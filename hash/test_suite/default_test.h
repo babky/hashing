@@ -18,10 +18,26 @@ namespace TestSuite {
 		virtual bool assertFalse(bool value, const std::string & message = "");
 		virtual bool assertValid(void * ptr, const std::string & message = "");
 		virtual bool assertNull(void * ptr, const std::string & message = "");
+
 		template <typename T>
 		bool assertEqual(const T & v1, const T & v2, const std::string & message = "")
 		{
 			return this->assertTrue(v1 == v2, message);
+		}
+
+		template <class Exception, class Operation>
+		bool assertException(Operation expr, const std::string & message = "") {
+			try {
+				expr();
+				this->assertTrue(false, "No exception thrown for " + message + ".");
+			} catch (const Exception &) {
+				this->assertTrue(true, "Exception safely handled for " + message + ".");
+				return true;
+			} catch (...) {
+				this->assertTrue(false, "Exception type differs for " + message + ".");
+			}
+
+			return false;
 		}
 
 	private:

@@ -1,20 +1,60 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "function.h"
+#include <vector>
+#include "utils/definitions.h"
 
 namespace Hash {
 
 	/**
 	 * Hashing table - basic implementation.
+	 *
+	 * @typeparam T Stored item type.
+	 * @typeparam EqualityComparer Type of the equality comparer used.
+	 * @typeparam HashFunction Function used to determine hash of the item.
+	 * @typeparam Storage Storage used for creating the table.
 	 */
-	template<typename T, template <class> class HashFunction>
-	class Table {
+	template<
+		typename T, 
+		typename Comparer,
+		template <class> class Function, 
+		template <class, class, class> class Storage
+	>
+	class Table : public HashTable<T> {
 	public:
+		/**
+		 * Type for the hash function.
+		 */
+		typedef Function<T> HashFunction;
+
+		/**
+		 * Type for the hash. This is the type of the value returned by the hash function.
+		 */
+		typedef typename Function<T>::HashType HashType;
+		
+		/**
+		 * Equality comparer.
+		 */
+		typedef Comparer EqualityComparer;
+
+		/**
+		 * Storage - hash table implementation.
+		 */
+		typedef Storage<T, EqualityComparer, HashType> HashStorage;
+
 		/**
 		 * Constructor.
 		 */
 		Table(void) {
+		}
+
+		/**
+		 * Constructor.
+		 *
+		 * @param comparer Comparer used to determine the equality of items.
+		 */
+		explicit Table(const EqualityComparer & comparer):
+			storage(StorageType(comparer)) {
 		}
 
 		/**
@@ -23,7 +63,7 @@ namespace Hash {
 		 * @param element Added element.
 		 */
 		void insert(const T & element) {
-			element;
+			this->storage.insert(element, this->function(element, this->storage.getTableSize()));
 		}
 
 		/**
@@ -32,7 +72,7 @@ namespace Hash {
 		 * @param element Removed element.
 		 */
 		bool remove(const T & element) {
-			return false;
+			return this->storage.remove(element, this->function(element, this->storage.getTableSize()));
 		}
 
 		/**
@@ -40,8 +80,8 @@ namespace Hash {
 		 *
 		 * @return Number of hashed elements.
 		 */
-		int size(void) const {
-			return 0;
+		int getSize(void) const {
+			return this->storage.getSize();
 		}
 
 		/**
@@ -51,27 +91,19 @@ namespace Hash {
 		 * @return Containment check.
 		 */
 		bool contains(const T & element) const {
-			return false;
+			return this->storage.contains(element, this->function(element, this->storage.getTableSize()));
 		}
 
 	protected:
 		/**
 		 * Used hashed function.
 		 */
-		HashFunction<T> function;
+		mutable HashFunction function;
 
-	private:
-		// TODO: Enable it.
 		/**
-		 * Forbidden copy c-tor.
+		 * Used storage.
 		 */
-		Table(const Table &);
-
-		// TODO: Enable it.
-		/**
-		 * Forbidden assignment operator.
-		 */
-		Table & operator =(const Table &);
+		HashStorage storage;
 
 	};
 

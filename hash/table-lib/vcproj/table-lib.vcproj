@@ -44,7 +44,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="4"
-				WarnAsError="true"
+				WarnAsError="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -146,7 +146,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\table.cpp"
+				RelativePath="..\storage.cpp"
 				>
 			</File>
 		</Filter>
@@ -160,6 +160,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\storage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\table.h"
 				>
 			</File>
@@ -167,7 +171,19 @@
 				Name="Utils"
 				>
 				<File
-					RelativePath="..\equality_comparer.h"
+					RelativePath="..\utils\definitions.h"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\equality_comparer.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Exceptions"
+				>
+				<File
+					RelativePath="..\exceptions\item_stored_exception.h"
 					>
 				</File>
 			</Filter>
