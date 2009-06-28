@@ -1,11 +1,21 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include <vector>
+#include <algorithm>
 #include "utils/definitions.h"
 #include "utils/storage_statistics.h"
+#include "policies/rehash_policy.h"
 
 namespace Hash {
+
+	/**
+	 * Rehashing operation to be done.
+	 */ 
+	enum RehashingOperation {
+		Refresh,
+		Shrink,
+		Enlarge
+	};
 
 	/**
 	 * Hashing table - basic implementation.
@@ -19,10 +29,16 @@ namespace Hash {
 		typename T, 
 		typename Comparer,
 		template <class> class Function, 
-		template <class, class, class> class Storage
+		template <class, class, class> class Storage,
+		class RehashPolicy = Policies::Rehash::LoadFactorBoundsRehashPolicy
 	>
 	class Table : public HashTable<T> {
 	public:
+		/**
+		 * Own type.
+		 */
+		typedef Table<T, Comparer, Function, Storage, RehashPolicy> HashTable;
+
 		/**
 		 * Type for the hash function.
 		 */
@@ -44,6 +60,11 @@ namespace Hash {
 		typedef Storage<T, EqualityComparer, HashType> HashStorage;
 
 		/**
+		 * Iterator for iterating throughout the items of the table.
+		 */
+		typedef typename HashStorage::Iterator Iterator;
+
+		/**
 		 * Constructor.
 		 */
 		Table(void) {
@@ -55,8 +76,19 @@ namespace Hash {
 		 * @param comparer Comparer used to determine the equality of items.
 		 */
 		explicit Table(const EqualityComparer & comparer):
-			storage(StorageType(comparer)) {
+			storage(HashStorage(comparer)) {
 		}
+
+		/**
+		 * Constructor.
+		 *
+		 * @param comparer Comparer used to determine the equality of items.
+		 * @param tableLength Length of the table.
+		 */
+		Table(const EqualityComparer & comparer, size_t tableLength):
+			storage(HashStorage(comparer, tableLength)) {
+		}
+
 
 		/**
 		 * Inserts the {@code element} into the table.
@@ -65,6 +97,9 @@ namespace Hash {
 		 */
 		void insert(const T & element) {
 			this->storage.insert(element, this->function(element, this->storage.getTableSize()));
+			if (this->rehashPolicy.needsRehashingAfterInsert(this->storage)) {
+				this->rehash(Enlarge);
+			}
 		}
 
 		/**
@@ -73,7 +108,12 @@ namespace Hash {
 		 * @param element Removed element.
 		 */
 		bool remove(const T & element) {
-			return this->storage.remove(element, this->function(element, this->storage.getTableSize()));
+			bool removed = this->storage.remove(element, this->function(element, this->storage.getTableSize()));
+			if (removed && !this->storage.isMinimal() && this->rehashPolicy.needsRehashingAfterDelete(this->storage)) {
+				this->rehash(Shrink);
+			}
+
+			return removed;
 		}
 
 		/**
@@ -120,7 +160,88 @@ namespace Hash {
 			this->storage.computeStatistics(stats);
 		}
 
-	protected:
+		/**
+		 * Completely rehashes the table.
+		 */
+		void rehash(RehashingOperation operation = Refresh) {
+			// TODO: Resizing policy.
+			size_t newLength = this->storage.getTableSize();
+			switch (operation) {
+				case Shrink:
+					newLength /= 2;
+					break;
+
+				case Enlarge:
+					newLength *= 2;
+					break;
+
+				case Refresh:
+					break;
+
+				default:
+					// TODO: assert(false, "Should not get here.");
+					break;
+			}
+
+			HashTable t(this->storage.getComparer(), newLength);
+
+			for (HashTable::Iterator it = this->getBeginning(), ite = this->getEnd(); it != ite; ++it) {
+				t.insert(*it);
+			}
+
+			swap(*this, t);
+		}
+
+		/**
+		 * Beginning of the table - first item.
+		 *
+		 * @return Iterator pointing to the first item.
+		 */
+		Iterator getBeginning(void) {
+			return this->storage.getBeginning();
+		}
+
+		/**
+		 * End of the table - after the last item.
+		 *
+		 * @return Iterator pointing just after the last item.
+		 */
+		Iterator getEnd(void) {
+			return this->storage.getEnd();
+		}
+
+		/**
+		 * Beginning of the table - first item.
+		 *
+		 * @return Iterator pointing to the first item.
+		 */
+		const Iterator getBegin(void) const {
+			return const_cast<HashTable *>(this)->getBegin();
+		}
+
+		/**
+		 * End of the table - after the last item.
+		 *
+		 * @return Iterator pointing just after the last item.
+		 */
+		const Iterator getEnd(void) const {
+			return const_cast<HashTable *>(this)->getEnd();
+		}
+
+		/**
+		 * Swapping the hash tables.
+		 *
+		 * @param a Hash table to be swapped.
+		 * @param b Hash table to be swapped.
+		 */
+		friend void swap(HashTable & a, HashTable & b) {
+			// TODO: std::swap is bad.
+			std::swap(a.function, b.function);
+			swap(a.storage, b.storage);
+			std::swap(a.rehashPolicy, b.rehashPolicy);
+		}
+
+	private:
 		/**
 		 * Used hashed function.
 		 */
@@ -130,6 +251,11 @@ namespace Hash {
 		 * Used storage.
 		 */
 		HashStorage storage;
+
+		/**
+		 * Used policy for rehashing signalization.
+		 */
+		RehashPolicy rehashPolicy;
 
 	};
 

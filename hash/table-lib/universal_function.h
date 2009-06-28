@@ -31,7 +31,6 @@ namespace Hash {
 			return hash(a, length);
 		}
 
-
 	private:
 		size_t universumMax;
 		size_t a, b;

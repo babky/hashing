@@ -3,6 +3,9 @@
 
 namespace Hash {
 
+	/**
+	 * Default hashing function.
+	 */
 	template<typename T>
 	class Function {
 	public:
