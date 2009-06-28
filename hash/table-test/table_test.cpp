@@ -46,4 +46,14 @@ void TableTest::runTest(void)
 	this->assertFalse(t.contains(0), "Table should not contain item 0.");
 	this->assertTrue(t.remove(3), "Removal must be successful.");
 	this->assertFalse(t.contains(3), "Table should not contain item 3.");
+
+	StorageStatistics stats = StorageStatistics();
+	t.computeStatistics(stats);
+	this->assertEqual(t.getLoadFactor(), stats.getLoadFactor(), "Load factors must be equal (1).");
+	t.insert(3);
+	this->assertEqual<size_t>(16, stats.getTableLength(), "Default table length is sufficient.");
+
+	stats.clear();
+	t.computeStatistics(stats);
+	this->assertEqual(t.getLoadFactor(), stats.getLoadFactor(), "Load factors must be equal (2).");
 }
