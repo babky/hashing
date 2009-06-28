@@ -40,11 +40,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;C:\Users\babky-regular\Libs\boost_1_39_0\boost_1_39_0\&quot;"
+				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="4"
-				WarnAsError="false"
+				WarnAsError="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -58,6 +60,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -102,6 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;C:\Users\babky-regular\Libs\boost_1_39_0\boost_1_39_0&quot;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="4"
@@ -119,6 +123,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Libs\boost_1_39_0\boost_1_39_0\stage\lib&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -167,6 +173,10 @@
 				RelativePath="..\table.h"
 				>
 			</File>
+			<File
+				RelativePath="..\universal_function.h"
+				>
+			</File>
 			<Filter
 				Name="Utils"
 				>
@@ -176,6 +186,10 @@
 				</File>
 				<File
 					RelativePath="..\utils\equality_comparer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\random_generator.h"
 					>
 				</File>
 			</Filter>
