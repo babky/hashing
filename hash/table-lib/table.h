@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "utils/definitions.h"
+#include "utils/storage_statistics.h"
 
 namespace Hash {
 
@@ -92,6 +93,31 @@ namespace Hash {
 		 */
 		bool contains(const T & element) const {
 			return this->storage.contains(element, this->function(element, this->storage.getTableSize()));
+		}
+		
+		/**
+		 * Clears the stored set.
+		 */
+		void clear(void) {
+			this->storage.clear();
+		}
+
+		/**
+		 * Load factor retrieval.
+		 *
+		 * @return Load factor.
+		 */
+		double getLoadFactor(void) const {
+			return this->storage.getLoadFactor();
+		}
+
+		/**
+		 * Computes the statistics for this storage.
+		 *
+		 * @param stats Storage for statistics.
+		 */ 
+		void computeStatistics(Utils::StorageStatistics & stats) const {
+			this->storage.computeStatistics(stats);
 		}
 
 	protected:

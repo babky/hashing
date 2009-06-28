@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "exceptions/item_stored_exception.h"
+#include "utils/storage_statistics.h"
 
 namespace Hash {
 
@@ -168,6 +169,38 @@ namespace Hash {
 		 */
 		size_t getTableSize(void) const {
 			return this->storageLength;
+		}
+
+		/**
+		 * Clears the storage.
+		 */
+		void clear(void) {
+			this->storageLength = 0;
+			this->elementCount = 0;
+			delete [] this->storage;
+			this->storage = new StorageItem[StorageParams::STARTING_STORAGE_SIZE];
+			this->storageLength = StorageParams::STARTING_STORAGE_SIZE;
+		}
+
+		/**
+		 * Load factor retrieval.
+		 *
+		 * @return Load factor.
+		 */
+		double getLoadFactor(void) const {
+			// TODO: assert storageLength != 0
+			return static_cast<double>(this->elementCount) / this->storageLength;
+		}
+
+		/**
+		 * Computes the statistics for this storage.
+		 *
+		 * @param stats Storage for statistics.
+		 */ 
+		void computeStatistics(Utils::StorageStatistics & stats) const {
+			for (size_t i = 0; i < this->storageLength; ++i) {
+				stats.addChain(this->storage[i].getSize());
+			}
 		}
 
 	private:

@@ -155,6 +155,10 @@
 				RelativePath="..\storage.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\utils\storage_statistics.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -190,6 +194,10 @@
 				</File>
 				<File
 					RelativePath="..\utils\random_generator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\storage_statistics.h"
 					>
 				</File>
 			</Filter>
