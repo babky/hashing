@@ -209,6 +209,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Policies"
+				>
+				<File
+					RelativePath="..\policies\rehash_policy.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\policies\rehash_policy.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
