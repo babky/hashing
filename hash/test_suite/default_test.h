@@ -1,7 +1,7 @@
 #ifndef DEFAULT_TEST_H
 #define DEFAULT_TEST_H
 
-#include "Test.h"
+#include "test.h"
 #include <vector>
 #include <string>
 

@@ -1,7 +1,7 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include "Assert.h"
+#include "test_assert.h"
 
 namespace TestSuite
 {
