@@ -1,6 +1,8 @@
 #ifndef STORAGE_STATISTICS_H
 #define STORAGE_STATISTICS_H
 
+#include <ostream>
+
 namespace Hash { namespace Utils {
 
 	/**
@@ -81,6 +83,15 @@ namespace Hash { namespace Utils {
 		 */
 		size_t maxChainLength;
 	};
+
+	/**
+	 * Prints the storage stats.
+	 *
+	 * @param stats Statistics to be outputted.
+	 * @param out	Output stream.
+	 * @return		Output stream.
+	 */
+	std::ostream & operator <<(std::ostream & out, const StorageStatistics & stats);
 
 } }
 
