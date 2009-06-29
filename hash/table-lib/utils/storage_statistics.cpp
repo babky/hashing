@@ -52,3 +52,13 @@ void StorageStatistics::clear(void) {
 	this->elementCount = 0;
 	this->tableLength = 0;
 }
+
+std::ostream & Hash::Utils::operator <<(std::ostream & out, const StorageStatistics & stats) {
+	out << "Element count: " << stats.getElementCount() << "\n";
+	out << "Table length:  " << stats.getTableLength() << "\n";
+	out << "Load factor:   " << stats.getLoadFactor() << "\n";
+	out << "Min chain:     " << stats.getMinimalChainLength() << "\n";
+	out << "Max chain:     " << stats.getMaximalChainLength() << "\n";
+
+	return out;
+}
