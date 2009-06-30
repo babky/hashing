@@ -11,7 +11,7 @@ namespace Hash { namespace Tests {
 
 	class LengthTest {
 	public:
-		typedef Hash::Table<int, Hash::Utils::EqualityComparer<int>, Hash::UniversalFunctionCWLF, Hash::ChainedStorage> 
+		typedef Hash::Table<int, Hash::Utils::EqualityComparer<int>, Hash::Function, Hash::ChainedStorage> 
 			TableCWLF;
 
 		void runTest(void);

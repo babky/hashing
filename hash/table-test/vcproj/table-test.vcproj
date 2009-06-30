@@ -131,7 +131,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_date_time-vc90-mt-gd-1_39.lib"
 				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Documents\Source\Hash\vendor\boost\stage\lib&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
