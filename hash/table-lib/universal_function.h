@@ -5,6 +5,9 @@
 
 namespace Hash {
 
+	/**
+	 * Carter - Wegman system of linear functions.
+	 */
 	template <typename T>
 	class UniversalFunctionCWLF {
 	public:
@@ -13,7 +16,7 @@ namespace Hash {
 		typedef size_t HashType;
 		UniversalFunctionCWLF(void):
 		  universumMax(UNIVERSUM_MAX_VALUE) {
-			RandomGenerator<size_t> g(0, this->universumMax - 1, true);
+			  Hash::Utils::RandomGenerator<size_t> g(0, this->universumMax - 1, true);
 
 			this->a = g.generate();
 			this->b = g.generate();
@@ -36,6 +39,10 @@ namespace Hash {
 		size_t a, b;
 	};
 
+	/**
+	 * Omega strongly universal system of functions.
+	 */
+	// TODO: Implement it.
 	template <typename T>
 	class UniversalFunctionOmega {
 	public:
