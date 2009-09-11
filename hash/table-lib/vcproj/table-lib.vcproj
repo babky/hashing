@@ -159,6 +159,22 @@
 				RelativePath="..\utils\storage_statistics.cpp"
 				>
 			</File>
+			<Filter
+				Name="Utils"
+				>
+				<File
+					RelativePath="..\utils\static_random_generator.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Policies"
+				>
+				<File
+					RelativePath="..\policies\rehash_policy.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -197,6 +213,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\utils\static_random_generator.h"
+					>
+				</File>
+				<File
 					RelativePath="..\utils\storage_statistics.h"
 					>
 				</File>
@@ -212,10 +232,6 @@
 			<Filter
 				Name="Policies"
 				>
-				<File
-					RelativePath="..\policies\rehash_policy.cpp"
-					>
-				</File>
 				<File
 					RelativePath="..\policies\rehash_policy.h"
 					>
