@@ -124,7 +124,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				LinkLibraryDependencies="true"
-				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Libs\boost_1_39_0\boost_1_39_0\stage\lib&quot;"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
