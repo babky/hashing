@@ -241,6 +241,15 @@ namespace Hash {
 			std::swap(a.rehashPolicy, b.rehashPolicy);
 		}
 
+		/**
+		 * Hash function retrieval.
+		 *
+		 * @return Current hash function.
+		 */
+		const HashFunction & getFunction(void) const {
+			return function;
+		}
+
 	private:
 		/**
 		 * Used hashed function.
