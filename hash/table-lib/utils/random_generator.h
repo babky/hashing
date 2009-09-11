@@ -14,13 +14,36 @@
 
 namespace Hash { namespace Utils {
 
+	/**
+	 * Random generator.
+	 *
+	 * @param IntType Type of the generated value.
+	 */
 	template<typename IntType>
 	class RandomGenerator {
 	public:
+		/**
+		 * Generating engine.
+		 */
 		typedef boost::mt19937 Engine;
+
+		/**
+		 * Distribution for the random values.
+		 */
 		typedef boost::uniform_int<IntType> Distribution;
+
+		/**
+		 * Generator.
+		 */
 		typedef boost::variate_generator<Engine&, Distribution> Generator;
 
+		/**
+		 * Generator constructor.
+		 *
+		 * @param min Minimum value.
+		 * @param max Maximum value.
+		 * @param initializeSeed Automatic (based on current timestamp) seed initialization.
+		 */
 		explicit RandomGenerator(IntType min, IntType max, bool initializeSeed = false):
 		  engine(Engine()),
 		  generator(Generator(engine, Distribution(min, max))) {
@@ -34,6 +57,20 @@ namespace Hash { namespace Utils {
 			}
 		}
 
+		/**
+		 * Sets the seed.
+		 *
+		 * @param seed New seed.
+		 */
+		void setSeed(int seed) {
+			generator.engine().seed(seed);
+		}
+
+		/**
+		 * Generates a new number.
+		 *
+		 * @param Returns the next random number.
+		 */
 		IntType generate(void) {
 			return this->generator();
 		}
