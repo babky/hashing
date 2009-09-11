@@ -12,7 +12,7 @@ namespace Hash { namespace Tests {
 	class LengthTest {
 	public:
 		typedef Hash::Table<int, Hash::Utils::EqualityComparer<int>, Hash::Function, Hash::ChainedStorage> 
-			TableCWLF;
+			SimpleTable;
 
 		void runTest(void);
 	};
