@@ -6,7 +6,8 @@ StorageStatistics::StorageStatistics(void):
   elementCount(0),
   tableLength(0),
   minChainLength(0),  
-  maxChainLength(0) {
+  maxChainLength(0),
+  rehashCount(0) {
 }
 
 size_t StorageStatistics::getElementCount(void) const {
@@ -51,6 +52,15 @@ void StorageStatistics::clear(void) {
 	this->minChainLength = 0;
 	this->elementCount = 0;
 	this->tableLength = 0;
+	this->rehashCount = 0;
+}
+
+void StorageStatistics::rehash(void) {
+	++this->rehashCount;
+}
+
+size_t StorageStatistics::getRehashCount(void) const {
+	return this->rehashCount;
 }
 
 std::ostream & Hash::Utils::operator <<(std::ostream & out, const StorageStatistics & stats) {
@@ -59,6 +69,7 @@ std::ostream & Hash::Utils::operator <<(std::ostream & out, const StorageStatist
 	out << "Load factor:   " << stats.getLoadFactor() << "\n";
 	out << "Min chain:     " << stats.getMinimalChainLength() << "\n";
 	out << "Max chain:     " << stats.getMaximalChainLength() << "\n";
+	out << "Rehash count:  " << stats.getRehashCount() << "\n";
 
 	return out;
 }

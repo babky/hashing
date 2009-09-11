@@ -5,6 +5,7 @@
 #include "utils/definitions.h"
 #include "utils/storage_statistics.h"
 #include "policies/rehash_policy.h"
+#include <cassert>
 
 namespace Hash {
 
@@ -179,9 +180,13 @@ namespace Hash {
 					break;
 
 				default:
-					// TODO: assert(false, "Should not get here.");
+					assert(false);
 					break;
 			}
+
+			Utils::StorageStatistics s;
+			this->storage.computeStatistics(s);
+			std::cout << s << "Rehashing.\n";
 
 			HashTable t(this->storage.getComparer(), newLength);
 

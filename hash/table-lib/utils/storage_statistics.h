@@ -57,6 +57,18 @@ namespace Hash { namespace Utils {
 		 */
 		void addChain(size_t chainLength);
 
+		/**
+		 * Rehashing done.
+		 */
+		void rehash(void);
+
+		/**
+		 * Rehashing count retrieval.
+		 * 
+		 * @return Rehashing count.
+		 */
+		size_t getRehashCount(void) const;
+
 		/** 
 		 * Clears the statistics.
 		 */
@@ -82,6 +94,11 @@ namespace Hash { namespace Utils {
 		 * Length of the longest chain.
 		 */
 		size_t maxChainLength;
+
+		/**
+		 * Rehash count.
+		 */
+		size_t rehashCount;
 	};
 
 	/**
