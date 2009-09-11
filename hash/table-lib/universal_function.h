@@ -2,6 +2,7 @@
 #define UNIVERSAL_FUNCTION_H
 
 #include "utils/random_generator.h"
+#include "utils/static_random_generator.h"
 
 namespace Hash {
 
@@ -14,9 +15,14 @@ namespace Hash {
 		const static size_t UNIVERSUM_MAX_VALUE = 65537;
 
 		typedef size_t HashType;
+
 		UniversalFunctionCWLF(void):
 		  universumMax(UNIVERSUM_MAX_VALUE) {
-			  Hash::Utils::RandomGenerator<size_t> g(0, this->universumMax - 1, true);
+			if (!Hash::Utils::StaticRandomGenerator<size_t>::isInitialized()) {
+				Hash::Utils::StaticRandomGenerator<size_t>::initialize(0, this->universumMax - 1);
+		    }
+			
+			Hash::Utils::RandomGenerator<size_t> & g = Hash::Utils::StaticRandomGenerator<size_t>::getGenerator();
 
 			this->a = g.generate();
 			this->b = g.generate();
