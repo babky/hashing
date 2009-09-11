@@ -14,6 +14,7 @@ void LengthTest::runTest(void) {
 	const size_t TEST_LENGTH = 1 << 24;
 
 	RandomGenerator<size_t> generator(0, 8 * TEST_LENGTH, true);
+	cout << "Running " << TEST_COUNT << " tests.\n";
 
 	for (size_t t = 0; t < TEST_COUNT; ++t) {
 		TableCWLF table;
@@ -33,7 +34,7 @@ void LengthTest::runTest(void) {
 			if (!table.contains(i)) {
 				cout << "Error.\n";
 			}
-		}*/
+		} */
 
 		maxChainLength += stats.getMaximalChainLength();
 	}
