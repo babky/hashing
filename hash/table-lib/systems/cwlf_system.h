@@ -1,8 +1,5 @@
-#ifndef UNIVERSAL_FUNCTION_H
-#define UNIVERSAL_FUNCTION_H
-
-#include "utils/random_generator.h"
-#include "utils/static_random_generator.h"
+#ifndef CWLF_SYSTEM_H
+#define CWLF_SYSTEM_H
 
 namespace Hash {
 
@@ -45,28 +42,6 @@ namespace Hash {
 		size_t a, b;
 	};
 
-	/**
-	 * Omega strongly universal system of functions.
-	 */
-	// TODO: Implement it.
-	template <typename T>
-	class UniversalFunctionOmega {
-	public:
-		typedef size_t HashType;
-
-		UniversalFunctionOmega(void) {
-		}
-
-		size_t getFunctionNo(void) const {
-			return this->functionNo;
-		}
-
-	private:
-		size_t functionNo;
-
-		size_t a, b;
-	};
-
 }
 
-#endif /* UNIVERSAL_FUNCTION_H */
+#endif /* CWLF_SYSTEM */
