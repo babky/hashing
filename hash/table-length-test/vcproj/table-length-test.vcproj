@@ -141,7 +141,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="table-lib.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Documents\Source\Hash\vendor\boost\stage\lib&quot;;&quot;C:\Users\babky-regular\Documents\Source\Hash\trunk\hash\vcproj\Release&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Documents\Source\local-hash\vendor\boost\stage\lib&quot;;&quot;C:\Users\babky-regular\Documents\Source\local-hash\trunk\hash\vcproj\Release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
