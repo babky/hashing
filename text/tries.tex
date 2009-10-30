@@ -1,0 +1,51 @@
+\chapter{Pokusy}
+\paragraph{Pokles pravdepodobnosti kolízie pre reťazcový systém}
+
+Postupnosť bitov, ktoré reprezentujú dvojkový zápis čísla $x$ môžeme chápať ako vektor, prvok vektorového priestoru. Tento predpoklad môžeme spraviť, lebo univerzum $U$ volíme ako množinu $\{0, \dots, N - 1 \}$, kde $N = 2^k$. Chceme odhadnúť pravdepodobnosť, že $n$ zadaných prvkov $x^1, \dots, x^n$ koliduje. Zostavíme $n$ rovníc tvaru:
+\begin{displaymath}
+\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i^j\right) \mod p = t \qquad j \in \{1, \dots, n\}
+\end{displaymath}
+
+Parameter $t \in \{0, \dots p-1\}$ môže byť ľubovoľný. Zostavíme maticu $M$ tejto sústavy, pričom budeme počítať nad poľom $Z_p$. 
+\begin{displaymath}
+M = \begin{pmatrix}
+  x_{k-1}^1 & x_{k-2}^1 & \cdots & x_0^1  \\
+  x_{k-1}^2 & x_{k-2}^2 & \cdots & x_0^2  \\
+  \vdots  	& \vdots  	& \ddots & \vdots \\
+  x_{k-1}^n & x_{k-2}^n & \cdots & x_0^n  \\
+ \end{pmatrix}
+\end{displaymath}
+
+Pokiaľ matica $M$ má dostatočne veľkú hodnosť, tak počet riešení a teda aj počet vyhovujúcich funkcií je malý. Ak $rank(M) = r$, potom počet zadaných vzorov je najviac $2^r$. Z toho ďalej plynie, že $r \geq \lceil \log n \rceil$. Počet riešení pri hodnosti $r$ je rovný veľkosti jadra matice. Počet vektorov v jadre je $l^{k-r}$. Pretože máme $p$ volieb parametra $t$, máme:
+\begin{displaymath}
+|\{ h \in H | h(x_1) = h(x_2) = \dots = h(x_n) \}| \leq p l^{k-r} \leq p l^{k - \lceil \log n \rceil}
+\end{displaymath}
+
+Z toho vidíme pravdepodobnosť kolízie ako:
+\begin{displaymath}
+P(h(x_1) = h(x_2) = \dots = h(x_n)) \leq \frac{p}{l^{\lceil \log n \rceil}} \leq \frac{p}{l^{\log n}} = \frac{p}{n^{\log l}}
+\end{displaymath}
+
+Posledná rovnosť plynie z nasledujúceho faktu:
+\begin{displaymath}
+l^{\log n} = 2^{(\log l)(\log n)} = 2^{(\log n)(\log l)} = n^{\log l}
+\end{displaymath}
+
+\begin{displaymath}
+\begin{split}
+\displaystyle \sum_{j=0}^{\infty} \dbinom{|S|}{j}\frac{p}{j^{\log l}} 
+	& = p \displaystyle \sum_{j=0}^{\infty} \dbinom{|S|}{j}\frac{1}{j^{\log l}}
+\end{split}
+\end{displaymath}
+
+Pre kombinačné čísla platí:
+\begin{displaymath}
+\dbinom{n}{j} = \dbinom{n}{n-j}
+\end{displaymath}
+\begin{displaymath}
+\dbinom{n}{j} \in O(n^{\min(j, n-j)})
+\end{displaymath}
+
+Vidíme, že člen $j^{\log l}$ prerastie $\dbinom{n}{j}$ až pri $j \doteq n - \log l$. V ostatných prípadoch sa nám oplatí odhad pravdepodobnosti nahradiť $1$ a súčet vyššie uvedenej rady je $O(n)$. Takýto pokles pravdepodobnosti je nedostačujúci a odhad je pre "vhodne" zvolené vzory ($dim(span(x_1, \dots, x_n)) \leq \lceil \log n \rceil$) pomerne tesný.
+
+\paragraph{Pokles pravdepodobnosti kolízie pre lineárny systém}

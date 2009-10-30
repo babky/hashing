@@ -1,0 +1,119 @@
+\chapter{Očakávaná dĺžka najdlhšieho reťazca}
+
+Pokúsime sa odhadnúť očakávanú dĺžku najdlhšieho reťazca pri univerzálnom hashovaní. Vychádzame z postupu použitého pri štandardnom hashovaní, ktorý neskôr upravíme. Pri tomto prístupe sme očakávanú dĺžku odhadovali pomocou pravdepodobnosti, že v jedinom reťazci koliduje $i$ a viac prvkov. Vychádzali sme z nasledujúcich dvoch faktov:
+\begin{displaymath}
+P(lpsl \geq i) \leq m P(psl \geq i)
+\end{displaymath}
+
+\begin{displaymath}
+\begin{split}
+E lpsl	& = \displaystyle \sum_{i=0}^{\infty} i P(lpsl = i) \\
+		& = \displaystyle \sum_{i = 0}^{\infty} i (P(lpsl \geq i) - P(lpsl \geq i + 1)) \\ 
+		& = \displaystyle \sum_{i = 0}^{\infty} P(lpsl \geq i)
+\end{split}
+\end{displaymath}
+
+Teda platí:
+\begin{displaymath}
+E lpsl \leq \displaystyle \sum_{i = 0}^{\infty} m P(psl \geq i)
+\end{displaymath}
+
+Na základe predpokladu nezávislosti výberu hashovaných prvkov z univerza odhadujeme pravdepodobnosť kolízie ako:
+\begin{displaymath}
+P(psl \geq i) \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
+\end{displaymath}
+
+Dopočítame odhad očakávanej dĺžky najdlhšieho reťazca:
+\begin{displaymath}
+\begin{split}
+E lpsl	& \leq \displaystyle \sum_{i = 0}^{\infty} m P(psl \geq i) \\
+		& \leq \displaystyle \sum_{i = 0}^{\infty} m \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i} \\
+		& = O(\frac{\log n}{\log \log n})
+\end{split}
+\end{displaymath}
+
+Teraz upravíme výpočet pre univerzálne hashovanie. Zásadný rozdiel je v odhade pravdepodobnosti kolízie $i$ prvkov. Tu sa oprieme o rôzne definície univerzálnych systémov hashovacích funkcií a o špecifické vlastnosti jednotlivých sád funkcií.
+
+\begin{definition}[Indikátor]
+\begin{displaymath}
+I: P(U) \rightarrow \lbrace 0, 1 \rbrace
+\end{displaymath}
+\begin{displaymath}
+I(M) = \left\{ 
+\begin{array}{l l}
+  0 & \quad M = \emptyset \\
+  1 & \quad M \neq \emptyset \\
+\end{array} \right.
+\end{displaymath}
+\end{definition}
+
+Z predchádzajúcej definície je vidieť, že platí $I(M) \leq |M|$.
+
+\paragraph{}
+Ďalej sa pokúsime načrtnúť výpočet očakávanej dĺžky najdlhšieho reťazca pre univerzálne hashovanie. Nech $h \in H$, $k \in N_0$ a $\tilde{x} \in A$, potom pre
+\begin{displaymath}
+\begin{split}
+M_{\geq k} & = \{Y \subseteq S | |Y| \geq k, h(Y) = \{\tilde{x}\}\} \\
+M_{= k} & = \{Y \subseteq S | |Y| = k, h(Y) = \{\tilde{x}\}\} 
+\end{split}
+\end{displaymath}
+platí:
+\begin{displaymath}
+I(M_{\geq k}) = I(M_{= k})
+\end{displaymath}
+Chceme ukázať, že neprázdnosť množiny $M_{\geq k}$ je ekvivalentná s neprázdnosťou $M_{= k}$. Nech $M_{\geq k}$ je neprázdna:
+\begin{displaymath}
+Y \in M_{\geq k} \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{\tilde{x}\} \Leftrightarrow \forall Y' \subseteq Y, |Y'| = k: Y' \in M_{=k}
+\end{displaymath}
+Nech $M_{=k}$ je neprázdna:
+\begin{displaymath}
+Y' \in M_{=k} \Rightarrow Y' \in M_{\geq k}
+\end{displaymath}
+Máme:
+\begin{displaymath}
+\begin{split}
+M_{\geq k} \neq \emptyset & \Leftrightarrow  M_{= k} \neq \emptyset \\
+I(M_{\geq k}) & = I(M_{= k})
+\end{split}
+\end{displaymath}
+
+Zvolíme reťazec obsahujúci prvok $\tilde{x}$ a jeho dĺžku označíme $l_{\tilde{x}}$. Ak má príslušný reťazec dĺžku aspoň $k$, potom musí existovať podmnožina $Y$ hashovanej množiny $S \subset U$ taká, že použitá funkcia $h$ je na nej konštantne rovná $\tilde{x}$. Aby bola dĺžka zvoleného reťazca presne $k$, množina $Y$ musí byť maximálna čo do počtu prvkov.
+\begin{displaymath}
+\begin{split}
+P(l^{\tilde{x}} \geq k) & = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+P(l^{\tilde{x}} = k) & = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ maximálna} \})}{|H|} \\
+\end{split}
+\end{displaymath}
+
+K tomuto výpočtu je nutné dodať niekoľko užitočných poznámok:
+\begin{itemize}
+\item Reťazec máme vždy určený jediným prvkom $\tilde{x}$, ktorý do neho patrí.
+\item Pravdepodobnosť počítame pre jedinú fixovanú hashovanú množinu $S$ a pravdepodobnostný priestor odpovedá voľbe funkcie $h$.
+\item Získame odhad $P(l^{\tilde{x}} \geq k) \leq p(A, U)$. Tento odhad použijeme obdobne ako pri výpočte v klasickom hashovaní na odhad pravdepodobnosti pre dĺžku najdlhšieho reťazca: $P(lpsl \geq k) \leq |A| p(A, U)$.
+\end{itemize}
+\begin{displaymath}
+\begin{split}
+P(l^{\tilde{x}} \geq k) 
+	& = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+	& = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+	& \leq \frac{\displaystyle \sum_{h \in H} |\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
+	& = \frac{|\{ (h, Y) | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
+	& = \frac{\displaystyle \sum_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+\end{split}
+\end{displaymath}
+Tento odhad silne závisí na vlastnostiach množiny funkcií $H$.
+\begin{theorem}
+Pokiaľ $H$ je silne $\omega$-univerzálny systém, očakávaná dĺžka najdlhšieho reťazca pri univerzálnom hashovaní je $O(\frac{\log n}{\log \log n})$.
+\end{theorem}
+\begin{proof}
+\begin{displaymath}
+\begin{split}
+P(l^{\tilde{x}} \geq k) 
+	& \leq \frac{\displaystyle \sum_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+	& = \frac{\displaystyle \sum_{Y \subseteq S, |Y| = k} \frac{|H|}{{|A|}^{k}}}{|H|} \\
+	& = \dbinom{|S|}{k}\frac{1}{{|A|}^k}
+\end{split}
+\end{displaymath}
+Tu môžeme pokračovať presne ako v prípade klasického hashovania, pretože odhad pravdepodobnosti kolízie $k$ prvkov vyšiel úplne rovnako. Dopracujeme sa k rovnakému výsledku $O(\frac{\log n}{\log \log n})$.
+\end{proof}
+Získať malý silne $\omega$-univerzálny systém je problém. Musíme použiť iné systémy a pri odhade sa opierať o ich špecifické vlastnosti.
