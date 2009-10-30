@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/babky/Documents/DP
+cd /home/babky/Documents/docs/text/
 
 if [ $# -ge 1 ]
 then

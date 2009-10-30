@@ -80,8 +80,8 @@ I(M_{\geq k}) & = I(M_{= k})
 Zvolíme reťazec obsahujúci prvok $\tilde{x}$ a jeho dĺžku označíme $l_{\tilde{x}}$. Ak má príslušný reťazec dĺžku aspoň $k$, potom musí existovať podmnožina $Y$ hashovanej množiny $S \subset U$ taká, že použitá funkcia $h$ je na nej konštantne rovná $\tilde{x}$. Aby bola dĺžka zvoleného reťazca presne $k$, množina $Y$ musí byť maximálna čo do počtu prvkov.
 \begin{displaymath}
 \begin{split}
-P(l^{\tilde{x}} \geq k) & = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-P(l^{\tilde{x}} = k) & = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ maximálna} \})}{|H|} \\
+P(l^{\tilde{x}} \geq k) & = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+P(l^{\tilde{x}} = k) & = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ maximálna} \})}{|H|} \\
 \end{split}
 \end{displaymath}
 
@@ -94,11 +94,11 @@ K tomuto výpočtu je nutné dodať niekoľko užitočných poznámok:
 \begin{displaymath}
 \begin{split}
 P(l^{\tilde{x}} \geq k) 
-	& = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-	& = \frac{\displaystyle \sum_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-	& \leq \frac{\displaystyle \sum_{h \in H} |\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
+	& = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+	& = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+	& \leq \frac{\sum\displaylimits_{h \in H} |\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
 	& = \frac{|\{ (h, Y) | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
-	& = \frac{\displaystyle \sum_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
 \end{split}
 \end{displaymath}
 Tento odhad silne závisí na vlastnostiach množiny funkcií $H$.
@@ -109,8 +109,8 @@ Pokiaľ $H$ je silne $\omega$-univerzálny systém, očakávaná dĺžka najdlh�
 \begin{displaymath}
 \begin{split}
 P(l^{\tilde{x}} \geq k) 
-	& \leq \frac{\displaystyle \sum_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
-	& = \frac{\displaystyle \sum_{Y \subseteq S, |Y| = k} \frac{|H|}{{|A|}^{k}}}{|H|} \\
+	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|A|}^{k}}}{|H|} \\
 	& = \dbinom{|S|}{k}\frac{1}{{|A|}^k}
 \end{split}
 \end{displaymath}

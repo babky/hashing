@@ -69,7 +69,7 @@ nazveme lineárny systém hashovacích funkcií.
 \end{definition}
 
 \begin{remark}
-Lineárny systém je $\frac{\left(\lceil \frac{N}{m} \rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-univerzálny.
+Lineárny systém je $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-univerzálny.
 \end{remark}
 % End linear systems
 
@@ -93,11 +93,11 @@ Pokiaľ $U = A$, funkcie $h(x)$ sa redukujú na tvar $h(x) = (\displaystyle \sum
 
 Teraz nech $U \neq A$. Postupujeme obdobne ako v dôkaze $c$-univerzality lineárneho systému.
 \begin{displaymath}
-(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} ) \mod N = {y}_i + {r_i}{m} \qquad {y}_i \in \{0, \dots, m - 1 \}, r_i \in \{0, m, 2m, \dots, \lceil \frac{N}{m} \rceil - 1\}
+(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} ) \mod N = {y}_i + {r_i}{m} \qquad {y}_i \in \{0, \dots, m - 1 \}, r_i \in \{0, m, 2m, \dots, \left\lceil \frac{N}{m} \right\rceil - 1\}
 \end{displaymath}
-Pre každú voľbu ${y}_i$ a $r_i$ dostávame jednoznačné riešenie sústavy. Pokiaľ sú zadané obrazy $y_i$, hodnoty $r_i$ už môžu byť ľubovoľné. Pre každú voľbu $r_i$ máme jedinú funkciu spĺňajúcu zadané predpoklady. Počet sád $r_i$ je ${\lceil \frac{N}{m} \rceil}^{n + 1}$ a práve toľko je polynomiálnych hashovacích funkcií, ktoré pošlú zadané vzory na im príslušné obrazy.
+Pre každú voľbu ${y}_i$ a $r_i$ dostávame jednoznačné riešenie sústavy. Pokiaľ sú zadané obrazy $y_i$, hodnoty $r_i$ už môžu byť ľubovoľné. Pre každú voľbu $r_i$ máme jedinú funkciu spĺňajúcu zadané predpoklady. Počet sád $r_i$ je ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$ a práve toľko je polynomiálnych hashovacích funkcií, ktoré pošlú zadané vzory na im príslušné obrazy.
 \begin{displaymath}
-|\{h \in H | h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| = {\lceil \frac{N}{m} \rceil}^{n + 1} = \frac{{\lceil \frac{N}{m} \rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}\left(\frac{N}{m}\right)^{n+1}
+|\{h \in H | h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| = {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}\left(\frac{N}{m}\right)^{n+1}
 \end{displaymath}
 \end{proof}
 % End polynoms
