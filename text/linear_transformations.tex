@@ -1,0 +1,453 @@
+\chapter{Systémy lineárnych zobrazení nad konečnými poliami}
+
+Zásadným výsledkom pre systémy lineárnych zobrazení je obmedzenie očakávanej dĺžky najdlhšieho reťazca. Dôkaz tejto vlastnosti nevychádza z prístupu, ktorý odhaduje pravdepodobnosť kolízie $k$ prvkov a tým pádom nevyužíva vlastnosti silne $2$-univerzálnych systémov. Pri použití poľa $Z_2$ a hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$ je $O(\log n \log \log n)$ horný odhad očakávanej dĺžky najdlhšieho reťazca. Pokiaľ budeme voliť iné polia, nemôžeme očakávať takéto dobré výsledky \cite{linear-hash-functions}.
+
+\begin{lemma}
+\label{lemma-linear-transformation-domain-distribution}
+Nech $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ je surjektívne lineárne zobrazenie a $x \in Z_2^t$. Potom $|T^{-1}(x)| = 2 ^ {u-t}$.
+\end{lemma}
+\begin{proof}
+Vychádzame, že z toho, že $T^{-1}(0)$ je vektorový podpriestor $Z_2^u$:
+\begin{displaymath}
+\begin{split}
+& T(0) = 0 \\
+T(u) = 0, T(v) = 0: & T(u + v) = T(u) + T(v) = 0 \\
+T(u) = 0: & T(\delta u) = \delta T(u) = \delta 0 = 0
+\end{split}
+\end{displaymath}
+
+Ukážeme, že $T^{-1}(x)$ je afinný podpriestor, $T^{-1}(x) = u + T^{-1}(0)$. Z toho okamžite plynie, že množiny $T^{-1}(x)$ sú rovnako veľké, $|T^{-1}(x)| = 2^{u-t}$. Nech $u \in T^{-1}(x)$, potom $T^{-1}(x) = u + T^{-1}(0)$.
+\begin{displaymath}
+\begin{split}
+v \in T^{-1}(0) 
+	& \Rightarrow T(u+v) = T(u) + T(v) = x + 0 = x  \\
+	& \Rightarrow u + T^{-1}(0) \subseteq T^{-1}(x)
+\end{split}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+v \in T^{-1}(x) 
+	& \Rightarrow T(v-u) = T(v) - T(u) = x - x = 0 \\
+	& \Rightarrow v - u \in T^{-1}(0) \\
+	& \Rightarrow T^{-1}(x) \subseteq u + T^{-1}(0)
+\end{split}
+\end{displaymath}
+\end{proof}
+
+Nasledujúce tvrdenia preberáme z \cite{linear-hash-functions}.
+
+\begin{lemma}
+\label{lemma-choose-random-vector}
+Nech $V$ je konečný vektorový priestor, $A \subseteq V$, $\alpha = 1 - \frac{|A|}{|V|}$. Potom pre pre náhodný, rovnomerne zvolený $v \in V$ platí:
+\begin{displaymath}
+E (1 - \frac{|A \cup (v + A)|}{|V|}) = \alpha^2 \textit{.}
+\end{displaymath}
+Strednú hodnotu berieme cez všetky možné výbery $v$.
+\end{lemma}
+\begin{proof}
+Pokiaľ vyberieme dva vektory $u$ a $v$ rovnomerne a nezávisle z $V$, tak pravdepodobnosť, že $u \notin A$ a $u \notin v + A$ je $\alpha$. Tieto dva javy sú nezávislé a s nasledujúcim je tvrdenie dokázané.
+\begin{displaymath}
+\begin{split}
+|A \cup (v + A)| 
+	& = \sum_{u \in V} 1 . P(u \in A \vee u \in v + A) \\ 
+	& = \sum_{u \in V} 1 - P(u \notin A \wedge u \notin v + A) \\ 
+	& = |V| (1 - \alpha ^ 2)
+\end{split}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+E (1 - \frac{|A \cup (v + A)|}{|V|}) 
+	& = \frac{\sum\displaylimits_{v \in V}(1 - \frac{|A \cup (v + A)|}{|V|})}{|V|} \\
+	& = \frac{\sum\displaylimits_{v \in V}\alpha ^ 2}{|V|}
+\end{split}
+\end{displaymath}
+\end{proof}
+
+\begin{lemma}
+\label{lemma-random-variable}
+Nech pre $1 \leq i \leq k$ sú $\alpha_i$ náhodné premenné a $0 < \alpha_0 < 1$ je konštanta. Ďalej nech pre $1 \leq i \leq k$ platí, že $0 \leq \alpha_i \leq \alpha_{i - 1}$ a predpokladáme, že $E[ \alpha_i | \alpha_{i-1} \dots \alpha_1 ] = \alpha_{i-1}^{2}$. Potom pre akýkoľvek prah $0 < t < 1$ platí nasledovné:
+\begin{displaymath}
+P(\alpha_k \geq t) \leq \alpha_0^{k - \log \log (\frac{1}{t}) + \log \log (\frac{1}{\alpha_0})}
+\end{displaymath}
+\end{lemma}
+\begin{proof}
+Pre $k = 0$ tvrdenie platí. Ak je $t \leq \alpha_0$, máme $-\log \log (1/t) + \log \log \left(\frac{1}{\alpha_0}\right) < 0$ a pravú stranu väčšiu ako 1. V ostatných prípadoch je pravdepodobnosť nulová.
+
+Predpokladáme, že tvrdenie pre $k$ platí, dokazujeme ho pre $k + 1$. Zvolíme $c = k - \log \log \left(\frac{1}{t}\right)$. Pokiaľ je $c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < 0$, je odhad pravdepodobnosti na pravej strane väčší ako $1$. Takže predpokladajme opak a:
+\begin{displaymath}
+P(\alpha_{k+1} \geq t) = E_{\alpha_{k+1}} P(\alpha_{k+1} \geq t | \alpha_1) \leq E_{\alpha_{k+1}} f(\alpha_1)
+\end{displaymath}
+Pričom $f$ definujeme pre $0 < x < 1$ nasledovne:
+\begin{displaymath}
+f_0(x) = x ^ {c + \log \log \left(\frac{1}{x}\right)}
+\end{displaymath}
+\begin{displaymath}
+ f(x) = 
+  \begin{cases} 
+   \min(1, f_0(x)) & \text{ak } 0 < x < 1 \\
+   1 & \text{ak } x = 0
+  \end{cases}
+\end{displaymath}
+Z indukčného predpokladu plynie, že hodnota $f$ je horný odhad pre pravdepodobnosť $P(\alpha_{k+1} \geq t | \alpha_1)$. Brali sme ohľad len na k premenných.
+
+Ukážeme, že pre všetky možné hodnoty x $0 \leq x \leq \alpha_1 \alpha_0$ je $f(x) \leq \frac{f_0(\alpha_0)x}{\alpha_0}$. Definujeme dve hodnoty $1 > x' = 2 ^ {-2 ^ {-c - 1}}$ a $x'' = {x'}^2 = 2 ^ {-2 ^ {-c}}$. 
+
+Uvedomíme si, že funkcia $\frac{f(x)}{x}$ je na intervale $(0, 1)$ najprv rastúca a potom klesajúca:
+\begin{displaymath}
+\frac{f(x)}{x}' = \left(c + \log e - 1 + \log \log \left(\frac{1}{x}\right)\right)\frac{f_0(x)}{x}
+\end{displaymath}
+
+Bod $x''$ je v časti, keď funkcia rastie:
+\begin{displaymath}
+c + \log e - 1 + \log \log \left(\frac{1}{x''}\right) = c + \log e - 1 - c > 0
+\end{displaymath}
+
+Teda v tejto časti funkcia $f$ nadobudne hodnotu $1$ a už pod ňu neklesne. Pre $x \geq x''$ je $f(x) = 1$:
+\begin{displaymath}
+f_0(x'') = x^{c - c} = 1
+\end{displaymath}
+\begin{displaymath}
+f_0(x) = x^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x''}\right)} = 1
+\end{displaymath}
+
+Takže platí:
+\begin{displaymath}
+\frac{f(x)}{x} \leq 
+  \begin{cases} 
+  	\frac{f_0(\alpha_0)}{\alpha_0} & \text{ak } \alpha_0 \text{ je v rastúcej časti} \\
+  	\frac{f_0(x)}{x} \leq \frac{f_0(x'')}{x''} = \frac{1}{x''} & 0 < x \leq x'' \\
+  	\frac{1}{x} \leq \frac{1}{x''} & x < x'' \\
+  \end{cases}
+\end{displaymath}
+
+Naviac:
+\begin{displaymath}
+\frac{f_0(x')}{x'} = \frac{\left({2 ^ {-2 ^ {-c - 1}}}\right)^{-1}}{2 ^ {-2 ^ {-c - 1}}} = \frac{1}{\left({2 ^ {-2 ^ {-c - 1}}}\right)^2} = \frac{1}{x''}
+\end{displaymath}
+
+Nakoľko je $x' \geq \alpha_0$ a nás zaujíma prípad, keď $\alpha_0$ je v klesajúcej časti intervalu, máme:
+\begin{displaymath}
+\frac{1}{x''} = \frac{f_0(x')}{x'} \leq \frac{{f_0}(\alpha_0)}{\alpha_0}\textit{.}
+\end{displaymath}
+
+Získali sme, že v intervale $0 \leq x \leq \alpha_1$ je $f(x) = \frac{f(x)x}{x} \leq \frac{f_0(\alpha_0)x}{\alpha_0}$ a teda:
+\begin{displaymath}
+P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alpha_0} = \frac{f_0(\alpha_0)}{\alpha_0}E \alpha_1 = \alpha_0 f(\alpha_0) = \alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
+\end{displaymath}
+
+\end{proof}
+
+\begin{theorem}
+\label{theorem-linear-function-set-onto}
+Ak $A$ je podmnožina vektorového priestoru $Z_2^u$ a $T: Z_2^u \rightarrow Z_2^t$ je rovnomerne zvolené náhodné a surjektívne lineárne zobrazenie pre $0 \leq t < u$. Označme $\alpha = 1 - \frac{|A|}{2^u} < 1$, potom:
+\begin{displaymath}
+P(T(A) \neq Z_2^t) \geq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}} \textit{.}
+\end{displaymath}
+\end{theorem}
+\begin{proof}
+Vezmime náhodne rovnomerne $s$ vektorov, $v_1, \dots, v_s$, z priestoru $Z_2^u$. $T$ bude také zobrazenie, že pre $v_i$ je $T(v_i) = 0$. Zvolené vektory sú z jadra zobrazenia $T$. Avšak nemusia ani generovať celé jadro, ani byť lineárne nezávislé, ani navzájom rôzne. Pretože vektory $v_1, \dots, v_s$ boli zvolené rovnomerne, stále môžeme doplniť $T$ tak, aby bolo zvolené rovnomerne. 
+
+Hľadať rovnomerne rozdelené surjektívne zobrazenia môžeme nasledovne. Fixujeme, napríklad kanonickú, bázu priestoru $Z_2^t$. Zo všetkých báz priestoru $Z_2^u$ rovnomerne jednu zvolíme a tú zobrazíme na fixovanú bázu priestoru $Z_2^t$. 
+
+Po výbere $s$ vektorov, nájdeme lineárne nezávislú podmnožinu $v_1, \dots, v_s$ tak, že $i$-ty vektor vylúčime, pokiaľ je zo $span(v_1, \dots, v_{i-1})$. Takto nájdenú lineárne nezávislú množinu rovnomerným výberom rozšírime na bázu $Z_2^u$. Zobrazením skonštruovanej na fixovanú bázu dokončíme výber $T$.
+
+Ďalej definujeme postupnosť $A_i = A + span(v_1, \dots, v_i)$ pre $0 \leq i \leq s$, k tomu odpovedajúce $\alpha_i = 1 - \frac{|A_i|}{2^u}$. Platí, že $0 \leq \alpha_i \leq \alpha_{i-1}$. Pretože $A_{i} = A + span(v_1, \dots, v_i) = A_{i-1} \cup (A_{i-1} + v_i)$, podľa lemmy \ref{lemma-choose-random-vector} vieme, že $E[\alpha_i | \alpha_{i-1}, \dots, \alpha_1] = \alpha_{i-1}^2$. Z lemmy \ref{lemma-random-variable} vyplýva:
+\begin{displaymath}
+\begin{split}
+P(\alpha_s \geq 2^{-t}) 
+	& \leq \alpha^{s - \log \log (\frac{1}{2^{-t}}) + \log \log (\frac{1}{\alpha})} \\
+	& = \alpha^{s - \log t + \log \log (\frac{1}{\alpha})} \\
+	& = \alpha^{u - t - \log t + \log \log (\frac{1}{\alpha})}
+\end{split}
+\end{displaymath}
+
+Toto je však aj pravdepodobnosť, že množina $T(A)$ je rôzna od $Z_2^t$. Ak $\alpha_s < 2^{-t}$, tak určite $T(A) = Z_2^t$. Pre $x \in Z_2^t - T(A)$ množiny $T^{-1}(x)$ a $A_s$ majú veľkosti $2^{u-t}$ (lemma \ref{lemma-linear-transformation-domain-distribution}) a $(1 - \alpha_s)2^u > 2^u - 2^{u-t}$. Vieme, že množiny $T^{-1}(x)$ a $A_s$ majú prázdny prienik. Nakoľko $A_s = A + span(v_1, \dots, v_s)$ a navyše $T(v_i) = 0$, platí $T(A) = T(A_s)$. Keď si uvedomíme, že veľkosť definičného oboru $T$ je $2^u$ a množiny $T^{-1}(x)$, $A_s$ sú disjunktné, okamžite dostávame spor.
+\end{proof}
+
+\begin{theorem}
+\label{theorem-set-onto-by-linear-transform}
+Nech $t$ je prirodzené číslo a $V$ konečný vektorový priestor nad $Z_2$ a $T$ náhodne rovnomerne zvolené surjektívne lineárne zobrazenie z $V$ do $Z_2^{t}$. Potom pre každé $\epsilon > 0$ existuje konštanta $c_\epsilon > 0$ taká, že pre každú podmnožinu $A \subset V$, $|A| \geq c_\epsilon t 2^t$ platí:
+\begin{displaymath}
+P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
+\end{displaymath}
+\end{theorem}
+\begin{proof}
+Definujeme priestor $W = Z_2^u$, pre $u = \left\lceil \log (\frac{2|A|}{\epsilon}) \right\rceil$. Vezmeme zobrazenie $T = T_0 \circ T_1$, $T_0: V \rightarrow W$ a $T_1: W \rightarrow Z_2^t$ surjektívne. Aby voľba zobrazenia $T$ bola vykonaná rovnomerne, stačí brať fixované zobrazenie $T_1$ a rovnomerne zvoliť zobrazenie $T_0$. Hodnoty zobrazenia pre vektory fixovanej bázy priestoru $V$ sú náhodné a rovnomerne rozdelené vo $W$ a následne aj v $Z_2^t$.
+
+Uvažujme dva vektory $v \neq w \in A$, ktoré kolidujú už kvôli $T_0$, $T_0(v) = T_0(w)$. Z $1$-univerzality systému lineárnych zobrazení plynie, že $P(T_0(v) = T_0(w)) = \frac{1}{|W|}$. Ďalej rozdelíme dôkaz na dve časti. 
+
+Pokiaľ $T_0(A) \leq \frac{|A|}{2}$, určite nastane aspoň $\frac{|A|}{2}$ takýchto kolízií. Očakávaný počet kolízií spôsobených zobrazením $T_0$ pritom vychádza:
+\[
+\frac{\dbinom{|A|}{2}}{|W|}\textit{.}
+\]
+V tomto prípade uvažujeme obe alternatívy, že zobrazenie je, aj nie je na:
+\begin{displaymath}
+P(T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{2}) \leq P(|T_0(A)| \leq \frac{|A|}{2}) \leq \frac{2 \dbinom{|A|}{2}}{|A||W|} < \frac{|A|}{|W|} \leq \frac{\epsilon}{2}
+\end{displaymath}
+V nerovnosti, keď prechádzame od pravdepodobnosti, sme použili Markovovu nerovnosť.
+
+Ostáva prípad, keď $|T(A)| > \frac{|A|}{2}$. Podľa vety \ref{theorem-linear-function-set-onto} máme:
+\begin{displaymath}
+\alpha = 1 - \frac{|T_0(A)|}{|W|} < 1 - \frac{|A|}{2|W|} = 1 - \frac{\epsilon |A|}{8|A|} \leq e^{-\frac{\epsilon}{8}}
+\end{displaymath}
+Pokiaľ zvolíme $c_\epsilon = 4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$:
+\begin{displaymath}
+\begin{split}
+P(T(A) \neq Z_2^t \wedge |T(A)| > \frac{|A|}{2}) 
+	& \leq \alpha ^ {u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)} \\
+	& \leq e^{-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}}	\\
+	& \leq e^{-\frac{\epsilon\left(t + \log t + 3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) -t - \log t  + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} \\
+	& \leq e^{{\log\left(\frac{\epsilon}{2}\right)}} 
+	\leq e^{\ln\left(\frac{\epsilon}{2}\right)} 
+	= \frac{\epsilon}{2}
+\end{split}
+\end{displaymath}
+
+Takže máme v obidvoch prípadoch pravdepodobnosti udalosti $T(A) \neq Z_2^t$ menšie ako $\frac{\epsilon}{2}$. Z toho plynie, že $P(T(A) = Z_2^t) \geq 1 - \epsilon$, čo sme mali dokázať.
+
+Nevýhodou tohoto prístupu je, že odhad konštanty $c_\epsilon$ je dosť nepresný a pre praktické použitie je nutné získať čo najmenšie hodnoty. Neskôr skutočne odhad zlepšíme a $c_\epsilon$ spočítame priamo pre požadované hodnoty $\epsilon$.
+\end{proof}
+
+Z dvoch predchádzajúcich viet odvodíme očakávanú dĺžku najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$. Tento odhad samozrejme platí aj pre hashovanie $n$ prvkov do tabuľky veľkosti $n$. S menším počtom prvkov sa očakávaná dĺžka nezmenší, naopak môžeme $n$ prvkov rozšíriť na $n \log n$ hashovaných hodnôt a odhad musí stále platiť. Ďalej sa budeme zaujímať o závislosť od faktoru naplnenia hashovacej tabuľky, budeme hashovať menej ako $n$ prvkov do tabuľky veľkosti $n$. Tu sledujeme zmenu očakávanej dĺžky najdlhšieho reťazca. Tá po miernej modifikácii dôkazu vyjde podobne - multiplikatívna konštanta priamo obsahuje faktor naplnenia tabuľky.
+
+\begin{theorem}
+\label{theorem-n-logn-to-n}
+Nech $H$ je systém lineárnych zobrazení medzi aritmetickými vektorovými priestormi nad telesom $Z_2$. použitý pri univerzálnom hashovaní so separovanými reťazcami. Potom očakávaná dĺžka najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$ je $O(\log n \log \log n)$.
+\end{theorem}
+\begin{proof}
+Uvažujme lineárne zobrazenie $h \in H$, $h: D \rightarrow B$. Vytvoríme priestor $A = Z_2^l$ pre $l \geq \log n$ a dve lineárne zobrazenia $h_1: D \rightarrow A$ a surjektívne $h_2: A \rightarrow B$. Obe zobrazenia $h_1$ aj $h_2$ sú vybraté rovnomerne. Teda aj zobrazenie $h = h_1 \circ h_2$ je vybraté rovnomerne zo všetkých zobrazení na $B$.
+
+Zásadnou myšlienkou celého dôkazu sú dve udalosti:
+\begin{itemize}
+\item $E_1$ - Existuje reťazec dĺžky aspoň $t$, t.j. $\exists \alpha \in B: | h^{-1}(\alpha) \cap S | > t$.
+\item $E_2$ - Existuje prvok $\alpha \in B$ taký, že $h_2^{-1}(\alpha) \subseteq h_1(S)$.
+\end{itemize}
+Pomocou predchádzajúcich tvrdení vieme jednoducho odhadnúť pravdepodobnosť udalosti $E_2$. Podstatná je pravdepodobnosť udalosti $E_1$. Všimneme si, že ak nastane udalosť $E_1$, tak je vysoko pravdepodobné, že nastala aj udalosť $E_2$.
+
+\begin{remark}
+\label{remark-e2-probability}
+Nech $d = \frac{2^l}{n \log n} > 1$. Potom platí:
+\begin{displaymath}
+P(E_2) \leq d^{-\log d - \log \log d}\textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+Ukážeme alternatívny popis udalosti $E_2$:
+\begin{displaymath}
+h_2^{-1}(\alpha) \subseteq h_1(S) \Leftrightarrow h_2(A - h_1(S)) \neq B \textit{.}
+\end{displaymath}
+
+Nech existuje prvok $\alpha$, ktorého vzor pri zobrazení $h_2$ je podmnožinou obrazu množiny $S$ pri $h_1$. Zobrazením $h_2$ sa určite nedostaneme z $A - h_1(S)$ na celú množinu $B$.
+
+Pretože $\frac{2^l}{n \log n} > 1$, predpoklady vety \ref{theorem-linear-function-set-onto} sú pre množinu $A - h_1(S) \subset A$ a zobrazenie $h_2$ splenené.
+Jej hustota je $\frac{|A| - |h_1(S)|}{|A|} = 1 - \alpha$.
+\begin{displaymath}
+\alpha = \frac{|h_1(S)|}{|S|} \leq \frac{|S|}{|A|} = \frac{1}{d}
+\end{displaymath}
+Pretože $d = \frac{2^l}{n \log n} > 1$:
+\begin{displaymath}
+\log d = l - \log n - \log \log n
+\end{displaymath}
+\begin{displaymath}
+P(E_2) \leq \alpha^{l - \log n - \log \log n + \log \log \left(\frac{1}{\alpha}\right)} = \alpha ^ {\log d + \log \log \left(\frac{1}{\alpha}\right)} \leq d^{-\log d - \log \log d}
+\end{displaymath}
+\end{proof}
+
+\begin{remark}
+\label{remark-prob-t-length-chain}
+Pokiaľ $t > c_{\frac{1}{2}}{\frac{2^l}{n}}\log\left(\frac{2^l}{n}\right)$, potom:
+\begin{displaymath}
+P(E_2 | E_1) \geq \frac{1}{2} \textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+Predpokladajme, že máme dané zobrazenie $h$ a nastala udalosť $E_1$. Určite existuje $S' \subseteq S$, ktorá má veľkosť aspoň $t$, namapovaná zobrazením $h$ na jediný prvok $\alpha \in Z_2^{\log n}$. Tento prvok fixujeme a ďalej definujeme $D' = h^{-1}(\alpha)$ a $A' = h_2^{-1}(\alpha)$. 
+
+Uvažujme rozdelenie zobrazení $h_1$, ktoré spĺňajú $h = h_1 \circ h_2$. Pokiaľ obmedzíme $h_1$ len na množinu $D'$, ide o afinné lineárne zobrazenie, ktoré je na množinu $A'$. Rovnomerným výberom všetkých zobrazení $h_1$ dochádza aj k rovnomernému výberu zobrazení z $D'$ na $A'$.
+
+Ak platí $A' \subseteq h_1(S)$, tak určite nastane aj udalosť $E_2$. Veľkosť množiny $A'$ je podľa lemmy \ref{lemma-linear-transformation-domain-distribution} práve $\frac{2^l}{n}$. Ďalej kardinalita $S' = D' \cap S$ je aspoň $t = \left\lceil c_{\frac{1}{2}}\left(\frac{2^l}{n}\right)\log\left(\frac{2^l}{n}\right)\right\rceil$. Podľa vety \ref{theorem-set-onto-by-linear-transform} je pravdepodobnosť, že množina veľkosti aspoň $t$ pokryje celú množinu $A'$ najmenej $\frac{1}{2}$.
+\end{proof}
+
+\begin{remark}
+Existuje konštanta $C$ taká, že pre všetky $r > 4$ pri hashovaní množiny $S \subset D$, $|S| = n \log n$ na množinu $B = Z_2^{\log n}$, platí:
+\begin{displaymath}
+P(lpsl > rC \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+Pre $r > 4$ položíme:
+\begin{displaymath}
+\begin{split}
+l & = \left\lfloor \log n + \log \log n + \log r - \log \log r \right\rfloor \\
+t & = 4c_{\frac{1}{2}}r\log n \log \log n \textit{.}
+\end{split}
+\end{displaymath}
+
+Overíme predpoklady pozorovania \ref{remark-e2-probability}:
+\begin{displaymath}
+d = \frac{2^l}{n \log n} \geq \frac{2^{\log n + \log \log n + \log r - \log \log r}}{n \log n} = \frac{r}{\log r} > 1\textit{.}
+\end{displaymath}
+
+Platí:
+\begin{displaymath}
+\frac{2^l}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{r\log n}{\log r}
+\end{displaymath}
+
+Pomocou predchádzajúcej nerovnosti overíme predpoklad pozorovania \ref{remark-prob-t-length-chain}:
+\begin{displaymath}
+\begin{split}
+c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
+	& < c_{\frac{1}{2}} 2 \left(\log n \left(\frac{r}{\log r}\right)\right)\left(2\log\log n \log r\right) \\
+	& = 4 c_{\frac{1}{2}} r \log n \log \log n \\
+	& = t
+\end{split}
+\end{displaymath}
+
+Pre zvolené hodnoty $l$ a $t$ máme $P(E_2 | E_1) \geq \frac{1}{2}$. Z toho plynie $P(E_1) \leq 2 P(E_2)$, čo nám dáva obmedzenie pre pravdepodobnosť udalosti $E_1$:
+\begin{displaymath}
+\begin{split}
+P(E_1) 
+	& \leq 2d^{-\log d - \log \log d} \\
+	& \leq 2\left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
+\end{split}
+\end{displaymath}
+
+Udalosť $E_1$ označuje existenciu reťazca dĺžky aspoň $t$. Odhad tým pádom platí pre všetky reťazce, aj najdlhší z nich. Položením $C = 4c_{\frac{1}{2}}$ dôkaz tohoto tvrdenia úspešne dokončíme.
+\end{proof}
+
+Vďaka predchádzajúcemu tvrdeniu už jednoducho spočítame očakávanú dĺžku najdlhšieho reťazca, berieme $K = C\log n \log \log n$:
+\begin{displaymath}
+\begin{split}
+E lpsl 
+	& = \int\limits_0^{\infty} P(lpsl > t) dt \\
+	& \leq 4K + \int\limits_{4K}^\infty P(lpsl > t) dt \\
+	& = 4K + K \int\limits_4^\infty P(lpsl > tK) dt \\
+	& \leq 4K + K \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \\
+	& = K(4 + I) = O(K) = O(\log n \log \log n) \\
+I 	& = \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}
+\end{split}
+\end{displaymath}
+
+Pre praktické použitie je podstatná aj multiplikatívna konštanta $4C(4 + I)$, ktorú sme nateraz zanedbali.
+\end{proof}
+
+Naším ďalším cieľom bude ukázať závislosť očakávanej dĺžky na faktore naplnenia hashovacej tabuľky a urobiť čo najtesnejší odhad na multiplikatívnu konštantu.
+
+Podarilo sa nám obmedziť $P(lpsl > 2Z \log n \log \log n)$ na $\frac{1}{2}$. To znamená, že najviac polovica funkcií spôsobí príliš dlhý reťazec a následné prehashovanie:
+\begin{displaymath}
+|\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace| = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H| \geq \frac{|H|}{2}
+\end{displaymath}
+
+Vzhľadom k tomu, že funkciu vyberáme rovnomerne, pričom nevyhovujúce zahadzujeme, stále sa jedná o rovnomerný výber, ale z menšej množiny.
+\begin{displaymath}
+\begin{split}
+P(h(x) = h(y)) 
+	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \textit{ a h nevytvorí dlhý reťazec} \rbrace |}{|\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace|} \\
+	& \leq \frac{2 |\lbrace h \in H \mid h(x) = h(y) \rbrace}{|H|} \\
+	& \leq 2 \frac{|H|}{m |H|} = \frac{2}{m}
+\end{split}
+\end{displaymath}
+
+Posledná rovnosť plynie z $1$-univerzality systému lineárnych zobrazení. Podobné obmedzenie môžu platiť aj pre iné univerzálne systémy. Pre takéto systémy pravdepodobnosť kolízie dvoch prvkov odhadneme pomocou vlastností plynúcich zo silnej $k$-univerzality alebo $c$-univerzality daných systémov.
+
+Predchádzajúci výpočet dokumentuje to, že očakávaná dĺžka vyhľadania jedného prvku ostáva stále konštantná, môže sa najviac zdvojnásobiť. Samozrejme, voľbou väčšej hodnoty dĺžky najdlhšieho reťazca sa dostaneme k lepším hodnotám pre očakávaný čas hľadania prvku. Pretože vylúčime menej pôvodných funkcií, rýchlejšie nájdeme aj vhodnú hashovaciu funkciu. V tomto prípade sa však garancia najhoršieho prípadu adekvátne zhorší. 
+
+\section{Odhad konštanty}
+V dôkaze odhadu očakávanej dĺžky najdlhšieho reťazca vystupuje integrál:
+\begin{displaymath}
+I = \displaystyle\int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+
+Vyčíslenie integrálu $I$ z predchádzajúceho dôkazu môžeme urobiť tak, že ho odhadneme jeho horným súčtom a porovnáme s funkciou, ktorej integrál konverguje. Konkrétne volíme porovnanie s $\displaystyle \int \frac{1}{r^{\frac{3}{2}}} dr$. 
+
+Pre $r = 16$:
+\begin{displaymath}
+\frac{1}{16 ^ {1.5}} = \frac{1}{64}
+\end{displaymath}
+
+\begin{displaymath}
+\left(\frac{16}{\log 16}\right)^{-\log \left(\frac{16}{\log 16}\right) - \log \log \left(\frac{16}{\log 16}\right)} = 4^{-2 - 1} = \frac{1}{64}
+\end{displaymath}
+
+A teda od $r > 16$ môžeme nahradiť integrál novým odhadom:
+\begin{displaymath}
+\begin{split}
+I_{\epsilon} 
+	& \leq \frac{1}{1 - \epsilon} \left( \displaystyle \sum_{r = 4}^{15} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} + \int\limits_{16}^\infty \frac{1}{r^{1.5}} dr \right) \\
+	& \leq \frac{1}{1 - \epsilon} \left(4.3 + \frac{1}{2}\right) = \frac{4.8}{1-\epsilon}
+\end{split}
+\end{displaymath}
+Pôvodne sme používali $I = I_{\frac{1}{2}}$.
+
+Ďalším dôležitým článkom je optimalizácia $\min_\epsilon(4 c_\epsilon (4 + I_{\epsilon}))$. Táto hodnota je menšia ako $2420$ pre $\epsilon = 0.879$ a $c_\epsilon$ dopočítame "ručne".
+
+\section{Odhad pravdepodobnosti pri hashovaní li\-ne\-ár\-ne\-ho množstva prvkov}
+V tejto časti nám pôjde o získanie predstavy o očakávanej dĺžke najdlhšieho reťazca pri zmene faktoru naplnenia hashovacej tabuľky. Nebudeme hashovať superlineárne množstvo záznamov, ale len lineárne a to dokonca menšie ako je veľkosť hashovacej tabuľky. Doposiaľ sme nepotrebovali rôzne označenie pre veľkosť hashovacej tabuľky a počet prvkov, ponecháme $n$ ako veľkosť tabuľky. Počet prvkov značíme $\alpha_f n$, kde $\alpha_f$ je faktor naplnenia tabuľky.
+
+Teraz upravíme predchádzajúce tvrdenie tak, aby zahŕňalo aj faktor naplnenia. 
+\begin{theorem}
+\label{theorem-n-to-n}
+Pri hashovaní $\alpha_f n$ prvkov do tabuľky veľkosti $n$ je očakávaná dĺžka najdlhšieho reťazca $O(\alpha_f \log n \log \log n)$.
+\end{theorem}
+\begin{proof}
+Upravíme tvrdenia a dôkazy niektorých lem. Prvá zjavná úprava, ktorú potrebujeme, je odhad odkedy môžeme použiť odhad pravdepodobnosti.
+
+\begin{remark}
+Existuje konštanta $C$ taká, že pre všetky $r > 4$ pri hashovaní množiny $S \subset D$, $|S| = \alpha_f n$ na množinu $B = Z_2^{\log n}$, platí:
+\begin{displaymath}
+P(lpsl > r \alpha_f C \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+Postupujeme obdobne ako v predchádzajúcej verzii:
+\begin{displaymath}
+\begin{split}
+l & = \left\lfloor \log n + \log \log n + \log r - \log \log r - \log \alpha_f \right\rfloor \\
+t & = 4\alpha_f c_{\frac{1}{2}} \log n \log \log n \\
+d & = \frac{2^l}{n \log n} \\
+\end{split}
+\end{displaymath}
+
+Overíme predpoklady pozorovania \ref{remark-e2-probability}:
+\begin{displaymath}
+d = \frac{2^l}{n \log n} \geq \frac{n \log n \log r}{\alpha_f n \log n \log \log r} > 1
+\end{displaymath}
+
+Ešte je nutné upraviť dôkaz pozorovania \ref{remark-e2-probability}. V dôkaze sme použili nasledovný vzťah, ktorý sme ihneď opravili, medzi objektami $h_1(S)$, $A = Z_2^l$, $\alpha$ a $d$.
+\begin{displaymath}
+\alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{n \log n}{2^l} = \frac{1}{d}
+\end{displaymath}
+
+Týmto ostáva pozorovanie \ref{remark-e2-probability} v platnosti aj pre túto schému.
+
+Platí:
+\begin{displaymath}
+\begin{split}
+c_{\frac{1}{2}} \frac{2^l}{n} \log \left(\frac{2^l}{n}\right) 
+	& < c_{\frac{1}{2}} 2 \alpha_f \log n \left( \frac{r}{\log r} \right) \left(2 \log \log n \log r \right) \\
+	& \leq 4 c_{\frac{1}{2}} \alpha_f \log n \log \log n \log r \\
+	& = t
+\end{split}
+\end{displaymath}
+
+Teda sú splnené predpoklady pozorovania \ref{remark-prob-t-length-chain}. Jeho dôkaz vyhovuje naďalej, použila sa množina $A = Z_2^l$, pričom sme sa nikde neodkazovali na konkrétnu hodnotu $l$ a veľkosť hashovacej tabuľky $|B| = n$ je nezmenená.
+
+Pokračujeme rovnako ako v dôkaze pri predchádzajúcej schéme:
+\begin{displaymath}
+P(E1) \leq \frac{1}{P(E2|E1)}P(E2) \leq 2 d ^ {-\log d - \log \log d}\textit{.}
+\end{displaymath}
+\end{proof}
+
+Teraz už len upravíme výpočet odhadu očakávanej dĺžky najdlhšieho reťazca, teraz berieme $K = C \alpha_f \log n \log \log n$.
+\begin{displaymath}
+\begin{split}
+E lpsl 
+	& = \int\limits_0^\infty P(lpspl > t) dt \\
+	& \leq 4K + \int\limits_{4K}^\infty P(lpspl > t) dt \\
+	& = 4K + K\int\limits_4^\infty P(lpspl > tK) dt \\
+	& \leq K(4 + I) = O(K) = O(\alpha_f \log n \log \log n)
+\end{split}
+\end{displaymath}
+
+Výraz $I$ sa od predchádzajúceho dôkazu nezmenil.
+\end{proof}
