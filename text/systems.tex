@@ -73,7 +73,33 @@ Lineárny systém je $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}
 \end{remark}
 % End linear systems
 
+% Linear transformations
 \paragraph{Systém lineárnych zobrazení}
+\begin{definition}{Systém lineárnych zobrazení}
+Nech $A$, $B$ sú dva vektorové priestory nad $Z_2$ pričom platí $dim(A) = m$ a $dim(B) = n$. Systém funkcií 
+\begin{displaymath}
+H = \{L : A \rightarrow B | L \text{ je lineárne zobrazenie}\}
+\end{displaymath}
+nazveme systém lineárnych zobrazení.
+\end{definition}
+\begin{remark}
+Systém lineárnych zobrazení je $1$-univerzálny.
+\end{remark}
+\begin{proof}
+Označme $(T)_{i, j}=t_{i, j}$ ako maticu lineárneho zobrazenia. Máme zadané dva rôzne prvky $x$, $y$ z priestoru $A$, nech sa líšia na $k$-tom mieste. Nech všetky prvky matice $T$ okrem $k$-teho stĺpca sú definované. Teraz sme schopní jednoznačne určiť ostávajúce hodnoty, pre, $1 \leq i \leq n$, $i$-ty riadok máme:
+\begin{displaymath}
+\begin{split}
+\displaystyle\sum_{j = 1}^{m}t_{i, j}x_j & = \displaystyle\sum_{j = 1}^{m}t_{i, j}y_j \\
+t_{i, k} & = (x_k - y_j)^{-1}\displaystyle\sum_{j = 1, j \neq k}^{m}t_{i, j}(y_j - x_j)
+\end{split}
+\end{displaymath}
+Teda $k$-ty stĺpec môžeme jednoznačne určiť. Počet všetkých funkcií je $2^{mn}$ a kolíznych zobrazení je $2^{(m-1)n}$.
+\begin{displaymath}
+2^{(m-1)n} = \frac{2^{mn}}{2^n}
+\end{displaymath}
+Systém lineárnych zobrazení je $1$-univerzálny.
+\end{proof}
+% End linear transformations
 
 % Polynoms
 \paragraph{Polynómy nad konečnými poliami}
