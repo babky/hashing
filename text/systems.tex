@@ -1,0 +1,156 @@
+\chapter{Systémy univerzálnych funkcií}
+
+% TODO: Odkazy na jednotlive systemy
+% TODO: Citacia na clanok s definiciami.
+
+\begin{definition}[Silne $n$-univerzálny systém hashovacích funkcií]
+\label{strong_universal_n_system}
+Nech $n \in N$ a $H$ je množina funkcií $h: U \rightarrow A$ taká, že pre každé $x_1, x_2, \dots, x_n \in U$, $x_i \neq x_j$ pre $i \neq j$ a $y_1, y_2, \dots, y_n \in A$ platí $\left|\lbrace h \in H | h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| = \frac{|H|}{|A|^n}$. Potom systém funkcií $H$ nazveme silne $n$-univerzálny.
+\end{definition}
+
+\begin{definition}[Silne $2$-univerzálny systém hashovacích funkcií]
+\label{strong_universal_2_system}
+Systém funkcií $H$ je silne $2$-univerzálny, pokiaľ je silne univerzálny pre $n = 2$.
+\end{definition}
+
+\begin{definition}[Silne $\omega$-univerzálny systém hashovacích funkcií]
+\label{strong_universal_omega_system}
+Systém funkcií $H$ je silne $\omega$-univerzálny, pokiaľ je silne univerzálny pre každé $n \in N$.
+\end{definition}
+
+% TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
+Toto je veľmi silný požiadavok kladený na systém funkcií. Jednoduchým prí\-kladom je množina všetkých funkcií z univerza $U$ do $A$. Ide o prakticky neveľmi použiteľný systém kvôli veľkosti potrebnej na jeho kódovanie. 
+
+\begin{definition}[$c$-univerzálny systém hashovacích funkcií]
+\label{c_universal_system}
+Nech $c \in R, c > 0$, a $H$ je množina zobrazení $h: U \rightarrow A$ taká, že každú dvojicu $x, y \in U$, $x \neq y$ je $\left| \lbrace h \in H | h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|}$. Potom $H$ nazveme $c$-univerzálny systém hashovacích funkcií.
+\end{definition}
+
+\begin{remark}
+Každý silne $2$-univerzálny systém funkcií je $1$-univerzálny.
+\end{remark}
+\begin{proof}
+Nech $x, y \in U$ sú dané. Aby platilo $h(x) = h(y)$ postupne volíme všetky $t \in A$ tak, že $h(x) = h(y) = t$. Množiny funkcií $H_t = \lbrace h \in H | h(x) = h(y) = t \rbrace$ sú navzájom disjunktné a navyše $|H_t| = \frac{|H|}{{|A|}^{2}}$. Zvolili sme oba obrazy rovné $t$. Po sčítaní cez všetky $t \in A$ dostávame:
+\begin{displaymath}
+|\lbrace h \in H | h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}
+\end{displaymath}
+\end{proof}
+
+\begin{remark}
+Každý silne $n$-univerzálny systém funkcií je silne $k$-univerzálny pre každé $1 \leq k \leq n$.
+\end{remark}
+\begin{proof}
+Použijeme rovnaký prístup ako v predchádzajúcom prípade. Nech máme zadaných $k$ po dvojiciach rôznych vzorov $x_1, \dots, x_k \in U$ a k nim odpovedajúce obrazy $y_1, \dots, y_k$. 
+\begin{itemize}
+\item Postupnosť vzorov rozšírime pomocou ďalších ľubovoľných $n - k$ ale rôznych prvkov na $n$ prvkovú. 
+\item K množine obrazov budeme voliť všetky možné $(n-k)$-tice prvkov z $A$. 
+\end{itemize}
+Pretože nám nezáleží na obrazoch vzorov, ktoré sme pridali, platí:
+\begin{displaymath}
+\lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, k \rbrace \rbrace = \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace
+\end{displaymath}
+Množiny funkcií, ktoré zobrazujú množinu rozšírených vzorov na zvolené obrazy, sú navzájom disjunktné:
+\begin{displaymath}
+\begin{split}
+\left| \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, k \rbrace \rbrace \right| 
+	& = \left| \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right|  \\
+	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \left| \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
+	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \frac{H}{{|A|}^{n}} = {|A|}^{n - k} \frac{H}{{|A|}^{n}} = \frac{H}{{|A|}^{k}}
+\end{split}
+\end{displaymath}
+\end{proof}
+
+% Linear systems
+\paragraph{Lineárny systém}
+\begin{definition}[Lineárny systém]
+Nech $U = \{0, \dots, N - 1 \}$ a $A = \{0, \dots, m - 1\}$. Potom systém funkcií 
+\[ H = \{h(x): U \rightarrow A | h(x) = ((ax + b) \mod N) \mod m\} \]
+nazveme lineárny systém hashovacích funkcií.
+\end{definition}
+
+\begin{remark}
+Lineárny systém je $\frac{\left(\lceil \frac{N}{m} \rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-univerzálny.
+\end{remark}
+% End linear systems
+
+\paragraph{Systém lineárnych zobrazení}
+
+% Polynoms
+\paragraph{Polynómy nad konečnými poliami}
+\begin{definition}[Polynómy nad konečnými poliami]
+Nech $U = \{0, \dots, N - 1 \}$, $A = \{0, \dots, m - 1\}$ a $n \in N$. Potom systém funkcií 
+\[ H = \{h(x): U \rightarrow A | h(x) = ((\displaystyle \sum_{i=0}^{n} c_i x^i ) \mod N) \mod m\} \]
+nazveme systém polynomiálnych hashovacích funkcií stupňa $n$. Koeficienty $c_i, i \in \{0, 1, \dots, n\}$ volíme z množiny $U$.
+\end{definition}
+\begin{remark}
+Nech $N$ je prvočíslo. Systém polynomiálnych hashovacích funkcií stupňa $n$ je silne $n + 1$-univerzálny pre $A = U$. Pre $A \neq U$ je "takmer" silne $n + 1$-univerzálny.
+\end{remark}
+\begin{proof}
+% TODO: Odkaz na Vandermondovu maticu.
+Nech $x_1, x_2, \dots, x_{n+1}$ sú po dvojiciach rôzne a $y_1, y_2, \dots, y_{n+1}$ sú zvolené obrazy. Potom môžeme zostaviť Vandermondovu maticu pre určenie jednotlivých koeficientov $c_0, c_1, \dots, c_n$.
+
+Pokiaľ $U = A$, funkcie $h(x)$ sa redukujú na tvar $h(x) = (\displaystyle \sum_{i=0}^{n} c_i x^i ) \mod N$. Veľkosť systému je ${|U|}^{n+1}$. Pre zadané vzory a ich obrazy z invertibility Vanderomondovej matice dostávame práve jednu funkciu $h$, ktorá spĺňa predpísané podmienky. Za predpokladu $|A| = |U|$ platí ${|A|}^{n+1} = {|U|}^{n+1}$. Ihneď získavame, že systém polynomiálnych funkcií je silne $n+1$-univerzálny.
+
+Teraz nech $U \neq A$. Postupujeme obdobne ako v dôkaze $c$-univerzality lineárneho systému.
+\begin{displaymath}
+(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} ) \mod N = {y}_i + {r_i}{m} \qquad {y}_i \in \{0, \dots, m - 1 \}, r_i \in \{0, m, 2m, \dots, \lceil \frac{N}{m} \rceil - 1\}
+\end{displaymath}
+Pre každú voľbu ${y}_i$ a $r_i$ dostávame jednoznačné riešenie sústavy. Pokiaľ sú zadané obrazy $y_i$, hodnoty $r_i$ už môžu byť ľubovoľné. Pre každú voľbu $r_i$ máme jedinú funkciu spĺňajúcu zadané predpoklady. Počet sád $r_i$ je ${\lceil \frac{N}{m} \rceil}^{n + 1}$ a práve toľko je polynomiálnych hashovacích funkcií, ktoré pošlú zadané vzory na im príslušné obrazy.
+\begin{displaymath}
+|\{h \in H | h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| = {\lceil \frac{N}{m} \rceil}^{n + 1} = \frac{{\lceil \frac{N}{m} \rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}\left(\frac{N}{m}\right)^{n+1}
+\end{displaymath}
+\end{proof}
+% End polynoms
+
+
+\paragraph{Bitový súčet reťazca nad konečným poľom}
+\begin{definition}
+Nech $U = \{0, \dots, N - 1\}$ a $A = \{0, \dots, p - 1 \}$, kde $N = 2^k$ a $p$ je prvočíslo, zvolíme $l \leq p$. Pre každý prvok $x \in U$ budeme chápať zápis $x = x_{k - 1} x_{k-2} \dots x_0$ ako zápis čísla x v binárnej sústave ($x = \displaystyle \sum_{j=0}^{k-1} x_j 2^j$). Systém funkcií 
+\begin{displaymath}
+H = \{ h: U \rightarrow A | h(x) = (\displaystyle \sum_{i=0}^{k-1} c_i x_i) \mod p, c_i \in \{0, 1, \dots, l - 1\} \}
+\end{displaymath} 
+nazveme reťazcový systém.
+\end{definition}
+\begin{remark}
+Reťazcový systém je $c$-univerzálny, pre $c = \frac{p}{l}$.
+\end{remark}
+\begin{proof}
+Vieme, že $|H| = l^k$. Nech $x, y \in U$ a $x \neq y$, existuje $0 \leq j \leq k-1$, t.ž. $x_j - y_j \neq 0$.
+Nech $h(x) = h(y)$, potom:
+\begin{displaymath}
+\begin{split}
+\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \mod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \mod p \\
+c_j(x_j - y_j) \mod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p \\
+c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p
+\end{split}
+\end{displaymath}
+Posledná rovnosť platí, pretože $p$ je prvočíslo a prvok $x_j - y_j$ je invertibilný. Pri výbere funkcií, ktoré dané dva rôzne prvky nechajú kolidovať, sme o voľbu jednej konštanty $c_j$ ochudobnení. 
+
+\begin{displaymath}
+|\{h \in H | h(x) = h(y) \}| = l^{k-1} = \frac{p}{l}\frac{l^k}{p} = c\frac{|H|}{|A|}
+\end{displaymath}
+\end{proof}
+
+% All functions
+\paragraph{Množina všetkých zobrazení}
+\begin{remark}
+Systém všetkých zobrazení $h: U \rightarrow A$ je silne $\omega$-univerzálny.
+\end{remark}
+\begin{proof}
+Platí:
+\begin{displaymath}
+|H| = {|A|}^{|U|}
+\end{displaymath}
+Nech máme zadaných $n$ po dvojiciach rôznych vzorov $x_1, \dots, x_n$ a k nim odpovedajúce obrazy $y_1, \dots, y_n$. Veľkosť $H_n = \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace$ je:
+\begin{displaymath}
+|H_n| = {|A|}^{|U| - n} = \frac{{|A|}^{|U|}}{{|A|}^{n}} = \frac{|H|}{|A|^n}
+\end{displaymath}
+\end{proof}
+
+Pamätať si úplné zobrazenie zo systému $H$ je nepraktické. Kódujeme aj hodnoty prvkov, ktoré sa nikdy v hashovanej množine nevyskytnú. Alternatívou je konštruovať náhodnú parciálnu funkciu z množiny všetkých zobrazení z $U$ do $A$ nasledujúcim spôsobom. Vychádzame z predpokladu existencie rýchlej asociatívnej pamäti a generátora náhodných prvkov. Kedykoľvek máme hashovať prvok, tak chceme určiť hodnotu hashovacej funkcie. Najprv pomocou asociatívnej pamäti zistíme, či už nemá priradenú hodnotu. Ak nie, vygenerujeme náhodný prvok z množiny $A$ a do asociatívnej pamäti toto zobrazenie poznamenáme. Jedná sa o postupnú konštrukciu funkcie z množiny všetkých zobrazení. Nakoľko táto konštrukcia vyberá prvky rovnomerne, zostrojená funkcia má vlastnosti silne $\omega$-univerzálneho systému. Navyše nemáme uložené mapovanie pre prvky, ktoré sme doteraz nepotrebovali.
+% End all functions
+
+\paragraph{Malý univerzálny systém}
+
+
+\paragraph{Systém definovaný pomocou matíc}

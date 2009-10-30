@@ -1,0 +1,40 @@
+\documentclass[12pt,notitlepage]{report}
+\pagestyle{plain}
+\usepackage{a4wide}
+\usepackage[left=4cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+
+\frenchspacing
+\usepackage[utf8x]{inputenc}
+\usepackage[czech,slovak]{babel}
+\usepackage{ucs}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{epstopdf}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{courier}
+
+\usepackage{listings}
+\lstset{language=c++, basicstyle=\ttfamily\footnotesize}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\include{csprimes}
+\include{alg_def}
+\include{definitions}
+
+\author{Martin Babka}
+\title{Výpočty pre hashovanie}
+
+\begin{document}
+\include{systems}
+\include{elpsl}
+\include{tries}
+\end{document}
