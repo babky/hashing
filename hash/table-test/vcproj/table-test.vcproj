@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Users\babky-regular\Documents\Source\Hash\trunk\hash\test-suite&quot;;&quot;C:\Users\babky-regular\Documents\Source\Hash\trunk\hash\table-lib&quot;;&quot;C:\Users\babky-regular\Documents\Source\Hash\vendor\boost&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\trunk\hash\table-lib&quot;;..\..\..\..\vendor\boost;&quot;..\..\..\..\trunk\hash\test-suite&quot;"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Documents\Source\Hash\vendor\boost\stage\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -113,7 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;C:\Users\babky-regular\Documents\Source\Hash\trunk\hash\test-suite&quot;;&quot;C:\Users\babky-regular\Documents\Source\Hash\trunk\hash\table-lib&quot;;&quot;C:\Users\babky-regular\Documents\Source\Hash\vendor\boost&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\trunk\hash\table-lib&quot;;..\..\..\..\vendor\boost;&quot;..\..\..\..\trunk\hash\test-suite&quot;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="4"
@@ -131,7 +131,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories="&quot;C:\Users\babky-regular\Documents\Source\Hash\vendor\boost\stage\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
