@@ -174,6 +174,10 @@
 					RelativePath="..\policies\rehash_policy.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\policies\worst_case_rehash_policy.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -194,7 +198,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\universal_function.h"
+				RelativePath="..\universal_systems.h"
 				>
 			</File>
 			<Filter
@@ -234,6 +238,26 @@
 				>
 				<File
 					RelativePath="..\policies\rehash_policy.h"
+					>
+				</File>
+				<File
+					RelativePath="..\policies\worst_case_rehash_policy.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Systems"
+				>
+				<File
+					RelativePath="..\systems\cwlf_system.h"
+					>
+				</File>
+				<File
+					RelativePath="..\systems\linear_map_system.h"
+					>
+				</File>
+				<File
+					RelativePath="..\systems\omega_system.h"
 					>
 				</File>
 			</Filter>
