@@ -1,0 +1,3 @@
+function prob(r) {
+	return (log2(r) / r) ^ (log2(r / log2(r)) + log2(log2(r / log2(r))
+}
