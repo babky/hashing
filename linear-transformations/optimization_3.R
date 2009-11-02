@@ -81,7 +81,7 @@ while (k <= k_max) {
 			scheme_2 = scheme_2_mult_constant(k, e, l);
 			if (scheme_2 < scheme_2_min) {
 				scheme_2_min = scheme_2;
-				scheme_2_min_vec = c(k, e, l, scheme_2);
+				scheme_2_min_vec = c(k, e, l, scheme_2, c);
 				# print(scheme_2_min_vec);
 			}
 
@@ -99,7 +99,7 @@ print(scheme_1_min_vec);
 print(scheme_2_min_vec);
 
 # Additive constant
-c_e = scheme_2_min_vec[4];
+c_e = scheme_2_min_vec[5];
 e = scheme_2_min_vec[2];
 print (2 * c_e * ((14 - 4) / (1 - e) + 4));
 

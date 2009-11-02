@@ -47,12 +47,12 @@ c_min = compute_constant(3, 0.5, 0);
 scheme_1_min = scheme_1_mult_constant(3, 0.5, 0);
 scheme_2_min = scheme_2_mult_constant(3, 0.5, 0);
 
-k_min = 2;
+k_min = 1;
 k_max = 4;
 k_step = 0.01;
 
-l_min = -0.5;
-l_max = 0.5;
+l_min = 1;
+l_max = 3;
 l_step = 0.01;
 
 e_min = 0.5;
@@ -67,25 +67,25 @@ while (k <= k_max) {
 		e = e_min;
 
 		while (e <= e_max) {
-#			c = compute_constant(k, e, l);
-#			if (c < c_min) {
-#				c_min_vec = c(k, e, l, c);
-#				c_min = c;
-#				# print(c_min_vec);
-#			}
+			c = compute_constant(k, e, l);
+			if (c < c_min) {
+				c_min_vec = c(k, e, l, c);
+				c_min = c;
+				# print(c_min_vec);
+			}
 
-#			scheme_1 = scheme_1_mult_constant(k, e, l);
-#			if (scheme_1 < scheme_1_min) {
-#				scheme_1_min = scheme_1;
-#				scheme_1_min_vec = c(k, e, l, scheme_1);
-#				# print(scheme_1_min_vec);
-#			}
+			scheme_1 = scheme_1_mult_constant(k, e, l);
+			if (scheme_1 < scheme_1_min) {
+				scheme_1_min = scheme_1;
+				scheme_1_min_vec = c(k, e, l, scheme_1);
+				# print(scheme_1_min_vec);
+			}
 
 			scheme_2 = scheme_2_mult_constant(k, e, l);
 			if (scheme_2 < scheme_2_min) {
 				scheme_2_min = scheme_2;
 				scheme_2_min_vec = c(k, e, l, scheme_2);
-				print(scheme_2_min_vec);
+				# print(scheme_2_min_vec);
 			}
 
 			e = e + e_step;
