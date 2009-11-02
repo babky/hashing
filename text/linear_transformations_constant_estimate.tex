@@ -1,0 +1,128 @@
+\section{Estimating the multiplicative constant}
+
+\subsection{Integral}
+When we were proving the upper bond on the length of the longest chain in a hash table we defined the constant $I$ as:
+\begin{displaymath}
+I = \displaystyle\int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+
+Now we will extend the definition of $I$ to $I_{\epsilon}$. This integral is one part of the multiplicative constant.
+\begin{displaymath}
+I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+Originally we used $I_{\frac{1}{2}} = I$. The extension is motivated by the fact that we were not forced to use $\epsilon$ equal to $0.5$. When we choose other value we can obtain even a smaller integral value. If we select an arbitrary $\epsilon$ the conditional probability of event $E_2 | E_1$ is constrained as $P(E_2 | E_1) \geq 1 - \epsilon$. And the bound on the probability of event $E_1$ becomes $P(E_1) = \frac{1}{1-\epsilon} P(E_2)$.
+
+Evaluation of the integral $I$ may be split into two parts. We try to compare it to a function which has a convergent improper integral. The function chosen here is $r^{1.5}$. But the chosen function becomes greater after the value $r = 16$. In the interval $[4, 16]$ the integral $I$ is bounded by its upper Riemann sum.
+
+For $r = 16$:
+\begin{displaymath}
+\frac{1}{16 ^ {1.5}} = \frac{1}{64}
+\end{displaymath}
+
+\begin{displaymath}
+\left(\frac{16}{\log 16}\right)^{-\log \left(\frac{16}{\log 16}\right) - \log \log \left(\frac{16}{\log 16}\right)} = 4^{-2 - 1} = \frac{1}{64}
+\end{displaymath}
+
+For $r > 16$ we can use our estimates.
+\begin{displaymath}
+\begin{split}
+I_{\epsilon} 
+	& \leq \frac{1}{1 - \epsilon} \left( \displaystyle \sum_{r = 4}^{15} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} + \int\limits_{16}^\infty \frac{1}{r^{1.5}} dr \right) \\
+	& \leq \frac{1}{1 - \epsilon} \left(4.3 + \frac{1}{2}\right) = \frac{4.8}{1-\epsilon}
+\end{split}
+\end{displaymath}
+
+\subsection{Choosing $\epsilon$}
+The most important step is the optimization of the value $4 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then $47 005$ for $\epsilon = 0.93$, $k = 1.42$ and $l = 1.06$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant it becomes less than linear estimate for $n$ approximately equal to $8 000 000$.
+
+The first approach to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} is to parametrize every constant. Then we will optimize these parameters so that we get the least $c_{\epsilon}$. The optimization can not be done analytically because of the complexity of the constraints. We created a straightforward program that assigns each parameter a value from a predefined interval. Then it computes the multiplicative constant and the best achieved value is remembered and used.
+
+We actually made two modifications. 
+
+We may have the size of the set $T_0(A)$ less than $\frac{|A|}{l}$, for $l > 1$. The second parameter is obtained by modifying the dimension of the factor vector space $Z_2^u$. We change the definition of $u$ to:
+\begin{displaymath}
+u = \left\lceil \log \left(\frac{k |A|}{\epsilon}\right) \right\rceil \textit{.}
+\end{displaymath}
+Then the probability of the event $T(A) \neq Z_2^t$ is:
+\begin{displaymath}
+P(T(A) \neq Z_2^t) \leq P(|T_0(A)| \leq \frac{|A|}{l}) + P(T_1(T_0(A)) \neq Z_2^t) \leq \epsilon
+\end{displaymath}
+The right side, $\epsilon$ is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ directly without any estimations.
+\begin{displaymath}
+\begin{split}
+P(|T_0(A)| \leq \frac{|A|}{k}) + P(T_1(T_0(A)) \neq Z_2^t) 
+& \leq \frac{l(|A| - 1)}{2|W|} + \left(1 - \frac{|A|}{l|W|}\right)^{u - t - \log t - \log \log \frac{1}{1 - \frac{|A|}{l|W|}}} \\
+& \leq \frac{l}{2^k}
+\end{split}
+\end{displaymath}
+
+\section{Odhad pravdepodobnosti pri hashovaní li\-ne\-ár\-ne\-ho množstva prvkov}
+V tejto časti nám pôjde o získanie predstavy o očakávanej dĺžke najdlhšieho reťazca pri zmene faktoru naplnenia hashovacej tabuľky. Nebudeme hashovať superlineárne množstvo záznamov, ale len lineárne a to dokonca menšie ako je veľkosť hashovacej tabuľky. Doposiaľ sme nepotrebovali rôzne označenie pre veľkosť hashovacej tabuľky a počet prvkov, ponecháme $n$ ako veľkosť tabuľky. Počet prvkov značíme $\alpha_f n$, kde $\alpha_f$ je faktor naplnenia tabuľky.
+
+Teraz upravíme predchádzajúce tvrdenie tak, aby zahŕňalo aj faktor naplnenia. 
+\begin{theorem}
+\label{theorem-n-to-n}
+Pri hashovaní $\alpha_f n$ prvkov do tabuľky veľkosti $n$ je očakávaná dĺžka najdlhšieho reťazca $O(\alpha_f \log n \log \log n)$.
+\end{theorem}
+\begin{proof}
+Upravíme tvrdenia a dôkazy niektorých lem. Prvá zjavná úprava, ktorú potrebujeme, je odhad odkedy môžeme použiť odhad pravdepodobnosti.
+
+\begin{remark}
+Existuje konštanta $C$ taká, že pre všetky $r > 4$ pri hashovaní množiny $S \subset D$, $|S| = \alpha_f n$ na množinu $B = Z_2^{\log n}$, platí:
+\begin{displaymath}
+P(lpsl > r \alpha_f C \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+Postupujeme obdobne ako v predchádzajúcej verzii:
+\begin{displaymath}
+\begin{split}
+l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + \log \alpha_f \right\rfloor \\
+t & = 4\alpha_f c_{\frac{1}{2}} \log n \log \log n \\
+d & = \frac{2^l}{\alpha_f n \log n} \\
+\end{split}
+\end{displaymath}
+
+Overíme predpoklady pozorovania \ref{remark-e2-probability}. V menovateli použijeme tiež faktor naplnenia, pretože aj ním je limitovaná veľkosť hashovanej množiny:
+\begin{displaymath}
+d = \frac{2^l}{\alpha_f n \log n} \geq \frac{\alpha_f n \log n \log r}{\alpha_f n \log n \log \log r} > 1
+\end{displaymath}
+
+Ešte je nutné upraviť dôkaz pozorovania \ref{remark-e2-probability}. V dôkaze sme použili nasledovný vzťah, ktorý sme ihneď opravili, medzi objektami $h_1(S)$, $A = Z_2^l$, $\alpha$ a $d$.
+\begin{displaymath}
+\alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{\alpha_f n \log n}{2^l} = \frac{1}{d}
+\end{displaymath}
+
+Týmto ostáva pozorovanie \ref{remark-e2-probability} v platnosti aj pre túto schému.
+
+Platí:
+\begin{displaymath}
+\begin{split}
+c_{\frac{1}{2}} \frac{2^l}{n} \log \left(\frac{2^l}{n}\right) 
+	& < c_{\frac{1}{2}} 2 \alpha_f \log n \left( \frac{r}{\log r} \right) \left(2 \log \log n \log r \right) \\
+	& \leq 4 c_{\frac{1}{2}} \alpha_f \log n \log \log n \log r \\
+	& = t
+\end{split}
+\end{displaymath}
+
+Teda sú splnené predpoklady pozorovania \ref{remark-prob-t-length-chain}. Jeho dôkaz vyhovuje naďalej, použila sa množina $A = Z_2^l$, pričom sme sa nikde neodkazovali na konkrétnu hodnotu $l$ a veľkosť hashovacej tabuľky $|B| = n$ je nezmenená.
+
+Pokračujeme rovnako ako v dôkaze pri predchádzajúcej schéme:
+\begin{displaymath}
+P(E1) \leq \frac{1}{P(E2|E1)}P(E2) \leq 2 d ^ {-\log d - \log \log d}\textit{.}
+\end{displaymath}
+\end{proof}
+
+Teraz už len upravíme výpočet odhadu očakávanej dĺžky najdlhšieho reťazca, teraz berieme $K = C \alpha_f \log n \log \log n$.
+\begin{displaymath}
+\begin{split}
+E lpsl 
+	& = \int\limits_0^\infty P(lpspl > t) dt \\
+	& \leq 4K + \int\limits_{4K}^\infty P(lpspl > t) dt \\
+	& = 4K + K\int\limits_4^\infty P(lpspl > tK) dt \\
+	& \leq K(4 + I) = O(K) = O(\alpha_f \log n \log \log n)
+\end{split}
+\end{displaymath}
+
+Výraz $I$ sa od predchádzajúceho dôkazu nezmenil.
+\end{proof}
