@@ -1,13 +1,15 @@
-\chapter{Systémy lineárnych zobrazení nad konečnými poliami}
+\chapter{Systems of linear maps between vector spaces}
 
-Zásadným výsledkom pre systémy lineárnych zobrazení je obmedzenie očakávanej dĺžky najdlhšieho reťazca. Dôkaz tejto vlastnosti nevychádza z prístupu, ktorý odhaduje pravdepodobnosť kolízie $k$ prvkov a tým pádom nevyužíva vlastnosti silne $2$-univerzálnych systémov. Pri použití poľa $Z_2$ a hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$ je $O(\log n \log \log n)$ horný odhad očakávanej dĺžky najdlhšieho reťazca. Pokiaľ budeme voliť iné polia, nemôžeme očakávať takéto dobré výsledky \cite{linear-hash-functions}.
+Main result regarding the systems of linear maps is the upper bound on the length of the longest probe sequence. The proof of this property does not come from the ideas already mentioned in this text. The approach used here does not try to compute the probability of collision of $k$-elements directly. Thus we will not exploit the attributes of a $2$-strongly universal system. Instead we concentrate and work with special properties of this unique system.
+
+In the following we will be using the vector spaces over the $Z_2$ field for hashing $n \log n$ elements into a hash table of size of $n$ slots. Under these assumptions we will prove very important property of this scheme; the length of the longest chain is $O(\log n \log \log n)$. If the other finite fields are used we can not expect that good properties as it is mentioned in \cite{linear-hash-functions}.
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Nech $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ je surjektívne lineárne zobrazenie a $x \in Z_2^t$. Potom $|T^{-1}(x)| = 2 ^ {u-t}$.
+Let $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ be an onto linear map and $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
 \end{lemma}
 \begin{proof}
-Vychádzame, že z toho, že $T^{-1}(0)$ je vektorový podpriestor $Z_2^u$:
+First we remark that $T^{-1}(0)$ is a vector subspace of the vector space $Z_2^u$:
 \begin{displaymath}
 \begin{split}
 & T(0) = 0 \\
@@ -16,7 +18,7 @@ T(u) = 0: & T(\delta u) = \delta T(u) = \delta 0 = 0
 \end{split}
 \end{displaymath}
 
-Ukážeme, že $T^{-1}(x)$ je afinný podpriestor, $T^{-1}(x) = u + T^{-1}(0)$. Z toho okamžite plynie, že množiny $T^{-1}(x)$ sú rovnako veľké, $|T^{-1}(x)| = 2^{u-t}$. Nech $u \in T^{-1}(x)$, potom $T^{-1}(x) = u + T^{-1}(0)$.
+Next we will prove that $T^{-1}(x)$ is an affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The consequence is that all sets $T^{-1}(x)$ are of the same size, exactly $|T^{-1}(x)| = 2^{u-t}$. If we have one element $u \in T^{-1}(x)$ then the set $T^{-1}(x)$ is the same as the set $u + T^{-1}(0)$.
 \begin{displaymath}
 \begin{split}
 v \in T^{-1}(0) 
@@ -34,18 +36,18 @@ v \in T^{-1}(x)
 \end{displaymath}
 \end{proof}
 
-Nasledujúce tvrdenia preberáme z \cite{linear-hash-functions}.
+All of the following claims are taken from \cite{linear-hash-functions}. It is convenient to show the original proves and then modify them according our needs.
 
 \begin{lemma}
 \label{lemma-choose-random-vector}
-Nech $V$ je konečný vektorový priestor, $A \subseteq V$, $\alpha = 1 - \frac{|A|}{|V|}$. Potom pre pre náhodný, rovnomerne zvolený $v \in V$ platí:
+If $V$ is a finite vector space, $A$ is a subset of $V$, $\alpha = 1 - \frac{|A|}{|V|}$. Then for a random uniformly chosen vector $v \in V$ holds:
 \begin{displaymath}
 E (1 - \frac{|A \cup (v + A)|}{|V|}) = \alpha^2 \textit{.}
 \end{displaymath}
-Strednú hodnotu berieme cez všetky možné výbery $v$.
+The expectation taken here is through all of the possible choices of $v$.
 \end{lemma}
 \begin{proof}
-Pokiaľ vyberieme dva vektory $u$ a $v$ rovnomerne a nezávisle z $V$, tak pravdepodobnosť, že $u \notin A$ a $u \notin v + A$ je $\alpha$. Tieto dva javy sú nezávislé a s nasledujúcim je tvrdenie dokázané.
+We choose two vectors $u$ and $v$ uniformly and independently from the space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the following we will finish the proof this lemma.
 \begin{displaymath}
 \begin{split}
 |A \cup (v + A)| 
@@ -63,74 +65,125 @@ E (1 - \frac{|A \cup (v + A)|}{|V|})
 \end{displaymath}
 \end{proof}
 
+The following lemma is a very technical one ans is used to estimate the probabilities of some events related to linear maps.
 \begin{lemma}
 \label{lemma-random-variable}
-Nech pre $1 \leq i \leq k$ sú $\alpha_i$ náhodné premenné a $0 < \alpha_0 < 1$ je konštanta. Ďalej nech pre $1 \leq i \leq k$ platí, že $0 \leq \alpha_i \leq \alpha_{i - 1}$ a predpokladáme, že $E[ \alpha_i | \alpha_{i-1} \dots \alpha_1 ] = \alpha_{i-1}^{2}$. Potom pre akýkoľvek prah $0 < t < 1$ platí nasledovné:
+For $1 \leq i \leq k$ the $\alpha_i$ are random variables and $0 < \alpha_0 < 1$ is a constant. For the random variables, $1 \leq i \leq k$, we assume the following:
+\begin{gather*}
+0 \leq \alpha_i \leq \alpha_{i - 1} \\
+E[ \alpha_i | \alpha_{i-1} \dots \alpha_1 ] = \alpha_{i-1}^{2} \\
+\end{gather*}
+Then for every constant $0 < t < 1$ we can estimate the probability:
 \begin{displaymath}
-P(\alpha_k \geq t) \leq \alpha_0^{k - \log \log (\frac{1}{t}) + \log \log (\frac{1}{\alpha_0})}
+P(\alpha_k \geq t) \leq \alpha_0^{k - \log \log (\frac{1}{t}) + \log \log \left(\frac{1}{\alpha_0}\right)}
 \end{displaymath}
 \end{lemma}
 \begin{proof}
-Pre $k = 0$ tvrdenie platí. Ak je $t \leq \alpha_0$, máme $-\log \log (1/t) + \log \log \left(\frac{1}{\alpha_0}\right) < 0$ a pravú stranu väčšiu ako 1. V ostatných prípadoch je pravdepodobnosť nulová.
+For $k = 0$ the claim is certainly true; we have just two cases to take into account. First if $t \leq \alpha_0$, the exponent is negative:
+\begin{displaymath}
+-\log \log (1/t) + \log \log \left(\frac{1}{\alpha_0}\right) < 0
+\end{displaymath}
+The base, $\alpha_0$, is less then $1$ so our estimate of the probability is above $1$. 
 
-Predpokladáme, že tvrdenie pre $k$ platí, dokazujeme ho pre $k + 1$. Zvolíme $c = k - \log \log \left(\frac{1}{t}\right)$. Pokiaľ je $c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < 0$, je odhad pravdepodobnosti na pravej strane väčší ako $1$. Takže predpokladajme opak a:
+In the remaining possibility the real probability is $0$ and our estimate is certainly positive.
+
+By using induction we suppose that the lemma holds for $k$ and we will show its validity for $k + 1$. For convenience we set the constant $c$ equal to $k - \log \log \left(\frac{1}{t}\right)$. The expected result on the right side is then:
+\begin{displaymath}
+\alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
+\end{displaymath}
+
+As in the induction start we will rule out the case if exponent is negative:
+\begin{displaymath}
+c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < 0\textit{.}
+\end{displaymath}
+Our estimate will be greater than $1$. 
+
+Now we will assume the opposite inequality. The proof needs to be split into a few cases at this place. Also we need some useful remarks so we point them out at first. The estimated probability can certainly be computed by taking the expectation when we fix the random variable $\alpha_1$ in an interval $[0, \alpha_0]$.
 \begin{displaymath}
 P(\alpha_{k+1} \geq t) = E_{\alpha_{k+1}} P(\alpha_{k+1} \geq t | \alpha_1) \leq E_{\alpha_{k+1}} f(\alpha_1)
 \end{displaymath}
-Pričom $f$ definujeme pre $0 < x < 1$ nasledovne:
+
+Where $f$ is defined for $0 < x < 1$ as:
 \begin{displaymath}
 f_0(x) = x ^ {c + \log \log \left(\frac{1}{x}\right)}
 \end{displaymath}
-\begin{displaymath}
+\begin{equation}\label{f-definition}
  f(x) = 
   \begin{cases} 
-   \min(1, f_0(x)) & \text{ak } 0 < x < 1 \\
-   1 & \text{ak } x = 0
+   \min(1, f_0(x)) & \text{if } 0 < x < 1 \\
+   1 & \text{if } x = 0
   \end{cases}
-\end{displaymath}
-Z indukčného predpokladu plynie, že hodnota $f$ je horný odhad pre pravdepodobnosť $P(\alpha_{k+1} \geq t | \alpha_1)$. Brali sme ohľad len na k premenných.
+\end{equation}
+In the function $f$ the argument $x$ plays the role of the constant $\alpha_1$ since we fixed its value. There are only $k$ variables among variables $\alpha_{k+1}$ and $\alpha_1$. From the induction hypothesis it follows that $f$ is the upper bound for $P(\alpha_{k+1} \geq t | \alpha_1)$.
 
-Ukážeme, že pre všetky možné hodnoty x $0 \leq x \leq \alpha_1 \alpha_0$ je $f(x) \leq \frac{f_0(\alpha_0)x}{\alpha_0}$. Definujeme dve hodnoty $1 > x' = 2 ^ {-2 ^ {-c - 1}}$ a $x'' = {x'}^2 = 2 ^ {-2 ^ {-c}}$. 
+For all $0 \leq x \leq \alpha_0$ we would like to have the value of $f(x)$ upper bounded by the expression $\frac{f_0(\alpha_0)x}{\alpha_0}$. In order to prove this property we define two values $x'$ and $x''$ both less than $1$:
+\begin{equation}
+x' = 2 ^ {-2 ^ {-c - 1}}
+\end{equation}
+\begin{equation}
+x'' = {x'}^2 = 2 ^ {-2 ^ {-c}}
+\end{equation}
 
-Uvedomíme si, že funkcia $\frac{f(x)}{x}$ je na intervale $(0, 1)$ najprv rastúca a potom klesajúca:
+Now we should point out how the mentioned bound is obtained.
+\begin{equation}
+f(x) = \frac{x f(x)}{x} \leq \frac{x f_0(\alpha_0)}{\alpha_0}
+\end{equation}
+The last inequality remains to be proved. We will bound the function $\frac{f(x)}{x}$. 
+
+From the derivation of the function $\frac{f(x)}{x}$ in the interval $(0, 1)$ we know that it is initially in the increasing phase and then decreases.
 \begin{displaymath}
 \frac{f(x)}{x}' = \left(c + \log e - 1 + \log \log \left(\frac{1}{x}\right)\right)\frac{f_0(x)}{x}
 \end{displaymath}
 
-Bod $x''$ je v časti, keď funkcia rastie:
+The point $x''$ lies in the increasing phase:
 \begin{displaymath}
 c + \log e - 1 + \log \log \left(\frac{1}{x''}\right) = c + \log e - 1 - c > 0
 \end{displaymath}
 
-Teda v tejto časti funkcia $f$ nadobudne hodnotu $1$ a už pod ňu neklesne. Pre $x \geq x''$ je $f(x) = 1$:
-\begin{displaymath}
-f_0(x'') = x^{c - c} = 1
-\end{displaymath}
-\begin{displaymath}
+For every $x$, $x'' \leq x$ the value of $f(x)$ is 1:
+\begin{equation}\label{f-x-double-prime}
+f_0(x'') = {x''}^{c + \log \log \left(\frac{1}{2^{-2^{-c}}}\right)} = {x''}^{c - c} = 1
+\end{equation}
+\begin{equation}\label{f-x-after-double-prime}
 f_0(x) = x^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x''}\right)} = 1
-\end{displaymath}
+\end{equation}
 
-Takže platí:
-\begin{displaymath}
-\frac{f(x)}{x} \leq 
-  \begin{cases} 
-  	\frac{f_0(\alpha_0)}{\alpha_0} & \text{ak } \alpha_0 \text{ je v rastúcej časti} \\
-  	\frac{f_0(x)}{x} \leq \frac{f_0(x'')}{x''} = \frac{1}{x''} & 0 < x \leq x'' \\
-  	\frac{1}{x} \leq \frac{1}{x''} & x < x'' \\
-  \end{cases}
-\end{displaymath}
+Finally from the above claims we can conclude.
+\paragraph{The constant $\alpha_0$ is in the increasing phase.}
+Since $\alpha_1 \leq \alpha_0$ the values $x$ are certainly less then $\alpha_0$ and also are in the increasing phase. Under these assumptions we immediately have:
+\begin{equation}
+\frac{f(x)}{x} \leq \frac{f(\alpha_0)}{\alpha_0}
+\end{equation}
 
-Naviac:
-\begin{displaymath}
+\paragraph*{The constant $\alpha_0$ is in the decreasing phase.}
+\subparagraph*{Value $x$ is before $x''$.}
+\begin{equation}
+\frac{f(x)}{x} \leq \frac{f(x'')}{x''} \leq \frac{f_0(x'')}{x''} = \frac{1}{x''}
+\end{equation}
+The first inequality holds because $x$ is also in the increasing phase. The second comes from the definition \eqref{f-definition} and the equality is from the \eqref{f-x-double-prime}.
+
+\subparagraph*{Value $x$ is greater than $x''$.}
+\begin{equation}
+\frac{f(x)}{x} \leq \frac{1}{x} \leq \frac{1}{x''}
+\end{equation}
+The first inequality follows from \eqref{f-x-after-double-prime}. And the second is clear because $x \geq x''$.
+
+In this case we have bounded the value $\frac{f(x)}{x}$ by $\frac{1}{x''}$. Next we will discuss the upper bound on that value.
+\begin{equation}
 \frac{f_0(x')}{x'} = \frac{\left({2 ^ {-2 ^ {-c - 1}}}\right)^{-1}}{2 ^ {-2 ^ {-c - 1}}} = \frac{1}{\left({2 ^ {-2 ^ {-c - 1}}}\right)^2} = \frac{1}{x''}
+\end{equation}
+
+We have already ruled out the case $x' < \alpha_0$ since the exponent in the proved claim would be negative:
+\begin{displaymath}
+c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < c + 1 + \log \log \left(\frac{1}{x'}\right) = c + 1 - c - 1 = 0
 \end{displaymath}
 
-Nakoľko je $x' \geq \alpha_0$ a nás zaujíma prípad, keď $\alpha_0$ je v klesajúcej časti intervalu, máme:
+So if the $\alpha_0$ is in the decreasing phase we must assume $x' \geq \alpha_0$. Because $\alpha_0$ is before $x'$ the value $\frac{f(\alpha_0)}{\alpha_0}$ is still greater than $\frac{f(x')}{x'}$ and the following holds:
 \begin{displaymath}
 \frac{1}{x''} = \frac{f_0(x')}{x'} \leq \frac{{f_0}(\alpha_0)}{\alpha_0}\textit{.}
 \end{displaymath}
 
-Získali sme, že v intervale $0 \leq x \leq \alpha_1$ je $f(x) = \frac{f(x)x}{x} \leq \frac{f_0(\alpha_0)x}{\alpha_0}$ a teda:
+So in both cases, $\alpha_0$ is in increasing or decreasing phase, for every $0 \leq x \leq \alpha_0$ the value $f(x) = \frac{f(x)x}{x} \leq \frac{f_0(\alpha_0)x}{\alpha_0}$. Finally we can estimate the above mentioned expected value and probability.
 \begin{displaymath}
 P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alpha_0} = \frac{f_0(\alpha_0)}{\alpha_0}E \alpha_1 = \alpha_0 f(\alpha_0) = \alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
 \end{displaymath}
@@ -139,7 +192,7 @@ P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alp
 
 \begin{theorem}
 \label{theorem-linear-function-set-onto}
-Ak $A$ je podmnožina vektorového priestoru $Z_2^u$ a $T: Z_2^u \rightarrow Z_2^t$ je rovnomerne zvolené náhodné a surjektívne lineárne zobrazenie pre $0 \leq t < u$. Označme $\alpha = 1 - \frac{|A|}{2^u} < 1$, potom:
+Let $A$ be a subset of the vector space $Z_2^u$ and $T: Z_2^u \rightarrow Z_2^t$ is random uniformly chosen surjective linear map, $0 \leq t < u$. Denote $\alpha = 1 - \frac{|A|}{2^u} < 1$. Then:
 \begin{displaymath}
 P(T(A) \neq Z_2^t) \geq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}} \textit{.}
 \end{displaymath}
@@ -166,7 +219,7 @@ Toto je však aj pravdepodobnosť, že množina $T(A)$ je rôzna od $Z_2^t$. Ak 
 
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
-Nech $t$ je prirodzené číslo a $V$ konečný vektorový priestor nad $Z_2$ a $T$ náhodne rovnomerne zvolené surjektívne lineárne zobrazenie z $V$ do $Z_2^{t}$. Potom pre každé $\epsilon > 0$ existuje konštanta $c_\epsilon > 0$ taká, že pre každú podmnožinu $A \subset V$, $|A| \geq c_\epsilon t 2^t$ platí:
+Nech $t$ je prirodzené číslo a $V$ konečný vektorový priestor nad $Z_2$ a $T$ náhodne rovnomerne zvolené lineárne zobrazenie z $V$ do $Z_2^{t}$. Potom pre každé $\epsilon > 0$ existuje konštanta $c_\epsilon > 0$ taká, že pre každú podmnožinu $A \subset V$, $|A| \geq c_\epsilon t 2^t$ platí:
 \begin{displaymath}
 P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
 \end{displaymath}
@@ -197,7 +250,12 @@ P(T(A) \neq Z_2^t \wedge |T(A)| > \frac{|A|}{2})
 	& \leq \alpha ^ {u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)} \\
 	& \leq e^{-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}}	\\
 	& \leq e^{-\frac{\epsilon\left(t + \log t + 3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) -t - \log t  + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} \\
-	& \leq e^{{\log\left(\frac{\epsilon}{2}\right)}} 
+	& \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log\left(\frac{1}{\alpha}\right) \right)}{8}} \\
+	& \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\left(\frac{\epsilon}{8} \log e \right) \right)}{8}} \\
+	& =    e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e - 3 + \log \epsilon \right)}{8}} \\
+	& =    e^{-\frac{\epsilon \left(                    \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e \right)}{8}} \\
+	& \leq e^{-\frac{\epsilon \left(                    \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) \right)}{8}} \\
+	& = e^{{\log\left(\frac{\epsilon}{2}\right)}} 
 	\leq e^{\ln\left(\frac{\epsilon}{2}\right)} 
 	= \frac{\epsilon}{2}
 \end{split}
@@ -351,103 +409,3 @@ P(h(x) = h(y))
 Posledná rovnosť plynie z $1$-univerzality systému lineárnych zobrazení. Podobné obmedzenie môžu platiť aj pre iné univerzálne systémy. Pre takéto systémy pravdepodobnosť kolízie dvoch prvkov odhadneme pomocou vlastností plynúcich zo silnej $k$-univerzality alebo $c$-univerzality daných systémov.
 
 Predchádzajúci výpočet dokumentuje to, že očakávaná dĺžka vyhľadania jedného prvku ostáva stále konštantná, môže sa najviac zdvojnásobiť. Samozrejme, voľbou väčšej hodnoty dĺžky najdlhšieho reťazca sa dostaneme k lepším hodnotám pre očakávaný čas hľadania prvku. Pretože vylúčime menej pôvodných funkcií, rýchlejšie nájdeme aj vhodnú hashovaciu funkciu. V tomto prípade sa však garancia najhoršieho prípadu adekvátne zhorší. 
-
-\section{Odhad konštanty}
-V dôkaze odhadu očakávanej dĺžky najdlhšieho reťazca vystupuje integrál:
-\begin{displaymath}
-I = \displaystyle\int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
-\end{displaymath}
-
-Vyčíslenie integrálu $I$ z predchádzajúceho dôkazu môžeme urobiť tak, že ho odhadneme jeho horným súčtom a porovnáme s funkciou, ktorej integrál konverguje. Konkrétne volíme porovnanie s $\displaystyle \int \frac{1}{r^{\frac{3}{2}}} dr$. 
-
-Pre $r = 16$:
-\begin{displaymath}
-\frac{1}{16 ^ {1.5}} = \frac{1}{64}
-\end{displaymath}
-
-\begin{displaymath}
-\left(\frac{16}{\log 16}\right)^{-\log \left(\frac{16}{\log 16}\right) - \log \log \left(\frac{16}{\log 16}\right)} = 4^{-2 - 1} = \frac{1}{64}
-\end{displaymath}
-
-A teda od $r > 16$ môžeme nahradiť integrál novým odhadom:
-\begin{displaymath}
-\begin{split}
-I_{\epsilon} 
-	& \leq \frac{1}{1 - \epsilon} \left( \displaystyle \sum_{r = 4}^{15} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} + \int\limits_{16}^\infty \frac{1}{r^{1.5}} dr \right) \\
-	& \leq \frac{1}{1 - \epsilon} \left(4.3 + \frac{1}{2}\right) = \frac{4.8}{1-\epsilon}
-\end{split}
-\end{displaymath}
-Pôvodne sme používali $I = I_{\frac{1}{2}}$.
-
-Ďalším dôležitým článkom je optimalizácia $\min_\epsilon(4 c_\epsilon (4 + I_{\epsilon}))$. Táto hodnota je menšia ako $2420$ pre $\epsilon = 0.879$ a $c_\epsilon$ dopočítame "ručne".
-
-\section{Odhad pravdepodobnosti pri hashovaní li\-ne\-ár\-ne\-ho množstva prvkov}
-V tejto časti nám pôjde o získanie predstavy o očakávanej dĺžke najdlhšieho reťazca pri zmene faktoru naplnenia hashovacej tabuľky. Nebudeme hashovať superlineárne množstvo záznamov, ale len lineárne a to dokonca menšie ako je veľkosť hashovacej tabuľky. Doposiaľ sme nepotrebovali rôzne označenie pre veľkosť hashovacej tabuľky a počet prvkov, ponecháme $n$ ako veľkosť tabuľky. Počet prvkov značíme $\alpha_f n$, kde $\alpha_f$ je faktor naplnenia tabuľky.
-
-Teraz upravíme predchádzajúce tvrdenie tak, aby zahŕňalo aj faktor naplnenia. 
-\begin{theorem}
-\label{theorem-n-to-n}
-Pri hashovaní $\alpha_f n$ prvkov do tabuľky veľkosti $n$ je očakávaná dĺžka najdlhšieho reťazca $O(\alpha_f \log n \log \log n)$.
-\end{theorem}
-\begin{proof}
-Upravíme tvrdenia a dôkazy niektorých lem. Prvá zjavná úprava, ktorú potrebujeme, je odhad odkedy môžeme použiť odhad pravdepodobnosti.
-
-\begin{remark}
-Existuje konštanta $C$ taká, že pre všetky $r > 4$ pri hashovaní množiny $S \subset D$, $|S| = \alpha_f n$ na množinu $B = Z_2^{\log n}$, platí:
-\begin{displaymath}
-P(lpsl > r \alpha_f C \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
-\end{displaymath}
-\end{remark}
-\begin{proof}
-Postupujeme obdobne ako v predchádzajúcej verzii:
-\begin{displaymath}
-\begin{split}
-l & = \left\lfloor \log n + \log \log n + \log r - \log \log r - \log \alpha_f \right\rfloor \\
-t & = 4\alpha_f c_{\frac{1}{2}} \log n \log \log n \\
-d & = \frac{2^l}{n \log n} \\
-\end{split}
-\end{displaymath}
-
-Overíme predpoklady pozorovania \ref{remark-e2-probability}:
-\begin{displaymath}
-d = \frac{2^l}{n \log n} \geq \frac{n \log n \log r}{\alpha_f n \log n \log \log r} > 1
-\end{displaymath}
-
-Ešte je nutné upraviť dôkaz pozorovania \ref{remark-e2-probability}. V dôkaze sme použili nasledovný vzťah, ktorý sme ihneď opravili, medzi objektami $h_1(S)$, $A = Z_2^l$, $\alpha$ a $d$.
-\begin{displaymath}
-\alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{n \log n}{2^l} = \frac{1}{d}
-\end{displaymath}
-
-Týmto ostáva pozorovanie \ref{remark-e2-probability} v platnosti aj pre túto schému.
-
-Platí:
-\begin{displaymath}
-\begin{split}
-c_{\frac{1}{2}} \frac{2^l}{n} \log \left(\frac{2^l}{n}\right) 
-	& < c_{\frac{1}{2}} 2 \alpha_f \log n \left( \frac{r}{\log r} \right) \left(2 \log \log n \log r \right) \\
-	& \leq 4 c_{\frac{1}{2}} \alpha_f \log n \log \log n \log r \\
-	& = t
-\end{split}
-\end{displaymath}
-
-Teda sú splnené predpoklady pozorovania \ref{remark-prob-t-length-chain}. Jeho dôkaz vyhovuje naďalej, použila sa množina $A = Z_2^l$, pričom sme sa nikde neodkazovali na konkrétnu hodnotu $l$ a veľkosť hashovacej tabuľky $|B| = n$ je nezmenená.
-
-Pokračujeme rovnako ako v dôkaze pri predchádzajúcej schéme:
-\begin{displaymath}
-P(E1) \leq \frac{1}{P(E2|E1)}P(E2) \leq 2 d ^ {-\log d - \log \log d}\textit{.}
-\end{displaymath}
-\end{proof}
-
-Teraz už len upravíme výpočet odhadu očakávanej dĺžky najdlhšieho reťazca, teraz berieme $K = C \alpha_f \log n \log \log n$.
-\begin{displaymath}
-\begin{split}
-E lpsl 
-	& = \int\limits_0^\infty P(lpspl > t) dt \\
-	& \leq 4K + \int\limits_{4K}^\infty P(lpspl > t) dt \\
-	& = 4K + K\int\limits_4^\infty P(lpspl > tK) dt \\
-	& \leq K(4 + I) = O(K) = O(\alpha_f \log n \log \log n)
-\end{split}
-\end{displaymath}
-
-Výraz $I$ sa od predchádzajúceho dôkazu nezmenil.
-\end{proof}
