@@ -1,15 +1,15 @@
 \chapter{Systems of linear maps between vector spaces}
 
-Main result regarding the systems of linear maps is the upper bound on the length of the longest probe sequence. The proof of this property does not come from the ideas already mentioned in this text. The approach used here does not try to compute the probability of collision of $k$-elements directly. Thus we will not exploit the attributes of a $2$-strongly universal system. Instead we concentrate and work with special properties of this unique system.
+Main result regarding the~systems of linear maps is the~upper bound on the~length of the~longest probe sequence. The~proof of this property does not come from the~ideas already mentioned in this text. The~approach used here does not try to compute the~probability of collision of $k$-elements directly. Thus we will not exploit the~attributes of a~$2$-strongly universal system. Instead we concentrate and work with special properties of this unique system.
 
-In the following we will be using the vector spaces over the $Z_2$ field for hashing $n \log n$ elements into a hash table of size of $n$ slots. Under these assumptions we will prove very important property of this scheme; the length of the longest chain is $O(\log n \log \log n)$. If the other finite fields are used we can not expect that good properties as it is mentioned in \cite{linear-hash-functions}.
+In the~following we will be using the~vector spaces over the~$Z_2$ field for hashing $n \log n$ elements into a~hash table of size of $n$ slots. Under these assumptions we will prove very important property of this scheme; the~length of the~longest chain is $O(\log n \log \log n)$. If the~other finite fields are used we can not expect that good properties as it is mentioned in \cite{linear-hash-functions}.
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Let $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ be an onto linear map and $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
+Let $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ be an~onto linear map and $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
 \end{lemma}
 \begin{proof}
-First we remark that $T^{-1}(0)$ is a vector subspace of the vector space $Z_2^u$:
+First we remark that $T^{-1}(0)$ is a~vector subspace of the~vector space $Z_2^u$:
 \begin{displaymath}
 \begin{split}
 & T(0) = 0 \\
@@ -18,7 +18,7 @@ T(u) = 0: & T(\delta u) = \delta T(u) = \delta 0 = 0
 \end{split}
 \end{displaymath}
 
-Next we will prove that $T^{-1}(x)$ is an affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The consequence is that all sets $T^{-1}(x)$ are of the same size, exactly $|T^{-1}(x)| = 2^{u-t}$. If we have one element $u \in T^{-1}(x)$ then the set $T^{-1}(x)$ is the same as the set $u + T^{-1}(0)$.
+Next we will prove that $T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ are of the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. If we have one element $u \in T^{-1}(x)$ then the~set $T^{-1}(x)$ is the~same as the~set $u + T^{-1}(0)$.
 \begin{displaymath}
 \begin{split}
 v \in T^{-1}(0) 
@@ -36,23 +36,23 @@ v \in T^{-1}(x)
 \end{displaymath}
 \end{proof}
 
-All of the following claims are taken from \cite{linear-hash-functions}. It is convenient to show the original proves and then modify them according our needs.
+All of the~following claims are taken from \cite{linear-hash-functions}. It is convenient to show the~original proves and then modify them according our needs.
 
 \begin{lemma}
 \label{lemma-choose-random-vector}
-If $V$ is a finite vector space, $A$ is a subset of $V$, $\alpha = 1 - \frac{|A|}{|V|}$. Then for a random uniformly chosen vector $v \in V$ holds:
+If $V$ is a~finite vector space, $A$ is a~subset of $V$, $\alpha = 1 - \frac{|A|}{|V|}$. Then for a~random uniformly chosen vector $v \in V$ holds:
 \begin{displaymath}
 E (1 - \frac{|A \cup (v + A)|}{|V|}) = \alpha^2 \textit{.}
 \end{displaymath}
-The expectation taken here is through all of the possible choices of $v$.
+The expectation taken here is through all of the~possible choices of $v$.
 \end{lemma}
 \begin{proof}
-We choose two vectors $u$ and $v$ uniformly and independently from the space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the following we will finish the proof this lemma.
+We choose two vectors $u$ and $v$ uniformly and independently from the~space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the~following we will finish the~proof this lemma.
 \begin{displaymath}
 \begin{split}
 |A \cup (v + A)| 
-	& = \sum_{u \in V} 1 . P(u \in A \vee u \in v + A) \\ 
-	& = \sum_{u \in V} 1 - P(u \notin A \wedge u \notin v + A) \\ 
+	& = \sum_{u \in V} 1 . P(u \in a~\vee u \in v + A) \\ 
+	& = \sum_{u \in V} 1 - P(u \notin a~\wedge u \notin v + A) \\ 
 	& = |V| (1 - \alpha ^ 2)
 \end{split}
 \end{displaymath}
@@ -65,40 +65,40 @@ E (1 - \frac{|A \cup (v + A)|}{|V|})
 \end{displaymath}
 \end{proof}
 
-The following lemma is a very technical one ans is used to estimate the probabilities of some events related to linear maps.
+The following lemma is a~very technical one ans is used to estimate the~probabilities of some events related to linear maps.
 \begin{lemma}
 \label{lemma-random-variable}
-For $1 \leq i \leq k$ the $\alpha_i$ are random variables and $0 < \alpha_0 < 1$ is a constant. For the random variables, $1 \leq i \leq k$, we assume the following:
+For $1 \leq i \leq k$ the~$\alpha_i$ are random variables and $0 < \alpha_0 < 1$ is a~constant. For the~random variables, $1 \leq i \leq k$, we assume the~following:
 \begin{gather*}
 0 \leq \alpha_i \leq \alpha_{i - 1} \\
 E[ \alpha_i | \alpha_{i-1} \dots \alpha_1 ] = \alpha_{i-1}^{2} \\
 \end{gather*}
-Then for every constant $0 < t < 1$ we can estimate the probability:
+Then for every constant $0 < t < 1$ we can estimate the~probability:
 \begin{displaymath}
 P(\alpha_k \geq t) \leq \alpha_0^{k - \log \log (\frac{1}{t}) + \log \log \left(\frac{1}{\alpha_0}\right)}
 \end{displaymath}
 \end{lemma}
 \begin{proof}
-For $k = 0$ the claim is certainly true; we have just two cases to take into account. First if $t \leq \alpha_0$, the exponent is negative:
+For $k = 0$ the~claim is certainly true; we have just two cases to take into account. First if $t \leq \alpha_0$, the~exponent is negative:
 \begin{displaymath}
 -\log \log (1/t) + \log \log \left(\frac{1}{\alpha_0}\right) < 0
 \end{displaymath}
-The base, $\alpha_0$, is less then $1$ so our estimate of the probability is above $1$. 
+The base, $\alpha_0$, is less then $1$ so our estimate of the~probability is above $1$. 
 
-In the remaining possibility the real probability is $0$ and our estimate is certainly positive.
+In the~remaining possibility the~real probability is $0$ and our estimate is certainly positive.
 
-By using induction we suppose that the lemma holds for $k$ and we will show its validity for $k + 1$. For convenience we set the constant $c$ equal to $k - \log \log \left(\frac{1}{t}\right)$. The expected result on the right side is then:
+By using induction we suppose that the~lemma holds for $k$ and we will show its validity for $k + 1$. For convenience we set the~constant $c$ equal to $k - \log \log \left(\frac{1}{t}\right)$. The~expected result on the~right side is then:
 \begin{displaymath}
 \alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
 \end{displaymath}
 
-As in the induction start we will rule out the case if exponent is negative:
+As in the~induction start we will rule out the~case if exponent is negative:
 \begin{displaymath}
 c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < 0\textit{.}
 \end{displaymath}
 Our estimate will be greater than $1$. 
 
-Now we will assume the opposite inequality. The proof needs to be split into a few cases at this place. Also we need some useful remarks so we point them out at first. The estimated probability can certainly be computed by taking the expectation when we fix the random variable $\alpha_1$ in an interval $[0, \alpha_0]$.
+Now we will assume the~opposite inequality. At~this place the~proof needs to be split into a~few cases. At first we need to point out some useful remarks. The~estimated probability can certainly be computed by taking the~expectation when we fix the~random variable $\alpha_1$ in an~interval $[0, \alpha_0]$.
 \begin{displaymath}
 P(\alpha_{k+1} \geq t) = E_{\alpha_{k+1}} P(\alpha_{k+1} \geq t | \alpha_1) \leq E_{\alpha_{k+1}} f(\alpha_1)
 \end{displaymath}
@@ -114,9 +114,9 @@ f_0(x) = x ^ {c + \log \log \left(\frac{1}{x}\right)}
    1 & \text{if } x = 0
   \end{cases}
 \end{equation}
-In the function $f$ the argument $x$ plays the role of the constant $\alpha_1$ since we fixed its value. There are only $k$ variables among variables $\alpha_{k+1}$ and $\alpha_1$. From the induction hypothesis it follows that $f$ is the upper bound for $P(\alpha_{k+1} \geq t | \alpha_1)$.
+In the~function $f$ the~argument $x$ plays the~role of the~constant $\alpha_1$ since we fixed its value. There are only $k$ variables among variables $\alpha_{k+1}$ and $\alpha_1$. From the~induction hypothesis it follows that $f$ is the~upper bound for $P(\alpha_{k+1} \geq t | \alpha_1)$.
 
-For all $0 \leq x \leq \alpha_0$ we would like to have the value of $f(x)$ upper bounded by the expression $\frac{f_0(\alpha_0)x}{\alpha_0}$. In order to prove this property we define two values $x'$ and $x''$ both less than $1$:
+For all $0 \leq x \leq \alpha_0$ we would like to have the~value of $f(x)$ upper bounded by the~expression $\frac{f_0(\alpha_0)x}{\alpha_0}$. In order to prove this property we define two values $x'$ and $x''$ both less than $1$:
 \begin{equation}
 x' = 2 ^ {-2 ^ {-c - 1}}
 \end{equation}
@@ -124,23 +124,23 @@ x' = 2 ^ {-2 ^ {-c - 1}}
 x'' = {x'}^2 = 2 ^ {-2 ^ {-c}}
 \end{equation}
 
-Now we should point out how the mentioned bound is obtained.
+Now we should point out how the~mentioned bound is obtained.
 \begin{equation}
 f(x) = \frac{x f(x)}{x} \leq \frac{x f_0(\alpha_0)}{\alpha_0}
 \end{equation}
-The last inequality remains to be proved. We will bound the function $\frac{f(x)}{x}$. 
+The last inequality remains to be proved. We will bound the~function $\frac{f(x)}{x}$. 
 
-From the derivation of the function $\frac{f(x)}{x}$ in the interval $(0, 1)$ we know that it is initially in the increasing phase and then decreases.
+From the~derivation of the~function $\frac{f(x)}{x}$ in the~interval $(0, 1)$ we know that it is initially in the~increasing phase and then decreases.
 \begin{displaymath}
 \frac{f(x)}{x}' = \left(c + \log e - 1 + \log \log \left(\frac{1}{x}\right)\right)\frac{f_0(x)}{x}
 \end{displaymath}
 
-The point $x''$ lies in the increasing phase:
+The point $x''$ lies in the~increasing phase:
 \begin{displaymath}
 c + \log e - 1 + \log \log \left(\frac{1}{x''}\right) = c + \log e - 1 - c > 0
 \end{displaymath}
 
-For every $x$, $x'' \leq x$ the value of $f(x)$ is 1:
+For every $x$, $x'' \leq x$ the~value of $f(x)$ is 1:
 \begin{equation}\label{f-x-double-prime}
 f_0(x'') = {x''}^{c + \log \log \left(\frac{1}{2^{-2^{-c}}}\right)} = {x''}^{c - c} = 1
 \end{equation}
@@ -148,42 +148,42 @@ f_0(x'') = {x''}^{c + \log \log \left(\frac{1}{2^{-2^{-c}}}\right)} = {x''}^{c -
 f_0(x) = x^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x''}\right)} = 1
 \end{equation}
 
-Finally from the above claims we can conclude.
-\paragraph{The constant $\alpha_0$ is in the increasing phase.}
-Since $\alpha_1 \leq \alpha_0$ the values $x$ are certainly less then $\alpha_0$ and also are in the increasing phase. Under these assumptions we immediately have:
+Finally from the~above claims we can conclude.
+\paragraph{The constant $\alpha_0$ is in the~increasing phase.}
+Since $\alpha_1 \leq \alpha_0$ the~values $x$ are certainly less then $\alpha_0$ and also are in the~increasing phase. Under these assumptions we immediately have:
 \begin{equation}
 \frac{f(x)}{x} \leq \frac{f(\alpha_0)}{\alpha_0}
 \end{equation}
 
-\paragraph*{The constant $\alpha_0$ is in the decreasing phase.}
+\paragraph*{The constant $\alpha_0$ is in the~decreasing phase.}
 \subparagraph*{Value $x$ is before $x''$.}
 \begin{equation}
 \frac{f(x)}{x} \leq \frac{f(x'')}{x''} \leq \frac{f_0(x'')}{x''} = \frac{1}{x''}
 \end{equation}
-The first inequality holds because $x$ is also in the increasing phase. The second comes from the definition \eqref{f-definition} and the equality is from the \eqref{f-x-double-prime}.
+The first inequality holds because $x$ is also in the~increasing phase. The~second comes from the~definition \eqref{f-definition} and the~equality is from the~\eqref{f-x-double-prime}.
 
 \subparagraph*{Value $x$ is greater than $x''$.}
 \begin{equation}
 \frac{f(x)}{x} \leq \frac{1}{x} \leq \frac{1}{x''}
 \end{equation}
-The first inequality follows from \eqref{f-x-after-double-prime}. And the second is clear because $x \geq x''$.
+The first inequality follows from \eqref{f-x-after-double-prime}. And the~second is clear because $x \geq x''$.
 
-In this case we have bounded the value $\frac{f(x)}{x}$ by $\frac{1}{x''}$. Next we will discuss the upper bound on that value.
+In this case we have bounded the~value $\frac{f(x)}{x}$ by $\frac{1}{x''}$. Next we will discuss the~upper bound on that value.
 \begin{equation}
 \frac{f_0(x')}{x'} = \frac{\left({2 ^ {-2 ^ {-c - 1}}}\right)^{-1}}{2 ^ {-2 ^ {-c - 1}}} = \frac{1}{\left({2 ^ {-2 ^ {-c - 1}}}\right)^2} = \frac{1}{x''}
 \end{equation}
 
-We have already ruled out the case $x' < \alpha_0$ since the exponent in the proved claim would be negative:
+We have already ruled out the~case $x' < \alpha_0$ since the~exponent in the~proved claim would be negative:
 \begin{displaymath}
 c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < c + 1 + \log \log \left(\frac{1}{x'}\right) = c + 1 - c - 1 = 0
 \end{displaymath}
 
-So if the $\alpha_0$ is in the decreasing phase we must assume $x' \geq \alpha_0$. Because $\alpha_0$ is before $x'$ the value $\frac{f(\alpha_0)}{\alpha_0}$ is still greater than $\frac{f(x')}{x'}$ and the following holds:
+So if the~$\alpha_0$ is in the~decreasing phase we must assume $x' \geq \alpha_0$. Because $\alpha_0$ is before $x'$ the~value $\frac{f(\alpha_0)}{\alpha_0}$ is still greater than $\frac{f(x')}{x'}$ and the~following holds:
 \begin{displaymath}
 \frac{1}{x''} = \frac{f_0(x')}{x'} \leq \frac{{f_0}(\alpha_0)}{\alpha_0}\textit{.}
 \end{displaymath}
 
-So in both cases, $\alpha_0$ is in increasing or decreasing phase, for every $0 \leq x \leq \alpha_0$ the value $f(x) = \frac{f(x)x}{x} \leq \frac{f_0(\alpha_0)x}{\alpha_0}$. Finally we can estimate the above mentioned expected value and probability.
+So in both cases, $\alpha_0$ is in increasing or decreasing phase, for every $0 \leq x \leq \alpha_0$ the~value $f(x) = \frac{f(x)x}{x} \leq \frac{f_0(\alpha_0)x}{\alpha_0}$. Finally we can estimate the~above mentioned expected value and probability.
 \begin{displaymath}
 P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alpha_0} = \frac{f_0(\alpha_0)}{\alpha_0}E \alpha_1 = \alpha_0 f(\alpha_0) = \alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
 \end{displaymath}
@@ -192,19 +192,19 @@ P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alp
 
 \begin{theorem}
 \label{theorem-linear-function-set-onto}
-Let $A$ be a subset of the vector space $Z_2^u$ and $T: Z_2^u \rightarrow Z_2^t$ is random uniformly chosen surjective linear map, $0 \leq t < u$. Denote $\alpha = 1 - \frac{|A|}{2^u} < 1$. Then:
+Let $A$ be a~subset of the~vector space $Z_2^u$ and $T: Z_2^u \rightarrow Z_2^t$ is random uniformly chosen surjective linear map, $0 \leq t < u$. Denote $\alpha = 1 - \frac{|A|}{2^u} < 1$. Then:
 \begin{displaymath}
 P(T(A) \neq Z_2^t) \geq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}} \textit{.}
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-Vezmime náhodne rovnomerne $s$ vektorov, $v_1, \dots, v_s$, z priestoru $Z_2^u$. $T$ bude také zobrazenie, že pre $v_i$ je $T(v_i) = 0$. Zvolené vektory sú z jadra zobrazenia $T$. Avšak nemusia ani generovať celé jadro, ani byť lineárne nezávislé, ani navzájom rôzne. Pretože vektory $v_1, \dots, v_s$ boli zvolené rovnomerne, stále môžeme doplniť $T$ tak, aby bolo zvolené rovnomerne. 
+We will consider uniformly and independently selected $s$ vectors, $v_1, \dots, v_s$ from the~vector space $Z_2^u$. $T$ is such a~linear map that $v_i$ je $T(v_i) = 0$; selected vectors are members of $Ker(T)$. However, they do not necesarilly span the~whole kernel, they do not need to be linearly independent, even they may be equal. Because they are selected uniformly and independently we still can have $T$ selected uniformly. We can achieve this by extending its above definition. 
 
-Hľadať rovnomerne rozdelené surjektívne zobrazenia môžeme nasledovne. Fixujeme, napríklad kanonickú, bázu priestoru $Z_2^t$. Zo všetkých báz priestoru $Z_2^u$ rovnomerne jednu zvolíme a tú zobrazíme na fixovanú bázu priestoru $Z_2^t$. 
+Random and independent selection of linear transormations may be done like this. One basis, canonical for example, of the~space $Z_2^t$ is fixed. The~number of all bases of the~space $Z_2^u$ is finite. One is uniformly chosen and is mapped by the~function $T$ on the~fixed basis of $Z_2^t$. This mapping has to be implemented carefully. First we find the~kernel, $u-t$ vector of the~chosen basis are sent to $0$. The~remaining $t$ vectors are permuted and then mapped.
 
-Po výbere $s$ vektorov, nájdeme lineárne nezávislú podmnožinu $v_1, \dots, v_s$ tak, že $i$-ty vektor vylúčime, pokiaľ je zo $span(v_1, \dots, v_{i-1})$. Takto nájdenú lineárne nezávislú množinu rovnomerným výberom rozšírime na bázu $Z_2^u$. Zobrazením skonštruovanej na fixovanú bázu dokončíme výber $T$.
+The selection of $s$ vectors gives us the~part of the~kernel in the~following manner. The~$i$-th vector is added to the~kernel if and only if it does not belong to the~$span(v_1, \dots, v_{i-1})$. This is certainly a~linearly independent set of dimension lower or equal to $s$. From Steinitz's theorem we know that it can be extented to a~basis. By mapping an~uniformly selected extension basis to the~target space one can obtain the~wanted function $T$.
 
-Ďalej definujeme postupnosť $A_i = A + span(v_1, \dots, v_i)$ pre $0 \leq i \leq s$, k tomu odpovedajúce $\alpha_i = 1 - \frac{|A_i|}{2^u}$. Platí, že $0 \leq \alpha_i \leq \alpha_{i-1}$. Pretože $A_{i} = A + span(v_1, \dots, v_i) = A_{i-1} \cup (A_{i-1} + v_i)$, podľa lemmy \ref{lemma-choose-random-vector} vieme, že $E[\alpha_i | \alpha_{i-1}, \dots, \alpha_1] = \alpha_{i-1}^2$. Z lemmy \ref{lemma-random-variable} vyplýva:
+Define a~sequence $A_i = a~+ span(v_1, \dots, v_i)$ for $0 \leq i \leq s$, the~matching $\alpha_i = 1 - \frac{|A_i|}{2^u}$, $0 \leq \alpha_i \leq \alpha_{i-1}$. Since $A_{i} = a~+ span(v_1, \dots, v_i) = A_{i-1} \cup (A_{i-1} + v_i)$, by using lemma \ref{lemma-choose-random-vector} we already know that $E[\alpha_i | \alpha_{i-1}, \dots, \alpha_1] = \alpha_{i-1}^2$. And the lemma \ref{lemma-random-variable} implies:
 \begin{displaymath}
 \begin{split}
 P(\alpha_s \geq 2^{-t}) 
@@ -214,18 +214,18 @@ P(\alpha_s \geq 2^{-t})
 \end{split}
 \end{displaymath}
 
-Toto je však aj pravdepodobnosť, že množina $T(A)$ je rôzna od $Z_2^t$. Ak $\alpha_s < 2^{-t}$, tak určite $T(A) = Z_2^t$. Pre $x \in Z_2^t - T(A)$ množiny $T^{-1}(x)$ a $A_s$ majú veľkosti $2^{u-t}$ (lemma \ref{lemma-linear-transformation-domain-distribution}) a $(1 - \alpha_s)2^u > 2^u - 2^{u-t}$. Vieme, že množiny $T^{-1}(x)$ a $A_s$ majú prázdny prienik. Nakoľko $A_s = A + span(v_1, \dots, v_s)$ a navyše $T(v_i) = 0$, platí $T(A) = T(A_s)$. Keď si uvedomíme, že veľkosť definičného oboru $T$ je $2^u$ a množiny $T^{-1}(x)$, $A_s$ sú disjunktné, okamžite dostávame spor.
+The event $\alpha_s \geq 2^{-t}$ is more probable than $T(A) \neq Z_2^t$. Whenever $\alpha_s$ is lower than $2^{-t}$ $T(A)$ must be the whole space $Z_2^t$. If there is a $x \in Z_2^t - T(A)$ the sets $T^{-1}(x)$ and $A_s$ are of sizes $2^{u-t}$ (lemma \ref{lemma-linear-transformation-domain-distribution}) and $(1 - \alpha_s)2^u > 2^u - 2^{u-t}$ respectively. We also know that they must be disjoint since $A_s = a + span(v_1, \dots, v_s)$ and $T(v_i) = 0$ implies $T(A) = T(A_s)$. Considering the sizes of the sets $T^{-1}(x)$, $A_s$ and the fact that they are disjoint we immediately obtain a contradiction.
 \end{proof}
 
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
-Nech $t$ je prirodzené číslo a $V$ konečný vektorový priestor nad $Z_2$ a $T$ náhodne rovnomerne zvolené lineárne zobrazenie z $V$ do $Z_2^{t}$. Potom pre každé $\epsilon > 0$ existuje konštanta $c_\epsilon > 0$ taká, že pre každú podmnožinu $A \subset V$, $|A| \geq c_\epsilon t 2^t$ platí:
+Nech $t$ je prirodzené číslo a~$V$ konečný vektorový priestor nad $Z_2$ a~$T$ náhodne rovnomerne zvolené lineárne zobrazenie z $V$ do $Z_2^{t}$. Potom pre každé $\epsilon > 0$ existuje konštanta $c_\epsilon > 0$ taká, že pre každú podmnožinu $A \subset V$, $|A| \geq c_\epsilon t 2^t$ platí:
 \begin{displaymath}
 P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-Definujeme priestor $W = Z_2^u$, pre $u = \left\lceil \log (\frac{2|A|}{\epsilon}) \right\rceil$. Vezmeme zobrazenie $T = T_0 \circ T_1$, $T_0: V \rightarrow W$ a $T_1: W \rightarrow Z_2^t$ surjektívne. Aby voľba zobrazenia $T$ bola vykonaná rovnomerne, stačí brať fixované zobrazenie $T_1$ a rovnomerne zvoliť zobrazenie $T_0$. Hodnoty zobrazenia pre vektory fixovanej bázy priestoru $V$ sú náhodné a rovnomerne rozdelené vo $W$ a následne aj v $Z_2^t$.
+Definujeme priestor $W = Z_2^u$, pre $u = \left\lceil \log (\frac{2|A|}{\epsilon}) \right\rceil$. Vezmeme zobrazenie $T = T_0 \circ T_1$, $T_0: V \rightarrow W$ a~$T_1: W \rightarrow Z_2^t$ surjektívne. Aby voľba zobrazenia $T$ bola vykonaná rovnomerne, stačí brať fixované zobrazenie $T_1$ a~rovnomerne zvoliť zobrazenie $T_0$. Hodnoty zobrazenia pre vektory fixovanej bázy priestoru $V$ sú náhodné a~rovnomerne rozdelené vo $W$ a~následne aj v $Z_2^t$.
 
 Uvažujme dva vektory $v \neq w \in A$, ktoré kolidujú už kvôli $T_0$, $T_0(v) = T_0(w)$. Z $1$-univerzality systému lineárnych zobrazení plynie, že $P(T_0(v) = T_0(w)) = \frac{1}{|W|}$. Ďalej rozdelíme dôkaz na dve časti. 
 
@@ -263,17 +263,17 @@ P(T(A) \neq Z_2^t \wedge |T(A)| > \frac{|A|}{2})
 
 Takže máme v obidvoch prípadoch pravdepodobnosti udalosti $T(A) \neq Z_2^t$ menšie ako $\frac{\epsilon}{2}$. Z toho plynie, že $P(T(A) = Z_2^t) \geq 1 - \epsilon$, čo sme mali dokázať.
 
-Nevýhodou tohoto prístupu je, že odhad konštanty $c_\epsilon$ je dosť nepresný a pre praktické použitie je nutné získať čo najmenšie hodnoty. Neskôr skutočne odhad zlepšíme a $c_\epsilon$ spočítame priamo pre požadované hodnoty $\epsilon$.
+Nevýhodou tohoto prístupu je, že odhad konštanty $c_\epsilon$ je dosť nepresný a~pre praktické použitie je nutné získať čo najmenšie hodnoty. Neskôr skutočne odhad zlepšíme a~$c_\epsilon$ spočítame priamo pre požadované hodnoty $\epsilon$.
 \end{proof}
 
-Z dvoch predchádzajúcich viet odvodíme očakávanú dĺžku najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$. Tento odhad samozrejme platí aj pre hashovanie $n$ prvkov do tabuľky veľkosti $n$. S menším počtom prvkov sa očakávaná dĺžka nezmenší, naopak môžeme $n$ prvkov rozšíriť na $n \log n$ hashovaných hodnôt a odhad musí stále platiť. Ďalej sa budeme zaujímať o závislosť od faktoru naplnenia hashovacej tabuľky, budeme hashovať menej ako $n$ prvkov do tabuľky veľkosti $n$. Tu sledujeme zmenu očakávanej dĺžky najdlhšieho reťazca. Tá po miernej modifikácii dôkazu vyjde podobne - multiplikatívna konštanta priamo obsahuje faktor naplnenia tabuľky.
+Z dvoch predchádzajúcich viet odvodíme očakávanú dĺžku najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$. Tento odhad samozrejme platí aj pre hashovanie $n$ prvkov do tabuľky veľkosti $n$. S menším počtom prvkov sa očakávaná dĺžka nezmenší, naopak môžeme $n$ prvkov rozšíriť na $n \log n$ hashovaných hodnôt a~odhad musí stále platiť. Ďalej sa budeme zaujímať o závislosť od faktoru naplnenia hashovacej tabuľky, budeme hashovať menej ako $n$ prvkov do tabuľky veľkosti $n$. Tu sledujeme zmenu očakávanej dĺžky najdlhšieho reťazca. Tá po miernej modifikácii dôkazu vyjde podobne - multiplikatívna konštanta priamo obsahuje faktor naplnenia tabuľky.
 
 \begin{theorem}
 \label{theorem-n-logn-to-n}
 Nech $H$ je systém lineárnych zobrazení medzi aritmetickými vektorovými priestormi nad telesom $Z_2$. použitý pri univerzálnom hashovaní so separovanými reťazcami. Potom očakávaná dĺžka najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$ je $O(\log n \log \log n)$.
 \end{theorem}
 \begin{proof}
-Uvažujme lineárne zobrazenie $h \in H$, $h: D \rightarrow B$. Vytvoríme priestor $A = Z_2^l$ pre $l \geq \log n$ a dve lineárne zobrazenia $h_1: D \rightarrow A$ a surjektívne $h_2: A \rightarrow B$. Obe zobrazenia $h_1$ aj $h_2$ sú vybraté rovnomerne. Teda aj zobrazenie $h = h_1 \circ h_2$ je vybraté rovnomerne zo všetkých zobrazení na $B$.
+Uvažujme lineárne zobrazenie $h \in H$, $h: D \rightarrow B$. Vytvoríme priestor $A = Z_2^l$ pre $l \geq \log n$ a~dve lineárne zobrazenia $h_1: D \rightarrow A$ a~surjektívne $h_2: a~\rightarrow B$. Obe zobrazenia $h_1$ aj $h_2$ sú vybraté rovnomerne. Teda aj zobrazenie $h = h_1 \circ h_2$ je vybraté rovnomerne zo všetkých zobrazení na $B$.
 
 Zásadnou myšlienkou celého dôkazu sú dve udalosti:
 \begin{itemize}
@@ -297,7 +297,7 @@ h_2^{-1}(\alpha) \subseteq h_1(S) \Leftrightarrow h_2(A - h_1(S)) \neq B \textit
 
 Nech existuje prvok $\alpha$, ktorého vzor pri zobrazení $h_2$ je podmnožinou obrazu množiny $S$ pri $h_1$. Zobrazením $h_2$ sa určite nedostaneme z $A - h_1(S)$ na celú množinu $B$.
 
-Pretože $\frac{2^l}{n \log n} > 1$, predpoklady vety \ref{theorem-linear-function-set-onto} sú pre množinu $A - h_1(S) \subset A$ a zobrazenie $h_2$ splenené.
+Pretože $\frac{2^l}{n \log n} > 1$, predpoklady vety \ref{theorem-linear-function-set-onto} sú pre množinu $A - h_1(S) \subset A$ a~zobrazenie $h_2$ splenené.
 Jej hustota je $\frac{|A| - |h_1(S)|}{|A|} = 1 - \alpha$.
 \begin{displaymath}
 \alpha = \frac{|h_1(S)|}{|S|} \leq \frac{|S|}{|A|} = \frac{1}{d}
@@ -319,7 +319,7 @@ P(E_2 | E_1) \geq \frac{1}{2} \textit{.}
 \end{displaymath}
 \end{remark}
 \begin{proof}
-Predpokladajme, že máme dané zobrazenie $h$ a nastala udalosť $E_1$. Určite existuje $S' \subseteq S$, ktorá má veľkosť aspoň $t$, namapovaná zobrazením $h$ na jediný prvok $\alpha \in Z_2^{\log n}$. Tento prvok fixujeme a ďalej definujeme $D' = h^{-1}(\alpha)$ a $A' = h_2^{-1}(\alpha)$. 
+Predpokladajme, že máme dané zobrazenie $h$ a~nastala udalosť $E_1$. Určite existuje $S' \subseteq S$, ktorá má veľkosť aspoň $t$, namapovaná zobrazením $h$ na jediný prvok $\alpha \in Z_2^{\log n}$. Tento prvok fixujeme a~ďalej definujeme $D' = h^{-1}(\alpha)$ a~$A' = h_2^{-1}(\alpha)$. 
 
 Uvažujme rozdelenie zobrazení $h_1$, ktoré spĺňajú $h = h_1 \circ h_2$. Pokiaľ obmedzíme $h_1$ len na množinu $D'$, ide o afinné lineárne zobrazenie, ktoré je na množinu $A'$. Rovnomerným výberom všetkých zobrazení $h_1$ dochádza aj k rovnomernému výberu zobrazení z $D'$ na $A'$.
 
@@ -361,7 +361,7 @@ c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
 \end{split}
 \end{displaymath}
 
-Pre zvolené hodnoty $l$ a $t$ máme $P(E_2 | E_1) \geq \frac{1}{2}$. Z toho plynie $P(E_1) \leq 2 P(E_2)$, čo nám dáva obmedzenie pre pravdepodobnosť udalosti $E_1$:
+Pre zvolené hodnoty $l$ a~$t$ máme $P(E_2 | E_1) \geq \frac{1}{2}$. Z toho plynie $P(E_1) \leq 2 P(E_2)$, čo nám dáva obmedzenie pre pravdepodobnosť udalosti $E_1$:
 \begin{displaymath}
 \begin{split}
 P(E_1) 
@@ -389,9 +389,9 @@ I 	& = \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r
 Pre praktické použitie je podstatná aj multiplikatívna konštanta $4C(4 + I)$, ktorú sme nateraz zanedbali.
 \end{proof}
 
-Naším ďalším cieľom bude ukázať závislosť očakávanej dĺžky na faktore naplnenia hashovacej tabuľky a urobiť čo najtesnejší odhad na multiplikatívnu konštantu.
+Naším ďalším cieľom bude ukázať závislosť očakávanej dĺžky na faktore naplnenia hashovacej tabuľky a~urobiť čo najtesnejší odhad na multiplikatívnu konštantu.
 
-Podarilo sa nám obmedziť $P(lpsl > 2Z \log n \log \log n)$ na $\frac{1}{2}$. To znamená, že najviac polovica funkcií spôsobí príliš dlhý reťazec a následné prehashovanie:
+Podarilo sa nám obmedziť $P(lpsl > 2Z \log n \log \log n)$ na $\frac{1}{2}$. To znamená, že najviac polovica funkcií spôsobí príliš dlhý reťazec a~následné prehashovanie:
 \begin{displaymath}
 |\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace| = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H| \geq \frac{|H|}{2}
 \end{displaymath}
@@ -400,7 +400,7 @@ Vzhľadom k tomu, že funkciu vyberáme rovnomerne, pričom nevyhovujúce zahadz
 \begin{displaymath}
 \begin{split}
 P(h(x) = h(y)) 
-	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \textit{ a h nevytvorí dlhý reťazec} \rbrace |}{|\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace|} \\
+	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \textit{ a~h nevytvorí dlhý reťazec} \rbrace |}{|\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace|} \\
 	& \leq \frac{2 |\lbrace h \in H \mid h(x) = h(y) \rbrace}{|H|} \\
 	& \leq 2 \frac{|H|}{m |H|} = \frac{2}{m}
 \end{split}
