@@ -35,7 +35,7 @@ I_{\epsilon}
 \subsection{Choosing $\epsilon$}
 The most important step is the optimization of the value $4 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then $47 005$ for $\epsilon = 0.93$, $k = 1.42$ and $l = 1.06$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant it becomes less than linear estimate for $n$ approximately equal to $8 000 000$.
 
-The first approach to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} is to parametrize every constant. Then we will optimize these parameters so that we get the least $c_{\epsilon}$. The optimization can not be done analytically because of the complexity of the constraints. We created a straightforward program that assigns each parameter a value from a predefined interval. Then it computes the multiplicative constant and the best achieved value is remembered and used.
+The first approach to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} is to parameterize every constant. Then we will optimize these parameters so that we get the least $c_{\epsilon}$. The optimization can not be done analytically because of the complexity of the constraints. We created a straightforward program that assigns each parameter a value from a predefined interval. Then it computes the multiplicative constant and the best achieved value is remembered and used.
 
 We actually made two modifications. 
 
@@ -56,25 +56,25 @@ P(|T_0(A)| \leq \frac{|A|}{k}) + P(T_1(T_0(A)) \neq Z_2^t)
 \end{split}
 \end{displaymath}
 
-\section{Odhad pravdepodobnosti pri hashovaní li\-ne\-ár\-ne\-ho množstva prvkov}
-V tejto časti nám pôjde o získanie predstavy o očakávanej dĺžke najdlhšieho reťazca pri zmene faktoru naplnenia hashovacej tabuľky. Nebudeme hashovať superlineárne množstvo záznamov, ale len lineárne a to dokonca menšie ako je veľkosť hashovacej tabuľky. Doposiaľ sme nepotrebovali rôzne označenie pre veľkosť hashovacej tabuľky a počet prvkov, ponecháme $n$ ako veľkosť tabuľky. Počet prvkov značíme $\alpha_f n$, kde $\alpha_f$ je faktor naplnenia tabuľky.
+\section{Probability estimate when hashing linear amount of elements.}
+A common use of a hash table is with load factor lower than one. We already showed if there is a super-linear amount of elements hashed we can expect a reasonable result in the worst case. However the most important is the expected size of a bucket. The upper bound of the expected size is equal to $1 + c \alpha$. So using a load factor lower than one has a significant impact on the average case. We need to examine a scheme of hashing $\alpha_f n$ elements into a hash table of size $n$, so $alpha_f$ is the table's load factor. 
 
-Teraz upravíme predchádzajúce tvrdenie tak, aby zahŕňalo aj faktor naplnenia. 
+We need to change the previous claims to fit our new scheme: 
 \begin{theorem}
 \label{theorem-n-to-n}
-Pri hashovaní $\alpha_f n$ prvkov do tabuľky veľkosti $n$ je očakávaná dĺžka najdlhšieho reťazca $O(\alpha_f \log n \log \log n)$.
+When hashing $\alpha_f n$ elements into a table of size $n$ the expected length of the longest chain is bounded by $O(\alpha_f \log n \log \log n)$.
 \end{theorem}
 \begin{proof}
-Upravíme tvrdenia a dôkazy niektorých lem. Prvá zjavná úprava, ktorú potrebujeme, je odhad odkedy môžeme použiť odhad pravdepodobnosti.
+We have to modify the previous lemmas and their proofs from. Apparently we must lower the value of a chain length when we get a convenient probability estimate proportionally to $\alpha_f$. 
 
 \begin{remark}
-Existuje konštanta $C$ taká, že pre všetky $r > 4$ pri hashovaní množiny $S \subset D$, $|S| = \alpha_f n$ na množinu $B = Z_2^{\log n}$, platí:
+There is a constant $C$ so that for all $r > 4$, $S$ is the hashed set ($S \subset D$, $|S| = \alpha_f n$) and $B = Z_2^{\log n}$ is the hash table the probability of existence of a long chain is:
 \begin{displaymath}
 P(lpsl > r \alpha_f C \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
 \end{displaymath}
 \end{remark}
 \begin{proof}
-Postupujeme obdobne ako v predchádzajúcej verzii:
+We show changes that need to be made. 
 \begin{displaymath}
 \begin{split}
 l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + \log \alpha_f \right\rfloor \\
@@ -83,19 +83,17 @@ d & = \frac{2^l}{\alpha_f n \log n} \\
 \end{split}
 \end{displaymath}
 
-Overíme predpoklady pozorovania \ref{remark-e2-probability}. V menovateli použijeme tiež faktor naplnenia, pretože aj ním je limitovaná veľkosť hashovanej množiny:
+The assumptions of the \ref{remark-e2-probability}\textsuperscript{th} remark are met. There is the factor $\alpha_f$ in the denominator because the size of the hashed set is certainly limited by $\alpha_f n \leq \alpha_f n \log n$:
 \begin{displaymath}
-d = \frac{2^l}{\alpha_f n \log n} \geq \frac{\alpha_f n \log n \log r}{\alpha_f n \log n \log \log r} > 1
+d = \frac{2^l}{\alpha_f n \log n} \geq \frac{\alpha_f n \log n \log r}{\alpha_f n \log n \log \log r} > 1 \textit{.}
 \end{displaymath}
 
-Ešte je nutné upraviť dôkaz pozorovania \ref{remark-e2-probability}. V dôkaze sme použili nasledovný vzťah, ktorý sme ihneď opravili, medzi objektami $h_1(S)$, $A = Z_2^l$, $\alpha$ a $d$.
+In the proof of the \ref{remark-e2-probability} we also used a relation among $h_1(S)$, $A = Z_2^l$, $\alpha$ and $d$. We present here that simalar holds and this makes it valid for this scheme, too.
 \begin{displaymath}
-\alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{\alpha_f n \log n}{2^l} = \frac{1}{d}
+\alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{\alpha_f n \log n}{2^l} = \frac{1}{d} \textit{.}
 \end{displaymath}
 
-Týmto ostáva pozorovanie \ref{remark-e2-probability} v platnosti aj pre túto schému.
-
-Platí:
+For using the other lemma the value of the variable $t$ has to be large enough:
 \begin{displaymath}
 \begin{split}
 c_{\frac{1}{2}} \frac{2^l}{n} \log \left(\frac{2^l}{n}\right) 
@@ -105,15 +103,15 @@ c_{\frac{1}{2}} \frac{2^l}{n} \log \left(\frac{2^l}{n}\right)
 \end{split}
 \end{displaymath}
 
-Teda sú splnené predpoklady pozorovania \ref{remark-prob-t-length-chain}. Jeho dôkaz vyhovuje naďalej, použila sa množina $A = Z_2^l$, pričom sme sa nikde neodkazovali na konkrétnu hodnotu $l$ a veľkosť hashovacej tabuľky $|B| = n$ je nezmenená.
+The conditions of the remark \ref{remark-prob-t-length-chain} are fulfilled. Its proof is still right, since we use it with no further assumptions. The same vector space $A = Z_2^l$ is constructed; we never referenced the value of $l$. The vector space $B$, the hash table, is unchanged.
 
-Pokračujeme rovnako ako v dôkaze pri predchádzajúcej schéme:
+We continue identically to the previous case:
 \begin{displaymath}
 P(E1) \leq \frac{1}{P(E2|E1)}P(E2) \leq 2 d ^ {-\log d - \log \log d}\textit{.}
 \end{displaymath}
 \end{proof}
 
-Teraz už len upravíme výpočet odhadu očakávanej dĺžky najdlhšieho reťazca, teraz berieme $K = C \alpha_f \log n \log \log n$.
+In order to reach the desired length we modify the calculation by taking $K = C \alpha_f \log n \log \log n$.
 \begin{displaymath}
 \begin{split}
 E lpsl 
@@ -124,5 +122,5 @@ E lpsl
 \end{split}
 \end{displaymath}
 
-Výraz $I$ sa od predchádzajúceho dôkazu nezmenil.
+Expression $I$ has not been modified.
 \end{proof}
