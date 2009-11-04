@@ -1,9 +1,15 @@
 class CollisionFunctions:
     
-    def __init__(self, p, m):
+    def __init__(self, p, m, allow_zero = 1):
         self.p = p
         self.m = m
-        self.functions = set([(a, b) for a in range(p) for b in range(p)])
+        self.allow_zero = allow_zero
+
+        if (self.allow_zero):
+            self.functions = set([(a, b) for a in range(p) for b in range(p)])
+        else:
+            self.functions = set([(a, b) for a in range(1, p) for b in range(p)])
+
         self.colliding_elements = []
 
     def restrict_collision_functions(self, x):
@@ -30,7 +36,10 @@ class CollisionFunctions:
         return len(self.colliding_elements)
 
     def get_all_function_count(self):
-        return self.p ** 2
+        if (self.allow_zero):
+            return self.p ** 2
+        else:
+            return self.p * (self.p - 1)
     
     def compute_function(self, function, x):
         (a, b) = function

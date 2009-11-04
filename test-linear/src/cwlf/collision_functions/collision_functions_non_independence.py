@@ -25,7 +25,11 @@ def count_functions_2_independently(cf, a0, a1, a2):
 
     return (cf1, cf2)
 
-cf = CollisionFunctions(109, 64)
+#cf = CollisionFunctions(2099, 64, 0)
+#cf = CollisionFunctions(109, 64, 0)
+#cf = CollisionFunctions(5, 2, 0)
+
+cf = CollisionFunctions(109, 33, 0)
 cf_3 = count_functions_3(cf, 1, 2, 3)
 (cf_1, cf_2) = count_functions_2_independently(cf, 1, 2, 3)
 # @type cf_1 CollisionFunctions
