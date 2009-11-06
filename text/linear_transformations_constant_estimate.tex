@@ -33,30 +33,59 @@ I_{\epsilon}
 \end{displaymath}
 
 \subsection{Choosing $\epsilon$}
-The most important step is the optimization of the value $4 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then $47 005$ for $\epsilon = 0.93$, $k = 1.42$ and $l = 1.06$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant it becomes less than linear estimate for $n$ approximately equal to $8 000 000$.
+The most important step is the optimization of the value $4 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then $22 568$ for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant it becomes less than linear for $n$ approximately equal to 1 000 000.
 
-The first approach to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} is to parameterize every constant. Then we will optimize these parameters so that we get the least $c_{\epsilon}$. The optimization can not be done analytically because of the complexity of the constraints. We created a straightforward program that assigns each parameter a value from a predefined interval. Then it computes the multiplicative constant and the best achieved value is remembered and used.
+The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform}. We try to parameterize every constant in it. Then we will optimize these parameters so that we get the least $c_{\epsilon}$. The optimization itself has not been performed analytically because of the complexity of the constraints. We created a straightforward program that assigns each parameter a value from a predefined interval. Then it computes the multiplicative constant and the best achieved value is remembered and used.
 
-We actually made two modifications. 
-
-We may have the size of the set $T_0(A)$ less than $\frac{|A|}{l}$, for $l > 1$. The second parameter is obtained by modifying the dimension of the factor vector space $Z_2^u$. We change the definition of $u$ to:
+We actually created two parameter $k$ and $l$. The limit of the size of the set $T_0(A)$ is changed to $\frac{|A|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $Z_2^u$. We change the definition of $u$ to:
 \begin{displaymath}
-u = \left\lceil \log \left(\frac{k |A|}{\epsilon}\right) \right\rceil \textit{.}
+u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \textit{.}
 \end{displaymath}
-Then the probability of the event $T(A) \neq Z_2^t$ is:
-\begin{displaymath}
-P(T(A) \neq Z_2^t) \leq P(|T_0(A)| \leq \frac{|A|}{l}) + P(T_1(T_0(A)) \neq Z_2^t) \leq \epsilon
-\end{displaymath}
-The right side, $\epsilon$ is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ directly without any estimations.
+
+The probability of the event $T(A) \neq Z_2^t$ can be expressed by using law of total probability as:
 \begin{displaymath}
 \begin{split}
-P(|T_0(A)| \leq \frac{|A|}{k}) + P(T_1(T_0(A)) \neq Z_2^t) 
-& \leq \frac{l(|A| - 1)}{2|W|} + \left(1 - \frac{|A|}{l|W|}\right)^{u - t - \log t - \log \log \frac{1}{1 - \frac{|A|}{l|W|}}} \\
-& \leq \frac{l}{2^k}
+P(T(A) \neq Z_2^t) 
+    & = P(T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{k}) + P(T(A) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}) \\ 
+    & \leq P(|T_0(A)| \leq \frac{|A|}{k}) + P(T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}) \\
+    & \leq \epsilon \\
+\end{split}
+\end{displaymath}
+The right side, $\epsilon$, is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ directly without any estimations.
+
+\begin{lemma}
+When the size of the set $|T_0(A)|$ is less than $\frac{|A|}{k}$ for $1 \leq k$ then there are at least $\frac{|A|(k - 1)}{2}$ collisions.
+\end{lemma} 
+\begin{proof}
+Define the sequence $b_i$ for $i \in T_0(A)$ where $b_i = \left|A \cap T_0^{-1}(i)\right|$. Also note that $\sum_{i \in T_0(A)} b_i = |A|$.
+The number of all colliding pairs can be computed as follows.
+\begin{displaymath}
+\frac{1}{2} \sum_{i \in T_0(A)} b_i (b_i - 1) \geq \frac{|A|}{2}\left(\frac{|A|}{|T_0(A)|} - 1\right) \geq \frac{|A|(k - 1)}{2}
+\end{displaymath}
+The last inequality can be obtained from Cauchy–Bunyakovsky–Schwarz inequality.
+\end{proof}
+
+\begin{displaymath}
+\begin{split}
+P(|T_0(A)| \leq \frac{|A|}{k}) & + P(T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}) \\ 
+& \leq \frac{|A| - 1}{(k - 1)|W|} + \left(1 - \frac{|A|}{k|W|}\right)^{u - t - \log t + \log \log \left(\frac{1}{1 - \frac{|A|}{k|W|}}\right)} \\
+& < \frac{\epsilon}{(k - 1) 2 ^ l} + \left(1 - \frac{\epsilon}{2 k 2^l}\right)^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2^l}}\right)} \\
+& \leq \epsilon \\
 \end{split}
 \end{displaymath}
 
-\section{Probability estimate when hashing linear amount of elements.}
+For convenience we define a new variable $\alpha'$ equal to $1 - \frac{\epsilon}{2 k 2 ^l}$. From the above inequality we need to find the minimal value of $c_\epsilon$:
+\begin{displaymath}
+\begin{split}
+\frac{\epsilon}{(k - 1) 2 ^ l} + {\alpha'}^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{\alpha'}\right)} & \leq \epsilon \\
+{\alpha'}^{\log c_\epsilon}{\alpha'}^{l - \log \epsilon + \log \log \left(\frac{1}{\alpha'}\right)} & \leq \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l} \\
+{\alpha'}^{\log c_\epsilon} & \leq \left(\epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\alpha'}^{\log \epsilon - l - \log \log \left(\frac{1}{\alpha'}\right)} \\
+{\log c_\epsilon} & \geq \frac{\log \left( \left( \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\alpha'}^{\log \epsilon - l - \log \log \left(\frac{1}{\alpha'}\right)}\right)}{\log \alpha'}  \\
+\end{split}
+\end{displaymath}
+
+
+\section{Hashing a linear amount of elements}
 A common use of a hash table is with load factor lower than one. We already showed if there is a super-linear amount of elements hashed we can expect a reasonable result in the worst case. However the most important is the expected size of a bucket. The upper bound of the expected size is equal to $1 + c \alpha$. So using a load factor lower than one has a significant impact on the average case. We need to examine a scheme of hashing $\alpha_f n$ elements into a hash table of size $n$, so $alpha_f$ is the table's load factor. 
 
 We need to change the previous claims to fit our new scheme: 

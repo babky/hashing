@@ -2,11 +2,11 @@
 
 Main result regarding the~systems of linear maps is the~upper bound on the~length of the~longest probe sequence. The~proof of this property does not come from the~ideas already mentioned in this text. The~approach used here does not try to compute the~probability of collision of $k$-elements directly. Thus we will not exploit the~attributes of a~$2$-strongly universal system. Instead we concentrate and work with special properties of this unique system.
 
-In the~following we will be using the~vector spaces over the~$Z_2$ field for hashing $n \log n$ elements into a~hash table of size of $n$ slots. Under these assumptions we will prove very important property of this scheme; the~length of the~longest chain is $O(\log n \log \log n)$. If the~other finite fields are used we can not expect that good properties as it is mentioned in \cite{linear-hash-functions}.
+In the~following section we consider the~vector spaces over the~$Z_2$ field only. Also the scheme supposes hashing $n \log n$ elements into a~hash table of size $n$ slots. Under these assumptions we can prove one very important property of this model; the~length of the~longest chain is bounded by function in $O(\log n \log \log n)$. If vector spaces are over other finite fields we can not expect such good properties \cite{linear-hash-functions}.
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Let $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ be an~onto linear map and $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
+Let $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ be an~onto linear map and vector $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
 \end{lemma}
 \begin{proof}
 First we remark that $T^{-1}(0)$ is a~vector subspace of the~vector space $Z_2^u$:
@@ -18,7 +18,7 @@ T(u) = 0: & T(\delta u) = \delta T(u) = \delta 0 = 0
 \end{split}
 \end{displaymath}
 
-Next we will prove that $T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ are of the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. If we have one element $u \in T^{-1}(x)$ then the~set $T^{-1}(x)$ is the~same as the~set $u + T^{-1}(0)$.
+We show that $T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ are of the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$.
 \begin{displaymath}
 \begin{split}
 v \in T^{-1}(0) 
@@ -36,7 +36,7 @@ v \in T^{-1}(x)
 \end{displaymath}
 \end{proof}
 
-All of the~following claims are taken from \cite{linear-hash-functions}. It is convenient to show the~original proves and then modify them according our needs.
+All of the~following claims are taken from \cite{linear-hash-functions}. It is convenient to show the~original proofs and then modify them according to our future needs.
 
 \begin{lemma}
 \label{lemma-choose-random-vector}
@@ -44,7 +44,7 @@ If $V$ is a~finite vector space, $A$ is a~subset of $V$, $\alpha = 1 - \frac{|A|
 \begin{displaymath}
 E (1 - \frac{|A \cup (v + A)|}{|V|}) = \alpha^2 \textit{.}
 \end{displaymath}
-The expectation taken here is through all of the~possible choices of $v$.
+The~expectation is taken through all the~possible choices of $v$.
 \end{lemma}
 \begin{proof}
 We choose two vectors $u$ and $v$ uniformly and independently from the~space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the~following we will finish the~proof this lemma.
@@ -192,13 +192,13 @@ P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alp
 
 \begin{theorem}
 \label{theorem-linear-function-set-onto}
-Let $A$ be a~subset of the~vector space $Z_2^u$ and $T: Z_2^u \rightarrow Z_2^t$ is random uniformly chosen surjective linear map, $0 \leq t < u$. Denote $\alpha = 1 - \frac{|A|}{2^u} < 1$. Then:
+Let $A$ be a~subset of the~vector space $Z_2^u$ and $T: Z_2^u \rightarrow Z_2^t$ is a random uniformly chosen surjective linear map, $0 \leq t < u$. Denote $\alpha = 1 - \frac{|A|}{2^u} < 1$. Then:
 \begin{displaymath}
 P(T(A) \neq Z_2^t) \geq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}} \textit{.}
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-We will consider uniformly and independently selected $s$ vectors, $v_1, \dots, v_s$ from the~vector space $Z_2^u$. $T$ is such a~linear map that $v_i$ je $T(v_i) = 0$; selected vectors are members of $Ker(T)$. However, they do not necesarilly span the~whole kernel, they do not need to be linearly independent, even they may be equal. Because they are selected uniformly and independently we still can have $T$ selected uniformly. We can achieve this by extending its above definition. 
+Consider uniformly and independently selected $s$ vectors, $v_1, \dots, v_s$ from the~vector space $Z_2^u$. If $T$ is a~linear map that maps every $v_i$ to the $0$ vector; selected vectors are members of $Ker(T)$. However, they do not necesarilly span the~whole kernel, they do not need to be linearly independent, even they may be equal. Because they are selected uniformly and independently we still can have $T$ selected uniformly. We can achieve this by extending its above definition. 
 
 Random and independent selection of linear transormations may be done like this. One basis, canonical for example, of the~space $Z_2^t$ is fixed. The~number of all bases of the~space $Z_2^u$ is finite. One is uniformly chosen and is mapped by the~function $T$ on the~fixed basis of $Z_2^t$. This mapping has to be implemented carefully. First we find the~kernel, $u-t$ vector of the~chosen basis are sent to $0$. The~remaining $t$ vectors are permuted and then mapped.
 
@@ -219,90 +219,83 @@ The event $\alpha_s \geq 2^{-t}$ is more probable than $T(A) \neq Z_2^t$. Whenev
 
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
-Nech $t$ je prirodzené číslo a~$V$ konečný vektorový priestor nad $Z_2$ a~$T$ náhodne rovnomerne zvolené lineárne zobrazenie z $V$ do $Z_2^{t}$. Potom pre každé $\epsilon > 0$ existuje konštanta $c_\epsilon > 0$ taká, že pre každú podmnožinu $A \subset V$, $|A| \geq c_\epsilon t 2^t$ platí:
+If $T: V -> Z_2^t$ is a random uniformly chosen linear map where $V$ is a finite vector space over $Z_2$. Then for every $0 < \epsilon < 1$ there is a costant $c_\epsilon > 0$ such that for every subset $A$ of the domain $V$, $|A| \geq c_\epsilon t 2^t$, the probability of mapping $A$ onto the whole space is high enough.
 \begin{displaymath}
 P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-Definujeme priestor $W = Z_2^u$, pre $u = \left\lceil \log (\frac{2|A|}{\epsilon}) \right\rceil$. Vezmeme zobrazenie $T = T_0 \circ T_1$, $T_0: V \rightarrow W$ a~$T_1: W \rightarrow Z_2^t$ surjektívne. Aby voľba zobrazenia $T$ bola vykonaná rovnomerne, stačí brať fixované zobrazenie $T_1$ a~rovnomerne zvoliť zobrazenie $T_0$. Hodnoty zobrazenia pre vektory fixovanej bázy priestoru $V$ sú náhodné a~rovnomerne rozdelené vo $W$ a~následne aj v $Z_2^t$.
+First we will define a factor vector space $W = Z_2^u$ where $u = \left\lceil \log (\frac{2|A|}{\epsilon}) \right\rceil$. Any linear map $T$ may be constructed by putting $T = T_0 \circ T_1$ where $T_0: V \rightarrow W$ and $T_1: W \rightarrow Z_2^t$ last is also surjective. For the uniform selection of function $T$ the mapping $T_1$ may be fixed and it is sufficient to uniformly selected a map $T_0$. However we also need a random mapping $T_1$ so it will be selected uniformly, too.
 
-Uvažujme dva vektory $v \neq w \in A$, ktoré kolidujú už kvôli $T_0$, $T_0(v) = T_0(w)$. Z $1$-univerzality systému lineárnych zobrazení plynie, že $P(T_0(v) = T_0(w)) = \frac{1}{|W|}$. Ďalej rozdelíme dôkaz na dve časti. 
+Consider two vectors $v \neq w \in A$ which collide because of the function $T_0$, $T_0(v) = T_0(w)$. Because a system of linear function is $1$-universal the probability of the collision is $P(T_0(v) = T_0(w)) = \frac{1}{|W|}$. By using the law of total probability we get:
+\begin{displaymath}
+P(T(A) \neq A) = P(T(A) \neq A \wedge |T_0(A)| \leq \frac{|A|}{2}) + P(T(A) \neq A \wedge |T_0(A)| > \frac{|A|}{2})
+\end{displaymath}
 
-Pokiaľ $T_0(A) \leq \frac{|A|}{2}$, určite nastane aspoň $\frac{|A|}{2}$ takýchto kolízií. Očakávaný počet kolízií spôsobených zobrazením $T_0$ pritom vychádza:
-\[
+If the size $|T_0(A)| \leq \frac{|A|}{2}$ there must be at least $\frac{|A|}{2}$ collision. The expected number of collision caused by the transformation $T_0$ is:
+\begin{displaymath}
 \frac{\dbinom{|A|}{2}}{|W|}\textit{.}
-\]
-V tomto prípade uvažujeme obe alternatívy, že zobrazenie je, aj nie je na:
+\end{displaymath}
+
+In the first case we will vanish the first part of conjunction. The probability estimate is obtained by applying the Markov inequality.
 \begin{displaymath}
 P(T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{2}) \leq P(|T_0(A)| \leq \frac{|A|}{2}) \leq \frac{2 \dbinom{|A|}{2}}{|A||W|} < \frac{|A|}{|W|} \leq \frac{\epsilon}{2}
 \end{displaymath}
-V nerovnosti, keď prechádzame od pravdepodobnosti, sme použili Markovovu nerovnosť.
 
-Ostáva prípad, keď $|T(A)| > \frac{|A|}{2}$. Podľa vety \ref{theorem-linear-function-set-onto} máme:
+There is one case remaining - $|T(A)| > \frac{|A|}{2}$. By using the theorem \ref{theorem-linear-function-set-onto} for vector space $W$, set $|T_0(A)|$ and mapping $T_1$ we get:
 \begin{displaymath}
 \alpha = 1 - \frac{|T_0(A)|}{|W|} < 1 - \frac{|A|}{2|W|} = 1 - \frac{\epsilon |A|}{8|A|} \leq e^{-\frac{\epsilon}{8}}
 \end{displaymath}
-Pokiaľ zvolíme $c_\epsilon = 4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$:
-\begin{displaymath}
-\begin{split}
-P(T(A) \neq Z_2^t \wedge |T(A)| > \frac{|A|}{2}) 
-	& \leq \alpha ^ {u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)} \\
-	& \leq e^{-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}}	\\
-	& \leq e^{-\frac{\epsilon\left(t + \log t + 3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) -t - \log t  + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} \\
-	& \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log\left(\frac{1}{\alpha}\right) \right)}{8}} \\
-	& \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\left(\frac{\epsilon}{8} \log e \right) \right)}{8}} \\
-	& =    e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e - 3 + \log \epsilon \right)}{8}} \\
-	& =    e^{-\frac{\epsilon \left(                    \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e \right)}{8}} \\
-	& \leq e^{-\frac{\epsilon \left(                    \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) \right)}{8}} \\
-	& = e^{{\log\left(\frac{\epsilon}{2}\right)}} 
-	\leq e^{\ln\left(\frac{\epsilon}{2}\right)} 
-	= \frac{\epsilon}{2}
-\end{split}
-\end{displaymath}
+In the following the constant $c_\epsilon$ is chosen as $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$:
+\begin{align*}
+P(T(A) & \neq Z_2^t \wedge |T(A)| > \frac{|A|}{2}) && \leq \alpha ^ {u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)} \\
+    & \leq e^{-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} && \leq e^{-\frac{\epsilon\left(t + \log t + 3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} \\
+    & \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log\left(\frac{1}{\alpha}\right) \right)}{8}} && \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\left(\frac{\epsilon}{8} \log e \right) \right)}{8}} \\
+    & = e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e - 3 + \log \epsilon \right)}{8}} && = e^{-\frac{\epsilon \left( \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e \right)}{8}} \\
+    & \leq e^{-\frac{\epsilon \left( \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) \right)}{8}} = e^{{\log\left(\frac{\epsilon}{2}\right)}} \leq e^{\ln\left(\frac{\epsilon}{2}\right)} && = \frac{\epsilon}{2}
+\end{align*}
 
-Takže máme v obidvoch prípadoch pravdepodobnosti udalosti $T(A) \neq Z_2^t$ menšie ako $\frac{\epsilon}{2}$. Z toho plynie, že $P(T(A) = Z_2^t) \geq 1 - \epsilon$, čo sme mali dokázať.
+In both alternatives the probability limit is $\frac{\epsilon}{2}$. It gives us that $P(T(A) = Z_2^t) \geq 1 - \epsilon$.
 
-Nevýhodou tohoto prístupu je, že odhad konštanty $c_\epsilon$ je dosť nepresný a~pre praktické použitie je nutné získať čo najmenšie hodnoty. Neskôr skutočne odhad zlepšíme a~$c_\epsilon$ spočítame priamo pre požadované hodnoty $\epsilon$.
+The biggest disadvantage of the that the current estimate of $c_\epsilon$ is very inaccurate. For the practical use of this scheme we need the smallest value possible. In the later section we will try to lower the value of $c_\epsilon$.
 \end{proof}
 
-Z dvoch predchádzajúcich viet odvodíme očakávanú dĺžku najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$. Tento odhad samozrejme platí aj pre hashovanie $n$ prvkov do tabuľky veľkosti $n$. S menším počtom prvkov sa očakávaná dĺžka nezmenší, naopak môžeme $n$ prvkov rozšíriť na $n \log n$ hashovaných hodnôt a~odhad musí stále platiť. Ďalej sa budeme zaujímať o závislosť od faktoru naplnenia hashovacej tabuľky, budeme hashovať menej ako $n$ prvkov do tabuľky veľkosti $n$. Tu sledujeme zmenu očakávanej dĺžky najdlhšieho reťazca. Tá po miernej modifikácii dôkazu vyjde podobne - multiplikatívna konštanta priamo obsahuje faktor naplnenia tabuľky.
+The two previous theorems give us enough strength to achieve our goal - restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$elements into the $n$ slots. By hashing a linear amounts the expected length can not grow, instead we can extend the hashed set to $n \log n$ values and the estimate remains valid. The most common application is to have load factors lower than 1. For this model we need will show an important relation of the chain length on the load factor. This is achieved by a slight proof modification and the multiplicative constant contains the table's load factor itself.
 
 \begin{theorem}
 \label{theorem-n-logn-to-n}
-Nech $H$ je systém lineárnych zobrazení medzi aritmetickými vektorovými priestormi nad telesom $Z_2$. použitý pri univerzálnom hashovaní so separovanými reťazcami. Potom očakávaná dĺžka najdlhšieho reťazca pri hashovaní $n \log n$ prvkov do tabuľky veľkosti $n$ je $O(\log n \log \log n)$.
+Let $H$ be the system of all linear mappings between two vector spaces over the field $Z_2$. The expected length of the longest chain when hashing $n \log n$ elements into the table of size $n$ is $O(\log n \log \log n)$.
 \end{theorem}
 \begin{proof}
-Uvažujme lineárne zobrazenie $h \in H$, $h: D \rightarrow B$. Vytvoríme priestor $A = Z_2^l$ pre $l \geq \log n$ a~dve lineárne zobrazenia $h_1: D \rightarrow A$ a~surjektívne $h_2: a~\rightarrow B$. Obe zobrazenia $h_1$ aj $h_2$ sú vybraté rovnomerne. Teda aj zobrazenie $h = h_1 \circ h_2$ je vybraté rovnomerne zo všetkých zobrazení na $B$.
+As in the previous proof we will factor a linear transformation $h \in H$, $h: D \rightarrow B$. We use the vector space $A = Z_2^l$ pre $l \geq \log n$ and two functions $h_1: D \rightarrow A$ and $h_2: a~\rightarrow B$ which is surjective. Both linear functions $h_1$ and $h_2$ are selected uniformly. This implies the uniform choice of the transformation $h = h_1 \circ h_2$.
 
-Zásadnou myšlienkou celého dôkazu sú dve udalosti:
+The idea presented here is to estimate the probability $P(lpsl > t)$ by using the other somehow unnatural event $E_2$. Its probability is then easy to find. The probability of the event $E_1 \equiv lpsl > t$ can be simply determined by discovering the relation between them. We will remark the following fact. When the $E_1$ is true with a high probability the event $E_2$ also appears.
+
 \begin{itemize}
-\item $E_1$ - Existuje reťazec dĺžky aspoň $t$, t.j. $\exists \alpha \in B: | h^{-1}(\alpha) \cap S | > t$.
-\item $E_2$ - Existuje prvok $\alpha \in B$ taký, že $h_2^{-1}(\alpha) \subseteq h_1(S)$.
+\item $E_1$ denotes the existence of a chain of length at least $t$ elements. Formally written $\exists \alpha \in B: | h^{-1}(\alpha) \cap S | > t$.
+\item $E_2$ is equivalent to existence of a vector $\alpha \in B$ such that $h_2^{-1}(\alpha) \subseteq h_1(S)$.
 \end{itemize}
-Pomocou predchádzajúcich tvrdení vieme jednoducho odhadnúť pravdepodobnosť udalosti $E_2$. Podstatná je pravdepodobnosť udalosti $E_1$. Všimneme si, že ak nastane udalosť $E_1$, tak je vysoko pravdepodobné, že nastala aj udalosť $E_2$.
 
 \begin{remark}
 \label{remark-e2-probability}
-Nech $d = \frac{2^l}{n \log n} > 1$. Potom platí:
+If $d = \frac{2^l}{n \log n} > 1$ then we have:
 \begin{displaymath}
 P(E_2) \leq d^{-\log d - \log \log d}\textit{.}
 \end{displaymath}
 \end{remark}
 \begin{proof}
-Ukážeme alternatívny popis udalosti $E_2$:
+First we should point out one equivalent definition of $E_2$.
 \begin{displaymath}
 h_2^{-1}(\alpha) \subseteq h_1(S) \Leftrightarrow h_2(A - h_1(S)) \neq B \textit{.}
 \end{displaymath}
 
-Nech existuje prvok $\alpha$, ktorého vzor pri zobrazení $h_2$ je podmnožinou obrazu množiny $S$ pri $h_1$. Zobrazením $h_2$ sa určite nedostaneme z $A - h_1(S)$ na celú množinu $B$.
+Event $E_2$ holds if and only if there is an element $\alpha$ which inverse image $h_2^{-1}(\alpha)$ is a subset of image $S$ by $h_1$. Then equivalently the function $h_2$ can not display $A - h_1(S)$ onto the whole set $B$.
 
-Pretože $\frac{2^l}{n \log n} > 1$, predpoklady vety \ref{theorem-linear-function-set-onto} sú pre množinu $A - h_1(S) \subset A$ a~zobrazenie $h_2$ splenené.
-Jej hustota je $\frac{|A| - |h_1(S)|}{|A|} = 1 - \alpha$.
+Now we use the theorem \ref{theorem-linear-function-set-onto} for the function $h_2$, set $h_1(A)$ and target space $B$. Because $\frac{2^l}{n \log n} > 1$ holds the assumptions of the \ref{theorem-linear-function-set-onto} are satisfied. Corresponding inverse density $\alpha = 1 - \frac{|A| - |h_1(S)|}{|A|} = \frac{|h_1(S)|}{|A|}$.
 \begin{displaymath}
 \alpha = \frac{|h_1(S)|}{|S|} \leq \frac{|S|}{|A|} = \frac{1}{d}
 \end{displaymath}
-Pretože $d = \frac{2^l}{n \log n} > 1$:
+Because $d = \frac{2^l}{n \log n} > 1$:
 \begin{displaymath}
 \log d = l - \log n - \log \log n
 \end{displaymath}
@@ -311,29 +304,31 @@ P(E_2) \leq \alpha^{l - \log n - \log \log n + \log \log \left(\frac{1}{\alpha}\
 \end{displaymath}
 \end{proof}
 
+Follows the similar lemma for the conditional probability.
 \begin{remark}
 \label{remark-prob-t-length-chain}
-Pokiaľ $t > c_{\frac{1}{2}}{\frac{2^l}{n}}\log\left(\frac{2^l}{n}\right)$, potom:
+If $t > c_{\frac{1}{2}}{\frac{2^l}{n}}\log\left(\frac{2^l}{n}\right)$ then for the conditional probability of events holds:
 \begin{displaymath}
 P(E_2 | E_1) \geq \frac{1}{2} \textit{.}
 \end{displaymath}
 \end{remark}
 \begin{proof}
-Predpokladajme, že máme dané zobrazenie $h$ a~nastala udalosť $E_1$. Určite existuje $S' \subseteq S$, ktorá má veľkosť aspoň $t$, namapovaná zobrazením $h$ na jediný prvok $\alpha \in Z_2^{\log n}$. Tento prvok fixujeme a~ďalej definujeme $D' = h^{-1}(\alpha)$ a~$A' = h_2^{-1}(\alpha)$. 
+Suppose that we have given a mapping $h$ and the event $E_1$ holds. There must be a subset $S' \subseteq S$ consisting of at least $t$ elements mapped by $h$ to a single element$\alpha \in Z_2^{\log n}$. We fix this element and define $D' = h^{-1}(\alpha)$ a~$A' = h_2^{-1}(\alpha)$. 
 
-Uvažujme rozdelenie zobrazení $h_1$, ktoré spĺňajú $h = h_1 \circ h_2$. Pokiaľ obmedzíme $h_1$ len na množinu $D'$, ide o afinné lineárne zobrazenie, ktoré je na množinu $A'$. Rovnomerným výberom všetkých zobrazení $h_1$ dochádza aj k rovnomernému výberu zobrazení z $D'$ na $A'$.
+Consider the distribution of transformations $h_1$ which satisfy the equation $h = h_1 \circ h_2$. By restricting $h_1$ to the set $D'$ we obtain a affine linear transformation onto the set $A'$. The uniform selection of $h_1$ corresponds to the uniform selection of all transformations from $D'$ onto $A'$.
 
-Ak platí $A' \subseteq h_1(S)$, tak určite nastane aj udalosť $E_2$. Veľkosť množiny $A'$ je podľa lemmy \ref{lemma-linear-transformation-domain-distribution} práve $\frac{2^l}{n}$. Ďalej kardinalita $S' = D' \cap S$ je aspoň $t = \left\lceil c_{\frac{1}{2}}\left(\frac{2^l}{n}\right)\log\left(\frac{2^l}{n}\right)\right\rceil$. Podľa vety \ref{theorem-set-onto-by-linear-transform} je pravdepodobnosť, že množina veľkosti aspoň $t$ pokryje celú množinu $A'$ najmenej $\frac{1}{2}$.
+$E_2$ is certainly present whenever $A' \subseteq h_1(S)$ occurs. The size of the set $A'$ is exactly $\frac{2^l}{n}$, lemma \ref{lemma-linear-transformation-domain-distribution}. The cardinality of  $S' = D' \cap S$ is at least $t = \left\lceil c_{\frac{1}{2}}\left(\frac{2^l}{n}\right)\log\left(\frac{2^l}{n}\right)\right\rceil$ since we supposed the presence of $E_2$. The theorem \ref{theorem-set-onto-by-linear-transform} gives us the lower bound $\frac{1}{2}$ on the probability of covering the whole set $A'$ by a set of size at least $t$. 
 \end{proof}
 
+Now we must bound the probability of existence of a long chain.
 \begin{remark}
-Existuje konštanta $C$ taká, že pre všetky $r > 4$ pri hashovaní množiny $S \subset D$, $|S| = n \log n$ na množinu $B = Z_2^{\log n}$, platí:
+There is a constant $C$ such that for all $r > 4$ in the scheme of hashing $S \subset D$, $|S| = n \log n$ using the hashing table $B = Z_2^{\log n}$ the following holds:
 \begin{displaymath}
 P(lpsl > rC \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
 \end{displaymath}
 \end{remark}
 \begin{proof}
-Pre $r > 4$ položíme:
+This proof is the straightforward use of the previous remarks.
 \begin{displaymath}
 \begin{split}
 l & = \left\lfloor \log n + \log \log n + \log r - \log \log r \right\rfloor \\
@@ -341,17 +336,15 @@ t & = 4c_{\frac{1}{2}}r\log n \log \log n \textit{.}
 \end{split}
 \end{displaymath}
 
-Overíme predpoklady pozorovania \ref{remark-e2-probability}:
+The condition of the remark \ref{remark-e2-probability} is certainly fulfilled:
 \begin{displaymath}
 d = \frac{2^l}{n \log n} \geq \frac{2^{\log n + \log \log n + \log r - \log \log r}}{n \log n} = \frac{r}{\log r} > 1\textit{.}
 \end{displaymath}
 
-Platí:
+The following inequality helps us to prove the assumption of the \ref{remark-prob-t-length-chain}:
 \begin{displaymath}
 \frac{2^l}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{r\log n}{\log r}
 \end{displaymath}
-
-Pomocou predchádzajúcej nerovnosti overíme predpoklad pozorovania \ref{remark-prob-t-length-chain}:
 \begin{displaymath}
 \begin{split}
 c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
@@ -361,7 +354,7 @@ c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
 \end{split}
 \end{displaymath}
 
-Pre zvolené hodnoty $l$ a~$t$ máme $P(E_2 | E_1) \geq \frac{1}{2}$. Z toho plynie $P(E_1) \leq 2 P(E_2)$, čo nám dáva obmedzenie pre pravdepodobnosť udalosti $E_1$:
+The probability $P(E_2 | E_1) \geq \frac{1}{2}$ is obtained for the given values of $l$ and $t$. This implies $P(E_1) \leq 2 P(E_2)$ which gives us the $E_1$ event's probability as:
 \begin{displaymath}
 \begin{split}
 P(E_1) 
@@ -370,10 +363,10 @@ P(E_1)
 \end{split}
 \end{displaymath}
 
-Udalosť $E_1$ označuje existenciu reťazca dĺžky aspoň $t$. Odhad tým pádom platí pre všetky reťazce, aj najdlhší z nich. Položením $C = 4c_{\frac{1}{2}}$ dôkaz tohoto tvrdenia úspešne dokončíme.
+The event $E_1$ denotes the existence of a chain of size at least $t$ elements. There is a chain longer than $t$ in a hash table if and only if the longest chain is longer than $t$. This proof completed is by putting $C = 4c_{\frac{1}{2}}$.
 \end{proof}
 
-Vďaka predchádzajúcemu tvrdeniu už jednoducho spočítame očakávanú dĺžku najdlhšieho reťazca, berieme $K = C\log n \log \log n$:
+Because of the previous claim we simply find the expected longest chain length, denote $K = C\log n \log \log n$.
 \begin{displaymath}
 \begin{split}
 E lpsl 
@@ -385,27 +378,25 @@ E lpsl
 I 	& = \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}
 \end{split}
 \end{displaymath}
-
-Pre praktické použitie je podstatná aj multiplikatívna konštanta $4C(4 + I)$, ktorú sme nateraz zanedbali.
 \end{proof}
 
-Naším ďalším cieľom bude ukázať závislosť očakávanej dĺžky na faktore naplnenia hashovacej tabuľky a~urobiť čo najtesnejší odhad na multiplikatívnu konštantu.
+For the practical use the multiplicative constant $4C(4 + I)$ is also important. In our proofs we neglected its estimation and we only obtained a good asymptotic growth which is negated by its great value. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ the constant $c_\epsilon$ equals $4 ^ 17$ which is too much. Our next goal is to show a better constant's estimate and the dependency of the longest chain on load factor of the hash table.
 
-Podarilo sa nám obmedziť $P(lpsl > 2Z \log n \log \log n)$ na $\frac{1}{2}$. To znamená, že najviac polovica funkcií spôsobí príliš dlhý reťazec a~následné prehashovanie:
+We already showed that $P(lpsl > 2C \log n \log \log n)$ is less than $\frac{1}{2}$. This fact is obtained by a direct use of the Markov inequality. This means that less than half of functions create longest chains longer than $2C \log n \log \log n$. This ends by rehashing of the whole table.
 \begin{displaymath}
-|\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace| = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H| \geq \frac{|H|}{2}
+|\lbrace h \in H \mid \textit{ h does not create a long chains} \rbrace| = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H| \geq \frac{|H|}{2}
 \end{displaymath}
 
-Vzhľadom k tomu, že funkciu vyberáme rovnomerne, pričom nevyhovujúce zahadzujeme, stále sa jedná o rovnomerný výber, ale z menšej množiny.
+Regarding the fact that the function is chosen uniformly and not suitable are discarded we still have an uniform selection. We used a smaller function system; the restriction is done by using the information about the hashed set.
 \begin{displaymath}
 \begin{split}
 P(h(x) = h(y)) 
-	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \textit{ a~h nevytvorí dlhý reťazec} \rbrace |}{|\lbrace h \in H \mid \textit{ h nevytvorí dlhý reťazec} \rbrace|} \\
+	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \rbrace |}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
 	& \leq \frac{2 |\lbrace h \in H \mid h(x) = h(y) \rbrace}{|H|} \\
 	& \leq 2 \frac{|H|}{m |H|} = \frac{2}{m}
 \end{split}
 \end{displaymath}
 
-Posledná rovnosť plynie z $1$-univerzality systému lineárnych zobrazení. Podobné obmedzenie môžu platiť aj pre iné univerzálne systémy. Pre takéto systémy pravdepodobnosť kolízie dvoch prvkov odhadneme pomocou vlastností plynúcich zo silnej $k$-univerzality alebo $c$-univerzality daných systémov.
+The last equality is implied by $1$-universality of systems of linear transformations. Similar restrictions of the other universal systems may be used. For such systems probability of collision of two (or more) elements is estimated by their strong $k$-universality or $c$-universality.
 
-Predchádzajúci výpočet dokumentuje to, že očakávaná dĺžka vyhľadania jedného prvku ostáva stále konštantná, môže sa najviac zdvojnásobiť. Samozrejme, voľbou väčšej hodnoty dĺžky najdlhšieho reťazca sa dostaneme k lepším hodnotám pre očakávaný čas hľadania prvku. Pretože vylúčime menej pôvodných funkcií, rýchlejšie nájdeme aj vhodnú hashovaciu funkciu. V tomto prípade sa však garancia najhoršieho prípadu adekvátne zhorší. 
+The previous computation shows us that the expected chain length is still constant, at most it can be doubled. Of course by selecting the greater length of longest chain we will omit less mappings. Thus we obtain better expected results for the find operation. But the warranty for the worst case is adequately worsened.
