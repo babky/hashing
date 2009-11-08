@@ -22,9 +22,6 @@ compute_constant = function(k, e, l) {
 	# alpha ^ log c = probability_upper_bound * alpha ^ -exponent
 	# log c = log (probability_upper_bound * alpha ^ -exponent) / log(alpha)
 	RHS = probability_upper_bound * alpha^(-exponent);
-	print(probability_upper_bound);
-	print(RHS);
-	print(alpha^(-exponent));
 	log_c = log2(RHS)/log2(alpha);
 
 	return (2 ^ log_c);
