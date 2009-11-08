@@ -7,20 +7,24 @@
 
 # Computes the best possible constant for the given parameters.
 compute_constant = function(k, e, l) {
-	# exponent = log k - log e + l + log log (1/alpha)
+	# exponent = l - log e + log log (1/alpha)
 	# alpha ^ (log c + exponent) <= probability_upper_bound
 
 	# temporary values
-	e_member = e / (k * 2^l);
+	e_member_1 = e / ((k - 1) * 2^l);
+	e_member_2 = e / (2 * k * 2^l);
 	
 	# needed values
-	alpha = 1 - e_member / 4;
-	probability_upper_bound = e - e_member;
-	exponent = log2(k) - log2(e) + l + log2(log2(1/alpha));
+	alpha = 1 - e_member_2;
+	probability_upper_bound = e - e_member_1;
+	exponent = -log2(e) + l + log2(log2(1/alpha));
 	
 	# alpha ^ log c = probability_upper_bound * alpha ^ -exponent
 	# log c = log (probability_upper_bound * alpha ^ -exponent) / log(alpha)
 	RHS = probability_upper_bound * alpha^(-exponent);
+	print(probability_upper_bound);
+	print(RHS);
+	print(alpha^(-exponent));
 	log_c = log2(RHS)/log2(alpha);
 
 	return (2 ^ log_c);
@@ -47,15 +51,15 @@ c_min = compute_constant(3, 0.5, 0);
 scheme_1_min = scheme_1_mult_constant(3, 0.5, 0);
 scheme_2_min = scheme_2_mult_constant(3, 0.5, 0);
 
-k_min = 1;
+k_min = 2;
 k_max = 4;
 k_step = 0.01;
 
-l_min = 1;
-l_max = 3;
+l_min = 0.5;
+l_max = 2;
 l_step = 0.01;
 
-e_min = 0.5;
+e_min = 0.2;
 e_max = 0.99;
 e_step = 0.01;
 
