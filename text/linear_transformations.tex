@@ -313,9 +313,9 @@ P(E_2 | E_1) \geq \frac{1}{2} \textit{.}
 \end{displaymath}
 \end{remark}
 \begin{proof}
-Suppose that we have given a mapping $h$ and the event $E_1$ holds. There must be a subset $S' \subseteq S$ consisting of at least $t$ elements mapped by $h$ to a single element$\alpha \in Z_2^{\log n}$. We fix this element and define $D' = h^{-1}(\alpha)$ a~$A' = h_2^{-1}(\alpha)$. 
+Suppose that we have a given mapping $h$ and the event $E_1$ holds. There must be a subset $S' \subseteq S$ consisting of at least $t$ elements mapped by $h$ to a single element $\alpha \in Z_2^{\log n}$. We fix this element and define $D' = h^{-1}(\alpha)$ and $A' = h_2^{-1}(\alpha)$. 
 
-Consider the distribution of transformations $h_1$ which satisfy the equation $h = h_1 \circ h_2$. By restricting $h_1$ to the set $D'$ we obtain a affine linear transformation onto the set $A'$. The uniform selection of $h_1$ corresponds to the uniform selection of all transformations from $D'$ onto $A'$.
+Consider the distribution of all transformations $h_1$ which satisfy the equation $h = h_1 \circ h_2$. By restricting $h_1$ to the set $D'$ we obtain a affine linear transformation onto the set $A'$. The uniform selection of $h_1$ corresponds to the uniform selection of all transformations from $D'$ onto $A'$.
 
 $E_2$ is certainly present whenever $A' \subseteq h_1(S)$ occurs. The size of the set $A'$ is exactly $\frac{2^l}{n}$, lemma \ref{lemma-linear-transformation-domain-distribution}. The cardinality of  $S' = D' \cap S$ is at least $t = \left\lceil c_{\frac{1}{2}}\left(\frac{2^l}{n}\right)\log\left(\frac{2^l}{n}\right)\right\rceil$ since we supposed the presence of $E_2$. The theorem \ref{theorem-set-onto-by-linear-transform} gives us the lower bound $\frac{1}{2}$ on the probability of covering the whole set $A'$ by a set of size at least $t$. 
 \end{proof}
@@ -384,10 +384,14 @@ For the practical use the multiplicative constant $4C(4 + I)$ is also important.
 
 We already showed that $P(lpsl > 2C \log n \log \log n)$ is less than $\frac{1}{2}$. This fact is obtained by a direct use of the Markov inequality. This means that less than half of functions create longest chains longer than $2C \log n \log \log n$. This ends by rehashing of the whole table.
 \begin{displaymath}
-|\lbrace h \in H \mid \textit{ h does not create a long chains} \rbrace| = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H| \geq \frac{|H|}{2}
+\begin{split}
+|\lbrace h \in H \mid \textit{ h does not create a long chains} \rbrace| 
+	& = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H|  \\
+	& \geq \frac{|H|}{2} \\
+\end{split}
 \end{displaymath}
 
-Regarding the fact that the function is chosen uniformly and not suitable are discarded we still have an uniform selection. We used a smaller function system; the restriction is done by using the information about the hashed set.
+Regarding the fact that the function is chosen uniformly and not suitable are discarded we still have an uniform selection. We used a smaller function system; note that the restriction here is done by using the information about the hashed set.
 \begin{displaymath}
 \begin{split}
 P(h(x) = h(y)) 
