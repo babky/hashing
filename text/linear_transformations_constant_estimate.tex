@@ -10,7 +10,7 @@ Now we will extend the definition of $I$ to $I_{\epsilon}$. This integral is one
 \begin{displaymath}
 I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
 \end{displaymath}
-Originally we used $I_{\frac{1}{2}} = I$. The extension is motivated by the fact that we were not forced to use $\epsilon$ equal to $0.5$. When we choose other value we can obtain even a smaller integral value. If we select an arbitrary $\epsilon$ the conditional probability of event $E_2 | E_1$ is constrained as $P(E_2 | E_1) \geq 1 - \epsilon$. And the bound on the probability of event $E_1$ becomes $P(E_1) = \frac{1}{1-\epsilon} P(E_2)$.
+Originally we used $I_{\frac{1}{2}} = I$. The extension is motivated by the fact that we were not forced to use $\epsilon$ equal to $0.5$. When we choose other value we can obtain even a smaller integral value. If we select an arbitrary $\epsilon$ the conditional probability of event $E_2 | E_1$ is constrained as $P(E_2 | E_1) \geq 1 - \epsilon$. And the bound on the probability of event $E_1$ becomes $P(E_1) \leq \frac{1}{1-\epsilon} P(E_2)$.
 
 Evaluation of the integral $I$ may be split into two parts. We try to compare it to a function which has a convergent improper integral. The function chosen here is $r^{1.5}$. But the chosen function becomes greater after the value $r = 16$. In the interval $[4, 16]$ the integral $I$ is bounded by its upper Riemann sum.
 
@@ -54,6 +54,7 @@ P(T(A) \neq Z_2^t)
 The right side, $\epsilon$, is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ directly without any estimations.
 
 \begin{lemma}
+\label{lemma-collision-count}
 When the size of the set $|T_0(A)|$ is less than $\frac{|A|}{k}$ for $1 \leq k$ then there are at least $\frac{|A|(k - 1)}{2}$ collisions.
 \end{lemma} 
 \begin{proof}
@@ -86,7 +87,7 @@ For convenience we define a new variable $\alpha'$ equal to $1 - \frac{\epsilon}
 
 
 \section{Hashing a linear amount of elements}
-A common use of a hash table is with load factor lower than one. We already showed if there is a super-linear amount of elements hashed we can expect a reasonable result in the worst case. However the most important is the expected size of a bucket. The upper bound of the expected size is equal to $1 + c \alpha$. So using a load factor lower than one has a significant impact on the average case. We need to examine a scheme of hashing $\alpha_f n$ elements into a hash table of size $n$, so $alpha_f$ is the table's load factor. 
+A common use of a hash table is with load factors lower than one. We already showed if there is a super-linear amount of elements hashed we can expect a reasonable result in the worst case. However the most important is the expected size of a bucket. The upper bound of the expected size is equal to $1 + c \alpha$. So using a load factor lower than one has a significant impact on the average case. We need to examine a scheme of hashing $\alpha_f n$ elements into a hash table of size $n$ where $\alpha_f$ is the table's load factor. 
 
 We need to change the previous claims to fit our new scheme: 
 \begin{theorem}
@@ -106,18 +107,18 @@ P(lpsl > r \alpha_f C \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{
 We show changes that need to be made. 
 \begin{displaymath}
 \begin{split}
-l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + \log \alpha_f \right\rfloor \\
+l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + \log \alpha_f + 1 \right\rfloor \\
 t & = 4\alpha_f c_{\frac{1}{2}} \log n \log \log n \\
 d & = \frac{2^l}{\alpha_f n \log n} \\
 \end{split}
 \end{displaymath}
 
-The assumptions of the \ref{remark-e2-probability}\textsuperscript{th} remark are met. There is the factor $\alpha_f$ in the denominator because the size of the hashed set is certainly limited by $\alpha_f n \leq \alpha_f n \log n$:
+The assumptions of the remark \ref{remark-e2-probability} are met. The factor $\alpha_f$ may appear in the denominator because the size of the hashed set is certainly limited by $\alpha_f n \leq \alpha_f n \log n$:
 \begin{displaymath}
-d = \frac{2^l}{\alpha_f n \log n} \geq \frac{\alpha_f n \log n \log r}{\alpha_f n \log n \log \log r} > 1 \textit{.}
+d = \frac{2^l}{\alpha_f n \log n} \geq \frac{\alpha_f n \log n r}{\alpha_f n \log n \log r} > 1 \textit{.}
 \end{displaymath}
 
-In the proof of the \ref{remark-e2-probability} we also used a relation among $h_1(S)$, $A = Z_2^l$, $\alpha$ and $d$. We present here that simalar holds and this makes it valid for this scheme, too.
+In the proof of the \ref{remark-e2-probability} we also used a relation among $h_1(S)$, $A = Z_2^l$, $\alpha$ and $d$. We must show that similar relations hold. This makes our reasoning valid for this scheme, too.
 \begin{displaymath}
 \alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{\alpha_f n \log n}{2^l} = \frac{1}{d} \textit{.}
 \end{displaymath}
@@ -152,4 +153,112 @@ E lpsl
 \end{displaymath}
 
 Expression $I$ has not been modified.
+\end{proof}
+
+\section{Obtaining an even better multiplicative constant}
+For the model of hashing linear amount of elements we only used the estimates valid also in the case of hashing the super-linear count of items. Now in order to obtain a better result we have to reconsider our choices. The ideas remain the same but we will change some claims to suit our needs.
+
+The previous and not very succesfull attempt gave us a constant suitable for hashing millions of elements. With a constant in the order of hundreds our estimates starts beating the linear one when hashing around 40 000 elements.
+
+The constant $c_\epsilon$ plays the most crucial role. We try to lower its value first. Instead of making the factor space $W$ larger than the set $A$ we will bound it between $\frac{|A|}{4}$. But it still must be larger than the target space $Z_2^t$. Of course this is possible since the set $A$ contains at least $t2^t$ elements.
+
+\begin{remark}
+For every convenient $\epsilon$ there is a constant $c_\epsilon$ such that for every subset $A$, $|A| \geq c_\epsilon t 2^t$ of the source space $V$ and for an uniformly selected linear transformation $T$ to the target space $Z_2^t$ the probability of mapping $A$ to the whole target space is at least $1-\epsilon$:
+\begin{displaymath}
+P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+We present the proof with all the possible parameters that can have their value chosen to optimise the value of $c_\epsilon$. According to these parameters the interval for $\epsilon$ may be found.
+
+For every value $\frac{|A|}{2^l}$ there is a power of two $2^u = |W|$ less or equal to $\frac{2|A|}{2^l}$. The value of $l$ will be non-negative and so $|W| \leq |A|$. As in the previous modifications we will estimate the two probabilities obtained by using the law of total probability.
+
+According to the lemma \ref{lemma-collision-count} when the result $T_0(A)$ has less than $\frac{|W|}{k}$ elements there must be at least $\frac{|A|}{2}\left(\frac{k|A|}{|W|} - 1\right)$ collisions caused by it.
+
+\begin{displaymath}
+P(|T_0(A)| \geq \frac{|W|}{k}) \leq \frac{|A|(|A| - 1)}{2|W|\frac{|A|}{2}\left(\frac{k|A|}{|W|} - 1\right)} \leq \frac{|A|}{k|A| - |W|} \leq \frac{|A|}{k|A| - \frac{2|A|}{2^l}} \leq \frac{2^l}{2^l k - 2}
+\end{displaymath}
+
+The remaining case is when $|T_0(A)| \geq \frac {|W|}{k}$.
+
+\begin{displaymath}
+\alpha = 1 - \frac{|T_0(A)|}{|W|} \leq 1 - \frac{1}{k}
+\end{displaymath}
+
+\begin{displaymath}
+P(T(A) \neq Z_2^t) \leq \left(1 - \frac{1}{k}\right)^{\log c_\epsilon + \log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l}
+\end{displaymath}
+
+The sum of both cases is greater than the whole probability of event $T(A) \neq Z_2^t$ and must be less than $\epsilon$.
+
+\begin{displaymath}
+\begin{split}
+\frac{2^l}{2^l k - 2} + \left(1 - \frac{1}{k}\right)^{\log c_\epsilon + \log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l} & \leq \epsilon \\
+\left(1 - \frac{1}{k}\right)^{\log c_\epsilon} & \leq \frac{\epsilon - \frac{2^l}{2^l k - 2}}{\log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l} \\
+\log c_\epsilon & \geq \frac{\log \left(\frac{\epsilon - \frac{2^l}{2^l k - 2}}{\log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l}\right)}{\log \left(1 - \frac{1}{k}\right)}
+\end{split}
+\end{displaymath}
+
+For some values $\epsilon$, $k$ and $l$ it may happen $\frac{2^l}{2^l k - 2} \geq \epsilon$. In this case no $c_\epsilon$ may be found using this proof. However with this computation slightly better results for valid choices are found. Compare the value 17.31 ($\epsilon = 0.8967$) to 67.77 ($\epsilon = 0.98$).
+\end{proof}
+
+Now we will present a different approach to prove bound on the expected length of the longest chain by choosing other size of the factor space $A$.
+\begin{theorem}
+When hashing a linear $\alpha_f n$ elements into a table of size $n$ the expected length of the longest chain is bounded by $O(\alpha_f \log n \log \log n)$.
+\end{theorem}
+\begin{proof}
+Our choices for $r \geq 4$:
+\begin{displaymath}
+\begin{split}
+l & = \lfloor \log n + \log r - \log \log r + \log \alpha_f + 1\rfloor \\
+d & = \frac{2^l}{\alpha_f n} \geq \frac{\alpha_f n r}{\alpha_f n \log r} = \frac{r}{\log r} \geq 2 \\
+t & = 2 \alpha_f c_\epsilon r \\
+\end{split}
+\end{displaymath}
+
+The choice for $d$ gives us the probability of the event $E_2$.
+\begin{displaymath}
+\begin{split}
+\alpha & = 1 - \frac{|A - h_1(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} \\
+\log d & = l - \log \alpha_f - \log n \geq l - \log n \\
+P(E_2) 
+	& \leq \alpha^{l - \log n - \log \log n + \log \log \left( \frac{1}{\alpha} \right)} \\
+	& \leq \left( \frac{1}{d} \right)^{\log d - \log \log n + \log \log d} \\
+	& \leq \left(\frac{r}{\log r}\right)^{\log \log n - \log d - \log \log d} \\
+	& \leq \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
+\end{split}
+\end{displaymath}
+
+The verification of the choice of $t$ follows.
+\begin{displaymath}
+\begin{split}
+c_\epsilon \frac{2^l}{n} \log \left( \frac{2^l}{n} \right) 
+	& \leq 2 c_\epsilon \alpha_f \frac{r}{\log r} \log \left( \frac{2 \alpha_f r}{\log r} \right) \\
+	& \leq 2 c_\epsilon \alpha_f \frac{r}{\log r} \log r = 2 c_\epsilon \alpha_f r = t
+\end{split}
+\end{displaymath}
+
+Thus $P(lpsl \geq 2 \alpha_f c_\epsilon r) \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}$. Now from this fact we obtain a bound on the expected longest length.
+
+\begin{displaymath}
+\begin{split}
+E lpsl 
+	& = \int\limits_0^\infty P(lpsl \geq t) dt \leq 2 c_\epsilon 4 + \int\limits_{8 c_\epsilon}^\infty P(lpsl \geq t) dt \\ 
+	& = 8c_\epsilon + 2 c_\epsilon \int\limits_{4}^\infty P(lpsl \geq 2c_\epsilon r) dr \\
+	& = 2c_\epsilon \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \right) \\ 
+	& \leq 2c_\epsilon \left( 4 + \frac{1}{1-\epsilon}\left( 2 \log n \log \log n - 4 + I \right) \right) \\
+\end{split}
+\end{displaymath}
+
+For the integral $I$ estimation for simplicity we will denote the value $d = \frac{r}{\log r}$.
+\begin{displaymath}
+I = \int\limits_{2 \log n \log \log n}^\infty d ^ {\log \log n - \log d - \log \log d} dr \leq 14
+\end{displaymath}
+
+The whole bound looks like:
+\begin{displaymath}
+E lpsl \leq \frac{4c_\epsilon}{1 - \epsilon} \log n \log \log n + 2 c_\epsilon \left( \frac{I - 4}{1 - \epsilon} + 4 \right) \textit{.}
+\end{displaymath}
+
+The best estimate achieved so far is 538 $\log n \log \log n$ + 2 897.
 \end{proof}
