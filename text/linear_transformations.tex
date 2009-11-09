@@ -10,13 +10,11 @@ Let $T: Z_2^u \rightarrow Z_2^t$, $u \leq t$ be an~onto linear map and vector $x
 \end{lemma}
 \begin{proof}
 First we remark that $T^{-1}(0)$ is a~vector subspace of the~vector space $Z_2^u$:
-\begin{displaymath}
-\begin{split}
-& T(0) = 0 \\
-T(u) = 0, T(v) = 0: & T(u + v) = T(u) + T(v) = 0 \\
-T(u) = 0: & T(\delta u) = \delta T(u) = \delta 0 = 0
-\end{split}
-\end{displaymath}
+\begin{align*}
+&\textit{}& T(0) & = 0 \\
+T(u) = 0, T(v) = 0: &\textit{}& T(u + v) & = T(u) + T(v) = 0 \\
+\delta \in \lbrace 0, 1 \rbrace, T(u) = 0: &\textit{}& T(\delta u) & = \delta T(u) = \delta 0 = 0 \\
+\end{align*}
 
 We show that $T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ are of the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$.
 \begin{displaymath}
@@ -328,10 +326,10 @@ P(lpsl > rC \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \lef
 \end{displaymath}
 \end{remark}
 \begin{proof}
-This proof is the straightforward use of the previous remarks.
+The proof is a straightforward use of previous remarks.
 \begin{displaymath}
 \begin{split}
-l & = \left\lfloor \log n + \log \log n + \log r - \log \log r \right\rfloor \\
+l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + 1 \right\rfloor \\
 t & = 4c_{\frac{1}{2}}r\log n \log \log n \textit{.}
 \end{split}
 \end{displaymath}
@@ -341,14 +339,14 @@ The condition of the remark \ref{remark-e2-probability} is certainly fulfilled:
 d = \frac{2^l}{n \log n} \geq \frac{2^{\log n + \log \log n + \log r - \log \log r}}{n \log n} = \frac{r}{\log r} > 1\textit{.}
 \end{displaymath}
 
-The following inequality helps us to prove the assumption of the \ref{remark-prob-t-length-chain}:
+The following inequality helps us to prove the assumption of the remark \ref{remark-prob-t-length-chain}:
 \begin{displaymath}
-\frac{2^l}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{r\log n}{\log r}
+\frac{2^l}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{2 r\log n}{\log r}
 \end{displaymath}
 \begin{displaymath}
 \begin{split}
 c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
-	& < c_{\frac{1}{2}} 2 \left(\log n \left(\frac{r}{\log r}\right)\right)\left(2\log\log n \log r\right) \\
+	& < c_{\frac{1}{2}} 2 \left(\log n\right) \left(\frac{r}{\log r}\right)\left(2\log\log n \log r\right) \\
 	& = 4 c_{\frac{1}{2}} r \log n \log \log n \\
 	& = t
 \end{split}
@@ -380,8 +378,9 @@ I 	& = \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r
 \end{displaymath}
 \end{proof}
 
-For the practical use the multiplicative constant $4C(4 + I)$ is also important. In our proofs we neglected its estimation and we only obtained a good asymptotic growth which is negated by its great value. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ the constant $c_\epsilon$ equals $4 ^ 17$ which is too much. Our next goal is to show a better constant's estimate and the dependency of the longest chain on load factor of the hash table.
+For the practical use the multiplicative constant $4C(4 + I)$ is also important. In our proofs we neglected its estimation and we only obtained a good asymptotic growth which is negated by its great value. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ the constant $c_\epsilon$ equals $4 ^ {17}$ when using the original estimate. This value is too big for a practical use. Our next goal is to show a better constant's estimate and explore the dependency of the longest chain on load factor of the hash table.
 
+\section{Expected case when rehashing}
 We already showed that $P(lpsl > 2C \log n \log \log n)$ is less than $\frac{1}{2}$. This fact is obtained by a direct use of the Markov inequality. This means that less than half of functions create longest chains longer than $2C \log n \log \log n$. This ends by rehashing of the whole table.
 \begin{displaymath}
 \begin{split}
