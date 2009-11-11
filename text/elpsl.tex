@@ -1,6 +1,6 @@
 \chapter{Očakávaná dĺžka najdlhšieho reťazca}
 
-Pokúsime sa odhadnúť očakávanú dĺžku najdlhšieho reťazca pri univerzálnom hashovaní. Vychádzame z postupu použitého pri štandardnom hashovaní, ktorý neskôr upravíme. Pri tomto prístupe sme očakávanú dĺžku odhadovali pomocou pravdepodobnosti, že v jedinom reťazci koliduje $i$ a viac prvkov. Vychádzali sme z nasledujúcich dvoch faktov:
+Pokúsime sa odhadnúť očakávanú dĺžku najdlhšieho reťazca, značíme ako náhodnú veličinu $lpsl$,  pri univerzálnom hashovaní. Vychádzame z postupu použitého pri štandardnom hashovaní, ktorý neskôr upravíme. Pri tomto prístupe sme očakávanú dĺžku odhadovali pomocou pravdepodobnosti, že v jedinom reťazci koliduje $i$ a viac prvkov. Vychádzali sme z nasledujúcich dvoch faktov:
 \begin{displaymath}
 P(lpsl \geq i) \leq m P(psl \geq i)
 \end{displaymath}
@@ -18,7 +18,7 @@ Teda platí:
 E lpsl \leq \displaystyle \sum_{i = 0}^{\infty} m P(psl \geq i)
 \end{displaymath}
 
-Na základe predpokladu nezávislosti výberu hashovaných prvkov z univerza odhadujeme pravdepodobnosť kolízie ako:
+Z platnosti predpokladu nezávislosti výberu hashovaných prvkov z univerza od\-had\-ne\-me pravdepodobnosť kolízie ako:
 \begin{displaymath}
 P(psl \geq i) \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
 \end{displaymath}
