@@ -113,7 +113,7 @@ Nech $N$ je prvočíslo. Systém polynomiálnych hashovacích funkcií stupňa $
 \end{remark}
 \begin{proof}
 % TODO: Odkaz na Vandermondovu maticu.
-Nech $x_1, x_2, \dots, x_{n+1}$ sú po dvojiciach rôzne a $y_1, y_2, \dots, y_{n+1}$ sú zvolené obrazy. Potom môžeme zostaviť Vandermondovu maticu pre určenie jednotlivých koeficientov $c_0, c_1, \dots, c_n$.
+Nech prvky $x_1, x_2, \dots, x_{n+1}$ sú po dvojiciach rôzne a $y_1, y_2, \dots, y_{n+1}$ sú zvolené odpovedajúce obrazy. Potom môžeme zostaviť Vandermondovu maticu pre určenie jednotlivých koeficientov $c_0, c_1, \dots, c_n$.
 
 Pokiaľ $U = A$, funkcie $h(x)$ sa redukujú na tvar $h(x) = (\displaystyle \sum_{i=0}^{n} c_i x^i ) \mod N$. Veľkosť systému je ${|U|}^{n+1}$. Pre zadané vzory a ich obrazy z invertibility Vanderomondovej matice dostávame práve jednu funkciu $h$, ktorá spĺňa predpísané podmienky. Za predpokladu $|A| = |U|$ platí ${|A|}^{n+1} = {|U|}^{n+1}$. Ihneď získavame, že systém polynomiálnych funkcií je silne $n+1$-univerzálny.
 
@@ -167,7 +167,7 @@ Platí:
 \begin{displaymath}
 |H| = {|A|}^{|U|}
 \end{displaymath}
-Nech máme zadaných $n$ po dvojiciach rôznych vzorov $x_1, \dots, x_n$ a k nim odpovedajúce obrazy $y_1, \dots, y_n$. Veľkosť $H_n = \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace$ je:
+Nech máme zadaných $n$ po dvojiciach rôznych vzorov $x_1, \dots, x_n$ a im odpovedajúce obrazy $y_1, \dots, y_n$. Veľkosť $H_n = \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace$ je:
 \begin{displaymath}
 |H_n| = {|A|}^{|U| - n} = \frac{{|A|}^{|U|}}{{|A|}^{n}} = \frac{|H|}{|A|^n}
 \end{displaymath}
