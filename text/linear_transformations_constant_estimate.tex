@@ -245,7 +245,7 @@ Thus $P(lpsl \geq 2 \alpha_f c_\epsilon r) \leq \frac{1}{1 - \epsilon} \left(\fr
 E lpsl 
 	& = \int\limits_0^\infty P(lpsl \geq t) dt \leq 2 c_\epsilon 4 + \int\limits_{8 c_\epsilon}^\infty P(lpsl \geq t) dt \\ 
 	& = 8c_\epsilon + 2 c_\epsilon \int\limits_{4}^\infty P(lpsl \geq 2c_\epsilon r) dr \\
-	& = 2c_\epsilon \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \right) \\ 
+	& = 2c_\epsilon \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \right) \\ 
 	& \leq 2c_\epsilon \left( 4 + \frac{1}{1-\epsilon}\left( 2 \log n \log \log n - 4 + I \right) \right) \\
 \end{split}
 \end{displaymath}
@@ -260,5 +260,16 @@ The whole bound looks like:
 E lpsl \leq \frac{4c_\epsilon}{1 - \epsilon} \log n \log \log n + 2 c_\epsilon \left( \frac{I - 4}{1 - \epsilon} + 4 \right) \textit{.}
 \end{displaymath}
 
-The best estimate achieved so far is 538 $\log n \log \log n$ + 2 897.
+The estimate of integral $\int\limits_{4}^\infty \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr$ remains to be unveiled. First we must realise that the exponent must be negative in order to get the integrand below 1. And it is sufficient to have $\log \left( \frac{r}{\log r} \right) > \log \log n$. Our choice is to put $r > 2 \log n \log \log n$:
+\begin{displaymath}
+\begin{split}
+d & \geq \log n \\
+\frac{r}{\log r} & \geq \log n \\
+\frac{r}{\log r} & \geq \frac{2 \log n \log \log n}{1 + \log \log n + \log \log \log n} \\
+	& = \frac{2 \log n}{1 + \frac{1}{\log \log n} + \frac{\log \log \log n}{\log \log n}} \\
+	& \geq \log n \\
+\end{split}
+\end{displaymath}
+
+Which is valid for $n \geq 16$. The value of $I$ is determined in the similar fashion as in the previous case. The best estimate achieved is 538 $\log n \log \log n$ + 2~897.
 \end{proof}
