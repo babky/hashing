@@ -1,4 +1,4 @@
-from cwlf.collision_functions.collision_functions import CWLFSystem
+from cwlf.system import CWLFSystem
 import copy
 
 def count_functions_3(cf, a0, a1, a2):
