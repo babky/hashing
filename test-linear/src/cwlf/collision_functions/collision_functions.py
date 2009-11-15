@@ -1,4 +1,4 @@
-class CollisionFunctions:
+class CWLFSystem:
     
     def __init__(self, p, m, allow_zero = 1):
         self.p = p
