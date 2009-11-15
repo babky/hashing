@@ -7,7 +7,7 @@ m = 64
 c = N / m
 c = fractions.Fraction((c + 1) ** 2, c ** 2)
 
-cf = CollisionFunctions(N, m)
+cf = CWLFSystem(N, m)
 elements = [1, 2, 3, 9, 15, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 43, 44]
 l = 0
 for element in elements:

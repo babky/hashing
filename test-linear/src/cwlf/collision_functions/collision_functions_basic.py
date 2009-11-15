@@ -6,7 +6,7 @@ from collision_functions import CollisionFunctions
 #    cf.restrict_collision_functions(element)
 #    print cf.get_colliding_function_count()
 
-cf = CollisionFunctions(5, 2)
+cf = CWLFSystem(5, 2)
 
 print cf.compute_function((4, 2), 1)
 print cf.compute_function((4, 2), 2)

@@ -5,7 +5,7 @@ from cwlf.collision_functions.collision_functions import CollisionFunctions
 class CollisionFunctionsTest(unittest.TestCase):
 
     def test_collision_function_count(self):
-        cf = CollisionFunctions(17)
+        cf = CWLFSystem(17)
         self.assertEqual(cf.compute_function((3, 15), 2), 4, "CWLF function computation test.")
 
         cf.restrict_collision_functions(1)
