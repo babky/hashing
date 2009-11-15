@@ -1,4 +1,4 @@
-from cwlf.collision_functions.collision_functions import CWLFSystem
+from cwlf.system import CWLFSystem
 import fractions
 
 N = 2099
