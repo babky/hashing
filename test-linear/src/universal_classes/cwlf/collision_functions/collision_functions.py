@@ -1,4 +1,4 @@
-from cwlf.system import CWLFSystem
+from universal_classes.cwlf.system import CWLFSystem
 
 #cf = CollisionFunctions(643, 64)
 #elements = [1, 2, 3, 9, 15, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 43, 44]

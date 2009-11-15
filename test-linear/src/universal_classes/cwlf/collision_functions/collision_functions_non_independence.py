@@ -1,4 +1,4 @@
-from cwlf.system import CWLFSystem
+from universal_classes.cwlf.system import CWLFSystem
 import copy
 
 def count_functions_3(cf, a0, a1, a2):

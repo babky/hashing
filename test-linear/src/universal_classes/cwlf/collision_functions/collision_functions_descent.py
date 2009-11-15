@@ -1,4 +1,4 @@
-from cwlf.system import CWLFSystem
+from universal_classes.cwlf.system import CWLFSystem
 import fractions
 
 N = 2099
