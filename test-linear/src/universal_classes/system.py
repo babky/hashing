@@ -3,6 +3,9 @@ class UniversalSystem:
     def __init__(self):
         self.colliding_elements = []
         
+    def restrict_collision_functions(self, x):
+        raise NotImplementedError()
+        
     def _restrict_collision_functions_set(self, x):
         if self.colliding_elements != []:
             y = self.colliding_elements[0]
@@ -23,7 +26,7 @@ class UniversalSystem:
             return
         
         y = self.colliding_elements[0]
-        max = len(self.colliding_elements)
+        max = len(self.functions)
         i = 0
         while i < max:
             function = self.functions[i]
@@ -32,6 +35,8 @@ class UniversalSystem:
                 max -= 1
             else:
                 i += 1
+                
+        self.colliding_elements.append(x)
                     
     def get_colliding_functions(self):
         return self.functions
