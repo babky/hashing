@@ -1,5 +1,5 @@
+from cwlf.collision_functions.collision_functions import CWLFSystem
 import fractions
-from collision_functions import CollisionFunctions
 
 N = 2099
 m = 64

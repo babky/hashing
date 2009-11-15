@@ -1,5 +1,5 @@
+from cwlf.collision_functions.collision_functions import CWLFSystem
 import copy
-from collision_functions import CollisionFunctions
 
 def count_functions_3(cf, a0, a1, a2):
     cf = copy.deepcopy(cf)
