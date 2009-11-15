@@ -1,6 +1,5 @@
+from cwlf.collision_functions.collision_functions import CWLFSystem
 import unittest
-
-from cwlf.collision_functions.collision_functions import CollisionFunctions
 
 class CollisionFunctionsTest(unittest.TestCase):
 
