@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/babky/Documents/docs/text/
+cd `dirname $0`/..
 
 if [ $# -ge 1 ]
 then
