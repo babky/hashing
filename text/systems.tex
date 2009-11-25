@@ -211,3 +211,36 @@ Combinations of pairs of functions from $k$-strongly universal classes by the op
 \end{itemize}
 give $k$-strongly universal classes of functions.
 \end{corollary}
+
+Next step is to discover a dependence of the $k$ parameter on the size of the universal class. From this we know the limits of the $k$ parameter. 
+\begin{theorem}
+If $H$ is a $k$-strongly universal system of functions. Then the following holds:
+\begin{displaymath}
+|H| \geq \frac{\log m ^ {k - 1}}{\log k \log m} \textit{.}
+\end{displaymath}
+\end{theorem}
+\begin{proof}
+\begin{displaymath}
+\begin{split}
+\frac{N}{m^i} & > k \\
+\frac{N}{m^{i + 1}} & < k \\
+\frac{\log N - \log k}{\log m} & < i + 1 \\
+\frac{\log N - \log k}{\log m} - 1 & < i \\
+\frac{\log N - \log k - \log m}{\log m} & < i \\
+\frac{\log \left( \frac{N}{km} \right)}{\log m} & < i \\
+\log_m \left( \frac{N}{km} \right) & < i \\
+\end{split}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+i & \le \frac{|H|}{m^{k - 1}} \\
+\log_m \left( \frac{N}{km} \right) & < \frac{|H|}{m^{k - 1}} \\
+m^{k - 1} \log_m \left( \frac{N}{km} \right) & < |H| \\
+\end{split}
+\end{displaymath}
+This can be rewritten as:
+\begin{displaymath}
+k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m}
+\end{displaymath}
+\end{proof}
+
