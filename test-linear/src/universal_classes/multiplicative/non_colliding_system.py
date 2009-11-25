@@ -7,10 +7,15 @@ class NonCollidingMultiplicativeSystem(UniversalSystem):
         self.p = p
         self.m = m
         
-        self.functions = set(range(1, self.p));
+        self.functions = set(range(self.p / 2 + 1, self.p));
         for i in range(1, self.p / self.m):
-            self.functions.remove(i * self.m)
-            self.functions.remove(((p - i) * self.m) % self.p)
+            k  = i * self.m;
+            if k in self.functions:
+                self.functions.remove(k)
+                
+            k  = ((p - i) * self.m) % self.p;
+            if k in self.functions:
+                self.functions.remove(k)
             
         self.all_functions_count = len(self.functions)
         
