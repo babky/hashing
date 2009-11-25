@@ -1,5 +1,6 @@
-\chapter{Systémy univerzálnych funkcií}
+\chapter{Systems of universal classes of functions}
 
+\section{Examples of universal classes of functions}
 % TODO: Odkazy na jednotlive systemy
 % TODO: Citacia na clanok s definiciami.
 
@@ -69,8 +70,10 @@ nazveme lineárny systém hashovacích funkcií.
 \end{definition}
 
 \begin{remark}
-Lineárny systém je $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-univerzálny.
+Linear class of functions is $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-universal.
 \end{remark}
+\begin{proof}
+\end{proof}
 % End linear systems
 
 % Linear transformations
@@ -180,3 +183,31 @@ Pamätať si úplné zobrazenie zo systému $H$ je nepraktické. Kódujeme aj ho
 
 
 \paragraph{Systém definovaný pomocou matíc}
+
+\section{Properties of systems of universal functions}
+In this section we sum up some properties of $k$-strongly universal classes of functions. We concentrate mainly on the generalization of the known properties of the $c$-universal classes to the strongly universal classes.
+
+The first theorems show the results of combinations of two strongly universal systems.
+\begin{theorem}
+If both $H$ and $I$ are $k$-strongly universal systems over the table size of $m$. Then the system of pairs of functions $J = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ is also $k$-strongly universal. Where the composite function is defined as $f_{(h, i)}(x) = (h(x), i(x))$ and the functions $h$ and $i$ are chosen independently.
+\end{theorem}
+\begin{proof}
+If $x_1, \dots, x_k$ are the elements that are supposed to be mapped onto selected $(y_1, z_1), \dots, (y_k, z_k)$ buckets. The probability of mapping $h(x_1) = y_1, \dots, h(x_k) = y_k$ is $\frac{1}{m^k}$ and the probability of $h(x_1) = z_1, \dots, h(x_k) = y_k$ is the same. So the probability of the selected collision scheme $h(x_1) = (y_1, z_1), \dots, h(x_k) = (y_k, z_k)$ is equal to $\frac{1}{m^{2k}}$. Though the exponent is $2k$ since the table size is $m^2$ so the system is $k$-strongly universal only.
+\end{proof}
+
+This limits the power of combining two system into a larger table. Although we obtain a smaller probability of collision but we pay an expensive price of the large table. The same may be achieved by simple squaring the table. This scheme does not provide a sufficient result. We can combine the result of the function pair into a table without any lost of the universality.
+\begin{theorem}
+Let $B$ denote the set of buckets of a hash table of size $|B| = m$. Both $H$ and $I$ are $k$-strongly universal classes of functions over the table $B$. The operation $o: B \times B \rightarrow B$ has the property property that for every $c, a \in B$ there is exactly one $b \in B$ such that $o(a, b) = c$. Then the system of functions $F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ where $f_{(h, i)}(x) = o(h(x), i(x))$ is $k$-strongly universal.
+\end{theorem}
+\begin{proof}
+The given $x_1, \dots, x_k$ are supposed to be mapped onto $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$. The probability of event $h(x_1) = a_1, \dots, h(x_k) = a_k$ and $i(x_1) = b_1, \dots, i(x_k) = b_k$ is exactly $\frac{1}{m^{2k}}$. Since the pairs may be chosen arbitrarily for every $1 \le i \le k$ there are $m^k$ of them. It follows that $P(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$.
+\end{proof}
+
+\begin{corollary}
+Combinations of pairs of functions from $k$-strongly universal classes by the operation:
+\begin{itemize}
+\item $xor$ where the table size is a power of 2
+\item $+$, $-$ where the table size is a prime
+\end{itemize}
+give $k$-strongly universal classes of functions.
+\end{corollary}
