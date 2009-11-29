@@ -436,7 +436,7 @@ namespace Hash {
 			 */
 			ChainedList(const ChainedList & list) {
 				this->elementCount = list->elementCount;
-				for (ChainedNode * n = list->first, n->next; n = n->next) {
+				for (ChainedNode * n = list->first; n->next; n = n->next) {
 					this->first = new ChainedNode(n->item, this->first);
 				}
 			}
