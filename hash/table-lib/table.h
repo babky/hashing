@@ -2,6 +2,7 @@
 #define TABLE_H
 
 #include <algorithm>
+#include <iostream>
 #include "utils/definitions.h"
 #include "utils/storage_statistics.h"
 #include "policies/rehash_policy.h"

@@ -17,8 +17,7 @@ namespace Hash {
 		 *
 		 * @param item Inserted item causing this exception.
 		 */
-		ItemStoredException(const T & item):
-		  std::exception("Item already stored in the collection.") {
+		ItemStoredException(const T & item) {
 			this->item = item;
 		}
 
@@ -29,6 +28,10 @@ namespace Hash {
 		 */
 		virtual T & getItem(void) {
 			return this->item;
+		}
+		
+		virtual const char * what(void) const throw() {
+			return "Item already stored in the hash table.";
 		}
 
 	private:
