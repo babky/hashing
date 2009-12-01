@@ -214,33 +214,45 @@ give $k$-strongly universal classes of functions.
 
 Next step is to discover a dependence of the $k$ parameter on the size of the universal class. From this we know the limits of the $k$ parameter. 
 \begin{theorem}
-If $H$ is a $k$-strongly universal system of functions. Then the following holds:
+If $H$ is a $k$-strongly universal system of functions. Then the size of the system is bounded by:
 \begin{displaymath}
-|H| \geq \frac{\log m ^ {k - 1}}{\log k \log m} \textit{.}
+|H| > m^{k - 1} \log_m \left( \frac{N}{km} \right) \textit{.}
+\end{displaymath}
+
+The strong universality of every such system of functions $H$ has its upper bound
+\begin{displaymath}
+k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \textit{.}
 \end{displaymath}
 \end{theorem}
 \begin{proof}
+First we will construct the sequence of sets $U_0$, $U_1$, $\dots$. The set $U_0$ is the same as $U$. The set $U_i$ denotes the greatest subset of $U_{i - 1}$ that collides under the function $h_i \in H$. From the Dirichlet's principle the size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$ . By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^k}$.
+
+Now let the index $i$ denote the last set $U_i$ such that $|U_i| \geq k$. The functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of the set $U_i$ to a single image. The probability of this event is less or equal to $\frac{1}{m ^ {k - 1}}$. From this argument we now know that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since the index $i$ is last with the property $U_i \geq k$ we also know $\frac{|U|}{m ^ {i + 1}} < k$. 
+
+Putting it all together:
 \begin{displaymath}
 \begin{split}
-\frac{N}{m^i} & > k \\
 \frac{N}{m^{i + 1}} & < k \\
-\frac{\log N - \log k}{\log m} & < i + 1 \\
-\frac{\log N - \log k}{\log m} - 1 & < i \\
-\frac{\log N - \log k - \log m}{\log m} & < i \\
+\frac{N}{k} & < m ^ {i + 1} \\
 \frac{\log \left( \frac{N}{km} \right)}{\log m} & < i \\
 \log_m \left( \frac{N}{km} \right) & < i \\
 \end{split}
 \end{displaymath}
+
+Obtaining the bound on the size of system of functions:
 \begin{displaymath}
 \begin{split}
-i & \le \frac{|H|}{m^{k - 1}} \\
-\log_m \left( \frac{N}{km} \right) & < \frac{|H|}{m^{k - 1}} \\
-m^{k - 1} \log_m \left( \frac{N}{km} \right) & < |H| \\
+\frac{|H|}{m^{k - 1}} & \geq i > \log_m \left( \frac{N}{km} \right) \\
+|H| & > m^{k - 1} \log_m \left( \frac{N}{km} \right) \\
 \end{split}
 \end{displaymath}
-This can be rewritten as:
+
+This can be rewritten to get bound on $k$ as:
 \begin{displaymath}
-k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m}
+\begin{split}
+m^{k - 1} & < \frac{|H|}{\log_m \left( \frac{N}{km} \right)} \\
+k & < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \\
+\end{split}
 \end{displaymath}
 \end{proof}
 
