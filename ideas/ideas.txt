@@ -1,0 +1,4 @@
+ Open and double hashing with universal functions.
+ Schema of a hashing model similar to perfect hashing. Only a part of the table gets rehashed. The full rehash is not needed.
+ CWLF system of linear functions - properties related to the longest chain length. Is it possible to change it (with a simple function in the second coordinate) to a strongly universal system?
+ 
