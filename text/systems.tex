@@ -185,34 +185,40 @@ Pamätať si úplné zobrazenie zo systému $H$ je nepraktické. Kódujeme aj ho
 \paragraph{Systém definovaný pomocou matíc}
 
 \section{Properties of systems of universal functions}
-In this section we sum up some properties of $k$-strongly universal classes of functions. We concentrate mainly on the generalization of the known properties of the $c$-universal classes to the strongly universal classes.
+In this section we sum up some properties of $k$-strongly universal classes of functions. We concentrate on the generalisation of the known properties of the $c$-universal classes to the strongly universal classes.
 
 The first theorems show the results of combinations of two strongly universal systems.
 \begin{theorem}
-If both $H$ and $I$ are $k$-strongly universal systems over the table size of $m$. Then the system of pairs of functions $J = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ is also $k$-strongly universal. Where the composite function is defined as $f_{(h, i)}(x) = (h(x), i(x))$ and the functions $h$ and $i$ are chosen independently.
+Let $H$ and $I$ be $k$-strongly universal systems both over the universe $U$ and table of size $m$. Then the system of pairs of functions 
+\begin{displaymath}
+J = \lbrace f_{(h, i)}:U \times U \rightarrow \lbrace 0, \dots, m - 1 \rbrace \times \lbrace 0, \dots, m - 1 \rbrace | h \in H, i \in I \rbrace
+\end{displaymath} 
+is also $k$-strongly universal. The result of a composite function given by a pair $(h, i)$ is computed as $f_{(h, i)}(x) = (h(x), i(x))$.
 \end{theorem}
 \begin{proof}
-If $x_1, \dots, x_k$ are the elements that are supposed to be mapped onto selected $(y_1, z_1), \dots, (y_k, z_k)$ buckets. The probability of mapping $h(x_1) = y_1, \dots, h(x_k) = y_k$ is $\frac{1}{m^k}$ and the probability of $h(x_1) = z_1, \dots, h(x_k) = y_k$ is the same. So the probability of the selected collision scheme $h(x_1) = (y_1, z_1), \dots, h(x_k) = (y_k, z_k)$ is equal to $\frac{1}{m^{2k}}$. Though the exponent is $2k$ since the table size is $m^2$ so the system is $k$-strongly universal only.
+Let $x_1, \dots, x_k$ be the elements that are supposed to be mapped onto selected buckets $(y_1, z_1), \dots, (y_k, z_k)$. The number of functions mapping both $h(x_1) = y_1, \dots, h(x_k) = y_k$ and $h(x_1) = z_1, \dots, h(x_k) = y_k$ is $\frac{|H|}{m^k}$ or $\frac{|I|}{m^k}$ respectively. So the number of all functions mapping $h(x_1) = (y_1, z_1), \dots, h(x_k) = (y_k, z_k)$ is equal to $\frac{|H||I|}{m^{2k}}$. Although the exponent is $2k$ because the table size is $m^2$ the constructed system is $k$-strongly universal only.
 \end{proof}
 
-This limits the power of combining two system into a larger table. Although we obtain a smaller probability of collision but we pay an expensive price of the large table. The same may be achieved by simple squaring the table. This scheme does not provide a sufficient result. We can combine the result of the function pair into a table without any lost of the universality.
+Previous result limits the power of combining two system into a larger table. We obtain a smaller probability of collision but we pay an expensive price of the larger table size. The same effect on the collision probability can be simply achieved by squaring the table size. 
+
+We could also combine the two functions and use a suitable operation to merge the given results into a smaller table as it is stated in the next theorem.
 \begin{theorem}
-Let $B$ denote the set of buckets of a hash table of size $|B| = m$. Both $H$ and $I$ are $k$-strongly universal classes of functions over the table $B$. The operation $o: B \times B \rightarrow B$ has the property property that for every $c, a \in B$ there is exactly one $b \in B$ such that $o(a, b) = c$. Then the system of functions $F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ where $f_{(h, i)}(x) = o(h(x), i(x))$ is $k$-strongly universal.
+Let $B$ denote the set of buckets of a hash table of size $m$ thus $|B| = m$. Both $H$ and $I$ are $k$-strongly universal classes of functions over the table $B$. The operation $o: B \times B \rightarrow B$ is given so that for every $c, a \in B$ there is exactly one $b \in B$ such that $o(a, b) = c$. Then the system of functions $F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ where $f_{(h, i)}(x) = o(h(x), i(x))$ is $k$-strongly universal.
 \end{theorem}
 \begin{proof}
-The given $x_1, \dots, x_k$ are supposed to be mapped onto $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$. The probability of event $h(x_1) = a_1, \dots, h(x_k) = a_k$ and $i(x_1) = b_1, \dots, i(x_k) = b_k$ is exactly $\frac{1}{m^{2k}}$. Since the pairs may be chosen arbitrarily for every $1 \le i \le k$ there are $m^k$ of them. It follows that $P(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$.
+The given elements $x_1, \dots, x_k$ are supposed to be mapped onto the prescribed images $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$. The probability of event $h(x_1) = a_1, \dots, h(x_k) = a_k$ and $i(x_1) = b_1, \dots, i(x_k) = b_k$ is exactly $\frac{1}{m^{2k}}$. The pair for a single value $y_i$ may be chosen arbitrarily for every $1 \le i \le k$. There are $m^k$ pairs that confirm the values $y_i$. Now we see that $P(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$.
 \end{proof}
 
 \begin{corollary}
-Combinations of pairs of functions from $k$-strongly universal classes by the operation:
+Combinations of functions from $k$-strongly universal classes with the operation:
 \begin{itemize}
 \item $xor$ where the table size is a power of 2
-\item $+$, $-$ where the table size is a prime
+\item $+$, $-$ when the table size is a prime
 \end{itemize}
 give $k$-strongly universal classes of functions.
 \end{corollary}
 
-Next step is to discover a dependence of the $k$ parameter on the size of the universal class. From this we know the limits of the $k$ parameter. 
+Next step is to discover the dependence of the parameter $k$ of strongly universal classes on their size. This will show us the best possible probability estimate for the collision.
 \begin{theorem}
 If $H$ is a $k$-strongly universal system of functions. Then the size of the system is bounded by:
 \begin{displaymath}
@@ -225,9 +231,9 @@ k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \texti
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-First we will construct the sequence of sets $U_0$, $U_1$, $\dots$. The set $U_0$ is the same as $U$. The set $U_i$ denotes the greatest subset of $U_{i - 1}$ that collides under the function $h_i \in H$. From the Dirichlet's principle the size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$ . By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^k}$.
+First we will construct the sequence of sets $U_0$, $U_1$, $\dots$. The set $U_0$ is the same as $U$. The set $U_i$ is the greatest subset of $U_{i - 1}$ that collides under the function $h_i \in H$. From the Dirichlet's principle the size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$. By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^i}$.
 
-Now let the index $i$ denote the last set $U_i$ such that $|U_i| \geq k$. The functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of the set $U_i$ to a single image. The probability of this event is less or equal to $\frac{1}{m ^ {k - 1}}$. From this argument we now know that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since the index $i$ is last with the property $U_i \geq k$ we also know $\frac{|U|}{m ^ {i + 1}} < k$. 
+Now let the index $i$ denote the last set $U_i$ such that $|U_i| \geq k$. The functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of the set $U_i$ to a single image. The probability of this event is less or equal to $\frac{1}{m ^ {k - 1}}$. From this argument we know that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since the index $i$ is last with the property $U_i \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} < k$. 
 
 Putting it all together:
 \begin{displaymath}
@@ -255,4 +261,3 @@ k & < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \\
 \end{split}
 \end{displaymath}
 \end{proof}
-
