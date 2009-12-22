@@ -6,11 +6,11 @@ When we were proving the upper bond on the length of the longest chain in a hash
 I = \displaystyle\int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
 \end{displaymath}
 
-Now we will extend the definition of $I$ to $I_{\epsilon}$. This integral is one part of the multiplicative constant.
+Now we will extend the definition of $I$ to $I_{\epsilon}$. This integral is one part of the multiplicative constant $16c_\epsilon(4 + I)$.
 \begin{displaymath}
 I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
 \end{displaymath}
-Originally we used $I_{\frac{1}{2}} = I$. The extension is motivated by the fact that we were not forced to use $\epsilon$ equal to $0.5$. When we choose other value we can obtain even a smaller integral value. If we select an arbitrary $\epsilon$ the conditional probability of event $E_2 | E_1$ is constrained as $P(E_2 | E_1) \geq 1 - \epsilon$. And the bound on the probability of event $E_1$ becomes $P(E_1) \leq \frac{1}{1-\epsilon} P(E_2)$.
+Originally we used $I_{\frac{1}{2}} = I$. The extension is motivated by the fact that we were not forced to use $\epsilon$ equal to $0.5$. If we chose other values we could obtain even smaller integral values. If we select an arbitrary $\epsilon$ the conditional probability of event $E_2 | E_1$ is constrained as $P(E_2 | E_1) \geq 1 - \epsilon$. And the bound on the probability of event $E_1$ becomes $P(E_1) \leq \frac{1}{1-\epsilon} P(E_2)$.
 
 Evaluation of the integral $I$ may be split into two parts. We try to compare it to a function which has a convergent improper integral. The function chosen here is $r^{1.5}$. But the chosen function becomes greater after the value $r = 16$. In the interval $[4, 16]$ the integral $I$ is bounded by its upper Riemann sum.
 
@@ -33,11 +33,13 @@ I_{\epsilon}
 \end{displaymath}
 
 \subsection{Choosing $\epsilon$}
-The most important step is the optimisation of the value $4 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then $22 568$ for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant it becomes less than linear for $n$ approximately equal to one million.
+The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then 22 568 for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant the estimate becomes less than linear for $n$ approximately equal to one million.
 
-The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every constant in it. Values of the parameters are than optimised to get the least $c_{\epsilon}$ and multiplicative constant. The optimisation itself is not performed analytically because of its complexity caused by the constraints. Instead we created a straightforward program that assigns each parameter values from a predefined interval. Values from a parameter's interval are enumerated uniformly with the given step. The multiplicative constant is computed for every assignment and the best achieved value is remembered.
+The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every constant in it. Values of the parameters are than optimised to get the least multiplicative constant. The optimisation itself is not performed analytically because of its complexity that is caused by the emerged constraints. 
 
-We actually created two parameter $k$ and $l$. The limit of the size of the set $T_0(A)$ is changed to $\frac{|A|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $Z_2^u$. We change the definition of $u$ to:
+Instead we created a straightforward program that assigns each parameter values from a predefined interval. They are enumerated uniformly with the prescribed step. The multiplicative constant is then computed for every such assignment and the best achieved value is remembered.
+
+We actually created two parameters $k$ and $l$. The limit of the size of the set $T_0(A)$ is changed to $\frac{|A|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $Z_2^u$. We change the definition of $u$ to:
 \begin{displaymath}
 u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \textit{.}
 \end{displaymath}
@@ -51,7 +53,7 @@ P(T(A) \neq Z_2^t)
     & \leq \epsilon \\
 \end{split}
 \end{displaymath}
-The right side, $\epsilon$, is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ directly without any estimations.
+The right side, $\epsilon$, is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ explicitly without any estimations from the last inequality in the proof of theorem \ref{theorem-set-onto-by-linear-transform}.
 
 \begin{lemma}
 \label{lemma-collision-count}

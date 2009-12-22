@@ -17,7 +17,7 @@ T(u) = 0, T(v) = 0: &\textit{}& T(u + v) & = T(u) + T(v) = 0 \\
 \delta \in \lbrace 0, 1 \rbrace, T(u) = 0: &\textit{}& T(\delta u) & = \delta T(u) = \delta 0 = 0 \\
 \end{align*}
 
-We show that $T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ are of the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$.
+We show that $T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ have the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$. This is also the one to one map between $T^{-1}(0)$ and $T^{-1}(x)$.
 \begin{displaymath}
 \begin{split}
 v \in T^{-1}(0) 
@@ -35,7 +35,7 @@ v \in T^{-1}(x)
 \end{displaymath}
 \end{proof}
 
-All of the~following claims are taken from \cite{linear-hash-functions}. It is convenient to show the~original proofs and then modify them according to our future needs.
+All of the~following claims in this section are taken from \cite{linear-hash-functions}. It is convenient to show the~original proofs and then modify them according to our future needs.
 
 \begin{lemma}
 \label{lemma-choose-random-vector}
@@ -46,7 +46,7 @@ E (1 - \frac{|A \cup (v + A)|}{|V|}) = \alpha^2 \textit{.}
 The~expectation is taken through all the~possible choices of $v$.
 \end{lemma}
 \begin{proof}
-We choose two vectors $u$ and $v$ uniformly and independently from the~space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the~following we will finish the~proof this lemma.
+We choose two vectors $u$ and $v$ uniformly and independently from the~space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the~following we will finish the~proof of this lemma.
 \begin{displaymath}
 \begin{split}
 |A \cup (v + A)| 
@@ -64,7 +64,7 @@ E (1 - \frac{|A \cup (v + A)|}{|V|})
 \end{displaymath}
 \end{proof}
 
-The following lemma is a~very technical one ans is used to estimate the~probabilities of some events related to linear maps.
+The following lemma is a~very technical one and is used to estimate the~probabilities of some events related to linear maps.
 \begin{lemma}
 \label{lemma-random-variable}
 For $1 \leq i \leq k$ the~$\alpha_i$ are random variables and $0 < \alpha_0 < 1$ is a~constant. For the~random variables, $1 \leq i \leq k$, we assume the~following:
@@ -80,7 +80,7 @@ P(\alpha_k \geq t) \leq \alpha_0^{k - \log \log (\frac{1}{t}) + \log \log \left(
 \begin{proof}
 For $k = 0$ the~claim is certainly true; we have just two cases to take into account. First if $t \leq \alpha_0$, the~exponent is negative:
 \begin{displaymath}
--\log \log (1/t) + \log \log \left(\frac{1}{\alpha_0}\right) < 0
+-\log \log (\frac{1}{t}) + \log \log \left(\frac{1}{\alpha_0}\right) < 0
 \end{displaymath}
 The base, $\alpha_0$, is less then $1$ so our estimate of the~probability is above $1$. 
 
@@ -197,11 +197,11 @@ P(T(A) \neq Z_2^t) \geq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}} \te
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-Consider uniformly and independently selected $s$ vectors, $v_1, \dots, v_s$ from the~vector space $Z_2^u$. If $T$ is a~linear map that maps every $v_i$ to the $0$ vector; selected vectors are members of $Ker(T)$. However, they do not necesarilly span the~whole kernel, they do not need to be linearly independent, even they may be equal. Because they are selected uniformly and independently we still can have $T$ selected uniformly. We can achieve this by extending its above definition. 
+Consider uniformly and independently selected $s$ vectors, $v_1, \dots, v_s$ from the~vector space $Z_2^u$. If $T$ is a~linear map that maps every $v_i$ to the $0$ vector; selected vectors are members of $Ker(T)$. However, they do not necessarily span the~whole kernel, they do not need to be linearly independent, actually they may be even equal. Because they are selected uniformly and independently we still can have $T$ selected uniformly. We can achieve this by extending its above definition. 
 
-Random and independent selection of linear transormations may be done like this. One basis, canonical for example, of the~space $Z_2^t$ is fixed. The~number of all bases of the~space $Z_2^u$ is finite. One is uniformly chosen and is mapped by the~function $T$ on the~fixed basis of $Z_2^t$. This mapping has to be implemented carefully. First we find the~kernel, $u-t$ vector of the~chosen basis are sent to $0$. The~remaining $t$ vectors are permuted and then mapped.
+Random and independent selection of linear transformations can be performed for example by using the following idea. One basis, canonical for example, of the~space $Z_2^t$ is fixed. The~number of all bases of the~space $Z_2^u$ is finite. One is uniformly chosen and is mapped by the~function $T$ on the~fixed basis of $Z_2^t$. This mapping has to be implemented carefully. First we find the~kernel, $u-t$ vector of the~chosen basis are sent to $0$. The~remaining $t$ vectors are permuted and then mapped.
 
-The selection of $s$ vectors gives us the~part of the~kernel in the~following manner. The~$i$-th vector is added to the~kernel if and only if it does not belong to the~$span(v_1, \dots, v_{i-1})$. This is certainly a~linearly independent set of dimension lower or equal to $s$. From Steinitz's theorem we know that it can be extented to a~basis. By mapping an~uniformly selected extension basis to the~target space one can obtain the~wanted function $T$.
+The selection of $s$ vectors gives us the~part of the~kernel in the~following manner. The~$i$-th vector is added to the~kernel if and only if it does not belong to the~$span(v_1, \dots, v_{i-1})$. This is certainly a~linearly independent set of dimension lower or equal to $s$. From Steinitz's theorem we know that it can be extended to a~basis. By mapping an~uniformly selected extension basis to the~target space one can obtain the~wanted function $T$.
 
 Define a~sequence $A_i = a~+ span(v_1, \dots, v_i)$ for $0 \leq i \leq s$, the~matching $\alpha_i = 1 - \frac{|A_i|}{2^u}$, $0 \leq \alpha_i \leq \alpha_{i-1}$. Since $A_{i} = a~+ span(v_1, \dots, v_i) = A_{i-1} \cup (A_{i-1} + v_i)$, by using lemma \ref{lemma-choose-random-vector} we already know that $E[\alpha_i | \alpha_{i-1}, \dots, \alpha_1] = \alpha_{i-1}^2$. And the lemma \ref{lemma-random-variable} implies:
 \begin{displaymath}
@@ -259,7 +259,7 @@ In both alternatives the probability limit is $\frac{\epsilon}{2}$. It gives us 
 The biggest disadvantage of the that the current estimate of $c_\epsilon$ is very inaccurate. For the practical use of this scheme we need the smallest value possible. In the later section we will try to lower the value of $c_\epsilon$.
 \end{proof}
 
-The two previous theorems give us enough strength to achieve our goal - restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$elements into the $n$ slots. By hashing a linear amounts the expected length can not grow, instead we can extend the hashed set to $n \log n$ values and the estimate remains valid. The most common application is to have load factors lower than 1. For this model we need will show an important relation of the chain length on the load factor. This is achieved by a slight proof modification and the multiplicative constant contains the table's load factor itself.
+The two previous theorems give us enough strength to achieve our goal - restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts the expected length can not grow, instead we can extend the hashed set to $n \log n$ values and the estimate remains valid. The most common models use load factors lower than 1. For these models we need and will show an important relation of the chain length on the load factor. This is achieved by a small modification of the given proofs, the multiplicative constant contains the table's load factor itself.
 
 \begin{theorem}
 \label{theorem-n-logn-to-n}
