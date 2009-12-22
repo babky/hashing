@@ -1,27 +1,30 @@
 \chapter {Universal classes of linear functions}
 
 % TODO: Add the bibitem and citation.
-In this chapter we will discuss various systems of linear functions. The original system of linear functions was first discovered by Carter and Wegman. 
+In this chapter we will discuss various systems of linear functions. The original system of linear functions was first discovered by Carter and Wegman. Nowadays various modifications are known.
 
-Also for examination of the properties of the original system the simpler and smaller multiplicative system may be used. The two have many common properties and share the same drawbacks. Some computations may differ but the multiplicative system may provide us with new insights.
+For examining the properties of the original system the simpler and smaller multiplicative systems may be used. They have many common properties and share some same drawbacks. Some computations may differ but these multiplicative system may provide us with new insights.
 
 \begin{definition}{Multiplicative system}
-Let $p$ be a prime and $m$, $m < p$ is the size of the hash table. Then multiplicative system of universal functions, $H$, contains all the linear functions, $h:Z_p \rightarrow \lbrace 0, \dots, m - 1\rbrace$, of the form $h(x) = kx \mod p \mod m$. 
+Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then multiplicative system of universal functions, $H$, contains all the linear functions, $h:Z_p \rightarrow \lbrace 0, \dots, m - 1\rbrace$, of the form $h(x) = kx \mod p \mod m$. 
 \end{definition}
 
 \begin{theorem}
 For a prime $p$ and $m < p$ the multiplicative system is $\frac{p}{p - 1}$-universal.
 \end{theorem}
 \begin{proof}
-If $x$ and $y$ are two different elements. We have to find the number of functions in the multiplicative system that will make their images the same.
+If $x$ and $y$ are two different elements. We have to find the number of functions in the multiplicative system that will make their images the same:
 \begin{displaymath}
 \begin{split}
 kx \mod p \mod m & = ky \mod p \mod m \\
 kx - ky \mod p \mod m & = 0 \\
-kx - ky \mod p & = l m \ \text{it}
 \end{split}
 \end{displaymath}
+
+This can be rewritten as:
+\begin{displaymath}
+k(x - y) \mod p = l m \text{ for $l \in \lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \rbrace$}
+\end{displaymath}
+
+Thus for every choice of $x$ and $y$ there are at most $2\left\lfloor\frac{p}{m}\right\rfloor + 1$ functions. For every value of $l$ there is exactly one $k$ satisfying the equality since the number $p$ is a prime.
 \end{proof}
-
-
-
