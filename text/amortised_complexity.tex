@@ -1,0 +1,110 @@
+\chapter{Amortised complexity of a hashing scheme}
+
+% TODO: ktore schemy nevedia delete, alebo nie je znamene, zmienit dynamizaciu
+The hashing scheme we propose later in this chapter is a solution to the set representation problem. Every such solution provides us basic with some operations. These allow obtaining an information if an element is stored within the set, accessing the stored elements and inserting the element. Some schemes do not implement the element removal or the efficient implementation is not known.
+
+% TODO: definicia vahovo vyvazeneho stromu.
+The must crucial are the operations' running times. Various solutions prefer different operations. For example a simple array has $O(1)$ find and $O(n)$ insertion or deletion in the canonical case and better bounds can be obtained using the amortised complexity. Balanced trees' subroutines are typically bounded by the logarithmic time. The answer of a good choice which data structure should be used lies in the estimated structure of operations. A good choice can be an asymptotic improvement but this does not change the fact that the short running times are welcomed.
+
+We analyse the running times of the universal hashing first by mentioning the known facts. Then we extend this analysis to the universal hashing using the system of linear transformations over vector spaces. We will guarantee the worst case complexity of the find operation.
+
+\section{Expected time of the find operation in the classical universal hashing}
+In this section we assume that the used system of hashing functions is at least $c$-universal. The running time of the find operation is proportional to the number of collisions in the bucket where the searched element should be placed according to its hash value. The obvious worst case is $O(n)$ where $n$ is the number of elements hashed. The universal hashing gives a far better expected estimate, $O(1)$.
+
+\begin{theorem}
+\label{theorem-expected-chain-length-universal}
+Expected time of the find operation in the universal hashing using a $c$-universal system is $O(1)$ if the load factors are upper bounded.
+\end{theorem}
+\begin{proof}
+The time of the find operation is given by the length of the chain into which the searched element falls. We must also add the time for hashing the element but this can be typically done in one unit of time. The expected length of a chain containing the element $x \in U$ must be computed. The expectation is taken over the family of hash functions and the chain's length is the sum of indicator variables:
+\begin{displaymath}
+\frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S - \lbrace x \rbrace} P(h(x) = h(y))}{|H|} = \frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S - \lbrace x \rbrace} \frac{c}{m}}{|H|} = \frac{cn}{m}
+\end{displaymath}
+
+Since the element $x$ may be present in the set $S$ the time is bounded by the expression $1 + c\alpha$ where $\alpha$ is the table's load factor. The typical load factor is lower than 1, we only assumed that it is bounded. It is still enough to see that the expected operation's time complexity is still $O(1)$.
+\end{proof}
+
+\section{Hashing using the family of linear transformations}
+
+The model we propose is a slight modification of the simplest universal hashing scheme with separated chains:
+\begin{itemize}
+\item We use the universal family of linear transformations from the $U = Z^2_l$ to the space $Z^2_f$. We may imagine this as hashing $l$-bit binary numbers to the space of $f$-bit binary numbers. We will refer to the size of the hashing table as $m = 2^k$.
+\item \textbf{Chain limit rule:} when there is a chain longer than a limiting value $l(m)$ then the whole table is rehashed.
+\item \textbf{Load factor rule:} if the only operations performed are insert and find the load factor of the table is maintained in the interval $\left[0.5, 1\right]$. We need the interval $\left[0.25, 1\right]$ if delete is allowed, too. If the load factor rule is violated whole table is rehashed into a greater or smaller table respectively without violating the second property.
+\end{itemize}
+
+The choice of the limiting value, $l(m)$, for the table of size $m$ is done in the following manner. We would like to guarantee the worst case limit even when the table is fully loaded. So we use the results of the section \ref{section-linear-systems-linear-amount-constant-estimate} for the $\alpha = 1$ when the delete operations are not allowed and $\alpha = 1.5$ when they are. The value $l(m)$ is chosen so that the probability of failing to find a suitable function is lower than a prescribed value $p$. This probability bound certainly works for the lower values of $\alpha$. In the mentioned section we computed the limit for $p = 0.5$ as $19.152 \log n \log \log n$ when $\alpha = 1$ and $28.728 \log n \log \log n$ for $\alpha = 1.5$.
+
+Because the estimates used work only with the initial size of the table greater than $572$ we will use the initial size of $m$ = 1 024 elements. Since not every hash table grows to a size of 1 024 elements this overhead may be unacceptable. In this case we can turn off the rehash operation caused by the chain limit violation when the table is small. Now we are able to analyse the expected amortised time complexity of the introduced scheme.
+
+\begin{lemma}
+\label{lemma-linear-transformations-tries}
+If the hash function for a table with the size of $m$ elements and with the chain limit setup $P(lpsl \geq l(m)) \leq p$ is sought the expected number of tries is $\frac{1}{(1 - p)^2}$.
+\end{lemma}
+\begin{proof}
+The estimate of failing $k$ times is bounded by the geometric distribution and this probability is certainly less or equal than $p^k$. So the expected time of success is given by:
+\begin{displaymath}
+\sum_{i = 0}^{\infty} (i + 1)p^i = \sum_{i = 0}^{\infty}p^i + \sum_{i = 0}^{\infty}ip^i = \frac{1}{1 - p} + \frac{p}{(1- p)^2} = \frac{1}{(1 - p)^2}
+\end{displaymath}
+\end{proof}
+
+\begin{theorem}
+The expected amortised complexity of the operations find and insert is $O(1)$ when the delete operation is not allowed. The expectation is taken over an uniform choice of a hash function. Also assume that the number of insert operations is a power of two.
+\end{theorem}
+\begin{proof}
+For the amortised complexity analysis we use the potential method. The potential used here is the number $\alpha m - m$. This is the negative value of the number of remaining subsequent insert operations which would make the load factor equal to $1$. Whenever an real insert is done we check if the prolonged chain is not longer than the limiting value or the load factor is not greater than $1$. So there are three cases to be analysed.
+\begin{itemize}
+\item No rehash is needed. Then from the previous theorem (\ref{theorem-expected-chain-length-universal}) the operation itself took only $O(1)$ time in the expected case. The potential is also increased by one. So the operation consumed $O(1)$ amortised time.
+\item The rehash is performed because the load factor exceeds the value of $1$. The rehash itself takes the time $O(m)$ and the size of the table is doubled. Thus the resulting potential is $-m$ and the starting potential was $0$. So the operation took only a $O(1)$ time because of the first insertion.
+\item Suppose the a rehash is needed because there is a chain violating the length limit. We seek for a new function that satisfies the limit rule without resizing the table. The single rehash operation takes the time $O(m)$ and we have to find out how often this situation can occur between the two immediate rehashes caused by the load factor rule, we call it a cycle. Finding a suitable function during the cycle is remarkable same as in its end. We can see the process in the following manner. When we generate functions from the set $H$ we can ask if the function is fine for a set $S$ that will be represented at the end. Just remark that we do not know the set $S$ in advance. Because universal hashing has no assumptions on the set $S$\footnote{It only needs to be a subset of the universe $Z^2_l$.} and it contains all the currently hashed elements we can afford this simplification. After $\frac{1}{(1-p)^2)}$ such choices we are expected to find a right function. The expected number in a single cycle is then bounded. Notice that the number of inserts to get the table from the size $m$ when $\alpha = 0.5$ to the value of $\alpha$ equal to one is $m$. The expected time for the limit rule caused operations is $\frac{1}{(1 - p)^2}O(m)$ and if it is distributed along the cycle we are still at $O(1)$ amortised time.
+\end{itemize}
+
+If the number of inserts is not a power of two we would distribute possibly long time over a non-complete cycle and would not obtain $O(1)$ time in it. In the other cycles our complexity estimates hold. Amortised time of insert operation then converges to the $O(1)$ time with a growing number of operations. The expected time of find is from the theorem \ref{theorem-expected-chain-length-universal} and it obviously does not change the potential.
+\end{proof}
+
+One can find a potential to prove previous result more formally. We use this approach when the delete operation is also allowed.
+
+\begin{theorem}
+The expected amortised complexity of the operations find, insert and delete converges to $O(1)$. The expectation is taken over an uniform choice of a hash function.
+\end{theorem}
+\begin{proof}
+In this proof we need to distinguish two types of the operation cycles. First we need to distribute the work of the load factor rule and that of the chain limit rule as well. In the previous theorem these cycles were the same. Also remember the difference that the limiting value is computed for the $\alpha = 1.5$.
+
+In advance we must mention that the time of the find operation is proportional to the chain length. This value is expected to be constant and the operation does not change the potential. The following analysis is simplified by omitting the find operation.
+
+Let the sequence $O = (o_i)_{i=1}^o$ denote the sequence of operations performed starting from the empty table, $o_i \in \lbrace Insert, Delete \rbrace$ and $o$ is the number of operations performed. Two later definitions will make the following analysis more clear.
+
+\begin{definition}[$\alpha$-cycle]
+The $\alpha$-cycle contains the operations between two immediate rehash operations caused by violations of the load factor rule independently on its cause - lower or upper bound. 
+\end{definition}
+Also note that the $\alpha$ is now in the interval $\left[0.25, 1\right]$. Whenever the rehash operation is executed the table size is chosen to fit the $\alpha$ as nearest $0.5$ as possible. The $\alpha$-cycle is defined to amortise the work caused by the load factor rule.
+
+\begin{definition}[l-cycle]
+The l-cycles are the partitioning of the sequence $O$ such that every l-cycle ends
+\begin{itemize}
+\item when the rehash operation caused by the load factor rule is needed or
+\item we performed $0.5 m$ insert operations from the start of the l-cycle the load factor did not reach the value $1$.
+\end{itemize}
+\end{definition}
+The l-cycle allows us to analyse the work caused by the chain limit rule.
+
+The potential consists of two parts. Above all we want a simple insertion and deletion to take $O(1)$ time only. So the potential consists of the part $p_1 = 2i_{\alpha} + 4d_{\alpha}$ where $i_{\alpha}$ is the number inserts and $d_{\alpha}$ is the number of delete operations in the current $\alpha$-cycle. 
+
+Next we need to distribute the work caused by the chain limit rule. Let $e$ be the expected number of rehash operations, equally fails, when finding a good function. The second part of the potential is $p_2 = 2ei_{l} + (ce - r) m$ where $i_l$ is the number of insertions in the current l-cycle, $r$ is the number of rehash operations caused by the chain rule violation and $c$ denotes the number of cycles occurred so far. The overall potential is combined as $p = 2p_1 + p_2$.
+
+The analysis of the delete operation is simpler. When a deletion is performed we have just two cases:
+\begin{itemize}
+\item Simple deletion takes expected $O(1)$ time. We search in a chain of expected length $O(1)$ and the potential is increased by $8$.
+\item The $\alpha$ violates the lower value. Now remark the number of deletions performed in the current cycle. The table has the size of $m$ slots in the beginning with load factor $0.5$. In the end the load factor is lowered to $0.25$. This work can be done by at least $0.25 m$ delete operations. The rehashing takes $O(m)$ time and the potential is also lowered by $m$ at least. Let us discuss the potential change. At first the difference of the $2p_1$ part of the potential is $2m$ at least. The second part gets increased by at most $m$ since a new l-cycle is started and the $i_l$ is zeroed.
+\end{itemize}
+
+The analysis of the first two cases of the insert operation remains similar as in the previous proof:
+\begin{itemize}
+\item Suppose no rehash operation after an insert was performed. The searched chain had the constant expected length and the potential was increased by $4 + 2e$. So the amortised time of the operation is constant.
+\item If the load factor exceeds the upper bound there were at least $0.5 m$ insertions in the $\alpha$-cycle. The potential is certainly greater or equal $2m$. The rehash operation is expected to take $O(m)$ time. The resulting potential is lowered by at least $m$ since and a new l-cycle started.
+\item Insert operation is the last in the l-cycle. Then there are at least $0.5 m$ insertions and the accumulated potential in the $p2$ is equal to $em + (ce - r)m$. Since the new l-cycle begins the $i_l$ term is set to zero and the potential is moved to the term $((c + 1)e -r)m$.
+\item Only the insert operations violating the chain limit rule remain. The time to rehash the table is $O(m)$ times the number of fails. The part $p_2$ was decreased by the same value since the variable $r$ increased by the number of fails. The expected number of fails in one l-cycle is equal to $e$ because the load factor is maintained lower than 1. The $0.5 m$ insert operations of the l-cycle can cause the increase at most to $1.5$ and the limiting value is chosen for the $\alpha = 1.5$.
+\end{itemize}
+
+The fraction $\frac{(ce - r)m}{o}$ converges to $1$ with the growing number of operations, $o$. This can be seen from the weak law of large numbers.
+\end{proof}
