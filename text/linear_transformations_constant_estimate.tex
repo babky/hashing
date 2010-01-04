@@ -206,6 +206,7 @@ For some values $\epsilon$, $k$ and $l$ it may happen $\frac{2^l}{2^l k - 2} \ge
 
 Now we use this approach to prove a better bound on the expected length of the longest chain. The novel part lies in choosing a slightly different and smaller size of the factor space $A$.
 \begin{theorem}
+\label{elpsl-hashing-linear-amount}
 When hashing a linear amount of $\alpha_f n$ elements into a table of size $n$ the expected length of the longest chain is bounded by $O(\alpha_f \log n \log \log n)$.
 \end{theorem}
 \begin{proof}
@@ -277,13 +278,15 @@ Which is valid for $n \geq 16$. The value of $I$ is determined in the similar fa
 \end{proof}
 
 \section{Better hashing schemes}
-The expected length of the longest chain gives us the generic hint when we should rehash the table to guarantee the worst case time for the member operation. The lower the variable $lpsl$ is, the better bound can be achieved. For example the event that the $lpsl$ in the current hash table exceeds the value of $c E lpsl$ is bounded by $\frac{1}{c}$ by the Markov inequality. This means following:
+The expected length of the longest chain gives us the generic hint when we should rehash the table to guarantee the worst case time for the member operation. The lower the value $E lpsl$ is the better worst case bound is achieved. The probability of event that there is chain exceeding the value $c E lpsl$ is bounded by $\frac{1}{c}$. This is a straightforward use of the Markov inequality. 
+
+The probability bound of existence of a long chain has two important consequences:
 \begin{itemize}
 \item At most the fraction $\frac{1}{c}$ of all the functions cause long chains; longer than $c E lpsl$. The probability of rehashing for the uniform function's choice is then $\frac{1}{c}$.
 \item When rehashing; when a long chain appeared; to guarantee the bound of $c E lpsl$ the probability of finding a suitable function is $1 - \frac{1}{c}$. Note that this holds under the assumption of the uniform choice of an universal function.
 \end{itemize}
 
-From an estimate of the $E lpsl$ we can obtain a probability bound on the event of rehashing a table because of a long chain. Even better estimate may be obtained directly from the computed cumulative density function of the variable $lpsl$. We have already explicitly computed it in the previous proofs and are able to fill in the data. The approach with the expected length is more general but achieves worse performance. When we have the probability density function we should be able to compute the expected value. 
+Mentioned probability bound computed from the expected value can be improved by direct use of the cumulative density function of the variable $lpsl$. We already found and consequently improved it in the previous theorems. To sum up we can say that the approach with the expected length is more general but achieves worse performance. Note that whenever we know the probability density function we are able to compute the expected value.
 
 \section{Better bound estimate for the systems of linear functions}
 \label{section-linear-systems-linear-amount-constant-estimate}
@@ -295,29 +298,35 @@ P(lpsl \geq 2\alpha_f c_\epsilon r) & \leq \frac{1}{c} \\
 \frac{1}{1 - \epsilon}\left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} & \leq \frac{1}{c}
 \end{split}
 \end{displaymath}
-Let us remark that the probability estimate works for $r \geq 4$ only.
+Let us remark that the probability estimate works for $r \geq 4$ only, proof of theorem \ref{elpsl-hashing-linear-amount}.
 
-Let the $d$ denote the base of the exponentiation, $d = \frac{r}{\log r}$. And put the $d$ equal to $k \log n$ for a positive constant $k$. Then the following must be achieved:
+Let $d = k \log n$ and $d \leq \frac{r}{\log r}$ for a positive constant $k$. Since function $d^{\log \log n -\log d - \log \log d}$ is decreasing when the exponent is negative the previous inequality holds if
 \begin{displaymath}
-d ^ {\log \log n - \log d -\log \log d} \leq \frac{1 - \epsilon}{c}
+d ^ {\log \log n - \log d -\log \log d} \leq \frac{1 - \epsilon}{c}\textit{.}
 \end{displaymath}
 
-First for the exponent we have:
+As first for the exponent we have:
 \begin{displaymath}
-\log \log n - \log (k \log n) - \log \log (k \log n) = - \log k - \log (k + \log n) \leq -\log k - \log \log n
+\begin{split}
+\log & \log n - \log (k \log n) - \log \log (k \log n) \\
+	& = \log \log n - \log k - \log\log n - \log \log (k \log n) \\
+	& \leq - \log k - \log \log n \\
+\end{split}
 \end{displaymath}
+The last inequality holds for $\log (k \log n) \geq 1$ and this is equivalent to $n \geq 2^{\frac{2}{k}}$.
 
-If the $d$ denotes the base $\frac{r}{\log r}$ we need the value of $r$. For the value $r = 2 d \log d$ the following holds:
+We selected $d$ as a lower bound for $\frac{r}{\log r}$. Now we need to find a suitable value for $r$. Putting $r = 2 d \log d$ we need to confirm $d$ is a lower bound. For every $d$ greater or equal to $2$ the estimate works
+\begin{displaymath}
+\frac{r}{\log r} = \frac{2 d \log d}{1 + \log d + \log \log d} \geq d \textit{.}
+\end{displaymath}
+The assumption for the probability estimate used was $r \geq 4$ which gets fulfilled by choosing $d \geq 2$ as well.
+
+And we explicitly compute the dependence of $r$ on $n$:
 \begin{displaymath}
 r = 2 d \log d = 2 k \log n (\log k + \log \log n) = 2 k \log n \log \log n + 2 k \log k \log n
 \end{displaymath}
 
-This choice is implied by:
-\begin{displaymath}
-\frac{r}{\log r} = \frac{2 d \log d}{1 + \log d + \log \log d}
-\end{displaymath}
 
-This expression must be greater or equal to $d$. This certainly holds for every $d$ greater or equal than 2 and thus for $n \geq 2 ^ \frac{2}{k}$. The assumption for the probability estimate used was $r \geq 4$ which gets fulfilled by choosing $d \geq 2$ as well.
 
 Since $d = k \log n$ for the probability we want:
 \begin{displaymath}

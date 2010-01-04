@@ -4,6 +4,11 @@
 % TODO: Odkazy na jednotlive systemy
 % TODO: Citacia na clanok s definiciami.
 
+\begin{definition}[$c$-univerzálny systém hashovacích funkcií]
+\label{c_universal_system}
+Nech $c \in R, c > 0$, a $H$ je množina zobrazení $h: U \rightarrow A$ taká, že každú dvojicu $x, y \in U$, $x \neq y$ je $\left| \lbrace h \in H | h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|}$. Potom $H$ nazveme $c$-univerzálny systém hashovacích funkcií.
+\end{definition}
+
 \begin{definition}[Silne $n$-univerzálny systém hashovacích funkcií]
 \label{strong_universal_n_system}
 Nech $n \in N$ a $H$ je množina funkcií $h: U \rightarrow A$ taká, že pre každé $x_1, x_2, \dots, x_n \in U$, $x_i \neq x_j$ pre $i \neq j$ a $y_1, y_2, \dots, y_n \in A$ platí $\left|\lbrace h \in H | h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| = \frac{|H|}{|A|^n}$. Potom systém funkcií $H$ nazveme silne $n$-univerzálny.
@@ -22,18 +27,13 @@ Systém funkcií $H$ je silne $\omega$-univerzálny, pokiaľ je silne univerzál
 % TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
 Toto je veľmi silná požiadavka kladená na systém funkcií. Jednoduchým prí\-kladom je množina všetkých funkcií z univerza $U$ do $A$. Ide o prakticky neveľmi použiteľný systém kvôli veľkosti potrebnej na jeho kódovanie. 
 
-\begin{definition}[$c$-univerzálny systém hashovacích funkcií]
-\label{c_universal_system}
-Nech $c \in R, c > 0$, a $H$ je množina zobrazení $h: U \rightarrow A$ taká, že každú dvojicu $x, y \in U$, $x \neq y$ je $\left| \lbrace h \in H | h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|}$. Potom $H$ nazveme $c$-univerzálny systém hashovacích funkcií.
-\end{definition}
-
 \begin{remark}
-Každý silne $2$-univerzálny systém funkcií je $1$-univerzálny.
+Every 2-strongly universal system of functions is 1-universal.
 \end{remark}
 \begin{proof}
-Nech $x, y \in U$ sú dané. Aby platilo $h(x) = h(y)$ postupne volíme všetky $t \in A$ tak, že $h(x) = h(y) = t$. Množiny funkcií $H_t = \lbrace h \in H | h(x) = h(y) = t \rbrace$ sú navzájom disjunktné a navyše $|H_t| = \frac{|H|}{{|A|}^{2}}$. Zvolili sme oba obrazy rovné $t$. Po sčítaní cez všetky $t \in A$ dostávame:
+Let the elements $x, y \in U$, $x \neq y$ be given. For every possible image $t \in A$ we define the set of functions $H_t = \lbrace h \in H | h(x) = h(y) = t \rbrace$. These sets are disjoint and moreover $|H_t| = \frac{|H|}{{|A|}^{2}}$. By summing up throughout all $t \in A$ we have
 \begin{displaymath}
-|\lbrace h \in H | h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}
+|\lbrace h \in H | h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
 \end{displaymath}
 \end{proof}
 
@@ -189,19 +189,18 @@ In this section we sum up some properties of $k$-strongly universal classes of f
 
 The first theorems show the results of combinations of two strongly universal systems.
 \begin{theorem}
-Let $H$ and $I$ be $k$-strongly universal systems both over the universe $U$ and table of size $m$. Then the system of pairs of functions 
+Let $H$ and $I$ be $k$-strongly universal systems both mapping the universe $U$ to the table of size $m$. Then the system of pair functions 
 \begin{displaymath}
 J = \lbrace f_{(h, i)}:U \times U \rightarrow \lbrace 0, \dots, m - 1 \rbrace \times \lbrace 0, \dots, m - 1 \rbrace | h \in H, i \in I \rbrace
 \end{displaymath} 
-is also $k$-strongly universal. The result of a composite function given by a pair $(h, i)$ is computed as $f_{(h, i)}(x) = (h(x), i(x))$.
+is also $k$-strongly universal. Result of a pair function $(h, i)$ is $f_{(h, i)}(x) = (h(x), i(x))$.
 \end{theorem}
 \begin{proof}
-Let $x_1, \dots, x_k$ be the elements that are supposed to be mapped onto selected buckets $(y_1, z_1), \dots, (y_k, z_k)$. The number of functions mapping both $h(x_1) = y_1, \dots, h(x_k) = y_k$ and $h(x_1) = z_1, \dots, h(x_k) = y_k$ is $\frac{|H|}{m^k}$ or $\frac{|I|}{m^k}$ respectively. So the number of all functions mapping $h(x_1) = (y_1, z_1), \dots, h(x_k) = (y_k, z_k)$ is equal to $\frac{|H||I|}{m^{2k}}$. Although the exponent is $2k$ because the table size is $m^2$ the constructed system is $k$-strongly universal only.
+Let $x_1, \dots, x_k$ be the elements that are supposed to be mapped onto selected buckets $(y_1, z_1), \dots, (y_k, z_k)$. The number of functions mapping both $h(x_1) = y_1, \dots, h(x_k) = y_k$ and $i(x_1) = z_1, \dots, i(x_k) = z_k$ is $\frac{|H|}{m^k}$ or $\frac{|I|}{m^k}$ respectively. So the number of all functions mapping $h(x_1) = (y_1, z_1), \dots, h(x_k) = (y_k, z_k)$ is equal to $\frac{|H||I|}{m^{2k}}$. The size of the table is $m^2$ and hence the constructed system is $k$-strongly universal.
 \end{proof}
 
-Previous result limits the power of combining two system into a larger table. We obtain a smaller probability of collision but we pay an expensive price of the larger table size. The same effect on the collision probability can be simply achieved by squaring the table size. 
+Combining two universal systems is not only limited to increasing the table's size. From the previous result we obtain a smaller probability of collision by paying the expensive price of the table expansion. When using a single function the same effect can be achieved by squaring the table size.  We could also combine two strongly universal functions and use a suitable operation to merge the given results into a smaller table. The system created remains strongly universal as it is stated in the next theorem.
 
-We could also combine the two functions and use a suitable operation to merge the given results into a smaller table as it is stated in the next theorem.
 \begin{theorem}
 Let $B$ denote the set of buckets of a hash table of size $m$ thus $|B| = m$. Both $H$ and $I$ are $k$-strongly universal classes of functions over the table $B$. The operation $o: B \times B \rightarrow B$ is given so that for every $c, a \in B$ there is exactly one $b \in B$ such that $o(a, b) = c$. Then the system of functions $F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ where $f_{(h, i)}(x) = o(h(x), i(x))$ is $k$-strongly universal.
 \end{theorem}
@@ -210,12 +209,12 @@ The given elements $x_1, \dots, x_k$ are supposed to be mapped onto the prescrib
 \end{proof}
 
 \begin{corollary}
-Combinations of functions from $k$-strongly universal classes with the operation:
+Combining the results of pair functions created from $k$-strongly universal classes by the operation:
 \begin{itemize}
 \item $xor$ where the table size is a power of 2
-\item $+$, $-$ when the table size is a prime
+\item $+$, $-$ over an additive group $Z_l$ where $l$ is the table size
 \end{itemize}
-give $k$-strongly universal classes of functions.
+gives $k$-strongly universal classes of functions.
 \end{corollary}
 
 Next step is to discover the dependence of the parameter $k$ of strongly universal classes on their size. This will show us the best possible probability estimate for the collision.
@@ -231,19 +230,17 @@ k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \texti
 \end{displaymath}
 \end{theorem}
 \begin{proof}
-First we will construct the sequence of sets $U_0$, $U_1$, $\dots$. The set $U_0$ is the same as $U$. The set $U_i$ is the greatest subset of $U_{i - 1}$ that collides under the function $h_i \in H$. From the Dirichlet's principle the size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$. By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^i}$.
+First we will construct the sequence of sets $U_0$, $U_1$, $\dots$, where $U_0 = U$. The set $U_i$ is the greatest subset of $U_{i - 1}$ that collides under the function $h_i \in H$. From the Dirichlet's principle the size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$. By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^i}$.
 
 Now let the index $i$ denote the last set $U_i$ such that $|U_i| \geq k$. The functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of the set $U_i$ to a single image. The probability of this event is less or equal to $\frac{1}{m ^ {k - 1}}$. From this argument we know that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since the index $i$ is last with the property $U_i \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} < k$. 
 
 Putting it all together:
-\begin{displaymath}
-\begin{split}
-\frac{N}{m^{i + 1}} & < k \\
-\frac{N}{k} & < m ^ {i + 1} \\
-\frac{\log \left( \frac{N}{km} \right)}{\log m} & < i \\
-\log_m \left( \frac{N}{km} \right) & < i \\
-\end{split}
-\end{displaymath}
+\begin{gather*}
+\frac{N}{m^{i + 1}} < k \\
+\frac{N}{k} < m ^ {i + 1} \\
+\frac{\log \left( \frac{N}{km} \right)}{\log m} < i \\
+\log_m \left( \frac{N}{km} \right) < i \\
+\end{gather*}
 
 Obtaining the bound on the size of system of functions:
 \begin{displaymath}
