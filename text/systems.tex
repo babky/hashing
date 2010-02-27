@@ -1,87 +1,104 @@
 \chapter{Systems of universal classes of functions}
 
-\section{Examples of universal classes of functions}
+\section{Universal classes of functions}
 % TODO: Odkazy na jednotlive systemy
 % TODO: Citacia na clanok s definiciami.
 
-\begin{definition}[$c$-univerzálny systém hashovacích funkcií]
+\begin{definition}[$c$-universal class of hash functions]
 \label{c_universal_system}
-Nech $c \in R, c > 0$, a $H$ je množina zobrazení $h: U \rightarrow A$ taká, že každú dvojicu $x, y \in U$, $x \neq y$ je $\left| \lbrace h \in H | h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|}$. Potom $H$ nazveme $c$-univerzálny systém hashovacích funkcií.
+Let $c \in R$ be a positive number and $H$ be a set of functions $h: U \rightarrow A$ such that for each pair of different elements $x, y \in U$, $x \neq y$ we have \[ \left| \lbrace h \in H \setdelim h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|} \textit{.} \] The set $H$ is then called $c$-universal class of hash functions.
 \end{definition}
 
-\begin{definition}[Silne $n$-univerzálny systém hashovacích funkcií]
+At first notice the expected fact that the bound on the number of colliding functions for each domain pair is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table. Since the set $A$ can be seen as a hash table. A generalisation of the above definition provides us with an estimate of the number of colliding functions for more than two elements. This count becomes inversely proportional to the power of the table size.
+
+\begin{definition}[Strongly $n$-universal class of hash functions]
 \label{strong_universal_n_system}
-Nech $n \in N$ a $H$ je množina funkcií $h: U \rightarrow A$ taká, že pre každé $x_1, x_2, \dots, x_n \in U$, $x_i \neq x_j$ pre $i \neq j$ a $y_1, y_2, \dots, y_n \in A$ platí $\left|\lbrace h \in H | h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| = \frac{|H|}{|A|^n}$. Potom systém funkcií $H$ nazveme silne $n$-univerzálny.
+Let $n \in N$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| = \frac{|H|}{|A|^n} \textit{.} \] Then the system of functions $H$ is called strongly $n$-universal class of hash functions.
 \end{definition}
 
-\begin{definition}[Silne $2$-univerzálny systém hashovacích funkcií]
-\label{strong_universal_2_system}
-Systém funkcií $H$ je silne $2$-univerzálny, pokiaľ je silne univerzálny pre $n = 2$.
-\end{definition}
-
-\begin{definition}[Silne $\omega$-univerzálny systém hashovacích funkcií]
+\begin{definition}[Strongly $\omega$-universal class of hash functions]
 \label{strong_universal_omega_system}
-Systém funkcií $H$ je silne $\omega$-univerzálny, pokiaľ je silne univerzálny pre každé $n \in N$.
+Family of functions $H$ is strongly $\omega$-universal if and only if it is strongly $n$-universal for every $n \in N$.
 \end{definition}
 
 % TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
-Toto je veľmi silná požiadavka kladená na systém funkcií. Jednoduchým prí\-kladom je množina všetkých funkcií z univerza $U$ do $A$. Ide o prakticky neveľmi použiteľný systém kvôli veľkosti potrebnej na jeho kódovanie. 
+Such systems provide us with and estimate of the length of the longest chain in the hashing table. This bound can be proved directly from the above property without regarding any other special attributes of a system. So the above property is difficult to be satisfied by a small class of functions. A straightforward example is the set of all function from the domain $U$ to a hash table $A$. As mentioned this system is not very convenient because of its size.
 
 \begin{remark}
-Every 2-strongly universal system of functions is 1-universal.
+Every 2-strongly universal class of hash functions is also 1-universal.
 \end{remark}
 \begin{proof}
-Let the elements $x, y \in U$, $x \neq y$ be given. For every possible image $t \in A$ we define the set of functions $H_t = \lbrace h \in H | h(x) = h(y) = t \rbrace$. These sets are disjoint and moreover $|H_t| = \frac{|H|}{{|A|}^{2}}$. By summing up throughout all $t \in A$ we have
+We need to find the number of functions that make a given pair of elements $x, y \in U$, $x \neq y$ collide. The collision for a function $h \in H$ and given pair can be formally written as $h(x) = h(y)$. The collision may occur for every possible image $t \in A$. Now define the set of functions that display bot $x$ and $y$ on the image $t$ \[ H_t = \lbrace h \in H \setdelim h(x) = h(y) = t \rbrace \textit{.} \] These sets are disjoint and moreover $|H_t| = \frac{|H|}{{|A|}^{2}}$. By summing throughout all $t \in A$ we have
 \begin{displaymath}
-|\lbrace h \in H | h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
+|\lbrace h \in H \setdelim h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
 \end{displaymath}
+The number of colliding functions is then exactly $\frac{H}{|A|}$ and the system $H$ is 1-universal.
 \end{proof}
 
 \begin{remark}
-Každý silne $n$-univerzálny systém funkcií je silne $k$-univerzálny pre každé $1 \leq k \leq n$.
+Every strongly $n$-universal class of functions is strongly $k$-universal for every $1 \leq k \leq n$.
 \end{remark}
 \begin{proof}
-Použijeme rovnaký prístup ako v predchádzajúcom prípade. Nech máme zadaných $k$ po dvojiciach rôznych vzorov $x_1, \dots, x_k \in U$ a k nim odpovedajúce obrazy $y_1, \dots, y_k$. 
-\begin{itemize}
-\item Postupnosť vzorov rozšírime pomocou ďalších ľubovoľných $n - k$ ale rôznych prvkov na $n$ prvkovú. 
-\item K množine obrazov budeme voliť všetky možné $(n-k)$-tice prvkov z $A$. 
-\end{itemize}
-Pretože nám nezáleží na obrazoch vzorov, ktoré sme pridali, platí:
-\begin{displaymath}
-\lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, k \rbrace \rbrace = \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace
-\end{displaymath}
-Množiny funkcií, ktoré zobrazujú množinu rozšírených vzorov na zvolené obrazy, sú navzájom disjunktné:
-\begin{displaymath}
+We use an approach similar to one used in the proof of the previous remark. We are given $k$ different elements $x_1, \dots, x_k \in U$ and their images $y_1, \dots, y_k$. We need to find the number of functions that display the element $x_i$ to its image $y_i$. The estimate from the strong $n$-universality is for $n$ elements only. The set of images is extended by $n - k$ elements that are allowed to map on arbitrary bucket, element of the set $A$.
+
+The set of functions mapping given $k$ elements onto their prescribed images, $\bar H$,  may be seen as:
+\[
 \begin{split}
-\left| \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, k \rbrace \rbrace \right| 
-	& = \left| \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right|  \\
-	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \left| \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
+\bar{H}	& = \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, k \rbrace \rbrace \\
+	& = \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \textit{.}
+\end{split}
+\]
+
+Notice that the sets of functions that display elements $x_{k + 1}, \dots, x_n$ onto different images $y_{k + 1}, \dots, y_n$ are disjoint. The sum of their size is then equal to $|\bar H|$.
+\[
+\begin{split}
+|\bar H|& = \left| \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
+	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \left| \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
 	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \frac{H}{{|A|}^{n}} = {|A|}^{n - k} \frac{H}{{|A|}^{n}} = \frac{H}{{|A|}^{k}}
 \end{split}
-\end{displaymath}
+\]
+
+Now we can see that the class of functions $H$ is strongly $k$-universal, too.
 \end{proof}
 
+\section{Examples of universal classes of functions}
+In this section we show some examples of common universal classes of hash functions. With each system we provide a simple proof of its universality or strong universality. The systems differ in their domains and codomains. However every presented system can be thought as a mapping from a subset of natural numbers onto another subset of natural numbers.
+
 % Linear systems
-\paragraph{Lineárny systém}
-\begin{definition}[Lineárny systém]
-Nech $U = \{0, \dots, N - 1 \}$ a $A = \{0, \dots, m - 1\}$. Potom systém funkcií 
-\[ H = \{h(x): U \rightarrow A | h(x) = ((ax + b) \mod N) \mod m\} \]
-nazveme lineárny systém hashovacích funkcií.
+\paragraph{Linear system}
+System of linear functions was among the first systems of universal hash functions introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. In the article they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation.
+\begin{definition}[Linear system]
+Let $N$ be a prime and $m$ be a natural number. Define the sets $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$. Then the class of linear functions 
+\[ LS = \{h_{a, b}(x): U \rightarrow A \setdelim a, b \in U \textit{where} h_{a, b}(x) = ((ax + b) \mod N) \mod m \} \]
+is called the linear system.
 \end{definition}
 
 \begin{remark}
-Linear class of functions is $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-universal.
+Linear system is $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-universal.
 \end{remark}
 \begin{proof}
+Consider two different elements $x, y \in U$. We need to compute the number of functions $h_{a, b} \in H$ for which 
+\[ (ax + b \mod N) \mod m = (ay + b \mod N) \mod m \textit{.} \]
+
+This is equivalent to the existence of numbers $r, s, t$ that satisfy the following constraints.
+\begin{gather*}
+r \in \{0, \dots, m - 1 \} \\
+t, s \in \{0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1\} \\
+(ax + b) \mod N = s m + r \\
+(ay + b) \mod N = t m + r \\
+\end{gather*}
+
+Since $N$ is a prime number and $x \neq y$ for every choice of parameters $r, s, t$ there is a solution, parameters $a, b$, that satisfy the equalities.
+Number of possible choices of parameters $r, s, t$ is.
 \end{proof}
 % End linear systems
 
 % Linear transformations
-\paragraph{Systém lineárnych zobrazení}
-\begin{definition}{Systém lineárnych zobrazení}
+\paragraph{System of linear transformations}
+\begin{definition}{System of linear transformations}
 Nech $A$, $B$ sú dva vektorové priestory nad $Z_2$ pričom platí $dim(A) = m$ a $dim(B) = n$. Systém funkcií 
 \begin{displaymath}
-H = \{L : A \rightarrow B | L \text{ je lineárne zobrazenie}\}
+H = \{L : A \rightarrow B \setdelim L \text{ je lineárne zobrazenie}\}
 \end{displaymath}
 nazveme systém lineárnych zobrazení.
 \end{definition}

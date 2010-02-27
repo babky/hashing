@@ -2,17 +2,19 @@
 
 cd `dirname $0`/..
 
-if [ $# -ge 1 ]
-then
+# if [ $# -ge 1 ]
+# then
 	rm -rf output
 	mkdir output
 	cd output
 	TEXINPUTS=".:..:$TEXINPUTS" pdflatex -halt-on-error ../text.tex > /dev/null
+	cp ../bibliography.bib bibliography.bib
+	TEXINPUTS=".:..:$TEXINPUTS" bibtex text > /dev/null
 	TEXINPUTS=".:..:$TEXINPUTS" pdflatex -halt-on-error ../text.tex > /dev/null
-else
-	mkdir output 2> /dev/null
-	cd output
-fi
+# else
+# 	mkdir output 2> /dev/null
+# 	cd output
+# fi
 
 TEXINPUTS=".:..:$TEXINPUTS" pdflatex -halt-on-error ../text.tex
 echo
