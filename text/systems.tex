@@ -11,14 +11,21 @@ Let $c \in R$ be a positive number and $H$ be a set of functions $h: U \rightarr
 
 At first notice the expected fact that the bound on the number of colliding functions for each domain pair is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table. Since the set $A$ can be seen as a hash table. A generalisation of the above definition provides us with an estimate of the number of colliding functions for more than two elements. This count becomes inversely proportional to the power of the table size.
 
+\begin{definition}[Nearly strongly $n$-universal class of hash functions]
+\label{nearly_strong_universal_n_system}
+Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c > 1$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{c|H|}{|A|^n} \textit{.} \] Then the system of functions $H$ is called nearly strongly $n$-universal class of hash functions with constant $c$.
+\end{definition}
+
 \begin{definition}[Strongly $n$-universal class of hash functions]
 \label{strong_universal_n_system}
-Let $n \in N$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| = \frac{|H|}{|A|^n} \textit{.} \] Then the system of functions $H$ is called strongly $n$-universal class of hash functions.
+Let $n \in \mathbb{N}$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{|H|}{|A|^n} \textit{.} \] Then the system of functions $H$ is called strongly $n$-universal class of hash functions.
 \end{definition}
+
+Every strongly $n$-universal class of hash functions is a nearly strongly $n$-universal class with constant 1.
 
 \begin{definition}[Strongly $\omega$-universal class of hash functions]
 \label{strong_universal_omega_system}
-Family of functions $H$ is strongly $\omega$-universal if and only if it is strongly $n$-universal for every $n \in N$.
+Family of functions $H$ is strongly $\omega$-universal if and only if it is strongly $n$-universal for every $n \in \mathbb{N}$.
 \end{definition}
 
 % TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
@@ -30,9 +37,9 @@ Every 2-strongly universal class of hash functions is also 1-universal.
 \begin{proof}
 We need to find the number of functions that make a given pair of elements $x, y \in U$, $x \neq y$ collide. The collision for a function $h \in H$ and given pair can be formally written as $h(x) = h(y)$. The collision may occur for every possible image $t \in A$. Now define the set of functions that display bot $x$ and $y$ on the image $t$ \[ H_t = \lbrace h \in H \setdelim h(x) = h(y) = t \rbrace \textit{.} \] These sets are disjoint and moreover $|H_t| = \frac{|H|}{{|A|}^{2}}$. By summing throughout all $t \in A$ we have
 \begin{displaymath}
-|\lbrace h \in H \setdelim h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
+|\lbrace h \in H \setdelim h(x) = h(y) \rbrace | \leq \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
 \end{displaymath}
-The number of colliding functions is then exactly $\frac{H}{|A|}$ and the system $H$ is 1-universal.
+The number of colliding functions is then less than $\frac{H}{|A|}$ and the system $H$ is 1-universal.
 \end{proof}
 
 \begin{remark}
@@ -54,7 +61,7 @@ Notice that the sets of functions that display elements $x_{k + 1}, \dots, x_n$ 
 \begin{split}
 |\bar H|& = \left| \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in A} \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
 	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \left| \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
-	& = \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \frac{H}{{|A|}^{n}} = {|A|}^{n - k} \frac{H}{{|A|}^{n}} = \frac{H}{{|A|}^{k}}
+	& \leq \displaystyle \sum_{y_{k+1}, \dots, y_n \in A} \frac{H}{{|A|}^{n}} = {|A|}^{n - k} \frac{H}{{|A|}^{n}} = \frac{H}{{|A|}^{k}}
 \end{split}
 \]
 
@@ -68,13 +75,13 @@ In this section we show some examples of common universal classes of hash functi
 \paragraph{Linear system}
 System of linear functions was among the first systems of universal hash functions introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. In the article they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation.
 \begin{definition}[Linear system]
-Let $N$ be a prime and $m$ be a natural number. Define the sets $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$. Then the class of linear functions 
+Let $N$ be a prime and $m \in \mathbb{N}$. Define the sets $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$. Then the class of linear functions 
 \[ LS = \{h_{a, b}(x): U \rightarrow A \setdelim a, b \in U \textit{ where } h_{a, b}(x) = ((ax + b) \mod N) \mod m \} \]
 is called the linear system.
 \end{definition}
 
 \begin{remark}
-Linear system is $\frac{\left(\left\lceil \frac{N}{m} \right\rceil\right)^2}{\left(\frac{N}{m}\right)^2}$-universal.
+Linear system is $\frac{\left\lceil \frac{N}{m} \right\rceil ^ 2}{\left(\frac{N}{m}\right) ^ 2}$-universal.
 \end{remark}
 \begin{proof}
 Consider two different elements $x, y \in U$. We need to compute the number of functions $h_{a, b} \in H$ for which 
@@ -83,7 +90,7 @@ Consider two different elements $x, y \in U$. We need to compute the number of f
 This is equivalent to the existence of numbers $r, s, t$ that satisfy the following constraints.
 \begin{gather*}
 r \in \{0, \dots, m - 1 \} \\
-t, s \in \{0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1\} \\
+t, s \in \left\{ 0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1 \right\} \\
 (ax + b) \mod N = s m + r \\
 (ay + b) \mod N = t m + r \\
 \end{gather*}
@@ -98,7 +105,7 @@ m \left \lceil \frac{N}{m} \right \rceil ^ 2 \frac{\frac{N ^ 2}{m}}{\frac{N ^ 2}
 \frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\frac{N ^ 2}{m ^ 2}} \frac{N ^ 2}{m}
 \]
 
-So the system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\frac{N ^ 2}{m ^ 2}}$-universal.
+So the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left(\frac{N}{m}\right) ^ 2}$-universal.
 \end{proof}
 % End linear systems
 
@@ -128,47 +135,68 @@ The elements in the $k$-th column are precisely determined. The number of all fu
 % End linear transformations
 
 % Polynoms
-\paragraph{Polynómy nad konečnými poliami}
-\begin{definition}[Polynómy nad konečnými poliami]
-Nech $U = \{0, \dots, N - 1 \}$, $A = \{0, \dots, m - 1\}$ a $n \in N$. Potom systém funkcií 
-\[ H = \{h(x): U \rightarrow A | h(x) = ((\displaystyle \sum_{i=0}^{n} c_i x^i ) \mod N) \mod m\} \]
-nazveme systém polynomiálnych hashovacích funkcií stupňa $n$. Koeficienty $c_i, i \in \{0, 1, \dots, n\}$ volíme z množiny $U$.
+Another system is a generalisation of linear functions to polynomials. The advantage obtained by the system of polynomials is the strong universality exchanged for the size of the system.
+
+\paragraph{Polynomials over finite fields}
+\begin{definition}[Polynomials over finite fields]
+Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h(x): U \rightarrow A \setdelim h(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \right) \mod m \textit{ for } c_i \in U, 0 \leq i \leq n \right\rbrace \] is then called the system of polynomial hash functions of the $n$-th degree.
 \end{definition}
+
 \begin{remark}
-Nech $N$ je prvočíslo. Systém polynomiálnych hashovacích funkcií stupňa $n$ je silne $n + 1$-univerzálny pre $A = U$. Pre $A \neq U$ je "takmer" silne $n + 1$-univerzálny.
+Let $N$ be a prime number and $n \in \mathbb{N}$. If $A = U$ then the system of polynomial hash functions of the $n$-th degree is strongly $n + 1$-universal. When $A \neq U$ the system is nearly $n + 1$-strongly universal.
 \end{remark}
 \begin{proof}
 % TODO: Odkaz na Vandermondovu maticu.
-Nech prvky $x_1, x_2, \dots, x_{n+1}$ sú po dvojiciach rôzne a $y_1, y_2, \dots, y_{n+1}$ sú zvolené odpovedajúce obrazy. Potom môžeme zostaviť Vandermondovu maticu pre určenie jednotlivých koeficientov $c_0, c_1, \dots, c_n$.
+Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots, y_{n+1}$ are their prescribed images. We can write down system of linear equations that can be used to find the coeficients $c_0, c_1, \dots, c_n$.
+\[ 
+h(x_i) = y_i, \quad 0 \leq i \leq n 
+\]
 
-Pokiaľ $U = A$, funkcie $h(x)$ sa redukujú na tvar $h(x) = (\displaystyle \sum_{i=0}^{n} c_i x^i ) \mod N$. Veľkosť systému je ${|U|}^{n+1}$. Pre zadané vzory a ich obrazy z invertibility Vanderomondovej matice dostávame práve jednu funkciu $h$, ktorá spĺňa predpísané podmienky. Za predpokladu $|A| = |U|$ platí ${|A|}^{n+1} = {|U|}^{n+1}$. Ihneď získavame, že systém polynomiálnych funkcií je silne $n+1$-univerzálny.
+If $U = A$ the function $h(x)$ is reduced to the form \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \textit{.} \] Since $N$ is a prime number and the elements $x_i$ are different there is exactly one solution $c_0, \dots, c_n$. The size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|A|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial hash functions is strongly $n + 1$-universal.
 
-Teraz nech $U \neq A$. Postupujeme obdobne ako v dôkaze $c$-univerzality lineárneho systému.
+Let $U \neq A$. We follow the proof of $c$-universality of the linear system. We need to write the equations $h_(x_i) = y_i$ in the field $\mathbb{Z}_N$. Instead using the last modulo operation we introduce new variables $r_i$.
+
 \begin{displaymath}
-(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} ) \mod N = {y}_i + {r_i}{m} \qquad {y}_i \in \{0, \dots, m - 1 \}, r_i \in \{0, m, 2m, \dots, \left\lceil \frac{N}{m} \right\rceil - 1\}
+\begin{split}
+\left(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} \right) \mod N = {y}_i + {r_i}{m} \qquad 
+ & y_i \in \{0, \dots, m - 1 \} \\
+ & r_i \in \left\{0, m, 2m, \dots, \left\lceil \frac{N}{m} \right\rceil - 1 \right\} \\
+\end{split}
 \end{displaymath}
-Pre každú voľbu ${y}_i$ a $r_i$ dostávame jednoznačné riešenie sústavy. Pokiaľ sú zadané obrazy $y_i$, hodnoty $r_i$ už môžu byť ľubovoľné. Pre každú voľbu $r_i$ máme jedinú funkciu spĺňajúcu zadané predpoklady. Počet sád $r_i$ je ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$ a práve toľko je polynomiálnych hashovacích funkcií, ktoré pošlú zadané vzory na im príslušné obrazy.
+For every choice of $r_i$ we obtain an unique solution of the above equations. The number of all choices of $r_i$ is ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$. The count of all hash functions mapping $x_i$ onto $y_i$ complies the following:
 \begin{displaymath}
-|\{h \in H | h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| = {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}\left(\frac{N}{m}\right)^{n+1}
+|\{h \in H \setdelim h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| \leq {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}\left(\frac{N}{m}\right)^{n+1}
 \end{displaymath}
+
+This system is nearly strongly $n+1$-universal with the constant $\frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}$.
 \end{proof}
 % End polynoms
 
-
-\paragraph{Bitový súčet reťazca nad konečným poľom}
+% Bit string sum
+\paragraph{Bit sum of a string over the alphabet \{0, 1\}}
 \begin{definition}
-Nech $U = \{0, \dots, N - 1\}$ a $A = \{0, \dots, p - 1 \}$, kde $N = 2^k$ a $p$ je prvočíslo, zvolíme $l \leq p$. Pre každý prvok $x \in U$ budeme chápať zápis $x = x_{k - 1} x_{k-2} \dots x_0$ ako zápis čísla x v binárnej sústave ($x = \displaystyle \sum_{j=0}^{k-1} x_j 2^j$). Systém funkcií 
+Let $p$ be a prime number, $k \in \mathbb{N}$, $A = \{0, \dots, p - 1 \}$ and $l \in \mathbb{N}$, $l \leq p$. S 
 \begin{displaymath}
-H = \{ h: U \rightarrow A | h(x) = (\displaystyle \sum_{i=0}^{k-1} c_i x_i) \mod p, c_i \in \{0, 1, \dots, l - 1\} \}
+B_{p, l} = \left\{ h: \{0, 1\}^{k + 1} \rightarrow A \setdelim h(x) = \left(\displaystyle \sum_{i=0}^{k} c_i x_i\right) \mod p, c_i \in \{0, 1, \dots, l - 1\} \right\}
 \end{displaymath} 
-nazveme reťazcový systém.
+is called bit string system with parameters $p$ and $l$.
 \end{definition}
+
 \begin{remark}
-Reťazcový systém je $c$-univerzálny, pre $c = \frac{p}{l}$.
+Every element $x \in \{0, 1\}^{k + 1}$ can be seen as a $k + 1$-bit number since we can write it in a form $x = x_k x_{k - 1} \dots x_0$. 
+\end{remark}
+
+\begin{remark}
+Bit string system for a $k$-ary numbers modulo prime number $p$ and constant $l \in \mathbb{N}$, $l \leq p$ is $\frac{p}{l}$-universal.
 \end{remark}
 \begin{proof}
-Vieme, že $|H| = l^k$. Nech $x, y \in U$ a $x \neq y$, existuje $0 \leq j \leq k-1$, t.ž. $x_j - y_j \neq 0$.
-Nech $h(x) = h(y)$, potom:
+We are given two different elements $x, y$, we estimate the number of all sequences of coefficients $c_0, \dots, c_k$ that satisfy
+\[
+\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \mod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \mod p \textit{.}
+\]
+
+Since $x \neq y$ there is and index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$.
+
 \begin{displaymath}
 \begin{split}
 \left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \mod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \mod p \\
@@ -176,36 +204,51 @@ c_j(x_j - y_j) \mod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_
 c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p
 \end{split}
 \end{displaymath}
-Posledná rovnosť platí, pretože $p$ je prvočíslo a prvok $x_j - y_j$ je invertibilný. Pri výbere funkcií, ktoré dané dva rôzne prvky nechajú kolidovať, sme o voľbu jednej konštanty $c_j$ ochudobnení. 
+
+Last equality holds since $p$ is a prime number and the number $x_j - y_j$ is invertible in the field $\mathbb{Z}_p$. There is one degree of freedom lost when generating a function that makes $x$ and $y$ collide. The number of all functions is $l ^ {k + 1}$ and the size of the table is $p$. For the number of colliding functions can be computed as follows.
 
 \begin{displaymath}
-|\{h \in H | h(x) = h(y) \}| = l^{k-1} = \frac{p}{l}\frac{l^k}{p} = c\frac{|H|}{|A|}
+|\{h \in H | h(x) = h(y) \}| = l^{k} = \frac{p}{l}\frac{l^{k + 1}}{p} = \frac{p}{l}\frac{|B_{p, l}|}{|A|}
 \end{displaymath}
+
+The bit string system is thus $\frac{p}{l}$-universal.
 \end{proof}
+% End of bit string sum.
 
 % All functions
-\paragraph{Množina všetkých zobrazení}
+\paragraph{System of all functions}
+\begin{definition}
+Let $U$ and $A$ be sets such that $|A| < |U|$. The family of functions
+\[
+H = \{h: U \rightarrow A \}
+\]
+is called the system of all functions between $U$ and $A$.
+\end{definition}
+
 \begin{remark}
-Systém všetkých zobrazení $h: U \rightarrow A$ je silne $\omega$-univerzálny.
+System of all functions between sets $U$ and $A$ is strongly $\omega$-universal.
 \end{remark}
 \begin{proof}
-Platí:
-\begin{displaymath}
-|H| = {|A|}^{|U|}
-\end{displaymath}
-Nech máme zadaných $n$ po dvojiciach rôznych vzorov $x_1, \dots, x_n$ a im odpovedajúce obrazy $y_1, \dots, y_n$. Veľkosť $H_n = \lbrace h \in H | h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace$ je:
+We are given $n$ different elements $x_1, \dots, x_n$ and their images $y_1, \dots, y_n$. We compute the size of the set $H_n = \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace$.
+
 \begin{displaymath}
 |H_n| = {|A|}^{|U| - n} = \frac{{|A|}^{|U|}}{{|A|}^{n}} = \frac{|H|}{|A|^n}
 \end{displaymath}
+
+Now note that the system's size is $|H| = {|A|}^{|U|}$ and thus is it strongly $\omega$-universal.
 \end{proof}
 
-Pamätať si úplné zobrazenie zo systému $H$ je nepraktické. Kódujeme aj hodnoty prvkov, ktoré sa nikdy v hashovanej množine nevyskytnú. Alternatívou je konštruovať náhodnú parciálnu funkciu z množiny všetkých zobrazení z $U$ do $A$ nasledujúcim spôsobom. Vychádzame z predpokladu existencie rýchlej asociatívnej pamäti a generátora náhodných prvkov. Kedykoľvek máme hashovať prvok, tak chceme určiť hodnotu hashovacej funkcie. Najprv pomocou asociatívnej pamäti zistíme, či už nemá priradenú hodnotu. Ak nie, vygenerujeme náhodný prvok z množiny $A$ a do asociatívnej pamäti toto zobrazenie poznamenáme. Jedná sa o postupnú konštrukciu funkcie z množiny všetkých zobrazení. Nakoľko táto konštrukcia vyberá prvky rovnomerne, zostrojená funkcia má vlastnosti silne $\omega$-univerzálneho systému. Navyše nemáme uložené mapovanie pre prvky, ktoré sme doteraz nepotrebovali.
-% End all functions
+% TODO: Citation.
+The problem when using this system is that store a single function $h \in H$ is highly inconvenient. To store one element one needs $|U| \log |A|$ bits. When using this simple approach we need to encode the values of elements that will never be stored in the hash table with great probability. An alternative is to construct random partial function from the set of all functions from $A$ to $U$. 
 
-\paragraph{Malý univerzálny systém}
+These ideas come from the existence of fast an associative memory having expected time of find and insert operations $O(1)$ and random number generator. Whenever we have to store an element we must determine its hash value. At first using the associative memory we find out it already has a hash value associated. If not we use the random number generator to obtain a random element from $A$ and remember the connection, element - hash value, to the associative memory. This sequentially constructs a random mapping from the system of all functions. Since the random number generator used chooses the elements of $A$ uniformly created system is certainly strongly $\omega$-universal. In addition we do not store the hash values for irrelevant elements.
+% End of All functions
 
+% TODO: Maly univerzalny system.
+% \paragraph{Malý univerzálny systém}
 
-\paragraph{Systém definovaný pomocou matíc}
+% TODO: Maticovy system
+% \paragraph{Systém definovaný pomocou matíc}
 
 \section{Properties of systems of universal functions}
 In this section we sum up some properties of $k$-strongly universal classes of functions. We concentrate on the generalisation of the known properties of the $c$-universal classes to the strongly universal classes.
