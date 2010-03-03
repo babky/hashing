@@ -1,4 +1,4 @@
-\chapter{Systems of universal classes of functions}
+\chapter{Universal classes of functions}
 
 \section{Universal classes of functions}
 % TODO: Odkazy na jednotlive systemy
@@ -6,14 +6,18 @@
 
 \begin{definition}[$c$-universal class of hash functions]
 \label{c_universal_system}
-Let $c \in R$ be a positive number and $H$ be a set of functions $h: U \rightarrow A$ such that for each pair of different elements $x, y \in U$, $x \neq y$ we have \[ \left| \lbrace h \in H \setdelim h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|} \textit{.} \] The set $H$ is then called $c$-universal class of hash functions.
+Let $c \in R$ be a positive number and $H$ be a set of functions $h: U \rightarrow A$ such that for each pair of elements $x, y \in U$, $x \neq y$ we have \[ \left| \lbrace h \in H \setdelim h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|A|} \textit{.} \] The set $H$ is then called $c$-universal class of hash functions.
 \end{definition}
 
-At first notice the expected fact that the bound on the number of colliding functions for each domain pair is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table. Since the set $A$ can be seen as a hash table. A generalisation of the above definition provides us with an estimate of the number of colliding functions for more than two elements. This count becomes inversely proportional to the power of the table size.
+At first notice that the bound on the number of colliding functions for each domain pair is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table, set $A$ is formalisation of a hash table. A generalisation of the above definition for more than two elements provides us with a better estimate on the number of colliding functions. This count becomes inversely proportional to the power of the table size.
 
 \begin{definition}[Nearly strongly $n$-universal class of hash functions]
 \label{nearly_strong_universal_n_system}
-Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c > 1$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{c|H|}{|A|^n} \textit{.} \] Then the system of functions $H$ is called nearly strongly $n$-universal class of hash functions with constant $c$.
+Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c > 1$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following inequality holds
+\[ 
+	\left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{c|H|}{|A|^n} \textit{.} 
+\] 
+The system of functions $H$ is called nearly strongly $n$-universal class of hash functions with constant $c$.
 \end{definition}
 
 \begin{definition}[Strongly $n$-universal class of hash functions]
@@ -21,7 +25,7 @@ Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c > 1$ and $H$ be a set of functions 
 Let $n \in \mathbb{N}$ and $H$ be a set of functions $h: U \rightarrow A$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{|H|}{|A|^n} \textit{.} \] Then the system of functions $H$ is called strongly $n$-universal class of hash functions.
 \end{definition}
 
-Every strongly $n$-universal class of hash functions is a nearly strongly $n$-universal class with constant 1.
+Every strongly $n$-universal class of hash functions is nearly strongly $n$-universal class with constant 1. For most of the presented strongly universal classes not only the inequality is satisfied but the given bound is exactly the count of the colliding functions.
 
 \begin{definition}[Strongly $\omega$-universal class of hash functions]
 \label{strong_universal_omega_system}
@@ -35,9 +39,9 @@ Such systems provide us with and estimate of the length of the longest chain in 
 Every 2-strongly universal class of hash functions is also 1-universal.
 \end{remark}
 \begin{proof}
-We need to find the number of functions that make a given pair of elements $x, y \in U$, $x \neq y$ collide. The collision for a function $h \in H$ and given pair can be formally written as $h(x) = h(y)$. The collision may occur for every possible image $t \in A$. Now define the set of functions that display bot $x$ and $y$ on the image $t$ \[ H_t = \lbrace h \in H \setdelim h(x) = h(y) = t \rbrace \textit{.} \] These sets are disjoint and moreover $|H_t| = \frac{|H|}{{|A|}^{2}}$. By summing throughout all $t \in A$ we have
+We need to find the number of functions that make a given pair of elements $x, y \in U$, $x \neq y$ collide. A collision for a function $h \in H$ and given pair can be written in a form $h(x) = h(y) = t$ and occurs for every possible image $t \in A$. Define the set of functions that display both $x$ and $y$ on the image $t \in A$ \[ H_t = \lbrace h \in H \setdelim h(x) = h(y) = t \rbrace \textit{.} \] These sets are disjoint and moreover $|H_t| \leq \frac{|H|}{{|A|}^{2}}$. By summing throughout all $t \in A$ we have
 \begin{displaymath}
-|\lbrace h \in H \setdelim h(x) = h(y) \rbrace | \leq \displaystyle \sum_{t \in A} |H_t| = |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
+|\lbrace h \in H \setdelim h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in A} |H_t| \leq |A| \frac{|H|}{{|A|}^{2}} = \frac{H}{|A|}\textit{.}
 \end{displaymath}
 The number of colliding functions is then less than $\frac{H}{|A|}$ and the system $H$ is 1-universal.
 \end{proof}
@@ -46,7 +50,9 @@ The number of colliding functions is then less than $\frac{H}{|A|}$ and the syst
 Every strongly $n$-universal class of functions is strongly $k$-universal for every $1 \leq k \leq n$.
 \end{remark}
 \begin{proof}
-We use an approach similar to one used in the proof of the previous remark. We are given $k$ different elements $x_1, \dots, x_k \in U$ and their images $y_1, \dots, y_k$. We need to find the number of functions that display the element $x_i$ to its image $y_i$. The estimate from the strong $n$-universality is for $n$ elements only. The set of images is extended by $n - k$ elements that are allowed to map on arbitrary bucket, element of the set $A$.
+We use an approach similar to the one used in the proof of the previous remark. We are given $k$ different elements $x_1, \dots, x_k \in U$. For every choice of their images $y_1, \dots, y_k \in A$ we need to find the number of functions that display the element $x_i$ to its image $y_i$, $1 \leq i \leq k$. 
+
+The estimate that we can use from the strong $n$-universality holds for $n$ elements only. We extend the set of images by $n - k$ elements $x_{k + 1}, \dots, x_n$ that are allowed to map on arbitrary bucket, element of $A$. This extensions must be done carefully so that the final sequence consists of different images $x_1, \dots, x_n$.
 
 The set of functions mapping given $k$ elements onto their prescribed images, $\bar H$,  may be seen as:
 \[
@@ -69,11 +75,12 @@ Now we can see that the class of functions $H$ is strongly $k$-universal, too.
 \end{proof}
 
 \section{Examples of universal classes of functions}
-In this section we show some examples of common universal classes of hash functions. With each system we provide a simple proof of its universality or strong universality. The systems differ in their domains and codomains. However every presented system can be thought as a mapping from a subset of natural numbers onto another subset of natural numbers.
+In this section we show some examples of common universal classes of hash functions. With each system we provide a simple proof of its universality or strong universality. Presented systems not only differ in contained functions but also in their domains and codomains. However every system can be thought of as a mapping from a subset of natural numbers onto another subset of natural numbers.
 
 % Linear systems
 \paragraph{Linear system}
-System of linear functions was among the first systems of universal hash functions introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. In the article they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation.
+System of linear functions was among the first systems of universal hash functions. They were introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79} where they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation.
+
 \begin{definition}[Linear system]
 Let $N$ be a prime and $m \in \mathbb{N}$. Define the sets $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$. Then the class of linear functions 
 \[ LS = \{h_{a, b}(x): U \rightarrow A \setdelim a, b \in U \textit{ where } h_{a, b}(x) = ((ax + b) \mod N) \mod m \} \]
@@ -87,7 +94,7 @@ Linear system is $\frac{\left\lceil \frac{N}{m} \right\rceil ^ 2}{\left(\frac{N}
 Consider two different elements $x, y \in U$. We need to compute the number of functions $h_{a, b} \in H$ for which 
 \[ (ax + b \mod N) \mod m = (ay + b \mod N) \mod m \textit{.} \]
 
-This is equivalent to the existence of numbers $r, s, t$ that satisfy the following constraints.
+This is equivalent to the existence of numbers $r, s, t$ that satisfy the following constraints:
 \begin{gather*}
 r \in \{0, \dots, m - 1 \} \\
 t, s \in \left\{ 0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1 \right\} \\
@@ -95,14 +102,15 @@ t, s \in \left\{ 0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1 \right\} \
 (ay + b) \mod N = t m + r \\
 \end{gather*}
 
-Since $N$ is a prime number and $x \neq y$ for every choice of parameters $r, s, t$ there is a solution, parameters $a, b$, that satisfy the equalities.
-Number of possible choices of parameters $r, s, t$ is $m \left \lceil \frac{N}{m} \right \rceil ^ 2$. So there are at most $m \left \lceil \frac{N}{m} \right \rceil ^ 2$ functions $h_{a, b}$ that display the given elements $x, y$ to a same value.
+Since $N$ is a prime number and $x \neq y$ for every choice of parameters $r, s, t$ there is a solution; parameters $a, b$, that satisfy the equalities.
+Number of possible choices of parameters $r, s, t$ is $m \left \lceil \frac{N}{m} \right \rceil ^ 2$. So there are at most $m \left \lceil \frac{N}{m} \right \rceil ^ 2$ functions $h_{a, b}$ that display given elements $x, y$ to the same value.
 
-Now we need to compute the $c$-universality constant.
+We compute the system's $c$-universality constant.
 \[
 m \left \lceil \frac{N}{m} \right \rceil ^ 2 = 
 m \left \lceil \frac{N}{m} \right \rceil ^ 2 \frac{\frac{N ^ 2}{m}}{\frac{N ^ 2}{m}} = 
-\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\frac{N ^ 2}{m ^ 2}} \frac{N ^ 2}{m}
+\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\frac{N ^ 2}{m ^ 2}} \frac{N ^ 2}{m} = 
+\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\frac{N ^ 2}{m ^ 2}} \frac{|LS|}{|A|}
 \]
 
 So the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left(\frac{N}{m}\right) ^ 2}$-universal.
@@ -110,15 +118,17 @@ So the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left
 % End linear systems
 
 % Linear transformations
+Previous system contains only simple linear functions from natural numbers to natural numbers. An analogous class can be constructed by using linear transformations between vector spaces. The systems have various similar properties but the latter one gives us a suitable bound on the size of the largest bucket.
+
 \paragraph{System of linear transformations}
-\begin{definition}{System of linear transformations}
-Let $A$ and $B$ be two vector spaces over $Z_2$ field and moreover $dim(A) = m$ and $dim(B) = n$. System of functions \[ LT = \{L : A \rightarrow B \setdelim L \text{ is a linear transformation}\} \] is called system of linear transformations between $A$ and $B$.
+\begin{definition}[System of linear transformations]
+Let $A$ and $B$ be two vector spaces over $\mathbb{Z}_2$ and $dim(A) = m$ and $dim(B) = n$. System of functions \[ LT = \{L : A \rightarrow B \setdelim L \text{ is a linear transformation}\} \] is called system of linear transformations between $A$ and $B$.
 \end{definition}
 \begin{remark}
-System of linear transformations is $1$-universal.
+System of linear transformations between vector spaces $A$ and $B$ is $1$-universal.
 \end{remark}
 \begin{proof}
-Every linear transformation has a matrix $T$ associated with it. We are given two different vectors $x$ and $y$ from the vector space $A$ that are supposed to be displayed on the same image. Let $k$ be a position such that $x_k \neq y_k$. If every element of $T$ except the items in the $k$-th column are given we are able to compute the remaining ones. 
+Let $m$ and $n$ denote the dimensions of vector spaces $A$ and $B$. Then every linear transformation $L: A \rightarrow B$ has a binary $n \times m$ matrix $T$ associated with it. We are given two different vectors $x$ and $y$ from the vector space $A$ that are supposed to be mapped on the same image. Let $k$ be a position such that $x_k \neq y_k$. Whenever every element except the ones in the $k$-th column of matrix $T$ is given we are able to compute the remaining ones; the $k$-th column. 
 
 Since the images must be equal for every $i$, $1 \leq i \leq n$ the following holds:
 \[
@@ -130,31 +140,76 @@ Then for the element $t_{i, k}$ we have:
 t_{i, k} = (x_k - y_k)^{-1}\displaystyle\sum_{j = 1, j \neq k}^{m}t_{i, j}(y_j - x_j)
 \]
 
-The elements in the $k$-th column are precisely determined. The number of all functions (matrices) is $2^{mn}$, the size of the target space is $2^n$ and the number of collision ones is $2^{(m-1)n}$. System of linear transformations is then $1$-universal.
+The elements in the $k$-th column are precisely determined. The number of all functions, number of all binary matrices, is $2^{mn}$. Size of the target space is $2^n$. The number of all functions mapping $x$ and $y$ to a same value is $2^{(m-1)n}$ because we can choose every elements except $n$ in $k$-th column arbitrarily. 
+
+System of linear transformations is $1$-universal since:
+\[
+2^{(m - 1)n} = \frac{2^{mn}}{2^n} = \frac{|LT|}{|B|} \textit{.}
+\]
 \end{proof}
 % End linear transformations
 
-% Polynoms
-Another system is a generalisation of linear functions to polynomials. The advantage obtained by the system of polynomials is the strong universality exchanged for the size of the system.
+% Bit string sum
+We present another linear system that is $1$-universal as well. Every number can be written as a string over alphabet containing only two characters $0$ and $1$, in the number's binary form. Weighted digit sum is computed and considered its hash value. This somehow reminds us of the system of linear transformations.
+
+\paragraph{Bit sum of a string over the alphabet \{0, 1\}}
+\begin{definition}[Bit string system]
+Let $p$ be a prime number, $k \in \mathbb{N}$, $A = \{0, \dots, p - 1 \}$ and $l \in \mathbb{N}$, $l \leq p$. System of functions
+\begin{displaymath}
+B_{p, l} = \left\{ h: \{0, 1\}^{k + 1} \rightarrow A \setdelim h(x) = \left(\displaystyle \sum_{i=0}^{k} c_i x_i\right) \mod p, c_i \in \{0, 1, \dots, l - 1\} \right\}
+\end{displaymath} 
+is called bit string system with parameters $p$ and $l$.
+\end{definition}
+
+\begin{remark}
+Bit string system for binary numbers of length $k + 1$ modulo prime $p$ and constant $l \in \mathbb{N}$, $l \leq p$ is $\frac{p}{l}$-universal.
+\end{remark}
+\begin{proof}
+We are given two different elements $x, y$ and estimate the number of all sequences of coefficients $c_0, \dots, c_k$ that satisfy
+\[
+\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \mod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \mod p \textit{.}
+\]
+
+Since $x \neq y$ there is an index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$.
+
+\begin{displaymath}
+\begin{split}
+\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \mod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \mod p \\
+c_j(x_j - y_j) \mod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p \\
+c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p
+\end{split}
+\end{displaymath}
+
+Last equality holds since $p$ is a prime number and the number $x_j - y_j$ is invertible in the field $\mathbb{Z}_p$. There is one degree of freedom lost when generating a function that makes $x$ and $y$ collide. The number of all functions is $l ^ {k + 1}$ and the size of the table is $p$. The number of colliding functions can be computed as:
+
+\begin{displaymath}
+|\{h \in H | h(x) = h(y) \}| = l^{k} = \frac{p}{l}\frac{l^{k + 1}}{p} = \frac{p}{l}\frac{|B_{p, l}|}{|A|} \textit{.}
+\end{displaymath}
+
+The bit string system is thus $\frac{p}{l}$-universal.
+\end{proof}
+% End of bit string sum.
+
+% Polynomials
+Following system is a generalisation of already mentioned linear functions or transformations to polynomials. The advantage obtained by this system of polynomials is the strong universality. Unfortunately it is exchanged for the size of the system.
 
 \paragraph{Polynomials over finite fields}
 \begin{definition}[Polynomials over finite fields]
-Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h(x): U \rightarrow A \setdelim h(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \right) \mod m \textit{ for } c_i \in U, 0 \leq i \leq n \right\rbrace \] is then called the system of polynomial hash functions of the $n$-th degree.
+Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow A \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \right) \mod m \] is called the system of polynomial hash functions of the $n$-th degree.
 \end{definition}
 
 \begin{remark}
 Let $N$ be a prime number and $n \in \mathbb{N}$. If $A = U$ then the system of polynomial hash functions of the $n$-th degree is strongly $n + 1$-universal. When $A \neq U$ the system is nearly $n + 1$-strongly universal.
 \end{remark}
 \begin{proof}
-% TODO: Odkaz na Vandermondovu maticu.
-Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots, y_{n+1}$ are their prescribed images. We can write down system of linear equations that can be used to find the coeficients $c_0, c_1, \dots, c_n$.
+Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots, y_{n+1}$ are their prescribed images. We can write down a system of linear equations that can be used to find the coeficients $c_0, c_1, \dots, c_n$.
 \[ 
 h(x_i) = y_i, \quad 0 \leq i \leq n 
 \]
 
-If $U = A$ the function $h(x)$ is reduced to the form \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \textit{.} \] Since $N$ is a prime number and the elements $x_i$ are different there is exactly one solution $c_0, \dots, c_n$. The size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|A|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial hash functions is strongly $n + 1$-universal.
+If $U = A$ the function $h(x)$ is reduced to the form: \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \textit{.} \] Since $N$ is a prime number and the elements $x_i$ are different there is exactly one solution of the above system, let $c_0, \dots, c_n$ denote the solution. Size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|A|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial hash functions is strongly $n + 1$-universal.
 
-Let $U \neq A$. We follow the proof of $c$-universality of the linear system. We need to write the equations $h_(x_i) = y_i$ in the field $\mathbb{Z}_N$. Instead using the last modulo operation we introduce new variables $r_i$.
+Let $U \neq A$. We follow the proof of $c$-universality of the linear system. We need to write the equations $h(x_i) = y_i$ in the field $\mathbb{Z}_N$. We introduce new variables $r_i$ as in the previous case instead using the last modulo operation.
 
 \begin{displaymath}
 \begin{split}
@@ -170,54 +225,15 @@ For every choice of $r_i$ we obtain an unique solution of the above equations. T
 
 This system is nearly strongly $n+1$-universal with the constant $\frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}$.
 \end{proof}
-% End polynoms
 
-% Bit string sum
-\paragraph{Bit sum of a string over the alphabet \{0, 1\}}
-\begin{definition}
-Let $p$ be a prime number, $k \in \mathbb{N}$, $A = \{0, \dots, p - 1 \}$ and $l \in \mathbb{N}$, $l \leq p$. S 
-\begin{displaymath}
-B_{p, l} = \left\{ h: \{0, 1\}^{k + 1} \rightarrow A \setdelim h(x) = \left(\displaystyle \sum_{i=0}^{k} c_i x_i\right) \mod p, c_i \in \{0, 1, \dots, l - 1\} \right\}
-\end{displaymath} 
-is called bit string system with parameters $p$ and $l$.
-\end{definition}
-
-\begin{remark}
-Every element $x \in \{0, 1\}^{k + 1}$ can be seen as a $k + 1$-bit number since we can write it in a form $x = x_k x_{k - 1} \dots x_0$. 
-\end{remark}
-
-\begin{remark}
-Bit string system for a $k$-ary numbers modulo prime number $p$ and constant $l \in \mathbb{N}$, $l \leq p$ is $\frac{p}{l}$-universal.
-\end{remark}
-\begin{proof}
-We are given two different elements $x, y$, we estimate the number of all sequences of coefficients $c_0, \dots, c_k$ that satisfy
-\[
-\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \mod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \mod p \textit{.}
-\]
-
-Since $x \neq y$ there is and index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$.
-
-\begin{displaymath}
-\begin{split}
-\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \mod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \mod p \\
-c_j(x_j - y_j) \mod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p \\
-c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p
-\end{split}
-\end{displaymath}
-
-Last equality holds since $p$ is a prime number and the number $x_j - y_j$ is invertible in the field $\mathbb{Z}_p$. There is one degree of freedom lost when generating a function that makes $x$ and $y$ collide. The number of all functions is $l ^ {k + 1}$ and the size of the table is $p$. For the number of colliding functions can be computed as follows.
-
-\begin{displaymath}
-|\{h \in H | h(x) = h(y) \}| = l^{k} = \frac{p}{l}\frac{l^{k + 1}}{p} = \frac{p}{l}\frac{|B_{p, l}|}{|A|}
-\end{displaymath}
-
-The bit string system is thus $\frac{p}{l}$-universal.
-\end{proof}
-% End of bit string sum.
+Although the choice of $U = A$ is not very practical one however it gives us a clue that the system can be nearly strongly universal.
+% End of polynomials
 
 % All functions
+Definition of strongly $\omega$-universality gives us a powerful property but is there a system that satisfies the definition. One example, although not very useful, can be immediately constructed - it is a set of all functions between two sets.
+
 \paragraph{System of all functions}
-\begin{definition}
+\begin{definition}[System of all functions]
 Let $U$ and $A$ be sets such that $|A| < |U|$. The family of functions
 \[
 H = \{h: U \rightarrow A \}
@@ -229,19 +245,15 @@ is called the system of all functions between $U$ and $A$.
 System of all functions between sets $U$ and $A$ is strongly $\omega$-universal.
 \end{remark}
 \begin{proof}
-We are given $n$ different elements $x_1, \dots, x_n$ and their images $y_1, \dots, y_n$. We compute the size of the set $H_n = \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace$.
-
-\begin{displaymath}
-|H_n| = {|A|}^{|U| - n} = \frac{{|A|}^{|U|}}{{|A|}^{n}} = \frac{|H|}{|A|^n}
-\end{displaymath}
-
-Now note that the system's size is $|H| = {|A|}^{|U|}$ and thus is it strongly $\omega$-universal.
+We are given $n$ different elements $x_1, \dots, x_n$ and their images $y_1, \dots, y_n$. We must compute size of the set $H_n = \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n\rbrace \rbrace$. Now note that the system's size is $|H| = {|A|}^{|U|}$. Since the values for elements $x_1, \dots, x_n$ are fixed we have \[ |H_n| = {|A|}^{|U| - n} = \frac{{|A|}^{|U|}}{{|A|}^{n}} = \frac{|H|}{|A|^n} \] and thus the system is strongly $\omega$-universal.
 \end{proof}
 
 % TODO: Citation.
-The problem when using this system is that store a single function $h \in H$ is highly inconvenient. To store one element one needs $|U| \log |A|$ bits. When using this simple approach we need to encode the values of elements that will never be stored in the hash table with great probability. An alternative is to construct random partial function from the set of all functions from $A$ to $U$. 
+Let us show some considerations when we would like to use this system. The main problem when using this system is that fact that to encode a whole function $h \in H$ is highly inconvenient. To store one we need $|U| \log |A|$ bits. When using this simple approach we need to encode the values of elements that with great probability will never be stored in the hash table. An alternative is to construct random partial function from the set of all functions from $A$ to $U$. 
 
-These ideas come from the existence of fast an associative memory having expected time of find and insert operations $O(1)$ and random number generator. Whenever we have to store an element we must determine its hash value. At first using the associative memory we find out it already has a hash value associated. If not we use the random number generator to obtain a random element from $A$ and remember the connection, element - hash value, to the associative memory. This sequentially constructs a random mapping from the system of all functions. Since the random number generator used chooses the elements of $A$ uniformly created system is certainly strongly $\omega$-universal. In addition we do not store the hash values for irrelevant elements.
+These ideas come from the existence of fast associative memory having expected time of find and insert operations $O(1)$ and existence of a random number generator. Whenever we have to store an element we must determine its hash value. At first by using the associative memory we find out if the stored element already has a hash value associated. If not we use the random number generator to obtain an element from $A$ and remember this connection, element - its hash value, to the associative memory. This sequentially constructs a random mapping from the system of all functions. Because the random number generator used chooses the elements of $A$ uniformly created system is certainly strongly $\omega$-universal. In addition we do not store the hash values for irrelevant elements. 
+
+By using this idea to construct a fast hash table we are trapped in a cycle since we already needed one. But $\omega$-universal class can not only be used to construct a fast solution to the dictionary problem but to solve other problems like set equality. %TODO: \cite{nieco}
 % End of All functions
 
 % TODO: Maly univerzalny system.
@@ -257,21 +269,23 @@ The first theorems show the results of combinations of two strongly universal sy
 \begin{theorem}
 Let $H$ and $I$ be $k$-strongly universal systems both mapping the universe $U$ to the table of size $m$. Then the system of pair functions 
 \begin{displaymath}
-J = \lbrace f_{(h, i)}:U \times U \rightarrow \lbrace 0, \dots, m - 1 \rbrace \times \lbrace 0, \dots, m - 1 \rbrace | h \in H, i \in I \rbrace
+J = \lbrace f_{(h, i)}: U \rightarrow \lbrace 0, \dots, m - 1 \rbrace \times \lbrace 0, \dots, m - 1 \rbrace \setdelim h \in H, i \in I \rbrace
 \end{displaymath} 
 is also $k$-strongly universal. Result of a pair function $(h, i)$ is $f_{(h, i)}(x) = (h(x), i(x))$.
 \end{theorem}
 \begin{proof}
-Let $x_1, \dots, x_k$ be the elements that are supposed to be mapped onto selected buckets $(y_1, z_1), \dots, (y_k, z_k)$. The number of functions mapping both $h(x_1) = y_1, \dots, h(x_k) = y_k$ and $i(x_1) = z_1, \dots, i(x_k) = z_k$ is $\frac{|H|}{m^k}$ or $\frac{|I|}{m^k}$ respectively. So the number of all functions mapping $h(x_1) = (y_1, z_1), \dots, h(x_k) = (y_k, z_k)$ is equal to $\frac{|H||I|}{m^{2k}}$. The size of the table is $m^2$ and hence the constructed system is $k$-strongly universal.
+Let $x_1, \dots, x_k \in U$ be given different elements that are supposed to be mapped onto selected buckets $(y_1, z_1), \dots, (y_k, z_k)$. We compute the number of pair functions $f_{(h, i)}$ such that for both functions $h$ and $i$ we have $h(x_1) = y_1, \dots, h(x_k) = y_k$, $i(x_1) = z_1, \dots, i(x_k) = z_k$. From strong $k$-universality of both systems we know that there are at most $\frac{|H|}{m^k}$ functions $h$ and $\frac{|I|}{m^k}$ functions $i$ satisfying mentioned criteria. So the number of all functions $f_{(h, i)}$ such that $f_{(h, i)}(x_1) = (y_1, z_1), \dots, f_{(h, i)}(x_k) = (y_k, z_k)$ is at most $\frac{|H||I|}{m^{2k}}$. The size of the table is $m^2$ and thus the constructed system is $k$-strongly universal.
 \end{proof}
 
-Combining two universal systems is not only limited to increasing the table's size. From the previous result we obtain a smaller probability of collision by paying the expensive price of the table expansion. When using a single function the same effect can be achieved by squaring the table size.  We could also combine two strongly universal functions and use a suitable operation to merge the given results into a smaller table. The system created remains strongly universal as it is stated in the next theorem.
+Combining two universal systems does not have to be limited to increasing the table's size. From the previous result we obtain a smaller probability of collision by paying the expensive price of the table expansion. When using a simple class of hash functions the same effect on probability can be achieved by simply squaring the table's size. We could also combine two strongly universal functions and use a suitable operation to merge the given results into a smaller table. The system created remains strongly universal as it is stated in the next theorem and the combination does not bring us any obvious advantage.
 
 \begin{theorem}
-Let $B$ denote the set of buckets of a hash table of size $m$ thus $|B| = m$. Both $H$ and $I$ are $k$-strongly universal classes of functions over the table $B$. The operation $o: B \times B \rightarrow B$ is given so that for every $c, a \in B$ there is exactly one $b \in B$ such that $o(a, b) = c$. Then the system of functions $F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace$ where $f_{(h, i)}(x) = o(h(x), i(x))$ is $k$-strongly universal.
+Let $B$ denote the set of buckets of a hash table of size $m$, $|B| = m$. Let both $H$ and $I$ be strongly $k$-universal classes of functions over the table $B$. Let the operation $o: B \times B \rightarrow B$ be given. The operation satisfies that for every $c, a \in B$ there is exactly one $b \in B$ such that $o(a, b) = c$. Then the system of functions \[F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace\] where \[f_{(h, i)}(x) = o(h(x), i(x))\] is $k$-strongly universal.
 \end{theorem}
 \begin{proof}
-The given elements $x_1, \dots, x_k$ are supposed to be mapped onto the prescribed images $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$. The probability of event $h(x_1) = a_1, \dots, h(x_k) = a_k$ and $i(x_1) = b_1, \dots, i(x_k) = b_k$ is exactly $\frac{1}{m^{2k}}$. The pair for a single value $y_i$ may be chosen arbitrarily for every $1 \le i \le k$. There are $m^k$ pairs that confirm the values $y_i$. Now we see that $P(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$.
+To prove the theorem we are given different elements $x_1, \dots, x_k$ that are supposed to be mapped onto prescribed images $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$ because we can choose $m$ different values for $a_i \in B$. A pair for a single value $y_i$ may be chosen arbitrarily for every $1 \le i \le k$. There are $m^k$ pairs that fit the values $y_i$.
+
+From the previous theorem we have that probability of event $h(x_1) = a_1, \dots, h(x_k) = a_k$ and $i(x_1) = b_1, \dots, i(x_k) = b_k$ is less than $\frac{1}{m^{2k}}$. Now we see that $P(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see the system $F$ is strongly $k$-universal.
 \end{proof}
 
 \begin{corollary}
@@ -283,22 +297,20 @@ Combining the results of pair functions created from $k$-strongly universal clas
 gives $k$-strongly universal classes of functions.
 \end{corollary}
 
-Next step is to discover the dependence of the parameter $k$ of strongly universal classes on their size. This will show us the best possible probability estimate for the collision.
+Next step is to discover the dependence of the parameter $k$ of strongly $k$-universal classes on their size. This will show us the best possible probability bound for the collision of $k$ different elements depending on the size of the system.
 \begin{theorem}
-If $H$ is a $k$-strongly universal system of functions. Then the size of the system is bounded by:
+Let $H$ be a $k$-strongly universal system of functions mapping universe $U$ to a table $A$. Size of the system is then bounded by:
 \begin{displaymath}
 |H| > m^{k - 1} \log_m \left( \frac{N}{km} \right) \textit{.}
 \end{displaymath}
-
-The strong universality of every such system of functions $H$ has its upper bound
-\begin{displaymath}
-k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \textit{.}
-\end{displaymath}
 \end{theorem}
 \begin{proof}
-First we will construct the sequence of sets $U_0$, $U_1$, $\dots$, where $U_0 = U$. The set $U_i$ is the greatest subset of $U_{i - 1}$ that collides under the function $h_i \in H$. From the Dirichlet's principle the size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$. By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^i}$.
+At first number all functions in H, $H = \{h_1, \dots, h_{|H|}\}$ and define $m = |A|$. Now we create the sequence of sets $U_0$, $U_1$, $\dots$, where $U_0 = U$. Inductively define set $U_i$ as the greatest subset of $U_{i - 1}$ such that $h_i$ is a constant on $U_i$. 
 
-Now let the index $i$ denote the last set $U_i$ such that $|U_i| \geq k$. The functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of the set $U_i$ to a single image. The probability of this event is less or equal to $\frac{1}{m ^ {k - 1}}$. From this argument we know that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since the index $i$ is last with the property $U_i \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} < k$. 
+From the Dirichlet's principle size of every set $U_i$ may be estimated as $|U_i| \geq \frac{|U_{i - 1}|}{m}$. If for every $x \in A$ we had $|\displaystyle h_{i}^{-1}(x)| < \frac{|U_{i - 1}|}{m}$ for the size of $U_{i -1}$ we would have \[|U_{i -1}| = \displaystyle\sum_{x \in A} |\displaystyle h_{i}^{-1}(x)| < m\frac{|U_{i - 1}|}{m} = |U_{i -1}|\] which is impossible. By using a bounded induction one can obtain $|U_i| \geq \frac{|U|}{m^i}$.
+
+%TODO: veta, ked mam silne k univerzalny, tak prechod na pravdepodobnost kolizie jednej fcie.
+Now let the index $i$ denote the last set $U_i$ such that $|U_i| \geq k$. Functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of set $U_i$ to a single image. The probability of this event is less or equal to $\frac{1}{m ^ {k - 1}}$ by using theorem 1.16. From this argument we know that $i \leq \frac{|H|}{m ^ {k - 1}}$. Because index $i$ is last with the property $U_i \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} \leq |U_{i + 1}| < |U_i| \leq k$. 
 
 Putting it all together:
 \begin{gather*}
@@ -315,8 +327,16 @@ Obtaining the bound on the size of system of functions:
 |H| & > m^{k - 1} \log_m \left( \frac{N}{km} \right) \\
 \end{split}
 \end{displaymath}
+\end{proof}
 
-This can be rewritten to get bound on $k$ as:
+\begin{corollary}
+If $H$ is a strongly $k$-universal class of functions then
+\begin{displaymath}
+k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} \textit{.}
+\end{displaymath}
+\end{corollary}
+\begin{proof}
+The result of the previous theorem can be rewritten to get bound on $k$ as:
 \begin{displaymath}
 \begin{split}
 m^{k - 1} & < \frac{|H|}{\log_m \left( \frac{N}{km} \right)} \\
