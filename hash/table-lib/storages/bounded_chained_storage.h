@@ -14,11 +14,7 @@ namespace Hash { namespace Storages {
 	 */
 	template <typename T, typename Comparer, typename Hash>
 	class BoundedChainedStorage : public ChainedStorage<T, Comparer, Hash> {
-
-		/**
-		 * Current storage statistics computed for the hash table.
-		 */
-		size_t maxChainLength;
+	public:
 
 		void insert(const T & item, HashType hash) {
 			this->ChainedStorage::insert(item, hash);
@@ -28,6 +24,21 @@ namespace Hash { namespace Storages {
 				this->maxChainLength = chainLength;
 			}
 		}
+
+		/**
+		 * Maximal chain length retrieval.
+		 *
+		 * @return Maximal chain length.
+		 */
+		size_t getMaxChainLength(void) const {
+			return this->maxChainLength;
+		}
+
+	private:
+		/**
+		 * Current storage statistics computed for the hash table.
+		 */
+		size_t maxChainLength;
 
 	}
 
