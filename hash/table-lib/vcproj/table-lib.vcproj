@@ -261,6 +261,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Storages"
+				>
+				<File
+					RelativePath="..\storages\bounded_chained_storage.h"
+					>
+				</File>
+				<File
+					RelativePath="..\storages\chained_storage.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
