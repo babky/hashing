@@ -5,6 +5,7 @@ int main(size_t, const char **) {
 	using namespace Hash;
 	using namespace Hash::Utils;
 	using namespace Hash::Tests;
+	using namespace Hash::Storages;
 	using namespace std;
 
 	TableTest<Table<int, EqualityComparer<int>, UniversalFunctionCWLF, ChainedStorage> > test_univ_cwlf;
