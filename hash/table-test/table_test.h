@@ -5,6 +5,7 @@
 #include "function.h"
 #include "universal_systems.h"
 #include "storage.h"
+#include "storages/chained_storage.h"
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include "default_test.h"
