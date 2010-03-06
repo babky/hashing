@@ -90,7 +90,7 @@ namespace Hash { namespace Tests {
 		virtual void testMassiveFill(void) {
 			TableType t;
 			for (int i = 0; i < 50000; ++i) {
-				t.insert(i);
+				t.insert(5 * i);
 			}
 
 			this->assertEqual(50000, t.getSize(), "After inserting n distinct elements we expect table length of n.");
