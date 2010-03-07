@@ -18,11 +18,12 @@ void LengthTest::runTest(void) {
 
 	for (size_t t = 0; t < TEST_COUNT; ++t) {
 		TableCWLF table;
-		cout << "Function no: " << table.getFunction().getFunctionNo() << ".\n";
 
 		for (size_t i = 0; i < TEST_LENGTH; ++i) {
 			try {
-				table.insert(generator.generate());
+				table.insert(generator.generate());				
+			} catch (const AssertException &) {
+				throw;
 			} catch(...) {
 			}
 		}

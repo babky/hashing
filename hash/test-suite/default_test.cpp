@@ -10,7 +10,7 @@ void DefaultTest::resetTest(void) {
 	return this->results.resetTests();
 }
 
-const Assert & DefaultTest::getAssertionsResult(void) const {
+const Assert & DefaultTest::getAssertionResult(void) const {
 	return this->results;
 }
 
@@ -69,7 +69,7 @@ void CompoundTest::runTest(void) {
 		(*i)->runTest();
 		this->afterTest();
 
-		a = &((*i)->getAssertionsResult());
+		a = &((*i)->getAssertionResult());
 		this->results.addFailedCount(a->getFailedCount());
 		this->results.addOkCount(a->getPassedCount());
 	}
@@ -77,7 +77,7 @@ void CompoundTest::runTest(void) {
 	this->tearDown();
 }
 
-const Assert & CompoundTest::getAssertionsResult(void) const {
+const Assert & CompoundTest::getAssertionResult(void) const {
 	return this->results;
 }
 

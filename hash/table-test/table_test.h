@@ -5,7 +5,10 @@
 #include "function.h"
 #include "universal_systems.h"
 #include "storage.h"
+#include "policies/guaranteed_rehash_policy.h"
 #include "storages/chained_storage.h"
+#include "storages/bounded_chained_storage.h"
+#include "systems/linear_map_system.h"
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include "default_test.h"
@@ -89,11 +92,11 @@ namespace Hash { namespace Tests {
 
 		virtual void testMassiveFill(void) {
 			TableType t;
-			for (int i = 0; i < 50000; ++i) {
+			for (int i = 0; i < 5000; ++i) {
 				t.insert(5 * i);
 			}
 
-			this->assertEqual(50000, t.getSize(), "After inserting n distinct elements we expect table length of n.");
+			this->assertEqual(5000, t.getSize(), "After inserting n distinct elements we expect table length of n.");
 		}
 
 	};

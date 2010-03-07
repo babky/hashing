@@ -15,14 +15,62 @@ namespace Hash { namespace Storages {
 	template <typename T, typename Comparer, typename Hash>
 	class BoundedChainedStorage : public ChainedStorage<T, Comparer, Hash> {
 	public:
+		void init_stats(void) {
+			this->currentStats.setTableLength(this->getTableSize());
+		}
+
+		/**
+		 * Chained storage c-tor.
+		 */
+		BoundedChainedStorage(void):
+		  ChainedStorage() {
+			  this->init_stats();
+		}
+
+		/**
+		 * Chained storage c-tor.
+		 *
+		 * @param comparer Used comparer.
+		 * @param tableLength Starting length of the table.
+		 */
+		explicit BoundedChainedStorage(const EqualityComparer & comparer, 
+				size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		  ChainedStorage(comparer, tableLength) {
+			  this->init_stats();
+		}
+
+		/**
+		 * Chained storage copy c-tor.
+		 *
+		 * @param storage Copied storage.
+		 */
+		BoundedChainedStorage(const BoundedChainedStorage & storage):
+		  ChainedStorage(storage){
+			this->currentStats = storage.currentStats;
+		}
+
+		/**
+		 * Assignment operator.
+		 */
+		BoundedChainedStorage & operator = (const BoundedChainedStorage & storage) {
+			this->ChainedStorage::operator =(storage);
+			this->currentStats = storage.currentStats;
+			return *this;
+		}
 
 		void insert(const T & item, HashType hash) {
 			this->ChainedStorage::insert(item, hash);
+			this->currentStats.refineChain(this->getChainLength(hash));
+		}
 
-			size_t chainLength = this->storage[hash].getSize();
-			if (chainLength > this->maxChainLength) {
-				this->maxChainLength = chainLength;
+		bool remove(const T & item, HashType hash) {
+			bool retVal = this->ChainedStorage::remove(item, hash);
+
+			if (retVal) {
+				this->currentStats.removeElement();
 			}
+
+			return retVal;
 		}
 
 		/**
@@ -31,16 +79,67 @@ namespace Hash { namespace Storages {
 		 * @return Maximal chain length.
 		 */
 		size_t getMaxChainLength(void) const {
-			return this->maxChainLength;
+			return this->currentStats.getMaxChainLength();
+		}
+
+		void computeStatistics(Utils::StorageStatistics & stats) const {
+			stats = this->currentStats;
+		}
+
+		/**
+		 * Recomputes the whole statistics if wanted.
+		 *
+		 * @param stats Place where the computed statistics are stored.
+		 * @param recompute Flag indicating if the statistics should be fully recomputed.
+		 */
+		void computeStatistics(Utils::StorageStatistics & stats, bool recompute) {
+			if (recompute) {
+				this->ChainedStorage::computeStatistics(stats);
+			} else {
+				this->computeStatistics(stats);
+			}
 		}
 
 	private:
+		class StorageStatistics : public Utils::StorageStatistics {
+		public:
+
+			/**
+			 * Refines the maximal chain length.
+			 * 
+			 * @param chainLength length of the currently prolonged chain.
+			 */
+			void refineChain(size_t chainLength) {
+				++this->elementCount;
+				if (this->maxChainLength < chainLength) {
+					this->maxChainLength = chainLength;
+				}
+			}
+
+			/**
+			 * Length of the table setter.
+			 *
+			 * @param tableLength New table's length.
+			 */
+			void setTableLength(size_t tableLength) {
+				this->tableLength = tableLength;
+			}
+
+			/**
+			 * Element removed.
+			 */
+			void removeElement(void) {
+				--this->elementCount;
+			}
+
+		};
+
 		/**
 		 * Current storage statistics computed for the hash table.
 		 */
-		size_t maxChainLength;
+		StorageStatistics currentStats;
 
-	}
+	};
 
 } }
 

@@ -4,8 +4,11 @@
 #include <algorithm>
 #include <iostream>
 #include "utils/definitions.h"
+#include "utils/smart_pointer.h"
+#include "utils/rehash_observer.h"
 #include "utils/storage_statistics.h"
 #include "policies/rehash_policy.h"
+#include <stdexcept>
 #include <cassert>
 
 namespace Hash {
@@ -66,10 +69,22 @@ namespace Hash {
 		 */
 		typedef typename HashStorage::Iterator Iterator;
 
+	private:
+		/**
+		 * Table's initializer.
+		 */
+		void init(void) {
+			this->rehashObserver = RehashObserverType(new Hash::Utils::PrintingRehashObserver());
+			this->getFunction().initialize(this->storage);
+		}
+
+	public:
 		/**
 		 * Constructor.
 		 */
-		Table(void) {
+		Table(void):
+		  rehashObserver(0) {
+			init();
 		}
 
 		/**
@@ -78,7 +93,9 @@ namespace Hash {
 		 * @param comparer Comparer used to determine the equality of items.
 		 */
 		explicit Table(const EqualityComparer & comparer):
-			storage(HashStorage(comparer)) {
+		  storage(HashStorage(comparer)),
+		  rehashObserver(0) {
+			init();
 		}
 
 		/**
@@ -88,9 +105,10 @@ namespace Hash {
 		 * @param tableLength Length of the table.
 		 */
 		Table(const EqualityComparer & comparer, size_t tableLength):
-			storage(HashStorage(comparer, tableLength)) {
+		  storage(HashStorage(comparer, tableLength)),
+		  rehashObserver(0) {
+			init();
 		}
-
 
 		/**
 		 * Inserts the {@code element} into the table.
@@ -119,12 +137,22 @@ namespace Hash {
 		}
 
 		/**
-		 * The size of the table retrieval.
+		 * Number of stored elements retrieval.
 		 *
 		 * @return Number of hashed elements.
 		 */
 		int getSize(void) const {
 			return this->storage.getSize();
+		}
+
+		
+		/**
+		 * The size of the table retrieval.
+		 *
+		 * @return Size of the table.
+		 */
+		int getTableSize(void) const {
+			return this->storage.getTableSize();
 		}
 
 		/**
@@ -187,15 +215,38 @@ namespace Hash {
 
 			Utils::StorageStatistics s;
 			this->storage.computeStatistics(s);
-			std::cout << s << "Rehashing.\n";
 
 			HashTable t(this->storage.getComparer(), newLength);
+			this->getRehashObserver().rehash(t.storage);
 
 			for (HashTable::Iterator it = this->getBeginning(), ite = this->getEnd(); it != ite; ++it) {
 				t.insert(*it);
 			}
 
 			swap(*this, t);
+		}
+
+		/**
+		 * Currently used rehash observer - setter. Useful when letting the universal class of functions know that 
+		 * the table size changed.
+		 *
+		 * @param observer	New observer.
+		 */
+		void setRehashObserver(Hash::Utils::RehashObserver * observer) {
+			if (observer == 0) {
+				throw std::invalid_argument("Observer may not be null.");
+			}
+
+			this->rehashObserver = RehashObserverType(observer);
+		}
+
+		/**
+		 * Current rehash observer.
+		 *
+		 * @return Current rehash observer.
+		 */
+		Hash::Utils::RehashObserver & getRehashObserver(void) {
+			return *this->rehashObserver.instance();
 		}
 
 		/**
@@ -241,9 +292,9 @@ namespace Hash {
 		 * @param b Hash table to be swapped.
 		 */
 		friend void swap(HashTable & a, HashTable & b) {
-			// TODO: std::swap is bad.
 			std::swap(a.function, b.function);
 			swap(a.storage, b.storage);
+			std::swap(a.rehashObserver, b.rehashObserver);
 			std::swap(a.rehashPolicy, b.rehashPolicy);
 		}
 
@@ -252,11 +303,33 @@ namespace Hash {
 		 *
 		 * @return Current hash function.
 		 */
-		const HashFunction & getFunction(void) const {
+		HashFunction & getFunction(void) {
 			return function;
 		}
 
+		/**
+		 * Hash function retrieval.
+		 *
+		 * @return Current hash function.
+		 */
+		const HashFunction & getFunction(void) const {
+			return const_cast<Table<T, Comparer, Function, Storage, LoadFactorBoundsRehashPolicy> *> (this)->getFunction();
+		}
+
 	private:
+		/**
+		 * Smart pointer for rehash observer.
+		 */
+		typedef Hash::Utils::SmartPointer<
+			Hash::Utils::RehashObserver, 
+			Hash::Utils::AllowNullCheckPolicy
+		> RehashObserverType;
+
+		/**
+		 * Observer for rehashing. Implementation invariant - always a valid pointer.
+		 */
+		RehashObserverType rehashObserver;
+
 		/**
 		 * Used hashed function.
 		 */

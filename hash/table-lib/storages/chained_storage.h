@@ -1,10 +1,3 @@
-/*
- * chained_storage.h
- *
- *  Created on: 5.3.2010
- *      Author: Martin Babka
- */
-
 #ifndef CHAINED_STORAGE_H
 #define CHAINED_STORAGE_H
 
@@ -61,7 +54,8 @@ namespace Hash { namespace Storages {
 		 * @param comparer Used comparer.
 		 * @param tableLength Starting length of the table.
 		 */
-		explicit ChainedStorage(const EqualityComparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		explicit ChainedStorage(const EqualityComparer & comparer, 
+				size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  elementCount(0),
 		  storageLength(tableLength),
 		  storage(new StorageItem[tableLength]),
@@ -499,6 +493,17 @@ namespace Hash { namespace Storages {
 			size_t chainIndex;
 			ChainIterator chainIterator;
 		};
+
+	protected:
+		/**
+		 * Length of the given chain retrieval.
+		 *
+		 * @param hash Chain id.
+		 * @return Chain length.
+		 */
+		size_t getChainLength(HashType hash) const {
+			return this->storage[hash].getSize();
+		}
 
 	private:
 		/**

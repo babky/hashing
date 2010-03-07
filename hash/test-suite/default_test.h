@@ -11,7 +11,7 @@ namespace TestSuite {
 	public:
 		virtual ~DefaultTest(void);
 		virtual void resetTest(void);
-		virtual const Assert & getAssertionsResult(void) const;
+		virtual const Assert & getAssertionResult(void) const;
 
 	protected:
 		virtual bool assertTrue(bool value, const std::string & message = "");
@@ -58,7 +58,7 @@ namespace TestSuite {
 
 		virtual void resetTest(void);
 		virtual void runTest(void);
-		virtual const Assert & getAssertionsResult(void) const;
+		virtual const Assert & getAssertionResult(void) const;
 
 	protected:
 		class CTAssert : public Assert {
