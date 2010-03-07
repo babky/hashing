@@ -74,7 +74,7 @@ namespace Hash { namespace Utils {
 		 */
 		void clear(void);
 
-	private:
+	protected:
 		/**
 		 * Number of elements stored inside the table.
 		 */

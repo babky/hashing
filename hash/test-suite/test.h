@@ -37,7 +37,7 @@ namespace TestSuite
 		 *
 		 * @return Assertion result.
 		 */
-		virtual const Assert & getAssertionsResult(void) const = 0;
+		virtual const Assert & getAssertionResult(void) const = 0;
 
 	private:
 		/**

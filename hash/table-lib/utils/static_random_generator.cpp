@@ -2,4 +2,4 @@
 
 using namespace Hash::Utils;
 
-template<> RandomGenerator<size_t> * StaticRandomGenerator<size_t>::generator = 0;
+RandomGenerator<size_t> * StaticRandomGenerator<size_t>::generator = 0;

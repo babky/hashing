@@ -163,6 +163,18 @@
 				Name="Utils"
 				>
 				<File
+					RelativePath="..\utils\hash_assert.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\hash_math.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\rehash_observer.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\utils\static_random_generator.cpp"
 					>
 				</File>
@@ -170,6 +182,10 @@
 			<Filter
 				Name="Policies"
 				>
+				<File
+					RelativePath="..\policies\guaranteed_rehash_policy.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\policies\rehash_policy.cpp"
 					>
@@ -213,7 +229,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\utils\hash_assert.h"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\hash_math.h"
+					>
+				</File>
+				<File
 					RelativePath="..\utils\random_generator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\rehash_observer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\smart_pointer.h"
 					>
 				</File>
 				<File
@@ -236,6 +268,10 @@
 			<Filter
 				Name="Policies"
 				>
+				<File
+					RelativePath="..\policies\guaranteed_rehash_policy.h"
+					>
+				</File>
 				<File
 					RelativePath="..\policies\rehash_policy.h"
 					>

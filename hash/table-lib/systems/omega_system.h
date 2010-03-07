@@ -19,6 +19,9 @@ namespace Hash {
 			return this->functionNo;
 		}
 
+		void initialize(Hash::StorageInfo &) {
+		}
+			
 	private:
 		size_t functionNo;
 
