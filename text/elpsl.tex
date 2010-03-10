@@ -1,109 +1,184 @@
-\chapter{Očakávaná dĺžka najdlhšieho reťazca}
+\chapter{Expected length of the longest chain}
 
-Pokúsime sa odhadnúť očakávanú dĺžku najdlhšieho reťazca, značíme ako náhodnú veličinu $lpsl$,  pri univerzálnom hashovaní. Vychádzame z postupu použitého pri štandardnom hashovaní, ktorý neskôr upravíme. Pri tomto prístupe sme očakávanú dĺžku odhadovali pomocou pravdepodobnosti, že v jedinom reťazci koliduje $i$ a viac prvkov. Vychádzali sme z nasledujúcich dvoch faktov:
+\begin{section}{Influence of a bucket's size on time complexity}
+At first let us explain why the size of a bucket is so important for hashing. Assume a model when hashing elements into separate buckets in a hash table. A chain is created from the elements stored in a single bucket and they are represented by singly linked lists, hence the word chain. To find an element in a bucket one needs to iterate throughout all elements in the bucket's chain. Thus the time of the find operation is linear with the number of elements that fell in the bucket. A basic approach how to estimate the longest chain length when using universal hashing is about to be revealed.
+
+\begin{definition}[Equality indicator]
+Let $x$ and $y$ be two variables from the same universe $A$. Then function $\mathbf{I}: A \times A \rightarrow \{0, 1\}$ such that
+\[
+ \mathbf{I}(y = x) =
+  \begin{cases}
+   1 & \text{if } x = y \\
+   0 & \text{if } x \neq y
+  \end{cases}
+\]
+is called equality indicator.
+\end{definition}
+
+\begin{definition}[Probe sequence length, longest probe sequence length]
+Let $H$ be universal class of functions hashing universe $U$ onto a table $A$. Let $a \in A$ be a bucket of $A$ and $S \subseteq U$ be the represented set. 
+
+Then length of the chain $a$ when hashing by function $h$ is denoted by the variable $\psl(a, h) = \displaystyle \sum_{x \in S} \Indicator(h(x) = a)$. Variable $\lpsl(h) = \displaystyle \max_{a \in A} (\psl(a, h))$ denotes the length of the longest chain when using function $h$.
+\end{definition}
+
+Notation probe sequence comes from coalesced hashing. Chains are represented directly in the hash table and they are fused together even for elements with different hash values. Many authors refer to the process of finding an element in a chain as probing the sequence. Notation for random variables they use is $\psl$ and $\lpsl$ respectively. % TODO: citation.
+
+Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed over the choice of a function $h \in H$. The bounds on the variable $\lpsl$ that are obtained must be valid for any hashed set $S \subseteq U$ and depend on the size of the hashed set only. If we are able to find a tight upper bound on the length of the longest chain we can guarantee the worst case behaviour of a model. When the limit is broken we can choose any other function from the universal class of functions $H$ and rehash stored elements so that we obtain a table that does not violate the chain limit rule.
+
+When taking the probability into an account we define random variables $\psl$ and $\lpsl$ over the probability space determined by a choice of hash function $h \in H$ where $H$ is a universal class of hash functions used.
+
+\begin{definition}[Random variables of probe sequence length and longest probe sequence length]
+Let random variable $\psl(a)$ denote the size of the bucket $a \in A$. Its values are from $\mathbb{N}$ and probability density function is defined as:
+\[
+\Prob(\psl(a) = k) = \frac{\sum_{h \in H} \Indicator(\psl(a, h) = k)}{|H|}\text{.}
+\]
+
+Random variable $\lpsl$ denoting the maximal size of a bucket in a hash table is defined as:
+\[
+\lpsl = \displaystyle\max_{a \in A}(\psl(a))\text{.}
+\]
+\end{definition}
+\end{section}
+
+\begin{section}{Estimating length of the longest chain in the standard model of hashing}
+The standard result of hashing is the $O\left(\frac{\log n}{\log \log n}\right)$ bound on the length of the longest chain for the hashing. We can use computations in its proof to show the same bound holds for universal hashing with strongly $\omega$-universal class of functions. In order to prove this result we need to estimate the probability of collision of $k$ elements. Simplest model of hashing uses an assumption that is not necessarily satisfied; hashed elements are independently and uniformly chosen from the universe $U$. This is enough to bypass the problem. 
+
+The above definitions are for models of universal hashing however they are easy to understand with standard hashing, too. Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$. The simplest model assumes usage of just one hash function. It is parametrised by a choice of the hashed set $S \subset U$ instead. Since used hash function uniformly distributes the elements of the universe across the hash table we also do need the bucket parameter of variable $\psl$. For every pair of buckets $a, b \in A$ random variables have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob(\psl(a) = k) = \Prob(\psl(b) = k) \text{.}\] In this chapter $m$ denotes the size of the hash table $A$ and $n$ is the size of the hashed set $S$.
+
+The probability estimate for the variable $\lpsl$ is simply obtained from the probability estimate of $\psl$ as:
 \begin{displaymath}
-P(lpsl \geq i) \leq m P(psl \geq i)
+\Prob(\lpsl \geq i) \leq m \Prob(\psl(a) \geq i \text{ for any } a \in A)
 \end{displaymath}
 
 \begin{displaymath}
 \begin{split}
-E lpsl	& = \displaystyle \sum_{i=0}^{\infty} i P(lpsl = i) \\
-		& = \displaystyle \sum_{i = 0}^{\infty} i (P(lpsl \geq i) - P(lpsl \geq i + 1)) \\ 
-		& = \displaystyle \sum_{i = 0}^{\infty} P(lpsl \geq i)
+\Expect \lpsl
+	& = \displaystyle \sum_{i=0}^{\infty} i \Prob(\lpsl = i) \\
+	& = \displaystyle \sum_{i = 0}^{\infty} i (\Prob(\lpsl \geq i) - \Prob(\lpsl \geq i + 1)) \\ 
+	& = \displaystyle \sum_{i = 0}^{\infty} \Prob(\lpsl \geq i)
 \end{split}
 \end{displaymath}
 
-Teda platí:
+And thus we have:
 \begin{displaymath}
-E lpsl \leq \displaystyle \sum_{i = 0}^{\infty} m P(psl \geq i)
+\Expect \lpsl \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob(\psl \geq i)
 \end{displaymath}
 
-Z platnosti predpokladu nezávislosti výberu hashovaných prvkov z univerza od\-had\-ne\-me pravdepodobnosť kolízie ako:
+From the assumption of independent and uniform choice of hashed elements from the universe we can estimate the probability of collision as binomial random variable. The event that an element is hashed into a prescribed bucket is $\frac{1}{m}$.
 \begin{displaymath}
-P(psl \geq i) \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
+\Prob(\psl \geq i) \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
 \end{displaymath}
+Remark that this estimate holds only for universes substantially larger than hashed sets. The selection of the first element changes the probability of choice of the second element and so on.
 
-Dopočítame odhad očakávanej dĺžky najdlhšieho reťazca:
+We can finish the estimate of the variable $\lpsl$ by computing:
 \begin{displaymath}
 \begin{split}
-E lpsl	& \leq \displaystyle \sum_{i = 0}^{\infty} m P(psl \geq i) \\
-		& \leq \displaystyle \sum_{i = 0}^{\infty} m \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i} \\
-		& = O(\frac{\log n}{\log \log n})
+\Expect \lpsl	& \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob(\psl \geq i) \\
+		& \leq \displaystyle \sum_{i = 0}^{\infty} m \min\left(1, \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}\right) \\
+		& = O\left(\frac{\log n}{\log \log n}\right)
 \end{split}
 \end{displaymath}
+\end{section}
 
-Teraz upravíme výpočet pre univerzálne hashovanie. Zásadný rozdiel je v odhade pravdepodobnosti kolízie $i$ prvkov. Tu sa oprieme o rôzne definície univerzálnych systémov hashovacích funkcií a o špecifické vlastnosti jednotlivých sád funkcií.
+\begin{section}{Estimate for models of universal hashing}
+The computation for universal hashing needs to be extended by a new probability estimate of collision of $i$ elements. We will use the definition of strongly $\omega$-universal class of hash functions. We can also exploit specific properties of various universal classes.
 
-\begin{definition}[Indikátor]
+\begin{definition}[Set indicator]
+Let $\Indicator$ be a function such that
 \begin{displaymath}
-I: P(U) \rightarrow \lbrace 0, 1 \rbrace
+\Indicator: 2^U \rightarrow \lbrace 0, 1 \rbrace
 \end{displaymath}
 \begin{displaymath}
-I(M) = \left\{ 
+\Indicator(M) = \left\{ 
 \begin{array}{l l}
   0 & \quad M = \emptyset \\
   1 & \quad M \neq \emptyset \\
 \end{array} \right.
 \end{displaymath}
+
+Then $I$ is called a set indicator.
 \end{definition}
 
-Z predchádzajúcej definície je vidieť, že platí $I(M) \leq |M|$.
+\begin{remark}
+From the previous definition it is apparent that \[\Indicator(M) \leq |M| \textit{.} \]
+\end{remark}
 
-\paragraph{}
-Ďalej sa pokúsime načrtnúť výpočet očakávanej dĺžky najdlhšieho reťazca pre univerzálne hashovanie. Nech $h \in H$, $k \in N_0$ a $\tilde{x} \in A$, potom pre
+Now we present a method how to estimate the probability of collision of $k$ elements.
+\begin{definition}[Collision sets of $k$ elements]
+Let $h \in H$ be the universal function used, $k \in \mathbb{N}_0$ be supposed number of colliding elements and $\tilde{x} \in A$ be the collision bucket. Define sets $M_{\geq k}(h, \tilde{x})$ and $M_{= k}(h, \tilde{x})$ as
 \begin{displaymath}
 \begin{split}
-M_{\geq k} & = \{Y \subseteq S | |Y| \geq k, h(Y) = \{\tilde{x}\}\} \\
-M_{= k} & = \{Y \subseteq S | |Y| = k, h(Y) = \{\tilde{x}\}\} 
+M_{\geq k}(h, \tilde{x}) & = \{Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{\tilde{x}\}\} \\
+M_{= k}(h, \tilde{x}) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{\tilde{x}\}\} 
 \end{split}
 \end{displaymath}
-platí:
+\end{definition}
+
+When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the hashed set $S$ of size greater or equal to $k$ hashed to a same value $\tilde{x}$. 
+
+\begin{lemma}
+\label{lemma-indicator-k-collision}
+For any function $h$ and bucket $\tilde{x}$ non-emptiness of set $M_{\geq k}$ is equivalent to the non-emptiness of set $M_{= k}$:
 \begin{displaymath}
-I(M_{\geq k}) = I(M_{= k})
+\Indicator(M_{\geq k}) = \Indicator(M_{= k}) \text{.}
 \end{displaymath}
-Chceme ukázať, že neprázdnosť množiny $M_{\geq k}$ je ekvivalentná s neprázdnosťou $M_{= k}$. Nech $M_{\geq k}$ je neprázdna:
+\begin{proof}
+Let $M_{\geq k}$ be a non empty set:
 \begin{displaymath}
-Y \in M_{\geq k} \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{\tilde{x}\} \Leftrightarrow \forall Y' \subseteq Y, |Y'| = k: Y' \in M_{=k}
+\begin{split}
+Y \in M_{\geq k} 
+	& \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{\tilde{x}\} \\
+	& \Leftrightarrow \forall Y' \subseteq Y, |Y'| = k: Y' \in M_{=k} \\
+	& \Rightarrow \exists Y' \subseteq Y, |Y'| = k: Y' \in M_{=k} \\
+\end{split}
 \end{displaymath}
-Nech $M_{=k}$ je neprázdna:
+
+Let $M_{=k}$ be a non empty set:
 \begin{displaymath}
 Y' \in M_{=k} \Rightarrow Y' \in M_{\geq k}
 \end{displaymath}
-Máme:
+
+Now we have:
 \begin{displaymath}
 \begin{split}
 M_{\geq k} \neq \emptyset & \Leftrightarrow  M_{= k} \neq \emptyset \\
-I(M_{\geq k}) & = I(M_{= k})
+\Indicator(M_{\geq k}) & = \Indicator(M_{= k})
 \end{split}
 \end{displaymath}
+\end{proof}
+\end{lemma}
 
-Zvolíme reťazec obsahujúci prvok $\tilde{x}$ a jeho dĺžku označíme $l_{\tilde{x}}$. Ak má príslušný reťazec dĺžku aspoň $k$, potom musí existovať podmnožina $Y$ hashovanej množiny $S \subset U$ taká, že použitá funkcia $h$ je na nej konštantne rovná $\tilde{x}$. Aby bola dĺžka zvoleného reťazca presne $k$, množina $Y$ musí byť maximálna čo do počtu prvkov.
+We choose any arbitrary element $\tilde{x} \in U$. If the chain of the selected element $\tilde{x}$ has $\psl(\tilde{x}, h) \geq k$ then there must exists a subset $Y$ of hashed set $S \subset U$ such that used function $h$ is constant on $Y$ and moreover $h(Y) = \{ \tilde{x} \}$. If $\psl(\tilde{x}, h) = k$ then set $Y$ must be maximal in the number of its elements; it may not be extended to a larger set hashed onto $\tilde{x}$. We can compute the probability density function of $\psl(\tilde{x})$ as:
 \begin{displaymath}
 \begin{split}
-P(l^{\tilde{x}} \geq k) & = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-P(l^{\tilde{x}} = k) & = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ maximálna} \})}{|H|} \\
+\Prob(\psl(\tilde{x}) \geq k) & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+\Prob(\psl(\tilde{x}) = k) & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ is maximal} \})}{|H|} \\
 \end{split}
 \end{displaymath}
 
-K tomuto výpočtu je nutné dodať niekoľko užitočných poznámok:
+We add some remarks to clarify the motivation of the following calculations:
 \begin{itemize}
-\item Reťazec máme vždy určený jediným prvkom $\tilde{x}$, ktorý do neho patrí.
-\item Pravdepodobnosť počítame pre jedinú fixovanú hashovanú množinu $S$ a pravdepodobnostný priestor odpovedá voľbe funkcie $h$.
-\item Získame odhad $P(l^{\tilde{x}} \geq k) \leq p(A, U)$. Tento odhad použijeme obdobne ako pri výpočte v klasickom hashovaní na odhad pravdepodobnosti pre dĺžku najdlhšieho reťazca: $P(lpsl \geq k) \leq |A| p(A, U)$.
+\item Every chain is determined by a single element $\tilde{x}$ which is included in it.
+\item Probability estimate is always computed for a single set $S$ and probability space corresponds to a choice of hash function $h \in H$.
+\item We want to obtain an estimate $\Prob(\psl(\tilde{x}) \geq k) \leq p(A, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob(\lpsl(h) \geq k) \leq |A| p(A, U, H, |S|) \text{.} \] The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
 \end{itemize}
+
+Lemma \ref{lemma-indicator-k-collision} allows us to estimate the probability of collision of more than $k$ elements.
 \begin{displaymath}
 \begin{split}
-P(l^{\tilde{x}} \geq k) 
-	& = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-	& = \frac{\sum\displaylimits_{h \in H} I(\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-	& \leq \frac{\sum\displaylimits_{h \in H} |\{ Y \subseteq S | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
-	& = \frac{|\{ (h, Y) | |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
-	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+\Prob(\psl(\tilde{x}) \geq k) 
+	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+	& \leq \frac{\sum\displaylimits_{h \in H} |\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
+	& = \frac{|\{ (h, Y) \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
+	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H \setdelim h(Y) = \{\tilde{x}\} \}|}{|H|} \\
 \end{split}
 \end{displaymath}
-Tento odhad silne závisí na vlastnostiach množiny funkcií $H$.
+
+Last estimate must be done from the properties of the class $H$. For example we can use strong $\omega$-universality.
+
 \begin{theorem}
-Pokiaľ $H$ je silne $\omega$-univerzálny systém, očakávaná dĺžka najdlhšieho reťazca pri univerzálnom hashovaní je $O(\frac{\log n}{\log \log n})$.
+If $H$ is strongly $\omega$-universal system, then $\Expect \lpsl \in O\left(\frac{\log n}{\log \log n}\right)$.
 \end{theorem}
 \begin{proof}
 \begin{displaymath}
@@ -114,6 +189,9 @@ P(l^{\tilde{x}} \geq k)
 	& = \dbinom{|S|}{k}\frac{1}{{|A|}^k}
 \end{split}
 \end{displaymath}
-Tu môžeme pokračovať presne ako v prípade klasického hashovania, pretože odhad pravdepodobnosti kolízie $k$ prvkov vyšiel úplne rovnako. Dopracujeme sa k rovnakému výsledku $O(\frac{\log n}{\log \log n})$.
+
+Now we can carry on as in the case of standard model of hashing. The probability estimate of collision of $k$ elements is exactly the same and we gain the same result $\Expect \lpsl = O\left(\frac{\log n}{\log \log n}\right)$.
 \end{proof}
-Získať malý silne $\omega$-univerzálny systém je problém. Musíme použiť iné systémy a pri odhade sa opierať o ich špecifické vlastnosti.
+
+Constructing small strongly $\omega$-universal systems is problematic. In this work we used systems of linear maps and their specific properties not related to strong universality to obtain an interesting upper bound on the variable $\lpsl$. This upper bound allowed us to guarantee worst case amortised time for every operation.
+\end{section}

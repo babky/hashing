@@ -79,7 +79,7 @@ In this section we show some examples of common universal classes of hash functi
 
 % Linear systems
 \paragraph{Linear system}
-System of linear functions was among the first systems of universal hash functions. They were introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79} where they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation.
+System of linear functions was among the first systems of universal hash functions. They were introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79} where they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation. Nowadays various modifications of linear systems are known and are presented in the following text. 
 
 \begin{definition}[Linear system]
 Let $N$ be a prime and $m \in \mathbb{N}$. Define the sets $U = \{0, \dots, N - 1 \}$ and $A = \{0, \dots, m - 1\}$. Then the class of linear functions 
@@ -117,8 +117,36 @@ So the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left
 \end{proof}
 % End linear systems
 
+% Multiplicative system
+For examining the properties of the original linear system simpler and smaller multiplicative system may be used. They have many common properties and share some same drawbacks. This multiplicative system may provide us with some insights for which choices of hash function and hashed set they both fail.
+
+\begin{definition}[Multiplicative system]
+Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \mod p) \mod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the multiplicative system.
+\end{definition}
+
+\begin{theorem}
+For a prime $p$ and $m < p$ the multiplicative system is $2$-universal.
+\end{theorem}
+\begin{proof}
+If $x$ and $y$ are given different elements. We have to find the number of functions in the multiplicative system that will make their images the same:
+\begin{displaymath}
+\begin{split}
+kx \mod p \mod m & = ky \mod p \mod m \\
+kx - ky \mod p \mod m & = 0 \\
+\end{split}
+\end{displaymath}
+
+This can be rewritten as:
+\begin{displaymath}
+k(x - y) \mod p = l m \qquad \text{ for  } l \in \left\lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \right\rbrace - \{0\}
+\end{displaymath}
+
+Notice the parameter $l \neq 0$ since $k \neq 0$. Thus for every choice of $x$ and $y$ there are at most $2\left\lfloor\frac{p}{m}\right\rfloor$ functions. For every value of $l$ there is exactly one $k$ satisfying the equality because parameter $p$ is a prime. For the number of colliding functions we have \[ | \lbrace h \in \mathrm{Mult}_{m,p} \setdelim h(x) = h(y) \rbrace | \leq \frac{2p}{m} \] and the system is then $2$-universal.
+\end{proof}
+% End of multiplicative system
+
 % Linear transformations
-Previous system contains only simple linear functions from natural numbers to natural numbers. An analogous class can be constructed by using linear transformations between vector spaces. The systems have various similar properties but the latter one gives us a suitable bound on the size of the largest bucket.
+Previous systems contain only simple linear functions from natural numbers to natural numbers. An analogous class can be constructed by using linear transformations between vector spaces. The systems have various similar properties but the latter one gives us a suitable bound on the size of the largest bucket.
 
 \paragraph{System of linear transformations}
 \begin{definition}[System of linear transformations]
@@ -253,7 +281,7 @@ Let us show some considerations when we would like to use this system. The main 
 
 These ideas come from the existence of fast associative memory having expected time of find and insert operations $O(1)$ and existence of a random number generator. Whenever we have to store an element we must determine its hash value. At first by using the associative memory we find out if the stored element already has a hash value associated. If not we use the random number generator to obtain an element from $A$ and remember this connection, element - its hash value, to the associative memory. This sequentially constructs a random mapping from the system of all functions. Because the random number generator used chooses the elements of $A$ uniformly created system is certainly strongly $\omega$-universal. In addition we do not store the hash values for irrelevant elements. 
 
-By using this idea to construct a fast hash table we are trapped in a cycle since we already needed one. But $\omega$-universal class can not only be used to construct a fast solution to the dictionary problem but to solve other problems like set equality. %TODO: \cite{nieco}
+By using this idea to construct a fast hash table we are trapped in a cycle since we already supposed existence of a fast associative memory. But $\omega$-universal class can not only be used to construct a fast solution to the dictionary problem but to solve other problems like the set equality. %TODO: \cite{nieco}
 % End of All functions
 
 % TODO: Maly univerzalny system.
@@ -285,7 +313,7 @@ Let $B$ denote the set of buckets of a hash table of size $m$, $|B| = m$. Let bo
 \begin{proof}
 To prove the theorem we are given different elements $x_1, \dots, x_k$ that are supposed to be mapped onto prescribed images $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$ because we can choose $m$ different values for $a_i \in B$. A pair for a single value $y_i$ may be chosen arbitrarily for every $1 \le i \le k$. There are $m^k$ pairs that fit the values $y_i$.
 
-From the previous theorem we have that probability of event $h(x_1) = a_1, \dots, h(x_k) = a_k$ and $i(x_1) = b_1, \dots, i(x_k) = b_k$ is less than $\frac{1}{m^{2k}}$. Now we see that $P(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see the system $F$ is strongly $k$-universal.
+From the previous theorem we have that probability of the event \[ h(x_1) = a_1, \dots, h(x_k) = a_k \text{ and } i(x_1) = b_1, \dots, i(x_k) = b_k \] is less than $\frac{1}{m^{2k}}$. Now we see that $\Prob(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see the system $F$ is strongly $k$-universal.
 \end{proof}
 
 \begin{corollary}
