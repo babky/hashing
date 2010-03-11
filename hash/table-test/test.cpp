@@ -1,7 +1,7 @@
 #include "table_test.h"
 #include <iostream>
 
-int main(size_t, const char **) {
+int main(int, const char **) {
 	using namespace Hash;
 	using namespace Hash::Utils;
 	using namespace Hash::Tests;

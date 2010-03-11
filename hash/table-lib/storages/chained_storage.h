@@ -12,8 +12,6 @@ namespace Hash { namespace Storages {
 	 */
 	template <typename T, typename Comparer, typename Hash>
 	class ChainedStorage : public Storage<T, Comparer, Hash> {
-		friend void swap(ChainedStorage & a, ChainedStorage & b);
-
 	public:
 		/**
 		 * Storage type used.

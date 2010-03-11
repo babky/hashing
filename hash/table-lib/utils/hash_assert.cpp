@@ -15,6 +15,10 @@ const char * AssertException::what(void) const throw() {
 	return this->message.c_str();
 }
 
+
+AssertException::~AssertException(void) throw() {
+}
+
 void Hash::Utils::hash_assert(bool status, string message, string file, size_t line) {
 	if (!status) {
 		throw AssertException(message, file, line);

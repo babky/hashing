@@ -3,6 +3,7 @@
 
 #include <boost/integer_traits.hpp>
 #include <utils/hash_assert.h>
+#include <utils/static_random_generator.h>
 #include <utils/hash_math.h>
 #include <utils/rehash_observer.h>
 
@@ -107,7 +108,7 @@ namespace Hash {
 		}
 
 		UniversalFunctionLinearMap<HashType> & operator =(const UniversalFunctionLinearMap<HashType> & rhs) {
-			typename UniversalFunctionLinearMap<HashType> cpy = rhs;
+			UniversalFunctionLinearMap<HashType> cpy = rhs;
 			swap(*this, cpy);
 			return *this;
 		}

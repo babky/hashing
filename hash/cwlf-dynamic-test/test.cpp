@@ -45,7 +45,7 @@ void LengthTest::runTest(void) {
 	cout << static_cast<double>(maxChainLength) / TEST_COUNT << "\n";
 }
 
-int main(size_t, const char **) {
+int main(int, const char **) {
 	LengthTest t;
 	t.runTest();
 

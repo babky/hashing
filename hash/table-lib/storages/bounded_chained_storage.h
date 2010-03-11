@@ -15,6 +15,10 @@ namespace Hash { namespace Storages {
 	template <typename T, typename Comparer, typename Hash>
 	class BoundedChainedStorage : public ChainedStorage<T, Comparer, Hash> {
 	public:
+		typedef Comparer EqualityComparer;
+		
+		typedef T HashType;
+		
 		void init_stats(void) {
 			this->currentStats.setTableLength(this->getTableSize());
 		}
@@ -23,7 +27,7 @@ namespace Hash { namespace Storages {
 		 * Chained storage c-tor.
 		 */
 		BoundedChainedStorage(void):
-		  ChainedStorage() {
+		  ChainedStorage<T, Comparer, Hash>() {
 			  this->init_stats();
 		}
 
@@ -35,7 +39,7 @@ namespace Hash { namespace Storages {
 		 */
 		explicit BoundedChainedStorage(const EqualityComparer & comparer, 
 				size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  ChainedStorage(comparer, tableLength) {
+		  ChainedStorage<T, Comparer, Hash>(comparer, tableLength) {
 			  this->init_stats();
 		}
 
@@ -44,27 +48,27 @@ namespace Hash { namespace Storages {
 		 *
 		 * @param storage Copied storage.
 		 */
-		BoundedChainedStorage(const BoundedChainedStorage & storage):
-		  ChainedStorage(storage){
+		BoundedChainedStorage(const BoundedChainedStorage<T, Comparer, Hash> & storage):
+		  ChainedStorage<T, Comparer, Hash>(storage){
 			this->currentStats = storage.currentStats;
 		}
 
 		/**
 		 * Assignment operator.
 		 */
-		BoundedChainedStorage & operator = (const BoundedChainedStorage & storage) {
-			this->ChainedStorage::operator =(storage);
+		BoundedChainedStorage & operator = (const BoundedChainedStorage<T, Comparer, Hash> & storage) {
+			this->ChainedStorage<T, Comparer, Hash>::operator =(storage);
 			this->currentStats = storage.currentStats;
 			return *this;
 		}
 
 		void insert(const T & item, HashType hash) {
-			this->ChainedStorage::insert(item, hash);
+			this->ChainedStorage<T, Comparer, Hash>::insert(item, hash);
 			this->currentStats.refineChain(this->getChainLength(hash));
 		}
 
 		bool remove(const T & item, HashType hash) {
-			bool retVal = this->ChainedStorage::remove(item, hash);
+			bool retVal = this->ChainedStorage<T, Comparer, Hash>::remove(item, hash);
 
 			if (retVal) {
 				this->currentStats.removeElement();
@@ -94,7 +98,7 @@ namespace Hash { namespace Storages {
 		 */
 		void computeStatistics(Utils::StorageStatistics & stats, bool recompute) {
 			if (recompute) {
-				this->ChainedStorage::computeStatistics(stats);
+				this->ChainedStorage<T, Comparer, Hash>::computeStatistics(stats);
 			} else {
 				this->computeStatistics(stats);
 			}
