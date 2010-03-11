@@ -313,7 +313,7 @@ Let $B$ denote the set of buckets of a hash table of size $m$, $|B| = m$. Let bo
 \begin{proof}
 To prove the theorem we are given different elements $x_1, \dots, x_k$ that are supposed to be mapped onto prescribed images $y_1, \dots, y_k$. For every $y_i$ there are exactly $m$ pairs $(a_i, b_i)$ such that $o(a_i, b_i) = y_i$ because we can choose $m$ different values for $a_i \in B$. A pair for a single value $y_i$ may be chosen arbitrarily for every $1 \le i \le k$. There are $m^k$ pairs that fit the values $y_i$.
 
-From the previous theorem we have that probability of the event \[ h(x_1) = a_1, \dots, h(x_k) = a_k \text{ and } i(x_1) = b_1, \dots, i(x_k) = b_k \] is less than $\frac{1}{m^{2k}}$. Now we see that $\Prob(f(x_i) = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see the system $F$ is strongly $k$-universal.
+From the previous theorem we have that probability of the event \[ h(x_1) = a_1, \dots, h(x_k) = a_k \text{ and } i(x_1) = b_1, \dots, i(x_k) = b_k \] is less than $\frac{1}{m^{2k}}$. Now we see that $\Prob{f(x_i} = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see the system $F$ is strongly $k$-universal.
 \end{proof}
 
 \begin{corollary}
