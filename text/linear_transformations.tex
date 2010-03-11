@@ -1,9 +1,14 @@
 \chapter{Systems of linear maps between vector spaces}
-The systems of linear transformations between vector spaces are studied in the ongoing text. The reason is simple; they allow us to construct the model of universal hashing where the worst case time for the find operation can be guaranteed without any assumptions on the hashed set $S$. 
+In this and the following chapter we concentrate mainly on system of linear transformations between vector spaces over field $\mathbb{Z}_2$. The reason is simple, they allow us to construct a model of universal hashing where the amortised worst case time of all operations can be guaranteed without any assumptions on the hashed set $S$. 
 
-Main result regarding the~systems of linear maps is the~upper bound on the~length of the~longest probe sequence. The~proof of this property does not come from the~ideas already mentioned in this text. The~approach used here does not try to compute the~probability of collision of $k$-elements directly. Thus we will not exploit the~attributes of a~$2$-strongly universal system. Instead we concentrate and work with special properties of this unique system.
+Main result regarding systems of linear maps is the~upper bound on the~length of the~longest probe sequence. Proof of this property does not come from the~idea showed in the previous chapter. The~approach used here does not try to compute the~probability of collision of $k$-elements directly and does not exploit the~attributes of strongly universal systems. Instead we concentrate and work with special properties of this unique system.
 
-In the~following section we consider the~vector spaces over the~$Z_2$ field only. Also the scheme supposes hashing $n \log n$ elements into a~hash table of size $n$ slots. Under these assumptions we can prove one very important property of this model; the~length of the~longest chain is bounded by function in $O(\log n \log \log n)$. If vector spaces are over other finite fields we can not expect such good properties \cite{DBLP:journals/jacm/AlonDMPT99}.
+In the~following sections we limit to the~vector spaces over the~field~$Z_2$ only. The theorems also suppose hashing $n \log n$ elements into a~hash table of size $n$ slots. The results are used for hashing $n$ elements only and then improved for just $n$ elements. Under these limitations we can show one very important property of this model; the~length of the~longest chain is bounded by function in $O(\log n \log \log n)$. If vector spaces are over other finite fields we can not expect such good properties \cite{DBLP:journals/jacm/AlonDMPT99}.
+
+\begin{section}{Models of uniform choice of linear transformation}
+\end{section}
+
+\begin{section}{Important facts from linear algebra}
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
@@ -35,34 +40,56 @@ v \in T^{-1}(x)
 \end{displaymath}
 \end{proof}
 
+\end{section}
+
 All of the~following claims in this section are taken from \cite{DBLP:journals/jacm/AlonDMPT99}. It is convenient to show the~original proofs and then modify them according to our future needs.
 
 \begin{lemma}
 \label{lemma-choose-random-vector}
-If $V$ is a~finite vector space, $A$ is a~subset of $V$, $\alpha = 1 - \frac{|A|}{|V|}$. Then for a~random uniformly chosen vector $v \in V$ holds:
+Let $V$ be a~finite vector space and $A$ be its subset. Define $\mu = 1 - \frac{|A|}{|V|}$ as inverse density of set $A$ in vector space $V$. Let $v \in V$ be a random uniformly chosen vector independent of $A$. Then
 \begin{displaymath}
-E (1 - \frac{|A \cup (v + A)|}{|V|}) = \alpha^2 \textit{.}
+\Expect{1 - \frac{|A \cup (v + A)|}{|V|}} = \mu^2
 \end{displaymath}
-The~expectation is taken through all the~possible choices of $v$.
-\end{lemma}
+where the~expectation is taken throughout all possible choices of $v \in V$.
+
 \begin{proof}
-We choose two vectors $u$ and $v$ uniformly and independently from the~space $V$. They can also be equal. Probability of event $u \notin A$ and $u \notin v + A$ is equal to $\alpha$. These two events are independent and by stating the~following we will finish the~proof of this lemma.
+Let $X_v = |A \cup (v + A)|$ be a random variable for a random uniformly chosen vector $u \in V$. We need to compute $\Expect{X_v}$ taken through all choices of $v \in V$.
+\[
+\Expect{X_v} = \displaystyle\sum_{v \in V} |A \cup (v + A)| . \Prob{v \text{ is chosen}} = \displaystyle\sum_{v \in V} \frac{|A \cup (v + A)|}{|V|}
+\]
+
+If we uniformly choose another vector $u \in V$ independent of $v$ then from standard definition of probability we obtain
+\[
+\Prob{u \in A~\vee u \in v + A} = \frac{|A \cup (v + A)|}{|V|} \text{.}
+\]
+
+Because $|A| = |v + A| = |V|(1 - \mu)$ probabilities of both events $u \notin A$ and $u \notin v + A$ are equal to $\mu$. These events are independent because vectors $u$ and $v$ are chosen independently of each other. So we can directly compute the above probability.
+\[
+\Prob{u \in A \vee u \in v + A} = 1 - \Prob{u \notin A \wedge\ u \notin v + A} = 1 - \mu^2
+\]
+
+From the above fact we express $||A \cup (v + A)|}{|V||$.
 \begin{displaymath}
-\begin{split}
-|A \cup (v + A)| 
-	& = \sum_{u \in V} 1 . P(u \in a~\vee u \in v + A) \\ 
-	& = \sum_{u \in V} 1 - P(u \notin a~\wedge u \notin v + A) \\ 
-	& = |V| (1 - \alpha ^ 2)
-\end{split}
+|A \cup (v + A)| = |V| \Prob{u \in A~\vee u \in v + A} = |V|(1 - \mu^2)
 \end{displaymath}
+
+Now we substitute the just obtained result into the computation of $\Expect(X_v)$.
+\[
+\Expect{X_v} = \displaystyle\sum_{v \in V} \frac{|A \cup (v + A)|}{|V|}
+\]
+
+ and prove the lemma.
 \begin{displaymath}
 \begin{split}
-E (1 - \frac{|A \cup (v + A)|}{|V|}) 
+\Expect{1 - \frac{|A \cup (v + A)|}{|V|}}
+	& = 1 - \frac{\Expect{X_v}}{|V|}
+	& = 1 - \frac{\Expect{X_v}}{|V|}
 	& = \frac{\sum\displaylimits_{v \in V}(1 - \frac{|A \cup (v + A)|}{|V|})}{|V|} \\
-	& = \frac{\sum\displaylimits_{v \in V}\alpha ^ 2}{|V|}
+	& = \frac{\sum\displaylimits_{v \in V}\mu ^ 2}{|V|}
 \end{split}
 \end{displaymath}
 \end{proof}
+\end{lemma}
 
 The following lemma is a~very technical one and is used to estimate the~probabilities of some events related to linear maps.
 \begin{lemma}

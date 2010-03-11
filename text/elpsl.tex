@@ -30,7 +30,7 @@ When taking the probability into an account we define random variables $\psl$ an
 \begin{definition}[Random variables of probe sequence length and longest probe sequence length]
 Let random variable $\psl(a)$ denote the size of the bucket $a \in A$. Its values are from $\mathbb{N}$ and probability density function is defined as:
 \[
-\Prob(\psl(a) = k) = \frac{\sum_{h \in H} \Indicator(\psl(a, h) = k)}{|H|}\text{.}
+\Prob{\psl(a) = k} = \frac{\sum_{h \in H} \Indicator(\psl(a, h) = k)}{|H|}\text{.}
 \]
 
 Random variable $\lpsl$ denoting the maximal size of a bucket in a hash table is defined as:
@@ -43,37 +43,37 @@ Random variable $\lpsl$ denoting the maximal size of a bucket in a hash table is
 \begin{section}{Estimating length of the longest chain in the standard model of hashing}
 The standard result of hashing is the $O\left(\frac{\log n}{\log \log n}\right)$ bound on the length of the longest chain for the hashing. We can use computations in its proof to show the same bound holds for universal hashing with strongly $\omega$-universal class of functions. In order to prove this result we need to estimate the probability of collision of $k$ elements. Simplest model of hashing uses an assumption that is not necessarily satisfied; hashed elements are independently and uniformly chosen from the universe $U$. This is enough to bypass the problem. 
 
-The above definitions are for models of universal hashing however they are easy to understand with standard hashing, too. Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$. The simplest model assumes usage of just one hash function. It is parametrised by a choice of the hashed set $S \subset U$ instead. Since used hash function uniformly distributes the elements of the universe across the hash table we also do need the bucket parameter of variable $\psl$. For every pair of buckets $a, b \in A$ random variables have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob(\psl(a) = k) = \Prob(\psl(b) = k) \text{.}\] In this chapter $m$ denotes the size of the hash table $A$ and $n$ is the size of the hashed set $S$.
+The above definitions are for models of universal hashing however they are easy to understand with standard hashing, too. Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$. The simplest model assumes usage of just one hash function. It is parametrised by a choice of the hashed set $S \subset U$ instead. Since used hash function uniformly distributes the elements of the universe across the hash table we also do need the bucket parameter of variable $\psl$. For every pair of buckets $a, b \in A$ random variables have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{.}\] In this chapter $m$ denotes the size of the hash table $A$ and $n$ is the size of the hashed set $S$.
 
 The probability estimate for the variable $\lpsl$ is simply obtained from the probability estimate of $\psl$ as:
 \begin{displaymath}
-\Prob(\lpsl \geq i) \leq m \Prob(\psl(a) \geq i \text{ for any } a \in A)
+\Prob{\lpsl \geq i} \leq m \Prob{\psl(a) \geq i \text{ for any } a \in A}
 \end{displaymath}
 
 \begin{displaymath}
 \begin{split}
-\Expect \lpsl
-	& = \displaystyle \sum_{i=0}^{\infty} i \Prob(\lpsl = i) \\
-	& = \displaystyle \sum_{i = 0}^{\infty} i (\Prob(\lpsl \geq i) - \Prob(\lpsl \geq i + 1)) \\ 
-	& = \displaystyle \sum_{i = 0}^{\infty} \Prob(\lpsl \geq i)
+\Expect{\lpsl}
+	& = \displaystyle \sum_{i=0}^{\infty} i \Prob{\lpsl = i} \\
+	& = \displaystyle \sum_{i = 0}^{\infty} i (\Prob{\lpsl \geq i} - \Prob{\lpsl \geq i + 1}) \\ 
+	& = \displaystyle \sum_{i = 0}^{\infty} \Prob{\lpsl \geq i}
 \end{split}
 \end{displaymath}
 
 And thus we have:
 \begin{displaymath}
-\Expect \lpsl \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob(\psl \geq i)
+\Expect{\lpsl} \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob{\psl \geq i}
 \end{displaymath}
 
 From the assumption of independent and uniform choice of hashed elements from the universe we can estimate the probability of collision as binomial random variable. The event that an element is hashed into a prescribed bucket is $\frac{1}{m}$.
 \begin{displaymath}
-\Prob(\psl \geq i) \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
+\Prob{\psl \geq i} \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
 \end{displaymath}
 Remark that this estimate holds only for universes substantially larger than hashed sets. The selection of the first element changes the probability of choice of the second element and so on.
 
 We can finish the estimate of the variable $\lpsl$ by computing:
 \begin{displaymath}
 \begin{split}
-\Expect \lpsl	& \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob(\psl \geq i) \\
+\Expect{\lpsl}	& \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob{\psl \geq i} \\
 		& \leq \displaystyle \sum_{i = 0}^{\infty} m \min\left(1, \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}\right) \\
 		& = O\left(\frac{\log n}{\log \log n}\right)
 \end{split}
@@ -151,8 +151,8 @@ M_{\geq k} \neq \emptyset & \Leftrightarrow  M_{= k} \neq \emptyset \\
 We choose any arbitrary element $\tilde{x} \in U$. If the chain of the selected element $\tilde{x}$ has $\psl(\tilde{x}, h) \geq k$ then there must exists a subset $Y$ of hashed set $S \subset U$ such that used function $h$ is constant on $Y$ and moreover $h(Y) = \{ \tilde{x} \}$. If $\psl(\tilde{x}, h) = k$ then set $Y$ must be maximal in the number of its elements; it may not be extended to a larger set hashed onto $\tilde{x}$. We can compute the probability density function of $\psl(\tilde{x})$ as:
 \begin{displaymath}
 \begin{split}
-\Prob(\psl(\tilde{x}) \geq k) & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-\Prob(\psl(\tilde{x}) = k) & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ is maximal} \})}{|H|} \\
+\Prob{\psl(\tilde{x}) \geq k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
+\Prob{\psl(\tilde{x}) = k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ is maximal} \})}{|H|} \\
 \end{split}
 \end{displaymath}
 
@@ -160,13 +160,13 @@ We add some remarks to clarify the motivation of the following calculations:
 \begin{itemize}
 \item Every chain is determined by a single element $\tilde{x}$ which is included in it.
 \item Probability estimate is always computed for a single set $S$ and probability space corresponds to a choice of hash function $h \in H$.
-\item We want to obtain an estimate $\Prob(\psl(\tilde{x}) \geq k) \leq p(A, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob(\lpsl(h) \geq k) \leq |A| p(A, U, H, |S|) \text{.} \] The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
+\item We want to obtain an estimate $\Prob{\psl(\tilde{x}) \geq k} \leq p(A, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl(h) \geq k} \leq |A| p(A, U, H, |S|) \text{.} \] The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
 \end{itemize}
 
 Lemma \ref{lemma-indicator-k-collision} allows us to estimate the probability of collision of more than $k$ elements.
 \begin{displaymath}
 \begin{split}
-\Prob(\psl(\tilde{x}) \geq k) 
+\Prob{\psl(\tilde{x}) \geq k}
 	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
 	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
 	& \leq \frac{\sum\displaylimits_{h \in H} |\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
@@ -178,7 +178,7 @@ Lemma \ref{lemma-indicator-k-collision} allows us to estimate the probability of
 Last estimate must be done from the properties of the class $H$. For example we can use strong $\omega$-universality.
 
 \begin{theorem}
-If $H$ is strongly $\omega$-universal system, then $\Expect \lpsl \in O\left(\frac{\log n}{\log \log n}\right)$.
+If $H$ is strongly $\omega$-universal system, then $\Expect{\lpsl} \in O\left(\frac{\log n}{\log \log n}\right)$.
 \end{theorem}
 \begin{proof}
 \begin{displaymath}
@@ -190,7 +190,7 @@ P(l^{\tilde{x}} \geq k)
 \end{split}
 \end{displaymath}
 
-Now we can carry on as in the case of standard model of hashing. The probability estimate of collision of $k$ elements is exactly the same and we gain the same result $\Expect \lpsl = O\left(\frac{\log n}{\log \log n}\right)$.
+Now we can carry on as in the case of standard model of hashing. The probability estimate of collision of $k$ elements is exactly the same and we gain the same result $\Expect{\lpsl} = O\left(\frac{\log n}{\log \log n}\right)$.
 \end{proof}
 
 Constructing small strongly $\omega$-universal systems is problematic. In this work we used systems of linear maps and their specific properties not related to strong universality to obtain an interesting upper bound on the variable $\lpsl$. This upper bound allowed us to guarantee worst case amortised time for every operation.
