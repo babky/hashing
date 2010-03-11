@@ -10,6 +10,8 @@ namespace Hash { namespace Utils {
 	public:
 		AssertException(std::string message, std::string file, size_t line);
 		const char * what(void) const throw();
+		
+		virtual ~AssertException(void) throw();
 
 	private:
 		std::string message;

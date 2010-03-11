@@ -10,10 +10,10 @@ include_directories ( .. ../../table-lib ${Boost_INCLUDE_DIRS} )
 
 link_directories ( ../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
 
-add_executable ( TableLengthTest ${SOURCES} )
+add_executable ( CWLFTest ${SOURCES} )
 
 target_link_libraries (
-    TableLengthTest
+    CWLFTest
     Table
     ${Boost_LIBRARIES}
 )

@@ -6,16 +6,16 @@
 
 namespace Hash { namespace Policies { namespace Rehash {
 
-	class GuaranteedRehashPolicy : RehashPolicy {
+	class GuaranteedRehashPolicy : public RehashPolicy {
 	public:
 		GuaranteedRehashPolicy(bool allowDelete = true);
 
-		inline virtual double getMinLoadFactor(void) const;
-		inline virtual double getMaxLoadFactor(void) const;
-		inline virtual size_t getMaxChainLength(size_t n) const;
+		double getMinLoadFactor(void) const;
+		double getMaxLoadFactor(void) const;
+		size_t getMaxChainLength(size_t n) const;
 		
-		inline virtual bool needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo);
-		inline virtual bool needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo);
+		bool needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo);
+		bool needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo);
 
 	private:
 		bool allowDelete;

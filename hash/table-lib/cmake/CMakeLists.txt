@@ -6,8 +6,12 @@ link_directories ( ${Boost_LIBRARY_DIRS} )
 
 set(SOURCES
     ../utils/storage_statistics.cpp
+    ../utils/hash_math.cpp
     ../utils/static_random_generator.cpp
+    ../utils/hash_assert.cpp
+    ../utils/rehash_observer.cpp
     ../policies/rehash_policy.cpp
+    ../policies/guaranteed_rehash_policy.cpp
     ../policies/worst_case_rehash_policy.cpp
     ../storage.cpp
 )

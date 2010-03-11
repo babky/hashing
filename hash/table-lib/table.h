@@ -313,7 +313,7 @@ namespace Hash {
 		 * @return Current hash function.
 		 */
 		const HashFunction & getFunction(void) const {
-			return const_cast<Table<T, Comparer, Function, Storage, LoadFactorBoundsRehashPolicy> *> (this)->getFunction();
+			return const_cast<Table<T, Comparer, Function, Storage, RehashPolicy> *> (this)->getFunction();
 		}
 
 	private:
