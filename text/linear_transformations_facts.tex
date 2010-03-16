@@ -1,0 +1,53 @@
+\begin{section}{Definitions and facts from linear algebra}
+\begin{definition}
+Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $v \in V$ define set $v + A$ as
+\[ v + A = \{ v + a \setdelim a \in A \} \text{.} \] 
+\end{definition}
+
+\begin{lemma}
+\label{lemma-linear-transformation-domain-distribution}
+Let $T: Z_2^u \rightarrow Z_2^t$, $u \geq t$ be an~onto linear map and vector $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
+\end{lemma}
+\begin{proof}
+At first remark that $T^{-1}(0)$ is a~subspace of~space $Z_2^u$.
+
+Set $T^{-1}(0)$ contains zero.
+\[ T(0) = 0 \]
+
+It is closed under addition.
+\[
+\begin{split}
+u, v \in T^{-1}(0) 
+	& \Rightarrow T(u) = 0, T(v) = 0 \\ 
+	& \Rightarrow T(u + v) = T(u) + T(v) = 0 \\ 
+	& \Rightarrow u + v \in T^{-1}(0) \\
+\end{split}
+\]
+
+It is closed under scalar multiplication.
+\[
+\begin{split}
+\delta \in \{0, 1\} \wedge u \in T^{-1}(0) 
+	& \Rightarrow T(\delta u) = \delta T(u) = \delta 0 = 0 \\
+	& \Rightarrow \delta u \in T^{-1}(0) \\
+\end{split}
+\]
+
+$T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ have the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$. This is also the one to one map between $T^{-1}(0)$ and $T^{-1}(x)$.
+\begin{displaymath}
+\begin{split}
+v \in T^{-1}(0) 
+	& \Rightarrow T(u+v) = T(u) + T(v) = x + 0 = x  \\
+	& \Rightarrow u + T^{-1}(0) \subseteq T^{-1}(x)
+\end{split}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+v \in T^{-1}(x) 
+	& \Rightarrow T(v-u) = T(v) - T(u) = x - x = 0 \\
+	& \Rightarrow v - u \in T^{-1}(0) \\
+	& \Rightarrow T^{-1}(x) \subseteq u + T^{-1}(0)
+\end{split}
+\end{displaymath}
+\end{proof}
+\end{section}
