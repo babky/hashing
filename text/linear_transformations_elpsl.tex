@@ -1,0 +1,145 @@
+\begin{section}{Original result}
+\begin{theorem}
+\label{theorem-n-logn-to-n}
+Let $H$ be the system of all linear mappings between two vector spaces over the field $Z_2$. The expected length of the longest chain when hashing $n \log n$ elements into the table of size $n$ is $O(\log n \log \log n)$.
+\end{theorem}
+\begin{proof}
+As in the previous proof we will factor a linear transformation $h \in H$, $h: D \rightarrow B$. We use the vector space $A = Z_2^l$ pre $l \geq \log n$ and two functions $h_1: D \rightarrow A$ and $h_2: a~\rightarrow B$ which is surjective. Both linear functions $h_1$ and $h_2$ are selected uniformly. This implies the uniform choice of the transformation $h = h_1 \circ h_2$.
+
+The idea presented here is to estimate the probability $P(lpsl > t)$ by using the other somehow unnatural event $E_2$. Its probability is then easy to find. The probability of the event $E_1 \equiv lpsl > t$ can be simply determined by discovering the relation between them. We will remark the following fact. When the $E_1$ is true with a high probability the event $E_2$ also appears.
+
+\begin{itemize}
+\item $E_1$ denotes the existence of a chain of length at least $t$ elements. Formally written $\exists \alpha \in B: | h^{-1}(\alpha) \cap S | > t$.
+\item $E_2$ is equivalent to existence of a vector $\alpha \in B$ such that $h_2^{-1}(\alpha) \subseteq h_1(S)$.
+\end{itemize}
+
+\begin{remark}
+\label{remark-e2-probability}
+If $d = \frac{2^l}{n \log n} > 1$ then we have:
+\begin{displaymath}
+P(E_2) \leq d^{-\log d - \log \log d}\textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+First we should point out one equivalent definition of $E_2$.
+\begin{displaymath}
+h_2^{-1}(\alpha) \subseteq h_1(S) \Leftrightarrow h_2(A - h_1(S)) \neq B \textit{.}
+\end{displaymath}
+
+Event $E_2$ holds if and only if there is an element $\alpha$ which inverse image $h_2^{-1}(\alpha)$ is a subset of image $S$ by $h_1$. Then equivalently the function $h_2$ can not display $A - h_1(S)$ onto the whole set $B$.
+
+Now we use the theorem \ref{theorem-linear-function-set-onto} for the function $h_2$, set $h_1(A)$ and target space $B$. Because $\frac{2^l}{n \log n} > 1$ holds the assumptions of the \ref{theorem-linear-function-set-onto} are satisfied. Corresponding inverse density $\alpha = 1 - \frac{|A| - |h_1(S)|}{|A|} = \frac{|h_1(S)|}{|A|}$.
+\begin{displaymath}
+\alpha = \frac{|h_1(S)|}{|S|} \leq \frac{|S|}{|A|} = \frac{1}{d}
+\end{displaymath}
+Because $d = \frac{2^l}{n \log n} > 1$:
+\begin{displaymath}
+\log d = l - \log n - \log \log n
+\end{displaymath}
+\begin{displaymath}
+P(E_2) \leq \alpha^{l - \log n - \log \log n + \log \log \left(\frac{1}{\alpha}\right)} = \alpha ^ {\log d + \log \log \left(\frac{1}{\alpha}\right)} \leq d^{-\log d - \log \log d}
+\end{displaymath}
+\end{proof}
+
+Follows the similar lemma for the conditional probability.
+\begin{remark}
+\label{remark-prob-t-length-chain}
+If $t > c_{\frac{1}{2}}{\frac{2^l}{n}}\log\left(\frac{2^l}{n}\right)$ then for the conditional probability of events holds:
+\begin{displaymath}
+P(E_2 | E_1) \geq \frac{1}{2} \textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+Suppose that we have a given mapping $h$ and the event $E_1$ holds. There must be a subset $S' \subseteq S$ consisting of at least $t$ elements mapped by $h$ to a single element $\alpha \in Z_2^{\log n}$. We fix this element and define $D' = h^{-1}(\alpha)$ and $A' = h_2^{-1}(\alpha)$. 
+
+Consider the distribution of all transformations $h_1$ which satisfy the equation $h = h_1 \circ h_2$. By restricting $h_1$ to the set $D'$ we obtain a affine linear transformation onto the set $A'$. The uniform selection of $h_1$ corresponds to the uniform selection of all transformations from $D'$ onto $A'$.
+
+$E_2$ is certainly present whenever $A' \subseteq h_1(S)$ occurs. The size of the set $A'$ is exactly $\frac{2^l}{n}$, lemma \ref{lemma-linear-transformation-domain-distribution}. The cardinality of  $S' = D' \cap S$ is at least $t = \left\lceil c_{\frac{1}{2}}\left(\frac{2^l}{n}\right)\log\left(\frac{2^l}{n}\right)\right\rceil$ since we supposed the presence of $E_2$. The theorem \ref{theorem-set-onto-by-linear-transform} gives us the lower bound $\frac{1}{2}$ on the probability of covering the whole set $A'$ by a set of size at least $t$. 
+\end{proof}
+
+Now we must bound the probability of existence of a long chain.
+\begin{remark}
+There is a constant $C$ such that for all $r > 4$ in the scheme of hashing $S \subset D$, $|S| = n \log n$ using the hashing table $B = Z_2^{\log n}$ the following holds:
+\begin{displaymath}
+P(lpsl > rC \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
+\end{displaymath}
+\end{remark}
+\begin{proof}
+The proof is a straightforward use of previous remarks.
+\begin{displaymath}
+\begin{split}
+l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + 1 \right\rfloor \\
+t & = 4c_{\frac{1}{2}}r\log n \log \log n \textit{.}
+\end{split}
+\end{displaymath}
+
+The condition of the remark \ref{remark-e2-probability} is certainly fulfilled:
+\begin{displaymath}
+d = \frac{2^l}{n \log n} \geq \frac{2^{\log n + \log \log n + \log r - \log \log r}}{n \log n} = \frac{r}{\log r} > 1\textit{.}
+\end{displaymath}
+
+The following inequality helps us to prove the assumption of the remark \ref{remark-prob-t-length-chain}:
+\begin{displaymath}
+\frac{2^l}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{2 r\log n}{\log r}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
+	& < c_{\frac{1}{2}} 2 \left(\log n\right) \left(\frac{r}{\log r}\right)\left(2\log\log n \log r\right) \\
+	& = 4 c_{\frac{1}{2}} r \log n \log \log n \\
+	& = t
+\end{split}
+\end{displaymath}
+
+The probability $P(E_2 | E_1) \geq \frac{1}{2}$ is obtained for the given values of $l$ and $t$. This implies $P(E_1) \leq 2 P(E_2)$ which gives us the $E_1$ event's probability as:
+\begin{displaymath}
+\begin{split}
+P(E_1) 
+	& \leq 2d^{-\log d - \log \log d} \\
+	& \leq 2\left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
+\end{split}
+\end{displaymath}
+
+The event $E_1$ denotes the existence of a chain of size at least $t$ elements. There is a chain longer than $t$ in a hash table if and only if the longest chain is longer than $t$. This proof completed is by putting $C = 4c_{\frac{1}{2}}$.
+\end{proof}
+
+Because of the previous claim we simply find the expected longest chain length, denote $K = C\log n \log \log n$.
+\begin{displaymath}
+\begin{split}
+E lpsl 
+	& = \int\limits_0^{\infty} P(lpsl > t) dt \\
+	& \leq 4K + \int\limits_{4K}^\infty P(lpsl > t) dt \\
+	& = 4K + K \int\limits_4^\infty P(lpsl > tK) dt \\
+	& \leq 4K + K \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \\
+	& = K(4 + I) = O(K) = O(\log n \log \log n) \\
+I 	& = \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}
+\end{split}
+\end{displaymath}
+\end{proof}
+
+For the practical use the multiplicative constant $4C(4 + I)$ is also important. In our proofs we neglected its estimation and we only obtained a good asymptotic growth which is negated by its great value. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ the constant $c_\epsilon$ equals $4 ^ {17}$ when using the original estimate. This value is too big for a practical use. Our next goal is to show a better constant's estimate and explore the dependency of the longest chain on load factor of the hash table.
+\end{section}
+
+\section{Expected case when rehashing}
+We already showed that $P(lpsl > 2C \log n \log \log n)$ is less than $\frac{1}{2}$. This fact is obtained by a direct use of the Markov inequality. This means that less than half of functions create longest chains longer than $2C \log n \log \log n$. This ends by rehashing of the whole table.
+\begin{displaymath}
+\begin{split}
+|\lbrace h \in H \mid \textit{ h does not create a long chains} \rbrace| 
+	& = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H|  \\
+	& \geq \frac{|H|}{2} \\
+\end{split}
+\end{displaymath}
+
+Regarding the fact that the function is chosen uniformly and not suitable are discarded we still have an uniform selection. We used a smaller function system; note that the restriction here is done by using the information about the hashed set.
+\begin{displaymath}
+\begin{split}
+P(h(x) = h(y)) 
+	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \rbrace |}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
+	& \leq \frac{2 |\lbrace h \in H \mid h(x) = h(y) \rbrace}{|H|} \\
+	& \leq 2 \frac{|H|}{m |H|} = \frac{2}{m}
+\end{split}
+\end{displaymath}
+
+The last equality is implied by $1$-universality of systems of linear transformations. Similar restrictions of the other universal systems may be used. For such systems probability of collision of two (or more) elements is estimated by their strong $k$-universality or $c$-universality.
+
+The previous computation shows us that the expected chain length is still constant, at most it can be doubled. Of course by selecting the greater length of longest chain we will omit less mappings. Thus we obtain better expected results for the find operation. But the warranty for the worst case is adequately worsened.

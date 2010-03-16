@@ -1,0 +1,253 @@
+\begin{section}{Probabilistic properties of the system of linear maps}
+
+Many of the~following claims in this section are taken from \cite{DBLP:journals/jacm/AlonDMPT99}. It is convenient to show the~original proofs and then modify them according to our future needs.
+
+\begin{lemma}
+\label{lemma-choose-random-vector}
+Let $V$ be a~finite vector space and $A$ be its subset. Define $\mu = 1 - \frac{|A|}{|V|}$ as inverse density of set $A$ in vector space $V$. Let $v \in V$ be a random uniformly chosen vector independent of $A$. Then
+\begin{displaymath}
+\Expect{1 - \frac{|A \cup (v + A)|}{|V|}} = \mu^2
+\end{displaymath}
+where the~expectation is taken throughout all possible choices of $v \in V$.
+
+\begin{proof}
+To simplify further computations define $X_v = |A \cup (v + A)|$ as a random variable taken throughout random uniform choice of vector $v \in V$. The toughest part is to compute $\Expect{X_v}$.
+\[
+\Expect{X_v} = \displaystyle\sum_{v \in V} |A \cup (v + A)| . \Prob{v \text{ is chosen}} = \displaystyle\sum_{v \in V} \frac{|A \cup (v + A)|}{|V|}
+\]
+
+Size of set $|A \cup (v + A)|$ can be expressed using indicator function.
+\[
+|A \cup (v + A)| = \displaystyle\sum_{u \in V} I(u \in A \vee u \in (v + A)) \\
+\]
+
+Now notice if $u \in A$ there are exactly $|V|$ vectors that satisfy the above condition. So we have found first $|V||A|$ choices. For $u \notin A$ and $a \in A$ there is exactly one vector $v \in V$ such that $a + v = u$. And the remaining $|A|(|V| - |A|)$ choices are discovered. Thus 
+\[ 
+\begin{split}
+|\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}| 
+	& = |A|(|V| - |A|) + |V||A| \\
+	& = 2|V||A| - |A|^2 \text{.} \\
+\end{split}
+\]
+
+Substituting into the definition of $\Expect{X_v}$ and rewriting sums into the just computed size of a suitable set.
+\[
+\begin{split}
+\Expect{X_v} 
+	& = \frac{\sum_{v \in V} \sum_{u \in V} I(u \in A \vee u \in (v + A))}{|V|}  \\
+	& = |\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}| \\ 
+	& = \frac{2|V||A| - |A|^2}{|V|} \\
+\end{split}
+\]
+
+Now finally compute the wanted expected value.
+\[
+\begin{split}
+\Expect{1 - \frac{|A \cup (v + A)|}{|V|}} 
+	& = 1 - \frac{\Expect{|A \cup (v + A)|}}{|V|}  \\
+	& = 1 - \frac{\Expect{X_v}}{|V|^2} \\
+	& = 1 - \frac{2|V||A| - |A|^2}{|V|^2} \\
+	& = \frac{|V|^2 + 2|V||A| - |A|^2}{|V|^2} \\
+	& = \left(1 - \frac{|A|}{|V|}\right)^2 = \mu^2 \\
+\end{split}
+\]
+\end{proof}
+\end{lemma}
+
+The following lemma is a~very technical one and is used to estimate the~probabilities of some events related to linear maps.
+\begin{lemma}
+\label{lemma-random-variable}
+For $1 \leq i \leq k$ the~$\alpha_i$ are random variables and $0 < \alpha_0 < 1$ is a~constant. For the~random variables, $1 \leq i \leq k$, we assume the~following:
+\begin{gather*}
+0 \leq \alpha_i \leq \alpha_{i - 1} \\
+E[ \alpha_i | \alpha_{i-1} \dots \alpha_1 ] = \alpha_{i-1}^{2} \\
+\end{gather*}
+Then for every constant $0 < t < 1$ we can estimate the~probability:
+\begin{displaymath}
+P(\alpha_k \geq t) \leq \alpha_0^{k - \log \log (\frac{1}{t}) + \log \log \left(\frac{1}{\alpha_0}\right)}
+\end{displaymath}
+\end{lemma}
+\begin{proof}
+For $k = 0$ the~claim is certainly true; we have just two cases to take into account. First if $t \leq \alpha_0$, the~exponent is negative:
+\begin{displaymath}
+-\log \log (\frac{1}{t}) + \log \log \left(\frac{1}{\alpha_0}\right) < 0
+\end{displaymath}
+The base, $\alpha_0$, is less then $1$ so our estimate of the~probability is above $1$. 
+
+In the~remaining possibility the~real probability is $0$ and our estimate is certainly positive.
+
+By using induction we suppose that the~lemma holds for $k$ and we will show its validity for $k + 1$. For convenience we set the~constant $c$ equal to $k - \log \log \left(\frac{1}{t}\right)$. The~expected result on the~right side is then:
+\begin{displaymath}
+\alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
+\end{displaymath}
+
+As in the~induction start we will rule out the~case if exponent is negative:
+\begin{displaymath}
+c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < 0\textit{.}
+\end{displaymath}
+Our estimate will be greater than $1$. 
+
+Now we will assume the~opposite inequality. At~this place the~proof needs to be split into a~few cases. At first we need to point out some useful remarks. The~estimated probability can certainly be computed by taking the~expectation when we fix the~random variable $\alpha_1$ in an~interval $[0, \alpha_0]$.
+\begin{displaymath}
+P(\alpha_{k+1} \geq t) = E_{\alpha_{k+1}} P(\alpha_{k+1} \geq t | \alpha_1) \leq E_{\alpha_{k+1}} f(\alpha_1)
+\end{displaymath}
+
+Where $f$ is defined for $0 < x < 1$ as:
+\begin{displaymath}
+f_0(x) = x ^ {c + \log \log \left(\frac{1}{x}\right)}
+\end{displaymath}
+\begin{equation}\label{f-definition}
+ f(x) = 
+  \begin{cases} 
+   \min(1, f_0(x)) & \text{if } 0 < x < 1 \\
+   1 & \text{if } x = 0
+  \end{cases}
+\end{equation}
+In the~function $f$ the~argument $x$ plays the~role of the~constant $\alpha_1$ since we fixed its value. There are only $k$ variables among variables $\alpha_{k+1}$ and $\alpha_1$. From the~induction hypothesis it follows that $f$ is the~upper bound for $P(\alpha_{k+1} \geq t | \alpha_1)$.
+
+For all $0 \leq x \leq \alpha_0$ we would like to have the~value of $f(x)$ upper bounded by the~expression $\frac{f_0(\alpha_0)x}{\alpha_0}$. In order to prove this property we define two values $x'$ and $x''$ both less than $1$:
+\begin{equation}
+x' = 2 ^ {-2 ^ {-c - 1}}
+\end{equation}
+\begin{equation}
+x'' = {x'}^2 = 2 ^ {-2 ^ {-c}}
+\end{equation}
+
+Now we should point out how the~mentioned bound is obtained.
+\begin{equation}
+f(x) = \frac{x f(x)}{x} \leq \frac{x f_0(\alpha_0)}{\alpha_0}
+\end{equation}
+The last inequality remains to be proved. We will bound the~function $\frac{f(x)}{x}$. 
+
+From the~derivation of the~function $\frac{f(x)}{x}$ in the~interval $(0, 1)$ we know that it is initially in the~increasing phase and then decreases.
+\begin{displaymath}
+\frac{f(x)}{x}' = \left(c + \log e - 1 + \log \log \left(\frac{1}{x}\right)\right)\frac{f_0(x)}{x}
+\end{displaymath}
+
+The point $x''$ lies in the~increasing phase:
+\begin{displaymath}
+c + \log e - 1 + \log \log \left(\frac{1}{x''}\right) = c + \log e - 1 - c > 0
+\end{displaymath}
+
+For every $x$, $x'' \leq x$ the~value of $f(x)$ is 1:
+\begin{equation}\label{f-x-double-prime}
+f_0(x'') = {x''}^{c + \log \log \left(\frac{1}{2^{-2^{-c}}}\right)} = {x''}^{c - c} = 1
+\end{equation}
+\begin{equation}\label{f-x-after-double-prime}
+f_0(x) = x^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x}\right)} \geq {x''}^{c - \log \log \left(\frac{1}{x''}\right)} = 1
+\end{equation}
+
+Finally from the~above claims we can conclude.
+\paragraph{The constant $\alpha_0$ is in the~increasing phase.}
+Since $\alpha_1 \leq \alpha_0$ the~values $x$ are certainly less then $\alpha_0$ and also are in the~increasing phase. Under these assumptions we immediately have:
+\begin{equation}
+\frac{f(x)}{x} \leq \frac{f(\alpha_0)}{\alpha_0}
+\end{equation}
+
+\paragraph*{The constant $\alpha_0$ is in the~decreasing phase.}
+\subparagraph*{Value $x$ is before $x''$.}
+\begin{equation}
+\frac{f(x)}{x} \leq \frac{f(x'')}{x''} \leq \frac{f_0(x'')}{x''} = \frac{1}{x''}
+\end{equation}
+The first inequality holds because $x$ is also in the~increasing phase. The~second comes from the~definition \eqref{f-definition} and the~equality is from the~\eqref{f-x-double-prime}.
+
+\subparagraph*{Value $x$ is greater than $x''$.}
+\begin{equation}
+\frac{f(x)}{x} \leq \frac{1}{x} \leq \frac{1}{x''}
+\end{equation}
+The first inequality follows from \eqref{f-x-after-double-prime}. And the~second is clear because $x \geq x''$.
+
+In this case we have bounded the~value $\frac{f(x)}{x}$ by $\frac{1}{x''}$. Next we will discuss the~upper bound on that value.
+\begin{equation}
+\frac{f_0(x')}{x'} = \frac{\left({2 ^ {-2 ^ {-c - 1}}}\right)^{-1}}{2 ^ {-2 ^ {-c - 1}}} = \frac{1}{\left({2 ^ {-2 ^ {-c - 1}}}\right)^2} = \frac{1}{x''}
+\end{equation}
+
+We have already ruled out the~case $x' < \alpha_0$ since the~exponent in the~proved claim would be negative:
+\begin{displaymath}
+c + 1 + \log \log \left(\frac{1}{\alpha_0}\right) < c + 1 + \log \log \left(\frac{1}{x'}\right) = c + 1 - c - 1 = 0
+\end{displaymath}
+
+So if the~$\alpha_0$ is in the~decreasing phase we must assume $x' \geq \alpha_0$. Because $\alpha_0$ is before $x'$ the~value $\frac{f(\alpha_0)}{\alpha_0}$ is still greater than $\frac{f(x')}{x'}$ and the~following holds:
+\begin{displaymath}
+\frac{1}{x''} = \frac{f_0(x')}{x'} \leq \frac{{f_0}(\alpha_0)}{\alpha_0}\textit{.}
+\end{displaymath}
+
+So in both cases, $\alpha_0$ is in increasing or decreasing phase, for every $0 \leq x \leq \alpha_0$ the~value $f(x) = \frac{f(x)x}{x} \leq \frac{f_0(\alpha_0)x}{\alpha_0}$. Finally we can estimate the~above mentioned expected value and probability.
+\begin{displaymath}
+P(\alpha_{k+1} \geq t) \leq E f(\alpha_1) \leq E \frac{f(\alpha_0)\alpha_1}{\alpha_0} = \frac{f_0(\alpha_0)}{\alpha_0}E \alpha_1 = \alpha_0 f(\alpha_0) = \alpha_0^{c + 1 + \log \log \left(\frac{1}{\alpha_0}\right)}
+\end{displaymath}
+
+\end{proof}
+
+\begin{theorem}
+\label{theorem-linear-function-set-onto}
+Let $A$ be a~subset of the~vector space $Z_2^u$ and $T: Z_2^u \rightarrow Z_2^t$ is a random uniformly chosen surjective linear map, $0 \leq t < u$. Denote $\alpha = 1 - \frac{|A|}{2^u} < 1$. Then:
+\begin{displaymath}
+P(T(A) \neq Z_2^t) \geq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}} \textit{.}
+\end{displaymath}
+\end{theorem}
+\begin{proof}
+Consider uniformly and independently selected $s$ vectors, $v_1, \dots, v_s$ from the~vector space $Z_2^u$. If $T$ is a~linear map that maps every $v_i$ to the $0$ vector; selected vectors are members of $Ker(T)$. However, they do not necessarily span the~whole kernel, they do not need to be linearly independent, actually they may be even equal. Because they are selected uniformly and independently we still can have $T$ selected uniformly. We can achieve this by extending its above definition. 
+
+Random and independent selection of linear transformations can be performed for example by using the following idea. One basis, canonical for example, of the~space $Z_2^t$ is fixed. The~number of all bases of the~space $Z_2^u$ is finite. One is uniformly chosen and is mapped by the~function $T$ on the~fixed basis of $Z_2^t$. This mapping has to be implemented carefully. First we find the~kernel, $u-t$ vector of the~chosen basis are sent to $0$. The~remaining $t$ vectors are permuted and then mapped.
+
+The selection of $s$ vectors gives us the~part of the~kernel in the~following manner. The~$i$-th vector is added to the~kernel if and only if it does not belong to the~$span(v_1, \dots, v_{i-1})$. This is certainly a~linearly independent set of dimension lower or equal to $s$. From Steinitz's theorem we know that it can be extended to a~basis. By mapping an~uniformly selected extension basis to the~target space one can obtain the~wanted function $T$.
+
+Define a~sequence $A_i = a~+ span(v_1, \dots, v_i)$ for $0 \leq i \leq s$, the~matching $\alpha_i = 1 - \frac{|A_i|}{2^u}$, $0 \leq \alpha_i \leq \alpha_{i-1}$. Since $A_{i} = a~+ span(v_1, \dots, v_i) = A_{i-1} \cup (A_{i-1} + v_i)$, by using lemma \ref{lemma-choose-random-vector} we already know that $E[\alpha_i | \alpha_{i-1}, \dots, \alpha_1] = \alpha_{i-1}^2$. And the lemma \ref{lemma-random-variable} implies:
+\begin{displaymath}
+\begin{split}
+P(\alpha_s \geq 2^{-t}) 
+	& \leq \alpha^{s - \log \log (\frac{1}{2^{-t}}) + \log \log (\frac{1}{\alpha})} \\
+	& = \alpha^{s - \log t + \log \log (\frac{1}{\alpha})} \\
+	& = \alpha^{u - t - \log t + \log \log (\frac{1}{\alpha})}
+\end{split}
+\end{displaymath}
+
+The event $\alpha_s \geq 2^{-t}$ is more probable than $T(A) \neq Z_2^t$. Whenever $\alpha_s$ is lower than $2^{-t}$ $T(A)$ must be the whole space $Z_2^t$. If there is a $x \in Z_2^t - T(A)$ the sets $T^{-1}(x)$ and $A_s$ are of sizes $2^{u-t}$ (lemma \ref{lemma-linear-transformation-domain-distribution}) and $(1 - \alpha_s)2^u > 2^u - 2^{u-t}$ respectively. We also know that they must be disjoint since $A_s = a + span(v_1, \dots, v_s)$ and $T(v_i) = 0$ implies $T(A) = T(A_s)$. Considering the sizes of the sets $T^{-1}(x)$, $A_s$ and the fact that they are disjoint we immediately obtain a contradiction.
+\end{proof}
+
+\begin{theorem}
+\label{theorem-set-onto-by-linear-transform}
+If $T: V -> Z_2^t$ is a random uniformly chosen linear map where $V$ is a finite vector space over $Z_2$. Then for every $0 < \epsilon < 1$ there is a costant $c_\epsilon > 0$ such that for every subset $A$ of the domain $V$, $|A| \geq c_\epsilon t 2^t$, the probability of mapping $A$ onto the whole space is high enough.
+\begin{displaymath}
+P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
+\end{displaymath}
+\end{theorem}
+\begin{proof}
+First we will define a factor vector space $W = Z_2^u$ where $u = \left\lceil \log (\frac{2|A|}{\epsilon}) \right\rceil$. Any linear map $T$ may be constructed by putting $T = T_0 \circ T_1$ where $T_0: V \rightarrow W$ and $T_1: W \rightarrow Z_2^t$ last is also surjective. For the uniform selection of function $T$ the mapping $T_1$ may be fixed and it is sufficient to uniformly selected a map $T_0$. However we also need a random mapping $T_1$ so it will be selected uniformly, too.
+
+Consider two vectors $v \neq w \in A$ which collide because of the function $T_0$, $T_0(v) = T_0(w)$. Because a system of linear function is $1$-universal the probability of the collision is $P(T_0(v) = T_0(w)) = \frac{1}{|W|}$. By using the law of total probability we get:
+\begin{displaymath}
+P(T(A) \neq A) = P(T(A) \neq A \wedge |T_0(A)| \leq \frac{|A|}{2}) + P(T(A) \neq A \wedge |T_0(A)| > \frac{|A|}{2})
+\end{displaymath}
+
+If the size $|T_0(A)| \leq \frac{|A|}{2}$ there must be at least $\frac{|A|}{2}$ collision. The expected number of collision caused by the transformation $T_0$ is:
+\begin{displaymath}
+\frac{\dbinom{|A|}{2}}{|W|}\textit{.}
+\end{displaymath}
+
+In the first case we will vanish the first part of conjunction. The probability estimate is obtained by applying the Markov inequality.
+\begin{displaymath}
+P(T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{2}) \leq P(|T_0(A)| \leq \frac{|A|}{2}) \leq \frac{2 \dbinom{|A|}{2}}{|A||W|} < \frac{|A|}{|W|} \leq \frac{\epsilon}{2}
+\end{displaymath}
+
+There is one case remaining - $|T(A)| > \frac{|A|}{2}$. By using the theorem \ref{theorem-linear-function-set-onto} for vector space $W$, set $|T_0(A)|$ and mapping $T_1$ we get:
+\begin{displaymath}
+\alpha = 1 - \frac{|T_0(A)|}{|W|} < 1 - \frac{|A|}{2|W|} = 1 - \frac{\epsilon |A|}{8|A|} \leq e^{-\frac{\epsilon}{8}}
+\end{displaymath}
+In the following the constant $c_\epsilon$ is chosen as $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$:
+\begin{align*}
+P(T(A) & \neq Z_2^t \wedge |T(A)| > \frac{|A|}{2}) && \leq \alpha ^ {u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)} \\
+    & \leq e^{-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} && \leq e^{-\frac{\epsilon\left(t + \log t + 3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) - t - \log t + \log\log\left(\frac{1}{\alpha}\right)\right)}{8}} \\
+    & \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log\left(\frac{1}{\alpha}\right) \right)}{8}} && \leq e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\left(\frac{\epsilon}{8} \log e \right) \right)}{8}} \\
+    & = e^{-\frac{\epsilon \left(3 - \log \epsilon + \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e - 3 + \log \epsilon \right)}{8}} && = e^{-\frac{\epsilon \left( \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e \right)}{8}} \\
+    & \leq e^{-\frac{\epsilon \left( \frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) \right)}{8}} = e^{{\log\left(\frac{\epsilon}{2}\right)}} \leq e^{\ln\left(\frac{\epsilon}{2}\right)} && = \frac{\epsilon}{2}
+\end{align*}
+
+In both alternatives the probability limit is $\frac{\epsilon}{2}$. It gives us that $P(T(A) = Z_2^t) \geq 1 - \epsilon$.
+
+The biggest disadvantage of the that the current estimate of $c_\epsilon$ is very inaccurate. For the practical use of this scheme we need the smallest value possible. In the later section we will try to lower the value of $c_\epsilon$.
+\end{proof}
+
+The two previous theorems give us enough strength to achieve our goal - restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts the expected length can not grow, instead we can extend the hashed set to $n \log n$ values and the estimate remains valid. The most common models use load factors lower than 1. For these models we need and will show an important relation of the chain length on the load factor. This is achieved by a small modification of the given proofs, the multiplicative constant contains the table's load factor itself.
+\end{section}
