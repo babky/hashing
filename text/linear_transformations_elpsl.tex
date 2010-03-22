@@ -1,12 +1,19 @@
-\begin{section}{Original result}
+\begin{section}{The original result}
+The last two theorems of the previous chapter give us enough power to achieve our goal - asymptotic restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts this expected length can not grow. Every hashed set can be extended into $n \log n$ elements and the estimate must still remain valid. 
+
+The most common models use load factors lower than one. Because of these models we generalise theorem so that it is parametrised by the table's load factor. Important relation of the expected length of the longest chain on the table's load factor is found. The result is that the multiplicative constant of the asymptotic growth is relative to the load factor of a hash table. New results are achieved by modifications of the given proofs with some new ideas.
+
 \begin{theorem}
 \label{theorem-n-logn-to-n}
-Let $H$ be the system of all linear mappings between two vector spaces over the field $Z_2$. The expected length of the longest chain when hashing $n \log n$ elements into the table of size $n$ is $O(\log n \log \log n)$.
+Let $U = \vecspace{w}$ be the hashed universe and $S \subset U$ be the hashed such that $|S| = n \log n$ where $n, t \in \mathbb{N}, n = 2 ^ t$. Let $H = LT(\vecspace{w}, \vecspace{t})$ be the universal system used. Then 
+\[
+\Expect{\lpsl} \in O(\log n \log \log n) \text{.}
+\]
 \end{theorem}
 \begin{proof}
-As in the previous proof we will factor a linear transformation $h \in H$, $h: D \rightarrow B$. We use the vector space $A = Z_2^l$ pre $l \geq \log n$ and two functions $h_1: D \rightarrow A$ and $h_2: a~\rightarrow B$ which is surjective. Both linear functions $h_1$ and $h_2$ are selected uniformly. This implies the uniform choice of the transformation $h = h_1 \circ h_2$.
+The target space, representation of the hash table, let be denoted by $B = \vecspace{t}$. As in the previous proof we will factor a linear transformation $T \in H$, $T: U \rightarrow B$. We use the vector space $A = \vecspace{l}$ for $l \geq \log n$ and two functions $T_0: D \rightarrow A$ and $T_1: A \rightarrow B$ which is surjective. Both linear functions $T_0$ and $T_2$ are selected uniformly. This implies the uniform choice of the transformation $T = T_1 \circ T_0$ because of model \ref{remark-model-uniform-linear-map-selection}.
 
-The idea presented here is to estimate the probability $P(lpsl > t)$ by using the other somehow unnatural event $E_2$. Its probability is then easy to find. The probability of the event $E_1 \equiv lpsl > t$ can be simply determined by discovering the relation between them. We will remark the following fact. When the $E_1$ is true with a high probability the event $E_2$ also appears.
+The idea presented here is to estimate the probability $\Prob{\lpsl > t}$ by using the other somehow unnatural event $E_2$. The probabilities are then easier to find. Probability of event $E_1 \equiv \lpsl > t$ can be simply determined by discovering the probability $\Prob{E_2 | E_1}$. When the $E_1$ is true with a high probability the event $E_2$ also appears.
 
 \begin{itemize}
 \item $E_1$ denotes the existence of a chain of length at least $t$ elements. Formally written $\exists \alpha \in B: | h^{-1}(\alpha) \cap S | > t$.
