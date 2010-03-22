@@ -1,0 +1,62 @@
+\begin{chapter}{Facts from linear algebra}
+\begin{definition}
+Let $V$ be a vector space, $U \subseteq V$ be its subspace and $\vec{x} \in V$. Set $A = x + V$ is called an affine subspace of $V$.
+\end{definition}
+
+\begin{lemma}
+\label{lemma-linear-transformation-domain-distribution}
+Let $T: Z_2^u \rightarrow Z_2^t$, $u \geq t$ be an~onto linear map and vector $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
+\end{lemma}
+\begin{proof}
+At first remark that $T^{-1}(0)$ is a~subspace of~space $Z_2^u$.
+
+Set $T^{-1}(0)$ contains zero.
+\[ T(0) = 0 \]
+
+It is closed under addition.
+\[
+\begin{split}
+u, v \in T^{-1}(0) 
+	& \Rightarrow T(u) = 0, T(v) = 0 \\ 
+	& \Rightarrow T(u + v) = T(u) + T(v) = 0 \\ 
+	& \Rightarrow u + v \in T^{-1}(0) \\
+\end{split}
+\]
+
+It is closed under scalar multiplication.
+\[
+\begin{split}
+\delta \in \{0, 1\} \wedge u \in T^{-1}(0) 
+	& \Rightarrow T(\delta u) = \delta T(u) = \delta 0 = 0 \\
+	& \Rightarrow \delta u \in T^{-1}(0) \\
+\end{split}
+\]
+
+$T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ have the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$. This is also the one to one map between $T^{-1}(0)$ and $T^{-1}(x)$.
+\begin{displaymath}
+\begin{split}
+v \in T^{-1}(0) 
+	& \Rightarrow T(u+v) = T(u) + T(v) = x + 0 = x  \\
+	& \Rightarrow u + T^{-1}(0) \subseteq T^{-1}(x)
+\end{split}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+v \in T^{-1}(x) 
+	& \Rightarrow T(v-u) = T(v) - T(u) = x - x = 0 \\
+	& \Rightarrow v - u \in T^{-1}(0) \\
+	& \Rightarrow T^{-1}(x) \subseteq u + T^{-1}(0)
+\end{split}
+\end{displaymath}
+\end{proof}
+
+\begin{lemma}
+\label{lemma-system-of-linear-equations-solution-count}
+Let $A \in \mathbb{Z}_2^{m \times n}$ be a matrix such that $\rank{A} = m$ and $m \leq n$. Then system of linear equations $A\vec{x} = \vec{y}$ has $2 ^ {n - m}$ solutions for every $\vec{y} \in \vecspace{m}$.
+\end{lemma}
+\begin{proof}
+Consider homogeneous system $A\vec{x} = \vec{0}$. It is a well-known fact that the dimension of the right null-space of the matrix $A$, denoted by $\nullspace{A}$, is equal to \[ \dimension{\nullspace{A}} =n - \rank{A} = n - m = \text{.} \] This fact implies that $|\nullspace{A}| = 2 ^ {n - m}$.
+
+Because $\rank{A} = m$ then for every vector $\vec{y} \in \vecspace{m}$ there is at least one solution $\vec{x} \in \vecspace{n}$ of the non-homogeneous system $A\vec{x} = \vec{y}$. It is clear that the set of all solutions of the non-homogeneous system is an affine subspace of $V$ equal to $\vec{x} + \nullspace{A}$. The number of all solutions of non-homogeneous system for every vector $\vec{y}$ is then $2 ^ {n - m}$, too.
+\end{proof}
+\end{chapter}
