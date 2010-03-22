@@ -1,7 +1,7 @@
 \chapter{Expected length of the longest chain}
 
 \begin{section}{Influence of a bucket's size on time complexity}
-At first let us explain why the size of a bucket is so important for hashing. Assume a model when hashing elements into separate buckets in a hash table. A chain is created from the elements stored in a single bucket and they are represented by singly linked lists, hence the word chain. To find an element in a bucket one needs to iterate throughout all elements in the bucket's chain. Thus the time of the find operation is linear with the number of elements that fell in the bucket. A basic approach how to estimate the longest chain length when using universal hashing is about to be revealed.
+At first let us explain why the size of a bucket is so important for hashing. Assume a model of hashing storing elements in separate buckets in a hash table also called chains. A chain is created from the elements stored in a single bucket and is commonly represented by singly linked lists, hence the word chain. To find an element in a bucket (or chain) one needs to iterate throughout all its elements. Thus the time of the find operation is linear with the number of elements that fell in the bucket. A basic approach how to estimate the longest chain length when using universal hashing is revealed.
 
 \begin{definition}[Equality indicator]
 Let $x$ and $y$ be two variables from the same universe $A$. Then function $\mathbf{I}: A \times A \rightarrow \{0, 1\}$ such that
@@ -64,20 +64,22 @@ And thus we have:
 \Expect{\lpsl} \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob{\psl \geq i}
 \end{displaymath}
 
-From the assumption of independent and uniform choice of hashed elements from the universe we can estimate the probability of collision as binomial random variable. The event that an element is hashed into a prescribed bucket is $\frac{1}{m}$.
+From the assumption of independent and uniform choice of hashed elements from the universe we can estimate the probability of collision as binomial random variable. The event that an element is hashed into a prescribed bucket is $\frac{1}{m}$ because the used hash function divides universe $U$ uniformly among buckets \[ ||h^{-1}(i)| - |h^{-1}|(j)| \leq 1 \] for every $i, j \in A$.
 \begin{displaymath}
-\Prob{\psl \geq i} \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}
+\Prob{\psl \geq i} \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i
 \end{displaymath}
-Remark that this estimate holds only for universes substantially larger than hashed sets. The selection of the first element changes the probability of choice of the second element and so on.
+Remark that this estimate holds only for universes substantially larger than hashed sets. In large universes the selection of the first element slightly changes the probability of choice of the second element and so on.
 
 We can finish the estimate of the variable $\lpsl$ by computing:
 \begin{displaymath}
 \begin{split}
 \Expect{\lpsl}	& \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob{\psl \geq i} \\
-		& \leq \displaystyle \sum_{i = 0}^{\infty} m \min\left(1, \dbinom{n}{i}\left(\frac{1}{m}\right)^i\left(1 - \frac{1}{m}\right)^{n-i}\right) \\
+		& \leq \displaystyle \sum_{i = 0}^{\infty} m \min\left(1, \dbinom{n}{i}\left(\frac{1}{m}\right)^i\right) \\
 		& = O\left(\frac{\log n}{\log \log n}\right)
 \end{split}
 \end{displaymath}
+
+In the last calculation we assumed that the table's load factor is lower than 1 or equivalently $n < m$.
 \end{section}
 
 \begin{section}{Estimate for models of universal hashing}
@@ -99,9 +101,15 @@ Let $\Indicator$ be a function such that
 Then $I$ is called a set indicator.
 \end{definition}
 
+The relationship between the size of the set $M$ and its indicator is stated in the next remark.
 \begin{remark}
-From the previous definition it is apparent that \[\Indicator(M) \leq |M| \textit{.} \]
+\[\Indicator(M) \leq |M| \textit{.} \]
 \end{remark}
+\begin{proof}
+If $M = \emptyset$ then $I(M) = 0 = |M|$ and the inequality holds. 
+
+If $M \neq \emptyset$ then $I(M) = 1 \leq |M|$ so the statement is true.
+\end{proof}
 
 Now we present a method how to estimate the probability of collision of $k$ elements.
 \begin{definition}[Collision sets of $k$ elements]

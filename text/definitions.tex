@@ -1,3 +1,4 @@
+
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{theorem}[definition]{Theorem}
 \newtheorem{lemma}[definition]{Lemma}
@@ -10,5 +11,9 @@
 \newcommand{\lpsl}{\mathrm{lpsl}}
 \newcommand{\psl}{\mathrm{psl}}
 \newcommand{\Indicator}{\mathbf{I}}
-\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\rank}[1]{\mathrm{rank}\left({#1}\right)}
+\newcommand{\dimension}[1]{\mathrm{dim}\left({#1}\right)}
+\newcommand{\nullspace}[1]{\mathcal{N}\left({#1}\right)}
+\newcommand{\matrixkernel}[1]{\mathrm{Ker}\left({#1}\right)}
+\newcommand{\vecspan}[1]{\mathrm{span}\left({#1}\right)}
 \newcommand{\vecspace}[1]{\mathbb{Z}_{2}^{#1}}
