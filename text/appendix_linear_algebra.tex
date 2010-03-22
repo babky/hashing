@@ -3,6 +3,29 @@
 Let $V$ be a vector space, $U \subseteq V$ be its subspace and $\vec{x} \in V$. Set $A = x + V$ is called an affine subspace of $V$.
 \end{definition}
 
+\begin{definition}
+Let $A$ be a matrix from $T ^ {m \times n}$ where $T$ is a field and $n, m \in \mathbb{N}$. Set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the null-space of matrix A.
+\end{definition}
+
+\begin{remark}
+Null-space of every matrix $A \in T ^ {m \times n}$ is a subspace of vector space $T^{n}$.
+\end{remark}
+\begin{proof}
+Proof is a straightforward verification of the three properties of vector subspaces.
+
+Zero vector is contained in $\nullspace{A}$ because $A\vec{0} = \vec{0}$.
+
+For every $\vec{x}, \vec{y} \in \nullspace{A}$ their sum $\vec{x} + \vec{x} \in \nullspace{A}$.
+\[
+	A(\vec{x} + \vec{y}) = A\vec{x} + A\vec{y} = \vec{0} + \vec{0} = \vec{0}
+\]
+
+For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have $t \vec{x} \in \nullspace{A}$.
+\[
+	At\vec{x} = tA\vec{x} = t\vec{0} = \vec{0}
+\]
+\end{proof}
+
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
 Let $T: Z_2^u \rightarrow Z_2^t$, $u \geq t$ be an~onto linear map and vector $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
