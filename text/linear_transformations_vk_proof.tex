@@ -1,0 +1,60 @@
+First set $u = \lceil\log(\frac {2|A|}{\epsilon})\rceil$. Let $T_1: \vecspace{u} \rightarrow \vecspace{t}$ be a random uniformly chosen surjective linear mapping (since $u \geq t$ such mapping exists). Fix $T_1$. Then for every random uniformly chosen linear mapping $T_0: \vecspace{w} \rightarrow \vecspace{u}$ linear mapping $T$ defined as $T = T_1 \circ T_0$  is a random linear mapping with uniform distribution by using model \ref{remark-model-uniform-linear-map-selection}. 
+
+Since the family of all linear mappings from $\vecspace{w}$ into $\vecspace{u}$ is $1$-universal we conclude that \[ \Prob{T_0(\vec{x}) = T_0(\vec{y})} = 2 ^ {-u} \] for all distinct vectors $\vec {x}$ and $\vec {y}$ from $\vecspace{w}$. If $d_A$ is the number of  all pairs of distinct vectors $\vec {x},\vec {y}\in A$ with $T_0(\vec {x}) = T_0(\vec {y})$ then the expected value of the random variable $d_A$ is \[ \Expect{d_A}= \binom{|A|}{2} 2 ^ {-u} \text{.} \]
+
+If $|T_0(A)| \leq \frac {|A|}{2}$ then there exist at least $\frac {|A
+|}{2}$ pairs of distinct vectors $\vec {x},\vec {y} \in A$ with $T_0(\vec {x}) = T_0(\vec {y}
+)$. By Markov inequality \[ \Prob{d_A \geq k\binom {|A|}{2} 2^{-u}} \leq \frac{1}{k} \text{.} \]
+Thus if we set $k = \frac {|A|2^u}{2\binom {|A|}{2}}$ then we obtain 
+\[ 
+	\Prob{|T_0(A)| \leq \frac {|A|}{2}} 
+		\leq \Prob{d_A \geq \frac {|A|}{2}} 
+		\leq \frac{2 \binom{|A|}{2}}{|A|2^u} = \frac{|A| - 1}{2^u} < \frac{|A|}{2^u} 
+		\leq \frac{\epsilon |A|}{2|A|} = \frac{\epsilon}2
+\]
+
+We can summarize that
+\[ 
+\Prob{T(A) \neq \vecspace{t} \wedge |T_0(A)| \leq \frac{|A|}{2}} \leq \frac{\epsilon}{2} \text{.}
+\]
+
+Secondly we compute $\Prob{T(A) \neq \vecspace{t} \wedge |T_0(A)| \geq \frac{|A|}{2}}$. By the previous remark \ref{theorem-linear-function-set-onto} for $T_1: \vecspace{u} \rightarrow \vecspace{t}$ and $T_0(A) \subseteq \vecspace{u}$, we have
+\[
+	\Prob{T(A) = T_1(T_0(A)) \neq \vecspace{T} \wedge |T_0(A)| \geq \frac{|A|}{2}} \leq \mu ^ {u - t - \log t  +\log\log \left(\frac{1}{\mu}\right) } 
+\]
+where $\mu = 1- \frac{|T_0(A)|}{2^u}$. Clearly
+\[
+\mu = 1 - \frac{|T_0(A)|}{|W|} < 1 - \frac{|A|}{2|W|} = 1 - \frac{\epsilon |A|}{8|A|} \leq e^{-\frac{\epsilon}{8}}
+\text{.}
+\]
+
+In the following constant $c_{\epsilon}$ is chosen as $4\left(\frac{2}{\epsilon}\right) ^ {\frac{8}{\epsilon}}$. Then we can estimate:
+\[
+\begin{split}
+& -\frac{\epsilon}{8} \left(u - t - \log t + \log \log \left( \frac{1}{\mu} \right) \right) \\
+& \qquad = -\frac{\epsilon}{8}\left(\left\lceil\log\left(\frac{2|A|}{\epsilon}\right)\right\rceil - t - \log t + \log\log\left(\frac{1}{\mu}\right)\right) \\
+& \qquad \leq -\frac{\epsilon}{8} \left( \left\lceil \log\left( \frac{8 \left(\frac{2}{\epsilon}\right) ^ {\frac{8}{\epsilon}}t2^t}{\epsilon} \right) \right\rceil - t - \log t + \log\log\left(\frac{1}{\mu}\right)\right) \\
+& \qquad \leq -\frac{\epsilon}{8} \left(3 + \frac{8}{\epsilon}\log\frac{2}{\epsilon} - \log\epsilon + \log t + t - t - \log t + \log \left( \left(\frac{\epsilon}{8}\right)\log e \right) \right) \\
+& \qquad = -\frac{\epsilon}{8} \left(3 - \log\epsilon + \frac{8}{\epsilon} \log \left(\frac{2}{\epsilon}\right) + \log\epsilon - 3 + \log\log e\right) \\
+& \qquad = -\frac{\epsilon}{8}\left(\frac{8}{\epsilon}\log\left(\frac{2}{\epsilon}\right) + \log\log e\right) \\
+& \qquad = \log \frac{\epsilon}{2} - \frac{\epsilon}{8} \log\log e \\
+& \qquad \leq \log\frac{\epsilon}{2} \\
+\end{split}
+\]
+
+And for the calculated probability we dervive:
+\[
+\begin{split}
+\Prob{T(A) \neq \vecspace{t} \wedge |T(A)| > \frac{|A|}{2}} 
+	& \leq \mu ^ {u - t - \log t + \log\log\left(\frac{1}{\mu}\right)} \\
+	& \leq e ^ {-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\mu}\right)\right)}{8}} \\
+	& \leq e ^ {\log \left( \frac{\epsilon}{2} \right)} \leq e ^ {\ln \left(\frac{\epsilon}{2}\right)} = \frac{\epsilon}{2} \\
+\end{split} \text{.}
+\]
+
+If we connect both alternatives we deduce that 
+\[ 
+	\Prob{T(A) = T_1(T_0(A)) \neq \vecspace{t}} \leq \frac{\epsilon}{2} + \frac{
+\epsilon}{2} = \epsilon
+\]
+and form this it follows that $\Prob{T(A) = \vecspace{t}} \geq 1 - \epsilon$.
