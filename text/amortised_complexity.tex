@@ -24,6 +24,33 @@ The time of the find operation is given by the length of the chain into which th
 Since the element $x$ may be present in the set $S$ the time is bounded by the expression $1 + c\alpha$ where $\alpha$ is the table's load factor. The typical load factor is lower than 1, we only assumed that it is bounded. It is still enough to see that the expected operation's time complexity is still $O(1)$.
 \end{proof}
 
+\section{Effects of trimming long chains on the universal system}
+The fact that \[ \Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k} \] is obtained by a direct use of the Markov inequality. For instance this means that less than half of all functions create longest chains longer than $2C_\epsilon \log n \log \log n$ for every $0 < \epsilon < 1$. This situation ends by rehashing of the whole table and finding a new suitable function that does not create such long chains.
+
+If we by the statement that function $h$ creates a long chain mean that there is a chain of length longer than $k \Expect{\lpsl}$ then:
+\begin{displaymath}
+\begin{split}
+|\lbrace h \in H \mid \textit{ h does not create a long chain} \rbrace| 
+	& = \left(1 - \Prob{\lpsl > k \Expect{\lpsl}}\right) |H|  \\
+	& \geq \frac{|H|}{k} \text{.}
+\end{split}
+\end{displaymath}
+
+Regarding that every function is chosen uniformly and not the suitable ones are discarded we still have the uniform selection among functions that does not create long chains. So we use a smaller but still $k$-universal system of functions. Note that the restriction here is done by using the information about the hashed set.
+\[
+\begin{split}
+P(h(x) = h(y)) 
+	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \rbrace |}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
+	& \leq \frac{k |\lbrace h \in H \mid h(x) = h(y) \rbrace}{|H|} \\
+	& \leq k \frac{|H|}{m |H|} = \frac{k}{m}
+\end{split}
+\]
+
+The last equality is implied by $1$-universality of systems of linear transformations. Similar restrictions of the other universal systems may be used. For such systems probability of collision of two (or more) elements is estimated by their strong $k$-universality or $c$-universality.
+
+The previous computation shows us that the expected chain length is still constant, at most it can be doubled. Of course by selecting the greater length of longest chain we will omit less mappings. Thus we obtain better expected results for the find operation. But the warranty for the worst case is adequately worsened.
+
+
 \section{Hashing using the family of linear transformations}
 
 The model we propose is a slight modification of the simplest universal hashing scheme with separated chains:

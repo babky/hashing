@@ -7,146 +7,219 @@ The most common models use load factors lower than one. Because of these models 
 \label{theorem-n-logn-to-n}
 Let $U = \vecspace{w}$ be the hashed universe and $S \subset U$ be the hashed such that $|S| = n \log n$ where $n, t \in \mathbb{N}, n = 2 ^ t$. Let $H = LT(\vecspace{w}, \vecspace{t})$ be the universal system used. Then 
 \[
-\Expect{\lpsl} \in O(\log n \log \log n) \text{.}
+	\Expect{\lpsl} \in O(\log n \log \log n) \text{.}
 \]
 \end{theorem}
+The original proof is showed in the following few pages. It contains some remarks and definitions that are pointed out on their own and later refined. It uses two basic ideas; factorisation and probability estimates of two correlated events.
+
+Let the target space, representation of the hash table, be denoted by $B = \vecspace{t}$. As in the previous proof we will factor a linear transformation $T \in H$, $T: \vecspace{w} \rightarrow \vecspace{t}$. We define factor vector space $A = \vecspace{u}$ for $u \geq \log n$ and two functions $T_0: \vecspace{w} \rightarrow \vecspace{u}$ and $T_1: \vecspace{u} \rightarrow \vecspace{t}$ which is surjective. Both linear functions $T_0$ and $T_1$ are selected uniformly among $LT(U, A)$ and $LTS(A, B)$ respectively. By direct use of model \ref{remark-model-uniform-linear-map-selection} we obtain uniform choice of the transformation $T = T_1 \circ T_0$ .
+
+The second idea of the proof is to estimate the probability of event called $E1$, $\lpsl > l$, for any natural number $l$. The probability bound on $E_1$ is found by inspecting another quite unnatural event $E_2$. Probability of event $E_1$ is then simply determined by discovering the probabilities $\Prob{E_2 | E_1}$ and $\Prob{E_2}$.
+
+\begin{definition}
+Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and $S \subset U$ be the hashed set. Event $E_1(S, T, l)$ denotes existence of a chain of length at least $l$ elements when using function $T$. 
+\[ 
+	E_1(S, T, l) \equiv \exists \vec{y} \in B: | T^{-1}(\vec{y}) \cap S | > l
+\]
+\end{definition}
+
+\begin{definition}
+Let $T_0: U \rightarrow A, T_1: A \rightarrow B$ be linear transformations where $T_2$ is surjective and $S \subset U$ be the hashed set. Event $E_2(S, T_0, T_1)$ is then defined as:
+\[
+	E_2(S, T_0, T_1) \equiv \exists \vec{y} \in B: T_1^{-1}(\vec{y}) \subseteq T_0(S) \text{.}
+\]
+\end{definition}
+
+When it is clear what we mean by $S, T_0, T_1$ and $t$ we omit the parametrisation of the events and just use $E_1$ or $E_2$.
+
+Now we will point out another definition of the event $E_2$ that fits better to the scheme of remark $\ref{theorem-linear-function-set-onto}$.
+\begin{remark}
+\label{remark-e2-equivalency}
+Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations and moreover $T_2$ be surjective. Let $S \subset U$ be the hashed set. Appearance of event $E_2(S, T_0, T_1)$ is then equivalent to
+\[
+	E_2(S, T_0, T_1) \equiv \exists \vec{y}: T_1^{-1}(\vec{y}) \subseteq T_0(S) \Leftrightarrow T_1(A - T_0(S)) \neq B \text{.}
+\]
+\end{remark}
 \begin{proof}
-The target space, representation of the hash table, let be denoted by $B = \vecspace{t}$. As in the previous proof we will factor a linear transformation $T \in H$, $T: U \rightarrow B$. We use the vector space $A = \vecspace{l}$ for $l \geq \log n$ and two functions $T_0: D \rightarrow A$ and $T_1: A \rightarrow B$ which is surjective. Both linear functions $T_0$ and $T_2$ are selected uniformly. This implies the uniform choice of the transformation $T = T_1 \circ T_0$ because of model \ref{remark-model-uniform-linear-map-selection}.
+To proof direction from the left to the right assume that event $E_2$ is present. Event $E_2$ occurs if and only if there is a vector $\vec{y} \in B$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Under these conditions transformation $T_1$ may not display set $A - T_0(S)$ onto $B$ since $\vec{y} \notin T_1(A - T^{-1}(y)) \supseteq T_1(A - T_0(S))$ or equivalently $B \neq T_1(A - T_0(S))$.
 
-The idea presented here is to estimate the probability $\Prob{\lpsl > t}$ by using the other somehow unnatural event $E_2$. The probabilities are then easier to find. Probability of event $E_1 \equiv \lpsl > t$ can be simply determined by discovering the probability $\Prob{E_2 | E_1}$. When the $E_1$ is true with a high probability the event $E_2$ also appears.
+If $B \neq T_1(A - T_0(S))$ then there exists a vector $\vec{y} \in B$ such that $\vec{y} \notin T_1(A - T_0(S))$. Since $T_1$ is surjective we have $T_1(A) = B$. Because no point from $A - T_0(S)$ is displayed on $\vec{y}$ the whole preimage of $\vec{y}$ must be contained in $T_0(S)$, $T_1^{-1}(\vec{y}) \subseteq T_0(S)$.
+\end{proof}
 
-\begin{itemize}
-\item $E_1$ denotes the existence of a chain of length at least $t$ elements. Formally written $\exists \alpha \in B: | h^{-1}(\alpha) \cap S | > t$.
-\item $E_2$ is equivalent to existence of a vector $\alpha \in B$ such that $h_2^{-1}(\alpha) \subseteq h_1(S)$.
-\end{itemize}
-
+As mentioned before we can use the previous equivalency to estimate probability of event $E_2$ as stated in the following remark. 
 \begin{remark}
 \label{remark-e2-probability}
-If $d = \frac{2^l}{n \log n} > 1$ then we have:
-\begin{displaymath}
-P(E_2) \leq d^{-\log d - \log \log d}\textit{.}
-\end{displaymath}
+Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations where $T_1$ is surjective and $S \subset U$ denote the hashed set and define $d = \frac{|A|}{|S|}$. If $d > 1$ then 
+\[
+	\Prob{E_2(S, T_0, T_1))} \leq d^{-\log d - \log \log d} \text{.}
+\]
 \end{remark}
 \begin{proof}
-First we should point out one equivalent definition of $E_2$.
-\begin{displaymath}
-h_2^{-1}(\alpha) \subseteq h_1(S) \Leftrightarrow h_2(A - h_1(S)) \neq B \textit{.}
-\end{displaymath}
+Theorem \ref{theorem-linear-function-set-onto} for surjective transformation $T_1$, set $A - T_0(S) \subset A$, target space $B = \vecspace{t}$ and $\mu = \frac{|T_0(S)|}{|A|}$ states that
+\[
+	\Prob{T_1(A - T_0(S)) \neq B} \leq \mu ^ {u - t - \log t + \log \log \frac{1}{\mu}} \text{.}
+\]
 
-Event $E_2$ holds if and only if there is an element $\alpha$ which inverse image $h_2^{-1}(\alpha)$ is a subset of image $S$ by $h_1$. Then equivalently the function $h_2$ can not display $A - h_1(S)$ onto the whole set $B$.
+Corresponding inverse density $\mu$ can be computed as 
+\[
+	\mu = 1 - \frac{|A - T_0(S)|}{|A|} = 1 - \frac{|A| - |T_0(S)|}{|A|} = \frac{|T_0(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} < 1 \text{.}
+\] 
 
-Now we use the theorem \ref{theorem-linear-function-set-onto} for the function $h_2$, set $h_1(A)$ and target space $B$. Because $\frac{2^l}{n \log n} > 1$ holds the assumptions of the \ref{theorem-linear-function-set-onto} are satisfied. Corresponding inverse density $\alpha = 1 - \frac{|A| - |h_1(S)|}{|A|} = \frac{|h_1(S)|}{|A|}$.
-\begin{displaymath}
-\alpha = \frac{|h_1(S)|}{|S|} \leq \frac{|S|}{|A|} = \frac{1}{d}
-\end{displaymath}
-Because $d = \frac{2^l}{n \log n} > 1$:
-\begin{displaymath}
-\log d = l - \log n - \log \log n
-\end{displaymath}
-\begin{displaymath}
-P(E_2) \leq \alpha^{l - \log n - \log \log n + \log \log \left(\frac{1}{\alpha}\right)} = \alpha ^ {\log d + \log \log \left(\frac{1}{\alpha}\right)} \leq d^{-\log d - \log \log d}
-\end{displaymath}
+Now we can rewrite logarithm of variable $d$ as 
+\[
+	\log d = \log \frac{|A|}{|S|} = \log |A| - \log |S| = u - \log n - \log \log n \text{.}
+\]
+
+Since $E_2 \equiv T_1(A - T_0(S)) \neq B$ we can conclude
+\[
+\begin{split}
+\Prob{E_2}
+	& \leq \mu^{u - \log t - \log \log t + \log \log \left(\frac{1}{\mu}\right)} \\
+	& = \mu ^ {\log d + \log \log \left(\frac{1}{\mu}\right)} \\
+	& \leq \left(\frac{1}{d}\right) ^ {\log d + \log \log d} \\
+	& = d ^ {-\log d - \log \log d} \text{.} \\
+\end{split}
+\]
+
+Because of the assumptions of theorem \ref{theorem-linear-function-set-onto} the proof of this remark holds only when $\emptyset \neq A - T_0(S) \neq A$. Since $S$ is non-empty set we can see that $A - T_0(S) \neq A$. Because $d = \frac{|A|}{|S|} > 1$ it must be true that $|A| > |S| \geq |T_0(S)|$ and set $A - T_0(S)$ can not be empty.
 \end{proof}
 
-Follows the similar lemma for the conditional probability.
+A similar lemma for estimating the conditional probability of event $E_2 | E_1$ follows.
 \begin{remark}
-\label{remark-prob-t-length-chain}
-If $t > c_{\frac{1}{2}}{\frac{2^l}{n}}\log\left(\frac{2^l}{n}\right)$ then for the conditional probability of events holds:
-\begin{displaymath}
-P(E_2 | E_1) \geq \frac{1}{2} \textit{.}
-\end{displaymath}
+\label{remark-prob-l-length-chain}
+Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be random uniformly chosen linear transformations where $T_1$ is surjective. Then for every $0 < \epsilon < 1$ there is a constant $c_{\epsilon} > 0$ such that for every $S \subset U$ denoting the hashed  elements and for every $l \in \mathbb{N}$, $l \geq c_{\epsilon}{\frac{|A|}{|B|}}\log\frac{|A|}{|B|}$ the upper bound for the probability of event $E_2 | E_1$ is
+\[
+	\Prob{E_2(S, T_0, T_1) | E_1(S, T, l)} \geq 1 - \epsilon \text{.}
+\]
 \end{remark}
 \begin{proof}
-Suppose that we have a given mapping $h$ and the event $E_1$ holds. There must be a subset $S' \subseteq S$ consisting of at least $t$ elements mapped by $h$ to a single element $\alpha \in Z_2^{\log n}$. We fix this element and define $D' = h^{-1}(\alpha)$ and $A' = h_2^{-1}(\alpha)$. 
+Suppose that we are given a mapping $T$ and the event $E_1$ appears. There must be a subset $S' \subseteq S$ consisting of at least $l$ elements mapped by $T$ to a single element $\vec{y} \in B$. We fix this element and define $U' = T^{-1}(\vec{y})$ and $A' = T_1^{-1}(\vec{y})$. Notice that $S' = U' \cap S$.
 
-Consider the distribution of all transformations $h_1$ which satisfy the equation $h = h_1 \circ h_2$. By restricting $h_1$ to the set $D'$ we obtain a affine linear transformation onto the set $A'$. The uniform selection of $h_1$ corresponds to the uniform selection of all transformations from $D'$ onto $A'$.
+From lemma \ref{lemma-linear-transformation-domain-distribution} it follows that size of the set $A'$ is exactly $\frac{|A|}{|B|}$. And from lemma \ref{lemma-linear-transformation-domain-distribution} we have that sets $A'$ and $U'$ are affine subspaces. Since $T_0$ is random uniformly chosen linear mapping its restriction $T_0|_{U'}$ is also a random and uniformly chosen linear transformation as stated in model \ref{remark-model-uniform-linear-map-selection-affine}.
 
-$E_2$ is certainly present whenever $A' \subseteq h_1(S)$ occurs. The size of the set $A'$ is exactly $\frac{2^l}{n}$, lemma \ref{lemma-linear-transformation-domain-distribution}. The cardinality of  $S' = D' \cap S$ is at least $t = \left\lceil c_{\frac{1}{2}}\left(\frac{2^l}{n}\right)\log\left(\frac{2^l}{n}\right)\right\rceil$ since we supposed the presence of $E_2$. The theorem \ref{theorem-set-onto-by-linear-transform} gives us the lower bound $\frac{1}{2}$ on the probability of covering the whole set $A'$ by a set of size at least $t$. 
+Since we assumed presence of $E_1$ cardinality of $S' = U' \cap S$ must be at least $l \geq c_{\epsilon}\frac{|A|}{|B|} \log\frac{|A|}{|B|} = c_{\epsilon}{A'}\log{A'}$. Now we can use theorem \ref{theorem-set-onto-by-linear-transform} for the source space $U'$, set $S' \subseteq U'$, target space $A'$ and mapping $T_0|_{U'}$ and we obtain that 
+\[
+	\Prob{T_0|_{U'}(S') = A' | E_1} \geq 1 - \epsilon \text{.}
+\]
+
+Remark that we used theorem \ref{theorem-set-onto-by-linear-transform} for affine mapping $T_0|_{U'}$. However, we can use the generating mapping of $T_0|_{U'}$, corresponding non-affine subspaces and transform $S'$ to the original non-affine subspace instead.
+
+Event $E_2$ is certainly present whenever $A' \subseteq T_0(S)$. In the language of probability:
+\[
+	\Prob{A' \subseteq T_0(S) | E_1} \leq \Prob{E_2 | E_1} \text{.}
+\]
+
+Finally we can finish the remark's proof
+\[
+	\Prob{E_2 | E_1} \geq \Prob{A' \subseteq T_0(S) | E_1} \geq \Prob{A' = T_0|_{U'}(S') | E_1} \geq 1 - \epsilon \text{.}
+\]
 \end{proof}
 
-Now we must bound the probability of existence of a long chain.
+\begin{corollary}
+\label{corollary-prob-e2-e1}
+Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be random uniformly chosen linear transformations where $T_1$ is surjective. Then for every $0 < \epsilon < 1$ there is a constant $c_{\epsilon} > 0$ such that for every $S \subset U$ denoting the hashed  elements and for every $l \in \mathbb{N}$, $l \geq c_{\epsilon}{\frac{|A|}{|B|}}\log\frac{|A|}{|B|}$ for the probability of event $E_1$ we have
+\[
+	\Prob{E_1(S, T, l)} \leq \frac{1}{1 - \epsilon} \Prob{E_2(S, T_0, T_1)} \text{.}
+\]
+\end{corollary}
+\begin{proof}
+The proof is a straightforward use of the previous remark and definition of conditional probability.
+\[
+	\frac{\Prob{E_2, E_1}}{\Prob{E_1}} = \Prob{E_2 | E_1} \geq 1 - \epsilon
+\]
+
+Using the fact $\Prob{E_2} \geq \Prob{E_2, E_1}$ we conclude:
+\[
+	\Prob{E_1} \leq \frac{1}{1 - \epsilon}\Prob{E_2, E_1} \leq \frac{1}{1 - \epsilon}\Prob{E_2} \text{.}
+\]
+\end{proof}
+
+The probability bound of existence of a long chain is estimated by the following theorem.
 \begin{remark}
-There is a constant $C$ such that for all $r > 4$ in the scheme of hashing $S \subset D$, $|S| = n \log n$ using the hashing table $B = Z_2^{\log n}$ the following holds:
-\begin{displaymath}
-P(lpsl > rC \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
-\end{displaymath}
+Let $U = \vecspace{w}$, $B = \vecspace{t}$ be vector spaces representing the domain ($U$) and the hash table ($B$). Let $T: U \rightarrow B$ be random uniformly chosen linear map. For every $0 < \epsilon < 1$ there is a constant $C_\epsilon$ such that for every $r > 4$ when hashing $S \subset U$, $|S| \leq t 2 ^ t$ the estimate on length of the longest chain holds:
+\[
+	\Prob{\lpsl > C_\epsilon r \log n \log \log n} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
+\]
 \end{remark}
 \begin{proof}
-The proof is a straightforward use of previous remarks.
-\begin{displaymath}
+Proof of this remark is a straightforward use of previous remarks, we only have to choose the values of their parameters. As mentioned before we create the factorisation space $A = \vecspace{u}$. By validity of model \ref{remark-model-uniform-linear-map-selection-affine} uniform and independent choice of two random linear transformations $T_0: U \rightarrow A$ and surjective $T_1: A \rightarrow B$ corresponds to the uniform choice $T: U \rightarrow B$ such that $T = T_1 \circ T_0$.
+
+
+In the following choose $n \in \mathbb{R}$ such that $n \log n = 2 ^ t$. Since $|S| \leq 2 ^ t$ we have also that $|S| \leq n \log n$. Our choice of $u$ must confirm to $|A| \geq |B|$ since we need a surjective function $T_1$. The choices also satisfy assumptions of the remark \ref{remark-e2-probability} and corollary \ref{corollary-prob-e2-e1}.
+\[
 \begin{split}
-l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + 1 \right\rfloor \\
-t & = 4c_{\frac{1}{2}}r\log n \log \log n \textit{.}
+	u & = \left\lfloor \log n + \log \log n + \log r - \log \log r + 1 \right\rfloor \\
+	l & = 4c_{\epsilon}r\log n \log \log n \\
 \end{split}
-\end{displaymath}
+\]
 
-The condition of the remark \ref{remark-e2-probability} is certainly fulfilled:
-\begin{displaymath}
-d = \frac{2^l}{n \log n} \geq \frac{2^{\log n + \log \log n + \log r - \log \log r}}{n \log n} = \frac{r}{\log r} > 1\textit{.}
-\end{displaymath}
+Since $r > 4$ we have that $\frac{r}{\log r} > 1$:
+\[
+	2 ^ u \geq \frac{rn \log n}{\log r} > n \log n = 2 ^ t = |B| \text{.}
+\]
 
-The following inequality helps us to prove the assumption of the remark \ref{remark-prob-t-length-chain}:
-\begin{displaymath}
-\frac{2^l}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{2 r\log n}{\log r}
-\end{displaymath}
-\begin{displaymath}
+Hence the condition $d = \frac{|A|}{|S|} > 1$ of remark \ref{remark-e2-probability} is satisfied because
+\[
+	d = \frac{|A|}{|S|} = \frac{2^u}{n \log n} \geq \frac{n \log n}{n \log n}\frac{r}{\log r} = \frac{r}{\log r} > 1 \text{.}
+\]
+
+Following inequality helps us to prove the assumption $l \geq c_\epsilon \frac{|A|}{|B|} \log \frac{|A|}{|B|}$ of the corollary \ref{corollary-prob-e2-e1}.
+\[
+	\frac{2^u}{n} \leq \frac{2 ^{\log n + \log \log n + \log r - \log \log r + 1}}{n} = \frac{2 r\log n}{\log r}
+\]
+
+Because $\log \left(\frac{2 r\log n}{\log r}\right) \leq 2 \log \log n \log r$ the assumption holds:
+\[
 \begin{split}
-c_{\frac{1}{2}}\frac{2^l}{n}\log\left(\frac{2^l}{n}\right)
-	& < c_{\frac{1}{2}} 2 \left(\log n\right) \left(\frac{r}{\log r}\right)\left(2\log\log n \log r\right) \\
-	& = 4 c_{\frac{1}{2}} r \log n \log \log n \\
-	& = t
+c_{\epsilon}\frac{2^u}{n}\log\left(\frac{2^u}{n}\right)
+	& \leq 2 c_{\epsilon} \log n \frac{r}{\log r} \log \left(\frac{2 r\log n}{\log r}\right) \\
+	& \leq 4 c_{\epsilon} \log n \frac{r}{\log r} \log \log n \log r \\
+	& = 4 c_{\epsilon} r \log n \log \log n \\
+	& = l \text{.}
 \end{split}
-\end{displaymath}
+\]
 
-The probability $P(E_2 | E_1) \geq \frac{1}{2}$ is obtained for the given values of $l$ and $t$. This implies $P(E_1) \leq 2 P(E_2)$ which gives us the $E_1$ event's probability as:
-\begin{displaymath}
+Now using remark \ref{remark-e2-probability} and corollary \ref{corollary-prob-e2-e1} we obtain:
+\[
 \begin{split}
-P(E_1) 
-	& \leq 2d^{-\log d - \log \log d} \\
-	& \leq 2\left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
+\Prob{E_1}
+	& \leq \frac{1}{1 - \epsilon} \Prob{E_2} \\
+	& \leq \frac{1}{1 - \epsilon} d ^ {-\log d - \log \log d} \\ 
+	& \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \end{split}
-\end{displaymath}
+\]
 
-The event $E_1$ denotes the existence of a chain of size at least $t$ elements. There is a chain longer than $t$ in a hash table if and only if the longest chain is longer than $t$. This proof completed is by putting $C = 4c_{\frac{1}{2}}$.
+The event $E_1$ denotes the existence of a chain of size at least $l$ elements. A chain longer than $l$ in a hash table exists if and only if the longest chain is longer than $l$, $\lpsl > l \Leftrightarrow E_1(S, T, l)$. This proof completed is by putting $C_\epsilon = 4c_\epsilon$.
+
+\[
+\begin{split}
+\Prob{\lpsl > l} 
+	& = \Prob{\lpsl > 4c_{\epsilon} r \log n \log \log n} \\
+	& = \Prob{\lpsl > C_\epsilon r \log n \log \log n} \\
+	& = \Prob{E_1(S, T, l)} \\
+	& \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
+\end{split}
+\]
 \end{proof}
 
-Because of the previous claim we simply find the expected longest chain length, denote $K = C\log n \log \log n$.
-\begin{displaymath}
+Previous claim is very convenient in order to successfully prove theorem \ref{theorem-n-logn-to-n}. For every fixed $0 < \epsilon < 1$ set $K_\epsilon = C_\epsilon \log n \log \log n$.
+\[
 \begin{split}
-E lpsl 
-	& = \int\limits_0^{\infty} P(lpsl > t) dt \\
-	& \leq 4K + \int\limits_{4K}^\infty P(lpsl > t) dt \\
-	& = 4K + K \int\limits_4^\infty P(lpsl > tK) dt \\
-	& \leq 4K + K \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \\
-	& = K(4 + I) = O(K) = O(\log n \log \log n) \\
-I 	& = \int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}
+\Expect{\lpsl}
+	& = \int\limits_0^{\infty} \Prob{\lpsl > r} dr \\
+	& \leq 4K_\epsilon + \int\limits_{4K_\epsilon}^\infty \Prob{\lpsl > r} dr \\
+	& = 4K_\epsilon + K_\epsilon \int\limits_4^\infty \Prob{\lpsl > rK_\epsilon} dr \\
+	& \leq 4K_\epsilon + K_\epsilon \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \\
+	& = K_\epsilon(4 + I_\epsilon) = O(K_\epsilon) = O(\log n \log \log n)
 \end{split}
-\end{displaymath}
-\end{proof}
+\]
 
-For the practical use the multiplicative constant $4C(4 + I)$ is also important. In our proofs we neglected its estimation and we only obtained a good asymptotic growth which is negated by its great value. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ the constant $c_\epsilon$ equals $4 ^ {17}$ when using the original estimate. This value is too big for a practical use. Our next goal is to show a better constant's estimate and explore the dependency of the longest chain on load factor of the hash table.
+We substituted $I_\epsilon$ for
+\[
+I_\epsilon = \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
+\]
+
+And the proof of the theorem \ref{theorem-n-logn-to-n} is complete even in more general form because we did not make any assumption on the size of the hashed set $S$ except $|S| \leq |B| \log |B|$.
+
+For the practical use of this result the multiplicative constant $K_\epsilon(4 + I_\epsilon)$ plays an important role. In our proofs performed so far we neglected its estimation. We only obtained a good asymptotic result that is negated by the constant's great value. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ only constant $c_\epsilon$ equals $4 ^ {17}$ by usage of the original estimate. Our next goal is to show a better constant's estimate, explore the dependency of the longest chain on load factor of the hash table and find an even better constant when using load factors lower than one.
 \end{section}
-
-\section{Expected case when rehashing}
-We already showed that $P(lpsl > 2C \log n \log \log n)$ is less than $\frac{1}{2}$. This fact is obtained by a direct use of the Markov inequality. This means that less than half of functions create longest chains longer than $2C \log n \log \log n$. This ends by rehashing of the whole table.
-\begin{displaymath}
-\begin{split}
-|\lbrace h \in H \mid \textit{ h does not create a long chains} \rbrace| 
-	& = \left(1 - P(lpsl > 2Z \log n \log \log n)\right) |H|  \\
-	& \geq \frac{|H|}{2} \\
-\end{split}
-\end{displaymath}
-
-Regarding the fact that the function is chosen uniformly and not suitable are discarded we still have an uniform selection. We used a smaller function system; note that the restriction here is done by using the information about the hashed set.
-\begin{displaymath}
-\begin{split}
-P(h(x) = h(y)) 
-	& =  \frac{|\lbrace h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \rbrace |}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
-	& \leq \frac{2 |\lbrace h \in H \mid h(x) = h(y) \rbrace}{|H|} \\
-	& \leq 2 \frac{|H|}{m |H|} = \frac{2}{m}
-\end{split}
-\end{displaymath}
-
-The last equality is implied by $1$-universality of systems of linear transformations. Similar restrictions of the other universal systems may be used. For such systems probability of collision of two (or more) elements is estimated by their strong $k$-universality or $c$-universality.
-
-The previous computation shows us that the expected chain length is still constant, at most it can be doubled. Of course by selecting the greater length of longest chain we will omit less mappings. Thus we obtain better expected results for the find operation. But the warranty for the worst case is adequately worsened.

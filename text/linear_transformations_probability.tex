@@ -200,7 +200,7 @@ The inequality holds for every of the three cases and the induction step is comp
 \label{theorem-linear-function-set-onto}
 Let $u$ and $t$ be natural numbers such that $0 < t \leq u$. Let $A$ be a~proper and non-empty subset of the~vector space $\vecspace{u}$. Set $\mu = 1 - \frac{|A|}{2^u}$ as inverse density of $A$ in $\vecspace{u}$. Then for a random uniformly chosen surjective linear map $T: \vecspace{u} \rightarrow \vecspace{t}$ we have
 \[
-	\Prob{T(A) \neq \vecspace{t}} \geq \mu^{u - t - \log t + \log \log \frac{1}{\mu}} \textit{.}
+	\Prob{T(A) \neq \vecspace{t}} \leq \mu^{u - t - \log t + \log \log \frac{1}{\mu}} \textit{.}
 \]
 \end{theorem}
 \begin{proof}
@@ -242,9 +242,10 @@ Combining the previous notes finishes the proof of this remark.
 \]
 \end{proof}
 
+The next theorem gives the probability of mapping whole set $A$ onto target space into relation to its size.
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
-If $T: V \rightarrow \vecspace{t}$ is a random uniformly chosen linear map where $V = \vecspace{w}$. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon > 0$ such that for every subset $A$ of the domain $V$, $|A| \geq c_\epsilon t 2^t$, the probability of mapping $A$ onto the whole space is high enough
+If $T: \vecspace{w} \rightarrow \vecspace{t}$ is a random uniformly chosen linear map. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon > 0$ such that for every subset $A$ of the domain $\vecspace{w}$, $|A| \geq c_\epsilon t 2^t$, the probability of mapping $A$ onto the whole space is
 \[
 	\Prob{T(A) = \vecspace{t}} \geq 1 - \epsilon \text{.}
 \]

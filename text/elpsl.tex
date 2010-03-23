@@ -1,6 +1,6 @@
 \chapter{Expected length of the longest chain}
 
-\begin{section}{Influence of a bucket's size on time complexity}
+\begin{section}{Influence of bucket's size on time complexity}
 At first let us explain why the size of a bucket is so important for hashing. Assume a model of hashing storing elements in separate buckets in a hash table also called chains. A chain is created from the elements stored in a single bucket and is commonly represented by singly linked lists, hence the word chain. To find an element in a bucket (or chain) one needs to iterate throughout all its elements. Thus the time of the find operation is linear with the number of elements that fell in the bucket. A basic approach how to estimate the longest chain length when using universal hashing is revealed.
 
 \begin{definition}[Equality indicator]
