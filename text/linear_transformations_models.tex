@@ -63,4 +63,14 @@ Every pair $T_0, T_1$ generating $T$ can be uniquely mapped by $id_{M, M'}$ onto
 
 Finally for every linear map $T$ there is constant number of pairs $T_0, T_1$ leading to $T$. Because of uniformity of selection the probability of choosing pair $T_0, T_1$ leading to $T = T_1 \circ T_0$ is constant for every map $T$.
 \end{proof}
+
+\begin{remark}
+\label{remark-model-uniform-linear-map-selection-affine}
+Let $U, A, B$ be vector spaces, $T_0: U \rightarrow A$ be a random uniformly chosen linear map among $LT(U, A)$ and $T_1: A \rightarrow B$ be a random uniformly chosen surjective linear map from $LTS(A, B)$. Set $T = T_1 \circ T_0$. For a vector $\vec{y} \in B$ define $U' = T^{-1}(\vec{y})$ and $A' = T_1^{-1}(\vec{y})$. Then $T_0|_{U'}: U' \rightarrow A'$ is a random affine linear map chosen among all affine linear maps $LT_{A}(U', A')$.
+\end{remark}
+\begin{proof}
+Define $U_0 = T^{-1}(0)$, $A_0 = T_1^{-1}(0)$ and $D_1 = D_0 ^ {\bot}$. There is one to one relationship among linear transformation $T_0: U \rightarrow A$ and pairs of mappings $T_0|_{D_0}$ and $T_0|_{D_1}$. The uniform choice of $h$ corresponds to uniform and independent choices of $T_0|_{D_0}$ and $T_0|_{D_1}$. 
+
+When $\vec{y} = \vec{0}$ then we have uniform selection of mapping $T_0|_{U'} = T_0|_{D_0}$. When $\vec{y} \neq \vec{0}$ selected affine mapping $T_0|_{U'}$ is defined as $T_0|_{U'}(\vec{x}) = \vec{u} + T_0|_{D_0}(\vec{x} - \vec{v})$ for arbitrary but fixed vectors $\vec{u} \in A'$, $\vec{v} \in U'$. Once again note that vectors $\vec{u}, \vec{v}$ can not vary for different choices of function $T_0$. Moreover it uniquely corresponds to its defining function $T_0|_{D_0}$.
+\end{proof}
 \end{section}

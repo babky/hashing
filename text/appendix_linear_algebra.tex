@@ -1,10 +1,17 @@
 \begin{chapter}{Facts from linear algebra}
-\begin{definition}
+\begin{definition}[Affine subspace]
 Let $V$ be a vector space, $U \subseteq V$ be its subspace and $\vec{x} \in V$. Set $A = x + V$ is called an affine subspace of $V$.
 \end{definition}
 
-\begin{definition}
-Let $A$ be a matrix from $T ^ {m \times n}$ where $T$ is a field and $n, m \in \mathbb{N}$. Set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the null-space of matrix A.
+\begin{definition}[Null-space of matrix]
+Let $A$ be a matrix from $T ^ {m \times n}$ where $T$ is a field and $n, m \in \mathbb{N}$. Set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the null-space of matrix $A$.
+\end{definition}
+
+\begin{definition}[Orthogonal complement]
+Let $V$ be a vector subspace of a vector space $U$. Orthogonal complement of subspace $V ^ {\bot}$ is defined by:
+\[
+	V ^ {\bot} = \{ u \in U \setdelim \langle u | v \rangle = 0 \text{ for all } v \in V \} \text{.}
+\]
 \end{definition}
 
 \begin{remark}
@@ -26,12 +33,23 @@ For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have $t \vec{x} \in \null
 \]
 \end{proof}
 
+\begin{definition}[Affine linear map]
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = v + V_0$ and $U_A = u + U_0$ be affine subspaces of $V$ and $U$ respectively for $v \in V$, $u \in U$. Function $T_A: V_A \rightarrow U_A$ is called affine linear map if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(x) = u + T_0(x - v)$.
+\end{definition}
+
+\begin{definition}[Set of all affine linear map]
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = v + V_0$ and $U_A = u + U_0$ be affine subspaces of $V$ and $U$ respectively for $v \in V$, $u \in U$. Set of all affine linear mapping between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
+\[
+	LT_A(V_A, U_A) = \{ T: V_A \rightarrow U_A \setdelim T \text{ is an affine map} \} \text{.}
+\]
+\end{definition}
+
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Let $T: Z_2^u \rightarrow Z_2^t$, $u \geq t$ be an~onto linear map and vector $x \in Z_2^t$. Then $|T^{-1}(x)| = 2 ^ {u-t}$.
+Let $T: \vecspace{u} \rightarrow \vecspace{t}$, $u \geq t$ be an~onto linear map and vector $x \in \vecspace{t}$. Then $|T^{-1}(x)| = 2 ^ {u - t}$ and moreover set $T^{-1}(x)$ is an affine subspace of $\vecspace{u}$.
 \end{lemma}
 \begin{proof}
-At first remark that $T^{-1}(0)$ is a~subspace of~space $Z_2^u$.
+At first remark that $T^{-1}(0)$ is a~subspace of~space $\vecspace{u}$.
 
 Set $T^{-1}(0)$ contains zero.
 \[ T(0) = 0 \]
