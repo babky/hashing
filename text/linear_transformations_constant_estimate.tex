@@ -1,161 +1,136 @@
-\section{Estimating the multiplicative constant}
+\chapter{Estimating the multiplicative constant}
+Improvements of the previous results of hashing with systems of linear transformations are needed since the obtained multiplicative constants are enormous. At first we decrease value of constant $c_\epsilon$ and it lower the multiplicative constant as well. Because typical load factors are lower than one we assumed hashing only linear amounts of elements with respect to the size of the hash table. In the previous chapter we showed similar asymptotic result. It has to be improved and to gain even better results.
 
-\subsection{Integral}
-When we were proving the upper bond on the length of the longest chain in a hash table we defined the constant $I$ as:
-\begin{displaymath}
-I = \displaystyle\int\limits_4^\infty 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
-\end{displaymath}
+To complete our goal we change the previous claims to fit the scheme of hashing linear amounts of elements. As already mentioned good asymptotic behaviour is not enough since we can not neglect the inherited constant factors. In the presented proofs of corresponding theorems we try to make the estimates as tight as possible.
 
-Now we will extend the definition of $I$ to $I_{\epsilon}$. This integral is one part of the multiplicative constant $16c_\epsilon(4 + I)$.
-\begin{displaymath}
-I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
-\end{displaymath}
-Originally we used $I_{\frac{1}{2}} = I$. The extension is motivated by the fact that we were not forced to use $\epsilon$ equal to $0.5$. If we chose other values we could obtain even smaller integral values. If we select an arbitrary $\epsilon$ the conditional probability of event $E_2 | E_1$ is constrained as $P(E_2 | E_1) \geq 1 - \epsilon$. And the bound on the probability of event $E_1$ becomes $P(E_1) \leq \frac{1}{1-\epsilon} P(E_2)$.
+\section{Minimising the integral part}
+When we were performing last part of the proof of theorem \ref{theorem-n-logn-to-n}, the upper bond on the length of the longest chain in a hash table, we defined constant $I_\epsilon$, for $0 < \epsilon < 1$, as
+\[
+I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
+\]
+This integral is part of the multiplicative constant $16c_\epsilon(4 + I_\epsilon)$. To lower its value we provide a way how to estimate $I_\epsilon$.
 
-Evaluation of the integral $I$ may be split into two parts. We try to compare it to a function which has a convergent improper integral. The function chosen here is $r^{1.5}$. But the chosen function becomes greater after the value $r = 16$. In the interval $[4, 16]$ the integral $I$ is bounded by its upper Riemann sum.
+In the original proof of theorem in \cite{DBLP:journals/jacm/AlonDMPT99} only special case $I_{\frac{1}{2}}$ was considered. Our extension to $I_\epsilon$ is motivated by the fact that we are not forced to use $\epsilon$ equal to $0.5$. If we chose other values we could obtain even smaller constant values.
+
+Evaluation of the integral $I_\epsilon$ is split into two parts. We compare integrand of $I_\epsilon$ to a function $f(r)$ which has convergent improper integral $\int_{4}^{\infty} f(r) dr$. The function chosen here is $r^{1.5}$. The chosen function becomes greater than integrand for $r \geq 16$. In the interval $[4, 16]$ he value of integral $I_\epsilon$ is bounded by its upper Riemann sum.
 
 For $r = 16$:
-\begin{displaymath}
-\frac{1}{16 ^ {1.5}} = \frac{1}{64}
-\end{displaymath}
+\[
+	\frac{1}{16 ^ {1.5}} = \frac{1}{64}
+\]
 
-\begin{displaymath}
-\left(\frac{16}{\log 16}\right)^{-\log \left(\frac{16}{\log 16}\right) - \log \log \left(\frac{16}{\log 16}\right)} = 4^{-2 - 1} = \frac{1}{64}
-\end{displaymath}
+\[
+	\left(\frac{16}{\log 16}\right)^{-\log \left(\frac{16}{\log 16}\right) - \log \log \left(\frac{16}{\log 16}\right)} = 4^{-2 - 1} = \frac{1}{64}
+\]
 
-For $r > 16$ we can use our estimates.
-\begin{displaymath}
+Combining our estimates gains the following.
+\[
 \begin{split}
 I_{\epsilon} 
 	& \leq \frac{1}{1 - \epsilon} \left( \displaystyle \sum_{r = 4}^{15} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} + \int\limits_{16}^\infty \frac{1}{r^{1.5}} dr \right) \\
 	& \leq \frac{1}{1 - \epsilon} \left(4.3 + \frac{1}{2}\right) = \frac{4.8}{1-\epsilon}
 \end{split}
-\end{displaymath}
+\]
 
-\subsection{Choosing $\epsilon$}
-The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$. This is the explicit formula for the multiplicative constant. This value is less then 22 568 for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. These values come from a slight modification of the theorem \ref{theorem-set-onto-by-linear-transform} and we will explain them later. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant the estimate becomes less than linear for $n$ approximately equal to one million.
+\section{Setting the parameters of the system}
+Let us present a simple parametrisation of choice of $\epsilon$ to obtain minimal value of $c_\epsilon$ and multiplicative constant. This simple but powerful technique is used later with combination of newly achieved results.
 
-The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every constant in it. Values of the parameters are than optimised to get the least multiplicative constant. The optimisation itself is not performed analytically because of its complexity that is caused by the emerged constraints. 
+The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$ what is the explicit formula for the multiplicative constant. Greatest part of value of this constant is taken by the factor $c_\epsilon$. To get the lowest possible a slight modification of proof of theorem \ref{theorem-set-onto-by-linear-transform} is needed.
 
-Instead we created a straightforward program that assigns each parameter values from a predefined interval. They are enumerated uniformly with the prescribed step. The multiplicative constant is then computed for every such assignment and the best achieved value is remembered.
+The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every chosen constant in it. Values of the parameters are than set in order to get the least multiplicative constant. The optimisation itself is not performed analytically because of its complexity that is caused by the constraints that emerge. 
 
-We actually created two parameters $k$ and $l$. The limit of the size of the set $T_0(A)$ is changed to $\frac{|A|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $Z_2^u$. We change the definition of $u$ to:
-\begin{displaymath}
-u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \textit{.}
-\end{displaymath}
+We created a straightforward program that assigns each parameter values from a predefined interval instead. These values are enumerated uniformly with the prescribed step. The multiplicative constant is then computed for every such assignment and the best achieved value is remembered.
 
-The probability of the event $T(A) \neq Z_2^t$ can be expressed by using law of total probability as:
-\begin{displaymath}
+We parametrised the proof by two variables $k$ and $l$. The limit on the size of set $T_0(A)$ is changed to $\frac{|A|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $\vecspace{u}$. We change the definition of $u$ to:
+\[
+u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \text{.}
+\]
+
+As seen in the original proof the probability of the event $T(A) \neq \vecspace{t}$ can be expressed by using law of total probability as:
+\[
 \begin{split}
-P(T(A) \neq Z_2^t) 
-    & = P(T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{k}) + P(T(A) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}) \\ 
-    & \leq P(|T_0(A)| \leq \frac{|A|}{k}) + P(T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}) \\
-    & \leq \epsilon \\
+& \Prob{T(A) \neq Z_2^t} \\
+    & \qquad = \Prob{T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{k}} + \Prob{T(A) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}} \\ 
+    & \qquad \leq \Prob{|T_0(A)| \leq \frac{|A|}{k}} + \Prob{T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}} \\
+    & \qquad \leq \epsilon \\
 \end{split}
-\end{displaymath}
-The right side, $\epsilon$, is the needed result which we must obtain by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we could not get a good result. So we compute the constant $c_{\epsilon}$ explicitly without any estimations from the last inequality in the proof of theorem \ref{theorem-set-onto-by-linear-transform}.
+\]
+
+The right side, $\epsilon$, is the wanted result which must be gained by choosing the convenient $c_{\epsilon}$. Also the estimate of $c_{\epsilon}$ was modified comparing to the original proof. By putting $c_{\epsilon}$ equal to $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$ we can not get a good result. Value of $c_{\epsilon}$ is computed explicitly without any inaccurate estimations.
 
 \begin{lemma}
 \label{lemma-collision-count}
-When the size of the set $|T_0(A)|$ is less than $\frac{|A|}{k}$ for $1 \leq k$ then there are at least $\frac{|A|(k - 1)}{2}$ collisions.
+Let $T_0: U \rightarrow W$ be a function and $A \subseteq U$. If the size of the set $|T_0(A)|$ is less than $\frac{|A|}{k}$ for $1 \leq k$ then there are at least $\frac{|A|(k - 1)}{2}$ collisions. By collision of two elements $x \neq y \in A$ the unordered pair $\{ x, y \}$ such that $T_0(x) = T_0(y)$ is understood.
 \end{lemma} 
 \begin{proof}
-Define the sequence $b_i$ for $i \in T_0(A)$ where $b_i = \left|A \cap T_0^{-1}(i)\right|$. Also note that $\sum_{i \in T_0(A)} b_i = |A|$.
+Define the sequence $b_i \in \mathbb{N}_0$ for $i \in T_0(A)$ where $b_i = \left|A \cap T_0^{-1}(i)\right|$. Also note that $\sum_{i \in T_0(A)} b_i = |A|$.
 The number of all colliding pairs can be computed as follows.
-\begin{displaymath}
-\frac{1}{2} \sum_{i \in T_0(A)} b_i (b_i - 1) \geq \frac{|A|}{2}\left(\frac{|A|}{|T_0(A)|} - 1\right) \geq \frac{|A|(k - 1)}{2}
-\end{displaymath}
-The last inequality can be obtained from Cauchy–Bunyakovsky–Schwarz inequality.
+\[
+\begin{split}
+|\{ \{x, y\} \setdelim x \neq y \in A, T_0(x) = T_0(y) \}| 
+	& = \frac{1}{2} \sum_{i \in T_0(A)} b_i (b_i - 1) \\ 
+	& \geq \frac{|A|}{2}\left(\frac{|A|}{|T_0(A)|} - 1\right) \\
+	& \geq \frac{|A|(k - 1)}{2}
+\end{split}
+\]
+The first inequality can be obtained from Cauchy–Bunyakovsky–Schwarz inequality.
 \end{proof}
 
-\begin{displaymath}
+For the probability of the first event, $|T_0(A)| \leq \frac{|A|}{k}$, we use the Markov inequality as in the original proof. The only difference is that the number of collisions is at least $\frac{|A|(k - 1)}{2}$ by lemma \ref{lemma-collision-count}. The expected number remains the same $\dbinom{|A|}{2}2 ^ {-u}$.
+\[
 \begin{split}
-P(|T_0(A)| \leq \frac{|A|}{k}) & + P(T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}) \\ 
-& \leq \frac{|A| - 1}{(k - 1)|W|} + \left(1 - \frac{|A|}{k|W|}\right)^{u - t - \log t + \log \log \left(\frac{1}{1 - \frac{|A|}{k|W|}}\right)} \\
-& < \frac{\epsilon}{(k - 1) 2 ^ l} + \left(1 - \frac{\epsilon}{2 k 2^l}\right)^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2^l}}\right)} \\
-& \leq \epsilon \\
+\Prob{|T_0(A)| \leq \frac{|A|}{k}} 
+	& \leq \Prob{d_a \geq \frac{|A|(k - 1)}{2}} \\
+	& \leq \frac{\dbinom{|A|}{2}2 ^ {-u}}{\frac{|A|(k - 1)}{2}} \\
+	& = \frac{|A| - 1}{(k - 1) 2^u} \\
 \end{split}
-\end{displaymath}
+\]
 
-For convenience we define a new variable $\alpha'$ equal to $1 - \frac{\epsilon}{2 k 2 ^l}$. From the above inequality we need to find the minimal value of $c_\epsilon$:
-\begin{displaymath}
+The second event's probability estimate is based on the theorem \ref{theorem-linear-function-set-onto} as well. Just note it is used for the set $T_0(A)$ transformation $T_1$, the source and resulting vector spaces are $\vecspace{u}$ and $\vecspace{t}$ respectively. The inverse density $\mu = 1 - \frac{|T_0(A)|}{2^u}$.
+
+The following upper bound on the $\mu$ is very useful to be shown.
+\[
 \begin{split}
-\frac{\epsilon}{(k - 1) 2 ^ l} + {\alpha'}^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{\alpha'}\right)} & \leq \epsilon \\
-{\alpha'}^{\log c_\epsilon}{\alpha'}^{l - \log \epsilon + \log \log \left(\frac{1}{\alpha'}\right)} & \leq \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l} \\
-{\alpha'}^{\log c_\epsilon} & \leq \left(\epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\alpha'}^{\log \epsilon - l - \log \log \left(\frac{1}{\alpha'}\right)} \\
-{\log c_\epsilon} & \geq \frac{\log \left( \left( \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\alpha'}^{\log \epsilon - l - \log \log \left(\frac{1}{\alpha'}\right)}\right)}{\log \alpha'}  \\
+\mu = 1 - \frac{|T_0(A)|}{2^u} 
+	& \leq 1 - \frac{|A|}{k 2 ^ u} \\
+	& \leq 1 - \frac{\epsilon}{2 k 2 ^ l}
 \end{split}
-\end{displaymath}
+\]
 
+From the assumption on the set $A$ we also have that
+\begin{gather*}
+	|A| \geq c_\epsilon 2^t t \\
+	u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \geq l + \log c_\epsilon + t + \log t - \log \epsilon \text{.} \\
+\end{gather*}
 
-\section{Hashing a linear amount of elements}
-A common use of a hash table is with load factors lower than one. We already showed if there is a super-linear amount of elements hashed we can expect a reasonable result in the worst case. However the most important is the expected size of a bucket. The upper bound of the expected size is equal to $1 + c \alpha$. So using a load factor lower than one has a significant impact on the average case. We need to examine a scheme of hashing $\alpha_f n$ elements into a hash table of size $n$ where $\alpha_f$ is the table's load factor. 
-
-We need to change the previous claims to fit our new scheme: 
-\begin{theorem}
-\label{theorem-n-to-n}
-When hashing $\alpha_f n$ elements into a table of size $n$ the expected length of the longest chain is bounded by $O(\alpha_f \log n \log \log n)$.
-\end{theorem}
-\begin{proof}
-We have to modify the previous lemmas and their proofs from. Apparently we must lower the value of a chain length when we get a convenient probability estimate proportionally to $\alpha_f$. 
-
-\begin{remark}
-There is a constant $C$ so that for all $r > 4$, $S$ is the hashed set ($S \subset D$, $|S| = \alpha_f n$) and $B = Z_2^{\log n}$ is the hash table the probability of existence of a long chain is:
-\begin{displaymath}
-P(lpsl > r \alpha_f C \log n \log \log n) \leq 2 \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\textit{.}
-\end{displaymath}
-\end{remark}
-\begin{proof}
-We show changes that need to be made. 
-\begin{displaymath}
+\[
 \begin{split}
-l & = \left\lfloor \log n + \log \log n + \log r - \log \log r + \log \alpha_f + 1 \right\rfloor \\
-t & = 4\alpha_f c_{\frac{1}{2}} \log n \log \log n \\
-d & = \frac{2^l}{\alpha_f n \log n} \\
+& \Prob{T_1(T_0(A)) \neq \vecspace{t} \wedge |T_0(A)| > \frac{|A|}{k}} \\
+	& \qquad \leq \mu ^ {u - t - \log t + \log \log \left(\frac{1}{\mu}\right)} \\
+	& \qquad \leq \left(1 - \frac{\epsilon}{2 k 2 ^ l}\right)^{l + \log c_\epsilon + t + \log t - \log \epsilon - t - \log t + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2 ^ l}}\right)} \\
+	& \qquad \leq \left(1 - \frac{\epsilon}{2 k 2 ^ l}\right)^{l + \log c_\epsilon - \log \epsilon + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2 ^ l}}\right)} \\
 \end{split}
-\end{displaymath}
+\]
 
-The assumptions of the remark \ref{remark-e2-probability} are met. The factor $\alpha_f$ may appear in the denominator because the size of the hashed set is certainly limited by $\alpha_f n \leq \alpha_f n \log n$:
-\begin{displaymath}
-d = \frac{2^l}{\alpha_f n \log n} \geq \frac{\alpha_f n \log n r}{\alpha_f n \log n \log r} > 1 \textit{.}
-\end{displaymath}
-
-In the proof of the \ref{remark-e2-probability} we also used a relation among $h_1(S)$, $A = Z_2^l$, $\alpha$ and $d$. We must show that similar relations hold. This makes our reasoning valid for this scheme, too.
-\begin{displaymath}
-\alpha = \frac{|h_1(S)|}{|A|}\leq \frac{|S|}{|A|} = \frac{\alpha_f n}{2^l} \leq \frac{\alpha_f n \log n}{2^l} = \frac{1}{d} \textit{.}
-\end{displaymath}
-
-For using the other lemma the value of the variable $t$ has to be large enough:
-\begin{displaymath}
+\[
 \begin{split}
-c_{\frac{1}{2}} \frac{2^l}{n} \log \left(\frac{2^l}{n}\right) 
-	& < c_{\frac{1}{2}} 2 \alpha_f \log n \left( \frac{r}{\log r} \right) \left(2 \log \log n \log r \right) \\
-	& \leq 4 c_{\frac{1}{2}} \alpha_f \log n \log \log n \log r \\
-	& = t
+& \Prob{|T_0(A)| \leq \frac{|A|}{k}} + \Prob{T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}} \\ 
+	& \qquad \leq \frac{\epsilon}{(k - 1) 2 ^ l} + \left(1 - \frac{\epsilon}{2 k 2^l}\right)^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2^l}}\right)} \\
+	& \qquad \leq \epsilon \\
 \end{split}
-\end{displaymath}
+\]
 
-The conditions of the remark \ref{remark-prob-l-length-chain} are fulfilled. Its proof is still right, since we use it with no further assumptions. The same vector space $A = Z_2^l$ is constructed; we never referenced the value of $l$. The vector space $B$, the hash table, is unchanged.
-
-We continue identically to the previous case:
-\begin{displaymath}
-P(E1) \leq \frac{1}{P(E2|E1)}P(E2) \leq 2 d ^ {-\log d - \log \log d}\textit{.}
-\end{displaymath}
-\end{proof}
-
-In order to achieve the desired length we modify the calculation by taking $K = C \alpha_f \log n \log \log n$.
-\begin{displaymath}
+The last inequality is the proved bound that is achieved by the convenient but lowest possible choice of $c_\epsilon$. From the last expression the only thing we need is to have variable $c_\epsilon$ standalone so that the minimal value of $c_\epsilon$ is found. For convenience define a new variable $\mu' = 1 - \frac{\epsilon}{2 k 2 ^l}$.
+\[
 \begin{split}
-E lpsl 
-	& = \int\limits_0^\infty P(lpspl > t) dt \\
-	& \leq 4K + \int\limits_{4K}^\infty P(lpspl > t) dt \\
-	& = 4K + K\int\limits_4^\infty P(lpspl > tK) dt \\
-	& \leq K(4 + I) = O(K) = O(\alpha_f \log n \log \log n)
+\frac{\epsilon}{(k - 1) 2 ^ l} + {\mu'}^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} & \leq \epsilon \\
+{\mu'}^{\log c_\epsilon}{\mu'}^{l - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} & \leq \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l} \\
+{\mu'}^{\log c_\epsilon} & \leq \left(\epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\mu'}^{\log \epsilon - l - \log \log \left(\frac{1}{\mu'}\right)} \\
+{\log c_\epsilon} & \geq \frac{\log \left( \left( \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\mu'}^{\log \epsilon - l - \log \log \left(\frac{1}{\mu'}\right)}\right)}{\log \mu'}  \\
 \end{split}
-\end{displaymath}
+\]
 
-Expression $I$ has not been modified.
-\end{proof}
+So we modified the proof of the original theorem in order to obtain a better values of $c_\epsilon$. Its value is computed for every choice of parameters $k$ and $l$ directly from the above expression. The best value obtained by presented method is less then 22 568 for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant the estimate becomes less than linear estimate, $\Expect{\lpsl} \leq n$, for the number of elements stored approximately equal to one million.
 
 \section{Obtaining an even better multiplicative constant}
 For the model of hashing linear amount of elements we only used the estimates valid also in the case of hashing the super-linear count of items. Now in order to obtain a better result we have to reconsider our choices. The ideas remain the same but we will change some claims to suit our needs.
