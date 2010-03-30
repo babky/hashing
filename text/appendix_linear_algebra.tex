@@ -1,6 +1,6 @@
 \begin{chapter}{Facts from linear algebra}
 \begin{definition}[Affine subspace]
-Let $V$ be a vector space, $U \subseteq V$ be its subspace and $\vec{x} \in V$. Set $A = x + V$ is called an affine subspace of $V$.
+Let $V$ be a vector space, $U \subseteq V$ be its subspace and $\vec{x} \in V$. Set $A = \vec{x} + V$ is called an affine subspace of $V$.
 \end{definition}
 
 \begin{definition}[Null-space of matrix]
@@ -10,7 +10,7 @@ Let $A$ be a matrix from $T ^ {m \times n}$ where $T$ is a field and $n, m \in \
 \begin{definition}[Orthogonal complement]
 Let $V$ be a vector subspace of a vector space $U$. Orthogonal complement of subspace $V ^ {\bot}$ is defined by:
 \[
-	V ^ {\bot} = \{ u \in U \setdelim \langle u | v \rangle = 0 \text{ for all } v \in V \} \text{.}
+	V ^ {\bot} = \{ \vec{u} \in U \setdelim \langle \vec{u} | \vec{v} \rangle = 0 \text{ for all } \vec{v} \in V \} \text{.}
 \]
 \end{definition}
 
@@ -34,11 +34,11 @@ For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have $t \vec{x} \in \null
 \end{proof}
 
 \begin{definition}[Affine linear map]
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = v + V_0$ and $U_A = u + U_0$ be affine subspaces of $V$ and $U$ respectively for $v \in V$, $u \in U$. Function $T_A: V_A \rightarrow U_A$ is called affine linear map if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(x) = u + T_0(x - v)$.
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for some vectors $\vec{v} \in V$, $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is called affine linear map if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(x) = \vec{u} + T_0(x - \vec{v})$.
 \end{definition}
 
 \begin{definition}[Set of all affine linear map]
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = v + V_0$ and $U_A = u + U_0$ be affine subspaces of $V$ and $U$ respectively for $v \in V$, $u \in U$. Set of all affine linear mapping between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for $\vec{v} \in V$, $\vec{u} \in U$. Set of all affine linear mapping between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
 \[
 	LT_A(V_A, U_A) = \{ T: V_A \rightarrow U_A \setdelim T \text{ is an affine map} \} \text{.}
 \]
@@ -46,7 +46,7 @@ Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. L
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Let $T: \vecspace{u} \rightarrow \vecspace{t}$, $u \geq t$ be an~onto linear map and vector $x \in \vecspace{t}$. Then $|T^{-1}(x)| = 2 ^ {u - t}$ and moreover set $T^{-1}(x)$ is an affine subspace of $\vecspace{u}$.
+Let $T: \vecspace{u} \rightarrow \vecspace{t}$, $u \geq t$ be an~onto linear map and vector $\vec{x} \in \vecspace{t}$. Then $|T^{-1}(\vec{x})| = 2 ^ {u - t}$ and moreover set $T^{-1}(\vec{x})$ is an affine subspace of $\vecspace{u}$.
 \end{lemma}
 \begin{proof}
 At first remark that $T^{-1}(0)$ is a~subspace of~space $\vecspace{u}$.
@@ -57,36 +57,36 @@ Set $T^{-1}(0)$ contains zero.
 It is closed under addition.
 \[
 \begin{split}
-u, v \in T^{-1}(0) 
-	& \Rightarrow T(u) = 0, T(v) = 0 \\ 
-	& \Rightarrow T(u + v) = T(u) + T(v) = 0 \\ 
-	& \Rightarrow u + v \in T^{-1}(0) \\
+\vec{u}, \vec{v} \in T^{-1}(0) 
+	& \Rightarrow T(\vec{u}) = 0, T(\vec{v}) = 0 \\ 
+	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = 0 \\ 
+	& \Rightarrow \vec{u} + \vec{v} \in T^{-1}(0) \\
 \end{split}
 \]
 
 It is closed under scalar multiplication.
 \[
 \begin{split}
-\delta \in \{0, 1\} \wedge u \in T^{-1}(0) 
-	& \Rightarrow T(\delta u) = \delta T(u) = \delta 0 = 0 \\
-	& \Rightarrow \delta u \in T^{-1}(0) \\
+\delta \in \{0, 1\} \wedge \vec{u} \in T^{-1}(0) 
+	& \Rightarrow T(\delta \vec{u}) = \delta T(\vec{u}) = \delta 0 = 0 \\
+	& \Rightarrow \delta \vec{u} \in T^{-1}(0) \\
 \end{split}
 \]
 
-$T^{-1}(x)$ is an~affine subspace since $T^{-1}(x) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(x)$ have the~same size, exactly $|T^{-1}(x)| = 2^{u-t}$. For every vector $u \in T^{-1}(x)$ the~set $T^{-1}(x)$ is the~same as $u + T^{-1}(0)$. This is also the one to one map between $T^{-1}(0)$ and $T^{-1}(x)$.
+$T^{-1}(\vec{x})$ is an~affine subspace since $T^{-1}(\vec{x}) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(\vec{x})$ have the~same size, exactly $|T^{-1}(\vec{x})| = 2^{u-t}$. For every vector $\vec{u} \in T^{-1}(\vec{x})$ the~set $T^{-1}(\vec{x})$ is the~same as $\vec{u} + T^{-1}(0)$. This is also the one to one map between $T^{-1}(0)$ and $T^{-1}(\vec{x})$.
 \begin{displaymath}
 \begin{split}
-v \in T^{-1}(0) 
-	& \Rightarrow T(u+v) = T(u) + T(v) = x + 0 = x  \\
-	& \Rightarrow u + T^{-1}(0) \subseteq T^{-1}(x)
+\vec{v} \in T^{-1}(0) 
+	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{x} + 0 = \vec{x}  \\
+	& \Rightarrow \vec{u} + T^{-1}(0) \subseteq T^{-1}(\vec{x})
 \end{split}
 \end{displaymath}
 \begin{displaymath}
 \begin{split}
-v \in T^{-1}(x) 
-	& \Rightarrow T(v-u) = T(v) - T(u) = x - x = 0 \\
-	& \Rightarrow v - u \in T^{-1}(0) \\
-	& \Rightarrow T^{-1}(x) \subseteq u + T^{-1}(0)
+\vec{v} \in T^{-1}(\vec{x}) 
+	& \Rightarrow T(\vec{v} - \vec{u}) = T(\vec{v}) - T(\vec{u}) = \vec{x} - \vec{x} = 0 \\
+	& \Rightarrow \vec{v} - \vec{u} \in T^{-1}(0) \\
+	& \Rightarrow T^{-1}(\vec{x}) \subseteq \vec{u} + T^{-1}(0)
 \end{split}
 \end{displaymath}
 \end{proof}

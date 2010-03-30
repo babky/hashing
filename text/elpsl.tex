@@ -4,7 +4,7 @@
 At first let us explain why the size of a bucket is so important for hashing. Assume a model of hashing storing elements in separate buckets in a hash table also called chains. A chain is created from the elements stored in a single bucket and is commonly represented by singly linked lists, hence the word chain. To find an element in a bucket (or chain) one needs to iterate throughout all its elements. Thus the time of the find operation is linear with the number of elements that fell in the bucket. A basic approach how to estimate the longest chain length when using universal hashing is revealed.
 
 \begin{definition}[Equality indicator]
-Let $x$ and $y$ be two variables from the same universe $A$. Then function $\mathbf{I}: A \times A \rightarrow \{0, 1\}$ such that
+Let $x$ and $y$ be two variables from the same set $B$. Then function $\mathbf{I}: B \times B \rightarrow \{0, 1\}$ such that
 \[
  \mathbf{I}(y = x) =
   \begin{cases}
@@ -16,9 +16,9 @@ is called equality indicator.
 \end{definition}
 
 \begin{definition}[Probe sequence length, longest probe sequence length]
-Let $H$ be universal class of functions hashing universe $U$ onto a table $A$. Let $a \in A$ be a bucket of $A$ and $S \subseteq U$ be the represented set. 
+Let $H$ be universal class of functions hashing universe $U$ onto a table $B$. Let $a \in B$ be a bucket of $B$ and $S \subseteq U$ be the represented set. 
 
-Then length of the chain $a$ when hashing by function $h$ is denoted by the variable $\psl(a, h) = \displaystyle \sum_{x \in S} \Indicator(h(x) = a)$. Variable $\lpsl(h) = \displaystyle \max_{a \in A} (\psl(a, h))$ denotes the length of the longest chain when using function $h$.
+Then length of the chain $a$ when hashing by function $h$ is denoted by the variable $\psl(a, h) = \displaystyle \sum_{x \in S} \Indicator(h(x) = a)$. Variable $\lpsl(h) = \displaystyle \max_{a \in B} (\psl(a, h))$ denotes the length of the longest chain when using function $h$.
 \end{definition}
 
 Notation probe sequence comes from coalesced hashing. Chains are represented directly in the hash table and they are fused together even for elements with different hash values. Many authors refer to the process of finding an element in a chain as probing the sequence. Notation for random variables they use is $\psl$ and $\lpsl$ respectively. % TODO: citation.
@@ -28,14 +28,14 @@ Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed
 When taking the probability into an account we define random variables $\psl$ and $\lpsl$ over the probability space determined by a choice of hash function $h \in H$ where $H$ is a universal class of hash functions used.
 
 \begin{definition}[Random variables of probe sequence length and longest probe sequence length]
-Let random variable $\psl(a)$ denote the size of the bucket $a \in A$. Its values are from $\mathbb{N}$ and probability density function is defined as:
+Let random variable $\psl(a)$ denote the size of the bucket $a \in B$. Its values are from $\mathbb{N}$ and probability density function is defined as:
 \[
 \Prob{\psl(a) = k} = \frac{\sum_{h \in H} \Indicator(\psl(a, h) = k)}{|H|}\text{.}
 \]
 
 Random variable $\lpsl$ denoting the maximal size of a bucket in a hash table is defined as:
 \[
-\lpsl = \displaystyle\max_{a \in A}(\psl(a))\text{.}
+\lpsl = \displaystyle\max_{a \in B}(\psl(a))\text{.}
 \]
 \end{definition}
 \end{section}
@@ -43,11 +43,15 @@ Random variable $\lpsl$ denoting the maximal size of a bucket in a hash table is
 \begin{section}{Estimating length of the longest chain in the standard model of hashing}
 The standard result of hashing is the $O\left(\frac{\log n}{\log \log n}\right)$ bound on the length of the longest chain for the hashing. We can use computations in its proof to show the same bound holds for universal hashing with strongly $\omega$-universal class of functions. In order to prove this result we need to estimate the probability of collision of $k$ elements. Simplest model of hashing uses an assumption that is not necessarily satisfied; hashed elements are independently and uniformly chosen from the universe $U$. This is enough to bypass the problem. 
 
-The above definitions are for models of universal hashing however they are easy to understand with standard hashing, too. Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$. The simplest model assumes usage of just one hash function. It is parametrised by a choice of the hashed set $S \subset U$ instead. Since used hash function uniformly distributes the elements of the universe across the hash table we also do need the bucket parameter of variable $\psl$. For every pair of buckets $a, b \in A$ random variables have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{.}\] In this chapter $m$ denotes the size of the hash table $A$ and $n$ is the size of the hashed set $S$.
+The above definitions are intended for models of universal hashing. However they are easy to understand with standard hashing, too. 
+
+Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$ because the standard model assumes usage of just one hash function. Probability computed in this model is taken over the choice of the hashed set $S \subset U$. 
+
+Restrictions put on the hash function say that it distributes the elements of universe across the hash table uniformly. Hence the other parameter, bucket $b \in B$, of variable $\psl$ is no longer necessary. For every pair of buckets $a, b \in B$ random variables $\psl(a)$ and $\psl(b)$ have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{.}\] In this chapter $m$ denotes the size of the hash table $B$ and $n$ is the size of the hashed set $S$.
 
 The probability estimate for the variable $\lpsl$ is simply obtained from the probability estimate of $\psl$ as:
 \begin{displaymath}
-\Prob{\lpsl \geq i} \leq m \Prob{\psl(a) \geq i \text{ for any } a \in A}
+\Prob{\lpsl \geq i} \leq m \Prob{\psl(a) \geq i \text{ for any } a \in B}
 \end{displaymath}
 
 \begin{displaymath}
@@ -64,7 +68,7 @@ And thus we have:
 \Expect{\lpsl} \leq \displaystyle \sum_{i = 0}^{\infty} m \Prob{\psl \geq i}
 \end{displaymath}
 
-From the assumption of independent and uniform choice of hashed elements from the universe we can estimate the probability of collision as binomial random variable. The event that an element is hashed into a prescribed bucket is $\frac{1}{m}$ because the used hash function divides universe $U$ uniformly among buckets \[ ||h^{-1}(i)| - |h^{-1}|(j)| \leq 1 \] for every $i, j \in A$.
+From the assumption of independent and uniform choice of hashed elements from the universe we can estimate the probability of collision as binomial random variable. The event that an element is hashed into a prescribed bucket is $\frac{1}{m}$ because the used hash function divides universe $U$ uniformly among buckets \[ ||h^{-1}(i)| - |h^{-1}|(j)| \leq 1 \] for every $i, j \in B$.
 \begin{displaymath}
 \Prob{\psl \geq i} \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i
 \end{displaymath}
@@ -113,29 +117,29 @@ If $M \neq \emptyset$ then $I(M) = 1 \leq |M|$ so the statement is true.
 
 Now we present a method how to estimate the probability of collision of $k$ elements.
 \begin{definition}[Collision sets of $k$ elements]
-Let $h \in H$ be the universal function used, $k \in \mathbb{N}_0$ be supposed number of colliding elements and $\tilde{x} \in A$ be the collision bucket. Define sets $M_{\geq k}(h, \tilde{x})$ and $M_{= k}(h, \tilde{x})$ as
+Let $h \in H$ be the universal function used, $k \in \mathbb{N}_0$ be supposed number of colliding elements and $a \in B$ be the collision bucket. Define sets $M_{\geq k}(h, a)$ and $M_{= k}(h, a)$ as
 \begin{displaymath}
 \begin{split}
-M_{\geq k}(h, \tilde{x}) & = \{Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{\tilde{x}\}\} \\
-M_{= k}(h, \tilde{x}) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{\tilde{x}\}\} 
+M_{\geq k}(h, a) & = \{Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{a\}\} \\
+M_{= k}(h, a) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{a\}\} 
 \end{split}
 \end{displaymath}
 \end{definition}
 
-When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the hashed set $S$ of size greater or equal to $k$ hashed to a same value $\tilde{x}$. 
+When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the hashed set $S$ of size greater or equal to $k$ hashed to a same value $a$. 
 
 \begin{lemma}
 \label{lemma-indicator-k-collision}
-For any function $h$ and bucket $\tilde{x}$ non-emptiness of set $M_{\geq k}$ is equivalent to the non-emptiness of set $M_{= k}$:
+If $h: U \rightarrow B$ is a hash function mapping universe $U$ to hash table $B$ then for any bucket $a \in B$ non-emptiness of set $M_{\geq k}(h, a)$ is equivalent to the non-emptiness of set $M_{= k}(h, a)$ or equivalently written
 \begin{displaymath}
-\Indicator(M_{\geq k}) = \Indicator(M_{= k}) \text{.}
+\Indicator(M_{\geq k}(h, a)) = \Indicator(M_{= k}(h, a)) \text{.}
 \end{displaymath}
 \begin{proof}
 Let $M_{\geq k}$ be a non empty set:
 \begin{displaymath}
 \begin{split}
 Y \in M_{\geq k} 
-	& \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{\tilde{x}\} \\
+	& \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{a\} \\
 	& \Leftrightarrow \forall Y' \subseteq Y, |Y'| = k: Y' \in M_{=k} \\
 	& \Rightarrow \exists Y' \subseteq Y, |Y'| = k: Y' \in M_{=k} \\
 \end{split}
@@ -156,30 +160,30 @@ M_{\geq k} \neq \emptyset & \Leftrightarrow  M_{= k} \neq \emptyset \\
 \end{proof}
 \end{lemma}
 
-We choose any arbitrary element $\tilde{x} \in U$. If the chain of the selected element $\tilde{x}$ has $\psl(\tilde{x}, h) \geq k$ then there must exists a subset $Y$ of hashed set $S \subset U$ such that used function $h$ is constant on $Y$ and moreover $h(Y) = \{ \tilde{x} \}$. If $\psl(\tilde{x}, h) = k$ then set $Y$ must be maximal in the number of its elements; it may not be extended to a larger set hashed onto $\tilde{x}$. We can compute the probability density function of $\psl(\tilde{x})$ as:
+We choose any arbitrary element, bucket, $a \in B$. If the chain of the selected element $a$ has $\psl(a, h) \geq k$ then there must exists a subset $Y$ of hashed set $S \subset U$ such that function $h$ is constant on $Y$ and $h(Y) = \{ a \}$. If $\psl(a, h) = k$ then set $Y$ must be maximal in the number of its elements. It may not be possible to extend $Y$ to a larger set hashed just onto $a$. We can write down the probability density function of $\psl(a)$ as:
 \begin{displaymath}
 \begin{split}
-\Prob{\psl(\tilde{x}) \geq k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-\Prob{\psl(\tilde{x}) = k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \}, Y \text{ is maximal} \})}{|H|} \\
+\Prob{\psl(a) \geq k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ a \} \})}{|H|} \\
+\Prob{\psl(a) = k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ a \}, Y \text{ is maximal} \})}{|H|} \\
 \end{split}
 \end{displaymath}
 
 We add some remarks to clarify the motivation of the following calculations:
 \begin{itemize}
-\item Every chain is determined by a single element $\tilde{x}$ which is included in it.
+\item Every chain is determined by a single element $a$ which is included in it.
 \item Probability estimate is always computed for a single set $S$ and probability space corresponds to a choice of hash function $h \in H$.
-\item We want to obtain an estimate $\Prob{\psl(\tilde{x}) \geq k} \leq p(A, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl(h) \geq k} \leq |A| p(A, U, H, |S|) \text{.} \] The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
+\item We want to obtain an estimate $\Prob{\psl(a) \geq k} \leq p(B, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl(h) \geq k} \leq |B| p(B, U, H, |S|) \text{.} \] The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
 \end{itemize}
 
 Lemma \ref{lemma-indicator-k-collision} allows us to estimate the probability of collision of more than $k$ elements.
 \begin{displaymath}
 \begin{split}
-\Prob{\psl(\tilde{x}) \geq k}
-	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \})}{|H|} \\
-	& \leq \frac{\sum\displaylimits_{h \in H} |\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
-	& = \frac{|\{ (h, Y) \setdelim |Y| = k, h(Y) = \{ \tilde{x} \} \}|}{|H|} \\
-	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H \setdelim h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+\Prob{\psl(a) \geq k}
+	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ a \} \})}{|H|} \\
+	& = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ a \} \})}{|H|} \\
+	& \leq \frac{\sum\displaylimits_{h \in H} |\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ a \} \}|}{|H|} \\
+	& = \frac{|\{ (h, Y) \setdelim |Y| = k, h(Y) = \{ a \} \}|}{|H|} \\
+	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H \setdelim h(Y) = \{a\} \}|}{|H|} \\
 \end{split}
 \end{displaymath}
 
@@ -191,10 +195,10 @@ If $H$ is strongly $\omega$-universal system, then $\Expect{\lpsl} \in O\left(\f
 \begin{proof}
 \begin{displaymath}
 \begin{split}
-P(l^{\tilde{x}} \geq k) 
-	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
-	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|A|}^{k}}}{|H|} \\
-	& = \dbinom{|S|}{k}\frac{1}{{|A|}^k}
+P(\psl(a) \geq k) 
+	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{a\} \}|}{|H|} \\
+	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|B|}^{k}}}{|H|} \\
+	& = \dbinom{|S|}{k}\frac{1}{{|B|}^k}
 \end{split}
 \end{displaymath}
 
