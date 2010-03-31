@@ -24,67 +24,84 @@ The time of the find operation is given by the length of the chain into which th
 Since the element $x$ may be present in the set $S$ the time is bounded by the expression $1 + c\alpha$ where $\alpha$ is the table's load factor. The typical load factor is lower than 1, we only assumed that it is bounded. It is still enough to see that the expected time of every operation is still in $O(1)$.
 \end{proof}
 
-\section{Effects of trimming long chains on the universal system}
-The model of hashing that we present guarantees the worst case bound on the length of the longest chain and thus the time of all operations. If we knew the value of $\Expect{\lpsl}$ we would know when to stop inserting into a long chain and rehash whole table. The algorithm would start finding more suitable function which does create such long chains. We would also be able to set this limit according to the probability of creating long chain.
+\section{Effects of trimming long chains on a universal system}
+The model of hashing that we present guarantees the worst case bound on the length of the longest chain and thus the time of all operations. Knowledge of $\Expect{\lpsl}$ implies a limit when to stop inserting into a long chain whole table needs to be rehashed. The algorithm would start finding more suitable function which does create such long chains. We would also be able to set this limit according to the probability of creating long chain.
 
-Some formal computations are performed to support these ideas. The fact that $\Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k}$ is obtained by a direct use of the Markov inequality. For instance this means that less than half of all functions create longest chains longer than $2 \Expect{\lpsl}$. In the case of linear transformations $2\Expect{\lpsl} \leq \frac{8 c_\epsilon}{1 - \epsilon} \log m \log \log m$ for every $0 < \epsilon < 1$ where $m$ is the table's size. Situation when a long chain occurs ends by rehashing of the whole table and finding a new suitable function. Chosen mapping creates shorter chains only.
+Some formal computations are performed to support these ideas. The fact that $\Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k}$ is obtained by a direct use of the Markov inequality. For instance this means that less than half of all functions create longest chains longer than $2 \Expect{\lpsl}$. In the case of linear transformations this means $2\Expect{\lpsl} \leq \text{1 076} \log m \log \log m + 88$ for $\epsilon = 0.8$. The choice of $\epsilon$ corresponds to the selection of the minimal multiplicative constant.
 
-If the statement that function $h$ creates a long chain means that there is a chain of length longer than $k \Expect{\lpsl}$ then:
-\[
-|\lbrace h \in H \mid \textit{ h does not create a long chain} \rbrace| 
-	= \left(1 - \Prob{\lpsl > k \Expect{\lpsl}}\right) |H| 
-	\geq \frac{|H|}{k} \text{.}
-\]
+Expected length of the longest chain gives us the generic hint when we should rehash the table to guarantee the worst case time for the member operation. The lower the value $\Expect{\lpsl}$ (or its estimate) is the better worst case limit on a operation's running time is achieved.
 
-Regarding that every function is chosen uniformly and the unsuitable ones are discarded we still perform uniform selection but now among functions that does not create long chains. Note that the restriction on the functions of the universal system is done by using the information about the hashed set. In the next calculation we observe that a smaller but still universal system of functions.
+Mentioned probability bounds computed from the expected value can be improved by direct use of the probability density function of the variable $\lpsl$ when it is known. For linear systems we have already found it. In addition we have consequently improved it in the previous theorems. To sum up we can say that the approach with the expected length is more general but achieves worse performance. More general because whenever we know the probability density function we are able to compute the expected value.
+
+Probability bound on existence of a long chain has two important consequences:
+\begin{itemize}
+\item At most the fraction $\frac{1}{k}$ of all the functions cause long chains; longer than $k \Expect{\lpsl}$. The probability of rehashing for the uniform function's choice is then $\frac{1}{k}$.
+\item When rehashing; when a long chain appeared; to guarantee the bound of $k \Expect{\lpsl}$ the probability of finding a suitable function is $1 - \frac{1}{k}$. Note that this holds under the assumption of the uniform choice of an universal function.
+\end{itemize}
+
+\begin{definition}
+Let $H$ be the universal system mapping an universe $U$ to a hash table $B$. Let $m$ be size of the hash table and $\alpha$ its load factor. Let $l(m, \alpha)$ be a chain length limiting function and $S \subset U$ be a hashed set. 
+
+We say that function $h \in H$ creates a long chain if there is a chain of length longer than limiting value $l(m, \alpha)$.
+
+Moreover let $0 < p < 1$ be probability such that and $\Prob{\lpsl \geq l(m, \alpha)} \leq p$ then system $H_p = \{ h \in H \setdelim h \text{ does not create a long chain} \}$ is called $p$-trimmed system.
+\end{definition}
+
+\begin{lemma}
+\label{lemma-size-of-trimmed-system}
+If $H_p$ is a $p$-trimmed universal system then the number of functions is $(1 - p)|H|$ at least.
+\end{lemma}
+\begin{proof}
 \[
 \begin{split}
-& \Prob{h(x) = h(y) \text{ with trimming}} \\
-	& \qquad =  \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
-	& \qquad \leq \frac{k |\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{|H|} \\ 
-	& \qquad \leq \frac{k |\{ h \in H \mid h(x) = h(y) \}|}{|H|} \\
-	& \qquad = k \Prob{h(x) = h(y) \text{ without trimming}} \\
+|H_p|
+	& = |\lbrace h \in H \setdelim \text{ h does not create a long chain} \rbrace| \\
+	& =\Prob{\lpsl < l(m, \alpha)} |H| \\
+	& = \left(1 - \Prob{\lpsl \geq l(m, \alpha)}\right) |H| \\
+	& \geq (1 - p)|H| \text{.}
 \end{split}
 \]
+\end{proof}
 
-Last inequality combined with $c$-universality of the original system gives $ck$-universality of the resulting system. Similar restrictions on the other universal systems may be used. For such systems probability of collision of two (or more) elements is estimated by their strong $c$-universality or simple $c$-universality. Resulting probability is $k$ times the original one as stated in the next theorem.
+Regarding that every function is chosen uniformly and the unsuitable ones are discarded we still perform uniform selection. But now it is performed among functions that does not create long chains only. Note that the restriction on the functions of the universal system is done by using the information about the hashed set.
 
 \begin{theorem}
-Let $H$ be an universal system of hash functions mapping universe $U$ to a hash table $B$. Let $k > 1$ be the trim rate and define $m = |B|$. Then for every hashed set $S \subset U$ system of functions 
-\[
-	H_S = \{ h \in H \setdelim \lpsl(h) \leq k \Expect{\lpsl} \}
-\]
-is still universal with the constant of universality multiplied by the factor of $k$.
+Let $H$ be an universal system of hash functions mapping an universe $U$ to a hash table $B$. Let $0 < p < 1$ be the trimming rate and set $m = |B|$. Then system of functions $H_p$ is still universal with the constant of universality multiplied by factor $\frac{1}{1 - p}$. Equivalently:
 \[
 	\Prob{h(x) = h(y) \text{ for } h \in H_S} \leq k \Prob{h(x) = h(y) \text{ for } h \in H} \text{.}
 \]
 \end{theorem}
-In the probability statement we used the choice over function $h \in H_S$.
+In the probability statement we are force to choose function $h \in H_p$.
 \begin{proof}
-We use the just derived probability bound.
+Lemma \ref{lemma-size-of-trimmed-system} combined with $c$-universality of the original system gives $\frac{c}{1 - p}$-universality of the $p$-trimmed system. 
+
 \[
 \begin{split}
-\Prob{h(x) = h(y) \text{ for } h \in H_S} 
-	& = \Prob{h(x) = h(y) \text{ with trimming}} \\
-	& \leq k \Prob{h(x) = h(y) \text{ without trimming}} \\
-	& = \Prob{h(x) = h(y) \text{ for } h \in H} \\
+& \Prob{h(x) = h(y) \text{ for } h \in H_p}  \\
+	& \qquad =  \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
+	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{(1 - p)|H|} \\ 
+	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \}|}{(1 - p)|H|} \\
+	& \qquad = \frac{1}{1 - p} \Prob{h(x) = h(y) \text{ for } h \in H} \\
+	& \qquad \leq \frac{c}{(1 - p) m} \\
 \end{split}
 \]
+
+The universality constant is hence $\frac{c}{1 - p}$.
 \end{proof}
 
-Next statement summarises results for the systems of linear transformations inspected by us.
+Similar restrictions for the other universal systems may be found. For such systems probability of collision of two (or more) elements is estimated by their strong $k$-universality. Resulting probability is always $\frac{1}{1 - p}$ times higher than the original one.
+
+Next statement summarises results for the systems of linear transformations that we examine.
 
 \begin{corollary}
 \label{corollary-trimming-linear}
-For every trimming rate and hashed set the system of linear transformations, $LT(U, B)$, is still $k$-universal.
+For every trimming rate $0 < p < 1$ the system of linear transformations, $LT(U, B)$ is $\frac{1}{1 - p}$-universal.
 \end{corollary}
 \begin{proof}
-Since system of linear transformations is $1$-universal as seen in remark \ref{remark-system-of-linear-transformations} and from the previous statement it is clear that the system $LT(U, B)_S$ is still $k$-universal.
+System of linear transformations is $1$-universal as seen in remark \ref{remark-system-of-linear-transformations}. Because of the previous statement it is clear that the system $LT(U, B)_S$ is still $\frac{1}{1 - p}$-universal.
 \end{proof}
 
-The previous computations show us that the expected chain length is still constant but can be larger according to our choice of $k$. Of course by selecting greater length of the longest chain we will omit less mappings. The lower the value of trimming rate is the better expected results are obtained but the warranty for the worst case is adequately worsened.
-
-The most interesting idea of the trimming is an adaptation of the universal class of functions to hashed sets.
+Previous computations show that the expected chain length is still constant but gets larger and depends on our choice of $p$. The looser the value of trimming rate is the better expected results are obtained but the warranty for the worst case is adequately worsened. The most interesting idea remains that trimming is an adaptation of the universal class of functions to hashed sets.
 
 \section{Hashing using the family of linear transformations}
 

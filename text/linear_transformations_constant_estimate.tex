@@ -4,6 +4,7 @@ Improvements of the previous results of hashing with systems of linear transform
 To complete our goal we change the previous claims to fit the scheme of hashing linear amounts of elements. As already mentioned good asymptotic behaviour is not enough since we can not neglect the inherited constant factors. In the presented proofs of corresponding theorems we try to make the estimates as tight as possible.
 
 \section{Minimising the integral part}
+\label{section-integral-estimate}
 When we were performing last part of the proof of theorem \ref{theorem-n-logn-to-n}, the upper bond on the length of the longest chain in a hash table, we defined constant $I_\epsilon$, for $0 < \epsilon < 1$, as
 \[
 I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
@@ -32,26 +33,26 @@ I_{\epsilon}
 \end{split}
 \]
 
-\section{Setting the parameters of the system}
+\section{Parametrisation of the original proofs}
 Let us present a simple parametrisation of choice of $\epsilon$ to obtain minimal value of $c_\epsilon$ and multiplicative constant. This simple but powerful technique is used later with combination of newly achieved results.
 
-The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$ what is the explicit formula for the multiplicative constant. Greatest part of value of this constant is taken by the factor $c_\epsilon$. To get the lowest possible a slight modification of proof of theorem \ref{theorem-set-onto-by-linear-transform} is needed.
+The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$ what is the explicit formula for the multiplicative constant. The greatest part of value of this constant is taken by the factor $c_\epsilon$. To get the lowest possible a slight modification of proof of theorem \ref{theorem-set-onto-by-linear-transform} is needed.
 
 The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every chosen constant in it. Values of the parameters are than set in order to get the least multiplicative constant. The optimisation itself is not performed analytically because of its complexity that is caused by the constraints that emerge. 
 
 We created a straightforward program that assigns each parameter values from a predefined interval instead. These values are enumerated uniformly with the prescribed step. The multiplicative constant is then computed for every such assignment and the best achieved value is remembered.
 
-We parametrised the proof by two variables $k$ and $l$. The limit on the size of set $T_0(A)$ is changed to $\frac{|A|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $\vecspace{u}$. We change the definition of $u$ to:
+We parametrised the proof by two variables $k$ and $l$. The limit on the size of set $T_0(S)$ is changed to $\frac{|S|}{k}$, for $k > 2$. The second parameter is obtained by modifying the dimension of the factor vector space $\vecspace{u}$. We change the definition of $u$ to:
 \[
-u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \text{.}
+u = \left\lceil \log \left(\frac{2^l |S|}{\epsilon}\right) \right\rceil \text{.}
 \]
 
-As seen in the original proof the probability of the event $T(A) \neq \vecspace{t}$ can be expressed by using law of total probability as:
+As seen in the original proof the probability of the event $T(S) \neq \vecspace{t}$ can be expressed by using law of total probability as:
 \[
 \begin{split}
-& \Prob{T(A) \neq Z_2^t} \\
-    & \qquad = \Prob{T(A) \neq Z_2^t \wedge |T_0(A)| \leq \frac{|A|}{k}} + \Prob{T(A) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}} \\ 
-    & \qquad \leq \Prob{|T_0(A)| \leq \frac{|A|}{k}} + \Prob{T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}} \\
+& \Prob{T(S) \neq Z_2^t} \\
+    & \qquad = \Prob{T(S) \neq Z_2^t \wedge |T_0(S)| \leq \frac{|S|}{k}} + \Prob{T(S) \neq Z_2^t \wedge |T_0(S)| > \frac{|S|}{k}} \\ 
+    & \qquad \leq \Prob{|T_0(S)| \leq \frac{|S|}{k}} + \Prob{T_1(T_0(S)) \neq Z_2^t \wedge |T_0(S)| > \frac{|S|}{k}} \\
     & \qquad \leq \epsilon \\
 \end{split}
 \]
@@ -60,52 +61,53 @@ The right side, $\epsilon$, is the wanted result which must be gained by choosin
 
 \begin{lemma}
 \label{lemma-collision-count}
-Let $T_0: U \rightarrow W$ be a function and $A \subseteq U$. If the size of the set $|T_0(A)|$ is less than $\frac{|A|}{k}$ for $1 \leq k$ then there are at least $\frac{|A|(k - 1)}{2}$ collisions. By collision of two elements $x \neq y \in A$ the unordered pair $\{ x, y \}$ such that $T_0(x) = T_0(y)$ is understood.
+Let $T_0: U \rightarrow A$ be an arbitrary function and $S \subseteq U$. If the size of the set $|T_0(S)|$ is less than $\frac{|S|}{k}$ for $1 \leq k$ then there are at least $\frac{|S|(k - 1)}{2}$ collisions. We say that two elements $x \neq y \in S$ collide if $T_0(x) = T_0(y)$.
 \end{lemma} 
 \begin{proof}
-Define the sequence $b_i \in \mathbb{N}_0$ for $i \in T_0(A)$ where $b_i = \left|A \cap T_0^{-1}(i)\right|$. Also note that $\sum_{i \in T_0(A)} b_i = |A|$.
+Define the sequence $b_i \in \mathbb{N}_0$ for $i \in T_0(S)$ where $b_i = \left|S \cap T_0^{-1}(i)\right|$. Also note that $\sum_{i \in T_0(S)} b_i = |S|$.
 The number of all colliding pairs can be computed as follows.
 \[
 \begin{split}
-|\{ \{x, y\} \setdelim x \neq y \in A, T_0(x) = T_0(y) \}| 
-	& = \frac{1}{2} \sum_{i \in T_0(A)} b_i (b_i - 1) \\ 
-	& \geq \frac{|A|}{2}\left(\frac{|A|}{|T_0(A)|} - 1\right) \\
-	& \geq \frac{|A|(k - 1)}{2}
+|\{ \{x, y\} \setdelim x \neq y \in S, T_0(x) = T_0(y) \}| 
+	& = \frac{1}{2} \sum_{i \in T_0(S)} b_i (b_i - 1) \\ 
+	& \geq \frac{|S|}{2}\left(\frac{|S|}{|T_0(S)|} - 1\right) \\
+	& \geq \frac{|S|(k - 1)}{2}
 \end{split}
 \]
 The first inequality can be obtained from Cauchy–Bunyakovsky–Schwarz inequality.
 \end{proof}
 
-For the probability of the first event, $|T_0(A)| \leq \frac{|A|}{k}$, we use the Markov inequality as in the original proof. The only difference is that the number of collisions is at least $\frac{|A|(k - 1)}{2}$ by lemma \ref{lemma-collision-count}. The expected number remains the same $\dbinom{|A|}{2}2 ^ {-u}$.
+For the probability of the first event, $|T_0(S)| \leq \frac{|S|}{k}$, we use the Markov inequality as in the original proof. The only difference is that the number of collisions is at least $\frac{|S|(k - 1)}{2}$ by lemma \ref{lemma-collision-count}. The expected number remains the same $\dbinom{|S|}{2}2 ^ {-u}$.
 \[
 \begin{split}
-\Prob{|T_0(A)| \leq \frac{|A|}{k}} 
-	& \leq \Prob{d_a \geq \frac{|A|(k - 1)}{2}} \\
-	& \leq \frac{\dbinom{|A|}{2}2 ^ {-u}}{\frac{|A|(k - 1)}{2}} \\
-	& = \frac{|A| - 1}{(k - 1) 2^u} \\
+\Prob{|T_0(S)| \leq \frac{|S|}{k}} 
+	& \leq \Prob{d_S \geq \frac{|S|(k - 1)}{2}} \\
+	& \leq \frac{\dbinom{|S|}{2}2 ^ {-u}}{\frac{|S|(k - 1)}{2}} \\
+	& = \frac{|S| - 1}{(k - 1) 2^u} \\
 \end{split}
 \]
 
-The second event's probability estimate is based on the theorem \ref{theorem-linear-function-set-onto} as well. Just note it is used for the set $T_0(A)$ transformation $T_1$, the source and resulting vector spaces are $\vecspace{u}$ and $\vecspace{t}$ respectively. The inverse density $\mu = 1 - \frac{|T_0(A)|}{2^u}$.
+The second event's probability estimate is based on the theorem \ref{theorem-linear-function-set-onto} as well. Just note it is used for the set $T_0(S)$ transformation $T_1$, the source and resulting vector spaces are $\vecspace{u}$ and $\vecspace{t}$ respectively. The inverse density $\mu = 1 - \frac{|T_0(S)|}{2^u}$.
 
 The following upper bound on the $\mu$ is very useful to be shown.
 \[
 \begin{split}
-\mu = 1 - \frac{|T_0(A)|}{2^u} 
-	& \leq 1 - \frac{|A|}{k 2 ^ u} \\
+\mu = 1 - \frac{|T_0(S)|}{2^u} 
+	& \leq 1 - \frac{|S|}{k 2 ^ u} \\
 	& \leq 1 - \frac{\epsilon}{2 k 2 ^ l}
 \end{split}
 \]
 
-From the assumption on the set $A$ we also have that
+From the assumption on the set $S$ we also have that
 \begin{gather*}
-	|A| \geq c_\epsilon 2^t t \\
-	u = \left\lceil \log \left(\frac{2^l |A|}{\epsilon}\right) \right\rceil \geq l + \log c_\epsilon + t + \log t - \log \epsilon \text{.} \\
+	|S| \geq c_\epsilon 2^t t \\
+	u = \left\lceil \log \left(\frac{2^l |S|}{\epsilon}\right) \right\rceil \geq l + \log c_\epsilon + t + \log t - \log \epsilon \text{.} \\
 \end{gather*}
 
+The bounds on the probabilities are then obtained.
 \[
 \begin{split}
-& \Prob{T_1(T_0(A)) \neq \vecspace{t} \wedge |T_0(A)| > \frac{|A|}{k}} \\
+& \Prob{T_1(T_0(S)) \neq \vecspace{t} \wedge |T_0(S)| > \frac{|S|}{k}} \\
 	& \qquad \leq \mu ^ {u - t - \log t + \log \log \left(\frac{1}{\mu}\right)} \\
 	& \qquad \leq \left(1 - \frac{\epsilon}{2 k 2 ^ l}\right)^{l + \log c_\epsilon + t + \log t - \log \epsilon - t - \log t + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2 ^ l}}\right)} \\
 	& \qquad \leq \left(1 - \frac{\epsilon}{2 k 2 ^ l}\right)^{l + \log c_\epsilon - \log \epsilon + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2 ^ l}}\right)} \\
@@ -114,13 +116,13 @@ From the assumption on the set $A$ we also have that
 
 \[
 \begin{split}
-& \Prob{|T_0(A)| \leq \frac{|A|}{k}} + \Prob{T_1(T_0(A)) \neq Z_2^t \wedge |T_0(A)| > \frac{|A|}{k}} \\ 
+& \Prob{|T_0(S)| \leq \frac{|S|}{k}} + \Prob{T_1(T_0(S)) \neq Z_2^t \wedge |T_0(S)| > \frac{|S|}{k}} \\ 
 	& \qquad \leq \frac{\epsilon}{(k - 1) 2 ^ l} + \left(1 - \frac{\epsilon}{2 k 2^l}\right)^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{1 - \frac{\epsilon}{2 k 2^l}}\right)} \\
 	& \qquad \leq \epsilon \\
 \end{split}
 \]
 
-The last inequality is the proved bound that is achieved by the convenient but lowest possible choice of $c_\epsilon$. From the last expression the only thing we need is to have variable $c_\epsilon$ standalone so that the minimal value of $c_\epsilon$ is found. For convenience define a new variable $\mu' = 1 - \frac{\epsilon}{2 k 2 ^l}$.
+The last inequality is the proved bound that is achieved by the convenient but lowest possible choice of $c_\epsilon$. From the last expression the only thing we need is to have variable $c_\epsilon$ standalone so that the minimal value of $c_\epsilon$ is found. For convenience define a new variable $\mu' = 1 - \frac{\epsilon}{2 k 2 ^l}$, just notice that $\mu'$ upper bounds $\mu$.
 \[
 \begin{split}
 \frac{\epsilon}{(k - 1) 2 ^ l} + {\mu'}^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} & \leq \epsilon \\
@@ -130,130 +132,178 @@ The last inequality is the proved bound that is achieved by the convenient but l
 \end{split}
 \]
 
-So we modified the proof of the original theorem in order to obtain a better values of $c_\epsilon$. Its value is computed for every choice of parameters $k$ and $l$ directly from the above expression. The best value obtained by presented method is less then 22 568 for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. Though the asymptotic rate of the growth is $O(\log n \log \log n)$ with this large multiplicative constant the estimate becomes less than linear estimate, $\Expect{\lpsl} \leq n$, for the number of elements stored approximately equal to one million.
+So we modified the proof of the original theorem in order to obtain a better values of $c_\epsilon$. Its value is computed for every choice of parameters $k$ and $l$ directly from the above expression. The best value of multiplicative constant obtained by the presented method is something less then 22 568 for $\epsilon = 0.91$, $k = 3.28$ and $l = 0.5$. Though the asymptotic rate for $\lpsl$ is $O(\log m \log \log m)$ with this large multiplicative constant our estimate becomes less than linear, $\Expect{\lpsl} \leq n$, for the number of elements stored approximately equal to one million.
 
-\section{Obtaining an even better multiplicative constant}
-For the model of hashing linear amount of elements we only used the estimates valid also in the case of hashing the super-linear count of items. Now in order to obtain a better result we have to reconsider our choices. The ideas remain the same but we will change some claims to suit our needs.
+\section{Obtaining a better multiplicative constant}
+For the model of hashing linear amount of elements we used the estimates that are valid in case of hashing the super-linear number items as well. In order to obtain a better result we have to reconsider our choices. 
 
-The previous and not very successful attempt gave us a constant suitable for hashing millions of elements. With a constant in the order of hundreds our estimates starts beating the linear one when hashing around 40 000 elements.
+The previous and to be honest not very successful attempt gave us a constant suitable for hashing millions of elements. With a constant in the order of hundreds our estimates starts beating the linear one when hashing approximately 40 000 elements.
 
-The constant $c_\epsilon$ plays the most crucial role. We try to lower its value first. Instead of making the factor space $W$ larger than the set $A$ we will bound it between $\frac{|A|}{4}$. But it still must be larger than the target space $Z_2^t$. Of course this is possible since the set $A$ contains at least $t2^t$ elements.
+The constant $c_\epsilon$ plays the most crucial role and therefore we lower its value first. Instead of making the factor space $A$ larger than hashed set $S$ we will bound it between $|B|$ and $\frac{2|S|}{2 ^ l}$ where $l \geq 1$ is a parameter. This space must still be larger than the target space $\vecspace{t}$ since we have to ensure existence of surjective mapping $T_1: A \rightarrow B$. Of course this is possible since we assume that set $S$ contains at least $c_\epsilon t 2^t$ elements.
 
 \begin{remark}
-For every convenient $\epsilon$ there is a constant $c_\epsilon$ such that for every subset $A$, $|A| \geq c_\epsilon t 2^t$ of the source space $V$ and for an uniformly selected linear transformation $T$ to the target space $Z_2^t$ the probability of mapping $A$ to the whole target space is at least $1-\epsilon$:
-\begin{displaymath}
-P(T(A) = Z_2^t) \geq 1 - \epsilon \textit{.}
-\end{displaymath}
+Let $U = \vecspace{w}$ and $B = \vecspace{t}$ and $T \in LT(U, B)$ be a random uniformly chosen linear transformation. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon$ such that for every subset $S \subset U$, $|S| \geq c_\epsilon t 2^t$ the following holds
+\[
+\Prob{T(A) = \vecspace{t}} \geq 1 - \epsilon \text{.}
+\]
 \end{remark}
 \begin{proof}
-We present the proof with all the possible parameters that can have their value chosen to optimise the value of $c_\epsilon$. According to these parameters the interval for $\epsilon$ may be found.
+The proof we present is fully parametrised so that we can choose values of its arguments to optimise the $c_\epsilon$ and final multiplicative constant.
 
-For every value $\frac{|A|}{2^l}$ there is a power of two $2^u = |W|$ less or equal to $\frac{2|A|}{2^l}$. The value of $l$ will be non-negative and so $|W| \leq |A|$. As in the previous modifications we will estimate the two probabilities obtained by using the law of total probability.
+For every value $\frac{|S|}{2^l}$, $l \in \mathbb{R}, l \geq 1$, there is an uniquely determined number $u \in \mathbb{N}$ such that $A = \vecspace{u}$ and $\frac{|S|}{2 ^ l} \leq |A| \leq \frac{2|S|}{2 ^ l}$. As in the previous proof we will estimate the two probabilities obtained by using the law of total probability.
 
-According to the lemma \ref{lemma-collision-count} when the result $T_0(A)$ has less than $\frac{|W|}{k}$ elements there must be at least $\frac{|A|}{2}\left(\frac{k|A|}{|W|} - 1\right)$ collisions caused by it.
+According to lemma \ref{lemma-collision-count} when the image $T_0(S)$ has less than $\frac{|A|}{k}$ elements there must be at least $\frac{|S|}{2}\left(\frac{k|S|}{|A|} - 1\right)$ collisions caused by $T_0$. We used the lemma for set $S$ and fraction of resulting elements $\frac{|S|}{k'} = \frac{|A|}{k}$. Since resulting number of collisions equals $\frac{|S|}{2}(k' - 1)$ and $k' = \frac{k|S|}{|A|}$ we get the wanted result.
 
-\begin{displaymath}
-P(|T_0(A)| \geq \frac{|W|}{k}) \leq \frac{|A|(|A| - 1)}{2|W|\frac{|A|}{2}\left(\frac{k|A|}{|W|} - 1\right)} \leq \frac{|A|}{k|A| - |W|} \leq \frac{|A|}{k|A| - \frac{2|A|}{2^l}} \leq \frac{2^l}{2^l k - 2}
-\end{displaymath}
+The bound on one of probabilities given by the law of total probability is obtained by using Markov inequality again.
+\[
+\begin{split}
+\Prob{|T_0(S)| \leq \frac{|A|}{k}} 
+	& \leq \frac{|S|(|S| - 1)}{2|A|\frac{|S|}{2}\left(\frac{k|S|}{|A|} - 1\right)} \\
+	& \leq \frac{|S|}{k|S| - |A|} \\
+	& \leq \frac{|S|}{k|S| - \frac{2|S|}{2^l}} \\ 
+	& = \frac{2^l}{2^l k - 2} \\
+\end{split}
+\]
 
-The remaining case is when $|T_0(A)| \geq \frac {|W|}{k}$.
+The remaining case is when $|T_0(S)| > \frac {|A|}{k}$. Define $\mu$ as the inverse density of $T_0(S)$ in space $A$. Then the assumption made implies
+\[
+	\mu = 1 - \frac{|T_0(S)|}{|A|} < 1 - \frac{1}{k} < 1 \text{.}
+\]
 
-\begin{displaymath}
-\alpha = 1 - \frac{|T_0(A)|}{|W|} \leq 1 - \frac{1}{k}
-\end{displaymath}
+\[
+\begin{split}
+\Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| > \frac {|A|}{k}} 
+	& \leq \mu ^ {u - t - \log t + \log \log \frac{1}{\mu}} \\ 
+	& = \mu ^ {\log |A| - t - \log t + \log \log \frac{1}{\mu}} \\ 
+	& \leq \mu ^ {\log |S| - l - t - \log t + \log \log \frac{1}{\mu}} \\ 
+	& \leq \mu ^ {\log c_\epsilon + t + \log t - l - t - \log t + \log \log \frac{1}{\mu}} \\ 
+	& \leq \left(1 - \frac{1}{k}\right) ^ {\log c_\epsilon - l + \log \log \left(\frac{1}{1 - \frac{1}{k}} \right)}
+\end{split}
+\]
 
-\begin{displaymath}
-P(T(A) \neq Z_2^t) \leq \left(1 - \frac{1}{k}\right)^{\log c_\epsilon + \log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l}
-\end{displaymath}
+Whole probability of event $T(S) \neq Z_2^t$ must be less than $\epsilon$.
+\[
+\begin{split}
+& \Prob{T(S) \neq \vecspace{t}} \\
+	& \qquad = \Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| > \frac {|A|}{k}} + \Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| \leq \frac {|A|}{k}} \\
+	& \qquad \leq \Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| > \frac {|A|}{k}} + \Prob{|T_0(S)| \leq \frac {|A|}{k}} \\
+	& \qquad \leq \epsilon
+\end{split}
+\]
 
-The sum of both cases is greater than the whole probability of event $T(A) \neq Z_2^t$ and must be less than $\epsilon$.
-
-\begin{displaymath}
+Constant $c_\epsilon$ is computed directly from the above inequality.
+\[
 \begin{split}
 \frac{2^l}{2^l k - 2} + \left(1 - \frac{1}{k}\right)^{\log c_\epsilon + \log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l} & \leq \epsilon \\
-\left(1 - \frac{1}{k}\right)^{\log c_\epsilon} & \leq \frac{\epsilon - \frac{2^l}{2^l k - 2}}{\log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l} \\
-\log c_\epsilon & \geq \frac{\log \left(\frac{\epsilon - \frac{2^l}{2^l k - 2}}{\log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l}\right)}{\log \left(1 - \frac{1}{k}\right)}
+\left(1 - \frac{1}{k}\right)^{\log c_\epsilon} & \leq \frac{\epsilon - \frac{2^l}{2^l k - 2}}{\left(1 - \frac{1}{k}\right) ^ {\log \log \left(\frac{1}{1 - \frac{1}{k}}\right) - l}} \\
+\log c_\epsilon & \geq \frac{\log \left(\frac{\epsilon - \frac{2^l}{2^l k - 2}}{\left(1 - \frac{1}{k}\right) ^ {\log \log \left( \frac{1}{1 - \frac{1}{k}} \right) - l}}\right)}{\log \left(1 - \frac{1}{k}\right)}
 \end{split}
-\end{displaymath}
+\]
 
-For some values $\epsilon$, $k$ and $l$ it may happen $\frac{2^l}{2^l k - 2} \geq \epsilon$. In this case no $c_\epsilon$ may be found using this proof. However with this computation slightly better results for valid choices are found. Compare the value 17.31 ($\epsilon = 0.8967$) to 67.77 ($\epsilon = 0.98$).
+For some values $\epsilon$, $k$ and $l$ it may happen $\frac{2^l}{2^l k - 2} \geq \epsilon$. In this case no $c_\epsilon$ may be found using this proof. For such cases we can use the previous proof and hence the remark holds. However with this computation better results for valid choices are found. Compare values of $c_\epsilon$ obtained using this method; 17.31 (for choices $\epsilon = 0.8967$, k = 2.06, l = 2) to 67.77 (for $\epsilon = 0.98$, k = 3.28, l = 0.5) using the previous one.
 \end{proof}
 
-Now we use this approach to prove a better bound on the expected length of the longest chain. The novel part lies in choosing a slightly different and smaller size of the factor space $A$.
+Now the improved estimate of $c_\epsilon$ can be used to show a better bound on the expected length of the longest chain. The novel part lies in choosing a slightly different and smaller size of the factor space $A$.
 \begin{theorem}
-\label{elpsl-hashing-linear-amount}
-When hashing a linear amount of $\alpha_f n$ elements into a table of size $n$ the expected length of the longest chain is bounded by $O(\alpha_f \log n \log \log n)$.
+\label{theorem-hashing-linear-amount}
+When hashing a linear amount of $\alpha m$ elements into a table of size $m \geq 16$ the expected length of the longest chain is bounded by $O(\alpha \log m \log \log m)$ for $\alpha \in \left[0.5, 1 \right]$.
 \end{theorem}
 \begin{proof}
+As in the previous cases assume hashing universe $U = \vecspace{w}$ to hash table $B = \vecspace{t}$ and factor space $A = \vecspace{u}$ where dimension $u$ is specified lately. Because of model \ref{remark-model-uniform-linear-map-selection} we can uniformly select linear mappings $T_0: U \rightarrow A$ and surjective $T_1: A \rightarrow B$.
+
 Our choices for $r \geq 4$:
-\begin{displaymath}
+\[
 \begin{split}
-l & = \lfloor \log n + \log r - \log \log r + \log \alpha_f + 1\rfloor \\
-d & = \frac{2^l}{\alpha_f n} \geq \frac{\alpha_f n r}{\alpha_f n \log r} = \frac{r}{\log r} \geq 2 \\
-t & = 2 \alpha_f c_\epsilon r \\
+u & = \lfloor \log m + \log r - \log \log r + \log \alpha + 1\rfloor \\
+d & = \frac{|A|}{|S|} = \frac{2 ^ u}{\alpha m} \geq \frac{\alpha m r}{\alpha m \log r} = \frac{r}{\log r} \geq 2 \\
+l & = 2 \alpha c_\epsilon r \\
 \end{split}
-\end{displaymath}
+\]
 
-The choice for $d$ gives us the probability of the event $E_2$.
-\begin{displaymath}
+We have to verify that $|A| > |B|$.
+\[
+2 ^ u \geq \frac{\alpha m r }{\log r} \geq m \frac{\alpha r}{\log r} \geq m = |B|
+\]
+
+The choice for $d$ gives us the probability of event $E_2$, as stated in the proof of remark \ref{remark-e2-probability}.
+\[
 \begin{split}
-\alpha & = 1 - \frac{|A - h_1(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} \\
-\log d & = l - \log \alpha_f - \log n \geq l - \log n \\
-P(E_2) 
-	& \leq \alpha^{l - \log n - \log \log n + \log \log \left( \frac{1}{\alpha} \right)} \\
-	& \leq \left( \frac{1}{d} \right)^{\log d - \log \log n + \log \log d} \\
-	& \leq \left(\frac{r}{\log r}\right)^{\log \log n - \log d - \log \log d} \\
-	& \leq \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
+\mu & = 1 - \frac{|A - T_0(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} < 1 \\
+\log d & = u - \log \alpha - \log m
 \end{split}
-\end{displaymath}
+\]
 
-The verification of validity of choice for the variable $t$ follows:
-\begin{displaymath}
+\[
 \begin{split}
-c_\epsilon \frac{2^l}{n} \log \left( \frac{2^l}{n} \right) 
-	& \leq 2 c_\epsilon \alpha_f \frac{r}{\log r} \log \left( \frac{2 \alpha_f r}{\log r} \right) \\
-	& \leq 2 c_\epsilon \alpha_f \frac{r}{\log r} \log r = 2 c_\epsilon \alpha_f r = t
+\Prob{E_2}
+	& \leq \mu ^ {u - \log m - \log \log m + \log \log \left( \frac{1}{\mu} \right)} \\
+	& \leq \left(\frac{1}{d}\right) ^ {\log d + \log \alpha - \log \log m + \log \log d} \\
+	& \leq \left(\frac{r}{\log r}\right) ^ {\log \log m - \log \alpha - \log d - \log \log d} \\
+	& \leq \left(\frac{r}{\log r}\right) ^ {\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \\
 \end{split}
-\end{displaymath}
+\]
 
-Thus $P(lpsl \geq 2 \alpha_f c_\epsilon r) \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}$. From this fact we obtain a bound on the expected longest length.
-
-\begin{displaymath}
+Verification of validity of choice for variable $l$ follows:
+\[
 \begin{split}
-E lpsl 
-	& = \int\limits_0^\infty P(lpsl \geq t) dt \leq 2 c_\epsilon 4 + \int\limits_{8 c_\epsilon}^\infty P(lpsl \geq t) dt \\ 
-	& = 8c_\epsilon + 2 c_\epsilon \int\limits_{4}^\infty P(lpsl \geq 2c_\epsilon r) dr \\
-	& = 2c_\epsilon \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \right) \\ 
-	& \leq 2c_\epsilon \left( 4 + \frac{1}{1-\epsilon}\left( 2 \log n \log \log n - 4 + I \right) \right) \\
+c_\epsilon \frac{2 ^ u}{m} \log \left( \frac{2 ^ u}{m} \right) 
+	& \leq 2 c_\epsilon \alpha \frac{r}{\log r} \log \left( \frac{2 \alpha r}{\log r} \right) \\
+	& \leq 2 c_\epsilon \alpha \frac{r}{\log r} \log r \\
+	& = 2 \alpha c_\epsilon r = l
 \end{split}
-\end{displaymath}
+\]
 
-For the integral $I$ estimation for simplicity we will denote the value $d = \frac{r}{\log r}$.
-\begin{displaymath}
-I = \int\limits_{2 \log n \log \log n}^\infty d ^ {\log \log n - \log d - \log \log d} dr \leq 14
-\end{displaymath}
+Because assumptions of both remarks \ref{remark-prob-l-length-chain} and \ref{remark-e2-probability} are satisfied the probability of existence of a long chain is bounded as: \[ \Prob{\lpsl \geq 2 \alpha c_\epsilon r} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}\]. From this fact we obtain a bound on the expected longest length.
 
-The whole bound looks like:
-\begin{displaymath}
-E lpsl \leq \frac{4c_\epsilon}{1 - \epsilon} \log n \log \log n + 2 c_\epsilon \left( \frac{I - 4}{1 - \epsilon} + 4 \right) \textit{.}
-\end{displaymath}
-
-The estimate of integral $\int\limits_{4}^\infty \left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr$ remains to be unveiled. First we must realise that the exponent must be negative in order to get the integrand below 1. And it is sufficient to have $\log \left( \frac{r}{\log r} \right) > \log \log n$. Our choice is to put $r > 2 \log n \log \log n$:
-\begin{displaymath}
+\[
 \begin{split}
-d & \geq \log n \\
-\frac{r}{\log r} & \geq \log n \\
-\frac{r}{\log r} & \geq \frac{2 \log n \log \log n}{1 + \log \log n + \log \log \log n} \\
-	& = \frac{2 \log n}{1 + \frac{1}{\log \log n} + \frac{\log \log \log n}{\log \log n}} \\
-	& \geq \log n \\
+\Expect{\lpsl}
+	& = \int\limits_0^\infty \Prob{\lpsl \geq r} dr \leq 8 c_\epsilon \alpha + \int\limits_{8 c_\epsilon \alpha}^\infty \Prob{\lpsl \geq r} dr \\ 
+	& = 8c_\epsilon \alpha + 2 c_\epsilon \alpha \int\limits_{4}^\infty \Prob{\lpsl \geq 2c_\epsilon \alpha r} dr \\
+	& = 2c_\epsilon \alpha \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \right) \\ 
+	& \leq 2c_\epsilon \alpha \left( 4 + \frac{1}{1-\epsilon}\left( 2 \log m \log \log m - 4 + I'_\alpha \right) \right) \\
 \end{split}
-\end{displaymath}
+\]
 
-Which is valid for $n \geq 16$. The value of $I$ is determined in the similar fashion as in the previous case. The best estimate achieved is 538 $\log n \log \log n$ + 2~897.
+Whole bound on $\Expect{\lpsl}$ looks like:
+\[
+\Expect{\lpsl} \leq \frac{4c_\epsilon}{1 - \epsilon} \log m \log \log m + 2 c_\epsilon \left( \frac{I'_\alpha - 4}{1 - \epsilon} + 4 \right) \text{.}
+\]
+
+The estimate of integral $\int\limits_{4}^\infty \min \left(1, \left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr$ has to be shown. First we must realise that if the exponent is non-positive the integrand is certainly less or equal to one. If $r \geq 2 \log m \log \log m$ then $\log \left( \frac{r}{\log r} \right) \geq \log \log m$ because:
+\[
+\begin{split}
+\frac{r}{\log r} 
+	& \geq \frac{2 \log m \log \log m}{1 + \log \log m + \log \log \log m} \\
+	& = \frac{2 \log m}{1 + \frac{1}{\log \log m} + \frac{\log \log \log m}{\log \log m}} \\
+	& \geq \log m \text{.}
+\end{split}
+\]
+
+Or equivalently:
+\[
+	\log \left( \frac{r}{\log r} \right) \geq \log \log m \text{.}
+\]
+
+Because this bound is valid for $m \geq 16$ we have that $r \geq 2 \log m \log \log m \geq 16$. The remaining part of the exponent \[ -\log \alpha - \log \log \left( \frac{r}{\log r} \right) \leq -\log 0.5 - \log \log \frac{16}{4} = 0 \] is not positive, as well. 
+
+Value of $I'_\alpha$ is determined in the similar fashion as value of $I_\epsilon$ in section \ref{section-integral-estimate}. During estimation of $I'_\alpha$ put $d(r) = \frac{r}{\log r}$ for simplicity.
+\[
+\begin{split}
+I'_\alpha 
+	& = \int_{2 \log m \log \log m}^{\infty} d(r) ^ {\log \log m - \log \alpha - \log d(r) - \log \log d(r)} dr \\
+	& \leq \int\limits_{16}^{\infty} d(r) ^ {1 - \log \log d(r)} dr \\
+	& \leq \displaystyle\sum_{r \in \{16, 16.1, \dots, 2048 \}} \frac{d(r) ^ {1 - \log \log d(r)}}{10} + 
+		\int\limits_{2048}^{\infty} r ^ {-1.3} dr \\
+	& \leq 3.01 + \frac{2048 ^ {-0.3}}{0.3} \leq 3.36
+\end{split}
+\]
+
+The best estimate for $\Expect{\lpsl}$ achieved by this technique is for choices $\epsilon = 0.8$, $k = 2.26$, $l = 2$ and equals $538 \alpha \log m \log \log m + 44$.
 \end{proof}
 
 \section{Better hashing schemes}
-The expected length of the longest chain gives us the generic hint when we should rehash the table to guarantee the worst case time for the member operation. The lower the value $E lpsl$ is the better worst case bound is achieved. The probability of event that there is chain exceeding the value $c E lpsl$ is bounded by $\frac{1}{c}$. This is a straightforward use of the Markov inequality. 
+The expected length of the longest chain gives us the generic hint when we should rehash the table to guarantee the worst case time for the member operation. The lower the value $\Expect{\lpsl}$ (or its estimate) is the better worst case bound is achieved without violating expected running times. Probability of existence of  chain exceeding the value $c \Expect{\lpsl}$ is bounded by $\frac{1}{c}$. This is a straightforward use of Markov inequality. 
 
 The probability bound of existence of a long chain has two important consequences:
 \begin{itemize}
@@ -261,70 +311,93 @@ The probability bound of existence of a long chain has two important consequence
 \item When rehashing; when a long chain appeared; to guarantee the bound of $c E lpsl$ the probability of finding a suitable function is $1 - \frac{1}{c}$. Note that this holds under the assumption of the uniform choice of an universal function.
 \end{itemize}
 
-Mentioned probability bound computed from the expected value can be improved by direct use of the cumulative density function of the variable $lpsl$. We already found and consequently improved it in the previous theorems. To sum up we can say that the approach with the expected length is more general but achieves worse performance. Note that whenever we know the probability density function we are able to compute the expected value.
+Mentioned probability bound computed from the expected value can be improved by direct use of the cumulative density function of the variable $\lpsl$ if we know it. We already found and consequently improved it in the previous theorems. To sum up we can say that the approach with the expected length is more general but achieves worse performance. It is more general because whenever we know the probability density function we are able to compute the expected value.
 
-\section{Better bound estimate for the systems of linear functions}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Bound estimate based on probability density function}
 \label{section-linear-systems-linear-amount-constant-estimate}
-From now on we concentrate on obtaining a bound on the length of the chain if we allow the probability of rehashing $\frac{1}{c}$. The corresponding bound is computed from the density function.
+From now on we concentrate on obtaining a bound on the length of the chain such that probability of rehashing because of the chain length must be lower than $p$. The corresponding bound is computed from the density function shown in the proof of remark \ref{theorem-hashing-linear-amount}. Let us note that the following probability estimate works for $r \geq 4$ only. 
 
-\begin{displaymath}
+\[
 \begin{split}
-P(lpsl \geq 2\alpha_f c_\epsilon r) & \leq \frac{1}{c} \\ 
-\frac{1}{1 - \epsilon}\left(\frac{r}{\log r}\right)^{\log \log n - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} & \leq \frac{1}{c}
+\Prob{\lpsl \geq 2\alpha c_\epsilon r} & \leq p \\ 
+\frac{1}{1 - \epsilon}\left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} & \leq p \\
 \end{split}
-\end{displaymath}
-Let us remark that the probability estimate works for $r \geq 4$ only, proof of theorem \ref{elpsl-hashing-linear-amount}.
+\]
 
-Let $d = k \log n$ and $d \leq \frac{r}{\log r}$ for a positive constant $k$. When the exponent of function $d^{\log \log n -\log d - \log \log d}$ is negative it is decreasing and the previous inequality holds if
-\begin{displaymath}
-d ^ {\log \log n - \log d -\log \log d} \leq \frac{1 - \epsilon}{c}\textit{.}
-\end{displaymath}
+Define a function $f(d) = d ^ {\log \log m - \log \alpha - \log d - \log \log d}$. At first we show that function $f(d)$ is decreasing in the interval $\left[ d', \infty \right]$. We chose $d'$ so that it is minimal among $d' > 1$ and $\log \log m - \log \alpha - \log d' - \log \log d' < 0$. 
 
-As first for the exponent we have:
-\begin{displaymath}
+To show monotonicity of f let $d' \leq d_1 < d_2$.
+\[
 \begin{split}
-\log & \log n - \log (k \log n) - \log \log (k \log n) \\
-	& = \log \log n - \log k - \log\log n - \log \log (k \log n) \\
-	& \leq - \log k - \log \log n \\
+f(d_2) 
+	& = {d_2} ^ {\log \log m - \log \alpha - \log d_2 - \log \log d_2} \\
+	& < {d_1} ^ {\log \log m - \log \alpha - \log d_2 - \log \log d_2} \\
+	& < {d_1} ^ {\log \log m - \log \alpha - \log d_1 - \log \log d_1} \\
+	& = f(d_1) \\
 \end{split}
-\end{displaymath}
-The last inequality holds for $\log (k \log n) \geq 1$ and this is equivalent to $n \geq 2^{\frac{2}{k}}$.
+\]
 
-We selected $d$ as a lower bound for $\frac{r}{\log r}$. Now we need to find a suitable value for $r$. Putting $r = 2 d \log d$ we need to confirm $d$ is a lower bound. For every $d$ greater or equal to $2$ the estimate works
-\begin{displaymath}
-\frac{r}{\log r} = \frac{2 d \log d}{1 + \log d + \log \log d} \geq d \textit{.}
-\end{displaymath}
-The assumption for the probability estimate used was $r \geq 4$ which gets fulfilled by choosing $d \geq 2$ as well.
-
-And we explicitly compute the dependence of $r$ on $n$:
-\begin{displaymath}
-r = 2 d \log d = 2 k \log n (\log k + \log \log n) = 2 k \log n \log \log n + 2 k \log k \log n
-\end{displaymath}
-
-
-
-Since $d = k \log n$ for the probability we want:
-\begin{displaymath}
+The bound on $\lpsl$ for rehashing the table with probability $p$ equals $2 c_\epsilon \alpha r$ where $r$ must be found. At first we define a tight lower bound $d$ on expression $\frac{r}{\log r}$ and substitute it into function $f$ then \[ f(d) \geq f\left(\frac{r}{\log r}\right) \text{.} \] Whenever minimal $d$ such that $f(d) \leq (1 - \epsilon) p$ is found then wanted probability bound is satisfied, too.
+\[ 
 \begin{split}
-d ^ {\log \log n - \log d -\log \log d} & \leq \frac{1 - \epsilon}{c} \\
-\left(k \log n\right)^{-\log k -\log \log n} & \leq \frac{1 - \epsilon}{c} \\
+\Prob{\lpsl \geq 2 \alpha c_\epsilon r} 
+	& = \frac{1}{1 - \epsilon} f\left(\frac{r}{\log r}\right) \\
+	& \leq \frac{1}{1-\epsilon}f(d) \leq p \\
 \end{split}
-\end{displaymath}
-This gives us the lowest $n$ when our bound is valid. 
+\]
+From the lower bound $d$ of the expression $\frac{r}{\log r}$ variable $r$ can be expressed. The estimate on the length of the longest chain such that probability of rehashing is lower than $p$ is then finished.
 
-Also note that all the assumptions for the claims used are met. The bound for the fixed probability $\frac{1}{c}$ when the table is rehashed should be optimised. This bound is obtained as:
-\begin{displaymath}
-2 \alpha_f c_\epsilon r = 4 c_\epsilon k \alpha_f (\log n \log \log n + \log k \log n)
-\end{displaymath}
-And the best estimate is for the minimum $c_\epsilon$ which from the above section is 17.31 for the $\epsilon = 0.8967$.
+Let us define the lower bound $d$ as $d = k \log m$ and $d \leq \frac{r}{\log r}$ for a positive constant $k$. Following inequality allows us to find minimal suitable $d$.
+\[
+d ^ {\log \log m - \log \alpha - \log d - \log \log d} \leq (1 - \epsilon) p \text{.}
+\]
 
-And for example by fixing $k = 1$ and $c = 2$ with the best $\epsilon$ one gets:
+Since we selected $d$ as a lower bound for $\frac{r}{\log r}$ we have to express $r$ from $\frac{r}{\log r} \geq d$. Putting $r = 2 d \log d$ satisfies the inequality for every $d \geq 2$.
 \begin{displaymath}
+\frac{r}{\log r} = \frac{2 d \log d}{1 + \log d + \log \log d} = \frac{2 d}{1 + \frac{1}{\log d} + \frac{\log \log d}{\log d}} \geq d
+\end{displaymath}
+One of the assumptions for using probability estimate of event $\lpsl > 2 c_\epsilon \alpha r$ is $r \geq 4$. It is certainly satisfied when choosing $d \geq 2$ since $r = 2 d \log d \geq 4$.
+
+We substitute into $d$ and find the explicit dependence of $r$ on the table's size $m$:
+\begin{displaymath}
+r = 2 d \log d = 2 k \log m (\log k + \log \log m) = 2 k \log m \log \log m + 2 k \log k \log m \text{.}
+\end{displaymath}
+
+Our estimate on $\lpsl$ can be finally written as:
+\[
+4 c_\epsilon \alpha k (\log m \log \log m + \log k \log m) \text{.}
+\]
+
+The probability bound with $d$ substituted into it.
+\[
 \begin{split}
-\left(\frac{1}{\log n}\right)^{\log \log n} & \leq \frac{1 - \epsilon}{2} \\
+d ^ {\log \log m - \log \alpha - \log d -\log \log d} & \leq (1 - \epsilon)p \\
+\left(k \log m\right)^{-\log \alpha -\log k - \log \log (k \log m)} & \leq (1 - \epsilon)p \\
 \end{split}
-\end{displaymath}
+\]
 
-The estimate is certainly valid for $n \geq 32$. The bound's multiplicative constant without the load factor is $17.31 . 1 . 4$ which is less than 70. This bound becomes better than linear ($n$) for $n$ approximately equal to 3 000. But we were not forced to using $k = 1$, we assumed only the positiveness of $k$. So by choosing a lower value we obtain a better bound. The smaller value of $k$ postpones the validity of our estimates to greater values of $n$.
+This inequality has various interpretations.
+\begin{itemize}
+\item For fixed $0 < p, \epsilon < 1$ and positive constant $k$ we get a lower bound on $m$ when our estimate is valid. Note that we can obtain arbitrary low multiplicative constant since we are allowed to choose values for $k$. Such estimates are valid for large quantities of stored elements only.
+\item We can search for parameters of $\epsilon$ and $k$ so that multiplicative constant is the smallest possible for given hash table size $m$ and probability $p$. This approach is used to find the following estimate for $m \geq 4096$.
+\end{itemize}
 
 For small hash tables the best bound is achieved when the value of $n$ when our estimates are valid is the same as the value obtained by the above estimate. This value is for $k = 0.2766$, $n \geq 572$ and the multiplicative constant is $19.152$. This value has also been computed by a simple computer program.

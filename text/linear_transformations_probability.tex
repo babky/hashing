@@ -198,9 +198,9 @@ The inequality holds for every of the three cases and the induction step is comp
 
 \begin{theorem}
 \label{theorem-linear-function-set-onto}
-Let $u$ and $t$ be natural numbers such that $0 < t \leq u$. Let $A$ be a~proper and non-empty subset of the~vector space $\vecspace{u}$. Set $\mu = 1 - \frac{|A|}{2^u}$ as inverse density of $A$ in $\vecspace{u}$. Then for a random uniformly chosen surjective linear map $T: \vecspace{u} \rightarrow \vecspace{t}$ we have
+Let $u$ and $t$ be natural numbers such that $0 < t \leq u$. Let $S$ be a~proper and non-empty subset of the~vector space $\vecspace{u}$. Set $\mu = 1 - \frac{|S|}{2^u}$ as inverse density of $S$ in $\vecspace{u}$. Then for a random uniformly chosen surjective linear map $T: \vecspace{u} \rightarrow \vecspace{t}$ we have
 \[
-	\Prob{T(A) \neq \vecspace{t}} \leq \mu^{u - t - \log t + \log \log \frac{1}{\mu}} \textit{.}
+	\Prob{T(S) \neq \vecspace{t}} \leq \mu^{u - t - \log t + \log \log \frac{1}{\mu}} \textit{.}
 \]
 \end{theorem}
 \begin{proof}
@@ -208,7 +208,7 @@ Set $s = u - t$. Choose vectors $v_1, \dots, v_s \in \vecspace{u}$ independently
 
 We will perform random and uniform choice of linear transformation $T$ according to model \ref{remark-model-surjective-linear-map-selection}. Vectors $v_1, \dots, v_s$ are extended to a random basis $b$ of vector space $\vecspace{u}$ and choose random permutation $\pi$ as stated in the just mentioned model. Since selection of vectors $v_1, \dots, v_s$ is random uniform and vectors are independent of each other the basis $b$ is chosen uniformly indeed. Moreover the vectors $v_1, \dots, v_s$ define part $s'$ of the needed set $s \in S$ since we need to place them in the kernel of just constructed mapping $T$. Set $s'$ must be uniformly extended to any set $s \in S$ such that $s' \subseteq s$. The uniform choice of function $T$ is done by this. Just note that $T(v_i) = 0$ for all $i = 1, \dots, s$.	
 
-Let us define $A_0 = A$ and $A_i = A_{i - 1} \cup (A_{i - 1} + v_i)$ and set $\mu_i = 1 - \frac{|A_i|}{2 ^ u}$. When considering $\mu_i$ as random variables by using lemma \ref{lemma-choose-random-vector} we can derive the fact that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, s \}$. Because every set $A_i$ is an extension of the previous set $A_{i - 1}$ it is clear that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, s$. The assumptions of lemma \ref{lemma-random-variable} are satisfied and we obtain
+Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + v_i)$ and set $\mu_i = 1 - \frac{|S_i|}{2 ^ u}$. When considering $\mu_i$ as random variables by using lemma \ref{lemma-choose-random-vector} we can derive the fact that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, s \}$. Because every set $S_i$ is an extension of the previous set $S_{i - 1}$ it is clear that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, s$. The assumptions of lemma \ref{lemma-random-variable} are satisfied and we obtain
 \[
 \begin{split}
 \Prob{\mu_s \geq 2 ^ {-t}} 
@@ -218,23 +218,23 @@ Let us define $A_0 = A$ and $A_i = A_{i - 1} \cup (A_{i - 1} + v_i)$ and set $\m
 \end{split}
 \]
 
-We want to show that whenever $\mu_s < 2^{-t}$ the event $T(A_s) = \vecspace{t}$ occurs. Since $\mu_s = 1 - \frac{|A_s|}{2 ^ u}$ the size of set $A_s$ equals ${2 ^ u}(1 - \mu_s)$. Using the assumption $\mu_s < 2 ^ {-t}$ it follows that $|A_s| > 2^u - 2^{u - t}$. To derive wanted contradiction assume there is a vector $x \in \vecspace{t} - T(A_s)$ or equivalently $T(A_s) \neq \vecspace{t}$. Under these conditions it is clear that $T ^ {-1}(x)$ and $A_s$ are disjoint. From lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(x)| = 2 ^ {u - t}$. This would mean that
+We want to show that whenever $\mu_s < 2^{-t}$ the event $T(S_s) = \vecspace{t}$ occurs. Since $\mu_s = 1 - \frac{|S_s|}{2 ^ u}$ the size of set $S_s$ equals ${2 ^ u}(1 - \mu_s)$. Using the assumption $\mu_s < 2 ^ {-t}$ it follows that $|S_s| > 2^u - 2^{u - t}$. To derive wanted contradiction assume there is a vector $x \in \vecspace{t} - T(S_s)$ or equivalently $T(S_s) \neq \vecspace{t}$. Under these conditions it is clear that $T ^ {-1}(x)$ and $S_s$ are disjoint. From lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(x)| = 2 ^ {u - t}$. This would mean that
 \[
-2 ^ u = |\vecspace{u}| \geq |A_s \cup T^{-1}(x)| > 2 ^ u - 2 ^ {u - t} + 2 ^ {u - t} = 2 ^u
-\] which is impossible. The fact that if $\mu_s < 2^{-t}$ then $T(A_s) = \vecspace{t}$ can be rewritten in terms of probability as
+2 ^ u = |\vecspace{u}| \geq |S_s \cup T^{-1}(x)| > 2 ^ u - 2 ^ {u - t} + 2 ^ {u - t} = 2 ^u
+\] which is impossible. The fact that if $\mu_s < 2^{-t}$ then $T(S_s) = \vecspace{t}$ can be rewritten in terms of probability as
 \[
-	\Prob{\mu_s < 2^{-t}} \leq \Prob{T(A_s) = \vecspace{t}}
+	\Prob{\mu_s < 2^{-t}} \leq \Prob{T(S_s) = \vecspace{t}}
 \]
 
-Because $\vecspace{u}$ is a vector space over field $\mathbb{Z}_2$ by induction over $i$ we obtain that $A_i = A_{i - 1} \cup (v_i + A_{i - 1}) = A_0 + \vecspan{v_1, \dots, v_i}$. Note that $T(v_i) = 0$ because mapping $T$ was chosen so that every vector $v_i$ was placed in the kernel of $T$. This simply implies $T(A_s) = T(A)$.
+Because $\vecspace{u}$ is a vector space over field $\mathbb{Z}_2$ by induction over $i$ we obtain that $S_i = S_{i - 1} \cup (v_i + S_{i - 1}) = S_0 + \vecspan{v_1, \dots, v_i}$. Note that $T(v_i) = 0$ because mapping $T$ was chosen so that every vector $v_i$ was placed in the kernel of $T$. This simply implies $T(S_s) = T(S)$.
 
 Combining the previous notes finishes the proof of this remark.
 
 \[
 \begin{split}
-\Prob{T(A) \neq \vecspace{t}} 
-	& = \Prob{T(A_s) \neq \vecspace{t}}  \\
-	& = 1 - \Prob{T(A_s) = \vecspace{t}} \\
+\Prob{T(S) \neq \vecspace{t}} 
+	& = \Prob{T(S_s) \neq \vecspace{t}}  \\
+	& = 1 - \Prob{T(S_s) = \vecspace{t}} \\
 	& \leq 1 - \Prob{\mu_s < 2 ^ {-t}} \\
 	& = \Prob{\mu_s \geq 2 ^ {-t}} \\
 	& \leq \mu ^ {u - t - \log t + \log \log \left(\frac{1}{\mu}\right)} \\
@@ -242,12 +242,12 @@ Combining the previous notes finishes the proof of this remark.
 \]
 \end{proof}
 
-The next theorem gives the probability of mapping whole set $A$ onto target space into relation to its size.
+The next theorem gives the probability of mapping whole set $S$ onto target space into relation to its size.
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
-If $T: \vecspace{w} \rightarrow \vecspace{t}$ is a random uniformly chosen linear map. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon > 0$ such that for every subset $A$ of the domain $\vecspace{w}$, $|A| \geq c_\epsilon t 2^t$, the probability of mapping $A$ onto the whole space is
+If $T: \vecspace{w} \rightarrow \vecspace{t}$ is a random uniformly chosen linear map. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon > 0$ such that for every subset $S$ of the domain $\vecspace{w}$, $|S| \geq c_\epsilon t 2^t$, the probability of mapping $S$ onto the whole space is
 \[
-	\Prob{T(A) = \vecspace{t}} \geq 1 - \epsilon \text{.}
+	\Prob{T(S) = \vecspace{t}} \geq 1 - \epsilon \text{.}
 \]
 \end{theorem}
 \begin{proof}
