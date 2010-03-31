@@ -38,19 +38,34 @@ scheme_2_mult_constant = function(k, e, l) {
 	return (4 * c_e / (1 - e));
 }
 
+compute_integral = function() {
+	s = 0;
+	h = 10;
+
+	for (x in 0:(2048-16) * h) {
+		r = 16 + x / h;
+		d = r / log2(r);
+		s = s + 1 / h * d ^ (1 - log2(log2(d)));
+	}
+
+	return (s + (2048 ^ (-0.3)) / 0.3);
+}
+
+print (compute_integral())
+
 c_min = compute_constant(2, 2/3, 3);
 scheme_1_min = scheme_1_mult_constant(2, 2/3, 3);
 scheme_2_min = scheme_2_mult_constant(2, 2/3, 3);
 
 k_min = 2;
-k_max = 3;
+k_max = 4;
 k_step = 0.01;
 
 l_min = 2;
-l_max = 2;
-l_step = 1;
+l_max = 3;
+l_step = 0.01;
 
-e_min = 2/3;
+e_min = 0.7;
 e_max = 0.9;
 e_step = 0.01;
 
@@ -65,6 +80,7 @@ while (k <= k_max) {
 			# print(c(k, e, l));
 
 			c = compute_constant(k, e, l);
+
 			if (c < c_min) {
 				c_min_vec = c(k, e, l, c);
 				c_min = c;
@@ -101,6 +117,6 @@ print(scheme_2_min_vec);
 # Additive constant
 c_e = scheme_2_min_vec[5];
 e = scheme_2_min_vec[2];
-print (2 * c_e * ((14 - 4) / (1 - e) + 4));
+print (2 * c_e * ((3.36 - 4) / (1 - e) + 4));
 
 
