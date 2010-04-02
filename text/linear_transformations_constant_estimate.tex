@@ -142,6 +142,7 @@ The previous and to be honest not very successful attempt gave us a constant sui
 The constant $c_\epsilon$ plays the most crucial role and therefore we lower its value first. Instead of making the factor space $A$ larger than hashed set $S$ we will bound it between $|B|$ and $\frac{2|S|}{2 ^ l}$ where $l \geq 1$ is a parameter. This space must still be larger than the target space $\vecspace{t}$ since we have to ensure existence of surjective mapping $T_1: A \rightarrow B$. Of course this is possible since we assume that set $S$ contains at least $c_\epsilon t 2^t$ elements.
 
 \begin{remark}
+\label{remark-better-c-e}
 Let $U = \vecspace{w}$ and $B = \vecspace{t}$ and $T \in LT(U, B)$ be a random uniformly chosen linear transformation. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon$ such that for every subset $S \subset U$, $|S| \geq c_\epsilon t 2^t$ the following holds
 \[
 \Prob{T(A) = \vecspace{t}} \geq 1 - \epsilon \text{.}

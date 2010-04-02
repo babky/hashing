@@ -34,10 +34,10 @@ For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have $t \vec{x} \in \null
 \end{proof}
 
 \begin{definition}[Affine linear map]
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for some vectors $\vec{v} \in V$, $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is called affine linear map if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(x) = \vec{u} + T_0(x - \vec{v})$.
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ for vectors $\vec{v} \in V$, $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is called affine linear map if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(\vec{x}) = \vec{u} + T_0(\vec{x} - \vec{v})$, $\vec{x} \in V_A$.
 \end{definition}
 
-\begin{definition}[Set of all affine linear map]
+\begin{definition}[Set of all affine linear maps]
 Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for $\vec{v} \in V$, $\vec{u} \in U$. Set of all affine linear mapping between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
 \[
 	LT_A(V_A, U_A) = \{ T: V_A \rightarrow U_A \setdelim T \text{ is an affine map} \} \text{.}

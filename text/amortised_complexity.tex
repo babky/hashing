@@ -121,7 +121,7 @@ The most interesting idea of trimming is that system $H_p$ is an adaptation of t
 
 \section{Bound estimate based on probability density function}
 \label{section-linear-systems-linear-amount-constant-estimate}
-From now on we concentrate on obtaining a bound on the length of the chain such that probability of rehashing because of the chain length must be lower than $p$. The corresponding bound is computed from the density function shown in the proof of remark \ref{theorem-hashing-linear-amount}. Let us note that the following probability estimate works for $r \geq 4$ only. 
+From now on we concentrate on obtaining a chain length limit such that probability of rehashing caused by the limit must be lower than prescribed parameter $p$, $0 < p < 1$. The corresponding bound is computed from the density function shown in the proof of remark \ref{theorem-hashing-linear-amount}. 
 
 \[
 \begin{split}
@@ -129,10 +129,11 @@ From now on we concentrate on obtaining a bound on the length of the chain such 
 \frac{1}{1 - \epsilon}\left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} & \leq p \\
 \end{split}
 \]
+Notice that the following probability estimate works only for $r \geq 4$. 
 
-Define a function $f(d) = d ^ {\log \log m - \log \alpha - \log d - \log \log d}$. At first we show that function $f(d)$ is decreasing in the interval $\left[ d', \infty \right]$. We chose $d'$ so that it is minimal among $d' > 1$ and $\log \log m - \log \alpha - \log d' - \log \log d' < 0$. 
+For simplicity define a function $f(d) = d ^ {\log \log m - \log \alpha - \log d - \log \log d}$. At first we show that function $f(d)$ is decreasing in the interval $\left[ d', \infty \right]$. Point $d'$ is chosen so that it is minimal among $d' \geq 2$ and $\log \log m - \log \alpha - \log d' - \log \log d' < 0$. 
 
-To show monotonicity of f let $d' \leq d_1 < d_2$.
+To show monotonicity of $f$ let $d' \leq d_1 < d_2$.
 \[
 \begin{split}
 f(d_2) 
@@ -143,7 +144,7 @@ f(d_2)
 \end{split}
 \]
 
-The bound on $\lpsl$ for rehashing the table with probability $p$ equals $2 c_\epsilon \alpha r$ where $r$ must be found. At first we define a tight lower bound $d$ on expression $\frac{r}{\log r}$ and substitute it into function $f$ then \[ f(d) \geq f\left(\frac{r}{\log r}\right) \text{.} \] Whenever minimal $d$ such that $f(d) \leq (1 - \epsilon) p$ is found then wanted probability bound is satisfied, too.
+The sought bound on $\lpsl$ for rehashing the table with probability $p$ equals $2 c_\epsilon \alpha r$ where parameter $r$ is not known. First step is to define a tight lower bound $d$ on expression $\frac{r}{\log r}$ and substitute it into function $f$ then \[ f(d) \geq f\left(\frac{r}{\log r}\right) \text{.} \] Whenever minimal $d$ such that $f(d) \leq (1 - \epsilon) p$ is found then wanted probability bound is satisfied, too.
 \[ 
 \begin{split}
 \Prob{\lpsl \geq 2 \alpha c_\epsilon r} 
@@ -151,9 +152,9 @@ The bound on $\lpsl$ for rehashing the table with probability $p$ equals $2 c_\e
 	& \leq \frac{1}{1-\epsilon}f(d) \leq p \\
 \end{split}
 \]
-From the lower bound $d$ of the expression $\frac{r}{\log r}$ variable $r$ can be expressed. The estimate on the length of the longest chain such that probability of rehashing is lower than $p$ is then finished.
+Variable $r$ has to be expressed from our lower bound $d$ on the expression $\frac{r}{\log r}$. The estimate on the length of the longest chain such that probability of rehashing is lower than $p$ is then finished.
 
-Let us define the lower bound $d$ as $d = k \log m$ and $d \leq \frac{r}{\log r}$ for a positive constant $k$. Following inequality allows us to find minimal suitable $d$.
+Let us define the lower bound $d$ as $d = j \log m$ and $d \leq \frac{r}{\log r}$ for a positive constant $j$. Following inequality allows us to find minimal suitable $d$.
 \[
 d ^ {\log \log m - \log \alpha - \log d - \log \log d} \leq (1 - \epsilon) p \text{.}
 \]
@@ -166,30 +167,76 @@ One of the assumptions for using probability estimate of event $\lpsl > 2 c_\eps
 
 We substitute into $d$ and find the explicit dependence of $r$ on the table's size $m$:
 \begin{displaymath}
-r = 2 d \log d = 2 k \log m (\log k + \log \log m) = 2 k \log m \log \log m + 2 k \log k \log m \text{.}
+r = 2 d \log d = 2 j \log m (\log j + \log \log m) = 2 j (\log m \log \log m + \log j \log m) \text{.}
 \end{displaymath}
 
 Our estimate on $\lpsl$ can be finally written as:
 \[
-4 c_\epsilon \alpha k (\log m \log \log m + \log k \log m) \text{.}
+4 c_\epsilon \alpha j (\log m \log \log m + \log j \log m) \text{.}
 \]
 
 The probability bound with $d$ substituted into it.
 \[
 \begin{split}
 d ^ {\log \log m - \log \alpha - \log d -\log \log d} & \leq (1 - \epsilon)p \\
-\left(k \log m\right)^{-\log \alpha -\log k - \log \log (k \log m)} & \leq (1 - \epsilon)p \\
+\left(j \log m\right)^{-\log \alpha -\log j - \log \log (j \log m)} & \leq (1 - \epsilon)p \\
 \end{split}
 \]
 
 This inequality has various interpretations.
 \begin{itemize}
-\item For fixed $0 < p, \epsilon < 1$ and positive constant $k$ we get a lower bound on $m$ when our estimate is valid. Note that we can obtain arbitrary low multiplicative constant since we are allowed to choose values for $k$. Such estimates are valid for large quantities of stored elements only.
-\item We can search for parameters of $\epsilon$ and $k$ so that multiplicative constant is the smallest possible for given hash table size $m$ and probability $p$. This approach is used to find the following estimate for $m \geq 4096$.
+\item For fixed $0 < p, \epsilon < 1$ and positive constant $j$ we get a lower bound on $m$ when our estimate is valid. Note that we can obtain arbitrary low multiplicative constant since we are allowed to choose values for $j$. Such estimates are valid for large quantities of stored elements only.
+\item We can search for parameters of $\epsilon$ and $j$ so that multiplicative constant is the smallest possible for given hash table size $m$ and probability $p$. This approach is used to find the following estimate for $m \geq \text{4 096}$.
 \end{itemize}
 
-% TODO:
-For small hash tables the best bound is achieved when the value of $n$ when our estimates are valid is the same as the value obtained by the above estimate. This value is for $k = 0.2766$, $n \geq 572$ and the multiplicative constant is $19.152$. This value has also been computed by a simple computer program.
+\section{Bound for 4 096 elements and probability 0.5}
+As mentioned before we used the formula obtain in the previous section. The limit is computed for tables consisting of 4 096 buckets at least and probability bound set to 0.5. These choices were not random. Our first tries with the formula shown that the multiplicative constants gained by its use are in order of tens. This order of multiplicative constant corresponds to thousands of stored elements when using the most basic linear estimate.
+
+Program we used to compute the multiplicative constant used parameters $j$ and $\epsilon$ to minimise the expression $4 c_\epsilon \alpha j$. Since to compute the best multiplicative according to remark \ref{remark-better-c-e} additional parameters $k$ and $l$ are present we needed those, too. We used algorithm \ref{algorithm-scheme-3} we to solve this problem. It can be further improved but provided us valuable results.
+
+The best result achieved for $\alpha = 1.5$, $m \geq \text{4 096}$ is for $\epsilon = 0.96$, $j = 0.74$ and equals $4 c_\epsilon \alpha j = 57.29$. This result is used later in the following section.
+
+So compare this value with the linear estimate for size of the hash table $m = \text{4 096}$ and number of stored elements $n = \alpha m = 1.5 \cdot \text{4 096} = \text{6 144}$. Linear estimate on the length of the longest chain equals $n = \text{6 144}$. Our estimate is less than $60 \log m \log \log m < 60 \cdot 12 \cdot 4 = \text{2 880}$ which is already far better.
+
+\begin{algorithm}
+\caption{Calculate the multiplicative constant for parameters $p, m, \alpha, \epsilon, k, l$.}
+\label{procedure-scheme-3}
+\begin{algorithmic}
+\STATE $c_\epsilon$ $\leftarrow$ constant $c_\epsilon$ computed with parameters $k$, $\epsilon$ and $l$
+\STATE $r \leftarrow (1 - \epsilon)p$ \COMMENT{Right side, inevitably achieved bound.}
+\STATE $j \leftarrow 1$
+\STATE 
+\COMMENT{Lower the value of $j$ so that the right side is skipped.}
+\STATE $l \leftarrow (j \log m) ^ {-\log(\alpha) - \log(j) - \log(\log(j \log m))}$
+\WHILE {$l < r$ \textbf{and} $j > 0$}
+	\STATE $j \leftarrow j - STEP$;
+	\STATE $l \leftarrow (j \log m) ^ {-\log(\alpha) - \log(j) - \log(\log(j \log m))}$
+\ENDWHILE
+\STATE
+\STATE $j \leftarrow j + STEP$
+\RETURN $4 c_\epsilon \alpha j$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Calculate the smallest limit for $p=0.5$, $m \geq \text{4 096}$ and prescribed $\alpha$.}
+\label{algorithm-scheme-3}
+\floatname{algorithm}{Procedure}
+\begin{algorithmic}
+\STATE $c \leftarrow \infty$
+\FOR {$k \in \left[2, 4\right]\text{ with }STEP$}
+	\FOR {$l \in \left[1.3, 3\right]\text{ with }STEP$}
+		\FOR {$\epsilon \in \left[0.85, 0.9\right]\text{ with }STEP$}
+			\IF {$c > \text{ computed for all the parameters }p = 0.5, m = \text{4 096}, \alpha, \epsilon, k, l$}
+				\STATE $c \leftarrow \text{computed constant}$
+			\ENDIF
+		\ENDFOR
+	\ENDFOR
+\ENDFOR
+\STATE
+\RETURN $c$
+\end{algorithmic}
+\end{algorithm}
 
 \section{Hashing using the family of linear transformations}
 
@@ -203,7 +250,7 @@ The model we propose is a slight modification of the simplest universal hashing 
 The limiting value, $l(m)$, for the table of size $m$ is chosen so that probability of rehashing is bounded by the prescribed value $p$, $0 < p < 1$. We would like to guarantee the worst case limit even when the table is fully loaded. The results of the section \ref{section-linear-systems-linear-amount-constant-estimate} are applied for the load factor $\alpha = 1$ when the delete operation is forbidden and for $\alpha = 1.5$ when it is allowed.
 
 % TODO
-The value $l(m)$ is chosen so that the probability of failing to find a suitable function is lower than a prescribed value $p$. This probability bound certainly works for the lower values of $\alpha$. In the mentioned section we computed the limit for $p = 0.5$ as $19.152 \log m \log \log m$ when $\alpha = 1$ and $28.728 \log m \log \log m$ for $\alpha = 1.5$.
+The value $l(m)$ is chosen so that the probability of failing to find a suitable function is lower than a prescribed value $p$. This probability bound certainly works for the lower values of $\alpha$. In the mentioned section we computed the limit for $p = 0.5$ as $47.63 \log m \log \log m$ when $\alpha = 1$ and $57.29 \log m \log \log m$ for $\alpha = 1.5$.
 
 Because the estimates used work only with the initial size of the table greater than 4 096 we have to options. Either we use tables with initial size of $m = \text{4 096}$ elements. But not every hash table grows to a size of 4 096 elements and this overhead becomes unacceptable. The other option lies in turning off the chain limit rule violation checks when the table has less than 4 096 buckets. Expected amortised time complexity of the introduced scheme is about to be analysed.
 
