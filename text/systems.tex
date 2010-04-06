@@ -1,8 +1,10 @@
 \chapter{Universal classes of functions}
 
-Universal classes of functions play an important role in hashing since they improve independence of an associative memory on its input. Their greatest advantage for hashing is removal of two assumptions of classic hashing on uniformity of input. The first one is the uniform distribution of hashed sets and the second one is that every element of the universe has the same probability of being hashed. In standard hashing probability of collision is taken relative to the choice of hashed set. In universal hashing probability space corresponds to the choice of a random function from the universal system. Probabilities of collision events are then taken relative to the selection of a universal function. Notice that there is no direct relation to the input or equivalently to the represented set. Whatever bound is obtained it holds for any hashed set. 
+Universal classes of functions play an important role in hashing since they improve independence of the associative memory on its input. Their greatest advantage is removal of the two assumptions of classic hashing on uniformity of input. The first one is the uniform distribution of hashed sets having the same size. The second one says that every element of the universe has the same probability of being hashed. 
 
-Universal systems are constructed so that probability that given set is not suitable for a single function of the system is low. Hence functions in such systems are convenient for many hashed sets. If selected function is not suitable for the hashed set we are free to pick another function. Rehashing whole table using the just selected one is not likely to fail because probability of failing many times in row decreases exponentially.
+In addition models of standard hashing take probability of collision relative to the choice of the hashed set. In models of universal hashing probability space corresponds to the choice of a random function from the universal system. Notice that there is no direct relation between a collision and the input - the represented set. Collision is caused by an inconvenient choice of a universal function instead by an unsuitable input. Once again probabilities of collision events are taken relative to the uniform selection of a hash function. The greatest advantage of this approach is that whatever bound is obtained it holds for any hashed set. 
+
+Universal systems of functions are constructed in a way that the probability for a universal function not being suitable for a hashed set is low. Functions in such universal systems are convenient for many hashed sets. If the selected function is not suitable for any hashed set we are free to pick one. Rehashing the whole represented set using the new one is not likely to fail. Moreover probability of failing many times in a row decreases exponentially.
 
 \section{Universal classes of functions}
 % TODO: Odkazy na jednotlive systemy
@@ -64,9 +66,9 @@ The number of all colliding functions is then less or equal to $\frac{H}{|B|}$ a
 Every strongly $n$-universal class of functions is strongly $k$-universal for every $1 \leq k \leq n$.
 \end{remark}
 \begin{proof}
-Assume we are given $n$-universal class of functions $H$ mapping universe $U$ to hash table $B$. Similarly as in the previous proof we are given $k$ different elements $x_1, \dots, x_k \in U$. For every choice of their images $y_1, \dots, y_k \in B$ we need to find the number of functions that display the element $x_i$ to its image $y_i$, $1 \leq i \leq k$. 
+Let $H$ be a $n$-universal class of functions mapping a universe $U$ to a hash table $B$. Similarly to the previous proof there are $k$ different elements $x_1, \dots, x_k \in U$ that should be mapped to the prescribed buckets $y_1, \dots, y_k \in B$. For every choice of their images $y_1, \dots, y_k \in B$ we need to find the number of functions that display the element $x_i$ to its image $y_i$, $1 \leq i \leq k$. 
 
-The only estimate we can use comes from the strong $n$-universality and thus holds for $n$ elements only. We must extend the set of images by $n - k$ elements $x_{k + 1}, \dots, x_n$ that are allowed to map on arbitrary element of $B$. Such extension must be done carefully so that the final sequence consists of different images $x_1, \dots, x_n$ as well. From now on fix one such extension, $x_{k + 1}, \dots, x_n$.
+The only estimate we can use comes from the strong $n$-universality of $H$ and holds for $n$ elements only. We extend the set of images by other $n - k$ elements $x_{k + 1}, \dots, x_n$. They are let to be mapped on arbitrary element of $B$. Such extension must be done carefully so that the final sequence consists of different elements $x_1, \dots, x_n$, too. From now on fix one such extension, $x_{k + 1}, \dots, x_n$.
 
 The set of functions mapping given $k$ elements onto their prescribed images, $\bar H$, may be seen as:
 \[
@@ -105,10 +107,10 @@ is called the linear system.
 Linear system is $\frac{\left\lceil \frac{N}{m} \right\rceil ^ 2}{\left(\frac{N}{m}\right) ^ 2}$-universal.
 \end{remark}
 \begin{proof}
-Consider two different elements $x, y \in U$. We need to compute the number of functions $h_{a, b} \in H$ for which 
+Consider two different elements $x, y \in U$. We need to find the number of functions $h_{a, b} \in H$ such that 
 \[ (ax + b \bmod N) \bmod m = (ay + b \bmod N) \bmod m \textit{.} \]
 
-This is equivalent to the existence of numbers $r, s, t$ that satisfy the following constraints:
+This is equivalent to existence of numbers $r, s, t$ that satisfy the following constraints:
 \begin{gather*}
 r \in \{0, \dots, m - 1 \} \\
 t, s \in \left\{ 0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1 \right\} \\
@@ -116,8 +118,9 @@ t, s \in \left\{ 0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1 \right\} \
 (ay + b) \bmod N = t m + r \\
 \end{gather*}
 
-Since $N$ is a prime number and $x \neq y$ for every choice of parameters $r, s, t$ there is a solution; parameters $a, b$, that satisfy the equalities.
-Number of possible choices of parameters $r, s, t$ is $m \left \lceil \frac{N}{m} \right \rceil ^ 2$. So there are at most $m \left \lceil \frac{N}{m} \right \rceil ^ 2$ functions $h_{a, b}$ that display given elements $x, y$ to the same value.
+Since $N$ is a prime number and $x \neq y$ for every choice of parameters $r, s, t$ there is an exactly unique solution; parameters $a, b$ that satisfy the equalities.
+
+Number of all possible choices of parameters $r, s, t$ is $m \left \lceil \frac{N}{m} \right \rceil ^ 2$. So there are at most $m \left \lceil \frac{N}{m} \right \rceil ^ 2$ functions $h_{a, b}$ that display the elements $x, y$ to a same value.
 
 We compute the system's $c$-universality constant.
 \[
@@ -127,7 +130,7 @@ m \left \lceil \frac{N}{m} \right \rceil ^ 2 \frac{\frac{N ^ 2}{m}}{\frac{N ^ 2}
 \frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\frac{N ^ 2}{m ^ 2}} \frac{|LS|}{|B|}
 \]
 
-So the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left(\frac{N}{m}\right) ^ 2}$-universal.
+Hence the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left(\frac{N}{m}\right) ^ 2}$-universal.
 \end{proof}
 % End linear systems
 
@@ -142,7 +145,7 @@ Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the syst
 For a prime $p$ and $m < p$ the multiplicative system is $2$-universal.
 \end{theorem}
 \begin{proof}
-If $x$ and $y$ are given different elements. We have to find the number of functions in the multiplicative system that will make their images the same:
+Let $x$ and $y$ be different elements of the universe. We have to find the number of functions in the multiplicative system that make their images the same.
 \begin{displaymath}
 \begin{split}
 kx \bmod p \bmod m & = ky \bmod p \bmod m \\
@@ -150,9 +153,9 @@ kx - ky \bmod p \bmod m & = 0 \\
 \end{split}
 \end{displaymath}
 
-This can be rewritten as:
+This may be rewritten as:
 \begin{displaymath}
-k(x - y) \bmod p = l m \qquad \text{ for  } l \in \left\lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \right\rbrace - \{0\}
+k(x - y) \bmod p = l m \qquad \text{ for  } l \in \left\lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \right\rbrace - \{0\} \text{.}
 \end{displaymath}
 
 Notice the parameter $l \neq 0$ since $k \neq 0$. Thus for every choice of $x$ and $y$ there are at most $2\left\lfloor\frac{p}{m}\right\rfloor$ functions. For every value of $l$ there is exactly one $k$ satisfying the equality because parameter $p$ is a prime. For the number of colliding functions we have \[ | \lbrace h \in \mathrm{Mult}_{m,p} \setdelim h(x) = h(y) \rbrace | \leq \frac{2p}{m} \] and the system is then $2$-universal.
@@ -172,27 +175,27 @@ Let $U$ and $B$ be two vector spaces over $\mathbb{Z}_2$ and $dim(U) = m$ and $d
 System of linear transformations between vector spaces $U$ and $B$ is $1$-universal.
 \end{remark}
 \begin{proof}
-Let $m$ and $n$ denote the dimensions of vector spaces $U$ and $B$. Then every linear transformation $L: U \rightarrow B$ has an unique binary $n \times m$ matrix $T$ associated with it. We are given two different vectors $x, y \in U$ that are supposed to be mapped on the same image and counting the number of mappings confirming the collision. Let $k$ be a position such that $x_k \neq y_k$, it must exists since $x \neq y$. If every element of matrix T except the ones in the $k$-th is given we are able to compute the remaining ones; the $k$-th column. 
+Let $m$ and $n$ denote the dimensions of vector spaces $U$ and $B$ respectively. Then every linear transformation $L: U \rightarrow B$ is associated with a unique $n \times m$ binary matrix $T$. Let $x, y \in U$ be two distinct vectors mapped on a same image. We find the number of mappings confirming this collision. Let $k$ be a position such that $x_k \neq y_k$, it exists since $x \neq y$. We show the following statement. If every element of matrix $T$ except the elements in the $k$-th column is given the remaining ones, the $k$-th column, is determined uniquely.
 
-Since the images must be equal for every $i$, $1 \leq i \leq n$ the following holds:
+The images $Tx$, $Ty$ must be equal to cause a collision of $x$ and $y$. The next equality must then be true for every $i$, $1 \leq i \leq n$.
 \[
 \displaystyle\sum_{j = 1}^{m}t_{i, j}x_j = \displaystyle\sum_{j = 1}^{m}t_{i, j}y_j
 \]
 
-Then for the element $t_{i, k}$ we have:
+For $t_{i, k}$ we have:
 \[
-t_{i, k} = (x_k - y_k)^{-1}\displaystyle\sum_{j = 1, j \neq k}^{m}t_{i, j}(y_j - x_j)
+t_{i, k} = (x_k - y_k)^{-1}\displaystyle\sum_{j = 1, j \neq k}^{m}t_{i, j}(y_j - x_j) \text{.}
 \]
 
-The elements in the $k$-th column are uniquely determined. The number of all functions, number of all binary matrices, is $2^{mn}$. Size of the target space is $2^n$. The number of all functions mapping $x$ and $y$ to a same value is $2^{mn - n}$ because we can choose every element arbitrarily except those $n$ in $k$-th column. 
+The elements in the $k$-th column are clearly uniquely determined by the previous statement. The number of all functions, equivalently the number of all binary matrices, is $2^{mn}$. Notice that the size of the target space $B$ is $2^n$. The number of all functions mapping $x$ and $y$ to a same value is $2^{mn - n}$ since we are allowed to arbitrarily choose every element of the matrix $T$ except the $n$ ones in the $k$-th column. 
 
-System of linear transformations is $1$-universal since:
+System of linear transformations is $1$-universal because:
 \[
-2^{mn - n} = \frac{2^{mn}}{2^n} = \frac{|LT|}{|B|} \textit{.}
+2^{mn - n} = \frac{2^{mn}}{2^n} = \frac{|LT|}{|B|} \text{.}
 \]
 \end{proof}
 
-We are not only limited to vector spaces over field $\mathbb{Z}_2$. Systems of all linear transformation between vectors over any field $\mathbb{Z}_p$ are $1$-universal for any prime $p$, too.
+We are not limited only to vector spaces over field $\mathbb{Z}_2$. Systems of all linear transformations between vector spaces over any finite field $\mathbb{Z}_p$ are $1$-universal, too. However the most interesting results are achieved for the choice of $\mathbb{Z}_2$.
 % End linear transformations
 
 % Bit string sum
