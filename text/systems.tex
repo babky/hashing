@@ -175,11 +175,13 @@ Let $U$ and $B$ be two vector spaces over $\mathbb{Z}_2$ and $dim(U) = m$ and $d
 System of linear transformations between vector spaces $U$ and $B$ is $1$-universal.
 \end{remark}
 \begin{proof}
-Let $m$ and $n$ denote the dimensions of vector spaces $U$ and $B$ respectively. Then every linear transformation $L: U \rightarrow B$ is associated with a unique $n \times m$ binary matrix $T$. Let $x, y \in U$ be two distinct vectors mapped on a same image. We find the number of mappings confirming this collision. Let $k$ be a position such that $x_k \neq y_k$, it exists since $x \neq y$. We show the following statement. If every element, except those in the $k$-th column, of the matrix $T$ is fixed then the remaining ones, elements in the $k$-th column, are determined uniquely.
+Let $m$ and $n$ denote the dimensions of vector spaces $U$ and $B$ respectively. Then every linear transformation $L: U \rightarrow B$ is associated with a unique $n \times m$ binary matrix $T$. 
 
-The images $Tx$, $Ty$ must be equal to cause a collision of $x$ and $y$. The next equality must then be true for every $i$, $1 \leq i \leq n$.
+Let $x, y \in U$ be two distinct vectors mapped on a same image. We need to find the number of mappings confirming this collision. Let $k$ be a position such that $x_k \neq y_k$. Such $k$ exists since $x \neq y$. We show the following statement. If every element, except those in the $k$-th column, of the matrix $T$ is fixed then the remaining ones are determined uniquely. We just lost $n$ degrees of freedom when creating matrix $T$ causing the collision of $x$ and $y$. This lost implies $1$-universality of the system which is proved later as well.
+
+In order to create a collision of $x$ and $y$ their images $Tx$, $Ty$ must be the same. The system of equalities must then be true for every $i$, $1 \leq i \leq n$:
 \[
-\displaystyle\sum_{j = 1}^{m}t_{i, j}x_j = \displaystyle\sum_{j = 1}^{m}t_{i, j}y_j
+\displaystyle\sum_{j = 1}^{m}t_{i, j}x_j = \displaystyle\sum_{j = 1}^{m}t_{i, j}y_j \text{.}
 \]
 
 For $t_{i, k}$ we have:
@@ -187,7 +189,9 @@ For $t_{i, k}$ we have:
 t_{i, k} = (x_k - y_k)^{-1}\displaystyle\sum_{j = 1, j \neq k}^{m}t_{i, j}(y_j - x_j) \text{.}
 \]
 
-The elements in the $k$-th column are clearly uniquely determined by the previous statement. The number of all functions, equivalently the number of all binary matrices, is $2^{mn}$. Notice that the size of the target space $B$ is $2^n$. The number of all functions mapping $x$ and $y$ to a same value is $2^{mn - n}$ since we are allowed to arbitrarily choose every element of the matrix $T$ except the $n$ ones in the $k$-th column. 
+The elements in the $k$-th column are uniquely determined by the previous equality. 
+
+The number of all functions, equivalently the number of all binary matrices, is $2^{mn}$. Notice that the size of the target space $B$ is $2^n$. The number of all functions mapping $x$ and $y$ to a same value is $2^{mn - n}$ since we are allowed to arbitrarily choose every element of the matrix $T$ except the $n$ ones in the $k$-th column. 
 
 System of linear transformations is $1$-universal because:
 \[
@@ -200,7 +204,9 @@ We are not limited only to vector spaces over field $\mathbb{Z}_2$. Systems of a
 
 % Bit string sum
 \paragraph{Bit sum of a string over the alphabet \{0, 1\}}
-Presented family is another linear system that is $1$-universal, too. It is clear that every natural number can be written as a string over alphabet consisting from two characters only, $0$ and $1$, it is the number's binary form. Weighted digit sum is computed and considered the number's hash value. This somehow reminds us of the system of linear transformations.
+Presented family is another linear system that is $1$-universal, too. It is clear that every natural number can be written as a string over alphabet consisting from two characters only, $0$ and $1$, it is the number's binary form. Weighted digit sum is considered the number's hash value. This reminds us of the system of linear transformations.
+
+If we are hashing strings that are $k + 1$-bit long we also need $k + 1$ coefficients. Also assume hashing into a table of size $p \in \mathbb{N}$ where $p$ is a prime. Coefficients may be chosen arbitrarily but are not greater than a parameter $l$, $0 < l \leq p$. To transform a digit sum into an address of the hash table simple modulo $p$ operation is used. Parameter $l$ may seem quite artificial. However it sets the range for coefficients and therefore determines the size of the whole system.
 
 \begin{definition}[Bit string system]
 Let $p$ be a prime, $k \in \mathbb{N}$, $B = \{0, \dots, p - 1 \}$ and $l \in \mathbb{N}$, $l \leq p$. System of functions
@@ -214,12 +220,12 @@ is called bit string system with parameters $p$ and $l$.
 Bit string system for binary numbers of length $k + 1$ modulo prime $p$ and constant $l \in \mathbb{N}$, $l \leq p$ is $\frac{p}{l}$-universal.
 \end{remark}
 \begin{proof}
-We are given two different bit string $x, y \in \{0, 1\} ^ {k + 1}$ and estimate the number of all sequences of coefficients $c_0, \dots, c_k$ that satisfy
+Let $x$ and $y$ be two different bit string $x, y \in \{0, 1\} ^ {k + 1}$. We must estimate the number of all sequences of coefficients $0 \leq c_0, \dots, c_k < l$ that make the two elements collide. Every collision sequence must satisfy:
 \[
-\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \bmod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \bmod p \textit{.}
+\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \bmod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \bmod p \text{.}
 \]
 
-Since $x \neq y$ there is an index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$.
+Since $x \neq y$ there is an index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$. This allows us to exactly determine $j$\textsuperscript{th} coefficient $c_j$ from the others as stated below.
 
 \begin{displaymath}
 \begin{split}
@@ -229,7 +235,7 @@ c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_
 \end{split}
 \end{displaymath}
 
-Last equality holds since $p$ is a prime number and the number $x_j - y_j$ is invertible in the field $\mathbb{Z}_p$. There is one degree of freedom lost when generating a function that makes $x$ and $y$ collide. The number of all functions is $l ^ {k + 1}$ and the size of the table is $p$. The number of colliding functions can be computed as:
+Last equality holds since $p$ is a prime number and the number $x_j - y_j$ is invertible in the field $\mathbb{Z}_p$. There is one degree of freedom lost when choosing a function that makes $x$ and $y$ collide. The number of all functions is $l ^ {k + 1}$ and the size of the table is $p$. The number of colliding functions can be computed as:
 
 \begin{displaymath}
 |\{h \in BSS_{p, l} | h(x) = h(y) \}| = l^{k} = \frac{p}{l}\frac{l^{k + 1}}{p} = \frac{p}{l}\frac{|BSS_{p, l}|}{|B|} \textit{.}
@@ -240,7 +246,7 @@ The bit string system is thus $\frac{p}{l}$-universal.
 % End of bit string sum.
 
 % Polynomials
-Following system is a generalisation of already mentioned linear functions or transformations to polynomials. The advantage obtained by this system of polynomials is the strong universality. Unfortunately it is exchanged for the size of the system.
+The following system is a generalisation of so far discussed linear functions and linear transformations to polynomials. The advantage delivered by the system of polynomials is its strong universality. Unfortunately it is traded for the bigger size of the system.
 
 \paragraph{Polynomials over finite fields}
 \begin{definition}[Polynomials over finite fields]
