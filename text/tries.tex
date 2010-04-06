@@ -3,7 +3,7 @@
 
 Postupnosť bitov, ktoré reprezentujú dvojkový zápis čísla $x$ môžeme chápať ako vektor, prvok vektorového priestoru. Tento predpoklad môžeme spraviť, lebo univerzum $U$ volíme ako množinu $\{0, \dots, N - 1 \}$, kde $N = 2^k$. Chceme odhadnúť pravdepodobnosť, že $n$ zadaných prvkov $x^1, \dots, x^n$ koliduje. Zostavíme $n$ rovníc tvaru:
 \begin{displaymath}
-\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i^j\right) \mod p = t \qquad j \in \{1, \dots, n\}
+\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i^j\right) \bmod p = t \qquad j \in \{1, \dots, n\}
 \end{displaymath}
 
 Parameter $t \in \{0, \dots p-1\}$ môže byť ľubovoľný. Zostavíme maticu $M$ tejto sústavy, pričom budeme počítať nad poľom $Z_p$. 
@@ -124,7 +124,7 @@ Vidíme, že pre každé fixované $b$ a $r$ dostávame jednoznačné $a$. Poče
 	\label{tries:cwlf-experimental-probability-643-64}
 \end{table}
 
-Pokles pre prvé dva vstupy je pomerne rýchly, až na horné celé časti exponenciálny. Pokles pre väčší počet vstupov je už pomalší. V poslednom prípade dokonca ostal dlhší čas konštantný, čo je spôsobené tým, že za parameter $a$ volíme 0 a $b$ tak, aby $b \mod N \mod m = 0$, teda ako jeden z 11 násobkov 64 v $Z_{643}$. Takže došlo k akejsi degradácii.
+Pokles pre prvé dva vstupy je pomerne rýchly, až na horné celé časti exponenciálny. Pokles pre väčší počet vstupov je už pomalší. V poslednom prípade dokonca ostal dlhší čas konštantný, čo je spôsobené tým, že za parameter $a$ volíme 0 a $b$ tak, aby $b \bmod N \bmod m = 0$, teda ako jeden z 11 násobkov 64 v $Z_{643}$. Takže došlo k akejsi degradácii.
 
 Otázky a možnosti:
 \begin{itemize}

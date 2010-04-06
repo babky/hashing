@@ -97,7 +97,7 @@ System of linear functions was among the first systems of universal hash functio
 
 \begin{definition}[Linear system]
 Let $N$ be a prime and $m \in \mathbb{N}$. Define the sets $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$. Then the class of linear functions 
-\[ LS = \{h_{a, b}(x): U \rightarrow B \setdelim a, b \in U \textit{ where } h_{a, b}(x) = ((ax + b) \mod N) \mod m \} \]
+\[ LS = \{h_{a, b}(x): U \rightarrow B \setdelim a, b \in U \textit{ where } h_{a, b}(x) = ((ax + b) \bmod N) \bmod m \} \]
 is called the linear system.
 \end{definition}
 
@@ -106,14 +106,14 @@ Linear system is $\frac{\left\lceil \frac{N}{m} \right\rceil ^ 2}{\left(\frac{N}
 \end{remark}
 \begin{proof}
 Consider two different elements $x, y \in U$. We need to compute the number of functions $h_{a, b} \in H$ for which 
-\[ (ax + b \mod N) \mod m = (ay + b \mod N) \mod m \textit{.} \]
+\[ (ax + b \bmod N) \bmod m = (ay + b \bmod N) \bmod m \textit{.} \]
 
 This is equivalent to the existence of numbers $r, s, t$ that satisfy the following constraints:
 \begin{gather*}
 r \in \{0, \dots, m - 1 \} \\
 t, s \in \left\{ 0, \dots, \left \lceil \frac{N}{m} \right \rceil - 1 \right\} \\
-(ax + b) \mod N = s m + r \\
-(ay + b) \mod N = t m + r \\
+(ax + b) \bmod N = s m + r \\
+(ay + b) \bmod N = t m + r \\
 \end{gather*}
 
 Since $N$ is a prime number and $x \neq y$ for every choice of parameters $r, s, t$ there is a solution; parameters $a, b$, that satisfy the equalities.
@@ -135,7 +135,7 @@ So the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\left
 For examining the properties of the original linear system simpler and smaller multiplicative system may be used. They have many common properties and share some same drawbacks. This multiplicative system may provide us with some insights for which choices of hash function and hashed set they both fail.
 
 \begin{definition}[Multiplicative system]
-Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \mod p) \mod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the multiplicative system.
+Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \bmod p) \bmod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the multiplicative system.
 \end{definition}
 
 \begin{theorem}
@@ -145,14 +145,14 @@ For a prime $p$ and $m < p$ the multiplicative system is $2$-universal.
 If $x$ and $y$ are given different elements. We have to find the number of functions in the multiplicative system that will make their images the same:
 \begin{displaymath}
 \begin{split}
-kx \mod p \mod m & = ky \mod p \mod m \\
-kx - ky \mod p \mod m & = 0 \\
+kx \bmod p \bmod m & = ky \bmod p \bmod m \\
+kx - ky \bmod p \bmod m & = 0 \\
 \end{split}
 \end{displaymath}
 
 This can be rewritten as:
 \begin{displaymath}
-k(x - y) \mod p = l m \qquad \text{ for  } l \in \left\lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \right\rbrace - \{0\}
+k(x - y) \bmod p = l m \qquad \text{ for  } l \in \left\lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \right\rbrace - \{0\}
 \end{displaymath}
 
 Notice the parameter $l \neq 0$ since $k \neq 0$. Thus for every choice of $x$ and $y$ there are at most $2\left\lfloor\frac{p}{m}\right\rfloor$ functions. For every value of $l$ there is exactly one $k$ satisfying the equality because parameter $p$ is a prime. For the number of colliding functions we have \[ | \lbrace h \in \mathrm{Mult}_{m,p} \setdelim h(x) = h(y) \rbrace | \leq \frac{2p}{m} \] and the system is then $2$-universal.
@@ -202,7 +202,7 @@ Presented family is another linear system that is $1$-universal, too. It is clea
 \begin{definition}[Bit string system]
 Let $p$ be a prime, $k \in \mathbb{N}$, $B = \{0, \dots, p - 1 \}$ and $l \in \mathbb{N}$, $l \leq p$. System of functions
 \begin{displaymath}
-BSS_{p, l} = \left\{ h: \{0, 1\}^{k + 1} \rightarrow B \setdelim h(x) = \left(\displaystyle \sum_{i=0}^{k} c_i x_i\right) \mod p, c_i \in \{0, 1, \dots, l - 1\} \right\}
+BSS_{p, l} = \left\{ h: \{0, 1\}^{k + 1} \rightarrow B \setdelim h(x) = \left(\displaystyle \sum_{i=0}^{k} c_i x_i\right) \bmod p, c_i \in \{0, 1, \dots, l - 1\} \right\}
 \end{displaymath} 
 is called bit string system with parameters $p$ and $l$.
 \end{definition}
@@ -213,16 +213,16 @@ Bit string system for binary numbers of length $k + 1$ modulo prime $p$ and cons
 \begin{proof}
 We are given two different bit string $x, y \in \{0, 1\} ^ {k + 1}$ and estimate the number of all sequences of coefficients $c_0, \dots, c_k$ that satisfy
 \[
-\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \mod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \mod p \textit{.}
+\left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \bmod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \bmod p \textit{.}
 \]
 
 Since $x \neq y$ there is an index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$.
 
 \begin{displaymath}
 \begin{split}
-\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \mod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \mod p \\
-c_j(x_j - y_j) \mod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p \\
-c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \mod p
+\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \bmod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \bmod p \\
+c_j(x_j - y_j) \bmod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \bmod p \\
+c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \bmod p
 \end{split}
 \end{displaymath}
 
@@ -241,7 +241,7 @@ Following system is a generalisation of already mentioned linear functions or tr
 
 \paragraph{Polynomials over finite fields}
 \begin{definition}[Polynomials over finite fields]
-Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \right) \mod m \] is called the system of polynomial hash functions of the $n$-th degree.
+Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \right) \bmod m \] is called the system of polynomial hash functions of the $n$-th degree.
 \end{definition}
 
 \begin{remark}
@@ -253,13 +253,13 @@ Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots
 h(x_i) = y_i, \quad 0 \leq i \leq n 
 \]
 
-If $U = B$ the function $h(x)$ is reduced to the form: \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \mod N \textit{.} \] Since $N$ is a prime number and the elements $x_i$ are different there is exactly one solution of the above system, let $c_0, \dots, c_n$ denote the solution. Size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|B|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial hash functions is strongly $n + 1$-universal.
+If $U = B$ the function $h(x)$ is reduced to the form: \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \textit{.} \] Since $N$ is a prime number and the elements $x_i$ are different there is exactly one solution of the above system, let $c_0, \dots, c_n$ denote the solution. Size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|B|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial hash functions is strongly $n + 1$-universal.
 
 Let $U \neq B$. We follow the proof of $c$-universality of the linear system. At first we write down the equations $h(x_i) = y_i$ in the field $\mathbb{Z}_N$. Instead using the last modulo operation new variables $r_i$ are introduces as in the case of the linear system.
 
 \begin{displaymath}
 \begin{split}
-\left(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} \right) \mod N = {y}_i + {r_i}{m} \qquad 
+\left(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} \right) \bmod N = {y}_i + {r_i}{m} \qquad 
  & y_i \in \{0, \dots, m - 1 \} \\
  & r_i \in \left\{0, m, 2m, \dots, \left\lceil \frac{N}{m} \right\rceil - 1 \right\} \\
 \end{split}
