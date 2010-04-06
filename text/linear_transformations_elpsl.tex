@@ -44,6 +44,14 @@ Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations 
 To proof direction from the left to the right assume that event $E_2$ is present. Event $E_2$ occurs if and only if there is a vector $\vec{y} \in B$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Under these conditions transformation $T_1$ may not display set $A - T_0(S)$ onto $B$ since $\vec{y} \notin T_1(A - T^{-1}(y)) \supseteq T_1(A - T_0(S))$ or equivalently $B \neq T_1(A - T_0(S))$.
 
 If $B \neq T_1(A - T_0(S))$ then there exists a vector $\vec{y} \in B$ such that $\vec{y} \notin T_1(A - T_0(S))$. Since $T_1$ is surjective we have $T_1(A) = B$. Because no point from $A - T_0(S)$ is displayed on $\vec{y}$ the whole preimage of $\vec{y}$ must be contained in $T_0(S)$, $T_1^{-1}(\vec{y}) \subseteq T_0(S)$.
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.7\textwidth]{images/e2}
+
+  \caption{Occurrence of the event $E_2$.}
+\end{figure}
+
 \end{proof}
 
 As mentioned before we can use the previous equivalency to estimate probability of event $E_2$ as stated in the following remark. 
@@ -113,6 +121,13 @@ Finally we can finish the remark's proof
 \[
 	\Prob{E_2 | E_1} \geq \Prob{A' \subseteq T_0(S) | E_1} \geq \Prob{A' = T_0|_{U'}(S') | E_1} \geq 1 - \epsilon \text{.}
 \]
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.9\textwidth]{images/elpsl_proof}
+  \caption{Image depicting the situation in the proof.}
+\end{figure}
+
 \end{proof}
 
 \begin{corollary}
