@@ -1,4 +1,5 @@
 \chapter{Expected length of the longest chain}
+\label{chapter-elpsl}
 
 \begin{section}{Influence of bucket's size on time complexity}
 We already explained why the size of a bucket is so important for hashing. Assume a model of hashing where chains created from the elements stored in a single bucket are represented by a linked list, hence the word chain. To find an element in a bucket (or chain) one needs to iterate it. Thus the time of the find operation is linear with the number of elements that fell in the bucket. An approach, how to estimate the expected length of the longest chain when classic and using universal hashing, is shown.

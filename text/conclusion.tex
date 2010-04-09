@@ -1,1 +1,17 @@
 \chapter{Conclusion}
+We present a model of universal hashing which preserved $O(1)$ expected running time of the find operation. We were also able to compute the expected amortised running time for the insert and delete operations. In addition our model bounded the worst case running time by $O(\log n \log \log n)$. 
+
+Since we based it on the system of linear transformations the time to compute the hash value of an element is worsened. The solution that we propose is to store once computed hash values within the object. This optimisation exploits warranties of the model if the find operation is dominant. 
+
+\section{Future work}
+There are many ways how the model can be improved. First it may be interesting to mathematically describe behaviour of double hashing when used with a universal class of functions. Combined with the system of linear transformations it may be possible to obtain a similar worst case bound without violating the expected running times. 
+
+Similarly to perfect hashing the chain may be represented by a hash table allowed to have load factor with a small value. But if the elements in the bucket can not be accessed in a constant time it might be possible to rehash the small table instead of the large one. This approach may bring another optimisation.
+
+Another brilliant idea that may play a role for example in the area of load balancing is hash by two functions simultaneously. A newly stored element is placed into a smaller bucket as stated in \cite{1076315}. When finding we have to search in both buckets associated with an element. However the expected worst case time in classic hashing is substantially better and the expected complexity is preserved.
+
+And, of course, what is not shown in the thesis are the experimental results. A high quality benchmark of the model is required. The benchmark should be done with and without the optimisation to show the influence of the linear system on running times. Also the benchmark has to show when the warranty is needed in dependence on the operation composition and the input distribution. When we use  inputs created by random number generators they are uniformly distributed. The obtained chains are then short even for classic hashing. Such a good input are seldom present and the real cases of inconvenient inputs should be pointed out. Also when the chains are longer and the find operation is the most frequent one then it is convenient to have a worst case warranty. The question is how frequent the find operation has to be when compared to the modifying ones.
+
+Of course, using simpler classes may bring faster times of computing the hash codes. Linear classes are quite similar and maybe we can find correspondence allowing the results found for the class of linear transformations to be brought to another faster class.
+
+Models providing a reasonable worst case warranty with a good expected complexity may be a suitable choice for various set representation problems. Current models of hashing may provide such an warranty when enriched by a simple rule. Also approach relaxing the models providing warranties may be in help of achieving similar bounds.

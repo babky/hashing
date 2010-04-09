@@ -1,4 +1,5 @@
 \chapter{Hashing}
+\label{chapter-hashing}
 Hashing is one of the approaches designed for efficient solving of the dictionary problem. Various implementations differ in many different ways. However usage of a hash function and a quickly accessible table, typically represented by an array, is common to the most of them. Hash function transforms elements of the universe into addresses of the table.
 
 Represented sets are always small when compared to the size of the universe. In order to prevent waste of space we are forced to use tables as small as possible. Typically the size of the table storing the represented elements is chosen so that it is comparable to those of the stored set. 
@@ -58,7 +59,7 @@ Let $x, y \in U$ be two distinct elements. We say that $x$ and $y$ collide if $h
 It is just the collision handling what differentiates the models of hashing and determines their performance.
 
 \section{Assumptions of classic hashing}
-In Lemma \ref{lemma-expected-list-time} we computed the expected time of the find operation and used it as a measure of its time complexity. The computed expectation is based on the probability distribution of the input. For the lemma we assumed its uniformity. In hashing similar situation occurs. If we want to calculate the expected results we need corresponding probabilistic assumptions on the input.
+In Lemma \ref{lemma-expected-list-time} we computed the expected time of the find operation and used it as a measure of its time complexity. The computed expectation is based on the probability distribution of the input. For the lemma we assumed its uniformity. In hashing similar situation occurs. If we want to calculate the expected results we need corresponding probabilistic assumptions on the input. These assumptions may be found in similar forms in \cite{VK-skripta} or \cite{DBLP:books/sp/Mehlhorn84}.
 \begin{itemize}
 \item Hash function $h$ distributes the elements of universe uniformly across the hash table.
 \[
