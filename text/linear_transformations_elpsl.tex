@@ -1,11 +1,11 @@
 \begin{section}{The original result}
-The last two theorems of the previous chapter give us enough power to achieve our goal -- asymptotic restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts this expected length can not grow. Every hashed set can be extended into $n \log n$ elements and the estimate must still remain valid. 
+The last two theorems of the previous chapter give us enough power to achieve our goal -- asymptotic restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts this expected length can not grow. Every stored set can be extended into $n \log n$ elements and the estimate must still remain valid. 
 
 The most common models use load factors lower than one. Because of these models we generalise theorem so that it is parametrised by the table's load factor. Important relation of the expected length of the longest chain on the table's load factor is found. The result is that the multiplicative constant of the asymptotic growth is relative to the load factor of a hash table. New results are achieved by modifications of the given proofs with some new ideas.
 
 \begin{theorem}
 \label{theorem-n-logn-to-n}
-Let $U = \vecspace{w}$ be the hashed universe, $B = \vecspace{t}$ be the hash table and $S \subset U$ be the hashed set such that $|S| = m \log m$ where $t \in \mathbb{N}, m = 2 ^ t$. Let $H = LT(\vecspace{w}, \vecspace{t})$ be the universal system used. Then 
+Let $U = \vecspace{w}$ be the hashed universe, $B = \vecspace{t}$ be the hash table and $S \subset U$ be the stored set such that $|S| = m \log m$ where $t \in \mathbb{N}, m = 2 ^ t$. Let $H = LT(\vecspace{w}, \vecspace{t})$ be the universal system used. Then 
 \[
 	\Expect{\lpsl} \in O(\log m \log \log m) \text{.}
 \]
@@ -17,7 +17,7 @@ Let the target space, representation of the hash table, be denoted by $B = \vecs
 The second idea of the proof is to estimate the probability of event called $E_1$ for any natural number $l$. The probability bound on $E_1$ is found by inspecting another quite unnatural event $E_2$. Probability of event $E_1$ is then simply determined by discovering the probabilities $\Prob{E_2 | E_1}$ and $\Prob{E_2}$.
 
 \begin{definition}
-Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and $S \subset U$ be the hashed set. Event $E_1(S, T, l)$
+Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and $S \subset U$ be the stored set. Event $E_1(S, T, l)$
 
 \noindent Representation of set $S$ by the hash function $T$ has a chain of length greater than $l$,
 
@@ -27,7 +27,7 @@ Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and
 \end{definition}
 
 \begin{definition}
-Let $T_0: U \rightarrow A, T_1: A \rightarrow B$ be linear transformations where $T_2$ is surjective and $S \subset U$ be the hashed set. Event $E_2(S, T_0, T_1)$ is then defined as:
+Let $T_0: U \rightarrow A, T_1: A \rightarrow B$ be linear transformations where $T_2$ is surjective and $S \subset U$ be the stored set. Event $E_2(S, T_0, T_1)$ is then defined as:
 \[
 	E_2(S, T_0, T_1) \equiv \exists \vec{y} \in B: T_1^{-1}(\vec{y}) \subseteq T_0(S) \text{.}
 \]
@@ -38,7 +38,7 @@ When it is clear what we mean by $S, T_0, T_1$ and $l$ we omit the parametrisati
 Now we will point out another definition of the event $E_2$ that fits better to the scheme of Theorem $\ref{theorem-linear-function-set-onto}$.
 \begin{remark}
 \label{remark-e2-equivalency}
-Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations and such that $T_2$ is surjective. Let $S \subset U$ be the hashed set. Appearance of event $E_2(S, T_0, T_1)$ is then equivalent to
+Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations and such that $T_2$ is surjective. Let $S \subset U$ be the stored set. Appearance of event $E_2(S, T_0, T_1)$ is then equivalent to
 \[
 	E_2(S, T_0, T_1) \equiv \exists \vec{y}: T_1^{-1}(\vec{y}) \subseteq T_0(S) \Leftrightarrow T_1(A - T_0(S)) \neq B \text{.}
 \]
@@ -60,7 +60,7 @@ If $B \neq T_1(A - T_0(S))$ then there exists a vector $\vec{y} \in B$ such that
 As mentioned before we can use the previous equivalency to estimate probability of event $E_2$ as stated in the following remark. 
 \begin{remark}
 \label{remark-e2-probability}
-Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations where $T_1$ is surjective and $S \subset U$ denote the hashed set such that $|S| \leq |B| \log |B|$. Define $d = \frac{|A|}{|S|}$. If $d > 1$ then 
+Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations where $T_1$ is surjective and $S \subset U$ denote the stored set such that $|S| \leq |B| \log |B|$. Define $d = \frac{|A|}{|S|}$. If $d > 1$ then 
 \[
 	\Prob{E_2(S, T_0, T_1))} \leq d^{-\log d - \log \log d} \text{.}
 \]
@@ -234,7 +234,7 @@ I_\epsilon = \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\
 \]
 The fact that this integral is convergent for every $0 < \epsilon < 1$ is shown later.
 
-The proof of Theorem \ref{theorem-n-logn-to-n} is completed even in more general form. We made no special assumptions on the size of the hashed set $S$ except $|S| \leq |B| \log |B|$. \qed
+The proof of Theorem \ref{theorem-n-logn-to-n} is completed even in more general form. We made no special assumptions on the size of the stored set $S$ except $|S| \leq |B| \log |B|$. \qed
 
 \mbox{\qedhere}
 
@@ -253,7 +253,7 @@ Assume that the table's load factor $\alpha$ is bounded in $\left[0.5, 1\right]$
 In the case of hashing $m \log m$ elements we prepared some useful and remarks in advance and then finished main proof. We have to modify them, especially the choices for the size of the factor space differ. Apparently we must lower the value of a chain length when we get a convenient probability estimate proportionally to $\alpha_f$. 
 
 \begin{remark}
-Suppose a model of hashing domain $U = \vecspace{w}$ to a hash table $B = \vecspace{t}$ and define $m = |B|$. Assume we use $LT(U, B)$ as universal class and let $T \in LT(U, B)$ be a random uniformly chosen linear map used as a hash function. Moreover let $S \subset U$ be hashed set such that $|S| = \alpha m$ for load factor $0.5 \leq \alpha \leq 1$. Then for every $0 < \epsilon < 1$ there and $r > 4$,  probability of existence of a long chain is bounded as:
+Suppose a model of hashing domain $U = \vecspace{w}$ to a hash table $B = \vecspace{t}$ and define $m = |B|$. Assume we use $LT(U, B)$ as universal class and let $T \in LT(U, B)$ be a random uniformly chosen linear map used as a hash function. Moreover let $S \subset U$ be stored set such that $|S| = \alpha m$ for load factor $0.5 \leq \alpha \leq 1$. Then for every $0 < \epsilon < 1$ there and $r > 4$,  probability of existence of a long chain is bounded as:
 \[
 \Prob{\lpsl > 4 c_\epsilon \alpha r \log m \log \log m} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]

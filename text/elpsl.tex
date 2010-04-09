@@ -23,7 +23,7 @@ Then length of the chain with the address $a$ when hashing by function $h$ is de
 
 Notation probe sequence comes from coalesced hashing. Chains are represented directly in the hash table and they are fused together even for elements with different hash values. Many authors refer to the process of finding an element in a chain as probing the sequence. The authors denote these random variables by names $\psl$ and $\lpsl$, too. % TODO: citation.
 
-Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed over the choice of a function $h \in H$. The bounds on the variable $\lpsl$ that are obtained must be valid for any hashed set $S \subseteq U$ and depend on the size of the hashed set. If we are able to find a tight upper bound on the length of the longest chain we can guarantee the worst case behaviour of the model. When the limit is broken we can choose any other function from the universal class of functions $H$ and rehash stored elements so that we obtain a table that does not violate the chain limit rule.
+Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed over the choice of a function $h \in H$. The bounds on the variable $\lpsl$ that are obtained must be valid for any stored set $S \subseteq U$ and depend on the size of the stored set. If we are able to find a tight upper bound on the length of the longest chain we can guarantee the worst case behaviour of the model. When the limit is broken we can choose any other function from the universal class of functions $H$ and rehash stored elements so that we obtain a table that does not violate the chain limit rule.
 
 When taking the probability into an account we define random variables $\psl$ and $\lpsl$ over the probability space determined by a choice of hash function $h \in H$ where $H$ is a universal class of hash functions used.
 
@@ -45,9 +45,9 @@ The standard result of classic hashing is the $O\left(\frac{\log n}{\log \log n}
 
 The above definitions are intended for models of universal hashing. However they are easy to understand with standard hashing, too. 
 
-Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$ because the standard model assumes usage of just one hash function. Probability computed in this model is taken over the choice of the hashed set $S \subset U$. 
+Notice when using standard model we do not have to mention the additional parameter $h$ of variables $\psl$ and $\lpsl$ because the standard model assumes usage of just one hash function. Probability computed in this model is taken over the choice of the stored set $S \subset U$. 
 
-Restrictions placed on the hash function say that it distributes the elements of universe uniformly across the hash table. Hence the other parameter, bucket $b \in B$, of variable $\psl$ is no longer necessary, too. For every pair of buckets $a, b \in B$ random variables $\psl(a)$ and $\psl(b)$ then have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{.}\] In this chapter $m$ denotes the size of the hash table $B$ and $n$ is the size of the hashed set $S$.
+Restrictions placed on the hash function say that it distributes the elements of universe uniformly across the hash table. Hence the other parameter, bucket $b \in B$, of variable $\psl$ is no longer necessary, too. For every pair of buckets $a, b \in B$ random variables $\psl(a)$ and $\psl(b)$ then have same probabilities of being equal to a number $k \in \mathbb{N}$: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{.}\] In this chapter $m$ denotes the size of the hash table $B$ and $n$ is the size of the stored set $S$.
 
 The probability estimate for the variable $\lpsl$ is simply obtained from the probability estimate of $\psl$ as:
 \begin{displaymath}
@@ -72,7 +72,7 @@ Because the used hash function divides universe $U$ uniformly among buckets, pro
 \begin{displaymath}
 \Prob{\psl \geq i} \leq \dbinom{n}{i}\left(\frac{1}{m}\right)^i
 \end{displaymath}
-Remark that this estimate holds only when the universe is substantially larger than the hashed set. Selection of the first element slightly changes the probability of choice of the second element and so on. This fact may be neglected for large or infinite universes.
+Remark that this estimate holds only when the universe is substantially larger than the stored set. Selection of the first element slightly changes the probability of choice of the second element and so on. This fact may be neglected for large or infinite universes.
 
 We can finish the estimate of the variable $\lpsl$ by computing:
 \begin{displaymath}
@@ -126,7 +126,7 @@ M_{= k}(h, a) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{a\}\}
 \end{displaymath}
 \end{definition}
 
-When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Simply said, sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the hashed set $S$ of size greater or equal to $k$ which are hashed a singleton $a$. 
+When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Simply said, sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the stored set $S$ of size greater or equal to $k$ which are hashed a singleton $a$. 
 
 \begin{lemma}
 \label{lemma-indicator-k-collision}
@@ -160,7 +160,7 @@ M_{\geq k} \neq \emptyset & \Leftrightarrow  M_{= k} \neq \emptyset \\
 \end{proof}
 \end{lemma}
 
-We choose and fix any arbitrary element, bucket, $a \in B$. If the chain of the selected element $a$ has $\psl(a, h) \geq k$ then there must exists a subset $Y$ of hashed set $S \subset U$ such that function $h$ is constant on $Y$ and $h(Y) = \{ a \}$. If $\psl(a, h) = k$ then set $Y$ must be maximal considering its size. Hence it may not be possible to extend the set $Y$ to a larger set hashed just onto $a$. We can write down the probability density function of $\psl(a)$ as:
+We choose and fix any arbitrary element, bucket, $a \in B$. If the chain of the selected element $a$ has $\psl(a, h) \geq k$ then there must exists a subset $Y$ of the stored set $S \subset U$ such that function $h$ is constant on $Y$ and $h(Y) = \{ a \}$. If $\psl(a, h) = k$ then set $Y$ must be maximal considering its size. Hence it may not be possible to extend the set $Y$ to a larger set hashed just onto $a$. We can write down the probability density function of $\psl(a)$ as:
 \begin{displaymath}
 \begin{split}
 \Prob{\psl(a) \geq k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ a \} \})}{|H|} \\
@@ -173,7 +173,7 @@ We add some remarks clarifying the following calculations:
 \item Every chain is determined by a single element $a$ which is included in it.
 \item Probability estimate is always computed for a fixed set $S$ and probability space corresponds to a choice of hash function $h \in H$.
 \item We want to obtain an estimate $\Prob{\psl(a) \geq k} \leq p(B, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl(h) \geq k} \leq |B| p(B, U, H, |S|) \text{.} \] 
-\item The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
+\item The obtained estimate does not depend on the stored set $S$ directly, just on its size $n$.
 \end{itemize}
 
 Lemma \ref{lemma-indicator-k-collision} allows us to estimate the probability of collision of more than $k$ elements.

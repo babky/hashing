@@ -41,7 +41,7 @@ Probability bound $p$, $0 < p < 1$, on existence of a long chain has important c
 \end{itemize}
 
 \begin{definition}
-Let $H$ be the universal system mapping an universe $U$ to a hash table $B$. Let $m$ be size of the hash table and $\alpha$ its load factor. Let $l(m, \alpha)$ be a chain length limiting function and $S \subset U$ be a hashed set. 
+Let $H$ be the universal system mapping an universe $U$ to a hash table $B$. Let $m$ be size of the hash table and $\alpha$ its load factor. Let $l(m, \alpha)$ be a chain length limiting function and $S \subset U$ be the stored set. 
 
 We say that function $h \in H$ creates a long chain if there is a chain of length longer than limiting value $l(m, \alpha)$.
 
@@ -64,7 +64,7 @@ If $H_p$ is a $p$-trimmed system then the number of functions is $(1 - p)|H|$ at
 \]
 \end{proof}
 
-Regarding that every function is chosen uniformly and the unsuitable ones are discarded we still perform uniform selection. Now the choice is restricted to functions that do not create long chains; to set $H_p$ only. Note that the restriction on the functions of the original universal system $H$ uses some information about the hashed set.
+Regarding that every function is chosen uniformly and the unsuitable ones are discarded we still perform uniform selection. Now the choice is restricted to functions that do not create long chains; to set $H_p$ only. Note that the restriction on the functions of the original universal system $H$ uses some information about the stored set.
 
 \begin{theorem}
 Let $H$ be a $c$-universal system of hash functions mapping an universe $U$ to a hash table $B$. Let $0 < p < 1$ be the trimming rate and set $m = |B|$. Then system of functions $H_p$ is still universal with the constant of universality multiplied by factor $\frac{1}{1 - p}$. Equivalently:
@@ -117,7 +117,7 @@ The estimate of failing $k$ times in a row is clearly bounded by the geometric d
 \]
 \end{proof}
 
-The most interesting and the most important idea of trimming is that system $H_p$ is an adaptation of the original class to hashed sets. We showed that finding a suitable function needs constant number of tries in the expected case. Moreover restricted systems are still $c$-universal for some constant $c \geq 1$. Hence all operations using system $H_p$ take constant expected time, too.
+The most interesting and the most important idea of trimming is that system $H_p$ is an adaptation of the original class to the stored sets. We showed that finding a suitable function needs constant number of tries in the expected case. Moreover restricted systems are still $c$-universal for some constant $c \geq 1$. Hence all operations using system $H_p$ take constant expected time, too.
 
 \section{Bound estimate based on probability density function}
 \label{section-linear-systems-linear-amount-constant-estimate}
@@ -267,7 +267,7 @@ Note that the expectation is taken over the uniform choice of a hash function. F
 
 \item Suppose a rehash operation after an \emph{insertion} is needed because of \emph{violation of the chain limit rule}. We seek for a new function satisfying the rule without resizing the table. A single rehash operation takes the time of $O(m)$ operations. In the following we refer to two immediate rehashes caused by the load factor rule as cycle. We need to find out how many rehash operations caused by the violation of the chain limit rule can occur in one cycle. 
 
-Finding a suitable function for the hashed set $S$ during the cycle is remarkably similar to finding it at the cycle's end. This fact has more causes. At first we have the limit dependent on the size of the hash table only and computed it for $\alpha = 1$. Moreover we can not delete elements, they can only be added. We can see the process of finding a suitable function in the middle of a cycle in the following manner. When we select a function from the family $H$ we ask if the function is fine for the hashed set $S$. We can ask if it is suitable for set $S_e$ that will be represented at the end of the cycle instead. The limits and probability bounds may remain the same. At the end of the cycle we have $S \subset S_e$, $m = |S_e|$ and $\alpha = 1$. Although we do not know the hashed set $S_e$ in advance it is not a problem. Universal hashing  no assumptions on a hashed set $S_e$\footnote{It only needs to be a subset of the universe $U$.} and since $S_e$ contains all currently hashed elements, $S \subset S_e$, we can afford this simplification. Hence after $\frac{1}{(1-p)^2}$ such choices we are expected to find a right function. The expected number of rehashes in a single cycle caused by the violation of the chain limit rule is then bounded by the same expression. 
+Finding a suitable function for the stored set $S$ during the cycle is remarkably similar to finding it at the cycle's end. This fact has more causes. At first we have the limit dependent on the size of the hash table only and computed it for $\alpha = 1$. Moreover we can not delete elements, they can only be added. We can see the process of finding a suitable function in the middle of a cycle in the following manner. When we select a function from the family $H$ we ask if the function is fine for the stored set $S$. We can ask if it is suitable for set $S_e$ that will be represented at the end of the cycle instead. The limits and probability bounds may remain the same. At the end of the cycle we have $S \subset S_e$, $m = |S_e|$ and $\alpha = 1$. Although we do not know the stored set $S_e$ in advance it is not a problem. Universal hashing places no assumptions on the represented set $S_e$\footnote{It only needs to be a subset of the universe $U$.} and since $S_e$ contains all the currently stored elements, $S \subset S_e$, we can afford this simplification. Hence after $\frac{1}{(1-p)^2}$ such choices we are expected to find a right function. The expected number of rehashes in a single cycle caused by the violation of the chain limit rule is then bounded by the same expression. 
 
 Now we compute the amortised complexity of insert operations causing violation of the chain limit rule in one cycle. There are exactly $0.5 m$ insert operations raising the load factor from $\alpha = 0.5$ to $\alpha = 1$ for the table of size $m$. The expected time spent on fixing the chain limit rule in a cycle is then $\frac{1}{(1 - p)^2}O(m)$. We can distribute this amount of time along the cycle of $0.5 m$ inserts. This still means $O(1)$ expected amortised time for every insert operation.
 \end{itemize}
