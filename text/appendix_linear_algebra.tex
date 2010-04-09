@@ -50,44 +50,44 @@ Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. L
 Let $T: \vecspace{u} \rightarrow \vecspace{t}$, $u \geq t$ be an~onto linear map and vector $\vec{x} \in \vecspace{t}$. Then $|T^{-1}(\vec{x})| = 2 ^ {u - t}$ and moreover set $T^{-1}(\vec{x})$ is an affine subspace of $\vecspace{u}$.
 \end{lemma}
 \begin{proof}
-At first remark that $T^{-1}(0)$ is a~subspace of~space $\vecspace{u}$.
+At first remark that $T^{-1}(\vec{0})$ is a~subspace of~space $\vecspace{u}$.
 
-Set $T^{-1}(0)$ contains zero.
-\[ T(0) = 0 \]
+Set $T^{-1}(\vec{0})$ contains zero since
+\[ T(\vec{0}) = \vec{0} \text{.} \]
 
 It is closed under addition.
 \[
 \begin{split}
-\vec{u}, \vec{v} \in T^{-1}(0) 
-	& \Rightarrow T(\vec{u}) = 0, T(\vec{v}) = 0 \\ 
-	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = 0 \\ 
-	& \Rightarrow \vec{u} + \vec{v} \in T^{-1}(0) \\
+\vec{u}, \vec{v} \in T^{-1}(\vec{0}) 
+	& \Rightarrow T(\vec{u}) = \vec{0}, T(\vec{v}) = \vec{0} \\ 
+	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{0} \\ 
+	& \Rightarrow \vec{u} + \vec{v} \in T^{-1}(\vec{0}) \\
 \end{split}
 \]
 
 It is closed under scalar multiplication.
 \[
 \begin{split}
-\delta \in \{0, 1\} \wedge \vec{u} \in T^{-1}(0) 
-	& \Rightarrow T(\delta \vec{u}) = \delta T(\vec{u}) = \delta 0 = 0 \\
-	& \Rightarrow \delta \vec{u} \in T^{-1}(0) \\
+\delta \in \{0, 1\} \wedge \vec{u} \in T^{-1}(\vec{0}) 
+	& \Rightarrow T(\delta \vec{u}) = \delta T(\vec{u}) = \delta \vec{0} = \vec{0} \\
+	& \Rightarrow \delta \vec{u} \in T^{-1}(\vec{0}) \\
 \end{split}
 \]
 
-$T^{-1}(\vec{x})$ is an~affine subspace since $T^{-1}(\vec{x}) = u + T^{-1}(0)$. The~consequence is that all sets $T^{-1}(\vec{x})$ have the~same size, exactly $|T^{-1}(\vec{x})| = 2^{u-t}$. For every vector $\vec{u} \in T^{-1}(\vec{x})$ the~set $T^{-1}(\vec{x})$ is the~same as $\vec{u} + T^{-1}(0)$. This is also the one to one map between $T^{-1}(0)$ and $T^{-1}(\vec{x})$.
+$T^{-1}(\vec{x})$ is an~affine subspace since $T^{-1}(\vec{x}) = u + T^{-1}(\vec{0})$. The~consequence is that all sets $T^{-1}(\vec{x})$ have the~same size, exactly $|T^{-1}(\vec{x})| = 2^{u-t}$. For every vector $\vec{u} \in T^{-1}(\vec{x})$ the~set $T^{-1}(\vec{x})$ is the~same as $\vec{u} + T^{-1}(\vec{0})$. This is also the one to one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{x})$.
 \begin{displaymath}
 \begin{split}
-\vec{v} \in T^{-1}(0) 
-	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{x} + 0 = \vec{x}  \\
-	& \Rightarrow \vec{u} + T^{-1}(0) \subseteq T^{-1}(\vec{x})
+\vec{v} \in T^{-1}(\vec{0}) 
+	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{x} + \vec{0} = \vec{x}  \\
+	& \Rightarrow \vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{x})
 \end{split}
 \end{displaymath}
 \begin{displaymath}
 \begin{split}
 \vec{v} \in T^{-1}(\vec{x}) 
-	& \Rightarrow T(\vec{v} - \vec{u}) = T(\vec{v}) - T(\vec{u}) = \vec{x} - \vec{x} = 0 \\
-	& \Rightarrow \vec{v} - \vec{u} \in T^{-1}(0) \\
-	& \Rightarrow T^{-1}(\vec{x}) \subseteq \vec{u} + T^{-1}(0)
+	& \Rightarrow T(\vec{v} - \vec{u}) = T(\vec{v}) - T(\vec{u}) = \vec{x} - \vec{x} = \vec{0} \\
+	& \Rightarrow \vec{v} - \vec{u} \in T^{-1}(\vec{0}) \\
+	& \Rightarrow T^{-1}(\vec{x}) \subseteq \vec{u} + T^{-1}(\vec{0})
 \end{split}
 \end{displaymath}
 \end{proof}
