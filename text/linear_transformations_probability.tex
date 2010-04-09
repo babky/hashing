@@ -21,7 +21,7 @@ Let $V$ be a~finite vector space and $A$ be its subset. Define $\mu = 1 - \frac{
 where the~expectation is taken throughout all possible choices of $v \in V$.
 
 \begin{proof}
-To simplify further computations define $X_v = |A \cup (v + A)|$ as a random variable taken throughout random uniform choice of vector $v \in V$. The toughest part is to compute $\Expect{X_v}$.
+To simplify further computations define $X_v = |A \cup (v + A)|$ as a random variable taken throughout random uniform choice of vector $v \in V$. The most difficult part of the proof is to compute $\Expect{X_v}$.
 \[
 \Expect{X_v} = \displaystyle\sum_{v \in V} |A \cup (v + A)| . \Prob{v \text{ is chosen}} = \displaystyle\sum_{v \in V} \frac{|A \cup (v + A)|}{|V|}
 \]
@@ -31,7 +31,7 @@ Size of set $|A \cup (v + A)|$ can be expressed using indicator function.
 |A \cup (v + A)| = \displaystyle\sum_{u \in V} I(u \in A \vee u \in (v + A)) \\
 \]
 
-Now notice if $u \in A$ there are exactly $|V|$ vectors that satisfy the above condition. So we have found first $|V||A|$ choices. For $u \notin A$ and $a \in A$ there is exactly one vector $v \in V$ such that $a + v = u$. And the remaining $|A|(|V| - |A|)$ choices are discovered. Thus 
+Now notice if $u \in A$ there are exactly $|V|$ vectors that satisfy the above condition. For $u \notin A$ and $a \in A$ there is exactly one vector $v \in V$ such that $a + v = u$ and there are $|A|(|V| - |A|)$ such possibilities and the remaining choices are refused. Thus
 \[ 
 \begin{split}
 |\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}| 
@@ -45,7 +45,7 @@ Substituting into the definition of $\Expect{X_v}$ and rewriting sums into the j
 \begin{split}
 \Expect{X_v} 
 	& = \frac{\sum_{v \in V} \sum_{u \in V} I(u \in A \vee u \in (v + A))}{|V|}  \\
-	& = |\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}| \\ 
+	& = \frac{|\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}|}{|V|} \\ 
 	& = \frac{2|V||A| - |A|^2}{|V|} \\
 \end{split}
 \]
@@ -55,7 +55,7 @@ Now finally compute the wanted expected value.
 \begin{split}
 \Expect{1 - \frac{|A \cup (v + A)|}{|V|}} 
 	& = 1 - \frac{\Expect{|A \cup (v + A)|}}{|V|}  \\
-	& = 1 - \frac{\Expect{X_v}}{|V|^2} \\
+	& = 1 - \frac{\Expect{X_v}}{|V|} \\
 	& = 1 - \frac{2|V||A| - |A|^2}{|V|^2} \\
 	& = \frac{|V|^2 + 2|V||A| - |A|^2}{|V|^2} \\
 	& = \left(1 - \frac{|A|}{|V|}\right)^2 = \mu^2 \\
@@ -81,7 +81,7 @@ P(\mu_k \geq t) \leq \mu_0^{k - \log \log (\frac{1}{t}) + \log \log \left(\frac{
 We prove the statement by induction over $k$. 
 
 \paragraph*{The initial step, $k = 0$.}
-Since $\mu_0$ is constant then 
+Since $\mu_0$ is constant we have
 \[
 	\Prob{\mu_0 \geq t} = \begin{cases}
 		0 & \text{ if } \mu_0 < t \\
@@ -89,10 +89,11 @@ Since $\mu_0$ is constant then
 	\end{cases}
 \]
 
-Because $\mu_0 > 0$ the right side is always positive and the estimate certainly holds for $\mu_0 < t$.
+From $\mu_0 > 0$ it follows
 \[
 	\mu_0^{0 - \log \log \left(\frac{1}{t}\right) + \log \log \left(\frac{1}{\mu_0}\right)} \geq 0
 \]
+and thus the estimate holds for $\mu_0 < t$.
 
 If $1 > \mu_0 \geq t$ then $-\log \log \left(\frac{1}{t}\right) + \log \log \left(\frac{1}{\mu_0}\right) \leq 0$ and hence
 \[
@@ -101,11 +102,11 @@ If $1 > \mu_0 \geq t$ then $-\log \log \left(\frac{1}{t}\right) + \log \log \lef
 
 Thus the statement holds for $k = 0$.
 
-\paragraph*{The induction step, $k >= 0$.} We prove the statement for $k + 1$ and assume it holds for $k$. Let $t \in (0, 1)$ be given. For simplicity, let us denote $c = k - \log \log \left(\frac{1}{t}\right)$. Then we have to prove
+\paragraph*{The induction step.} We prove the statement holds for $k \geq 0$ then it holds for $k + 1$. Let $t \in (0, 1)$ be fixed. For simplicity, let us denote $c = k - \log \log \left(\frac{1}{t}\right)$. Then we have to prove
 \[
 	\Prob{\mu_{k + 1} \geq t} \leq \mu_0 ^ {c + 1 + \log \log \left(\frac{1}{\mu_0}\right)} \text{.}
 \]
-Whenever exponent $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) \leq 0$ the estimate holds, the right side is at least one since $\mu_0 \leq 1$. We can restrict ourselves to case when $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) > 0$. The proof is based on the fact that allows us to fix value of $\mu_1$ and use the induction hypothesis for $k$. For value $a \in \left[0, \mu_0\right]$ define $g(a) = \Prob{\mu_{k + 1} \geq t | \mu_1 = a}$. Then
+Whenever exponent $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) \leq 0$ the estimate holds, because $\mu_0 < 1$. We can restrict ourselves to case when $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) > 0$. To prove our statement we fix $\mu_1$ and we the induction hypothesis for $k$. For value $a \in \left[0, \mu_0\right]$ define $g(a) = \Prob{\mu_{k + 1} \geq t | \mu_1 = a}$. Then
 \[
 	\Prob{\mu_{k + 1} \geq t} = \int\limits_{0}^{\mu_0}\Prob{\mu_{k + 1} \geq t | \mu_1 = a}\Prob{\mu_1 = a} \, da = \Expect{g(\mu_1)} \text{.}
 \]
@@ -121,7 +122,7 @@ and $f(x) = \min \{1, f_0(x) \}$ for $0 \leq x < 1$.
 
 If $\beta_0 = a \in \left[0, \mu_0 \right]$ is constant and $\beta_i$ for $i = 1, \dots, k$ are random variables satisfying conditions of this lemma then $\Prob{\beta_k \geq t} = g(a)$. From the induction hypothesis for $k$ we have $g(a) \leq f(a) = a^{k - \log \log \left(\frac{1}{t}\right) + \log \log \left(\frac{1}{a}\right)}$ for every $a \in \left(0, \mu_0 \right]$.
 
-Next we investigate behaviour of $\frac{f_0}{x}$ on the interval $(0, 1)$. We start be computing the first derivation for every $x \in (0, 1)$.
+Next we investigate behaviour of $\frac{f_0}{x}$ on the interval $(0, 1)$. We start to compute the first derivation for every $x \in (0, 1)$.
 \[
 \left(\frac{f_0(x)}{x}\right)' = (c - 1 + \log \log \left( \frac{1}{x} \right) + \log e)\frac{f_0(x)}{x^2}
 \]
@@ -133,7 +134,17 @@ Let us also define $x_1 = 2 ^ {-2 ^ {-c}}$, the point where $f_0(x)$ first reach
 f_0(x_1) = {x_1} ^ {c + \log \log \left(\frac{1}{x_1}\right)} = {x_1} ^ {c - c} = 1
 \]
 Since $-c > -c + 1 -\log e$ inequality $x_1 < x_s$ holds and the investigated function $\frac{f_0(x)}{x}$ is still increasing in the point $x_1$.
-Because function $f_0(x)$ is increasing for every $x \in \left[x_1, 1\right)$ we have $f_0(x) \geq f_0(x_1) = 1$ and $f(x) = \min \{1, f_0(x)\} = 1$.
+Function $f_0(x)$ is increasing for every $x \in \left[x_1, 1\right)$. Let $x' < x$.
+\[
+\begin{split}
+f_0(x') 
+	& = {x'} ^ {c + \log \log \left(\frac{1}{x'}\right)} \\
+	& < {x} ^ {c + \log \log \left(\frac{1}{x'}\right)} \\
+	& < {x} ^ {c + \log \log \left(\frac{1}{x}\right)} \\
+\end{split}
+\]
+
+Thus we have $f_0(x) \geq f_0(x_1) = 1$ and $f(x) = \min \{1, f_0(x)\} = 1$.
 
 At last define the third point $x_2 = x_1 ^ 2 = 2 ^ {-2 ^ {-c - 1}}$. This point lies in the decreasing phase because $-c - 1 < -c + 1 - \log e$ and then $x_2 > x_s$. In the just defined point $x_2$ the following statement holds.
 \[
@@ -206,9 +217,9 @@ Let $u$ and $t$ be natural numbers such that $0 < t \leq u$. Let $S$ be a~proper
 \begin{proof}
 Set $s = u - t$. Choose vectors $v_1, \dots, v_s \in \vecspace{u}$ independently and randomly using the uniform distribution. Note that vectors $v_1, \dots, v_s \in \vecspace{u}$ need not to be linearly independent.
 
-We will perform random and uniform choice of linear transformation $T$ according to model \ref{remark-model-surjective-linear-map-selection}. Vectors $v_1, \dots, v_s$ are extended to a random basis $b$ of vector space $\vecspace{u}$ and choose random permutation $\pi$ as stated in the just mentioned model. Since selection of vectors $v_1, \dots, v_s$ is random uniform and vectors are independent of each other the basis $b$ is chosen uniformly indeed. Moreover the vectors $v_1, \dots, v_s$ define part $s'$ of the needed set $s \in S$ since we need to place them in the kernel of just constructed mapping $T$. Set $s'$ must be uniformly extended to any set $s \in S$ such that $s' \subseteq s$. The uniform choice of function $T$ is done by this. Just note that $T(v_i) = 0$ for all $i = 1, \dots, s$.	
+We perform random and uniform choice of linear transformation $T$ according to model \ref{remark-model-surjective-linear-map-selection}. Maximal linearly independent subset of vectors $v_1, \dots, v_s$ may be extended to a random basis $b$ of vector space $\vecspace{u}$. Now choose a random permutation $\pi \in \Pi_t$ as stated in the just mentioned model. Since selection of vectors $v_1, \dots, v_s$ is random and uniform, moreover vectors are independent of each other the basis $b$ is chosen uniformly indeed. Moreover the vectors $v_1, \dots, v_s$ define a part $s'$ of the needed set $s \in S$ since we need to place them in the kernel of the constructed mapping $T$. Set $s'$ must be uniformly extended to any set $s \in S$ such that $s' \subseteq s$. The uniform choice of function $T$ is done by this. Just note that $T(v_i) = 0$ for all $i = 1, \dots, s$.	
 
-Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + v_i)$ and set $\mu_i = 1 - \frac{|S_i|}{2 ^ u}$. When considering $\mu_i$ as random variables by using lemma \ref{lemma-choose-random-vector} we can derive the fact that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, s \}$. Because every set $S_i$ is an extension of the previous set $S_{i - 1}$ it is clear that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, s$. The assumptions of lemma \ref{lemma-random-variable} are satisfied and we obtain
+Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + v_i)$ and set $\mu_i = 1 - \frac{|S_i|}{2 ^ u}$. When considering $\mu_i$ as random variables by using Lemma \ref{lemma-choose-random-vector} we can derive the fact that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, s \}$. Because every set $S_i$ is an extension of the previous set $S_{i - 1}$ it is clear that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, s$. The assumptions of lemma \ref{lemma-random-variable} are satisfied and we obtain
 \[
 \begin{split}
 \Prob{\mu_s \geq 2 ^ {-t}} 
@@ -218,7 +229,7 @@ Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + v_i)$ and set $\m
 \end{split}
 \]
 
-We want to show that whenever $\mu_s < 2^{-t}$ the event $T(S_s) = \vecspace{t}$ occurs. Since $\mu_s = 1 - \frac{|S_s|}{2 ^ u}$ the size of set $S_s$ equals ${2 ^ u}(1 - \mu_s)$. Using the assumption $\mu_s < 2 ^ {-t}$ it follows that $|S_s| > 2^u - 2^{u - t}$. To derive wanted contradiction assume there is a vector $x \in \vecspace{t} - T(S_s)$ or equivalently $T(S_s) \neq \vecspace{t}$. Under these conditions it is clear that $T ^ {-1}(x)$ and $S_s$ are disjoint. From lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(x)| = 2 ^ {u - t}$. This would mean that
+We want to show that whenever $\mu_s < 2^{-t}$ the event $T(S_s) = \vecspace{t}$ occurs. Since $\mu_s = 1 - \frac{|S_s|}{2 ^ u}$ the size of set $S_s$ equals ${2 ^ u}(1 - \mu_s)$. Using the assumption $\mu_s < 2 ^ {-t}$ it follows that $|S_s| > 2^u - 2^{u - t}$. To get the contradiction we assume that there is a vector $x \in \vecspace{t} - T(S_s)$ or equivalently $T(S_s) \neq \vecspace{t}$. Under these conditions it is clear that $T ^ {-1}(x)$ and $S_s$ are disjoint. From lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(x)| = 2 ^ {u - t}$. This would mean that
 \[
 2 ^ u = |\vecspace{u}| \geq |S_s \cup T^{-1}(x)| > 2 ^ u - 2 ^ {u - t} + 2 ^ {u - t} = 2 ^u
 \] which is impossible. The fact that if $\mu_s < 2^{-t}$ then $T(S_s) = \vecspace{t}$ can be rewritten in terms of probability as
@@ -226,9 +237,9 @@ We want to show that whenever $\mu_s < 2^{-t}$ the event $T(S_s) = \vecspace{t}$
 	\Prob{\mu_s < 2^{-t}} \leq \Prob{T(S_s) = \vecspace{t}}
 \]
 
-Because $\vecspace{u}$ is a vector space over field $\mathbb{Z}_2$ by induction over $i$ we obtain that $S_i = S_{i - 1} \cup (v_i + S_{i - 1}) = S_0 + \vecspan{v_1, \dots, v_i}$. Note that $T(v_i) = 0$ because mapping $T$ was chosen so that every vector $v_i$ was placed in the kernel of $T$. This simply implies $T(S_s) = T(S)$.
+Because $\vecspace{u}$ is a vector space over field $\mathbb{Z}_2$, by induction over $i$, we obtain that $S_i = S_{i - 1} \cup (v_i + S_{i - 1}) = S_0 + \vecspan{v_1, \dots, v_i}$. Note that $T(v_i) = 0$ because mapping $T$ was chosen so that every vector $v_i$ was placed in the kernel of $T$. This simply implies $T(S_s) = T(S)$.
 
-Combining the previous notes finishes the proof of this remark.
+The proof of the theorem is finished by combining the previous notes.
 
 \[
 \begin{split}
@@ -242,7 +253,7 @@ Combining the previous notes finishes the proof of this remark.
 \]
 \end{proof}
 
-The next theorem gives the probability of mapping whole set $S$ onto target space into relation to its size.
+The next theorem shows the probability of the complementary event, $T(S) \neq \vecspace{t}$, if the set $S$ is large enough.
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
 If $T: \vecspace{w} \rightarrow \vecspace{t}$ is a random uniformly chosen linear map. Then for every $0 < \epsilon < 1$ there is a constant $c_\epsilon > 0$ such that for every subset $S$ of the domain $\vecspace{w}$, $|S| \geq c_\epsilon t 2^t$, the probability of mapping $S$ onto the whole space is

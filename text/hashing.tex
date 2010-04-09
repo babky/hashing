@@ -40,7 +40,7 @@ Universe consists of all the representable elements, examples include the object
 
 The letter $S$ typically denotes the \emph{hashed set}. We often refer to the variable $n$ as to the size of the hashed set, $n = |S|$. As already mentioned we always assume that $S \subset U$ and $|S| \ll |U|$.
 
-Since the universes are really large, refer to the previous examples, sizes of the tables are much smaller when compared to those of the universes. The space waste is typically caused by allocating a large table containing many empty buckets. The definition of the table's \emph{load factor} allows an exact analysis of the phenomena connected with the table's filling - its performance or waste of space.
+Since the universes are really large, refer to the previous examples, sizes of the tables are much smaller when compared to those of the universes. The space waste is typically caused by allocating a large table containing many empty buckets. The definition of the table's \emph{load factor} allows an exact analysis of the phenomena connected with the table's filling -- its performance or waste of space.
 
 \begin{definition}[Load factor]
 \label{definition-load-factor}
@@ -77,7 +77,7 @@ In lemma \ref{lemma-expected-list-time} we computed the expected time of the fin
 These assumptions provides us with a probabilistic model for the average case analysis of classic hashing.
 
 \section{Separate chaining}
-Separate chaining \cite{The-art-of-computer-programming}, \cite{DBLP:books/sp/Mehlhorn84} and \cite{DBLP:books/sp/MehlhornS2008} may be considered the most basic hash table implementation. However it provides a sufficient framework for illustration of various problems and analyses. Separate chaining usually utilises one hash function mapping elements of the universe to an address - an index of the array representing the hash table. Element is then stored in a bucket given by its hash address. Every bucket is represented by a singly linked list. 
+Separate chaining \cite{The-art-of-computer-programming}, \cite{DBLP:books/sp/Mehlhorn84} and \cite{DBLP:books/sp/MehlhornS2008} may be considered the most basic hash table implementation. However it provides a sufficient framework for illustration of various problems and analyses. Separate chaining usually utilises one hash function mapping elements of the universe to an address -- an index of the array representing the hash table. Element is then stored in a bucket given by its hash address. Every bucket is represented by a singly linked list. 
 
 Separate chaining, like the other classic models of hashing, is quite dependent on the hashed input. The assumptions we made are crucial for the average case analysis. This model assumes hashing of a universe $U = \{0, \dots, N - 1\}$ for $N \in \mathbb{N}$ into a table of size $m \in \mathbb{N}$. Number $m$ is much smaller then $N$ and moreover it is chosen to be a prime. Primality of $m$ improves the ability of the hash function to uniformly distribute the hashed set across the table. 
 

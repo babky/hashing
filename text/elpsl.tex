@@ -1,7 +1,7 @@
 \chapter{Expected length of the longest chain}
 
 \begin{section}{Influence of bucket's size on time complexity}
-We already explained why the size of a bucket is so important for hashing. Assume a model of hashing storing elements in separate buckets of a hash table. A chain is created from the elements stored in a single bucket and is frequently represented by a singly linked list, hence the word chain. To find an element in a bucket (or chain) one needs to iterate it. Thus the time of the find operation is linear with the number of elements that fell in the bucket. An approach, how to estimate the expected length of the longest chain when classic and using universal hashing, is shown.
+We already explained why the size of a bucket is so important for hashing. Assume a model of hashing where chains created from the elements stored in a single bucket are represented by a linked list, hence the word chain. To find an element in a bucket (or chain) one needs to iterate it. Thus the time of the find operation is linear with the number of elements that fell in the bucket. An approach, how to estimate the expected length of the longest chain when classic and using universal hashing, is shown.
 
 \begin{definition}[Equality indicator]
 Let $x$ and $y$ be two variables from the same set $B$. Then function $\mathbf{I}: B \times B \rightarrow \{0, 1\}$ such that
@@ -23,7 +23,7 @@ Then length of the chain with the address $a$ when hashing by function $h$ is de
 
 Notation probe sequence comes from coalesced hashing. Chains are represented directly in the hash table and they are fused together even for elements with different hash values. Many authors refer to the process of finding an element in a chain as probing the sequence. The authors denote these random variables by names $\psl$ and $\lpsl$, too. % TODO: citation.
 
-Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed over the choice of a function $h \in H$. The bounds on the variable $\lpsl$ that are obtained must be valid for any hashed set $S \subseteq U$ and depend on the size of the hashed set only. If we are able to find a tight upper bound on the length of the longest chain we can guarantee the worst case behaviour of the model. When the limit is broken we can choose any other function from the universal class of functions $H$ and rehash stored elements so that we obtain a table that does not violate the chain limit rule.
+Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed over the choice of a function $h \in H$. The bounds on the variable $\lpsl$ that are obtained must be valid for any hashed set $S \subseteq U$ and depend on the size of the hashed set. If we are able to find a tight upper bound on the length of the longest chain we can guarantee the worst case behaviour of the model. When the limit is broken we can choose any other function from the universal class of functions $H$ and rehash stored elements so that we obtain a table that does not violate the chain limit rule.
 
 When taking the probability into an account we define random variables $\psl$ and $\lpsl$ over the probability space determined by a choice of hash function $h \in H$ where $H$ is a universal class of hash functions used.
 
@@ -41,7 +41,7 @@ Random variable $\lpsl$ denoting the maximal size of a bucket in a hash table is
 \end{section}
 
 \begin{section}{Estimating length of the longest chain in the classic model of hashing}
-The standard result of classic hashing is the $O\left(\frac{\log n}{\log \log n}\right)$ bound on the length of the longest chain for the hashing. We can use computations in its proof to show that the same bound holds for universal hashing with strongly $\omega$-universal class of functions. In order to prove this result we need to estimate the probability of collision of $k$ elements. Simplest model of hashing uses an assumption that is not necessarily satisfied; hashed elements are independently and uniformly chosen from the universe $U$. This is enough to solve this problem in the area of classic hashing. 
+The standard result of classic hashing is the $O\left(\frac{\log n}{\log \log n}\right)$ bound on the length of the longest chain for the hashing. We can use computations in its proof to show that the same bound holds for universal hashing with strongly $\omega$-universal class of functions. In order to prove this result we need to estimate the probability of collision of $k$ elements. The simplest model of hashing uses an assumption that is not necessarily satisfied; hashed elements are independently and uniformly chosen from the universe $U$. This is enough to solve this problem in the area of classic hashing. 
 
 The above definitions are intended for models of universal hashing. However they are easy to understand with standard hashing, too. 
 
@@ -126,11 +126,11 @@ M_{= k}(h, a) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{a\}\}
 \end{displaymath}
 \end{definition}
 
-When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Simply said, sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the hashed set $S$ of size greater or equal to $k$ which are hashed to a same value $a$. 
+When it is clear from context we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Simply said, sets $M_{\geq k}$, $M_{= k}$ denote the subsets of the hashed set $S$ of size greater or equal to $k$ which are hashed a singleton $a$. 
 
 \begin{lemma}
 \label{lemma-indicator-k-collision}
-If $h: U \rightarrow B$ is a hash function mapping a universe $U$ to a hash table $B$ then for any bucket $a \in B$ non-emptiness of set $M_{\geq k}(h, a)$ is equivalent to the non-emptiness of set $M_{= k}(h, a)$ or equivalently
+If $h: U \rightarrow B$ maps a universe $U$ to a hash table $B$ then for any bucket $a \in B$ non-emptiness of set $M_{\geq k}(h, a)$ is equivalent to the non-emptiness of set $M_{= k}(h, a)$ or equivalently
 \begin{displaymath}
 \Indicator(M_{\geq k}(h, a)) = \Indicator(M_{= k}(h, a)) \text{.}
 \end{displaymath}
@@ -171,7 +171,7 @@ We choose and fix any arbitrary element, bucket, $a \in B$. If the chain of the 
 We add some remarks clarifying the following calculations:
 \begin{itemize}
 \item Every chain is determined by a single element $a$ which is included in it.
-\item Probability estimate is always computed for a single set $S$ and probability space corresponds to a choice of hash function $h \in H$.
+\item Probability estimate is always computed for a fixed set $S$ and probability space corresponds to a choice of hash function $h \in H$.
 \item We want to obtain an estimate $\Prob{\psl(a) \geq k} \leq p(B, U, H, |S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl(h) \geq k} \leq |B| p(B, U, H, |S|) \text{.} \] 
 \item The obtained estimate does not depend on the hashed hashed set $S$ directly, just on its size $n$.
 \end{itemize}
@@ -188,7 +188,7 @@ Lemma \ref{lemma-indicator-k-collision} allows us to estimate the probability of
 \end{split}
 \end{displaymath}
 
-Estimate of the last expression must be obtained from the properties unique to the class $H$. In this case we use strong $\omega$-universality since we assume it in the following theorem.
+Estimate of the last expression must be obtained from the properties of a given class $H$. In this case we use strong $\omega$-universality since we assume it in the following theorem.
 
 \begin{theorem}
 If $H$ is strongly $\omega$-universal system, then $\Expect{\lpsl} \in O\left(\frac{\log n}{\log \log n}\right)$.
@@ -206,5 +206,5 @@ P(\psl(a) \geq k)
 Now we can carry on as in the case of standard model of hashing. The probability estimate of collision of $k$ elements is exactly the same and we gain the same result $\Expect{\lpsl} = O\left(\frac{\log n}{\log \log n}\right)$.
 \end{proof}
 
-Constructing small strongly $\omega$-universal systems is problematic. In this work we used systems of linear maps and their specific properties not related to strong universality to obtain an interesting upper bound on the variable $\lpsl$. This upper bound allowed us to guarantee the worst case amortised time for every operation.
+Constructing small strongly $\omega$-universal systems is difficult. In this work we used systems of linear maps and their specific properties to obtain an interesting upper bound on the variable $\lpsl$. These attributes are independent of the strong $\omega$-universality.
 \end{section}
