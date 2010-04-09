@@ -1,0 +1,229 @@
+\chapter{Basic facts regarding probability}
+In this appendix we show some facts about the probability and probability spaces. We summarise very basic results used in the work.
+
+The first definition consider discrete probability.
+
+\begin{definition}[Probability space, elementary event]
+Set $\Omega = \{\omega_1, \dots, \omega_n \}$ is called \emph{probability space}. Its elements $\omega_i$, $1 \leq i \leq n$ are called \emph{elementary events}. The probability associated with an elementary event $\omega_i$, $1 \leq i \leq n$ equals \[ \Prob{\omega_i} = \frac{1}{n} \text{.} \]
+\end{definition}
+
+\begin{definition}[Event, probability]
+Set $A = \{a_1, \dots, a_m \}\subseteq \Omega$ containing elementary events is called \emph{compound event}. The \emph{probability of compound event $A$} may be computed as \[ \Prob{A} = \displaystyle\sum_{\omega \in A} \Prob{\omega} = \frac{|A|}{|\Omega|} = \frac{m}{n} \text{.} \]
+\end{definition}
+
+\begin{definition}[Complementary event, sure event, impossible event]
+Complementary event to the event $A \subseteq \Omega$ is the set $\Omega - A$. Its probability is \[ \Prob{\Omega - A} = 1 - \Prob{A} \text{.} \] The sure event is defined as the whole probability space $\Omega$ and its complementary event $\emptyset$ is called the impossible event.
+\end{definition}
+
+We can compute the size of the set, event, if we know the size of the probability space and the event's probability.
+
+\begin{lemma}
+Let $A \subseteq \Omega$ be an event such that $\Prob{A} = p$. Then $|A| = p |\Omega|$.
+\end{lemma}
+\begin{proof}
+This comes from the direct use of the probability of event $A$.
+\[
+p = \Prob{A} = \frac{|A|}{|\Omega|}
+\]
+\end{proof}
+
+\begin{definition}[Compound event, compound probability]
+Let $A, B \subseteq \Omega$ be events. Then the \emph{compound event} denoted by $A, B$ is the event $A \cap B$. The corresponding compound probability of the event is defined as
+\[
+\Prob{A, B} = \Prob{A \cap B} \text{.}
+\]
+\end{definition}
+
+\begin{definition}[Disjoint events]
+Let $A, B \subseteq \Omega$ be two events. We say that $A$ and $B$ are \emph{disjoint events} when $A \cap B = \emptyset$ and the corresponding compound probability equals
+\[
+\Prob{A, B} = \Prob{\emptyset} = 0 \text{.}
+\]
+\end{definition}
+
+\begin{definition}[Independent events]
+Let $A, B \subseteq \Omega$ be two events. We say that $A$ and $B$ are \emph{independent events} whenever
+\[
+\Prob{A, B} = \Prob{A}\Prob{B}
+\]
+\end{definition}
+
+The motivation of the following is to compute the probability of event $A$ inside the restricted probability space $B$.
+\begin{definition}[Conditional probability]
+Let $A, B \subseteq \Omega$ be two events and the event $B$ is not impossible, $\Prob{B} \neq 0$. Then the \emph{conditional probability} of event denoted by $A \mid B$ is defined as
+\[
+\Prob{A \mid B} = \frac{\Prob{A, B}}{\Prob{B}}
+\]
+\end{definition}
+
+\begin{lemma}
+If $A, B \subseteq \Omega$ are two events such that they are not disjoint and $\Prob{B} \neq 0$ then $\Prob{B} \leq \frac{\Prob{A}}{\Prob{A \mid B}}$.
+\end{lemma}
+\begin{proof}
+From our assumptions it follows that the probability of the event $A \mid B$ is defined and positive. To prove the lemma we use the definition of conditional probability and the straightforward bound on the probability of every event.
+\[
+\Prob{B} = \frac{\Prob{A, B}}{\Prob{A \mid B}} \leq \frac{\Prob{A}}{\Prob{A \mid B}}
+\]
+\end{proof}
+
+\begin{theorem}[The law of total probability]
+Let $A \subseteq \Omega$ be an event and $\Omega_1, \dots, \Omega_k$ be a decomposition of the probability space $\Omega$ such that it does not contain the impossible event. Then
+\[
+\Prob{A} = \displaystyle\sum_{i = 1}^{k} \Prob{A | \Omega_i} \Prob{\Omega_i} \text{.}
+\]
+\end{theorem}
+\begin{proof}
+We perform a straightforward computation and use the definition of the conditional probability. The sum of probabilities of the events equals the original event because the events' decomposition into elementary ones.
+\[
+\begin{split}
+\Prob{A}
+	& = \Prob{A \cap \Omega} \\
+	& = \displaystyle\sum_{i = 1}^{k} \Prob{A, \Omega_i} \\
+	& = \displaystyle\sum_{i = 1}^{k} \Prob{A | \Omega_i} \Prob{\Omega_i} \\
+\end{split}
+\]
+\end{proof}
+
+We summarise the basic properties of probability.
+\begin{itemize}
+\item $\Prob{\emptyset} = 0$
+\item $\Prob{\Omega} = 1$
+\item $0 \leq \Prob{A} \leq 1$
+\item $\Prob{A \vee B} = \Prob{A} + \Prob{B} - \Prob{A \wedge B}$
+\end{itemize}
+
+\begin{definition}[Discrete random variable]
+Let $\Omega$ be a probability space. Then \emph{discrete random variable} $X$ is a function $X: \Omega \rightarrow \mathbb{N}$. Probability of event $X = x$ is computed as 
+\[
+\Prob{X = x} = \displaystyle\sum_{\substack{\omega \in \Omega \\ X(\omega) = x}} \Prob{\omega} \text{.}
+\]
+\end{definition}
+
+\begin{definition}[Continuous random variable, probability density function, cumulative probability density function]
+\emph{Continuous random variable} $X$ is given by a function $X: \mathbb{R} \rightarrow \mathbb{R}$. 
+
+Its \emph{cumulative probability density function} is a function $F: \mathbb{R} \rightarrow \mathbb{R}$ such that
+\begin{itemize}
+\item $\lim\limits_{t \rightarrow -\infty} F(t) = 0$
+\item $\lim\limits_{t \rightarrow \infty} F(t) = 1$.
+\item F is a non-decreasing function.
+\end{itemize}
+
+The cumulative probability density function determines probability of the event $X \leq t$:
+\[
+F(t) = \Prob{X \leq t} \text{ for } t \in \mathbb{R} \text{.}
+\]
+
+The corresponding \emph{probability density function} $f: \mathbb{R} \rightarrow \mathbb{R}^{*}$ is given by \[ f(t) = F'(t) \text{ for } t \in \mathbb{R} \text{.} \] For probability density function the following holds.
+\begin{itemize}
+\item $\int\limits_{-\infty}^{\infty} f(t) dt = 1$
+\item $\int\limits_{-\infty}^{t} f(x) dx = F(t)$
+\end{itemize}
+\end{definition}
+
+More formal definitions of random variables use the Lebesgue measure and Borel sets to measure the probability $\Prob{X = x}$. However previous definitions are sufficient for our needs.
+
+If $X$ is a continuous random variable with cumulative density function $F$ then for probability of $X$ being bounded in the interval $\left[a, b\right]$ we have
+\[
+\Prob{a \leq X \leq b} = F(b) - F(a) \text{.}
+\]
+
+The motivation for defining probability density function $f$ is the following.
+\[
+\lim\limits_{a \rightarrow b}\Prob{a \leq X \leq b} = \lim\limits_{a \rightarrow b} F(b) - F(a) = F'(b) = f(b)
+\]
+Value $f(b)$ then describes $\Prob{X = b}$. For continuous variables this probability equals zero unless $f$ is in-continuous in $b$.
+
+After making this observations we see that:
+\[
+F(t) = \Prob{X \leq t} = \int\limits_{-\infty}^{t} \Prob{X = t} dt \text{.}
+\]
+
+\begin{definition}[Expected value]
+Let $X$ be a discrete random variable then its \emph{expected value}, $\Expect{X}$,  is defined as
+\[
+\Expect{X} = \displaystyle\sum_{x \in \mathbb{N}} x \Prob{X = x} \text{.}
+\]
+
+In the continuous case, let $X$ be a continuous random variable then its \emph{expected value}, $\Expect{X}$, is defined as
+\[
+\Expect{X} = \int\limits_{-\infty}^{\infty} x \Prob{X = x} dx \text{.}
+\]
+\end{definition}
+
+\begin{definition}[Variance]
+Let $X$ be a random variable. Its variance, $\Variance{X}$, is defined as \[ \Variance{X} = \Expect{(X - \Expect{X}) ^ 2} \text{.} \]
+\end{definition}
+
+We only state the basic properties of then expected value and variance for $a, b, c \in \mathbb{R}$ and random variables $X$ and $Y$.
+\begin{itemize}
+\item $\Expect{aX + bY + c} = a\Expect{X} + b\Expect{Y} + c$
+\item $\Variance{aX + bY + c} = a ^ 2 \Variance{X} + b ^ 2 \Variance{Y}$
+\end{itemize}
+
+\begin{definition}[Expected value of a function of a random variable]
+\end{definition}
+Let $X$ be a continuous random variable and $g: \mathbb{R} \rightarrow \mathbb{R}$ be a function. Then the expected value of the random variable $Y = g(X)$ is defined as
+\[
+\Expect{Y} = \int\limits_{-\infty}^{\infty} y\Prob{Y = y} dy = \int\limits_{-\infty}^{\infty} g(x)\Prob{X = x} dx \text{.}
+\]
+
+\begin{lemma}
+Let $X, Y$ be random variables, $t \in \mathbb{R}$ and $Z$ be a random variable having value $\Prob{X = t | Y = y}$ with the probability $\Prob{Y = y}$. Then $\Prob{X = t}$ can be computed as follows.
+\[
+\Prob{X = t} = \Expect{Z}
+\]
+\end{lemma}
+\begin{proof}
+By the law of total probability we can state the following fact.
+\[
+\begin{split}
+\Prob{X = t} 
+	& = \int\limits_{-\infty}^{\infty} \Prob{X = t, Y = y} dy \\
+	& = \int\limits_{-\infty}^{\infty} \Prob{X = t \mid Y = y} \Prob{Y = y} dy \\
+	& = \int\limits_{-\infty}^{\infty} z \Prob{Z = z} dz \\
+	& = \Expect{Z} \\
+\end{split}
+\]
+
+The expected value of set then equals the wanted probability.
+\end{proof}
+
+The modification of this lemma is used in Lemma \ref{lemma-random-variable}. The change is that we do not compute $\Prob{X = t}$ but $\Prob{X \geq t}$. The proof remains the same but we change the definition of random variable $Z$ accordingly.
+
+
+The two theorems are well known but we often refer to them and thus they are shown with their proofs. However let us note that various improvements for higher moments are known.
+\begin{theorem}[Markov's inequality]
+Let $X$ be a random variable and $t \in \mathbb{R}^{+}$. Then probability of event $X \geq t$ is bounded as:
+\[
+\Prob{|X| \geq t} \leq \frac{\Expect{|X|}}{t} \text{.}
+\]
+\end{theorem}
+\begin{proof}
+For the indicator $\Indicator(|X| \geq t)$ we have that $t\Indicator(|X| \geq t) \leq |X|$. If $|X| \geq t$ than $\Indicator(|X| \geq t) = 1$ and it follows that $t\Indicator(|X| \geq t) = t \leq |X|$. If $|X| < t$ then $0 = \Indicator(|X| \geq t) \leq |X|$.
+
+\[
+\begin{split}
+\Expect{|X|} 
+	& = \int\limits_{0}^{\infty} |X| \Prob{|X| = x} dx \\
+	& \geq \int\limits_{0}^{\infty} t \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
+	& \geq t \int\limits_{0}^{\infty} \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
+	& = t \Prob{|X| \geq t} \\
+\end{split}
+\]
+\end{proof}
+
+\begin{theorem}[Chebyshev's inequality]
+If $X$ is a random variable then \[ \Prob{|X - \Expect{X}| \geq \epsilon} \leq \frac{\Variance{X}}{\epsilon ^ 2} \text{.} \]
+\end{theorem}
+\begin{proof}
+Follows from the Markov's inequality and the definition of variance.
+\[
+\begin{split}
+\Prob{|X - \Expect{X}| \geq \epsilon} 
+	& = \Prob{(X - \Expect{X}) ^ 2 \geq \epsilon ^ 2} \\
+	& \leq \frac{\Expect{(X - \Expect{X}) ^ 2}}{\epsilon ^ 2} \\
+	& = \frac{\Variance{X}}{\epsilon ^ 2} \text{.}
+\end{split}
+\]
+\end{proof}
