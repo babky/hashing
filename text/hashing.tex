@@ -1,7 +1,7 @@
 \chapter{Hashing}
 Hashing is one of the approaches designed for efficient solving of the dictionary problem. Various implementations differ in many different ways. However usage of a hash function and a quickly accessible table, typically represented by an array, is common to the most of them. Hash function transforms elements of the universe into addresses of the table.
 
-Represented sets are always small when compared to the size of the universe. In order to prevent waste of space we are forced to use tables as small as possible. Typically the size of the table storing the represented elements is chosen so that it is comparable to those of the hashed set. 
+Represented sets are always small when compared to the size of the universe. In order to prevent waste of space we are forced to use tables as small as possible. Typically the size of the table storing the represented elements is chosen so that it is comparable to those of the stored set. 
 
 The fact that the hash table is much smaller than the possible universe and any two elements can be included in the represented set means that the elements may share the same address after using the hash function. This event is called a \emph{collision}. For hashing it is very important how collisions are handled. This is also the most interesting distinctive feature for different hashing models. In fact collision handling is crucial when determining the time complexity of the scheme.
 
@@ -38,7 +38,7 @@ Notation and formalisms that mathematically describe a hash table are crucial pa
 
 Universe consists of all the representable elements, examples include the objects of a programming language, strings over an alphabet, numbers or anything else. Hash function is a way to transform these elements into an address of the table, usually a natural number. Hash function $h$ can be described by a function $h: U \rightarrow B$. The other requirements placed on the function $h$ are discussed later.
 
-The letter $S$ typically denotes the \emph{hashed set}. We often refer to the variable $n$ as to the size of the hashed set, $n = |S|$. As already mentioned we always assume that $S \subset U$ and $|S| \ll |U|$.
+The letter $S$ typically denotes the \emph{stored set}. We often refer to the variable $n$ as to the size of the stored set, $n = |S|$. As already mentioned we always assume that $S \subset U$ and $|S| \ll |U|$.
 
 Since the universes are really large, refer to the previous examples, sizes of the tables are much smaller when compared to those of the universes. The space waste is typically caused by allocating a large table containing many empty buckets. The definition of the table's \emph{load factor} allows an exact analysis of the phenomena connected with the table's filling -- its performance or waste of space.
 
@@ -64,9 +64,9 @@ In Lemma \ref{lemma-expected-list-time} we computed the expected time of the fin
 \[
 ||h^{-1}(x)| - |h^{-1}(y)|| \leq 1 \text{ for every }x, y \in U \text{.}
 \]
-\item Every hashed set consisting of $n$ elements has the same probability of being represented among all the sets of the same size.
+\item Every stored set consisting of $n$ elements has the same probability of being represented among all the sets of the same size.
 \[
-\Prob{S \text{ is hashed}} = \frac{1}{\dbinom{|U|}{n}} \text{ for every set } S \subset U \text{ such that } |S| = n \text{.}
+\Prob{S \text{ is stored}} = \frac{1}{\dbinom{|U|}{n}} \text{ for every set } S \subset U \text{ such that } |S| = n \text{.}
 \]
 \item Every element of the universe has the same probability of being an argument of an operation.
 \[
@@ -79,7 +79,7 @@ These assumptions provides us with a probabilistic model for the average case an
 \section{Separate chaining}
 Separate chaining \cite{The-art-of-computer-programming}, \cite{DBLP:books/sp/Mehlhorn84} and \cite{DBLP:books/sp/MehlhornS2008} may be considered the most basic hash table implementation. However it provides a sufficient framework for illustration of various problems and analyses. Separate chaining usually utilises one hash function mapping elements of the universe to an address -- an index of the array representing the hash table. Element is then stored in a bucket given by its hash address. Every bucket is represented by a singly linked list. 
 
-Separate chaining, like the other classic models of hashing, is quite dependent on the hashed input. The assumptions we made are crucial for the average case analysis. This model assumes hashing of a universe $U = \{0, \dots, N - 1\}$ for $N \in \mathbb{N}$ into a table of size $m \in \mathbb{N}$. Number $m$ is much smaller then $N$ and moreover it is chosen to be a prime. Primality of $m$ improves the ability of the hash function to uniformly distribute the hashed set across the table. 
+Separate chaining, like the other classic models of hashing, is quite dependent on the stored input. The assumptions we made are crucial for the average case analysis. This model assumes hashing of a universe $U = \{0, \dots, N - 1\}$ for $N \in \mathbb{N}$ into a table of size $m \in \mathbb{N}$. Number $m$ is much smaller then $N$ and moreover it is chosen to be a prime. Primality of $m$ improves the ability of the hash function to uniformly distribute the stored set across the table. 
 
 Following example clarifies why primality is important for the choice of $m$.
 
@@ -136,7 +136,7 @@ To illustrate how the model with separated chaining works the algorithms are pre
 \end{algorithm}
 
 \begin{theorem}[Average case of the separate chaining]
-Let $U = \{0, \dots N - 1\}$ be the hashed universe where $N \in \mathbb{N}$. Let $S \subset U$ be the represented set and moreover $n = |S|$, $n \ll N$. Then the expected time of the successful find operation converges to $1 + \frac{\alpha}{2}$ and to $e^{-\alpha} + \alpha$ in the unsuccessful case.
+Let $U = \{0, \dots N - 1\}$ be the stored universe where $N \in \mathbb{N}$. Let $S \subset U$ be the represented set and moreover $n = |S|$, $n \ll N$. Then the expected time of the successful find operation converges to $1 + \frac{\alpha}{2}$ and to $e^{-\alpha} + \alpha$ in the unsuccessful case.
 \end{theorem}
 \begin{proof}
 
@@ -164,7 +164,7 @@ Linear probing is a scheme of open addressing with $h_2(x) = 1$ for every $x \in
 Another problem of linear hashing is its degradation because the clusters of non-empty buckets emerge for load factors near one. Delete operation implemented by marking just emphasises this problem.
 
 \subsection{Double hashing}
-If we want to distribute the hashed set uniformly across the hash table then the choice of a free bucket should be random. Whenever function $h(x, i)$ of argument $i$ is a random permutation of $B$ for every element $x \in U$ then the mentioned choice is really random. A necessary condition is that $h_2(x)$ and $m$ are incommensurable. Therefore the size of the hash table is again chosen so that it is a prime number. 
+If we want to distribute the stored set uniformly across the hash table then the choice of a free bucket should be random. Whenever function $h(x, i)$ of argument $i$ is a random permutation of $B$ for every element $x \in U$ then the mentioned choice is really random. A necessary condition is that $h_2(x)$ and $m$ are incommensurable. Therefore the size of the hash table is again chosen so that it is a prime number. 
 
 Double hashing has theoretical analyses yielding remarkable results.
 \begin{theorem}
@@ -175,7 +175,7 @@ Let $n$ be the size of the represented set and $m$ be the size of the hash table
 Universal hashing uses systems of functions instead of a single function. This removes the dependence of hashing on its input. The probability space is not determined by the selection of an input but by the uniform choice of the hash function. We study universal hashing and its systems in a more detail way in Chapter \ref{chapter-universal-classes}.
 
 \section{Perfect hashing}
-Assume that the hashed set $S$ is known in advance. The problem solved by perfect hashing is how to create a hash table and a hash function such that the find operation takes a constant time. Insert and delete operations are forbidden so the hashed set $S$ remains fixed. Additional requirements are placed not only on the size of the hash table but also on the space consumed by representing the constructed hash function since it may be quite complex.
+Assume that the stored set $S$ is known in advance. The problem solved by perfect hashing is how to create a hash table and a hash function such that the find operation takes a constant time. Insert and delete operations are forbidden so the stored set $S$ remains fixed. Additional requirements are placed not only on the size of the hash table but also on the space consumed by representing the constructed hash function since it may be quite complex.
 
 \section{Modern approaches}
 Modern approaches to nowadays hashing are often based on their probabilistic properties. Authors adapt and chang their models to improve the asymptotic results in the average case and in the expected worst case. The algorithms still remain fast and are enriched by simple rules. 

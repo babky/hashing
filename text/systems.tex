@@ -1,11 +1,11 @@
 \chapter{Universal classes of functions}
 \label{chapter-universal-classes}
 
-Universal classes of functions play an important role in hashing since they improve independence of the associative memory on its input. Their greatest advantage is removal of the two assumptions of classic hashing on uniformity of input. The first one is the uniform distribution of hashed sets having the same size. The second one says that every element of the universe has the same probability of being hashed. 
+Universal classes of functions play an important role in hashing since they improve independence of the associative memory on its input. Their greatest advantage is removal of the two assumptions of classic hashing on uniformity of input. The first one is the uniform distribution of stored sets having the same size. The second one says that every element of the universe has the same probability of being hashed. 
 
-In addition models of standard hashing take probability of collision relative to the choice of the hashed set. In models of universal hashing probability space corresponds to the choice of a random function from the universal system. Notice that there is no direct relation between a collision and the input -- the represented set. Collision is caused by an inconvenient choice of a universal function instead by an unsuitable input. Once again probabilities of collision events are taken relative to the uniform selection of a hash function. The greatest advantage of this approach is that whatever bound is obtained it holds for any hashed set. 
+In addition models of standard hashing take probability of collision relative to the choice of the stored set. In models of universal hashing probability space corresponds to the choice of a random function from the universal system. Notice that there is no direct relation between a collision and the input -- the represented set. Collision is caused by an inconvenient choice of a universal function instead by an unsuitable input. Once again probabilities of collision events are taken relative to the uniform selection of a hash function. The greatest advantage of this approach is that whatever bound is obtained it holds for any stored set. 
 
-Universal systems of functions are constructed in a way that the probability for a universal function not being suitable for a hashed set is low. Functions in such universal systems are convenient for many hashed sets. If the selected function is not suitable for any hashed set we are free to pick one. Rehashing the whole represented set using the new one is not likely to fail. Moreover probability of failing many times in a row decreases exponentially.
+Universal systems of functions are constructed in a way that the probability for a universal function not being suitable for a represented set is low. Functions in such universal systems are suitable for many stored sets. If the selected function is not suitable for any stored set we are free to pick one. Rehashing the whole represented set using the new one is not likely to fail. Moreover probability of failing many times in a row decreases exponentially.
 
 \section{Universal classes of functions}
 % TODO: Odkazy na jednotlive systemy
@@ -136,7 +136,7 @@ Hence the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\l
 % End linear systems
 
 % Multiplicative system
-For examining the properties of the original linear system simpler and smaller multiplicative system may be used. They have many common properties and share some same drawbacks. This multiplicative system may provide us with some insights for which choices of hash function and hashed set they both fail.
+For examining the properties of the original linear system simpler and smaller multiplicative system may be used. They have many common properties and share some same drawbacks. This multiplicative system may provide us with some insights for which choices of hash function and stored set they both fail.
 
 \begin{definition}[Multiplicative system]
 Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \bmod p) \bmod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the multiplicative system.

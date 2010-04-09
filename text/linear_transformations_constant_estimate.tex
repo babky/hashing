@@ -139,7 +139,7 @@ For the model of hashing linear amount of elements we used the estimates that ar
 
 The previous and to be honest not very successful attempt gave us a constant suitable for hashing millions of elements. With a constant in the order of hundreds our estimates starts beating the linear one when hashing approximately 40 000 elements.
 
-The constant $c_\epsilon$ plays the most crucial role and therefore we lower its value first. Instead of making the factor space $A$ larger than hashed set $S$ we will bound it between $|B|$ and $\frac{2|S|}{2 ^ l}$ where $l \geq 1$ is a parameter. This space must still be larger than the target space $\vecspace{t}$ since we have to ensure existence of surjective mapping $T_1: A \rightarrow B$. Of course this is possible since we assume that set $S$ contains at least $c_\epsilon t 2^t$ elements.
+The constant $c_\epsilon$ plays the most crucial role and therefore we lower its value first. Instead of making the factor space $A$ larger than stored set $S$ we will bound it between $|B|$ and $\frac{2|S|}{2 ^ l}$ where $l \geq 1$ is a parameter. This space must still be larger than the target space $\vecspace{t}$ since we have to ensure existence of surjective mapping $T_1: A \rightarrow B$. Of course this is possible since we assume that set $S$ contains at least $c_\epsilon t 2^t$ elements.
 
 \begin{remark}
 \label{remark-better-c-e}
