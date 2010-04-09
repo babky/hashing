@@ -5,7 +5,7 @@ To complete our goal we change the previous claims to fit the scheme of hashing 
 
 \section{Minimising the integral part}
 \label{section-integral-estimate}
-When we were performing last part of the proof of theorem \ref{theorem-n-logn-to-n}, the upper bond on the length of the longest chain in a hash table, we defined constant $I_\epsilon$, for $0 < \epsilon < 1$, as
+When we were performing last part of the proof of Theorem \ref{theorem-n-logn-to-n}, the upper bond on the length of the longest chain in a hash table, we defined constant $I_\epsilon$, for $0 < \epsilon < 1$, as
 \[
 I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]
@@ -36,9 +36,9 @@ I_{\epsilon}
 \section{Parametrisation of the original proofs}
 Let us present a simple parametrisation of choice of $\epsilon$ to obtain minimal value of $c_\epsilon$ and multiplicative constant. This simple but powerful technique is used later with combination of newly achieved results.
 
-The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$ what is the explicit formula for the multiplicative constant. The greatest part of value of this constant is taken by the factor $c_\epsilon$. To get the lowest possible a slight modification of proof of theorem \ref{theorem-set-onto-by-linear-transform} is needed.
+The most important step is the optimisation of the value $16 c_\epsilon (4 + I_{\epsilon})$ what is the explicit formula for the multiplicative constant. The greatest part of value of this constant is taken by the factor $c_\epsilon$. To get the lowest possible a slight modification of proof of Theorem \ref{theorem-set-onto-by-linear-transform} is needed.
 
-The first approach is to modify the proof of the theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every chosen constant in it. Values of the parameters are than set in order to get the least multiplicative constant. The optimisation itself is not performed analytically because of its complexity that is caused by the constraints that emerge. 
+The first approach is to modify the proof of Theorem \ref{theorem-set-onto-by-linear-transform} in a way that we parametrise every chosen constant in it. Values of the parameters are than set in order to get the least multiplicative constant. The optimisation itself is not performed analytically because of its complexity that is caused by the constraints that emerge. 
 
 We created a straightforward program that assigns each parameter values from a predefined interval instead. These values are enumerated uniformly with the prescribed step. The multiplicative constant is then computed for every such assignment and the best achieved value is remembered.
 
@@ -77,7 +77,7 @@ The number of all colliding pairs can be computed as follows.
 The first inequality can be obtained from Cauchy–Bunyakovsky–Schwarz inequality.
 \end{proof}
 
-For the probability of the first event, $|T_0(S)| \leq \frac{|S|}{k}$, we use the Markov inequality as in the original proof. The only difference is that the number of collisions is at least $\frac{|S|(k - 1)}{2}$ by lemma \ref{lemma-collision-count}. The expected number remains the same $\dbinom{|S|}{2}2 ^ {-u}$.
+For the probability of the first event, $|T_0(S)| \leq \frac{|S|}{k}$, we use the Markov inequality as in the original proof. The only difference is that the number of collisions is at least $\frac{|S|(k - 1)}{2}$ by Lemma \ref{lemma-collision-count}. The expected number remains the same $\dbinom{|S|}{2}2 ^ {-u}$.
 \[
 \begin{split}
 \Prob{|T_0(S)| \leq \frac{|S|}{k}} 
@@ -87,7 +87,7 @@ For the probability of the first event, $|T_0(S)| \leq \frac{|S|}{k}$, we use th
 \end{split}
 \]
 
-The second event's probability estimate is based on the theorem \ref{theorem-linear-function-set-onto} as well. Just note it is used for the set $T_0(S)$ transformation $T_1$, the source and resulting vector spaces are $\vecspace{u}$ and $\vecspace{t}$ respectively. The inverse density $\mu = 1 - \frac{|T_0(S)|}{2^u}$.
+The second event's probability estimate is based on Theorem \ref{theorem-linear-function-set-onto} as well. Just note it is used for the set $T_0(S)$ transformation $T_1$, the source and resulting vector spaces are $\vecspace{u}$ and $\vecspace{t}$ respectively. The inverse density $\mu = 1 - \frac{|T_0(S)|}{2^u}$.
 
 The following upper bound on the $\mu$ is very useful to be shown.
 \[
@@ -153,7 +153,7 @@ The proof we present is fully parametrised so that we can choose values of its a
 
 For every value $\frac{|S|}{2^l}$, $l \in \mathbb{R}, l \geq 1$, there is an uniquely determined number $u \in \mathbb{N}$ such that $A = \vecspace{u}$ and $\frac{|S|}{2 ^ l} \leq |A| \leq \frac{2|S|}{2 ^ l}$. As in the previous proof we will estimate the two probabilities obtained by using the law of total probability.
 
-According to lemma \ref{lemma-collision-count} when the image $T_0(S)$ has less than $\frac{|A|}{k}$ elements there must be at least $\frac{|S|}{2}\left(\frac{k|S|}{|A|} - 1\right)$ collisions caused by $T_0$. We used the lemma for set $S$ and fraction of resulting elements $\frac{|S|}{k'} = \frac{|A|}{k}$. Since resulting number of collisions equals $\frac{|S|}{2}(k' - 1)$ and $k' = \frac{k|S|}{|A|}$ we get the wanted result.
+According to Lemma \ref{lemma-collision-count} when the image $T_0(S)$ has less than $\frac{|A|}{k}$ elements there must be at least $\frac{|S|}{2}\left(\frac{k|S|}{|A|} - 1\right)$ collisions caused by $T_0$. We used the lemma for set $S$ and fraction of resulting elements $\frac{|S|}{k'} = \frac{|A|}{k}$. Since resulting number of collisions equals $\frac{|S|}{2}(k' - 1)$ and $k' = \frac{k|S|}{|A|}$ we get the wanted result.
 
 The bound on one of probabilities given by the law of total probability is obtained by using Markov inequality again.
 \[
@@ -210,7 +210,7 @@ Now the improved estimate of $c_\epsilon$ can be used to show a better bound on 
 When hashing a linear amount of $\alpha m$ elements into a table of size $m \geq 16$ the expected length of the longest chain is bounded by $O(\alpha \log m \log \log m)$ for $\alpha \in \left[0.5, 1 \right]$.
 \end{theorem}
 \begin{proof}
-As in the previous cases assume hashing universe $U = \vecspace{w}$ to hash table $B = \vecspace{t}$ and factor space $A = \vecspace{u}$ where dimension $u$ is specified lately. Because of model \ref{remark-model-uniform-linear-map-selection} we can uniformly select linear mappings $T_0: U \rightarrow A$ and surjective $T_1: A \rightarrow B$.
+As in the previous cases assume hashing universe $U = \vecspace{w}$ to hash table $B = \vecspace{t}$ and factor space $A = \vecspace{u}$ where dimension $u$ is specified lately. Because of Model \ref{remark-model-uniform-linear-map-selection} we can uniformly select linear mappings $T_0: U \rightarrow A$ and surjective $T_1: A \rightarrow B$.
 
 Our choices for $r \geq 4$:
 \[
@@ -226,7 +226,7 @@ We have to verify that $|A| > |B|$.
 2 ^ u \geq \frac{\alpha m r }{\log r} \geq m \frac{\alpha r}{\log r} \geq m = |B|
 \]
 
-The choice for $d$ gives us the probability of event $E_2$, as stated in the proof of remark \ref{remark-e2-probability}.
+The choice for $d$ gives us the probability of event $E_2$, as stated in the proof of Remark \ref{remark-e2-probability}.
 \[
 \begin{split}
 \mu & = 1 - \frac{|A - T_0(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} < 1 \\
@@ -254,7 +254,7 @@ c_\epsilon \frac{2 ^ u}{m} \log \left( \frac{2 ^ u}{m} \right)
 \end{split}
 \]
 
-Because assumptions of both remarks \ref{remark-prob-l-length-chain} and \ref{remark-e2-probability} are satisfied the probability of existence of a long chain is bounded as: \[ \Prob{\lpsl \geq 2 \alpha c_\epsilon r} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}\]. From this fact we obtain a bound on the expected longest length.
+Because assumptions of both remarks, Remark \ref{remark-prob-l-length-chain} and Remark \ref{remark-e2-probability}, are satisfied the probability of existence of a long chain is bounded as: \[ \Prob{\lpsl \geq 2 \alpha c_\epsilon r} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log \log m - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}\]. From this fact we obtain a bound on the expected longest length.
 
 \[
 \begin{split}
@@ -288,7 +288,7 @@ Or equivalently:
 
 Because this bound is valid for $m \geq 16$ we have that $r \geq 2 \log m \log \log m \geq 16$. The remaining part of the exponent \[ -\log \alpha - \log \log \left( \frac{r}{\log r} \right) \leq -\log 0.5 - \log \log \frac{16}{4} = 0 \] is not positive, as well. 
 
-Value of $I'_\alpha$ is determined in the similar fashion as value of $I_\epsilon$ in section \ref{section-integral-estimate}. During estimation of $I'_\alpha$ put $d(r) = \frac{r}{\log r}$ for simplicity.
+Value of $I'_\alpha$ is determined in the similar fashion as value of $I_\epsilon$ in Section \ref{section-integral-estimate}. During estimation of $I'_\alpha$ put $d(r) = \frac{r}{\log r}$ for simplicity.
 \[
 \begin{split}
 I'_\alpha 

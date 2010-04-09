@@ -58,7 +58,7 @@ Let $x, y \in U$ be two distinct elements. We say that $x$ and $y$ collide if $h
 It is just the collision handling what differentiates the models of hashing and determines their performance.
 
 \section{Assumptions of classic hashing}
-In lemma \ref{lemma-expected-list-time} we computed the expected time of the find operation and used it as a measure of its time complexity. The computed expectation is based on the probability distribution of the input. For the lemma we assumed its uniformity. In hashing similar situation occurs. If we want to calculate the expected results we need corresponding probabilistic assumptions on the input.
+In Lemma \ref{lemma-expected-list-time} we computed the expected time of the find operation and used it as a measure of its time complexity. The computed expectation is based on the probability distribution of the input. For the lemma we assumed its uniformity. In hashing similar situation occurs. If we want to calculate the expected results we need corresponding probabilistic assumptions on the input.
 \begin{itemize}
 \item Hash function $h$ distributes the elements of universe uniformly across the hash table.
 \[
@@ -172,7 +172,7 @@ Let $n$ be the size of the represented set and $m$ be the size of the hash table
 \end{theorem}
 
 \section{Universal hashing}
-Universal hashing uses systems of functions instead of a single function. This removes the dependence of hashing on its input. The probability space is not determined by the selection of an input but by the uniform choice of the hash function. We study universal hashing and its systems in a more detail way in chapter \ref{chapter-universal-classes}.
+Universal hashing uses systems of functions instead of a single function. This removes the dependence of hashing on its input. The probability space is not determined by the selection of an input but by the uniform choice of the hash function. We study universal hashing and its systems in a more detail way in Chapter \ref{chapter-universal-classes}.
 
 \section{Perfect hashing}
 Assume that the hashed set $S$ is known in advance. The problem solved by perfect hashing is how to create a hash table and a hash function such that the find operation takes a constant time. Insert and delete operations are forbidden so the hashed set $S$ remains fixed. Additional requirements are placed not only on the size of the hash table but also on the space consumed by representing the constructed hash function since it may be quite complex.
