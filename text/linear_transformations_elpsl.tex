@@ -1,5 +1,5 @@
 \begin{section}{The original result}
-The last two theorems of the previous chapter give us enough power to achieve our goal - asymptotic restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts this expected length can not grow. Every hashed set can be extended into $n \log n$ elements and the estimate must still remain valid. 
+The last two theorems of the previous chapter give us enough power to achieve our goal -- asymptotic restriction of the worst case chain length. Once again we achieve this limit when hashing even super-linear amount of $n \log n$ elements into $n$ slots. By hashing a linear amounts this expected length can not grow. Every hashed set can be extended into $n \log n$ elements and the estimate must still remain valid. 
 
 The most common models use load factors lower than one. Because of these models we generalise theorem so that it is parametrised by the table's load factor. Important relation of the expected length of the longest chain on the table's load factor is found. The result is that the multiplicative constant of the asymptotic growth is relative to the load factor of a hash table. New results are achieved by modifications of the given proofs with some new ideas.
 
@@ -14,12 +14,15 @@ The original proof is showed in the following few pages. It contains some remark
 
 Let the target space, representation of the hash table, be denoted by $B = \vecspace{t}$. As in the previous proof we will factor a linear transformation $T \in H$, $T: \vecspace{w} \rightarrow \vecspace{t}$. We define factor vector space $A = \vecspace{u}$ for $u \geq \log n$ and two functions $T_0: \vecspace{w} \rightarrow \vecspace{u}$ and $T_1: \vecspace{u} \rightarrow \vecspace{t}$ which is surjective. Both linear functions $T_0$ and $T_1$ are selected uniformly among $LT(U, A)$ and $LTS(A, B)$ respectively. By direct use of model \ref{remark-model-uniform-linear-map-selection} we obtain uniform choice of the transformation $T = T_1 \circ T_0$ .
 
-The second idea of the proof is to estimate the probability of event called $E1$, $\lpsl > l$, for any natural number $l$. The probability bound on $E_1$ is found by inspecting another quite unnatural event $E_2$. Probability of event $E_1$ is then simply determined by discovering the probabilities $\Prob{E_2 | E_1}$ and $\Prob{E_2}$.
+The second idea of the proof is to estimate the probability of event called $E_1$ for any natural number $l$. The probability bound on $E_1$ is found by inspecting another quite unnatural event $E_2$. Probability of event $E_1$ is then simply determined by discovering the probabilities $\Prob{E_2 | E_1}$ and $\Prob{E_2}$.
 
 \begin{definition}
-Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and $S \subset U$ be the hashed set. Event $E_1(S, T, l)$ denotes existence of a chain of length at least $l$ elements when using function $T$. 
+Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and $S \subset U$ be the hashed set. Event $E_1(S, T, l)$
+
+\noindent Representation of set $S$ by the hash function $T$ has a chain of length greater than $l$,
+
 \[ 
-	E_1(S, T, l) \equiv \exists \vec{y} \in B: | T^{-1}(\vec{y}) \cap S | > l
+	E_1(S, T, l) \equiv \exists \vec{y} \in B: | T^{-1}(\vec{y}) \cap S | > l \text{.}
 \]
 \end{definition}
 
@@ -30,18 +33,18 @@ Let $T_0: U \rightarrow A, T_1: A \rightarrow B$ be linear transformations where
 \]
 \end{definition}
 
-When it is clear what we mean by $S, T_0, T_1$ and $t$ we omit the parametrisation of the events and just use $E_1$ or $E_2$.
+When it is clear what we mean by $S, T_0, T_1$ and $l$ we omit the parametrisation of the events and just use $E_1$ or $E_2$.
 
-Now we will point out another definition of the event $E_2$ that fits better to the scheme of remark $\ref{theorem-linear-function-set-onto}$.
+Now we will point out another definition of the event $E_2$ that fits better to the scheme of Theorem $\ref{theorem-linear-function-set-onto}$.
 \begin{remark}
 \label{remark-e2-equivalency}
-Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations and moreover $T_2$ be surjective. Let $S \subset U$ be the hashed set. Appearance of event $E_2(S, T_0, T_1)$ is then equivalent to
+Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations and such that $T_2$ is surjective. Let $S \subset U$ be the hashed set. Appearance of event $E_2(S, T_0, T_1)$ is then equivalent to
 \[
 	E_2(S, T_0, T_1) \equiv \exists \vec{y}: T_1^{-1}(\vec{y}) \subseteq T_0(S) \Leftrightarrow T_1(A - T_0(S)) \neq B \text{.}
 \]
 \end{remark}
 \begin{proof}
-To proof direction from the left to the right assume that event $E_2$ is present. Event $E_2$ occurs if and only if there is a vector $\vec{y} \in B$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Under these conditions transformation $T_1$ may not display set $A - T_0(S)$ onto $B$ since $\vec{y} \notin T_1(A - T^{-1}(y)) \supseteq T_1(A - T_0(S))$ or equivalently $B \neq T_1(A - T_0(S))$.
+To proof direction from the left to the right assume that event $E_2$ is present. Event $E_2$ occurs if and only if there is a vector $\vec{y} \in B$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Under these conditions transformation $T_1$ does not map the set $A - T_0(S)$ onto $B$ since $\vec{y} \notin T_1(A - T^{-1}(y)) \supseteq T_1(A - T_0(S))$ or equivalently $B \neq T_1(A - T_0(S))$.
 
 If $B \neq T_1(A - T_0(S))$ then there exists a vector $\vec{y} \in B$ such that $\vec{y} \notin T_1(A - T_0(S))$. Since $T_1$ is surjective we have $T_1(A) = B$. Because no point from $A - T_0(S)$ is displayed on $\vec{y}$ the whole preimage of $\vec{y}$ must be contained in $T_0(S)$, $T_1^{-1}(\vec{y}) \subseteq T_0(S)$.
 
@@ -63,15 +66,12 @@ Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \
 \]
 \end{remark}
 \begin{proof}
-Theorem \ref{theorem-linear-function-set-onto} for surjective transformation $T_1$, set $A - T_0(S) \subset A$, target space $B = \vecspace{t}$ and $\mu = \frac{|T_0(S)|}{|A|}$ states that
+Theorem \ref{theorem-linear-function-set-onto} used for surjective transformation $T_1$, the set $A - T_0(S)$, target space $B = \vecspace{t}$ and \[
+	\mu = 1 - \frac{|A - T_0(S)|}{|A|} = 1 - \frac{|A| - |T_0(S)|}{|A|} = \frac{|T_0(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} < 1 \text{.}
+\] states that
 \[
 	\Prob{T_1(A - T_0(S)) \neq B} \leq \mu ^ {u - t - \log t + \log \log \frac{1}{\mu}} \text{.}
 \]
-
-Corresponding inverse density $\mu$ can be computed as 
-\[
-	\mu = 1 - \frac{|A - T_0(S)|}{|A|} = 1 - \frac{|A| - |T_0(S)|}{|A|} = \frac{|T_0(S)|}{|A|} \leq \frac{|S|}{|A|} = \frac{1}{d} < 1 \text{.}
-\] 
 
 Now we can rewrite logarithm of variable $d$ as 
 \[
@@ -89,7 +89,7 @@ Since $E_2 \equiv T_1(A - T_0(S)) \neq B$ we can conclude
 \end{split}
 \]
 
-Because of the assumptions of theorem \ref{theorem-linear-function-set-onto} the proof of this remark holds only when $\emptyset \neq A - T_0(S) \neq A$. Since $S$ is non-empty set we can see that $A - T_0(S) \neq A$. Because $d = \frac{|A|}{|S|} > 1$ it must be true that $|A| > |S| \geq |T_0(S)|$ and set $A - T_0(S)$ can not be empty.
+To satisfy the assumptions of Theorem \ref{theorem-linear-function-set-onto}, we must show that $\emptyset \neq A - T_0(S)$ and $A - T_0(S) \neq A$. Since $S$ is non-empty set we can see that $A - T_0(S) \neq A$. Because $d = \frac{|A|}{|S|} > 1$ it must be true that $|A| > |S| \geq |T_0(S)|$ and set $A - T_0(S)$ can not be empty.
 \end{proof}
 
 A similar lemma for estimating the conditional probability of event $E_2 | E_1$ follows.

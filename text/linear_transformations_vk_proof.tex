@@ -1,4 +1,4 @@
-First set $u = \lceil\log(\frac {2|S|}{\epsilon})\rceil$. Let $T_1: \vecspace{u} \rightarrow \vecspace{t}$ be a random uniformly chosen surjective linear mapping (since $u \geq t$ such mapping exists). Fix $T_1$. Then for every random uniformly chosen linear mapping $T_0: \vecspace{w} \rightarrow \vecspace{u}$ linear mapping $T$ defined as $T = T_1 \circ T_0$  is a random linear mapping with uniform distribution by using model \ref{remark-model-uniform-linear-map-selection}. 
+First set $u = \lceil\log(\frac {2|S|}{\epsilon})\rceil$. Let $T_1: \vecspace{u} \rightarrow \vecspace{t}$ be a random uniformly chosen surjective linear mapping. Since $c_\epsilon$ gets chosen large enough we have that $u \geq t$ and thus such mapping exists.  Fix $T_1$. Then for every random uniformly chosen linear mapping $T_0: \vecspace{w} \rightarrow \vecspace{u}$ linear mapping $T$ defined as $T = T_1 \circ T_0$  is a random linear mapping with uniform distribution by using model \ref{remark-model-uniform-linear-map-selection}. 
 
 Since the family of all linear mappings from $\vecspace{w}$ into $\vecspace{u}$ is $1$-universal we conclude that \[ \Prob{T_0(\vec{x}) = T_0(\vec{y})} = 2 ^ {-u} \] for all distinct vectors $\vec {x}$ and $\vec {y}$ from $\vecspace{w}$. If $d_S$ is the number of  all pairs of distinct vectors $\vec {x},\vec {y}\in S$ with $T_0(\vec {x}) = T_0(\vec {y})$ then the expected value of the random variable $d_S$ is \[ \Expect{d_S}= \binom{|S|}{2} 2 ^ {-u} \text{.} \]
 
@@ -17,13 +17,13 @@ We can summarize that
 \Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| \leq \frac{|S|}{2}} \leq \frac{\epsilon}{2} \text{.}
 \]
 
-Secondly we compute $\Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| > \frac{|S|}{2}}$. By the previous remark \ref{theorem-linear-function-set-onto} for $T_1: \vecspace{u} \rightarrow \vecspace{t}$ and $T_0(S) \subseteq \vecspace{u}$, we have
+Secondly we compute $\Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| > \frac{|S|}{2}}$. By Theorem \ref{theorem-linear-function-set-onto} for $T_1: \vecspace{u} \rightarrow \vecspace{t}$ and $T_0(S) \subseteq \vecspace{u}$, we have
 \[
 	\Prob{T(S) = T_1(T_0(S)) \neq \vecspace{T} \wedge |T_0(S)| > \frac{|S|}{2}} \leq \mu ^ {u - t - \log t  +\log\log \left(\frac{1}{\mu}\right) } 
 \]
 where $\mu = 1- \frac{|T_0(S)|}{2^u}$. Clearly
 \[
-\mu = 1 - \frac{|T_0(S)|}{2 ^ u} < 1 - \frac{|S|}{2 . 2 ^ u} = 1 - \frac{\epsilon |S|}{8|S|} \leq e^{-\frac{\epsilon}{8}}
+\mu = 1 - \frac{|T_0(S)|}{2 ^ u} < 1 - \frac{|S|}{2 . 2 ^ u} \leq 1 - \frac{\epsilon |S|}{8|S|} \leq e^{-\frac{\epsilon}{8}}
 \text{.}
 \]
 
@@ -41,14 +41,14 @@ In the following constant $c_{\epsilon}$ is chosen as $4\left(\frac{2}{\epsilon}
 \end{split}
 \]
 
-And for the calculated probability we dervive:
+And for the calculated probability we derive:
 \[
 \begin{split}
 \Prob{T(S) \neq \vecspace{t} \wedge |T(S)| > \frac{|S|}{2}} 
 	& \leq \mu ^ {u - t - \log t + \log\log\left(\frac{1}{\mu}\right)} \\
 	& \leq e ^ {-\frac{\epsilon\left(u - t - \log t + \log\log\left(\frac{1}{\mu}\right)\right)}{8}} \\
-	& \leq e ^ {\log \left( \frac{\epsilon}{2} \right)} \leq e ^ {\ln \left(\frac{\epsilon}{2}\right)} = \frac{\epsilon}{2} \\
-\end{split} \text{.}
+	& \leq e ^ {\log \left( \frac{\epsilon}{2} \right)} \leq e ^ {\ln \left(\frac{\epsilon}{2}\right)} = \frac{\epsilon}{2} \text{.}
+\end{split}
 \]
 
 If we connect both alternatives we deduce that 
