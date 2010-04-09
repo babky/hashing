@@ -124,7 +124,12 @@ If $\beta_0 = a \in \left[0, \mu_0 \right]$ is constant and $\beta_i$ for $i = 1
 
 Next we investigate behaviour of $\frac{f_0}{x}$ on the interval $(0, 1)$. We start to compute the first derivation for every $x \in (0, 1)$.
 \[
-\left(\frac{f_0(x)}{x}\right)' = (c - 1 + \log \log \left( \frac{1}{x} \right) + \log e)\frac{f_0(x)}{x^2}
+\begin{split}
+\left(\frac{f_0(x)}{x}\right)' 
+	& = \frac{xf_0(x)\left[\ln(x)\left(c + \log \log \left(\frac{1}{x}\right)\right)\right]' - f_0(x)}{x^2} \\
+	& = \frac{f_0(x)\left[c + \log \log \left(\frac{1}{x}\right) + x \cdot \frac{\ln x}{\log\left(\frac{1}{x}\right) \ln 2}\cdot\frac{x}{\ln 2}\cdot\frac{-1}{x ^ 2} \right] - f_0(x)}{x^2} \\
+	& = \left(c - 1 + \log \log \left( \frac{1}{x} \right) + \log e \right)\frac{f_0(x)}{x^2} \\
+\end{split}
 \]
 
 Define the stationary point $x_s = 2 ^ {-2 ^ {-c + 1 - \log e}}$. Function $\frac{f_0(x)}{x}$ is then increasing in the interval $(0, x_s)$ and decreasing in the interval $(x_s, 1)$. 
