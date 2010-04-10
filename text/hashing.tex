@@ -154,6 +154,12 @@ Another set of modifications changes the representation of chains. They are no l
 \section{Coalesced hashing}
 The chains of colliding elements are also stored directly in the hash table but they are allowed to fuse together. Every chain is represented by a singly linked list. The simpler methods such as LISCH and EISCH do not use any special additional memory. In addition the EISCH method utilises the move to front rule. Methods such as LICH, EICH and VICH use the additional memory which is not directly addressable by the hash function. Collision resolution uses the additional memory to store chains. When an empty place for a colliding element is needed it is first sought in the additional memory. Only if it is full then the addressable memory may be used. The methods differ in the usage of the move to front rule. The EICH method always obeys it, VICH uses it only in the addressable memory and the LICH method does not obey the rule at all.
 
+\begin{figure}
+  \centering
+    \includegraphics[width=0.2\textwidth]{images/vich}
+  \caption{Singly linked lists represented directly in the hash table. The first number is the bucket's address, the second is the represented key and the last one is the next pointer.}
+\end{figure}
+
 \section{Open addressing}
 The chains created by methods of coalesced hashing or separated chaining are explicitly represented by a singly or doubly linked lists. The additional pointers of the lists not only consume the memory but also worsen the cache behaviour of the hash table. Open addressing also merges the chains stored directly in the hash table but their representation is implicit. To remove the need of an additional pointer, a secondary function for conflict resolution is used.
 

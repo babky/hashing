@@ -190,9 +190,9 @@ System of linear transformations between vector spaces $U$ and $B$ is $1$-univer
 \begin{proof}
 Let $m$ and $n$ denote the dimensions of vector spaces $U$ and $B$ respectively. Then every linear transformation $L: U \rightarrow B$ is associated with a unique $n \times m$ binary matrix $T$. 
 
-Let $x, y \in U$ be two distinct vectors mapped on a same image. We need to find the number of mappings confirming this collision. Let $k$ be a position such that $x_k \neq y_k$. Such $k$ exists since $x \neq y$. We show the following statement. If the matrix $T$ is fixed except the $k$\textsuperscript{th} column then the $k$\textsuperscript{th} column is determined uniquely. We just lost $n$ degrees of freedom when creating matrix $T$ causing the collision of $x$ and $y$. This lost implies $1$-universality of the system which is proved later as well.
+Let $\vec{x}, \vec{y} \in U$ be two distinct vectors mapped on a same image. We need to find the number of mappings confirming this collision. Let $k$ be a position such that $x_k \neq y_k$. Such $k$ exists since $\vec{x} \neq \vec{y}$. We show the following statement. If the matrix $T$ is fixed except the $k$\textsuperscript{th} column then the $k$\textsuperscript{th} column is determined uniquely. We just lost $n$ degrees of freedom when creating matrix $T$ causing the collision of $\vec{x}$ and $\vec{y}$. This lost implies $1$-universality of the system which is proved later as well.
 
-In order to create a collision of $x$ and $y$ their images $Tx$, $Ty$ must be the same. The system of equalities must then be true for every $i$, $1 \leq i \leq n$:
+In order to create a collision of $\vec{x}$ and $\vec{y}$ their images $T\vec{x}$, $T\vec{y}$ must be the same. The system of equalities must then be true for every $i$, $1 \leq i \leq n$:
 \[
 \displaystyle\sum_{j = 1}^{m}t_{i, j}x_j = \displaystyle\sum_{j = 1}^{m}t_{i, j}y_j \text{.}
 \]
@@ -204,7 +204,7 @@ t_{i, k} = (x_k - y_k)^{-1}\displaystyle\sum_{j = 1, j \neq k}^{m}t_{i, j}(y_j -
 
 The elements in the $k$-th column are uniquely determined by the previous equality. 
 
-The number of all functions, equivalently the number of all binary matrices, is $2^{mn}$. Notice that the size of the target space $B$ is $2^n$. The number of all functions mapping $x$ and $y$ to a same value is $2^{mn - n}$ since we are allowed to arbitrarily choose every element of the matrix $T$ except the $n$ ones in the $k$-th column. 
+The number of all functions, equivalently the number of all binary matrices, is $2^{mn}$. Notice that the size of the target space $B$ is $2^n$. The number of all functions mapping $\vec{x}$ and $\vec{y}$ to a same value is $2^{mn - n}$ since we are allowed to arbitrarily choose every element of the matrix $T$ except the $n$ ones in the $k$-th column. 
 
 System of linear transformations is $1$-universal because:
 \[

@@ -3,49 +3,49 @@
 Most of the~following claims in this section are taken from \cite{DBLP:journals/jacm/AlonDMPT99}. It is convenient to show the~original proofs and then modify them according to our future needs. Some technical definitions and statements follow that are useful in order to show our goal.
 
 \begin{definition}
-Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $v \in V$ define set $v + A$ as
-\[ v + A = \{ v + a \setdelim a \in A \} \text{.} \] 
+Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $\vec{v} \in V$ define set $\vec{v} + A$ as
+\[ \vec{v} + A = \{ \vec{v} + \vec{a} \setdelim \vec{a} \in A \} \text{.} \] 
 \end{definition}
 
 \begin{definition}
 Let $V$ be a vector space and $A, B$ be a subsets of $V$. Define set $A + B$ as
-\[ A + B = \{ a + b \setdelim a \in A, b \in B \} \text{.} \] 
+\[ A + B = \{ \vec{a} + \vec{b} \setdelim \vec{a} \in A, \vec{b} \in B \} \text{.} \] 
 \end{definition}
 
 \begin{lemma}
 \label{lemma-choose-random-vector}
-Let $V$ be a~finite vector space and $A$ be its subset. Define $\mu = 1 - \frac{|A|}{|V|}$ as inverse density of set $A$ in vector space $V$. Let $v \in V$ be a random uniformly chosen vector independent of $A$. Then
+Let $V$ be a~finite vector space and $A$ be its subset. Define $\mu = 1 - \frac{|A|}{|V|}$ as inverse density of set $A$ in vector space $V$. Let $\vec{v} \in V$ be a random uniformly chosen vector independent of $A$. Then
 \begin{displaymath}
-\Expect{1 - \frac{|A \cup (v + A)|}{|V|}} = \mu^2
+\Expect{1 - \frac{|A \cup (\vec{v} + A)|}{|V|}} = \mu^2
 \end{displaymath}
-where the~expectation is taken throughout all possible choices of $v \in V$.
+where the~expectation is taken throughout all possible choices of $\vec{v} \in V$.
 
 \begin{proof}
-To simplify further computations define $X_v = |A \cup (v + A)|$ as a random variable taken throughout random uniform choice of vector $v \in V$. The most difficult part of the proof is to compute $\Expect{X_v}$.
+To simplify further computations define $X_{\vec{v}} = |A \cup (\vec{v} + A)|$ as a random variable taken throughout random uniform choice of vector $\vec{v} \in V$. The most difficult part of the proof is to compute $\Expect{X_{\vec{v}}}$.
 \[
-\Expect{X_v} = \displaystyle\sum_{v \in V} |A \cup (v + A)| . \Prob{v \text{ is chosen}} = \displaystyle\sum_{v \in V} \frac{|A \cup (v + A)|}{|V|}
+\Expect{X_{\vec{v}}} = \displaystyle\sum_{\vec{v} \in V} |A \cup (\vec{v} + A)| \cdot \Prob{\vec{v} \text{ is chosen}} = \displaystyle\sum_{\vec{v} \in V} \frac{|A \cup (\vec{v} + A)|}{|V|}
 \]
 
-Size of set $|A \cup (v + A)|$ can be expressed using indicator function.
+Size of the set $A \cup (\vec{v} + A)$ can be expressed using indicator function.
 \[
-|A \cup (v + A)| = \displaystyle\sum_{u \in V} I(u \in A \vee u \in (v + A)) \\
+|A \cup (\vec{v} + A)| = \displaystyle\sum_{\vec{u} \in V} I(\vec{u} \in A \vee \vec{u} \in (\vec{v} + A)) \\
 \]
 
-Now notice if $u \in A$ there are exactly $|V|$ vectors that satisfy the above condition. For $u \notin A$ and $a \in A$ there is exactly one vector $v \in V$ such that $a + v = u$ and there are $|A|(|V| - |A|)$ such possibilities and the remaining choices are refused. Thus
+Now notice if $\vec{u} \in A$ there are exactly $|V|$ vectors that satisfy the above condition. For $\vec{u} \notin A$ and $\vec{a} \in A$ there is exactly one vector $\vec{v} \in V$ such that $\vec{a} + \vec{v} = \vec{u}$ and there are $|A|(|V| - |A|)$ such possibilities and the remaining choices are refused. Thus
 \[ 
 \begin{split}
-|\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}| 
+|\{(\vec{u}, \vec{v}) \setdelim \vec{u} \in A \vee \vec{u} \in (\vec{v} + A), \vec{u}, \vec{v} \in V \}| 
 	& = |A|(|V| - |A|) + |V||A| \\
 	& = 2|V||A| - |A|^2 \text{.} \\
 \end{split}
 \]
 
-Substituting into the definition of $\Expect{X_v}$ and rewriting sums into the just computed size of a suitable set.
+Substituting into the definition of $\Expect{X_{\vec{v}}}$ and rewriting sums into the just computed size of a suitable set.
 \[
 \begin{split}
-\Expect{X_v} 
-	& = \frac{\sum_{v \in V} \sum_{u \in V} I(u \in A \vee u \in (v + A))}{|V|}  \\
-	& = \frac{|\{(u, v) \setdelim u \in A \vee u \in (v + A), u, v \in V \}|}{|V|} \\ 
+\Expect{X_{\vec{v}}} 
+	& = \frac{\sum_{\vec{v} \in V} \sum_{\vec{u} \in V} I(\vec{u} \in A \vee \vec{u} \in (\vec{v} + A))}{|V|}  \\
+	& = \frac{|\{(\vec{u}, \vec{v}) \setdelim \vec{u} \in A \vee \vec{u} \in (\vec{v} + A), \vec{u}, \vec{v} \in V \}|}{|V|} \\ 
 	& = \frac{2|V||A| - |A|^2}{|V|} \\
 \end{split}
 \]
@@ -53,9 +53,9 @@ Substituting into the definition of $\Expect{X_v}$ and rewriting sums into the j
 Now finally compute the wanted expected value.
 \[
 \begin{split}
-\Expect{1 - \frac{|A \cup (v + A)|}{|V|}} 
-	& = 1 - \frac{\Expect{|A \cup (v + A)|}}{|V|}  \\
-	& = 1 - \frac{\Expect{X_v}}{|V|} \\
+\Expect{1 - \frac{|A \cup (\vec{v} + A)|}{|V|}} 
+	& = 1 - \frac{\Expect{|A \cup (\vec{v} + A)|}}{|V|}  \\
+	& = 1 - \frac{\Expect{X_{\vec{v}}}}{|V|} \\
 	& = 1 - \frac{2|V||A| - |A|^2}{|V|^2} \\
 	& = \frac{|V|^2 + 2|V||A| - |A|^2}{|V|^2} \\
 	& = \left(1 - \frac{|A|}{|V|}\right)^2 = \mu^2 \\
@@ -220,11 +220,11 @@ Let $u$ and $t$ be natural numbers such that $0 < t \leq u$. Let $S$ be a~proper
 \]
 \end{theorem}
 \begin{proof}
-Set $s = u - t$. Choose vectors $v_1, \dots, v_s \in \vecspace{u}$ independently and randomly using the uniform distribution. Note that vectors $v_1, \dots, v_s \in \vecspace{u}$ need not to be linearly independent.
+Set $s = u - t$. Choose vectors $\vec{v_1}, \dots, \vec{v_s} \in \vecspace{u}$ independently and randomly using the uniform distribution. Note that vectors $\vec{v_1}, \dots, \vec{v_s} \in \vecspace{u}$ need not to be linearly independent.
 
-We perform random and uniform choice of linear transformation $T$ according to Model \ref{remark-model-surjective-linear-map-selection}. Maximal linearly independent subset of vectors $v_1, \dots, v_s$ may be extended to a random basis $b$ of vector space $\vecspace{u}$. Now choose a random permutation $\pi \in \Pi_t$ as stated in the just mentioned model. Since selection of vectors $v_1, \dots, v_s$ is random and uniform, moreover vectors are independent of each other the basis $b$ is chosen uniformly indeed. Moreover the vectors $v_1, \dots, v_s$ define a part $s'$ of the needed set $s \in S$ since we need to place them in the kernel of the constructed mapping $T$. Set $s'$ must be uniformly extended to any set $s \in S$ such that $s' \subseteq s$. The uniform choice of function $T$ is done by this. Just note that $T(v_i) = 0$ for all $i = 1, \dots, s$.	
+We perform random and uniform choice of linear transformation $T$ according to Model \ref{remark-model-surjective-linear-map-selection}. Maximal linearly independent subset of vectors $\vec{v_1}, \dots, \vec{v_s}$ may be extended to a random basis $b$ of vector space $\vecspace{u}$. Now choose a random permutation $\pi \in \Pi_t$ as stated in the just mentioned model. Since selection of vectors $\vec{v_1}, \dots, \vec{v_s}$ is random and uniform, moreover vectors are independent of each other the basis $b$ is chosen uniformly indeed. Moreover the vectors $\vec{v_1}, \dots, \vec{v_s}$ define a part $s'$ of the needed set $s \in S$ since we need to place them in the kernel of the constructed mapping $T$. Set $s'$ must be uniformly extended to any set $s \in S$ such that $s' \subseteq s$. The uniform choice of function $T$ is done by this. Just note that $T(\vec{v_i}) = \vec{0}$ for all $i = 1, \dots, s$.	
 
-Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + v_i)$ and set $\mu_i = 1 - \frac{|S_i|}{2 ^ u}$. When considering $\mu_i$ as random variables by using Lemma \ref{lemma-choose-random-vector} we can derive the fact that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, s \}$. Because every set $S_i$ is an extension of the previous set $S_{i - 1}$ it is clear that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, s$. The assumptions of Lemma \ref{lemma-random-variable} are satisfied and we obtain
+Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + \vec{v_i})$ and set $\mu_i = 1 - \frac{|S_i|}{2 ^ u}$. When considering $\mu_i$ as random variables by using Lemma \ref{lemma-choose-random-vector} we can derive the fact that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, s \}$. Because every set $S_i$ is an extension of the previous set $S_{i - 1}$ it is clear that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, s$. The assumptions of Lemma \ref{lemma-random-variable} are satisfied and we obtain
 \[
 \begin{split}
 \Prob{\mu_s \geq 2 ^ {-t}} 
@@ -234,15 +234,15 @@ Let us define $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + v_i)$ and set $\m
 \end{split}
 \]
 
-We want to show that whenever $\mu_s < 2^{-t}$ the event $T(S_s) = \vecspace{t}$ occurs. Since $\mu_s = 1 - \frac{|S_s|}{2 ^ u}$ the size of set $S_s$ equals ${2 ^ u}(1 - \mu_s)$. Using the assumption $\mu_s < 2 ^ {-t}$ it follows that $|S_s| > 2^u - 2^{u - t}$. To get the contradiction we assume that there is a vector $x \in \vecspace{t} - T(S_s)$ or equivalently $T(S_s) \neq \vecspace{t}$. Under these conditions it is clear that $T ^ {-1}(x)$ and $S_s$ are disjoint. From Lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(x)| = 2 ^ {u - t}$. This would mean that
+We want to show that whenever $\mu_s < 2^{-t}$ the event $T(S_s) = \vecspace{t}$ occurs. Since $\mu_s = 1 - \frac{|S_s|}{2 ^ u}$ the size of set $S_s$ equals ${2 ^ u}(1 - \mu_s)$. Using the assumption $\mu_s < 2 ^ {-t}$ it follows that $|S_s| > 2^u - 2^{u - t}$. To get the contradiction we assume that there is a vector $\vec{x} \in \vecspace{t} - T(S_s)$ or equivalently $T(S_s) \neq \vecspace{t}$. Under these conditions it is clear that $T ^ {-1}(\vec{x})$ and $S_s$ are disjoint. From Lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(\vec{x})| = 2 ^ {u - t}$. This would mean that
 \[
-2 ^ u = |\vecspace{u}| \geq |S_s \cup T^{-1}(x)| > 2 ^ u - 2 ^ {u - t} + 2 ^ {u - t} = 2 ^u
+2 ^ u = |\vecspace{u}| \geq |S_s \cup T^{-1}(\vec{x})| > 2 ^ u - 2 ^ {u - t} + 2 ^ {u - t} = 2 ^u
 \] which is impossible. The fact that if $\mu_s < 2^{-t}$ then $T(S_s) = \vecspace{t}$ can be rewritten in terms of probability as
 \[
 	\Prob{\mu_s < 2^{-t}} \leq \Prob{T(S_s) = \vecspace{t}}
 \]
 
-Because $\vecspace{u}$ is a vector space over field $\mathbb{Z}_2$, by induction over $i$, we obtain that $S_i = S_{i - 1} \cup (v_i + S_{i - 1}) = S_0 + \vecspan{v_1, \dots, v_i}$. Note that $T(v_i) = 0$ because mapping $T$ was chosen so that every vector $v_i$ was placed in the kernel of $T$. This simply implies $T(S_s) = T(S)$.
+Because $\vecspace{u}$ is a vector space over field $\mathbb{Z}_2$, by induction over $i$, we obtain that $S_i = S_{i - 1} \cup (\vec{v_i} + S_{i - 1}) = S_0 + \vecspan{\vec{v_1}, \dots, \vec{v_i}}$. Note that $T(\vec{v_i}) = \vec{0}$ because mapping $T$ was chosen so that every vector $\vec{v_i}$ was placed in the kernel of $T$. This simply implies $T(S_s) = T(S)$.
 
 The proof of the theorem is finished by combining the previous notes.
 

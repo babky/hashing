@@ -130,11 +130,11 @@ If $X$ is a continuous random variable with cumulative density function $F$ then
 
 The motivation for defining probability density function $f$ is the following.
 \[
-\lim\limits_{a \rightarrow b}\Prob{a \leq X \leq b} = \lim\limits_{a \rightarrow b} F(b) - F(a) = F'(b) = f(b)
+\Prob{a \leq X \leq b} = F(b) - F(a) = \int\limits_{a}^{b} f(x) dx
 \]
-Value $f(b)$ then describes $\Prob{X = b}$. For continuous variables this probability equals zero unless $f$ is in-continuous in $b$.
+For a small $\epsilon > 0$ value $\epsilon f(b)$ approximates $\Prob{b - \epsilon \leq X \leq b}$. For continuous variables the probability $P(X = b)$ equals zero unless $F$ is in-continuous in $b$ and thus $f(b) = \infty$.	
 
-After making this observations we see that:
+After making this observations we see that $F(t)$ can be rewritten in the form:
 \[
 F(t) = \Prob{X \leq t} = \int\limits_{-\infty}^{t} \Prob{X = t} dt \text{.}
 \]

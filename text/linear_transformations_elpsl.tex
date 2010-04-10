@@ -14,7 +14,7 @@ The original proof is showed in the following few pages. It contains some remark
 
 Let the target space, representation of the hash table, be denoted by $B = \vecspace{t}$. As in the previous proof we will factor a linear transformation $T \in H$, $T: \vecspace{w} \rightarrow \vecspace{t}$. We define factor vector space $A = \vecspace{u}$ for $u \geq \log n$ and two functions $T_0: \vecspace{w} \rightarrow \vecspace{u}$ and $T_1: \vecspace{u} \rightarrow \vecspace{t}$ which is surjective. Both linear functions $T_0$ and $T_1$ are selected uniformly among $LT(U, A)$ and $LTS(A, B)$ respectively. By direct use of Model \ref{remark-model-uniform-linear-map-selection} we obtain uniform choice of the transformation $T = T_1 \circ T_0$ .
 
-The second idea of the proof is to estimate the probability of event called $E_1$ for any natural number $l$. The probability bound on $E_1$ is found by inspecting another quite unnatural event $E_2$. Probability of event $E_1$ is then simply determined by discovering the probabilities $\Prob{E_2 | E_1}$ and $\Prob{E_2}$.
+The second idea of the proof is to estimate the probability of event called $E_1$ for any natural number $l$. The probability bound on $E_1$ is found by inspecting another quite unnatural event $E_2$. Probability of event $E_1$ is then simply determined by discovering the probabilities $\Prob{E_2 \mid E_1}$ and $\Prob{E_2}$.
 
 \begin{definition}
 Let $l$ be a natural number, $T: U \rightarrow B$ be a linear transformation and $S \subset U$ be the stored set. Event $E_1(S, T, l)$
@@ -44,7 +44,7 @@ Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be linear transformations 
 \]
 \end{remark}
 \begin{proof}
-To proof direction from the left to the right assume that event $E_2$ is present. Event $E_2$ occurs if and only if there is a vector $\vec{y} \in B$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Under these conditions transformation $T_1$ does not map the set $A - T_0(S)$ onto $B$ since $\vec{y} \notin T_1(A - T^{-1}(y)) \supseteq T_1(A - T_0(S))$ or equivalently $B \neq T_1(A - T_0(S))$.
+To proof direction from the left to the right assume that event $E_2$ is present. Event $E_2$ occurs if and only if there is a vector $\vec{y} \in B$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Under these conditions transformation $T_1$ does not map the set $A - T_0(S)$ onto $B$ since $\vec{y} \notin T_1(A - T^{-1}(\vec{y})) \supseteq T_1(A - T_0(S))$ or equivalently $B \neq T_1(A - T_0(S))$.
 
 If $B \neq T_1(A - T_0(S))$ then there exists a vector $\vec{y} \in B$ such that $\vec{y} \notin T_1(A - T_0(S))$. Since $T_1$ is surjective we have $T_1(A) = B$. Because no point from $A - T_0(S)$ is displayed on $\vec{y}$ the whole preimage of $\vec{y}$ must be contained in $T_0(S)$, $T_1^{-1}(\vec{y}) \subseteq T_0(S)$.
 
@@ -92,12 +92,12 @@ Since $E_2 \equiv T_1(A - T_0(S)) \neq B$ we can conclude
 To satisfy the assumptions of Theorem \ref{theorem-linear-function-set-onto}, we must show that $\emptyset \neq A - T_0(S)$ and $A - T_0(S) \neq A$. Since $S$ is non-empty set we can see that $A - T_0(S) \neq A$. Because $d = \frac{|A|}{|S|} > 1$ it must be true that $|A| > |S| \geq |T_0(S)|$ and set $A - T_0(S)$ can not be empty.
 \end{proof}
 
-A similar lemma for estimating the conditional probability of event $E_2 | E_1$ follows.
+A similar lemma for estimating the conditional probability of event $E_2 \mid E_1$ follows.
 \begin{remark}
 \label{remark-prob-l-length-chain}
-Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be random uniformly chosen linear transformations where $T_1$ is surjective. Then for every $0 < \epsilon < 1$ there is a constant $c_{\epsilon} > 0$ such that for every $S \subset U$ denoting the hashed  elements and for every $l \in \mathbb{N}$, $l \geq c_{\epsilon}{\frac{|A|}{|B|}}\log\frac{|A|}{|B|}$ the upper bound for the probability of event $E_2 | E_1$ is
+Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \rightarrow A$ and $T_1: A \rightarrow B$ be random uniformly chosen linear transformations where $T_1$ is surjective. Then for every $0 < \epsilon < 1$ there is a constant $c_{\epsilon} > 0$ such that for every $S \subset U$ denoting the hashed  elements and for every $l \in \mathbb{N}$, $l \geq c_{\epsilon}{\frac{|A|}{|B|}}\log\frac{|A|}{|B|}$ the upper bound for the probability of event $E_2 \mid E_1$ is
 \[
-	\Prob{E_2(S, T_0, T_1) | E_1(S, T, l)} \geq 1 - \epsilon \text{.}
+	\Prob{E_2(S, T_0, T_1) \mid E_1(S, T, l)} \geq 1 - \epsilon \text{.}
 \]
 \end{remark}
 \begin{proof}
@@ -107,19 +107,19 @@ From Lemma \ref{lemma-linear-transformation-domain-distribution} it follows that
 
 Since we assumed presence of $E_1$ cardinality of $S' = U' \cap S$ must be at least $l \geq c_{\epsilon}\frac{|A|}{|B|} \log\frac{|A|}{|B|} = c_{\epsilon}{A'}\log{A'}$. Now we can use Theorem \ref{theorem-set-onto-by-linear-transform} for the source space $U'$, set $S' \subseteq U'$, target space $A'$ and mapping $T_0|_{U'}$ and we obtain that 
 \[
-	\Prob{T_0|_{U'}(S') = A' | E_1} \geq 1 - \epsilon \text{.}
+	\Prob{T_0|_{U'}(S') = A' \mid E_1} \geq 1 - \epsilon \text{.}
 \]
 
 Remark that we used Theorem \ref{theorem-set-onto-by-linear-transform} for affine mapping $T_0|_{U'}$. However, we can use the generating mapping of $T_0|_{U'}$, corresponding non-affine subspaces and transform $S'$ to the original non-affine subspace instead.
 
 Event $E_2$ is certainly present whenever $A' \subseteq T_0(S)$. In the language of probability:
 \[
-	\Prob{A' \subseteq T_0(S) | E_1} \leq \Prob{E_2 | E_1} \text{.}
+	\Prob{A' \subseteq T_0(S) \mid E_1} \leq \Prob{E_2 \mid E_1} \text{.}
 \]
 
 Finally we can finish the remark's proof
 \[
-	\Prob{E_2 | E_1} \geq \Prob{A' \subseteq T_0(S) | E_1} \geq \Prob{A' = T_0|_{U'}(S') | E_1} \geq 1 - \epsilon \text{.}
+	\Prob{E_2 \mid E_1} \geq \Prob{A' \subseteq T_0(S) \mid E_1} \geq \Prob{A' = T_0|_{U'}(S') \mid E_1} \geq 1 - \epsilon \text{.}
 \]
 
 \begin{figure}
@@ -140,7 +140,7 @@ Let $U = \vecspace{w}$, $A = \vecspace{u}$ and $B = \vecspace{t}$. Let $T_0: U \
 \begin{proof}
 The proof is a straightforward use of the previous remark and definition of conditional probability.
 \[
-	\frac{\Prob{E_2, E_1}}{\Prob{E_1}} = \Prob{E_2 | E_1} \geq 1 - \epsilon
+	\frac{\Prob{E_2, E_1}}{\Prob{E_1}} = \Prob{E_2 \mid E_1} \geq 1 - \epsilon
 \]
 
 Using the fact $\Prob{E_2} \geq \Prob{E_2, E_1}$ we conclude:
