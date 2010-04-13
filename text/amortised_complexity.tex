@@ -36,10 +36,10 @@ The expected time of the find operation in every model of universal hashing is $
 Follows from the previous theorem. The running time of the find operation is proportional to the length of the chain where the searched element belongs. The operation must iterate the whole chain in the worst case. We must also consider the time for retrieving the element's hash value. This is typically performed in one unit of time. 
 \end{proof}
 
-\section{Effects of Trimming Long Chains}
-The model of hashing we propose guarantees the worst case bound on the length of the longest chain. Hence it bounds the running times of the operations. Knowledge of the value $\Expect{\lpsl}$ provides a \emph{limit} when to stop inserting into a long chain. If a long chain is found, then the whole table needs to be rehashed. In this situation algorithm finds a more suitable function which does create such long chains. The \emph{limit} corresponds to the probability of the existence of a long chain. In fact we set the \emph{limit} according to this probability. In this section we examine consequences of such \emph{limit} on models of universal hashing.
+\section{Consequences of Trimming Long Chains}
+The model of hashing we propose guarantees the worst case bound on the length of the longest chain. Hence it bounds the running times of the operations. Knowledge of the value $\Expect{\lpsl}$ provides a \emph{limit} when to stop inserting into a long chain. If a long chain is found, then the whole table needs to be rehashed. In this situation the algorithm finds a more suitable function; a function that does create such long chains. The \emph{limit} corresponds to the probability of the existence of a long chain. In fact we set the \emph{limit} according to this probability. In this section we examine consequences of such \emph{limits} on models of universal hashing.
 
-Following formal computations support our next ideas. The fact that \[ \Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k} \] may be obtained by direct use of the Markov's inequality. This fact for example means that less than half of all the universal functions create longest chains longer than $2 \Expect{\lpsl}$ for an arbitrary stored set. In the case of system of linear transformations we choose the \emph{limit} as $2\Expect{\lpsl} \leq \text{1 076} \log m \log \log m + 88$. The \emph{limit} follows from Corollary \ref{corollary-best-elpsl}.
+Following computations support our next ideas. The fact that \[ \Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k} \] may be obtained by direct use of the Markov's inequality. This fact for example means that less than half of all the universal functions create longest chains longer than $2 \Expect{\lpsl}$ for an arbitrary stored set. In the case of system of linear transformations we choose the \emph{limit} as $2\Expect{\lpsl} \leq \text{1 076} \log m \log \log m + 88$. The \emph{limit} follows from Corollary \ref{corollary-best-elpsl}.
 
 Expected length of the longest chain gives us a generic hint when the table should be rehashed if the worst case time for the find operation is guaranteed. The lower the value $\Expect{\lpsl}$, or the tighter its estimate, is, the better worst case \emph{limit} is achieved.
 
@@ -144,6 +144,15 @@ If the delete operation is allowed then the limit value $l(m)$ is computed for $
 \end{itemize}
 
 Either estimate for the chain limit rule we obtain in the following section is valid for the tables consisting of at least 4 096 buckets. There are two solutions how to address this problem. We may use tables with the initial size of $m = \text{4~096}$ elements. Since not every hash table grows to a size of 4~096 buckets this overhead becomes unacceptable. The other option lies in turning off the chain limit rule when the table has less than 4~096 buckets. 
+
+\section{Time Complexity of Computing a Hash Value}
+Since our model is based on the system of linear transformations, what is quite unusual, we have to deal with the time complexity of the computing of the element's hash value. We ask if the time required to compute the hash value is still constant. When we bound the size of the universe $|U|$, certainly it is. But generally it gets worsened when compared to the time required by Linear system \ref{definition-linear-system}. 
+
+Linear system uses a constant number of arithmetic operations. Since we do not bound the size of the universe $|U|$ we can perform them in $O(\log |U|)$ time. 
+
+Our system, system of linear transformations, represents every transformation by a binary matrix $M \in \vecspace{b \times u}$. Every element $\vec{x} \in U$ is a vector consisting of $u$ bits. To obtain its hash the matrix-vector multiplication $M\vec{x}$ is performed. We can certainly do it in $O(u b) = O(\log |U| \log |B|)$ time. This time is slightly worse than that of Linear system. However, if the size of the universe is bounded, it is still constant. And in hashing we often store numbers having the size of the word of the underlying architecture. Therefore arithmetic operations become constant and this is our case, too.
+
+Sometimes it is possible to cache once computed hash value within the element. This solution is a trade-of that improves the time complexity but consumes an additional memory.
 
 \section{Chain Limit Rule}
 \label{section-linear-systems-linear-amount-constant-estimate}
