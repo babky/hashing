@@ -1,10 +1,17 @@
-\chapter{The system of linear maps between vector spaces}
-Finally we concentrate on the systems of linear transformations between vector spaces over the field $\mathbb{Z}_2$. The reason is simple, they allow construction of a model of universal hashing in which the expected amortised time of all operations can be guaranteed without any assumptions on the stored set $S$. 
+\chapter{The System of Linear Transformations}
+\label{chapter-linear-systems}
+From now on, we concentrate on the systems of linear transformations between vector spaces over the field $\mathbb{Z}_2$. The reason is simple, they allow a construction of a remarkable model of universal hashing. Similarly to the other universal models the expected length of a chain is constant and so is the expected running time of the find operation. In addition the expected length of the longest chain is bounded by a sub-linear function of a single variable -- the size of the hash table. In our model, we have also managed to prove that the expected amortised time of every operation, find, insert and delete, is constant.
 
-Main result regarding systems of linear maps is the~upper bound on the~length of the~longest probe sequence. Proofs of this property does not come directly from the~idea showed in the previous chapter. The~approach used does not try to compute the~probability of collision of $k$-elements directly and does not exploit attributes of strongly universal systems. We concentrate and work with special properties of this unique system instead.
+Once again, the main result is the upper bound on the expected length of the longest chain when a system of linear maps is used as the universal class. As already mentioned, probability of collision of $k$-elements is not estimated directly from the properties common to all universal systems. Hence the proof of the bound can not be based on the idea shown in the previous chapter.time of every operation, insert, delete and find, is constant.
 
-In the following sections we restrict ourselves only to vector spaces over the field $\mathbb{Z}_2$. The shown theorems also suppose hashing $n \log n$ elements into a~hash table of size $n$ slots which is quite novel. However the results may be used for hashing only $n$ elements they are later improved for hashing such small sets. Under these conditions one very important property of this model can be shown; length of the~longest chain is bounded by a function contained in class $O(\log n \log \log n)$. If vector spaces used are over other finite fields we can not expect such good properties as shown in \cite{DBLP:journals/jacm/AlonDMPT99}.
+First we show a few models of the uniform random selection of a linear function. They describe other ways of the random uniform choice of a function from the universal class. Later we prove some technical lemmas regarding the vector spaces. Finally we state the required facts in terms of  system of linear transformations. Finally we interpret the facts in terms of hashing and propose a new model. Many theorems come from \cite{DBLP:journals/jacm/AlonDMPT99}. Our work lies in their correction, improvement and modification leading to a better and practical result.
+
+In the following sections we restrict ourselves only to the vector spaces over the field $\mathbb{Z}_2$. If vector spaces are taken over other finite field than the field $\mathbb{Z}_2$, then we can not expect such good results as shown in \cite{DBLP:journals/jacm/AlonDMPT99}. The first model proposes hashing of $m \log m$ elements into a hash table of size of $m$ slots with the worst case bound, $O(\log m \log \log m)$, which is quite unexpected. Although the results may be used for hashing $m$ elements only, too, they are later improved for hashing such sets. 
+
+When unsure about any exact definition or fact from linear algebra, see Appendix~\ref{appendix-linear-algebra} that exactly summarises and accurately proves them.
 
 \input{linear_transformations_models.tex}
 \input{linear_transformations_probability.tex}
+\input{linear_transformations_distribution.tex}
 \input{linear_transformations_elpsl.tex}
+\input{linear_transformations_constant_estimate.tex}
