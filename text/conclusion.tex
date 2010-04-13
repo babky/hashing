@@ -3,7 +3,7 @@ We present a model of universal hashing which preserved $O(1)$ expected running 
 
 Since we based it on the system of linear transformations the time to compute the hash value of an element is worsened. The solution that we propose is to store once computed hash values within the object. This optimisation exploits warranties of the model if the find operation is dominant. 
 
-\section{Future work}
+\section{Future Work}
 There are many ways how the model can be improved. First it may be interesting to mathematically describe behaviour of double hashing when used with a universal class of functions. Combined with the system of linear transformations it may be possible to obtain a similar worst case bound without violating the expected running times. 
 
 Similarly to perfect hashing the chain may be represented by a hash table allowed to have load factor with a small value. But if the elements in the bucket can not be accessed in a constant time it might be possible to rehash the small table instead of the large one. This approach may bring another optimisation.
