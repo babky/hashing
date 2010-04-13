@@ -1,11 +1,11 @@
-\chapter{Universal classes of functions}
+\chapter{Universal Classes of Functions}
 \label{chapter-universal-classes}
 
-Universal classes of functions play an important role in hashing since they improve independence of the associative memory on its input. Their greatest advantage is removal of the two assumptions of classic hashing on uniformity of input. The first one is the uniform distribution of stored sets having the same size. The second one says that every element of the universe has the same probability of being hashed. 
+Universal classes of functions play an important role in hashing since they improve independence of the associative memory on its input. Their greatest advantage is removal of the two assumptions of classic hashing -- uniformity of input. The first one states that the probability of storing a set is distributed uniformly among sets having the same size. The second one says that every element of the universe has the same probability of being hashed. 
 
-In addition models of standard hashing take probability of collision relative to the choice of the stored set. In models of universal hashing probability space corresponds to the choice of a random function from the universal system. Notice that there is no direct relation between a collision and the input -- the represented set. Collision is caused by an inconvenient choice of a universal function instead by an unsuitable input. Once again probabilities of collision events are taken relative to the uniform selection of a hash function. The greatest advantage of this approach is that whatever bound is obtained it holds for any stored set. 
+In addition, models of standard hashing take probability of collision relative to the choice of the stored set. In models of universal hashing probability space corresponds to the choice of a random function selected from the universal class. Collision is caused by an inconvenient choice of a universal function more than by an unsuitable input. Notice that the relation between a collision and the input, the represented set, is not so tight as in the classic hashing. Another advantage of universal hashing is that any obtained bound holds for every stored set.
 
-Universal systems of functions are constructed in a way that the probability for a universal function not being suitable for a represented set is low. Functions in such universal systems are suitable for many stored sets. If the selected function is not suitable for any stored set we are free to pick one. Rehashing the whole represented set using the new one is not likely to fail. Moreover probability of failing many times in a row decreases exponentially.
+Probability that the selected universal function is not suitable for a stored set is low. So every function from a universal system is suitable for many stored sets. If the selected function is not suitable for a stored set we are free to pick another one. Rehashing the table using a new function is not likely to fail. In addition, probability of failing many times in a row decreases exponentially.
 
 \section{Universal classes of functions}
 % TODO: Odkazy na jednotlive systemy
@@ -16,11 +16,11 @@ Universal systems of functions are constructed in a way that the probability for
 Let $c \in R$ be a positive number and $H$ be a multiset of functions $h: U \rightarrow B$ such that for each pair of elements $x, y \in U$, $x \neq y$ we have \[ \left| \lbrace h \in H \setdelim h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|B|} \text{.} \] The multiset $H$ is then called $c$-universal class of hash functions.
 \end{definition}
 
-At first notice that the bound on the number of colliding functions for each domain pair is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table, set $B$ is formalisation of a hash table. A generalisation of the above definition for more than two elements provides us with a better estimate on the number of colliding functions. This count becomes inversely proportional to the power of the table size.
+At first notice that the bound on the number of colliding functions for each pair of elements is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table. A generalisation of the above definition for more than two elements provides us with a better estimate on the number of colliding functions. This count becomes inversely proportional to the power of the table size.
 
 \begin{definition}[Nearly strongly $n$-universal class of hash functions]
 \label{nearly_strong_universal_n_system}
-Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c > 1$ and $H$ be a set of functions $h: U \rightarrow B$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in B$ the following inequality holds
+Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c \geq 1$ and $H$ be a multiset of functions $h: U \rightarrow B$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in B$ the following inequality holds
 \[ 
 	\left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{c|H|}{|B|^n} \textit{.} 
 \] 
@@ -29,10 +29,10 @@ The system of functions $H$ is called nearly strongly $n$-universal class of has
 
 \begin{definition}[Strongly $n$-universal class of hash functions]
 \label{strong_universal_n_system}
-Let $n \in \mathbb{N}$ and $H$ be a set of functions $h: U \rightarrow B$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{|H|}{|B|^n} \textit{.} \] Then the system of functions $H$ is called strongly $n$-universal class of hash functions.
+Let $n \in \mathbb{N}$ and $H$ be a multiset of functions $h: U \rightarrow B$ such that for every choice of $n$ different elements $x_1, x_2, \dots, x_n \in U$ and their images $y_1, y_2, \dots, y_n \in A$ the following holds \[ \left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{|H|}{|B|^n} \textit{.} \] Then the system of functions $H$ is called strongly $n$-universal class of hash functions.
 \end{definition}
 
-Every strongly $n$-universal class of hash functions is nearly strongly $n$-universal class with constant 1. For most of the presented strongly universal classes not only the inequality is satisfied but the given bound is exactly the count of the colliding functions.
+Every strongly $n$-universal class of hash functions is nearly strongly $n$-universal class with constant one. Most of the presented strongly universal classes not only satisfy the inequality from the definition but the bound equals the count of the colliding functions.
 
 \begin{definition}[Strongly $\omega$-universal class of hash functions]
 \label{strong_universal_omega_system}
@@ -40,22 +40,22 @@ Family of functions $H$ is strongly $\omega$-universal if it is strongly $n$-uni
 \end{definition}
 
 % TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
-Such systems provide us with and estimate of the length of the longest chain in the hashing table. This bound can be proved directly from the above property without regarding any other special attributes of a system. So the above property is difficult to be satisfied by a small class of functions. A straightforward example is the set of all function from the domain $U$ to a hash table $B$. As mentioned this system is not very convenient because of its size.
+The $\omega$-strongly universal systems provide us with an estimate of the expected length of the longest chain. This bound can be proved directly from the above property without regarding any other special attributes of a system. As shown later the above property is difficult to be satisfied by a small class of functions. A straightforward example of $\omega$-universal class is the set of all functions from domain $U$ to a hash table $B$. It is obvious that the system is not very convenient because of its size.
 
-The above definitions of universal classes can be rewritten in terms of probability as well. The probability space corresponds to the uniform choice of function from the system of functions. For example in Definition \ref{c_universal_system} of $c$-universal class $H$ of hash functions probability of collision of two different elements $x$ and $y$ can be rewritten as
+The above definitions of universal classes can be rewritten in terms of probability as well. The probability space corresponds to the uniform choice of a function from the system of functions. For example in Definition \ref{c_universal_system} of $c$-universal class $H$, probability of collision of two different elements $x$ and $y$ can be rewritten as
 \[
-	\Prob{h(x) = h(y)} = \frac{|\{h \in H \setdelim h(x) = h(y)\}|}{|H|} = \frac{c}{m} \text{.}
+	\Prob{h(x) = h(y)} = \frac{|\{h \in H \setdelim h(x) = h(y)\}|}{|H|} = \frac{c}{|B|} \text{.}
 \]
 In the same manner we can reformulate and use definitions for the other universal systems.
 
-In the remainder of this chapter we sum up some basic facts about universal systems, show remarks about their combinations and derive some theoretic bounds of strongly $k$-universal systems.
+In the remainder of this chapter we sum up some basic facts regarding universal systems, show remarks about their combinations and derive some theoretic bounds of strongly $k$-universal systems.
 \begin{remark}
 Every $2$-strongly universal class of hash functions is also 1-universal.
 \end{remark}
 \begin{proof}
-Let $H$ be $2$-strongly universal class of hash functions containing functions mapping universe $U$ to hash table $B$. We have to find the number of functions in $H$ that make a given pair of elements $x, y \in U$, $x \neq y$ collide. 
+Let $H$ be $2$-strongly universal class of functions mapping universe $U$ to a set $B$. We have to find the number of functions in $H$ which make a given pair of different elements $x, y \in U$ collide. 
 
-A collision for a function $h \in H$ and given pair $x \neq y \in U$ can be written in the form $h(x) = h(y) = t$ for any image $t \in B$. Define the set of functions that display both $x$ and $y$ on the image $t \in B$ \[ H_t = \lbrace h \in H \setdelim h(x) = h(y) = t \rbrace \textit{.} \] These sets are disjoint and moreover $|H_t| \leq \frac{|H|}{{|B|}^{2}}$. By summing throughout all $t \in B$ we have
+First, define the set of functions that display both $x$ and $y$ on the image $t \in B$ \[ H_t = \lbrace h \in H \setdelim h(x) = h(y) = t \rbrace \textit{.} \] These sets are disjoint and moreover $|H_t| \leq \frac{|H|}{{|B|}^{2}}$. By summing throughout all $t \in B$ we have
 \begin{displaymath}
 |\lbrace h \in H \setdelim h(x) = h(y) \rbrace | = \displaystyle \sum_{t \in B} |H_t| \leq |B| \frac{|H|}{{|B|}^{2}} = \frac{H}{|B|}\textit{.}
 \end{displaymath}
