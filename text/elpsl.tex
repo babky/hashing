@@ -29,6 +29,8 @@ Whenever any expectation over variables $\psl$, $\lpsl$ is taken it is performed
 When taking the probability into an account we define random variables $\psl$ and $\lpsl$ over the probability space determined by a choice of hash function $h \in H$ where $H$ is a universal class of hash functions used.
 
 \begin{definition}[Random variables of probe sequence length and longest probe sequence length]
+\label{definition-lpsl}
+\label{definition-psl}
 Random variable $\psl(a)$ denotes the size of the bucket with the address $a \in B$. Its values are from $\mathbb{N}$ and probability density function is defined as:
 \[
 \Prob{\psl(a) = k} = \frac{\sum_{h \in H} \Indicator(\psl(a, h) = k)}{|H|}\text{.}

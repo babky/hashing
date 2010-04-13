@@ -1,17 +1,36 @@
 \begin{chapter}{Facts from linear algebra}
 \label{appendix-linear-algebra}
-\begin{definition}[Affine subspace]
-Let $V$ be a vector space, $U \subseteq V$ be its subspace and $\vec{x} \in V$. Set $A = \vec{x} + V$ is called an affine subspace of $V$.
+\begin{definition}
+Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $\vec{v} \in V$ define set $\vec{v} + A$ as
+\[ \vec{v} + A = \{ \vec{v} + \vec{a} \setdelim \vec{a} \in A \} \text{.} \] 
 \end{definition}
 
+\begin{definition}
+Let $V$ be a vector space and $A, B$ be a subsets of $V$. Define set $A + B$ as
+\[ A + B = \{ \vec{a} + \vec{b} \setdelim \vec{a} \in A, \vec{b} \in B \} \text{.} \] 
+\end{definition}
+
+\begin{definition}[Affine subspace]
+\label{definition-affine-subspace}
+Let $V$ be a vector space, $V \leq U$ be its subspace and $\vec{x} \in U$. The set $A = \vec{x} + V$ is an \emph{affine subspace} of the vector space $U$.
+\end{definition}
+
+\begin{lemma}
+\label{lemma-affine-subspace-equality}
+Let $A = \vec{a} + \vec{V}$ be an affine subspace of a vector space $U$ for a vector subspace $V \leq U$ and a vector $\vec{x} \in V$. Then $A = \vec{b} + V$ for every $\vec{b} \in A$.
+\end{lemma}
+\begin{proof}
+Every vector $\vec{x} \in A$ may be written in a form $\vec{x} = \vec{a} + \vec{v_x}$ for a vector $\vec{v} \in V$. We need to rewrite it in the form $\vec{x} = \vec{b} + \vec{w_x}$ for a vector $\vec{w_x} \in V$. Since $\vec{b} \in A$ we also have that $\vec{b} = \vec{a} + \vec{v_b}$. Substituting $\vec{a} = \vec{b} - \vec{v_b}$ into $\vec{x}$ gives that $\vec{x} = \vec{a} + \vec{v_x} = \vec{b} - \vec{v_b} + \vec{v_x}$. Since $V$ is a vector space we have that $\vec{w_x} = \vec{v_x} - \vec{v_b} \in V$. We only have that $A \subset \vec{b} + V$. The reverse inclusion comes from the fact that $\vec{b} + V$ is an affine subspace and $a \in \vec{b} + V$ and. The proof is symmetric.
+\end{proof}
+
 \begin{definition}[Null-space of matrix]
-Let $A$ be a matrix from $T ^ {m \times n}$ where $T$ is a field and $n, m \in \mathbb{N}$. Set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the null-space of matrix $A$.
+Let $T$ be a field, $A \in T ^ {m \times n}$ be a matrix with $n, m \in \mathbb{N}$. Set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the \emph{null-space} of matrix $A$.
 \end{definition}
 
 \begin{definition}[Orthogonal complement]
-Let $V$ be a vector subspace of a vector space $U$. Orthogonal complement of subspace $V ^ {\bot}$ is defined by:
+Let $V$ be a vector subspace of a vector space $U$ and the operation $\langle \vec{u} \mid \vec{v} \rangle$ denote the scalar product of vectors $\vec{u}, \vec{v} \in V$. \emph{Orthogonal complement} of subspace $V$, denoted by $V ^ {\bot}$, is defined as:
 \[
-	V ^ {\bot} = \{ \vec{u} \in U \setdelim \langle \vec{u} | \vec{v} \rangle = 0 \text{ for all } \vec{v} \in V \} \text{.}
+	V ^ {\bot} = \{ \vec{u} \in U \setdelim \langle \vec{u} \mid \vec{v} \rangle = 0 \text{ for all } \vec{v} \in V \} \text{.}
 \]
 \end{definition}
 
@@ -21,25 +40,26 @@ Null-space of every matrix $A \in T ^ {m \times n}$ is a subspace of vector spac
 \begin{proof}
 Proof is a straightforward verification of the three properties of vector subspaces.
 
-Zero vector is contained in $\nullspace{A}$ because $A\vec{0} = \vec{0}$.
+Zero vector is in $\nullspace{A}$ because $A\vec{0} = \vec{0}$.
 
-For every $\vec{x}, \vec{y} \in \nullspace{A}$ their sum $\vec{x} + \vec{y} \in \nullspace{A}$.
+Sum $\vec{x} + \vec{y} \in \nullspace{A}$ for every $\vec{x}, \vec{y} \in \nullspace{A}$ since
 \[
-	A(\vec{x} + \vec{y}) = A\vec{x} + A\vec{y} = \vec{0} + \vec{0} = \vec{0}
+	A(\vec{x} + \vec{y}) = A\vec{x} + A\vec{y} = \vec{0} + \vec{0} = \vec{0} \text{.}
 \]
 
-For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have $t \vec{x} \in \nullspace{A}$.
+For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have that $t \vec{x} \in \nullspace{A}$ because
 \[
-	At\vec{x} = tA\vec{x} = t\vec{0} = \vec{0}
+	At\vec{x} = tA\vec{x} = t\vec{0} = \vec{0} \text{.}
 \]
 \end{proof}
 
 \begin{definition}[Affine linear map]
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ for vectors $\vec{v} \in V$, $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is called affine linear map if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(\vec{x}) = \vec{u} + T_0(\vec{x} - \vec{v})$, $\vec{x} \in V_A$.
+\label{definition-affine-linear-map}
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ for vectors $\vec{v} \in V$ and $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is an \emph{affine linear map} if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(\vec{x}) = \vec{u} + T_0(\vec{x} - \vec{v})$, $\vec{x} \in V_A$.
 \end{definition}
 
 \begin{definition}[Set of all affine linear maps]
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for $\vec{v} \in V$, $\vec{u} \in U$. Set of all affine linear mapping between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for vectors $\vec{v} \in V$ and $\vec{u} \in U$. \emph{Set of all affine linear mappings} between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
 \[
 	LT_A(V_A, U_A) = \{ T: V_A \rightarrow U_A \setdelim T \text{ is an affine map} \} \text{.}
 \]
@@ -47,58 +67,67 @@ Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. L
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Let $T: \vecspace{u} \rightarrow \vecspace{t}$, $u \geq t$ be an~onto linear map and vector $\vec{x} \in \vecspace{t}$. Then $|T^{-1}(\vec{x})| = 2 ^ {u - t}$ and moreover set $T^{-1}(\vec{x})$ is an affine subspace of $\vecspace{u}$.
+Let $T: \vecspace{u} \rightarrow \vecspace{t}$ for $u \geq t$ be an onto linear map and $\vec{y} \in \vecspace{t}$. Then $T^{-1}(\vec{y})$ is an affine subspace of $\vecspace{u}$ and $|T^{-1}(\vec{y})| = 2 ^ {u - t}$.
 \end{lemma}
 \begin{proof}
-At first remark that $T^{-1}(\vec{0})$ is a~subspace of~space $\vecspace{u}$.
+At first notice that the set $T^{-1}(\vec{0})$ is the subspace of the vector space $\vecspace{u}$.
 
-Set $T^{-1}(\vec{0})$ contains zero since
-\[ T(\vec{0}) = \vec{0} \text{.} \]
+The set $T^{-1}(\vec{0})$ contains the zero vector since
+\[ 
+	T(\vec{0}) = \vec{0} \text{.} 
+\]
 
-It is closed under addition.
+It is closed under addition because
 \[
 \begin{split}
 \vec{u}, \vec{v} \in T^{-1}(\vec{0}) 
 	& \Rightarrow T(\vec{u}) = \vec{0}, T(\vec{v}) = \vec{0} \\ 
 	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{0} \\ 
-	& \Rightarrow \vec{u} + \vec{v} \in T^{-1}(\vec{0}) \\
+	& \Rightarrow \vec{u} + \vec{v} \in T^{-1}(\vec{0}) \text{.}
 \end{split}
 \]
 
-It is closed under scalar multiplication.
+It is closed under scalar multiplication since
 \[
 \begin{split}
 \delta \in \{0, 1\} \wedge \vec{u} \in T^{-1}(\vec{0}) 
 	& \Rightarrow T(\delta \vec{u}) = \delta T(\vec{u}) = \delta \vec{0} = \vec{0} \\
-	& \Rightarrow \delta \vec{u} \in T^{-1}(\vec{0}) \\
+	& \Rightarrow \delta \vec{u} \in T^{-1}(\vec{0}) \text{.}
 \end{split}
 \]
 
-$T^{-1}(\vec{x})$ is an~affine subspace since $T^{-1}(\vec{x}) = u + T^{-1}(\vec{0})$. The~consequence is that all sets $T^{-1}(\vec{x})$ have the~same size, exactly $|T^{-1}(\vec{x})| = 2^{u-t}$. For every vector $\vec{u} \in T^{-1}(\vec{x})$ the~set $T^{-1}(\vec{x})$ is the~same as $\vec{u} + T^{-1}(\vec{0})$. This is also the one to one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{x})$.
-\begin{displaymath}
+The set $T^{-1}(\vec{y})$ is an affine subspace of the vector space $\vecspace{u}$ since for every vector $\vec{u}~\in~T^{-1}(\vec{y})$ we have that $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$ as it is shown by the following inclusion. First we show that $\vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y})$:
+\[
 \begin{split}
 \vec{v} \in T^{-1}(\vec{0}) 
-	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{x} + \vec{0} = \vec{x}  \\
-	& \Rightarrow \vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{x})
+	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{y} + \vec{0} = \vec{y}  \\
+	& \Rightarrow \vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y}) \text{.}
 \end{split}
-\end{displaymath}
-\begin{displaymath}
+\]
+The reverse inclusion, $T^{-1}(\vec{y}) \subseteq \vec{u} + T^{-1}(\vec{0})$, holds as well since
+\[
 \begin{split}
-\vec{v} \in T^{-1}(\vec{x}) 
-	& \Rightarrow T(\vec{v} - \vec{u}) = T(\vec{v}) - T(\vec{u}) = \vec{x} - \vec{x} = \vec{0} \\
+\vec{v} \in T^{-1}(\vec{y}) 
+	& \Rightarrow T(\vec{v} - \vec{u}) = T(\vec{v}) - T(\vec{u}) = \vec{y} - \vec{y} = \vec{0} \\
 	& \Rightarrow \vec{v} - \vec{u} \in T^{-1}(\vec{0}) \\
-	& \Rightarrow T^{-1}(\vec{x}) \subseteq \vec{u} + T^{-1}(\vec{0})
+	& \Rightarrow T^{-1}(\vec{y}) \subseteq \vec{u} + T^{-1}(\vec{0}) \text{.}
 \end{split}
-\end{displaymath}
+\]
+
+Now we use the obtained fact to prove the second statement of the lemma, $|T^{-1}(\vec{y})| = 2 ^ {u - t}$. Fix a vector $\vec{u} \in T^{-1}(\vec{y})$ the~set $T^{-1}(\vec{y})$ equals the set $\vec{u} + T^{-1}(\vec{0})$. This equality shows a one to one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{y})$. The~consequence is that all sets $T^{-1}(\vec{y})$ have the~same size, exactly $|T^{-1}(\vec{y})| = 2^{u-t}$.
 \end{proof}
 
 \begin{lemma}
 \label{lemma-system-of-linear-equations-solution-count}
-Let $A \in \mathbb{Z}_2^{m \times n}$ be a matrix such that $\rank{A} = m$ and $m \leq n$. Then system of linear equations $A\vec{x} = \vec{y}$ has $2 ^ {n - m}$ solutions for every $\vec{y} \in \vecspace{m}$.
+Let $A \in \mathbb{Z}_2^{m \times n}$ be a matrix such that $\rank{A} = m$ and $m \leq n$. Then the system of linear equations $A\vec{x} = \vec{y}$ has $2 ^ {n - m}$ solutions for every vector $\vec{y} \in \vecspace{m}$.
 \end{lemma}
 \begin{proof}
-Consider homogeneous system $A\vec{x} = \vec{0}$. It is a well-known fact that the dimension of the right null-space of the matrix $A$, denoted by $\nullspace{A}$, is equal to \[ \dimension{\nullspace{A}} =n - \rank{A} = n - m = \text{.} \] This fact implies that $|\nullspace{A}| = 2 ^ {n - m}$.
+Let us note that this lemma is a consequence of Lemma \ref{lemma-linear-transformation-domain-distribution} if we apply it for the linear transformation defined by the matrix $A$ and vector $\vec{y} \in \vecspace{m}$.
 
-Because $\rank{A} = m$ then for every vector $\vec{y} \in \vecspace{m}$ there is at least one solution $\vec{x} \in \vecspace{n}$ of the non-homogeneous system $A\vec{x} = \vec{y}$. It is clear that the set of all solutions of the non-homogeneous system is an affine subspace of $V$ equal to $\vec{x} + \nullspace{A}$. The number of all solutions of non-homogeneous system for every vector $\vec{y}$ is then $2 ^ {n - m}$, too.
+%Or we can prove it in a similar fashion and use a fact regarding the right null-space of the matrix $A$. First we show that the number of all solutions of the homogeneous equation is $2 ^ {n - m}$. Then, similarly to the previous proof, we show a one-to-one correspondence between the homogeneous and non-homogeneous solutions.
+
+%Consider homogeneous system $A\vec{x} = \vec{0}$. It is a well-known fact that the dimension of the right null-space of the matrix $A$, denoted by $\nullspace{A}$, is equal to \[ \dimension{\nullspace{A}} =n - \rank{A} = n - m \text{.} \] This fact implies that $|\nullspace{A}| = 2 ^ {n - m}$.
+
+%Because $\rank{A} = m$ then for every vector $\vec{y} \in \vecspace{m}$ there is at least one solution $\vec{x} \in \vecspace{n}$ of the non-homogeneous system $A\vec{x} = \vec{y}$. It is clear that for a fixed solution $\vec{x}$, the set of all solutions of the non-homogeneous system is an affine subspace of $\vecspace{n}$ and equals $\vec{x} + \nullspace{A}$. We just constructed a one-to-one map between the set of all solutions and $\nullspace{A}$. It follows that the number of all solutions of non-homogeneous system equals $2 ^ {n - m}$ for every vector $\vec{y}$.
 \end{proof}
 \end{chapter}
