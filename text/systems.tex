@@ -98,10 +98,11 @@ In this section we show some examples of common universal classes of hash functi
 \paragraph{Linear system}
 System of linear functions was among the first systems of universal hash functions. They were introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79} where they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation. Nowadays various modifications of linear systems are known and are presented in the following text. 
 
-\begin{definition}[Linear system]
+\begin{definition}[Linear System]
+\label{definition-linear-system}
 Let $N$ be a prime and $m \in \mathbb{N}$. Define the sets $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$. Then the class of linear functions 
 \[ LS = \{h_{a, b}(x): U \rightarrow B \setdelim a, b \in U \textit{ where } h_{a, b}(x) = ((ax + b) \bmod N) \bmod m \} \]
-is called the linear system.
+is called Linear System.
 \end{definition}
 
 \begin{remark}
