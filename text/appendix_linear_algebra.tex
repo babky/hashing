@@ -1,31 +1,51 @@
-\begin{chapter}{Facts from linear algebra}
+\begin{chapter}{Facts from Linear Algebra}
 \label{appendix-linear-algebra}
 \begin{definition}
-Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $\vec{v} \in V$ define set $\vec{v} + A$ as
+Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $\vec{v} \in V$ define the set $\vec{v} + A$ as
 \[ \vec{v} + A = \{ \vec{v} + \vec{a} \setdelim \vec{a} \in A \} \text{.} \] 
 \end{definition}
 
 \begin{definition}
-Let $V$ be a vector space and $A, B$ be a subsets of $V$. Define set $A + B$ as
+Let $V$ be a vector space and $A, B$ be a subsets of $V$. Define the set $A + B$ as
 \[ A + B = \{ \vec{a} + \vec{b} \setdelim \vec{a} \in A, \vec{b} \in B \} \text{.} \] 
 \end{definition}
 
 \begin{definition}[Affine subspace]
 \label{definition-affine-subspace}
-Let $V$ be a vector space, $V \leq U$ be its subspace and $\vec{x} \in U$. The set $A = \vec{x} + V$ is an \emph{affine subspace} of the vector space $U$.
+Let $V$ be a vector space, $V \leq U$ be its subspace and $\vec{a} \in U$. The set $A = \vec{a} + V$ is an \emph{affine subspace} of the vector space $U$.
 \end{definition}
 
 \begin{lemma}
 \label{lemma-affine-subspace-equality}
-Let $A = \vec{a} + \vec{V}$ be an affine subspace of a vector space $U$ for a vector subspace $V \leq U$ and a vector $\vec{x} \in V$. Then $A = \vec{b} + V$ for every $\vec{b} \in A$.
+Let $A = \vec{a} + \vec{V}$ be an affine subspace of a vector space $U$ determined by a subspace $V \leq U$ and a vector $\vec{a} \in V$. Then $A = \vec{b} + V$ for every $\vec{b} \in A$.
 \end{lemma}
 \begin{proof}
-Every vector $\vec{x} \in A$ may be written in a form $\vec{x} = \vec{a} + \vec{v_x}$ for a vector $\vec{v} \in V$. We need to rewrite it in the form $\vec{x} = \vec{b} + \vec{w_x}$ for a vector $\vec{w_x} \in V$. Since $\vec{b} \in A$ we also have that $\vec{b} = \vec{a} + \vec{v_b}$. Substituting $\vec{a} = \vec{b} - \vec{v_b}$ into $\vec{x}$ gives that $\vec{x} = \vec{a} + \vec{v_x} = \vec{b} - \vec{v_b} + \vec{v_x}$. Since $V$ is a vector space we have that $\vec{w_x} = \vec{v_x} - \vec{v_b} \in V$. We only have that $A \subset \vec{b} + V$. The reverse inclusion comes from the fact that $\vec{b} + V$ is an affine subspace and $a \in \vec{b} + V$ and. The proof is symmetric.
+Every vector $\vec{x} \in A$ may be written in a form $\vec{x} = \vec{a} + \vec{v_x}$ for a vector $\vec{v_x} \in V$. We need to rewrite it in the form $\vec{x} = \vec{b} + \vec{w_x}$ for a vector $\vec{w_x} \in V$. Since $\vec{b} \in A$ we also have that $\vec{b} = \vec{a} + \vec{v_b}$. Substituting $\vec{a} = \vec{b} - \vec{v_b}$ into $\vec{x} = \vec{a} + \vec{v_x}$ gives that $\vec{x} = \vec{a} + \vec{v_x} = \vec{b} - \vec{v_b} + \vec{v_x}$. Since $V$ is a vector space we have that $\vec{w_x} = \vec{v_x} - \vec{v_b} \in V$. We just proved that $A \subset \vec{b} + V$. The reverse inclusion comes from the fact that $\vec{b} + V$ is an affine subspace and $a \in \vec{b} + V$ and. The proof is symmetric.
 \end{proof}
 
-\begin{definition}[Null-space of matrix]
-Let $T$ be a field, $A \in T ^ {m \times n}$ be a matrix with $n, m \in \mathbb{N}$. Set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the \emph{null-space} of matrix $A$.
+\begin{definition}[Null-space of a matrix]
+Let $T$ be a field, $A \in T ^ {m \times n}$ be a matrix with $n, m \in \mathbb{N}$. The set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the \emph{null-space} of the matrix $A$.
 \end{definition}
+
+\begin{remark}
+Null-space of every matrix $A \in T ^ {m \times n}$ is a subspace of the vector space $T^{n}$.
+\end{remark}
+\begin{proof}
+Proof is a straightforward verification of the three properties of vector subspaces. In the following assume that $\vec{x}, \vec{y} \in \nullspace{A}$.
+
+\begin{description}
+\item The zero vector is in $\nullspace{A}$ because $A\vec{0} = \vec{0}$.
+\item The sum $\vec{x} + \vec{y} \in \nullspace{A}$,
+\[
+	A(\vec{x} + \vec{y}) = A\vec{x} + A\vec{y} = \vec{0} + \vec{0} = \vec{0} \text{.}
+\]
+
+\item For every $t \in T$ we have that $t \vec{x} \in \nullspace{A}$ because
+\[
+	At\vec{x} = tA\vec{x} = t\vec{0} = \vec{0} \text{.}
+\]
+\end{description}
+\end{proof}
 
 \begin{definition}[Orthogonal complement]
 Let $V$ be a vector subspace of a vector space $U$ and the operation $\langle \vec{u} \mid \vec{v} \rangle$ denote the scalar product of vectors $\vec{u}, \vec{v} \in V$. \emph{Orthogonal complement} of subspace $V$, denoted by $V ^ {\bot}$, is defined as:
@@ -34,32 +54,13 @@ Let $V$ be a vector subspace of a vector space $U$ and the operation $\langle \v
 \]
 \end{definition}
 
-\begin{remark}
-Null-space of every matrix $A \in T ^ {m \times n}$ is a subspace of vector space $T^{n}$.
-\end{remark}
-\begin{proof}
-Proof is a straightforward verification of the three properties of vector subspaces.
-
-Zero vector is in $\nullspace{A}$ because $A\vec{0} = \vec{0}$.
-
-Sum $\vec{x} + \vec{y} \in \nullspace{A}$ for every $\vec{x}, \vec{y} \in \nullspace{A}$ since
-\[
-	A(\vec{x} + \vec{y}) = A\vec{x} + A\vec{y} = \vec{0} + \vec{0} = \vec{0} \text{.}
-\]
-
-For every $\vec{x} \in \nullspace{A}$ and $t \in T$ we have that $t \vec{x} \in \nullspace{A}$ because
-\[
-	At\vec{x} = tA\vec{x} = t\vec{0} = \vec{0} \text{.}
-\]
-\end{proof}
-
 \begin{definition}[Affine linear map]
 \label{definition-affine-linear-map}
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ for vectors $\vec{v} \in V$ and $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is an \emph{affine linear map} if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(\vec{x}) = \vec{u} + T_0(\vec{x} - \vec{v})$, $\vec{x} \in V_A$.
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ with vectors $\vec{v} \in V$ and $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is an \emph{affine linear map} if there is a linear map $T_0: V_0 \rightarrow U_0$ such that $T_A(\vec{x}) = \vec{u} + T_0(\vec{x} - \vec{v})$, $\vec{x} \in V_A$.
 \end{definition}
 
 \begin{definition}[Set of all affine linear maps]
-Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively for vectors $\vec{v} \in V$ and $\vec{u} \in U$. \emph{Set of all affine linear mappings} between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively with vectors $\vec{v} \in V$ and $\vec{u} \in U$. \emph{Set of all affine linear mappings} between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
 \[
 	LT_A(V_A, U_A) = \{ T: V_A \rightarrow U_A \setdelim T \text{ is an affine map} \} \text{.}
 \]
@@ -87,7 +88,7 @@ It is closed under addition because
 \end{split}
 \]
 
-It is closed under scalar multiplication since
+It is closed for the scalar multiplication since
 \[
 \begin{split}
 \delta \in \{0, 1\} \wedge \vec{u} \in T^{-1}(\vec{0}) 
@@ -96,7 +97,7 @@ It is closed under scalar multiplication since
 \end{split}
 \]
 
-The set $T^{-1}(\vec{y})$ is an affine subspace of the vector space $\vecspace{u}$ since for every vector $\vec{u}~\in~T^{-1}(\vec{y})$ we have that $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$ as it is shown by the following inclusion. First we show that $\vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y})$:
+The set $T^{-1}(\vec{y})$ is an affine subspace of the vector space $\vecspace{u}$ since for every vector $\vec{u} \in T^{-1}(\vec{y})$ we have that $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. First we show, $\vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y})$:
 \[
 \begin{split}
 \vec{v} \in T^{-1}(\vec{0}) 
@@ -114,7 +115,7 @@ The reverse inclusion, $T^{-1}(\vec{y}) \subseteq \vec{u} + T^{-1}(\vec{0})$, ho
 \end{split}
 \]
 
-Now we use the obtained fact to prove the second statement of the lemma, $|T^{-1}(\vec{y})| = 2 ^ {u - t}$. Fix a vector $\vec{u} \in T^{-1}(\vec{y})$ the~set $T^{-1}(\vec{y})$ equals the set $\vec{u} + T^{-1}(\vec{0})$. This equality shows a one to one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{y})$. The~consequence is that all sets $T^{-1}(\vec{y})$ have the~same size, exactly $|T^{-1}(\vec{y})| = 2^{u-t}$.
+Now we use this fact to prove the second statement of the lemma, $|T^{-1}(\vec{y})| = 2 ^ {u - t}$. Fix arbitrary vector $\vec{u} \in T^{-1}(\vec{y})$. From Lemma \ref{lemma-affine-subspace-equality} then follows $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. In addition, the equality describes a one-to-one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{y})$. The~consequence is that all sets $T^{-1}(\vec{y})$ have the~same size, exactly $|T^{-1}(\vec{y})| = 2^{u-t}$.
 \end{proof}
 
 \begin{lemma}
@@ -122,7 +123,7 @@ Now we use the obtained fact to prove the second statement of the lemma, $|T^{-1
 Let $A \in \mathbb{Z}_2^{m \times n}$ be a matrix such that $\rank{A} = m$ and $m \leq n$. Then the system of linear equations $A\vec{x} = \vec{y}$ has $2 ^ {n - m}$ solutions for every vector $\vec{y} \in \vecspace{m}$.
 \end{lemma}
 \begin{proof}
-Let us note that this lemma is a consequence of Lemma \ref{lemma-linear-transformation-domain-distribution} if we apply it for the linear transformation defined by the matrix $A$ and vector $\vec{y} \in \vecspace{m}$.
+This is a consequence of Lemma \ref{lemma-linear-transformation-domain-distribution}. We apply it for the linear transformation given by the matrix $A$ and vector $\vec{y} \in \vecspace{m}$.
 
 %Or we can prove it in a similar fashion and use a fact regarding the right null-space of the matrix $A$. First we show that the number of all solutions of the homogeneous equation is $2 ^ {n - m}$. Then, similarly to the previous proof, we show a one-to-one correspondence between the homogeneous and non-homogeneous solutions.
 
