@@ -360,5 +360,5 @@ The analysis of the first two cases of the insert operation remains similar to t
 We clarify why the expected number of fails in one l-cycle is equal to $e$. The reason is similar to the reason why we needed $em$ time to enforce the chain limit rule in one cycle in the previous proof. Because the load factor is maintained lower than 1 we need at least $0.5 m$ successfuly insert operations to raise it above $1.5$. Therefore inserts in one l-cycle, when omitting deletes, can cause raise of the load factor to $1.5$ at most. Since the limiting value $l(m)$ is computed for the $\alpha = 1.5$ and $S \subset S_e$ we expect only $e$ rehash operations in one l-cycle to enforce the chain limit rule.
 \end{itemize}
 
-The fraction $\frac{(ce - r)m}{o}$ converges to $1$ with the growing number of operations, $o$. This follows from the Weak Law of Large Numbers -- Theorem \ref{theorem-chebyshev-inequality}.
+The fraction $\frac{(ce - r)m}{o}$ converges to $1$ with the growing number of operations, $o$. This follows from the Weak Law of Large Numbers -- Theorem \ref{theorem-weak-law-of-large-numbers} and from the fact that $o \in \Omega(m)$.
 \end{proof}

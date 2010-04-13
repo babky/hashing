@@ -181,8 +181,9 @@ In the continuous case assume that $X$ is a continuous random variable, then its
 Let $X$ be a random variable. Its variance, $\Variance{X}$, is defined as \[ \Variance{X} = \Expect{(X - \Expect{X}) ^ 2} \text{.} \]
 \end{definition}
 
-We only show the basic properties of the expected value and variance without the proof. Assume that $X$ and $Y$ are random variables and $a, b, c \in \mathbb{R}$.
+We only show the basic properties of the expected value and variance without the proof. 
 \begin{lemma}
+Assume that $X$ and $Y$ are random variables and $a, b, c \in \mathbb{R}$. Then
 \label{lemma-expected-value-properties}
 \begin{itemize}
 \item $\Expect{aX + bY + c} = a\Expect{X} + b\Expect{Y} + c$
@@ -221,10 +222,10 @@ The expected value of set then equals the wanted probability.
 
 We refer to the modification of the previous lemma for $X \geq t$ in Lemma \ref{lemma-random-variable}. In the modified version we assume that variable $Z = \Prob{X \geq t \mid Y = y}$. A straightforward inspection proves the lemma.
 
-The following two theorems are well known and we often refer to them in the work. Let us note that the similar improvements for the higher moments hold as well.
+The following two theorems, Markov's \cite{557945} and Chebyshev's \cite{pFEL66a} inequalities, are well known and we often refer to them in the work. Let us note that similar improvements for the higher moments hold as well.
 \begin{theorem}[Markov's inequality]
 \label{theorem-markov-inequality}
-Let $X$ be a random variable and $t \in \mathbb{R}^{+}$. Then probability of event $X \geq t$ is bounded by:
+Let $X$ be a random variable and $t \in \mathbb{R}^{+}$. Then the probability of the event $X \geq t$ is bounded as
 \[
 \Prob{|X| \geq t} \leq \frac{\Expect{|X|}}{t} \text{.}
 \]
@@ -257,6 +258,26 @@ First observe that the event $|X - \Expect{X}| \geq \epsilon$ is equivalent to t
 	& = \frac{\Variance{X}}{\epsilon ^ 2} \text{.}
 \end{split}
 \]
+\end{proof}
+
+From the Chebyshev's inequality it follows that the average converges to the expected value. This fact is commonly referred to as the Weak Law of Large Numbers.
+\begin{theorem}[Weak Law of Large Numbers]
+\label{theorem-weak-law-of-large-numbers}
+Let $n \in \mathbb{N}$, $\epsilon > 0$ and $X_1$, \dots, $X_n$ be identically independent distributed random variables. Then 
+\[
+\Prob{\left| \frac{\sum\displaylimits_{i = 1}^{n} X_i}{n} - \Expect{X_1} \right| \geq \epsilon} \leq \frac{\Variance{X_1}}{n\epsilon ^ 2} \text{.}
+\]
+\end{theorem}
+\begin{proof}
+Set the random variable $\bar{X} = \frac{\sum\displaylimits_{i = 1}^{n} X_i}{n}$. From the properties of the expected value and variance stated in Lemma \ref{lemma-expected-value-properties} it follows that 
+\[
+\begin{split}
+& \Expect{\bar{X}} = \Expect{X_1} \\
+& \Variance{\bar{X}} = \frac{\Variance{X_1}}{n} \text{.}
+\end{split}
+\]
+
+The Chebyshev's inequality used for the random variable $\bar{X}$ yields the required result.
 \end{proof}
 
 Following lemma enables us to compute the expected value of a continuous random variable if we know its cumulative probability density function.
