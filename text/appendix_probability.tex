@@ -1,31 +1,31 @@
-\chapter{Basic facts regarding probability}
-In this appendix we summarise some facts regarding the probability theory. We show basic definitions and prove statements used in the work.
+\chapter{Facts Regarding the Probability}
+In the appendix we summarise some facts regarding the probability theory. We show the basic definitions and prove the statements used in the work.
 
-First we discuss the discrete probability and discrete random variables. Then we move to continuous random variables and finally show the Markov's and Chebyshev's inequality.
+First we discuss the discrete probability and discrete random variables. Then we move to continuous random variables. Finally we show the Markov's and the Chebyshev's inequality.
 
-Whenever we perform a \emph{random experiment} we get a random outcome. The probability theory models the uncertainty included in random experiments and deals with the probabilities of such results. For example if the coin toss is our random experiment then the set $\{\text{roll}, \text{die}\}$ contains all the possible outcomes. If the coin is fair probability $\frac{1}{2}$ is the same for both of them.
+Whenever we perform a \emph{random experiment} we get a random outcome -- a \emph{random event} occurred. The probability theory models the uncertainty included in random experiments and deals with the probabilities of the random events. For example if the coin toss is the random experiment, then the set $\{\text{roll}, \text{die}\}$ contains all the possible outcomes. If the coin is fair, they share the same probability of occurrence.
 
 \begin{definition}[Probability space, elementary event]
-We refer to the set $\Omega$ consisting of all the possible outcomes of a random experiment, $\Omega = \{ \omega_1, \dots, \omega_n \}$ as to the \emph{probability space}. Its elements $\omega_i$, $1 \leq i \leq n$ are \emph{elementary events}. The probability of an elementary event $\omega_i$, $1 \leq i \leq n$ equals $p_i$, $0 \leq p_i \leq 1$ and is written as: \[ \Prob{\omega_i} = p_i \text{.} \] The sum of the probabilities of the elementary events must be equal to one:
+We refer to the set $\Omega$ consisting of all the possible outcomes of a random experiment, $\Omega = \{ \omega_1, \dots, \omega_n \}$ as to the \emph{probability space}. Its elements $\omega_i$, $i \in \{1, \dots, n\}$, are the \emph{elementary events}. The probability of every elementary event $\omega_i$, $i \in \{1, \dots, n\}$, equals $p_i$, $0 \leq p_i \leq 1$, and is written as: \[ \Prob{\omega_i} = p_i \text{.} \] The sum of the probabilities of the elementary events must be equal to one:
 \[
 \displaystyle\sum_{i = 1}^{n} p_i = 1 \text{.}
 \]
 \end{definition}
 
-In general the probabilities of elementary events need not to be the same but this assumption is frequently satisfied. Then $p_i = \frac{1}{n}$ for $1 \leq i \leq n$.
+In general the probabilities of the elementary events need not to be the same. However, this assumption is frequently satisfied and then $p_i = \frac{1}{n}$ for $i = 1, \dots, n$.
 
 \begin{definition}[Event, probability]
-Set $A = \{a_1, \dots, a_m \}\subseteq \Omega$, containing only elementary events, is called a \emph{compound event}. The \emph{probability of the compound event $A$} is \[ \Prob{A} = \displaystyle\sum_{\omega \in A} \Prob{\omega} \text{.} \] If the probabilities of the elementary events are the same then 
+The set $A = \{a_1, \dots, a_m \}\subseteq \Omega$, containing only elementary events, is called a \emph{compound event}. The \emph{probability of the compound event $A$} is \[ \Prob{A} = \displaystyle\sum_{\omega \in A} \Prob{\omega} \text{.} \] If the probabilities of the elementary events are the same, then 
 \[
 	\Prob{A} = \frac{|A|}{|\Omega|} = \frac{m}{n} \text{.}
 \]
 \end{definition}
 
-\begin{definition}[Complementary event, certain event, impossible event]
-Let $A \subseteq \Omega$ be an event. The set $\Omega - A$ is the \emph{complementary event} to the event $A$. The \emph{certain event} is the probability space $\Omega$ and its complementary event $\emptyset$ is the \emph{impossible event}.
+\begin{definition}[Complementary event, the certain event, the impossible event]
+Let $A \subseteq \Omega$ be an event. The event $\Omega - A$ is the \emph{complementary event} of the event $A$. The \emph{certain event} is the probability space $\Omega$ and its complementary event $\emptyset$ is the \emph{impossible event}.
 \end{definition}
 
-\begin{corollary}[Probability of a complementary event]
+\begin{corollary}[Probability of the complementary event]
 If $A \subseteq \Omega$ is an event then the probability of the complementary event is 
 \[ 
 	\Prob{\Omega - A} = 1 - \Prob{A} \text{.} 
@@ -43,13 +43,13 @@ Follows from the definition of probability:
 \]
 \end{proof}
 
-We can compute the size of the set, consisting of elementary events, if we know the event's probability and size of the probability space.
+We can compute the size of the set, consisting of elementary events, if we know the event's probability and the size of the probability space.
 
 \begin{lemma}
 Let $A \subseteq \Omega$ be an event such that $\Prob{A} = p$. If the probabilities of the elementary events are the same, then $|A| = p |\Omega|$.
 \end{lemma}
 \begin{proof}
-This statement is a direct use of the definition of probability of the event $A$.
+This statement is a direct use of the definition of the probability of the event $A$.
 \[
 p = \Prob{A} = \frac{|A|}{|\Omega|}
 \]
@@ -63,22 +63,22 @@ Let $A, B \subseteq \Omega$ be events. The \emph{compound event} is denoted by $
 \end{definition}
 
 \begin{definition}[Disjoint events]
-Let $A, B \subseteq \Omega$ be two events. Events $A$ and $B$ are \emph{disjoint} if $A \cap B = \emptyset$ and the corresponding compound probability equals
+Let $A, B \subseteq \Omega$ be events. Events $A$ and $B$ are \emph{disjoint} if $A \cap B = \emptyset$. The corresponding compound probability then equals
 \[
 \Prob{A, B} = \Prob{\emptyset} = 0 \text{.}
 \]
 \end{definition}
 
 \begin{definition}[Independent events]
-Let $A, B \subseteq \Omega$ be two events. Events $A$ and $B$ are \emph{independent} if
+Let $A, B \subseteq \Omega$ be events. Events $A$ and $B$ are \emph{independent} if
 \[
 \Prob{A, B} = \Prob{A}\Prob{B} \text{.}
 \]
 \end{definition}
 
-The motivation of the following is to compute the probability of event $A$ inside the restricted probability space $B$.
+The motivation of the following definition is a way how to compute the probability of event $A$ inside the restricted probability space $B$.
 \begin{definition}[Conditional probability]
-Let $A, B \subseteq \Omega$ be two events and assume that $\Prob{B} \neq 0$. Then the \emph{conditional probability} of event $A \mid B$ is defined as
+Let $A, B \subseteq \Omega$ be events and assume that $\Prob{B} \neq 0$. Then the \emph{conditional probability} of event $A \mid B$ is defined as
 \[
 \Prob{A \mid B} = \frac{\Prob{A, B}}{\Prob{B}} \text{.}
 \]
@@ -86,7 +86,7 @@ Let $A, B \subseteq \Omega$ be two events and assume that $\Prob{B} \neq 0$. The
 
 \begin{lemma}
 \label{lemma-conditional-probability-event-estimate}
-If $A, B \subseteq \Omega$ are two non-disjoint events such that $\Prob{B} \neq 0$, then $\Prob{B} \leq \frac{\Prob{A}}{\Prob{A \mid B}}$.
+If $A, B \subseteq \Omega$ are non-disjoint events such that $\Prob{B} \neq 0$, then $\Prob{B} \leq \frac{\Prob{A}}{\Prob{A \mid B}}$.
 \end{lemma}
 \begin{proof}
 From our assumptions we have that the conditional probability of the event $A \mid B$ is defined and positive. To prove the lemma the definition of the conditional probability and the straightforward bound on the compound probability, $\Prob{A, B}~\leq~\Prob{A}$, is used
@@ -95,13 +95,28 @@ From our assumptions we have that the conditional probability of the event $A \m
 \]
 \end{proof}
 
-We summarise the basic properties of probability.
+\begin{remark}
+Let $A, B \subseteq \Omega$ be events with $B \neq \emptyset$. The events are independent if and only if $\Prob{A \mid B} = \Prob{A}$.
+\end{remark}
+\begin{proof}
+If we assume the independence of the two events we have
+\[
+\Prob{A \mid B} = \frac{\Prob{A, B}}{\Prob{B}} = \frac{\Prob{A}\Prob{B}}{\Prob{B}} = \Prob{A} \text{.}
+\]
+The reverse implication holds since
+\[
+\Prob{A, B} = \Prob{A \mid B}\Prob{B} = \Prob{A}\Prob{B} \text{.}
+\]
+\end{proof}
+
+\begin{lemma}{Properties of Probability}
 \begin{itemize}
 \item $\Prob{\emptyset} = 0$
 \item $\Prob{\Omega} = 1$
 \item $0 \leq \Prob{A} \leq 1$
 \item $\Prob{A \cup B} = \Prob{A} + \Prob{B} - \Prob{A \cap B}$
 \end{itemize}
+\end{lemma}
 
 \begin{theorem}[The Law of Total Probability]
 \label{theorem-law-of-total-probability}
@@ -129,14 +144,15 @@ Let $\Omega$ be a probability space. Then \emph{discrete random variable} $X$ is
 \]
 \end{definition}
 
+In the continuous probability we usually assume that the vector space $\Omega$ is an uncountable set.
 \begin{definition}[Continuous random variable, probability density function, cumulative probability density function]
-\emph{Continuous random variable} $X$ is a function $X: \mathbb{R} \rightarrow \mathbb{R}$. 
+\emph{Continuous random variable} $X$ is a function $X: \Omega \rightarrow \mathbb{R}$. 
 
 Function $F: \mathbb{R} \rightarrow \left[0, 1\right]$ is the \emph{cumulative probability density function} of the random variable $X$ if the following conditions are satisfied
 \begin{itemize}
 \item $\lim\limits_{t \rightarrow -\infty} F(t) = 0$,
 \item $\lim\limits_{t \rightarrow \infty} F(t) = 1$.
-\item Function $F$ is non-decreasing.
+\item The function $F$ is non-decreasing.
 \item $F(t) = \Prob{X \leq t} $ for every $t \in \mathbb{R}$.
 \end{itemize}
 
@@ -149,16 +165,12 @@ Function $f: \mathbb{R} \rightarrow \mathbb{R}^{*}$ such that $f(t) = F'(t)$ for
 
 More formal definitions of random variables use the Lebesgue measure and Borel sets to measure the probability $\Prob{X = x}$. However previous definitions are sufficient for our needs.
 
-If $X$ is a continuous random variable with cumulative density function $F$ then the probability of $X \in \left[a, b\right]$ equals
+If $X$ is a continuous random variable with the cumulative density function $F$ then the probability of $X \in \left[a, b\right]$ equals
 \[
-\Prob{a \leq X \leq b} = F(b) - F(a) \text{.}
+\Prob{a \leq X \leq b} = F(b) - F(a) = \int\limits_{a}^{b} f(x) dx \text{.}
 \]
 
-The motivation behind probability density function is that it corresponds to the probability of $X$ being equal to a singleton.
-\[
-\Prob{a \leq X \leq b} = F(b) - F(a) = \int\limits_{a}^{b} f(x) dx
-\]
-We see that for every $\epsilon > 0$ value $\epsilon f(b)$ approximates $\Prob{b - \epsilon \leq X \leq b}$ when epsilon is small enough. However for continuous variables the event $X = b$ is impossible unless $F$ is in-continuous in $b$ and thus $f(b) = \infty$.	
+The motivation for the definition of the probability density function is the fact that it corresponds to the probability of $X$ being equal to a singleton. We see that for every $\epsilon > 0$ value $\epsilon f(b)$ approximates $\Prob{b - \epsilon \leq X \leq b}$, if it is small enough. However for continuous variables the event $X = b$ is impossible unless $F$ is in-continuous in $b$ and thus $f(b) = \infty$.	
 
 After observing the previous fact we can rewrite $F(t)$ to the form:
 \[
@@ -171,7 +183,7 @@ Let $X$ be a discrete random variable. Its \emph{expected value}, $\Expect{X}$, 
 \Expect{X} = \displaystyle\sum_{x \in \mathbb{N}} x \Prob{X = x} \text{.}
 \]
 
-In the continuous case assume that $X$ is a continuous random variable, then its \emph{expected value}, $\Expect{X}$, is defined as
+In the continuous case, assume that $X$ is a continuous random variable, then its \emph{expected value}, $\Expect{X}$, is defined as
 \[
 \Expect{X} = \int\limits_{-\infty}^{\infty} x \Prob{X = x} dx \text{.}
 \]
@@ -200,10 +212,7 @@ Let $X$ be a continuous random variable and $g: \mathbb{R} \rightarrow \mathbb{R
 
 \begin{lemma}
 \label{lemma-expect-probability}
-Let $X, Y$ be random variables, $t \in \mathbb{R}$ and $Z$ be a random variable having value $\Prob{X = t \mid Y = y}$ with the probability $\Prob{Y = y}$. Then $\Prob{X = t}$ can be computed as
-\[
-\Prob{X = t} = \Expect{Z} \text{.}
-\]
+Let $X, Y$ be random variables and $t \in \mathbb{R}$. For every $z \in [0, 1]$ set $\omega_t = \{y \in \mathbb{R} \setdelim z = \Prob{X = t \mid Y = y} \}$. Let $Z$ be a random variable bounded in the interval $[0, 1]$ such that \[\Prob{Z = z} = \int\limits_{\omega_t} \Prob{Y = y} dy \text{.} \] Then $\Prob{X = t} = \Expect{Z}$.
 \end{lemma}
 \begin{proof}
 By the Law of Total Probability we state the following fact:
@@ -212,17 +221,17 @@ By the Law of Total Probability we state the following fact:
 \Prob{X = t} 
 	& = \int\limits_{-\infty}^{\infty} \Prob{X = t, Y = y} dy \\
 	& = \int\limits_{-\infty}^{\infty} \Prob{X = t \mid Y = y} \Prob{Y = y} dy \\
-	& = \int\limits_{-\infty}^{\infty} z \Prob{Z = z} dz \\
+	& = \int\limits_{0}^{1} z \Prob{Z = z} dz \\
 	& = \Expect{Z} \text{.}
 \end{split}
 \]
 
-The expected value of set then equals the wanted probability.
+So the expected value of the variable $Z$ equals the probability $\Prob{X = t}$.
 \end{proof}
 
-We refer to the modification of the previous lemma for $X \geq t$ in Lemma \ref{lemma-random-variable}. In the modified version we assume that variable $Z = \Prob{X \geq t \mid Y = y}$. A straightforward inspection proves the lemma.
+In Lemma \ref{lemma-random-variable} we refer to the modification of Lemma \ref{lemma-expect-probability} for $X \geq t$. In this modified version we assume that variable $Z = \Prob{X \geq t \mid Y = y}$. A straightforward inspection proves the consequence.
 
-The following two theorems, Markov's \cite{557945} and Chebyshev's \cite{pFEL66a} inequalities, are well known and we often refer to them in the work. Let us note that similar improvements for the higher moments hold as well.
+The following two theorems, the Markov's \cite{557945} and Chebyshev's \cite{pFEL66a} inequalities, are well known and we often refer to them in the work. Let us note that various improvements for the higher moments hold as well.
 \begin{theorem}[Markov's inequality]
 \label{theorem-markov-inequality}
 Let $X$ be a random variable and $t \in \mathbb{R}^{+}$. Then the probability of the event $X \geq t$ is bounded as
@@ -231,7 +240,7 @@ Let $X$ be a random variable and $t \in \mathbb{R}^{+}$. Then the probability of
 \]
 \end{theorem}
 \begin{proof}
-For the indicator $\Indicator(|X| \geq t)$ we have that $t\Indicator(|X| \geq t) \leq |X|$. If $|X| \geq t$ than $\Indicator(|X| \geq t) = 1$ and it follows that $t\Indicator(|X| \geq t) = t \leq |X|$. If $|X| < t$ then $0 = \Indicator(|X| \geq t) \leq |X|$.
+For the indicator $\Indicator(|X| \geq t)$ we have that $t\Indicator(|X| \geq t) \leq |X|$. If $|X| \geq t$, than $\Indicator(|X| \geq t) = 1$ and it follows that $t\Indicator(|X| \geq t) = t \leq |X|$. If $|X| < t$, then $0 = \Indicator(|X| \geq t) \leq |X|$.
 
 \[
 \begin{split}
@@ -239,7 +248,7 @@ For the indicator $\Indicator(|X| \geq t)$ we have that $t\Indicator(|X| \geq t)
 	& = \int\limits_{0}^{\infty} |X| \Prob{|X| = x} dx \\
 	& \geq \int\limits_{0}^{\infty} t \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
 	& \geq t \int\limits_{0}^{\infty} \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
-	& = t \Prob{|X| \geq t} \\
+	& = t \Prob{|X| \geq t} \text{.}
 \end{split}
 \]
 \end{proof}
@@ -269,7 +278,7 @@ Let $n \in \mathbb{N}$, $\epsilon > 0$ and $X_1$, \dots, $X_n$ be identically in
 \]
 \end{theorem}
 \begin{proof}
-Set the random variable $\bar{X} = \frac{\sum\displaylimits_{i = 1}^{n} X_i}{n}$. From the properties of the expected value and variance stated in Lemma \ref{lemma-expected-value-properties} it follows that 
+Define the average of $X_1, \dots, X_n$ as the random variable $\bar{X} = \frac{\sum\displaylimits_{i = 1}^{n} X_i}{n}$. From the properties of the expected value and variance stated in Lemma \ref{lemma-expected-value-properties} it follows that 
 \[
 \begin{split}
 & \Expect{\bar{X}} = \Expect{X_1} \\
