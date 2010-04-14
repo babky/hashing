@@ -1,26 +1,29 @@
 \begin{section}{Probability Distribution of the Variable \texorpdfstring{$\lpsl$}{lpsl}}
 \label{section-linear-transformations-distribution}
-The last theorems of the previous chapter give us enough power to achieve our first goal -- asymptotic restriction of the expected length of the chain length. We achieve this goal when hashing even super-linear amount of $m \log m$ elements into a table consisting of $m$ slots. When storing sets of size equal to $\alpha m$ for a bounded load factor $\alpha$ the expected length can not grow. This fact comes from the idea that every stored set can be further extended into $m \log m$ elements and the estimate must still remain valid.
+The last theorems of the previous section give us enough power to achieve our first goal -- asymptotic restriction of the expected length of the chain length. But first, we find the probability distribution of the variable $\lpsl$ for various situations depending on the size of the stored set. 
 
-However common models use load factors lower than one. Therefore we generalise and refine our statements so that they are parametrised by the table's load factor. Then we find an important dependence of the expected length of the longest chain on the table's load factor. We get that the multiplicative constant of the asymptotic growth is relative to the load factor of the hash table.
+In the original article \cite{DBLP:journals/jacm/AlonDMPT99} authors suppose hashing even super-linear amount of $m \log m$ elements into a table consisting of $m$ slots. Common models use load factors lower than one and we suppose hashing of $\alpha m$ elements. When storing sets of size equal to $\alpha m$ for a bounded load factor $\alpha$, the expected length can not grow, if compared to hashing $m \log m$ elements. Every stored set can be further extended into $m \log m$ elements and the estimate must still remain valid. Unfortunately, this argument does not bring a reasonable result.
 
-First let us summarise what happens in the following pages. We use two basic ideas~--~factorisation and probability estimates of two highly correlated events. First we define the two events that enable us to estimate the probability of existence of a chain of length at least $l \in \mathbb{N}$. After the definitions we show facts that come from the original work \cite{DBLP:journals/jacm/AlonDMPT99}. They get immediately improved and we later use them for hashing. The theorems we state are not said in the notation of hashing directly. Rather we say them in general terms of vector spaces and then use them in the model proposed by us. 
+Therefore we further generalise and refine our statements. We discover an important dependence of $\Expect{\lpsl}$ on the table's load factor. We later state that $\Expect{\lpsl}$ is proportional to the load factor $\alpha$.
 
-The source space, represents later the universe, is the vector space $\vecspace{u}$. The target space, becomes a representation of the hash table, is denoted by $\vecspace{b}$. As already performed, we factor a random uniformly chosen linear transformation $T \in LT(\vecspace{u}, \vecspace{b})$ through the factor space $\vecspace{f}$. Model \ref{remark-model-uniform-linear-map-selection} implies existence of two linear functions $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$. In addition the last one is surjective and they may be chosen uniformly among $LT(\vecspace{u}, \vecspace{f})$ and $LTS(\vecspace{f}, \vecspace{b})$.
+First let us summarise what happens in the following pages. We use two basic ideas~--~factorisation and probability estimates of two highly correlated events. The two events $E_1$ and $E_2$ allow us to estimate the probability of the existence of a chain with length at least $l$, $l \in \mathbb{N}$. 
+
+Then we show Remark \ref{remark-probability-long-chain} that comes from the original work \cite{DBLP:journals/jacm/AlonDMPT99}. It is immediately improved and the results are later applied for hashing. The theorems we state are not expressed in the notation of hashing. Rather we say them in general terms of linear algebra. Then we use the theorems in the model proposed by us. 
+
+The notation of the section is the following. The source space, represents later the universe, is the vector space $\vecspace{u}$. The target space, becomes a representation of the hash table, is denoted by $\vecspace{b}$. As done many times before, we factor a random uniformly chosen linear transformation $T \in LT(\vecspace{u}, \vecspace{b})$ through the factor space $\vecspace{f}$. Model \ref{remark-model-uniform-linear-map-selection} shows the existence of two linear functions $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$. In addition the last one is surjective and they are chosen uniformly among $LT(\vecspace{u}, \vecspace{f})$ and $LTS(\vecspace{f}, \vecspace{b})$.
 
 \begin{definition}
-Let $l \in \mathbb{N}$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a linear transformation and $S \subset \vecspace{u}$. \emph{Event $E_1(S, T, l)$} occurs if there is a subset of $S$ containing at least $l$ elements wich are mapped by the function $T$ on a singleton,
+Let $l \in \mathbb{N}$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a linear transformation and $S \subset \vecspace{u}$. \emph{Event $E_1(S, T, l)$} occurs if there is a subset of $S$ containing at least $l$ elements mapped by the function $T$ on a singleton,
 
 \[ 
 	E_1(S, T, l) \equiv \exists \vec{y} \in \vecspace{b}: | T^{-1}(\vec{y}) \cap S | > l \text{.}
 \]
 \end{definition}
-
-The second event is defined only to simplify the estimate of probability of the event $E_1$. Note it may seem quite unnatural but it fits the scheme of Theorem \ref{theorem-linear-function-set-onto} as shown later.
+The event $E_1$ corresponds to the existence of a chain of length at least $l$. The second event is defined to simplify the estimate of probability of the event $E_1$. It may seem quite unnatural but it fits the scheme of Theorem \ref{theorem-linear-function-set-onto} as shown later.
 \begin{definition}
 Let $T_0: \vecspace{u} \rightarrow \vecspace{f}, T_1: \vecspace{f} \rightarrow \vecspace{b}$ be linear transformations with $T_2$ being surjective and $S \subset \vecspace{u}$. \emph{Event $E_2(S, T_0, T_1)$} occurs if
 \[
-	E_2(S, T_0, T_1) \equiv \exists \vec{y} \in B: T_1^{-1}(\vec{y}) \subseteq T_0(S) \text{.}
+	E_2(S, T_0, T_1) \equiv \exists \vec{y} \in \vecspace{b}: T_1^{-1}(\vec{y}) \subseteq T_0(S) \text{.}
 \]
 \end{definition}
 
@@ -29,7 +32,7 @@ Remember that when it is clear what we mean by $S, T_0, T_1$ and $l$ we omit the
 Now we will point an equivalent definition of the event $E_2$ showing why it may be used with Corollary $\ref{corollary-affine-e2}$.
 \begin{remark}
 \label{remark-e2-equivalency}
-Let $T_0: \vecspace{u} \rightarrow \vecspace{f}$, $T_1: \vecspace{f} \rightarrow \vecspace{b}$ be linear transformations with $T_2$ being surjective and $S \subset \vecspace{u}$. Then the event $E_2(S, T_0, T_1)$ occurs if and only if $T_1(\vecspace{f} - T_0(S)) \neq \vecspace{b}$. Formally said
+Let $T_0: \vecspace{u} \rightarrow \vecspace{f}$, $T_1: \vecspace{f} \rightarrow \vecspace{b}$ be linear transformations with $T_1$ being surjective and $S \subset \vecspace{u}$. Then the event $E_2(S, T_0, T_1)$ occurs if and only if $T_1(\vecspace{f} - T_0(S)) \neq \vecspace{b}$. Formally said
 \[
 	(E_2(S, T_0, T_1) \equiv \exists \vec{y}: T_1^{-1}(\vec{y}) \subseteq T_0(S)) \Leftrightarrow (T_1(\vecspace{f} - T_0(S)) \neq \vecspace{b}) \text{.}
 \]
@@ -68,7 +71,7 @@ We can estimate $\mu$ using only the value $d$ as
 \]
 To obtain the bound claimed by the remark rewrite the logarithm of the value $d$,
 \[
-	\log d = \log \frac{|\vecspace{f}|}{|S|} = \log |\vecspace{f}| - \log |S| \geq \log |\vecspace{f}| - \log (|B| \log |B|) = f - b - \log b \text{.}
+	\log d = \log \frac{|\vecspace{f}|}{|S|} = \log |\vecspace{f}| - \log |S| \geq \log |\vecspace{f}| - \log (b 2 ^ b) = f - b - \log b \text{.}
 \]
 
 In the following computation we use Corollary \ref{corollary-f-decreasing} to remove the inverse density $\mu$. Since $E_2 \equiv T_1(\vecspace{f} - T_0(S)) \neq \vecspace{b}$ and $\mu \leq \frac{1}{d}$ we have the needed bound,
@@ -82,10 +85,10 @@ In the following computation we use Corollary \ref{corollary-f-decreasing} to re
 \end{split}
 \]
 
-To meet the assumptions of Theorem \ref{theorem-linear-function-set-onto}, we must have that $\emptyset \neq \vecspace{f} - T_0(S)$ and $\vecspace{f} - T_0(S) \neq \vecspace{f}$. Since the set $S$ is non-empty it certainly holds that $\vecspace{f} - T_0(S) \neq \vecspace{f}$. Because $d = \frac{|\vecspace{f}|}{|S|} > 1$ it follows that $|\vecspace{f}| > |S| \geq |T_0(S)|$ and the set $\vecspace{f} - T_0(S)$ then can not be empty.
+To meet the assumptions of Theorem \ref{theorem-linear-function-set-onto}, we must have that $\emptyset \neq \vecspace{f} - T_0(S)$ and $\vecspace{f} - T_0(S) \neq \vecspace{f}$. Since the $S \neq \emptyset$, it certainly holds that $\vecspace{f} - T_0(S) \neq \vecspace{f}$. Because $d = \frac{|\vecspace{f}|}{|S|} > 1$, it follows that $|\vecspace{f}| > |S| \geq |T_0(S)|$ and the set $\vecspace{f} - T_0(S)$ then can not be empty.
 \end{proof}
 
-We show similar remarks used when having the size of the set $S$ proportional to the size of the target space $\vecspace{b}$. This corresponds to the situation when hashing only $\alpha m$ elements.
+We show similar remarks fitting the situation when the size of the set $S$ is proportional to that of the target space $\vecspace{b}$. This corresponds to the situation when hashing only $\alpha m$ elements.
 
 \begin{statement}
 \label{statement-e2-probability-linear-good}
@@ -96,15 +99,14 @@ Let $T_0: \vecspace{u} \rightarrow \vecspace{f}$, $T_1: \vecspace{f} \rightarrow
 \end{enumerate}
 \end{statement}
 \begin{proof}
-We slightly changed the choice of variable $d$ and naturally switched to the different size of $|S|$. In Remark \ref{remark-e2-probability} we have $d = \frac{|A|}{|S|}$. In fact we needed just three inequalities concerning $d$ in its proof
-\[
-\begin{split}
-	d & > 1 \\
-	\mu & = 1 - \frac{|A - T_0(S)|}{|A|} \leq \frac{1}{d} < 1 \\
-	\log d & \geq f - b - \log b \text{.}
-\end{split}
-\]
-First we verify each of them. The first is an assumption of the statement. The second one follows from $d > 1$
+We slightly changed the choice of the variable $d$ and naturally moved to a different size $|S|$. In original Remark \ref{remark-e2-probability} we have $d = \frac{|A|}{|S|}$. In fact, we needed just three inequalities concerning $d$
+\begin{enumerate}
+\item $d > 1$,
+\item $\mu = 1 - \frac{|A - T_0(S)|}{|A|} \leq \frac{1}{d} < 1$,
+\item $\log d \geq f - b - \log b$.
+\end{enumerate}
+
+First, we try to verify them. The first is an assumption of the statement. The second one follows from $d > 1$
 \[
 	\mu = 1 - \frac{|\vecspace{f} - T_0(S)|}{|\vecspace{f}|} = \frac{|T_0(S)|}{|\vecspace{f}|} \leq \frac{|S|}{|\vecspace{f}|} = \frac{\alpha |\vecspace{b}|}{|\vecspace{f}|} \leq 
 \begin{cases}
@@ -115,11 +117,11 @@ First we verify each of them. The first is an assumption of the statement. The s
 
 If we do not place any additional bound on the value $\alpha$ we can not get the third inequality exactly. In the first case if $d = \frac{2 ^ f}{\alpha b 2 ^ b}$, we have 
 \[
-	\log d = f - \log \alpha - \log |B| - \log \log |B| = f - b - \log b - \log \alpha \text{.}
+	\log d = f - \log \alpha - b - \log b \text{.}
 \]
 In the second case if $d = \frac{2 ^ f}{\alpha 2 ^ b}$, then
 \[
-	\log d = f - \log \alpha - \log |B| = f - b - \log \alpha \text{.}
+	\log d = f - \log \alpha - b \text{.}
 \]
 
 Recall that from the first two inequalities if follows that the assumptions of Theorem \ref{theorem-linear-function-set-onto} are met
@@ -174,15 +176,17 @@ Now we use Corollary \ref{corollary-affine-e2} for the source space $U_A$, the s
 	\Prob{T_0|_{U_A}(S_A) = F_A \mid E_1} \geq 1 - \epsilon \text{.}
 \]
 
-If $F_A \subseteq T_0(S)$, then $T_1^{-1}(\vec{y}) \subseteq T_0(S)$ and the event $E_2$ certainly occurs. Stated in the language of probability:
+If $F_A = T_1^{-1}(\vec{y}) \subseteq T_0(S)$, then the event $E_2$ certainly occurs. Stated in the language of probability:
 \[
 	\Prob{F_A \subseteq T_0(S) \mid E_1} \leq \Prob{E_2 \mid E_1} \text{.}
 \]
 
-By using the fact $F_A = T_0|_{U_A}(S) \Rightarrow F_A \subseteq T_0(S)$ the remark's proof is finally finished by claiming
+From $F_A = T_0|_{U_A}(S) \subseteq T_0(S)$ it follows that:
 \[
 	\Prob{E_2 \mid E_1} \geq \Prob{F_A \subseteq T_0(S) \mid E_1} \geq \Prob{F_A = T_0|_{U_A}(S_A) \mid E_1} \geq 1 - \epsilon \text{.}
 \]
+
+Thus the remark's proof is finally finished.
 
 \begin{figure}
   \centering
@@ -201,7 +205,7 @@ Let $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and $T_1: \vecspace{f} \rightar
 \]
 \end{corollary}
 \begin{proof}
-The proof is a straightforward use of the previous remarks and Lemma \ref{lemma-conditional-probability-event-estimate} stating that
+The proof is a straightforward use of the previous remark and Lemma \ref{lemma-conditional-probability-event-estimate}. They imply that
 \[
 	\Prob{E_1} \leq \frac{\Prob{E_2}}{\Prob{E_2 \mid E_1}} \leq \frac{1}{1 - \epsilon}\Prob{E_2} \text{.}
 \]
@@ -220,16 +224,16 @@ The event $E_1(S, T, l)$ denotes the existence of a vector $\vec{y} \in \vecspac
 \] 
 \end{proof}
 
-We are able to bound the probability density function of the random variable $\lpsl$ when regarding its above definition.
+We are able to bound the probability density function of the random variable $\lpsl$ when referring to its above definition.
 \begin{remark}
 \label{remark-probability-long-chain}
-Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear mapping, $\epsilon \in (0, 1)$ and $S \subset \vecspace{u}$, $|S| \leq b 2 ^ b$. Then for every $r \geq 4$
+Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear map, $\epsilon \in (0, 1)$ and $S \subset \vecspace{u}$, $|S| \leq b 2 ^ b$. Then for every $r \geq 4$
 \[
 	\Prob{\lpsl > 4 c_\epsilon r b \log b} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]
 \end{remark}
 \begin{proof}
-The proof itself is a straightforward use of the previous remarks. We only have to choose their parameters. First we create a factor space $\vecspace{f}$, its dimension is specified later. From Model \ref{remark-model-uniform-linear-map-selection-affine} and the random uniform and independent selection of two linear transformations $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and surjective $T_1: \vecspace{f} \rightarrow \vecspace{b}$ it follows that the linear mapping $T: \vecspace{u} \rightarrow \vecspace{b}$ such that $T = T_1 \circ T_0$ is chosen uniformly as well. Fix the mappings $T_0$, $T_1$ and $T$.
+In the proof we just conveniently use the previous remarks. We only have to choose their parameters. First we create a factor space $\vecspace{f}$, its dimension is specified later. From Model \ref{remark-model-uniform-linear-map-selection-affine} and the random uniform and independent selection of two linear transformations $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and surjective $T_1: \vecspace{f} \rightarrow \vecspace{b}$ it follows that the linear mapping $T: \vecspace{u} \rightarrow \vecspace{b}$ such that $T = T_1 \circ T_0$ is chosen uniformly as well. Fix the mappings $T_0$, $T_1$ and $T$.
 
 Now set 
 \[
@@ -243,7 +247,7 @@ The choice of $f$ implies that $|\vecspace{f}| \geq \vecspace{b}|$ because
 \[ 
 f \geq b + \log b + \log r - \log \log r \geq b \text{.}
 \]
-Hence a surjective function $T_1$ exists and may be fixed. Notice that the choices meet all the assumptions, $d < 1$, of Remark \ref{remark-e2-probability}. To verify the condition $l \geq c_\epsilon (f - b) 2 ^ {f - b}$ of Remark \ref{remark-probability-long-chain} we first show that
+Hence a surjective function $T_1$ exists and may be fixed. Notice that the choices meet all the assumptions, $d > 1$, of Remark \ref{remark-e2-probability}. To verify the condition $l \geq c_\epsilon (f - b) 2 ^ {f - b}$ of Remark \ref{remark-probability-long-chain} we first show that
 \[
 	2 ^ {f - b} \leq 2 ^ {b + \log b + \log r - \log \log r + 1 - b} = \frac{2 r b}{\log r} \text{.}
 \]
@@ -312,7 +316,7 @@ So that $T_1$ exists, we have to verify that $|\vecspace{f}| \geq |\vecspace{b}|
 \end{split}
 \]
 
-Secondly we show that the assumptions of Statement \ref{statement-e2-probability-linear-good} are met for both choices of $d$. Precisely we need $d > 1$ and this is satisfied because
+Secondly, we show that the assumptions of Statement \ref{statement-e2-probability-linear-good} are met for both choices of $d$. Precisely we need $d > 1$ and this is satisfied because
 \[
 \begin{split}
 & d_1 = \frac{2 ^ {f_1}}{\alpha b 2 ^ b} \geq \frac{r}{\log r} \geq 2 \\
@@ -320,7 +324,7 @@ Secondly we show that the assumptions of Statement \ref{statement-e2-probability
 \end{split}
 \]
 
-Naturally we want to meet the condition placed on the variable $l$ of Corollary \ref{corollary-prob-e2-e1}. Recall the assumption $\alpha < \frac{\log r}{2}$ that is used in either case. Let us discuss the first case
+Naturally, we want to meet the condition placed on the variable $l$ of Corollary \ref{corollary-prob-e2-e1}. Recall the assumption $\alpha < \frac{\log r}{2}$ that is used in either case. Let us discuss the first case
 \[ 
 	f_1 - b \leq \log b + \log r - \log \log r + \log \alpha + 1 \leq \log b + \log r \leq 2 \log b \log r \text{.} 
 \] Thus for the value of the variable $l_1$ we have that 

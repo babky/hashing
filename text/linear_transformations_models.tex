@@ -1,16 +1,20 @@
 \begin{section}{Models of the Random Uniform Choice}
 Our technical preparations for key statements include models of the random uniform choice of a linear map. These models are used later to simplify proofs assuming the random uniform choice of a linear transformation -- choice of a hash function. The simple random choice is transformed to the random uniform selection of two or more objects that precisely correspond to the linear function.
 
-We recall Definition \ref{definition-linear-transformations} saying that for two vector spaces $A$ and $B$ sets 
+We recall Definition \ref{definition-linear-transformations} saying that for two vector spaces $A$ and $B$, the sets 
 \[
 \begin{split}
-LT(A, B) & = \{ T: A \rightarrow B \setdelim T \text{ linear transformation} \} \\
-LTS(A, B) & = \{ T: A \rightarrow B \setdelim T \text{ surjective linear transformation} \} \text{.}
+& LT(A, B) = \{ T: A \rightarrow B \setdelim T \text{ is a linear transformation} \} \\
+& LTS(A, B) = \{ T: A \rightarrow B \setdelim T \text{ is a surjective linear transformation} \} \text{and}
 \end{split}
 \]
+and Definition \ref{definition-affine-linear-map} stating that for two affine vector spaces $A_A$ and $B_A$, the set
+\[
+LT_A(A_A, B_A) = \{ T_A: A_A \rightarrow B_A \setdelim T_A \text{ is an affine linear transformation} \} \text{.}
+\]
 
-\begin{definition}[Uniform selection model]
-Let $S = \{ s_1, \dots, s_n \}$. By random uniform selection of an element $s \in S$ we understand the model of selection with
+\begin{definition}[Uniform selection]
+Let $S = \{ s_1, \dots, s_n \}$. By random \emph{uniform selection} of an element $s \in S$ we understand the model of selection with
 \[
 	\Prob{s \in S \text{ is selected}} = \frac{1}{n} \text{.}
 \]
@@ -23,24 +27,24 @@ Let $b$ be a natural number. Then $\Pi_b$ denotes the set of all permutations of
 The first model shows the correspondence between the random uniform choice of a basis of the source space that is mapped onto a fixed basis of the smaller target space and the random uniform choice of a surjective linear transformation.
 \begin{remark}[Surjective linear map selection]
 \label{remark-model-surjective-linear-map-selection}
-Let $\mathcal{B}$ be the set of all bases of the vector space $\vecspace{f}$ and the set $\{\vec{y_1}, \dots, \vec{y_b}\}$ be a basis of the vector space $\vecspace{b}$ where $b, f \in \mathbb{N}$ and $b \leq f$. Let us denote $S$ the set of all subsets of $\{1, 2, \dots, f\}$ of size $f - b$. For the random uniform choice of a basis $\beta = \{\vec{b_1}, \dots, \vec{b_f} \} \in \mathcal{B}$, a set $s \in \mathcal{S}$ and a permutation $\pi \in \Pi_b$ we define linear map $T_{\beta, s, \pi}$ as
+Let $\mathcal{B}$ be the set of all bases of the vector space $\vecspace{f}$ and the set $\{\vec{y_1}, \dots, \vec{y_b}\}$ be a basis of the vector space $\vecspace{b}$ where $b, f \in \mathbb{N}$ and $b \leq f$. Let us denote $S$ the set of all subsets of $\{1, 2, \dots, f\}$ of size $f - b$. For the random uniform choice of a basis $\beta = \{\vec{b_1}, \dots, \vec{b_f} \} \in \mathcal{B}$, a set $s \in \mathcal{S}$ and a permutation $\pi \in \Pi_b$ we define the linear map $T_{\beta, s, \pi}$ as
 \[
 T_{\beta, s, \pi}(b_i) =  
   \begin{cases} 
     y_{\pi(i)} & \text{if } i \notin s \\
-    0 & \text{if } i \in s
-  \end{cases} \text{.}
+    0 & \text{if } i \in s \text{.}
+  \end{cases} 
 \]
-If we perform the random uniform choices of a base $\beta \in \mathcal{B}$, a set $s \in \mathcal{S}$ and a permutation $\pi \in \Pi_b$, then we obtain a randomly and uniformly selected surjective linear map $T_{\beta, s, \pi}$.
+If we perform the random uniform choices of a basis $\beta \in \mathcal{B}$, a set $s \in \mathcal{S}$ and a permutation $\pi \in \Pi_b$, then we obtain a randomly and uniformly selected surjective linear map $T_{\beta, s, \pi}$.
 \end{remark}
 \begin{proof}
-First remark that $T_{\beta, s, \pi}$ is a surjective linear map for every choice of $\beta \in \mathcal{B}$ and $s \in \mathcal{S}$ and $\pi \in \Pi_b$. From the fact that $T_{\beta, s, \pi}$ is defined for every vector of the basis $\beta$ we known it may be uniquely extended to a linear map. It is surjective since for every vector $\vec{y_i}$, $1 \leq i \leq b$ there is a vector $\vec{b_j}$, $1 \leq j \leq f$ such that $T_{\beta, s, \pi}(\vec{b_j}) = \vec{y_i}$. 
+First, remark that $T_{\beta, s, \pi}$ is a surjective linear map for every choice of $\beta \in \mathcal{B}$, $s \in \mathcal{S}$ and $\pi \in \Pi_b$. From the fact that $T_{\beta, s, \pi}$ is defined for every vector of the basis $\beta$ we known it may be uniquely extended to a linear map. It is surjective since for every vector $\vec{y_i}$, $i \in \{1, \dots, b\}$, there is a vector $\vec{b_j}$, $j \in \{1, \dots, f\}$, such that $T_{\beta, s, \pi}(\vec{b_j}) = \vec{y_i}$. 
 
 We show that for every surjective linear transformation $T$ there is a choice of $\beta, s$ and $\pi$ such that $T_{\beta, s, \pi} = T$. Consider set $T^{-1}(\vec{0})$, it certainly contains $f - b$ linearly independent vectors, denote them as $\beta_0$. 
 
-Now for every $i = 1, 2, \dots, b$ choose $\vec{c_i} \in T^{-1}(\vec{y_i})$, then $\beta_1 = \{\vec{c_1}, \vec{c_2}, \dots, \vec{c_b}\}$ is a linearly independent set because $\{\vec{y_1}, \dots, \vec{y_b}\}$ is a base of the vector space $\vecspace{b}$. Since $T(\beta_0) = \{ \vec{0} \}$ we deduce that $\beta = \beta_0 \cup \beta_1$ is a linearly independent set of size $f$, thus it is a base.
+Now for every $i = 1, 2, \dots, b$ choose $\vec{c_i} \in T^{-1}(\vec{y_i})$, then $\beta_1 = \{\vec{c_1}, \vec{c_2}, \dots, \vec{c_b}\}$ is a linearly independent set because the set $\{\vec{y_1}, \dots, \vec{y_b}\}$ is a basis of the vector space $\vecspace{b}$. Since $T(\beta_0) = \{ \vec{0} \}$ we deduce that $\beta = \beta_0 \cup \beta_1$ is a linearly independent set of size $f$, thus it is a basis.
 
-Let $\delta$ denote the number of all bases in the vector space $\vecspace{f - b}$ and $T$ be a fixed surjective linear transformation. The number of choices generating the transformation $T$ equals $f! \delta t 2 ^ {f - b}$. To choose the base $\beta$ of $\vecspace{f}$ the sets $\beta_0$ and $\beta_1$ are selected independently of each other as already stated. Number of choices for $\beta_0$ is $\delta$. The process of selection of $\beta_1$ is already described and implies that the number of choices is $t 2 ^ {f - b}$. The factor $f!$ appears because the bases of the vector space $\vecspace{f}$ are considered ordered. Since we want to create the fixed function $T$ the choice for $s$ and $\pi$ is already exactly determined by the previous choice of the base $\beta$. 
+Let $\delta$ denote the number of all bases in the vector space $\vecspace{f - b}$ and $T$ be a fixed surjective linear transformation. The number of choices generating the transformation $T$ equals $f! \delta t 2 ^ {f - b}$. To choose a basis $\beta$ of $\vecspace{f}$ the sets $\beta_0$ and $\beta_1$ are selected independently of each other as already stated. Number of choices for $\beta_0$ is $\delta$. The process of selection of $\beta_1$ is already described and implies that the number of choices is $t 2 ^ {f - b}$. The factor $f!$ appears because the bases of the vector space $\vecspace{f}$ are considered ordered. Since we want to create the fixed function $T$ the choice for $s$ and $\pi$ is already exactly determined by the previous choice of the basis $\beta$. 
 \end{proof}
 
 \begin{remark}
@@ -50,7 +54,7 @@ Let $u, f, b$ be natural numbers such that $b \leq f$. Assume the random uniform
 \begin{proof}
 The idea of the proof is to show that there exists a natural number $\gamma$ such that every linear map $T$ is generated by $\gamma$ choices of $T_0$ and $T_1$.
 
-To prove this fact, let $T_1$ be a fixed surjective linear map. Then the number of choices of $T_0$, such that $T = T_1 \circ T_0$, equals $u 2 ^ {f - b}$. Let $\beta$ be a fixed base of the vector space $\vecspace{u}$. For every $\vec{y}$ of $\beta$ there are $2 ^ {f - t}$ choices of $T_0(\vec{y}) \in T_1^{-1}(T(\vec{y}))$.  Clearly $T = T_1 \circ T_0$.
+To prove this fact, let $T_1$ be a fixed surjective linear map. First we show that the number of choices of $T_0$, such that $T = T_1 \circ T_0$, equals $u 2 ^ {f - b}$. Let $\beta$ be a fixed basis of the vector space $\vecspace{u}$. From Lemma \ref{lemma-linear-transformation-domain-distribution} it follows that for every $\vec{y}$ of $\beta$ there are $2 ^ {f - b}$ choices of $T_0(\vec{y}) \in T_1^{-1}(T(\vec{y}))$.  Clearly $T = T_1 \circ T_0$.
 
 Now for every $T$ there are exactly $\gamma = u 2 ^ {f - b} |LTS(\vecspace{f}, \vecspace{b})|$ choices of transformations $T_0$ and $T_1$.
 \end{proof}
@@ -59,15 +63,15 @@ See Appendix \ref{appendix-linear-algebra} for the definitions and facts regardi
 
 \begin{remark}
 \label{remark-model-uniform-linear-map-selection-affine}
-Let $u, f, b \in \mathbb{N}$ such that $f \leq b$. Assume the random uniform choices of $T_0:\vecspace{u} \rightarrow \vecspace{f}$ among $LT(\vecspace{u}, \vecspace{f})$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$ among $LTS(\vecspace{f}, \vecspace{b})$. Set $T = T_1 \circ T_0$. For every vector $\vec{y} \in \vecspace{b}$ denote $U_A = T ^ {-1}(\vec{y})$ and $F_A = T_1 ^ {-1}(\vec{y})$. If $U_A \neq \emptyset$, then $T_0|_{U_A}: U_A \rightarrow F_A$ is a random affine linear map chosen from the set of all affine linear maps $LT_{A}(U_A, F_A)$.
+Let $u, f, b \in \mathbb{N}$ such that $f \geq b$. Assume the random uniform choices of $T_0:\vecspace{u} \rightarrow \vecspace{f}$ among $LT(\vecspace{u}, \vecspace{f})$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$ among $LTS(\vecspace{f}, \vecspace{b})$. Set $T = T_1 \circ T_0$. Assume that $\vec{y} \in \vecspace{b}$ and denote $U_A = T ^ {-1}(\vec{y})$ and $F_A = T_1 ^ {-1}(\vec{y})$. If $U_A \neq \emptyset$, then $T_0|_{U_A}: U_A \rightarrow F_A$ is a random affine linear map chosen uniformly from the set $LT_{A}(U_A, F_A)$.
 \end{remark}
 \begin{proof}
 First set $U = \vecspace{u}$, $U_0 = T^{-1}(\vec{0})$, $F_0 = T_1^{-1}(\vec{0})$ and $U_1 = U_0 ^ {\bot}$. 
 
-Remark that there is a one to one relationship among the linear transformations $T_0: U \rightarrow F$ and pairs of mappings $T_0|_{U_0}$ and $T_0|_{U_1}$. Assume that $\beta_0$ and $\beta_1$ are orthonormal bases of the vector spaces $U_0$ and $U_1$. The set $\beta = \beta_0 \cup \beta_1$ is an orthonormal base of the vector space $U$, too. For a vector $\vec{x} \in \beta$ set the value $T_0(\vec{x})$ equal to $T_0|_{U_0}(\vec{x})$ or $T_0|_{U_1}(\vec{x})$ according to the presence of $\vec{x}$ in $\beta_0$ or $\beta_1$. Thus the uniform choice of a mapping $T_0$ corresponds to the uniform independent choices of linear functions $T_0|_{U_0}$ and $T_0|_{U_1}$.
+Now we show that there is a one-to-one relationship among the linear transformations $T_0: U \rightarrow F$ and pairs of mappings $T_0|_{U_0}$ and $T_0|_{U_1}$. Assume that $\beta_0$ and $\beta_1$ are orthonormal bases of the vector spaces $U_0$ and $U_1$. The set $\beta = \beta_0 \cup \beta_1$ is an orthonormal basis of the vector space $U$, too. For a vector $\vec{x} \in \beta$ set the value $T_0(\vec{x})$ equal to $T_0|_{U_0}(\vec{x})$ or $T_0|_{U_1}(\vec{x})$, according to the presence of $\vec{x}$ in $\beta_0$ or $\beta_1$. Thus the uniform choice of a mapping $T_0$ corresponds to the uniform independent choices of linear functions $T_0|_{U_0}$ and $T_0|_{U_1}$.
 
-From the just observed fact it follows that the uniform choice $T_0$ gives the uniform selection of $T_0|_{U_0}$.  When $\vec{y} = \vec{0}$ then, by the previous statement, we simply perform the random uniform selection of a mapping $T_0|_{U_A} = T_0|_{U_0}$. 
+From the observed fact it follows that the uniform choice $T_0$ gives the uniform selection of a linear transformation $T_0|_{U_0}$. When $\vec{y} = \vec{0}$, then, by the previous statement, we simply perform the random uniform selection of a mapping $T_0|_{U_A} = T_0|_{U_0}$. 
 
-When $\vec{y} \neq \vec{0}$ we have to randomly and uniformly select an affine mapping $T_0|_{U_A}$. By setting $T_0|_{U_A}(\vec{x}) = T_0(\vec{v}) + T_0|_{U_0}(\vec{x} - \vec{v})$ for an arbitrary but fixed vector $\vec{v} \in U_A$ the uniform choice of $T_0|_{U_0}$ implies the uniform choice of $T_0|_{U_A}$.
+When $\vec{y} \neq \vec{0}$, we have to randomly and uniformly select an affine mapping $T_0|_{U_A}$. By setting $T_0|_{U_A}(\vec{x}) = T_0(\vec{v}) + T_0|_{U_0}(\vec{x} - \vec{v})$ for an arbitrary but fixed vector $\vec{v} \in U_A$, the uniform choice of $T_0|_{U_0}$ implies the uniform choice of $T_0|_{U_A}$.
 \end{proof}
 \end{section}

@@ -68,10 +68,10 @@ Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. L
 
 \begin{lemma}
 \label{lemma-linear-transformation-domain-distribution}
-Let $T: \vecspace{u} \rightarrow \vecspace{t}$ for $u \geq t$ be an onto linear map and $\vec{y} \in \vecspace{t}$. Then $T^{-1}(\vec{y})$ is an affine subspace of $\vecspace{u}$ and $|T^{-1}(\vec{y})| = 2 ^ {u - t}$.
+Let $T: \vecspace{f} \rightarrow \vecspace{b}$ for $f \geq b$ be an onto linear map and $\vec{y} \in \vecspace{b}$. Then $T^{-1}(\vec{y})$ is an affine subspace of $\vecspace{f}$ and $|T^{-1}(\vec{y})| = 2 ^ {f - b}$.
 \end{lemma}
 \begin{proof}
-At first notice that the set $T^{-1}(\vec{0})$ is the subspace of the vector space $\vecspace{u}$.
+At first notice that the set $T^{-1}(\vec{0})$ is the subspace of the vector space $\vecspace{f}$.
 
 The set $T^{-1}(\vec{0})$ contains the zero vector since
 \[ 
@@ -97,7 +97,7 @@ It is closed for the scalar multiplication since
 \end{split}
 \]
 
-The set $T^{-1}(\vec{y})$ is an affine subspace of the vector space $\vecspace{u}$ since for every vector $\vec{u} \in T^{-1}(\vec{y})$ we have that $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. First we show, $\vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y})$:
+The set $T^{-1}(\vec{y})$ is an affine subspace of the vector space $\vecspace{f}$ since for every vector $\vec{u} \in T^{-1}(\vec{y})$ we have that $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. First we show, $\vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y})$:
 \[
 \begin{split}
 \vec{v} \in T^{-1}(\vec{0}) 
@@ -115,7 +115,7 @@ The reverse inclusion, $T^{-1}(\vec{y}) \subseteq \vec{u} + T^{-1}(\vec{0})$, ho
 \end{split}
 \]
 
-Now we use this fact to prove the second statement of the lemma, $|T^{-1}(\vec{y})| = 2 ^ {u - t}$. Fix arbitrary vector $\vec{u} \in T^{-1}(\vec{y})$. From Lemma \ref{lemma-affine-subspace-equality} then follows $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. In addition, the equality describes a one-to-one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{y})$. The~consequence is that all sets $T^{-1}(\vec{y})$ have the~same size, exactly $|T^{-1}(\vec{y})| = 2^{u-t}$.
+Now we use this fact to prove the second statement of the lemma, $|T^{-1}(\vec{y})| = 2 ^ {f - b}$. Fix arbitrary vector $\vec{u} \in T^{-1}(\vec{y})$. From Lemma \ref{lemma-affine-subspace-equality} then follows $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. In addition, the equality describes a one-to-one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{y})$. The~consequence is that all sets $T^{-1}(\vec{y})$ have the~same size, exactly $|T^{-1}(\vec{y})| = 2^{f - b}$.
 \end{proof}
 
 \begin{lemma}
