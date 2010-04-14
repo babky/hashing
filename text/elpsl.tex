@@ -47,7 +47,7 @@ Definition \ref{definition-psl} of the random variables $\lpsl$ and $\psl$ are m
 
 Remark, when using the standard model, we do not have to mention the additional parameter $h$ of the variables $\psl$ and $\lpsl$ because the standard model assumes a single hash function only. Recall that the probability space of this model corresponds to the choice of a stored set. 
 
-Additional restrictions placed on the hash function require that it distributes the elements of the universe uniformly across the hash table. Hence the other parameter, bucket $b \in B$, of the variable $\psl$ is no longer necessary, too. From this fact it follows that for arbitrary two buckets $a, b \in B$ random variables $\psl(a)$ and $\psl(b)$ are equal: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{ for every } k \in \mathbb{N} \text{.}\] 
+Additional restrictions placed on the hash function require that it distributes the elements of the universe uniformly across the hash table. Hence the other parameter, bucket $b \in B$, of the variable $\psl$ is no longer necessary, too. From this fact it follows that for two arbitrary buckets $a, b \in B$ the random variables $\psl(a)$ and $\psl(b)$ are equal: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{ for every } k \in \mathbb{N} \text{.}\] 
 
 In this chapter we use notation from Section \ref{section-notation}. So $U$ is a universe, $m$ denotes the size of the hash table $B$ and $n$ is the size of the stored set $S \subset U$.
 
@@ -94,12 +94,12 @@ We can finish the estimate of the variable $\lpsl$ by computing:
 \end{split}
 \end{displaymath}
 
-We assume that the table's load factor $\alpha < 1$. The complete proof, the last remaining estimate, can be found in \cite{DBLP:books/sp/Mehlhorn84}.
+If we assume that the table's load factor $\alpha < 1$, we can complete the proof. The last estimate can be found in \cite{DBLP:books/sp/Mehlhorn84}.
 \end{proof}
 \end{section}
 
 \begin{section}{Estimate for Universal Hashing}
-The calculation for universal hashing needs to switch to a different probability estimate of collision of $i$ elements. For the estimate the property of strongly $\omega$-universal class is used. We do not exploit specific properties of different universal classes. In this section we assume usage of a strongly $\omega$-universal class $H$.
+In universal hashing we move to a different probability estimate of collision of $k$ elements. The probability bound follows from strongly $\omega$-universality of the class $H$, we use. We neither assume nor exploit specific properties other than strongly $\omega$-universality.
 \begin{definition}[Set indicator]
 Let $\Indicator$ be a function such that
 \begin{displaymath}
@@ -138,7 +138,7 @@ M_{= k}(h, a) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{a\}\}  \text{.}
 \end{displaymath}
 \end{definition}
 
-When it is clear we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Simply said, sets $M_{\geq k}$ and $M_{= k}$ denote the chains of length at least $k$ and equal to $k$, respectively. Formally, chain of length $k$ is a subset of the stored set $S$ consisting of $k$ elements which are hashed to a singleton.
+When it is clear, we can omit parametrisation of the sets and use the notation $M_{\geq k}$ or $M_{= k}$. Simply said, sets $M_{\geq k}$ and $M_{= k}$ denote the chains of length at least $k$ and equal to $k$, respectively. Formally, chain of length $k$ is a subset of the stored set $S$ consisting of $k$ elements which are hashed to a singleton.
 
 \begin{lemma}
 \label{lemma-indicator-k-collision}
