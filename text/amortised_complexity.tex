@@ -1,32 +1,35 @@
 \chapter{The Model of Universal Hashing}
 \label{chapter-proposed-model}
 
-% TODO: ktore schemy nevedia delete, alebo nie je znamene, zmienit dynamizaciu
 The hashing scheme we propose later in this chapter is a solution to the set representation problem. Solution of this problems usually provide some basic operations such as \emph{Insert}, \emph{Delete} and \emph{Find}. These operations allow querying if an element is stored within the represented set, accessing the stored elements and inserting the element. Some schemes, e.g. double hashing, do not implement the element removal at all or the efficient implementation is not known.
 
-% TODO: definicia vahovo vyvazeneho stromu.
-The must crucial are the operations' running times. Various solutions to many algorithmic problems prefer different operations when representing sets. For instance some applications modify stored data rarely, such as log files. Another use of set representation may store the data that is almost never changed -- Find operation is preferred. So only the running times of selected operations are considered important. 
+The must important are the operations' running times. Various solutions to many algorithmic problems prefer different operations when representing sets. For instance some applications query the stored data rarely, e.g. log files. On the other hand, other applications of the set representation problem may store the data that is almost never changed -- find operation is preferred. Therefore the running times of only selected operations are considered crucial. 
 
-In the case of a simple array we have $O(1)$ time for the find procedure when we know the element's index. But insertion or deletion may take $O(n)$ time. Better bounds can be obtained using the amortised complexity. Routines of balanced trees' are typically bounded by the logarithmic time. As already mentioned the right answer what data structure should be used lies in the estimated structure of the operations. Making the right choice can be an asymptotic improvement. Anyway this does not change the fact that the short running times are welcomed.
+In the case of a simple array we have $O(1)$ time for the find procedure provided that we know an element's index. But insertion or deletion may take $O(n)$ time. Better bounds for dynamic arrays can be obtained using the amortised complexity. Another example are balanced trees, they have running times typically bounded by the logarithmic time. As already mentioned the right answer what data structure should be used lies in the estimated structure of the operations. Making the right choice can be an asymptotic improvement. Anyway, this does not change the fact that the short running times are welcomed.
 
-We analyse the running times of the universal hashing first by mentioning the known facts. Then we extend this analysis to the universal hashing using the system of linear transformations over vector spaces. Finally we propose a model that guarantees the worst case complexity of the find operation.
+We analyse the running times of the universal hashing, first by mentioning the known facts. Then, we extend this analysis to the universal hashing using the system of linear transformations over vector spaces. Finally, we propose a model that guarantees the worst case complexity of the find operation.
 
 \section{Time Complexity of Universal Hashing}
-In this section we assume that the used system of hashing functions is $c$-universal. The running time of the find operation is proportional to the number of collisions in the element's bucket. Every element is placed into a bucket according to its hash value. The obvious worst case time is $O(n)$ where $n$ is the number of elements hashed. The universal hashing gives a far better expected estimate, $O(1)$.
+In this section we assume, that the system of hashing functions we use is $c$-universal. The running time of the find operation is certainly proportional to the length of the chain of an element's bucket. The obvious worst case time is $O(n)$ where $n$ is the number of elements hashed. The universal hashing gives a far better expected estimate, $O(1)$.
 
 Recall the definitions and notation from Chapter \ref{chapter-hashing}. The load factor of a hash table is denoted by $\alpha = \frac{n}{m}$. The value $n$ denotes the size of the represented set and $m$ is the size of the table.
 
 \begin{theorem}
 \label{theorem-expected-chain-length-universal}
-Assume that the load factor of the hash table using a model of universal hashing is upper bounded. Then the expected length of a chain is lower or equals $1 + c \alpha$.
+Assume a hash table using a $c$-universal class of functions and that the table's load factor $\alpha$ is upper bounded. Then the expected length of a chain is lower or equals $c \alpha$.
 \end{theorem}
 \begin{proof}
-The expected length of a chain containing the element $x \in U$ is now determined. The expectation is taken over the choice of a function from the universal family of hash functions. The chain's length is expressed as the sum of indicator variables. For the expected value we have
+We find the expected length of a chain containing the element $x \in U$. The expectation is taken over the choice of a function from the universal family of functions. From the definition of the expected value we have
 \begin{displaymath}
-\Expect{\psl} = \frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S - \lbrace x \rbrace} P(h(x) = h(y))}{|H|} = \frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S - \lbrace x \rbrace} \frac{c}{m}}{|H|} = \frac{cn}{m} = c \alpha \text{.}
+\Expect{\psl} = \frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S} P(h(x) = h(y))}{|H|} = \frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S} \frac{c}{m}}{|H|} = \frac{cn}{m} = c \alpha \text{.}
 \end{displaymath}
+\end{proof}
 
-Since the element $x$ may be present in the set $S$ the length is clearly bounded by the expression $1 + c\alpha$ where $\alpha$ is the table's load factor.
+\begin{corollary}
+If we hash using a $c$-universal class and $\alpha$ denotes the table's load factor, then the expected time of the find operation is $1 + c\alpha$.
+\end{corollary}
+\begin{proof}
+The running time of the find operation is proportional to the length of the chain where the searched element belongs. In the worst case the operation must iterate the whole chain. We must also add the unit time for retrieving the element's hash value and for checking if the chain is not empty. From previous lemma it follows that the expected length of a chain is $c\alpha$. Remark, that we have no other assumption on the distribution of the input. The expected running time is then bounded by $1 + c\alpha$. 
 \end{proof}
 
 \begin{corollary}
@@ -34,7 +37,7 @@ Since the element $x$ may be present in the set $S$ the length is clearly bounde
 The expected time of the find operation in every model of universal hashing is $O(1)$ when the load factor is bounded.
 \end{corollary}
 \begin{proof}
-Follows from the previous theorem. The running time of the find operation is proportional to the length of the chain where the searched element belongs. The operation must iterate the whole chain in the worst case. We must also consider the time for retrieving the element's hash value. This is typically performed in one unit of time. 
+Follows from the previous corollary.
 \end{proof}
 
 \section{Consequences of Trimming Long Chains}
