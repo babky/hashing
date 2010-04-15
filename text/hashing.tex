@@ -22,12 +22,12 @@ If buckets are represented by linked lists, then the expected time of the find o
 Let $S$ be a set represented by a linked list. Assume that for every element $x \in S$: \[ \Prob{x \text{ is argument of the find operation}} = \frac{1}{|S|} \text{.} \] Then the expected time of the find operation is $\frac{|S| + 1}{2}$.
 \end{lemma}
 \begin{proof}
-Let $x_i \in S$ be the $i$-th element of the list, $1 \leq i \leq |S|$. Time to find the element $x_i$ inside the list equals $i$. The expected time of the find operation can be expressed directly from its definition. 
+Let $x_i \in S$ be the $i$-th element of the list, $1 \leq i \leq |S|$. Time to find the element $x_i$ inside the list equals $i$. The expected time of the find operation can be expressed directly from its definition
 \[
 \begin{split}
 \Expect{\text{time of the find operation}} 
 	& = \displaystyle\sum_{i = 1}^{|S|} i \Prob{x_i \text{ is the argument of the find operation}} \\
-	& = \frac{\sum_{i = 1}^{|S|}{i}}{|S|} = \frac{|S|(|S| + 1)}{2 |S|} = \frac{|S| + 1}{2} \\
+	& = \frac{\sum_{i = 1}^{|S|}{i}}{|S|} = \frac{|S|(|S| + 1)}{2 |S|} = \frac{|S| + 1}{2} \text{.}
 \end{split}
 \]
 \end{proof}
@@ -60,6 +60,7 @@ Above all the collision handling is what differentiates distinct hash tables and
 To completely explain the notation we have to mention that we refer to the function $\log$ as to the binary logarithm. The function $\ln$ denotes the natural logarithm.
 
 \section{Assumptions of Classic Hashing}
+\label{section-assumptions}
 In Lemma \ref{lemma-expected-list-time} we computed the expected time of the find operation and used it as a measure of its time complexity. Known probability distribution of the input enables us to compute the expected value. For the lemma we assumed the uniform distribution. In hashing similar situation occurs. If we want to find the expected results, then we need corresponding probabilistic assumptions on the input. The assumptions we make may be found in \cite{VK-skripta} or in \cite{DBLP:books/sp/Mehlhorn84}. They are similar to ours.
 \begin{itemize}
 \item Hash function $h$ distributes the elements of universe uniformly across the hash table:
@@ -89,7 +90,7 @@ Consider set $S = \{5n \setdelim n \in \{0, \dots, 5\} \}$ and a table consistin
 
 The apparent disadvantage of classic hashing is usage of a single hash function known in advance. For example if  the stored set $S$ is chosen, by an adversary, so that $S \subseteq f^{-1}(b)$ for a single bucket $b \in B$, we run into problems. Because our assumptions say that the probability of having such an input is quite low, these inputs may be neglected.
 
-To illustrate how separated chaining works the algorithms are presented. Although the model is quite simple the subroutines regarding the singly linked lists are not discussed. They are considered elementary enough. Remark that their running times are proportional to the length of the represented chain. Notice that the insert procedure has to check if the element is already stored inside the list so that it is not stored twice. 
+To illustrate how separated chaining works the algorithms are presented. Although the model is quite simple the subroutines regarding the singly linked lists are not discussed. They are considered elementary enough. We remark that the running time is proportional to length of the represented chain. Also notice that the insert procedure has to check whether the element is already stored inside the list else it can be stored twice. 
 
 \begin{algorithm}[ht]
 \caption{Find operation of the separate chaining.}
@@ -162,12 +163,12 @@ Methods of coalesced hashing and separate chaining represent the chains explicit
 
 Models of open addressing assume existence of two hash functions $h_1: U \rightarrow B$ and $h_2: U \rightarrow B$. Assume $x \in U$ is the $i$\textsuperscript{th} element of the chain and the order of elements in a chain starts from zero. Its address is then determined by a compound hash function $h(x, i) = h_1(x) + i h_2(x)$. When we insert the element $x \in U$ we find a minimal $i$ such that the bucket at the address $h(x, i)$ is empty.
 
-This approach also removes the problem of the choice of a free bucket when a collision occurs. Unfortunately, there is no fast implementation of the delete operation known so far. To delete an element we can mark its bucket as free and reuse it when possible. Marking the deleted element's bucket is necessary if we do not want to accidentally loose the elements lying behind the deleted one in the chain.
+This approach also removes the problem of the choice of a free bucket when a collision occurs. Unfortunately, there is no fast implementation of the delete operation known so far. To delete an element we can mark its bucket as free and reuse it when possible. Marking the deleted element's bucket is necessary if we do not want to accidentally loose the elements lying behind the deleted one in the chains.
 
 \subsection{Linear Probing}
 Linear probing is a scheme of open addressing with $h_2(x) = 1$ for every $x \in U$. The last element of the prolonged chain is placed into the first empty bucket behind the one with the address $h_1(x)$.
 
-Another problem of linear hashing is its degradation. Clusters of non-empty buckets emerge when load factors reach one. Delete operation implemented by marking only emphasises this problem.
+Another problem of linear hashing is its degradation. Clusters of non-empty buckets emerge when load factors reach one. Delete operation implemented by marking only emphasises this problem. Despite of the mentioned problems, linear probing takes the advantage of the good cache behaviour. No wonder, that its modifications are studied nowadays, e.g hopscotch hashing mentioned in Section \ref{section-modern-approaches}.
 
 \subsection{Double Hashing}
 If we want to distribute the stored set uniformly across the hash table, then the choice of a free bucket should be random. Whenever function $h(x, i)$ of argument $i$ is a random permutation of $B$, then the mentioned choice becomes random. A necessary condition is that $h_2(x)$ and $m$ are incommensurable. Therefore the size of the hash table is chosen so that it is a prime number again. 
@@ -181,12 +182,13 @@ The proof is shown in \cite{DBLP:books/sp/Mehlhorn84}.
 \end{proof}
 
 \section{Universal Hashing}
-Universal hashing uses a universal system of functions instead of a single function. This removes the dependence of universal hashing on its input. The probability space is now determined by the uniform choice of the hash function instead of selection of a stored set. We study universal hashing and its systems in Chapter \ref{chapter-universal-classes} in a more detail way.
+Universal hashing uses a universal system of functions instead of a single function. This removes the dependence of universal hashing on the uniformity of its input. It does not require the assumptions of standard hashing made in Section \ref{section-assumptions}. Universal hashing is a randomised algorithm and the probability space is determined by the uniform choice of a hash function, instead of the selection of a stored set. We study universal hashing and its systems in a more detail way in Chapter \ref{chapter-universal-classes}.
 
 \section{Perfect Hashing}
-Assume that the stored set $S$ is known in advance. The problem solved by perfect hashing is how to create a hash table and a hash function such that the find operation takes only a constant time. Insert and delete operations are forbidden, the stored set $S$ remains fixed. Additional requirements are placed on the size of the scheme. Size of the hash table is not the only problem. We must also take care about the space needed to represent the constructed hash function since it becomes quite complex.
+Assume that the stored set $S$ is known in advance. The problem solved by perfect hashing is how to create a hash table and a hash function such that the find operation takes only a constant time. Insert and delete operations are forbidden, the stored set $S$ remains fixed. Additional requirements are placed on the size of the scheme. Size of the hash table is not the only problem. We must also take care about the space needed to represent the constructed hash function since it becomes quite complex. The problem is solved in \cite{1884}.
 
 \section{Modern Approaches}
+\label{section-modern-approaches}
 Modern approaches to hashing are nowadays often based on their probabilistic properties. Authors adapt and change their models to improve the asymptotic results in the average case and in the expected worst case. The algorithms still remain fast and are enriched by simple rules. 
 
 Straightforward use of a single function is not enough and various universal systems are used. Theoretical analyses of the models do not necessarily involve the ideas of universal hashing. Universal classes are used as an heuristic. Although the algorithms are not complicated, their analyses become more and more difficult.

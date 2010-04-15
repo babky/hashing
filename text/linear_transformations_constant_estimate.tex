@@ -4,13 +4,13 @@ This integral $I_\epsilon$ is a part of the multiplicative constant $4c_\epsilon
 \label{section-integral-estimate}
 \begin{lemma}
 \label{lemma-convergent-I-e}
-The integral $I_\epsilon$ from Theorem \ref{theorem-n-logn-to-n} converges for every $\epsilon \in (0, 1)$ and
+The integral $I_\epsilon$ from Equality \ref{equality-i-e} converges for every $\epsilon \in (0, 1)$ and
 \[
 I_\epsilon \leq \frac{4.8}{1 - \epsilon} \text{.}
 \]
 \end{lemma}
 \begin{proof}
-We recall that the integral $I_\epsilon$ defined in Equality \ref{equality-i-e} equals
+We recall that the integral $I_\epsilon$ equals
 \[
 I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]
@@ -41,7 +41,7 @@ The estimate of the Riemann sum can be computed numerically.
 
 \begin{lemma}
 \label{lemma-estimate-j-a}
-Let $b \in \mathbb{N}$, $b \geq 4$, $\alpha \in [0.5, 1]$, $J'_{\alpha, b}$ be the integral defined by Equality \ref{equality-j-prime-a-b} and $J_{\alpha, b}$ be the integral defined by Equality \ref{equality-j-a-b}. Then 
+Let $b \in \mathbb{N}$, $b \geq 4$, $\alpha \in [0.5, 1]$, $J'_{\alpha, b}$ be the integral defined in Equality \ref{equality-j-prime-a-b} and $J_{\alpha, b}$ be the integral defined in Equality \ref{equality-j-a-b}. Then 
 \[
 	J'_{\alpha, b} \leq 2b \log b - 4 + J_{\alpha, b} \text{ and}
 \]
@@ -50,7 +50,7 @@ Let $b \in \mathbb{N}$, $b \geq 4$, $\alpha \in [0.5, 1]$, $J'_{\alpha, b}$ be t
 \]
 \end{lemma}
 \begin{proof}
-We estimate the integral \[ J'_{\alpha, b} = \int\limits_{4}^\infty \min \left(1, \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \] in a similar way as the previous one. 
+We estimate the integral \[ J'_{\alpha, b} = \int\limits_{4}^\infty \min \left(1, \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \] in a similar way to the previous one. 
 
 However, the situation is slightly complicated. First we must realise that if the exponent is negative, the integrand is certainly less than one. We show that if $r > 2 b \log b$, then the exponent is negative.
 
