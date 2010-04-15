@@ -40,7 +40,7 @@ Let $T_0: \vecspace{u} \rightarrow \vecspace{f}$, $T_1: \vecspace{f} \rightarrow
 \begin{proof}
 To prove the direction from the left to the right assume that the event $E_2$ occurs. This happens if there is a vector $\vec{y} \in \vecspace{b}$ such that $T_1^{-1}(\vec{y}) \subseteq T_1(S)$. Hence transformation $T_1$ can not map the set $\vecspace{f} - T_0(S)$ onto the vector space $\vecspace{b}$ since $\vec{y} \notin T_1(\vecspace{f} - T^{-1}(\vec{y})) \supseteq T_1(\vecspace{f} - T_0(S))$ or equivalently $\vecspace{b} \neq T_1(\vecspace{f} - T_0(S))$.
 
-Now we show the reverse direction. If $\vecspace{b} \neq T_1(\vecspace{f} - T_0(S))$, then there is a vector $\vec{y} \in \vecspace{b}$ such that $\vec{y} \notin T_1(\vecspace{f} - T_0(S))$. Since $T_1$ is surjective we have that $T_1(\vecspace{f}) = \vecspace{b}$. Since there is no point in $\vecspace{f} - T_0(S)$ displayed onto $\vec{y}$ it follows that the whole preimage of $\vec{y}$ must be contained in $T_0(S)$. Thus $T_1^{-1}(\vec{y}) \subseteq T_0(S)$.
+Now we show the reverse direction. If $\vecspace{b} \neq T_1(\vecspace{f} - T_0(S))$, then there is a vector $\vec{y} \in \vecspace{b}$ such that $\vec{y} \notin T_1(\vecspace{f} - T_0(S))$. Since $T_1$ is surjective we have that $T_1(\vecspace{f}) = \vecspace{b}$. Since there is no point in $\vecspace{f} - T_0(S)$ mapped onto $\vec{y}$ it follows that the whole preimage of $\vec{y}$ must be contained in $T_0(S)$. Thus $T_1^{-1}(\vec{y}) \subseteq T_0(S)$.
 
 \begin{figure}
   \centering
@@ -74,7 +74,7 @@ To obtain the bound claimed by the remark rewrite the logarithm of the value $d$
 	\log d = \log \frac{|\vecspace{f}|}{|S|} = \log |\vecspace{f}| - \log |S| \geq \log |\vecspace{f}| - \log (b 2 ^ b) = f - b - \log b \text{.}
 \]
 
-In the following computation we use Corollary \ref{corollary-f-decreasing} to remove the inverse density $\mu$. Since $E_2 \equiv T_1(\vecspace{f} - T_0(S)) \neq \vecspace{b}$ and $\mu \leq \frac{1}{d}$ we have the needed bound,
+In the following computation we use Corollary \ref{corollary-f0} to remove the inverse density $\mu$. Since $E_2 \equiv T_1(\vecspace{f} - T_0(S)) \neq \vecspace{b}$ and $\mu \leq \frac{1}{d}$ we have the needed bound,
 \[
 \begin{split}
 \Prob{E_2}
@@ -134,7 +134,7 @@ Now we use the theorem again for the transformation $T_1$, the set $\vecspace{f}
 	\Prob{E_2} \leq \mu ^ {f - b - \log b - \log \log \left( \frac{1}{\mu} \right)} \text{.}
 \]
 
-To prove the statement perform a similar estimation as in the original proof. For next the estimates use Corollary \ref{corollary-f-decreasing} and the fact that $\mu \leq \frac{1}{d}$. For the first case it follows that
+To prove the statement perform a similar estimation as in the original proof. For the next estimates use Corollary \ref{corollary-f0} and the fact that $\mu \leq \frac{1}{d}$. For the first case it follows that
 \[
 \begin{split}
 \Prob{E_2} 
@@ -262,7 +262,7 @@ c_{\epsilon}(f - b) 2 ^ {f - b}
 \end{split}
 \]
 
-From Corollary \ref{corollary-prob-e2-e1}, Remark \ref{remark-e2-probability} and Lemma \ref{lemma-f-increasing} it follows that
+From Corollary \ref{corollary-prob-e2-e1}, Remark \ref{remark-e2-probability} and Corollary \ref{corollary-f1} it follows that
 \[
 \begin{split}
 \Prob{E_1}
@@ -347,7 +347,7 @@ c_\epsilon (f_2 - b) 2 ^ {f_2 - b}
 \]
 
 
-Thus we are able to refer to Corollary \ref{corollary-prob-e2-e1}. Now use Lemma \ref{lemma-e1-lpsl-equivalence}, Corollary \ref{corollary-prob-e2-e1}, Remark \ref{remark-e2-probability} and Lemma \ref{lemma-f-increasing} in either case. In the first one we have
+Thus we are able to refer to Corollary \ref{corollary-prob-e2-e1}. Now use Lemma \ref{lemma-e1-lpsl-equivalence}, Corollary \ref{corollary-prob-e2-e1}, Remark \ref{remark-e2-probability} and Corollary \ref{corollary-f1} in either case. In the first one we have
 \[
 \begin{split}
 \Prob{\lpsl > 4 c_{\epsilon} \alpha r b \log b} 

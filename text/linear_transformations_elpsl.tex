@@ -3,7 +3,12 @@ In this section we estimate the expected value of the variable $\lpsl$, $\Expect
 
 \begin{theorem}
 \label{theorem-n-logn-to-n}
-Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation and $\epsilon \in (0, 1)$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| \leq b 2 ^ b$, then \[ \Expect{\lpsl} \leq 4 c_\epsilon(4 + I_\epsilon) b \log b \text{.} \] The value $I_\epsilon$ is defined later in the proof of the theorem in Equality \ref{equality-i-e}.
+Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation and $\epsilon \in (0, 1)$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| \leq b 2 ^ b$, then \[ \Expect{\lpsl} \leq 4 c_\epsilon(4 + I_\epsilon) b \log b \text{.} \] The value $I_\epsilon$ is defined as:
+\stepcounter{definition}
+\begin{equation}
+\label{equality-i-e}
+I_\epsilon = \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
+\end{equation}
 \end{theorem}
 \begin{proof}
 First set $K_\epsilon = 4 c_\epsilon b \log b$. In order to prove the theorem we use the probability distribution of the variable $\lpsl$ from Remark \ref{remark-probability-long-chain}. For every $r \geq 4$ it states that 
@@ -23,13 +28,6 @@ Lemma \ref{lemma-expected-value-cumulative} implies
 \end{split}
 \]
 
-We substituted $I_\epsilon$ for
-\stepcounter{definition}
-\begin{equation}
-\label{equality-i-e}
-I_\epsilon = \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
-\end{equation}
-
 The fact that the integral $I_\epsilon$ is convergent for every $\epsilon \in (0, 1)$ is shown later in Lemma \ref{lemma-convergent-I-e}.
 \end{proof}
 
@@ -37,7 +35,7 @@ Multiplicative constant $4 c_\epsilon(4 + I_\epsilon)$ plays an important role f
 
 \begin{theorem}
 \label{theorem-n-to-n}
-Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $\epsilon \in (0, 1)$ and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq 4 \alpha c_\epsilon(4 + I_\epsilon) b \log b \text{.} \] The value $I_\epsilon$ is defined in the proof of Theorem \ref{theorem-n-logn-to-n} by Equality \ref{equality-i-e}.
+Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $\epsilon \in (0, 1)$ and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq 4 \alpha c_\epsilon(4 + I_\epsilon) b \log b \text{.} \] The value $I_\epsilon$ is defined in Equality \ref{equality-i-e}.
 \end{theorem}
 \begin{proof}
 Set $K_\epsilon = 4 c_\epsilon b \log b$. When estimating $\Prob{\lpsl > r \alpha K_\epsilon}$ we use Remark \ref{remark-lpsl-pdf-linear-amount}. Its assumptions are satisfied since we use it for $r \geq 4$ and $\alpha \leq 1 \leq \frac{\log r}{2}$. It states that
@@ -69,7 +67,12 @@ The improved estimate of $c_\epsilon$ combined with the last claim of Remark \re
 
 \begin{theorem}
 \label{theorem-hashing-linear-amount}
-Let $b \in \mathbb{N}$, $b \geq 4$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $\epsilon \in (0, 1)$ and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq \frac{4 c_\epsilon \alpha}{1 - \epsilon} b \log b + 2 c_\epsilon \alpha \left( \frac{J_{\alpha, b} - 4}{1 - \epsilon} + 4 \right) \text{.} \] The value $J_{\alpha, b}$ is defined later in the proof by Equality \ref{equality-j-a-b}.
+Let $b \in \mathbb{N}$, $b \geq 4$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $\epsilon \in (0, 1)$ and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq \frac{4 c_\epsilon \alpha}{1 - \epsilon} b \log b + 2 c_\epsilon \alpha \left( \frac{J_{\alpha, b} - 4}{1 - \epsilon} + 4 \right) \text{.} \] The value $J_{\alpha, b}$ is defined as
+\stepcounter{definition}
+\begin{equation}
+\label{equality-j-a-b}
+J_{\alpha, b} = \int\limits_{2 b \log b}^\infty \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
+\end{equation}
 \end{theorem}
 \begin{proof}
 From Remark \ref{remark-lpsl-pdf-linear-amount}, Lemma \ref{lemma-expected-value-cumulative} and Lemma \ref{lemma-estimate-j-a} it follows that
@@ -92,11 +95,6 @@ J'_{\alpha, b} = \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\righ
 \end{equation}
 
 Later, in Lemma \ref{lemma-estimate-j-a} we estimate the integral $J'_{\alpha, b}$ by $2 b \log b - 4 +  J_{\alpha, b}$, where
-\stepcounter{definition}
-\begin{equation}
-\label{equality-j-a-b}
-J_{\alpha, b} = \int\limits_{2 b \log b}^\infty \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
-\end{equation}
 
 The whole bound on the expected value, $\Expect{\lpsl}$, then looks like:
 \[
