@@ -175,7 +175,7 @@ If we want to distribute the stored set uniformly across the hash table, then th
 
 Double hashing has theoretical analyses yielding remarkable results.
 \begin{theorem}
-Let $\alpha \in (0, 1)$ be the load factor of the hash table resolving collisions by double hashing. Then the running time of the find operation  converges to $\frac{1}{1 - \alpha}$ in the unsuccessful case and to $\frac{1}{\alpha}\log\left(\frac{1}{1 - \alpha}\right)$ when the operation is successful.
+Let $\alpha \in (0, 1)$ be the load factor of the hash table resolving collisions by double hashing. Then the running time of the find operation converges to $\frac{1}{1 - \alpha}$ in the unsuccessful case and to $\frac{1}{\alpha}\log\left(\frac{1}{1 - \alpha}\right)$ when the operation is successful.
 \end{theorem}
 \begin{proof}
 The proof is shown in \cite{DBLP:books/sp/Mehlhorn84}.
@@ -198,3 +198,11 @@ A model called \emph{robin hood hashing} \cite{10.1109/SFCS.1985.48}, \cite{Devr
 Another model, \emph{hopscotch hashing} \cite{DBLP:conf/wdag/HerlihyST08}, is a modification of the linear probing utilising the computer's cache behaviour. A chain is kept together in one place as long as possible. Algorithms in control of the processor cache store whole blocks of memory inside it when only a single part of the block is accessed. Provided that the chains are compact, storing them in the cache is quite probable. This optimisation makes probing substantially faster.
 
 Next investigated model is \emph{cuckoo hashing} \cite{782440}. However, the interest fades these days since there are some problems connected with it \cite{DBLP:conf/sofsem/DietzfelbingerS09}, \cite{1496857}.
+
+\section{Advantages and Disadvantages}
+Hashing, compared to other data structures solving the dictionary problem, e.g. trees, does not provide the complete set of operations. If the universe is ordered, we can not query the hash table for the $k$\textsuperscript{th} stored element. The hash functions are supposed to distribute the elements accross the table evenly. This assumption is somehow in the opposition to the preservation of the ordering.  Especially, different functions of a universal class can not preserve the ordering, they are required to be different. So in general, hashing does not provide the operations based or related to ordering of the elements such as succ, pred, order of an element or the mentioned operation -- k\textsuperscript{th}. Despite this, this can be also a rare advantage. Since trees require an ordering of the elements they store, when the universe is not naturally ordered a problem occurs. Usually we solve the problem by adding a unique identifier to every element that gets stored. This consumes a little memory and in distributed environments causes small troubles with unicity, too.
+
+The obvious advantage of hashing is its simplicity. In addition, its constant expected time of the find operation may seem far better than the logarithmic time of trees. On the other hand, if provided with an unsuitable, input hashing often degrades. Balanced trees provide warranties for every input they are provided with. This is a tradeoff that has to be decided by the user -- excellent expected and poor worst case time compared to logarithmic time in every case.
+
+To sum up, when we need a fast and simple to implement mapping of an object to another one, hashing is a good solution. Especially, when we have the assumptions of hashing satisfied. These conditions are often met with objects having the artificial identifiers. However the worst case guarantee is poor. Despite this, the expected worst case warranty is similar to that of trees, as shown later in the work. Nowadays, simplicity does not mean an extra advantage. Standard libraries of current programming languages provide us with many implementations of hashing and trees.
+
