@@ -172,10 +172,10 @@ M_{\geq k} \neq \emptyset & \Leftrightarrow  M_{= k} \neq \emptyset \\
 \end{proof}
 \end{lemma}
 
-Now fix any arbitrary bucket $b \in B$. If the chain in the bucket $b$ has $\psl(b, h) \geq k$, then there is a subset $Y \subseteq S$, $|Y| \geq k$, such that $h(Y) = \{ b \}$. If $\psl(b, h) = k$, then set $Y$, $|Y| = k$, is maximal considering its size. It means that the set $Y$ may not be extended to a larger one hashed just onto $b$. We can write down the probability density function of $\psl(b)$ as:
+Now fix any arbitrary bucket $b \in B$. If the chain in the bucket $b$ has $\psl(b, h) \geq k$, then there is a subset $Y \subseteq S$, $|Y| \geq k$, such that $h(Y) = \{ b \}$. If $\psl(b, h) = k$, then set $Y$, $|Y| = k$, is maximal considering its size. It means that the set $Y$ may not be extended to a larger one hashed just onto $b$. We can write down the probability density functions of $\psl(b)$ as:
 \begin{displaymath}
 \begin{split}
-\Prob{\psl(b) \geq k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ b \} \})}{|H|} \\
+\Prob{\psl(b) \geq k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{ b \} \})}{|H|} \text{,} \\
 \Prob{\psl(b) = k} & = \frac{\sum\displaylimits_{h \in H} \Indicator(\{ Y \subseteq S \setdelim |Y| = k, h(Y) = \{ b \}, Y \text{ is maximal} \})}{|H|} \text{.}
 \end{split}
 \end{displaymath}
@@ -216,12 +216,13 @@ We further estimate the above fraction from the properties of the class $H$. In 
 If $H$ is a strongly $\omega$-universal system, then $\Expect{\lpsl} \in O\left(\frac{\log n}{\log \log n}\right)$.
 \end{theorem}
 \begin{proof}
+Estimate the probability of the existence of a chain consisting of at least $k \in \mathbb{N}$ elements:
 \begin{displaymath}
 \begin{split}
 P(\psl(a) \geq k) 
 	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{a\} \}|}{|H|} \\
 	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|B|}^{k}}}{|H|} \\
-	& = \dbinom{|S|}{k}\frac{1}{{|B|}^k}
+	& = \dbinom{|S|}{k}\frac{1}{{|B|}^k} \text{.}
 \end{split}
 \end{displaymath}
 

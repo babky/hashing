@@ -12,7 +12,7 @@ Then we show Remark \ref{remark-probability-long-chain} that comes from the orig
 
 The notation of the section is the following. The source space, represents later the universe, is the vector space $\vecspace{u}$. The target space, becomes a representation of the hash table, is denoted by $\vecspace{b}$. As done many times before, we factor a random uniformly chosen linear transformation $T \in LT(\vecspace{u}, \vecspace{b})$ through the factor space $\vecspace{f}$. Model \ref{remark-model-uniform-linear-map-selection} shows the existence of two linear functions $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$. In addition the last one is surjective and they are chosen uniformly among $LT(\vecspace{u}, \vecspace{f})$ and $LTS(\vecspace{f}, \vecspace{b})$.
 
-\begin{definition}
+\begin{definition}[Event $E_1(S, T, l)$]
 Let $l \in \mathbb{N}$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a linear transformation and $S \subset \vecspace{u}$. \emph{Event $E_1(S, T, l)$} occurs if there is a subset of $S$ containing at least $l$ elements mapped by the function $T$ on a singleton,
 
 \[ 
@@ -20,7 +20,7 @@ Let $l \in \mathbb{N}$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a linear t
 \]
 \end{definition}
 The event $E_1$ corresponds to the existence of a chain of length at least $l$. The second event is defined to simplify the estimate of probability of the event $E_1$. It may seem quite unnatural but it fits the scheme of Theorem \ref{theorem-linear-function-set-onto} as shown later.
-\begin{definition}
+\begin{definition}[Event $E_2(S, T_0, T_1)$]
 Let $T_0: \vecspace{u} \rightarrow \vecspace{f}, T_1: \vecspace{f} \rightarrow \vecspace{b}$ be linear transformations with $T_2$ being surjective and $S \subset \vecspace{u}$. \emph{Event $E_2(S, T_0, T_1)$} occurs if
 \[
 	E_2(S, T_0, T_1) \equiv \exists \vec{y} \in \vecspace{b}: T_1^{-1}(\vec{y}) \subseteq T_0(S) \text{.}
@@ -101,9 +101,9 @@ Let $T_0: \vecspace{u} \rightarrow \vecspace{f}$, $T_1: \vecspace{f} \rightarrow
 \begin{proof}
 We slightly changed the choice of the variable $d$ and naturally moved to a different size $|S|$. In original Remark \ref{remark-e2-probability} we have $d = \frac{|A|}{|S|}$. In fact, we needed just three inequalities concerning $d$
 \begin{enumerate}
-\item $d > 1$,
-\item $\mu = 1 - \frac{|A - T_0(S)|}{|A|} \leq \frac{1}{d} < 1$,
-\item $\log d \geq f - b - \log b$.
+\item [(1)] $d > 1$,
+\item [(2)] $\mu = 1 - \frac{|A - T_0(S)|}{|A|} \leq \frac{1}{d} < 1$,
+\item [(3)] $\log d \geq f - b - \log b$.
 \end{enumerate}
 
 First, we try to verify them. The first is an assumption of the statement. The second one follows from $d > 1$
@@ -126,7 +126,7 @@ In the second case if $d = \frac{2 ^ f}{\alpha 2 ^ b}$, then
 
 Recall that from the first two inequalities if follows that the assumptions of Theorem \ref{theorem-linear-function-set-onto} are met
 \begin{gather*}
-\emptyset \neq \vecspace{f} - T_0(S) \neq \vecspace{f} \\
+\emptyset \neq \vecspace{f} - T_0(S) \neq \vecspace{f} \text{,} \\
 \mu < 1 \text{.}
 \end{gather*}
 Now we use the theorem again for the transformation $T_1$, the set $\vecspace{f} - T_0(S)$ and the inverse density $\mu$ and obtain
@@ -299,11 +299,11 @@ We do not repeat the whole proof of Remark \ref{remark-probability-long-chain} s
 Now perform the choices by setting
 \[
 \begin{split}
-	f_1 & = \left\lfloor b + \log b + \log r - \log \log r + \log \alpha + 1 \right\rfloor \\
-	f_2 & = \left\lfloor b + \log r - \log \log r + \log \alpha + 1 \right\rfloor \\
-	d_1 & = \frac{2 ^ {f_1}}{\alpha b 2 ^ b} \\
-	d_2 & = \frac{2 ^ {f_2}}{\alpha 2 ^ b} \\
-	l_1 & = 4 c_\epsilon \alpha r b \log b \\
+	f_1 & = \left\lfloor b + \log b + \log r - \log \log r + \log \alpha + 1 \right\rfloor \text{,} \\
+	f_2 & = \left\lfloor b + \log r - \log \log r + \log \alpha + 1 \right\rfloor \text{,} \\
+	d_1 & = \frac{2 ^ {f_1}}{\alpha b 2 ^ b} \text{,} \\
+	d_2 & = \frac{2 ^ {f_2}}{\alpha 2 ^ b} \text{,} \\
+	l_1 & = 4 c_\epsilon \alpha r b \log b \text{,} \\
 	l_2 & = 2 \alpha c_\epsilon r \text{.}
 \end{split}
 \]
@@ -311,7 +311,7 @@ Now perform the choices by setting
 So that $T_1$ exists, we have to verify that $|\vecspace{f}| \geq |\vecspace{b}|$. It is enough to have $f \geq b$. The inequality $f \geq b$ follows from the fact $\log r - \log \log r + \log \alpha \geq 0$ and from our choice of $f$ since
 \[
 \begin{split}
-	f_1 & \geq b + \log b + \log r - \log \log r + \log \alpha \geq b \\
+	f_1 & \geq b + \log b + \log r - \log \log r + \log \alpha \geq b \text{,} \\
 	f_2 & \geq b + \log r - \log \log r + \log \alpha \geq b \text{.}
 \end{split}
 \]
@@ -319,7 +319,7 @@ So that $T_1$ exists, we have to verify that $|\vecspace{f}| \geq |\vecspace{b}|
 Secondly, we show that the assumptions of Statement \ref{statement-e2-probability-linear-good} are met for both choices of $d$. Precisely we need $d > 1$ and this is satisfied because
 \[
 \begin{split}
-& d_1 = \frac{2 ^ {f_1}}{\alpha b 2 ^ b} \geq \frac{r}{\log r} \geq 2 \\
+& d_1 = \frac{2 ^ {f_1}}{\alpha b 2 ^ b} \geq \frac{r}{\log r} \geq 2 \text{,} \\
 & d_2 = \frac{2 ^ {f_2}}{\alpha 2 ^ b} \geq \frac{r}{\log r} \geq 2 \text{.}
 \end{split}
 \]

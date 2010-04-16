@@ -61,7 +61,7 @@ Let $H$ be a universal system mapping an universe $U$ to a hash table $B$. Let $
 
 Then function $l: \mathbb{N} \times \mathbb{R}_{0}^{+} \rightarrow \mathbb{N}$ of variables $m$ and $\alpha$, $l(m, \alpha)$, is a \emph{chain length limiting function}. 
 
-We say that function $h \in H$ \emph{creates a long chain} if there is a chain of length longer than limiting value $l(m, \alpha)$.
+We say that function $h \in H$ creates a \emph{long chain} if there is a chain of length longer than limiting value $l(m, \alpha)$.
 
 Moreover let $p \in (0, 1)$ be probability such that $\Prob{\lpsl \geq l(m, \alpha)} \leq p$, then system $H_p = \{ h \in H \setdelim h \text{ does not create a long chain} \}$ is called a \emph{$p$-trimmed system}. The probability $p$ is called the \emph{trimming rate}.
 \end{definition}
@@ -101,7 +101,7 @@ Let $H$ be a $c$-universal system of hash functions, $U$ be a universe and $B$ b
 \]
 \end{theorem}
 \begin{proof}
-From lemma \ref{lemma-size-of-trimmed-system} and from the assumption of $c$-universality of the original system it follows that 
+From Lemma \ref{lemma-size-of-trimmed-system} and from the assumption of $c$-universality of the original system it follows that 
 \[
 \begin{split}
 & \Prob{h(x) = h(y) \text{ for } h \in H_p}  \\
@@ -109,7 +109,7 @@ From lemma \ref{lemma-size-of-trimmed-system} and from the assumption of $c$-uni
 	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{(1 - p)|H|} \\ 
 	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \}|}{(1 - p)|H|} \\
 	& \qquad = \frac{1}{1 - p} \Prob{h(x) = h(y) \text{ for } h \in H} \\
-	& \qquad \leq \frac{c}{(1 - p) m} \\
+	& \qquad \leq \frac{c}{(1 - p) m} \text{.}
 \end{split}
 \]
 
@@ -247,9 +247,7 @@ We use Inequality \ref{inequality-formula-j} to obtain the chain limit. The limi
 
 Program optimising the value of the multiplicative constant only minimises the value $4 c_\epsilon \alpha j$ and does not pay any attention to the other constant. After the minimal value is retrieved, together with the values of the parameters, the value of the constant, $4 c_\epsilon j \log j b$, is determined. To find the value of the constant $c_\epsilon$ according to Inequality \ref{inequality-better-c-e} of Statement \ref{statement-better-c-e}, additional parameters $k$ and $l$ are required. We use Algorithm \ref{algorithm-scheme-3} to solve this optimisation problem.
 
-The last statement of the theorem now follows from Algorithm \ref{algorithm-scheme-3}, which is able to compute the minimal constant $a$ and corresponding constant $b$, and Claim \ref{claim-whole-limit}.
-
-\begin{algorithm}[ht!]
+\begin{algorithm}[H]
 \caption{Calculate the multiplicative constant for parameters $p, m, \alpha, \epsilon, k, l$.}
 \label{procedure-scheme-3}
 \begin{algorithmic}
@@ -269,7 +267,7 @@ The last statement of the theorem now follows from Algorithm \ref{algorithm-sche
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[ht!]
+\begin{algorithm}[H]
 \caption{Calculate the smallest limit for $p=0.5$, $m \geq \text{4 096}$ and prescribed $\alpha$.}
 \label{algorithm-scheme-3}
 \floatname{algorithm}{Procedure}
@@ -288,6 +286,8 @@ The last statement of the theorem now follows from Algorithm \ref{algorithm-sche
 \RETURN $c$
 \end{algorithmic}
 \end{algorithm}
+
+The last statement of the theorem now follows from Algorithm \ref{algorithm-scheme-3}, which is able to compute the minimal constant $a$ and corresponding constant $b$, and Claim \ref{claim-whole-limit}.
 \end{proof}
 
 The best result achieved for $\alpha = 1.5$, $m = 2 ^ b \geq \text{4 096}$ is for $\epsilon = 0.96$, $j = 0.74$ and equals $4 c_\epsilon \alpha j = 57.29$. The same approach gives multiplicative constant $47.63$ for $\alpha = 1$. The assumption $\alpha < \frac{r}{2}$ holds since $\alpha \leq 1.5 < 6 < jb \leq d \log d = \frac{r}{2}$.
@@ -545,14 +545,14 @@ We deal with the amortised time of the find and unsuccessful insert or delete op
 Let the sequence $O = \{o_i\}_{i=1}^o$ denote the performed operations, the $i$\textsuperscript{th} operation $o_i \in \lbrace Insert, Delete \rbrace$. The following two definitions make the analysis more exact and clear.
 
 \begin{definition}[$\alpha$-cycle]
-The $\alpha$-cycle consists of the operations between the two immediate rehash operations causing the violation of the load factor rule. Every $\alpha$-cycle contains the last operation -- the one causing the violation.
+The \emph{$\alpha$-cycle} consists of the operations between the two immediate rehash operations causing the violation of the load factor rule. Every $\alpha$-cycle contains the last operation -- the one causing the violation.
 \end{definition}
 First, notice that for this definition it is not important if the upper or lower bound of the load factor is the cause of the violation. Also note that the load factor $\alpha$ is now in the interval $\left[0.25, 1\right]$ since the delete operation is allowed, too. When a rehash operation is executed, the table size is chosen so that the value $\alpha$ is near $0.5$ as possible. 
 
 The next definition of the $\alpha$-cycle is intended for the analysis of the time spent by fixing the violations of the load factor rule.
 
 \begin{definition}[l-cycle]
-The l-cycles are the partitioning of the sequence $O$ such that every l-cycle ends
+The \emph{l-cycles} are the partitioning of the sequence $O$ such that every l-cycle ends
 \begin{itemize}
 \item when the rehash operation caused by the load factor rule is needed or
 \item we performed $0.5 m$ insert operations from the start of the l-cycle and the load factor did not exceed the value of $1$.

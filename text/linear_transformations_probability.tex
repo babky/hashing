@@ -140,7 +140,7 @@ The following functions are convenient for using the induction hypothesis. For e
 \begin{split}
 f_0(x) &= \begin{cases}
 	x ^ {c + \log \log \left(\frac{1}{x}\right)} & \text{ if } 0 < x < 1 \\ 
-	0 & \text{ if } x = 0 \\
+	0 & \text{ if } x = 0 \text{,}
 \end{cases} \\
 f(x) & = \min \{1, f_0(x) \} \text{.} 
 \end{split}
@@ -239,14 +239,14 @@ In both cases for every $x \in (0, \mu_0]$ the following holds \[ f(x) \leq \fra
 \]
 
 \paragraph{Constant $\mu_0$ is set so that the exponent is negative, $\mu_0 \geq x_2$.}
-To prove the lemma in this case, it is sufficient to show that the exponent, $c + 1 + \log \log \left( \frac{1}{\mu_0} \right)$, is not positive. As already observed before the estimate is then at least 1.
+To prove the lemma in this case, it is sufficient to show that the exponent, $c + 1 + \log \log \left( \frac{1}{\mu_0} \right)$, is not positive. As already observed before the estimate is then at least 1. The exponent is non-positive since
 \[
 \begin{split}
 	c + 1 + \log \log \left( \frac{1}{\mu_0} \right) 
 		& \leq c + 1 + \log \log \left( \frac{1}{x_2} \right) \\ 
 		& = c + 1 + \log \left(- \log \left(2 ^ {-2 ^ {-c - 1}}\right)\right) \\ 
 		& = c + 1 + \log \left(2 ^ {-c - 1}\right) \\ 
-		& = c + 1 - c - 1 = 0
+		& = c + 1 - c - 1 = 0 \text{.}
 \end{split}
 \]
 
@@ -543,7 +543,7 @@ From Theorem \ref{theorem-linear-function-set-onto} used for the set $T_0(S)$, t
 \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac {2 ^ f}{k}} 
 	& \leq \mu ^ {f - b - \log b + \log \log \frac{1}{\mu}} \\ 
 	& \leq \mu ^ {\log c_\epsilon + \log b + b - l - b - \log b + \log \log \frac{1}{\mu}} \\ 
-	& \leq \left(1 - \frac{1}{k}\right) ^ {\log c_\epsilon - l + \log \log \left(\frac{1}{1 - \frac{1}{k}} \right)}
+	& \leq \left(1 - \frac{1}{k}\right) ^ {\log c_\epsilon - l + \log \log \left(\frac{1}{1 - \frac{1}{k}} \right)} \text{.}
 \end{split}
 \]
 
