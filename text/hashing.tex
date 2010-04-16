@@ -46,13 +46,13 @@ Since the universes are really large, recall the previous examples, sizes of the
 
 \begin{definition}[Load factor]
 \label{definition-load-factor}
-Let $n$ be the size of the represented set and $m$ be the size of the hash table. The variable $\alpha$ defined as \[ \alpha = \frac{n}{m} \] is called the load factor of the table.
+Let $n$ be the size of the represented set and $m$ be the size of the hash table. The variable $\alpha$ defined as \[ \alpha = \frac{n}{m} \] is called the \emph{load factor} of the table.
 \end{definition}
 
 To take control of the table's overhead it is sufficient to keep the load factor in a predefined interval. Not only the empty buckets cause troubles. The overfilled ones are another extreme especially if there are too many collisions.
 \begin{definition}[Collision]
 \label{definition-collision}
-Let $x, y \in U$ be two distinct elements. We say that the elements $x$ and $y$ collide if $h(x) = h(y)$.
+Let $x, y \in U$ be two distinct elements. We say that the elements $x$ and $y$ \emph{collide} if $h(x) = h(y)$.
 \end{definition}
 
 Above all the collision handling is what differentiates distinct hash tables and determines their performance.

@@ -44,7 +44,7 @@ Every strongly $n$-universal class of hash functions is nearly strongly $n$-univ
 
 \begin{definition}[Strongly $\omega$-universal class of hash functions]
 \label{strong_universal_omega_system}
-Family of functions $H$ is strongly $\omega$-universal if it is strongly $n$-universal for every $n \in \mathbb{N}$.
+Family of functions $H$ is \emph{strongly $\omega$-universal} if it is strongly $n$-universal for every $n \in \mathbb{N}$.
 \end{definition}
 
 % TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
@@ -81,7 +81,7 @@ Let $H$ be a $n$-universal class consisting of functions from a universe $U$ int
 
 The only estimate we can use comes from the strong $n$-universality of $H$ and holds for $n$ elements only. We extend the set of images by other $n - k$ elements $x_{k + 1}, \dots, x_n$. They are let to be mapped on arbitrary element of $B$. Such extension must be done carefully so that the final sequence consists of different elements $x_1, \dots, x_n$, too. From now on fix one such extension, $x_{k + 1}, \dots, x_n$.
 
-The set of functions mapping given $k$ elements onto their prescribed images, $\bar H$, may be seen as:
+The set of functions mapping given $k$ elements onto their prescribed images, $\bar H$, may be seen as
 \[
 \begin{split}
 \bar{H}	& = \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, k \rbrace \rbrace \\
@@ -89,7 +89,7 @@ The set of functions mapping given $k$ elements onto their prescribed images, $\
 \end{split}
 \]
 
-Notice that sets of functions that map elements $x_{k + 1}, \dots, x_n$ onto different images $y_{k + 1}, \dots, y_n$ are disjoint. The sum of their sizes is then equal to $|\bar H|$.
+Notice that sets of functions that map elements $x_{k + 1}, \dots, x_n$ onto different images $y_{k + 1}, \dots, y_n$ are disjoint. The sum of their sizes is then equal to $|\bar H|$. It follows that
 \[
 \begin{split}
 |\bar H|& = \left| \displaystyle \bigcup_{y_{k+1}, \dots, y_n \in B} \lbrace h \in H \setdelim h(x_i) = y_i, i \in \lbrace 1, \dots, n \rbrace \rbrace \right| \\
@@ -112,7 +112,7 @@ System of linear functions was among the first systems of universal hash functio
 \label{definition-linear-system}
 Let $N$ be a prime, $m \in \mathbb{N}$ and let $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ be sets. Then the class of linear functions 
 \[ LS = \{h_{a, b}(x): U \rightarrow B \setdelim a, b \in U \text{ where } h_{a, b}(x) = ((ax + b) \bmod N) \bmod m \} \]
-is called linear system.
+is called \emph{linear system}.
 \end{definition}
 
 \begin{remark}
@@ -150,7 +150,7 @@ Hence the linear system is $\frac{\left \lceil \frac{N}{m} \right \rceil ^ 2}{\l
 For examining the properties of the original linear system simpler and smaller multiplicative system may be used. They have many common properties and share some same drawbacks. This multiplicative system may provide us with some insights for which choices of hash function and stored set they both fail.
 
 \begin{definition}[Multiplicative system]
-Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \bmod p) \bmod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the multiplicative system.
+Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \bmod p) \bmod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the \emph{multiplicative system}.
 \end{definition}
 
 An important application of the multiplicative system is the construction of a perfect hash function shown in \cite{1884} by Fredman, Koml\'os and Szemeredi.
@@ -182,16 +182,16 @@ Previous systems contain only simple linear functions from natural numbers to na
 \paragraph{System of linear transformations.} 
 Systems of linear transformations are studied later in Chapter \ref{chapter-linear-systems}. We use them in Chapter \ref{chapter-proposed-model} to create a new model of universal hashing.
 
-\begin{definition}
+\begin{definition}[The set of all linear transformations, the set of all surjective linear transformations]
 \label{definition-linear-transformations}
-Let $U$ and $B$ be two vector spaces. Denote the set of all linear transformations as
+Let $U$ and $B$ be two vector spaces. Denote \emph{the set of all linear transformations} as
 \[
 LT(U, B) = \{ T: U \rightarrow B \setdelim T \text{ is a linear transformation} \}
 \]
 and let
 \[
 LTS(U, B) = \{ T: U \rightarrow B \setdelim T \text{ is a surjective linear transformation} \}
-\] denote the set of all surjective linear transformations between vector spaces $U$~and~$B$.
+\] denote \emph{the set of all surjective linear transformations} between vector spaces $U$~and~$B$.
 \end{definition} 
 
 \begin{definition}[System of linear transformations]
@@ -241,7 +241,7 @@ Let $p$ be a prime, $k \in \mathbb{N}$, $B = \{0, \dots, p - 1 \}$ and $l \in \m
 \begin{displaymath}
 BSS_{p, l} = \left\{ h_{\vec{c}}: \{0, 1\}^{k + 1} \rightarrow B \setdelim h(x) = \left(\displaystyle \sum_{i=0}^{k} c_i x_i\right) \bmod p, \vec{c} = (c_0, \dots, c_k)  \in \mathbb{Z}_l^{k + 1} \right\}
 \end{displaymath} 
-is called bit string system with parameters $p$ and $l$.
+is called \emph{bit string system} with parameters $p$ and $l$.
 \end{definition}
 
 \begin{remark}
@@ -253,13 +253,13 @@ Let $x$ and $y$ be two different bit strings $x, y \in \{0, 1\} ^ {k + 1}$. We m
 \left( \displaystyle \sum_{i = 0}^{k} c_i x_i \right) \bmod p = \left( \displaystyle \sum_{i = 0}^{k} c_i y_i \right) \bmod p \text{.}
 \]
 
-Since $x \neq y$ there is an index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$. This allows us to exactly determine the $j$\textsuperscript{th} coefficient $c_j$ from the others as stated below.
+Since $x \neq y$ there is an index $j$, $0 \leq j \leq k$ such that $x_j - y_j \neq 0$. This allows us to exactly determine the $j$\textsuperscript{th} coefficient $c_j$ from the others:
 
 \begin{displaymath}
 \begin{split}
 \left(\displaystyle \sum_{i=0}^{k-1} c_i x_i\right) \bmod p & = \left(\displaystyle \sum_{i=0}^{k-1} c_i y_i\right) \bmod p \\
 c_j(x_j - y_j) \bmod p & = \left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \bmod p \\
-c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \bmod p
+c_j & = (x_j - y_j) ^ {-1}\left(\displaystyle \sum_{i=0, i \neq j}^{k-1} c_i (x_i - y_i)\right) \bmod p \text{.}
 \end{split}
 \end{displaymath}
 
@@ -277,15 +277,15 @@ The bit string system is thus $\frac{p}{l}$-universal.
 \paragraph{Polynomials over finite fields.}
 The following system is a generalisation of so far discussed linear functions and linear transformations to polynomials. The advantage delivered by the system of polynomials is its strong universality. Unfortunately it is traded for the bigger size of the system.
 
-\begin{definition}[Polynomials over finite fields]
-Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \right) \bmod m \] is called the system of polynomial functions of the $n$-th degree.
+\begin{definition}[System of polynomial functions]
+Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \right) \bmod m \] is called the \emph{system of polynomial functions} of the $n$-th degree.
 \end{definition}
 
 \begin{remark}
 Let $N$ be a prime number and $n \in \mathbb{N}$. If $B = U$ then the system of polynomial functions of the $n$-th degree is strongly $n + 1$-universal. When $B \neq U$ the system is nearly strongly $n + 1$-universal.
 \end{remark}
 \begin{proof}
-Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots, y_{n+1}$ are their prescribed images. We can write down a system of linear equations that can be used to find the coeficients $c_0, c_1, \dots, c_n$:
+Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots, y_{n+1}$ are their prescribed images. We can write down a system of linear equations that can be used to find the coefficients $c_0, c_1, \dots, c_n$:
 \[ 
 h(x_i) = y_i, \quad 0 \leq i \leq n \text{.}
 \]
@@ -297,9 +297,9 @@ Let $U \neq B$. We use the idea from the proof of $c$-universality of linear sys
 \begin{displaymath}
 \left(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} \right) \bmod N = {y}_i + {r_i}{m} \qquad r_i \in \left\{0, \dots, \left\lceil \frac{N}{m} \right\rceil - 1 \right\} \text{.}
 \end{displaymath}
-For every choice of all $r_i$, $0 \leq i \leq n$, we obtain an unique solution of the above system of equations since we are in the field $\mathbb{Z}_N$. The number of all choices of $r_i$ is ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$. From the number of functions which map $x_i$ to $y_i$ for $1 \leq i \leq n$ it follows
+For every choice of all $r_i$, $0 \leq i \leq n$, we obtain an unique solution of the above system of equations since we are in the field $\mathbb{Z}_N$. The number of all choices of $r_i$ is ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$. From the number of functions which map $x_i$ to $y_i$ for $1 \leq i \leq n$ it follows that
 \begin{displaymath}
-|\{h \in H \setdelim h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| \leq {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{\left(\frac{N}{m}\right)^{n + 1}}\left(\frac{N}{m}\right)^{n+1}
+|\{h \in H \setdelim h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| \leq {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{\left(\frac{N}{m}\right)^{n + 1}}\left(\frac{N}{m}\right)^{n+1} \text{.}
 \end{displaymath}
 
 Hence this system is nearly strongly $n+1$-universal with the constant $\frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{\left(\frac{N}{m}\right)^{n+1}}$.
@@ -317,7 +317,7 @@ Let $U$ and $B$ be sets such that $|B| < |U|$. The family of functions
 \[
 H = \{h: U \rightarrow B \}
 \]
-is called the system of all functions between $U$ and $B$.
+is called the \emph{system of all functions} between $U$ and $B$.
 \end{definition}
 
 \begin{remark}
