@@ -110,7 +110,7 @@ System of linear functions was among the first systems of universal hash functio
 
 \begin{definition}[Linear system]
 \label{definition-linear-system}
-Let $N$ be a prime and $m \in \mathbb{N}$. Define the sets $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$. Then the class of linear functions 
+Let $N$ be a prime, $m \in \mathbb{N}$ and let $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ be sets. Then the class of linear functions 
 \[ LS = \{h_{a, b}(x): U \rightarrow B \setdelim a, b \in U \text{ where } h_{a, b}(x) = ((ax + b) \bmod N) \bmod m \} \]
 is called linear system.
 \end{definition}
@@ -172,7 +172,7 @@ This may be rewritten as:
 k(x - y) \bmod p = l m \qquad \text{ for  } l \in \left\lbrace -\left\lfloor\frac{p}{m}\right\rfloor, \dots, \left\lfloor\frac{p}{m}\right\rfloor \right\rbrace - \{0\} \text{.}
 \end{displaymath}
 
-Notice the parameter $l \neq 0$ since $k \neq 0$. Thus for every choice of $x$ and $y$ there are at most $2\left\lfloor\frac{p}{m}\right\rfloor$ functions. For every value of $l$ there is exactly one $k$ satisfying the equality because parameter $p$ is a prime. For the number of colliding functions we have \[ | \lbrace h \in \mathrm{Mult}_{m,p} \setdelim h(x) = h(y) \rbrace | \leq \frac{2p}{m} \] and the system is then $2$-universal.
+Notice that the parameter $l \neq 0$ since $k \neq 0$. Thus for every choice of $x$ and $y$ there are at most $2\left\lfloor\frac{p}{m}\right\rfloor$ functions. For every value of $l$ there is exactly one $k$ satisfying the equality because parameter $p$ is a prime but $k$ can be a solution for distinct $l$. For the number of colliding functions we have \[ | \lbrace h \in \mathrm{Mult}_{m,p} \setdelim h(x) = h(y) \rbrace | \leq \frac{2p}{m} \] and the system is then $2$-universal.
 \end{proof}
 % End of multiplicative system
 
@@ -184,14 +184,14 @@ Systems of linear transformations are studied later in Chapter \ref{chapter-line
 
 \begin{definition}
 \label{definition-linear-transformations}
-Let $U$ and $B$ be two vector spaces. Define the set of all linear transformations
+Let $U$ and $B$ be two vector spaces. Denote the set of all linear transformations as
 \[
 LT(U, B) = \{ T: U \rightarrow B \setdelim T \text{ is a linear transformation} \}
 \]
-and
+and let
 \[
 LTS(U, B) = \{ T: U \rightarrow B \setdelim T \text{ is a surjective linear transformation} \}
-\] set of all surjective linear transformations between vector spaces $U$ and $B$.
+\] denote the set of all surjective linear transformations between vector spaces $U$~and~$B$.
 \end{definition} 
 
 \begin{definition}[System of linear transformations]
@@ -278,11 +278,11 @@ The bit string system is thus $\frac{p}{l}$-universal.
 The following system is a generalisation of so far discussed linear functions and linear transformations to polynomials. The advantage delivered by the system of polynomials is its strong universality. Unfortunately it is traded for the bigger size of the system.
 
 \begin{definition}[Polynomials over finite fields]
-Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \right) \bmod m \] is called the system of polynomial hash functions of the $n$-th degree.
+Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \right) \bmod m \] is called the system of polynomial functions of the $n$-th degree.
 \end{definition}
 
 \begin{remark}
-Let $N$ be a prime number and $n \in \mathbb{N}$. If $B = U$ then the system of polynomial hash functions of the $n$-th degree is strongly $n + 1$-universal. When $B \neq U$ the system is nearly strongly $n + 1$-universal.
+Let $N$ be a prime number and $n \in \mathbb{N}$. If $B = U$ then the system of polynomial functions of the $n$-th degree is strongly $n + 1$-universal. When $B \neq U$ the system is nearly strongly $n + 1$-universal.
 \end{remark}
 \begin{proof}
 Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots, y_{n+1}$ are their prescribed images. We can write down a system of linear equations that can be used to find the coeficients $c_0, c_1, \dots, c_n$:
@@ -290,19 +290,19 @@ Let $x_1, x_2, \dots, x_{n+1}$ be different elements of $U$ and $y_1, y_2, \dots
 h(x_i) = y_i, \quad 0 \leq i \leq n \text{.}
 \]
 
-If $U = B$ the function $h(x)$ is reduced to the form: \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \text{.} \] Since $N$ is a prime number and the elements $x_i$ are different the corresponding Vandermond matrix is regular. There is exactly one solution of the above system, let $c_0, \dots, c_n$ denote the solution. Size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|B|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial hash functions is strongly $n + 1$-universal.
+If $U = B$ the function $h(x)$ is reduced to the form: \[ h(x) = \left( \displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \text{.} \] Since $N$ is a prime number and the elements $x_i$ are different the corresponding Vandermond matrix is regular. There is exactly one solution of the above system, let $c_0, \dots, c_n$ denote the solution. Size of the system is ${|U|}^{n+1}$ and $1 = \frac{|U| ^ {n + 1}}{|B|^{n + 1}} = \frac{|U| ^ {n + 1}}{|U|^{n + 1}}$. Now it is clear that the system of polynomial functions is strongly $n + 1$-universal.
 
 Let $U \neq B$. We use the idea from the proof of $c$-universality of linear system. First we write down the equations $h(x_i) = y_i$ in the field $\mathbb{Z}_N$. Instead using $\bmod N$ we introduce new variables $r_i$ as in the proof for linear system such that
 
 \begin{displaymath}
 \left(\displaystyle \sum_{j=0}^{n} c_j x_{i}^{j} \right) \bmod N = {y}_i + {r_i}{m} \qquad r_i \in \left\{0, \dots, \left\lceil \frac{N}{m} \right\rceil - 1 \right\} \text{.}
 \end{displaymath}
-For every choice of all $r_i$, $0 \leq i \leq n$, we obtain an unique solution of the above system of equations since we are in the field $\mathbb{Z}_N$. The number of all choices of $r_i$ is ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$. From the number of hash functions which map $x_i$ to $y_i$ for $1 \leq i \leq n$ it follows
+For every choice of all $r_i$, $0 \leq i \leq n$, we obtain an unique solution of the above system of equations since we are in the field $\mathbb{Z}_N$. The number of all choices of $r_i$ is ${\left\lceil \frac{N}{m} \right\rceil}^{n + 1}$. From the number of functions which map $x_i$ to $y_i$ for $1 \leq i \leq n$ it follows
 \begin{displaymath}
-|\{h \in H \setdelim h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| \leq {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}\left(\frac{N}{m}\right)^{n+1}
+|\{h \in H \setdelim h(x_i) = y_i, i \in \{1, \dots, n + 1\}\}| \leq {\left\lceil \frac{N}{m} \right\rceil}^{n + 1} = \frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{\left(\frac{N}{m}\right)^{n + 1}}\left(\frac{N}{m}\right)^{n+1}
 \end{displaymath}
 
-Hence this system is nearly strongly $n+1$-universal with the constant $\frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{(\frac{N}{m})^{n+1}}$.
+Hence this system is nearly strongly $n+1$-universal with the constant $\frac{{\left\lceil \frac{N}{m} \right\rceil}^{n + 1}}{\left(\frac{N}{m}\right)^{n+1}}$.
 \end{proof}
 
 Although the choice of $U = B$ is not very practical one, however it gives us a clue that the system might be nearly strongly universal.
@@ -340,7 +340,7 @@ In this section we sum up some properties of strongly $k$-universal classes of f
 The first theorems show the results of combinations of two strongly universal systems.
 \begin{theorem}
 \label{theorem-pair-system}
-Let $H$ and $I$ be strongly $k$-universal systems both from a universe~$U$ into a hash table $B$ with $m = |B|$. For $h\in H$ and $i\in I$ let us define \[ f_{(h, i)}(x)= (h(x), i(x)) \] for all $x\ in U$. Then the system
+Let $H$ and $I$ be strongly $k$-universal systems both from a universe~$U$ into a hash table $B$ with $m = |B|$. For $h\in H$ and $i\in I$ let us define \[ f_{(h, i)}(x)= (h(x), i(x)) \] for all $x \in U$. Then the system
 \[
 	J = \{f_{(h, i)}: U \rightarrow B \times B \setdelim h \in H, i \in I \}
 \]
@@ -350,13 +350,13 @@ is strongly $k$-universal.
 Let $x_1, \dots, x_k$ be distinct elements of $U$ and $y_1, \dots, y_k, z_1, \dots, z_k \in B$. We find the number of pair functions $f_{(h, i)}$ such that for both functions $h$ and $i$ we have $h(x_1) = y_1, \dots, h(x_k) = y_k$, $i(x_1) = z_1, \dots, i(x_k) = z_k$. From strong $k$-universality of both systems we know that there are at most $\frac{|H|}{m^k}$ functions $h$ and $\frac{|I|}{m^k}$ functions $i$ satisfying mentioned criteria. So the number of all functions $f_{(h, i)}$ such that $f_{(h, i)}(x_1) = (y_1, z_1), \dots, f_{(h, i)}(x_k) = (y_k, z_k)$ is at most $\frac{|H||I|}{m^{2k}}$. The size of the table is $m^2$ and thus the constructed system is strongly $k$-universal.
 \end{proof}
 
-Combination of two universal systems does not have to increase the size of the table. From the previous result we obtain a smaller probability of collision by paying the expensive price of the table expansion. When using single class of hash functions the same effect on probability decrease can be achieved by simple squaring the table's size. We could also combine two strongly universal functions and use a suitable operation to merge the given results into a small table. The created system remains strongly universal as it is stated in the next theorem and the combination does not bring us any obvious advantage.
+Combination of two universal systems does not have to increase the size of the table. From the previous result we obtain a smaller probability of collision by paying the expensive price of the table expansion. When using single class of hash functions the same effect on probability decrease can be achieved by simple squaring the table's size. We could also combine two strongly universal systems of functions and use a suitable operation to merge the given results into a small table. The created system remains strongly universal as it is stated in the next theorem and the combination does not bring us any obvious advantage.
 
 \begin{theorem}
 Let $B$ denote the set of buckets of a hash table of size $m$, $|B| = m$. Let both $H$ and $I$ be strongly $k$-universal classes of functions over the table $B$. Let $o$ be a binary left cancellative operation on $B$, ie. for every $a, c \in B$ there exists exactly one $b \in B$ with $o(a, b) = c$. Then the system of functions \[F = \lbrace f_{(h, i)} | h \in H, i \in I \rbrace\] where \[f_{(h, i)}(x) = o(h(x), i(x))\] is strongly $k$-universal.
 \end{theorem}
 \begin{proof}
-To prove the statement assume that $x_1, \dots, x_k$ are pairwise distinct elements of $U$ and $y_1, \dots, y_k$ are elements of $B$. For every $y_i$, $1 \leq i \leq k$ choose a pair $(a_i, b_i)$ with $o(a_i, b_i)=y_i$. The number of such choices is $m ^k$. From Theorem \ref{theorem-pair-system} for a fixed choice of $(a_i, b_i)$, $1 \leq i \leq k$, it follows that the probability of the event \[ h(x_1) = a_1, \dots, h(x_k) = a_k \text{ and } i(x_1) = b_1, \dots, i(x_k) = b_k \] is less than $\frac{1}{m^{2k}}$. Hence $\Prob{f(x_i} = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see the system $F$ is strongly $k$-universal.
+To prove the statement assume that $x_1, \dots, x_k$ are pairwise distinct elements of $U$ and $y_1, \dots, y_k$ are elements of $B$. For every $y_i$, $1 \leq i \leq k$ choose a pair $(a_i, b_i)$ with $o(a_i, b_i)=y_i$. The number of such choices is $m ^k$. From Theorem \ref{theorem-pair-system} for a fixed choice of $(a_i, b_i)$, $1 \leq i \leq k$, it follows that the probability of the event \[ h(x_1) = a_1, \dots, h(x_k) = a_k \text{ and } i(x_1) = b_1, \dots, i(x_k) = b_k \] is less than $\frac{1}{m^{2k}}$. Hence $\Prob{f(x_i} = y_i, 1 \le i \le k) = \frac{m^k}{m^{2k}} = \frac{1}{m^k}$. Now we see that the system $F$ is strongly $k$-universal.
 \end{proof}
 
 \begin{corollary}
@@ -374,7 +374,7 @@ Both of the operations are left cancellative because they are group operations.
 Next step is to discover the dependence of the parameter $k$ of strongly $k$-universal classes on their size. This will show us the best possible probability bound for the collision of $k$ different elements depending on the size of the system.
 \begin{theorem}
 \label{theorem-strong-size}
-Let $H$ be a strongly $k$-universal system of functions mapping universe $U$ to a table $B$ of size $m$. Size of the system is then bounded by:
+Let $H$ be a strongly $k$-universal system of functions from a universe $U$ of size $N$ to a table $B$ of size $m$. Size of the system $H$ is then bounded by:
 \begin{displaymath}
 |H| > m^{k - 1} \log_m \left( \frac{N}{km} \right) \text{.}
 \end{displaymath}
@@ -385,7 +385,7 @@ Let $H = \{h_1, \dots, h_{|H|}\}$. By induction we create sequence $U_0, U_1, \d
 From the Dirichlet's principle size of every set $U_i$ satisfies $|U_i| \geq \frac{|U_{i - 1}|}{m}$. Hence we obtain $|U_i| \geq \frac{|U|}{m^i}$.
 
 %TODO: veta, ked mam silne k univerzalny, tak prechod na pravdepodobnost kolizie jednej fcie.
-Let $i$ be the greatest index with $|U_i| \geq k$. Functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of set $U_i$ to a singleton. By Remark \ref{remark-n-to-k}, the probability of this event is less or equal to $\frac{1}{m ^ {k-1}}$. It follows that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since index $i$ is the greatest index with the property $U_i \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} \leq |U_{i + 1}| < |U_i| \leq k$. 
+Let $i$ be the greatest index with $|U_i| \geq k$. Functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of set $U_i$ to a singleton. By Remark \ref{remark-n-to-k}, the probability of this event is less or equal to $\frac{1}{m ^ {k-1}}$. It follows that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since $i$ is the greatest index with the property $|U_i| \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} \leq |U_{i + 1}| < k$. 
 
 From $\frac{N}{m^{i + 1}} < k$ it follows $\frac{N}{km} < m ^ {i}$ and thus $\log_m \left( \frac{N}{km} \right) < i$.
 
@@ -397,7 +397,7 @@ Obtaining the bound on the size of system of functions:
 \end{proof}
 
 \begin{corollary}
-If $H$ is a strongly $k$-universal class of functions, then
+If $H$ is a strongly $k$-universal system of functions from a universe $U$ of size $N$ to a table $B$ of size $m$, then
 \begin{displaymath}
 k < 1 + \frac{\log |H| - \log \log_m \left( \frac{N}{km} \right)}{\log m} < 1 + \frac{\log |H|}{\log m} \text{.}
 \end{displaymath}

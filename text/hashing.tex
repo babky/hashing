@@ -6,7 +6,7 @@ Represented sets are always small when compared to the size of the universe. In 
 
 The fact that the hash table is much smaller than the universe and any two elements may represented means that the elements may share the same address after hashing. This event is called a \emph{collision}. For hashing it is very important how collisions are handled. This is also the most interesting distinctive feature for distinct hashing models. In fact, collision handling is crucial when determining the time complexity of the scheme.
 
-When two elements collide they should be stored in a single \emph{bucket}, cell of the hash table. A bucket is often represented by the simplest data structure possible. For instance single linked list should be sufficient in many cases. More sophisticated schemes, like perfect hashing, represent every chain in another hash table without collisions.
+When two elements collide they should be stored in a single \emph{bucket}, cell of the hash table. A bucket is often represented by the simplest data structure possible. For instance singly linked list should be sufficient in many cases. More sophisticated schemes, like perfect hashing, represent every chain in another hash table without collisions.
 
 For imagination the find operation of a hash table works in the following way. Every element is placed as an argument for the hash function. The element's address is then computed and used as an index of the hash table. Then we look into the bucket lying at the returned address if the element is stored inside or not.
 
@@ -77,7 +77,7 @@ In Lemma \ref{lemma-expected-list-time} we computed the expected time of the fin
 \]
 \end{itemize}
 
-These assumptions provides us with a probabilistic model for the average case analysis of classic hashing.
+These assumptions provide us with a probabilistic model for the average case analysis of classic hashing.
 
 \section{Separate Chaining}
 Separate chaining \cite{The-art-of-computer-programming}, \cite{DBLP:books/sp/Mehlhorn84} and \cite{DBLP:books/sp/MehlhornS2008} may be considered the most basic hash table implementation. However, it provides a sufficient framework for illustration of various problems and analyses. Separate chaining usually utilises one hash function mapping elements to an address -- an index of the array representing the hash table. Every represented element is stored within a bucket given by its hash address. Every bucket is represented by a singly linked list. 
@@ -92,7 +92,7 @@ The apparent disadvantage of classic hashing is usage of a single hash function 
 
 To illustrate how separated chaining works the algorithms are presented. Although the model is quite simple the subroutines regarding the singly linked lists are not discussed. They are considered elementary enough. We remark that the running time is proportional to length of the represented chain. Also notice that the insert procedure has to check whether the element is already stored inside the list else it can be stored twice. 
 
-\begin{algorithm}[ht]
+\begin{algorithm}[H]
 \caption{Find operation of the separate chaining.}
 \label{algorithm-find-separate-chaining}
 \floatname{algorithm}{Procedure}
@@ -108,7 +108,7 @@ To illustrate how separated chaining works the algorithms are presented. Althoug
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[ht]
+\begin{algorithm}[H]
 \caption{Insert operation of the separate chaining.}
 \label{algorithm-insert-separate-chaining}
 \floatname{algorithm}{Procedure}
@@ -171,7 +171,7 @@ Linear probing is a scheme of open addressing with $h_2(x) = 1$ for every $x \in
 Another problem of linear hashing is its degradation. Clusters of non-empty buckets emerge when load factors reach one. Delete operation implemented by marking only emphasises this problem. Despite of the mentioned problems, linear probing takes the advantage of the good cache behaviour. No wonder, that its modifications are studied nowadays, e.g hopscotch hashing mentioned in Section \ref{section-modern-approaches}.
 
 \subsection{Double Hashing}
-If we want to distribute the stored set uniformly across the hash table, then the choice of a free bucket should be random. Whenever function $h(x, i)$ of argument $i$ is a random permutation of $B$, then the mentioned choice becomes random. A necessary condition is that $h_2(x)$ and $m$ are incommensurable. Therefore the size of the hash table is chosen so that it is a prime number again. 
+If we want to distribute the stored set uniformly across the hash table, then the choice of a free bucket should be random. Whenever function $h(x, i)$ of argument $i$ is a random permutation of $B$, then the mentioned choice becomes random. A necessary condition is that $h_2(x)$ and $m$ are relatively prime. Therefore the size of the hash table is chosen so that it is a prime number again. 
 
 Double hashing has theoretical analyses yielding remarkable results.
 \begin{theorem}
