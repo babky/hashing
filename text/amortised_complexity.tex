@@ -315,19 +315,19 @@ If the delete operation is allowed, then the limit value $l(m)$ is computed for 
 Either estimate for the chain limit rule we obtain in the following section is valid for the tables consisting of at least 4 096 buckets. There are two solutions how to address this problem. We may use tables with the initial size of $m = \text{4~096}$ elements. Since not every hash table grows to a size of 4~096 buckets, this overhead becomes unacceptable. The other option lies in turning off the chain limit rule when the table has less than 4~096 buckets. 
 
 \section{Algorithms}
-In Section \ref{section-proposed-model} we propose a model of universal hashing without any exact definition. Precise algorithms, showing how the operations work, are required. Despite the fact that the algorithms are very similar to those shown in Chapter \ref{chapter-hashing}, they are described more precisely again.
+In Section \ref{section-proposed-model} we propose a model of universal hashing without any exact definition. Precise algorithms, showing how the operations work, are required. Despite the fact that the algorithms are very similar to those shown in Chapter \ref{chapter-hashing}, now they are described exactly.
 
-Although Theorem \ref{theorem-model-chain-limit-rule} gives the chain length limit for $\alpha \in \{1, 1.5\}$ and $p = 0.5$, different parametrisation is possible as well. Algorithm \ref{algorithm-scheme-3} from the proof of the theorem is general enough to be able to compute the bound for arbitrary $\alpha > 0$ and prescribed $p \in (0, 1)$. According to Theorem \ref{theorem-model-chain-limit-rule} the limit function is in the form $a \log \log m + b \log m$ for $a, b \in \mathbb{R}$ depending on $\alpha$ and $p$.
+Although Theorem \ref{theorem-model-chain-limit-rule} gives the chain length limit for $\alpha \in \{1, 1.5\}$ and $p = 0.5$, different parametrisation is possible as well. Algorithm \ref{algorithm-scheme-3} from the proof of the theorem is general enough to be able to compute the bound for arbitrary $\alpha > 0$ and prescribed $p \in (0, 1)$. According to Theorem \ref{theorem-model-chain-limit-rule} the limit function is in the form $a \log \log m + b \log m$ for $a, b \in \mathbb{R}$ depending only on $\alpha$ and $p$.
 
-Let us describe the hash table's variables. It contains variables storing its size $Size$, the number of represented elements $Count$ and array $T$ is the hash table itself. Every bucket $T[i]$ has associated two variables $T[i].Size$ and $T[i].Chain$ -- its size and the linked list of the elements in the bucket. Function $Limit$ denotes the chain length limiting function and $Hash$ is the current universal function -- a linear transformation represented by a binary matrix.
+First, let us describe the hash table's variables. It contains variables storing its size $Size$, the number of represented elements $Count$ and array $T$ is the hash table itself. Every bucket $T[i]$ is associated with two variables $T[i].Size$ and $T[i].Chain$ -- its size and the linked list of the elements in the bucket. Function $Limit$ denotes the chain length limiting function and $Hash$ is the current universal function -- a linear transformation represented by a binary matrix.
 
-Initialisation creates a new empty table with the prescribed size. Note that is also uniformly chooses a random linear mapping by the random initialisation of bits of the matrix. The values of bits are chosen with the same probability $0.5$.
+Initialisation creates a new empty table with the prescribed size. It also chooses a universal function by the random initialisation of bits in the matrix $Hash$. The values of bits are chosen with the same probability $0.5$.
 
 To enumerate the stored elements in the rehash operation, Algorithm \ref{algorithm-rehash}, we iterate through the table and through its chains. A common optimisation is to place all the stored elements into a linked list. This allows faster enumeration but causes a space overhead.
 
-Whenever a load factor rule or the chain limit rule is violated, the table is rehashed using a new function chosen in initialisation. Initialisation, Algorithm \ref{algorithm-initialisation}, allows a parameter $m$ specifying the new size, so the table is rehashed into a possibly larger or smaller table.
+Whenever a load factor rule or the chain limit rule is violated, the table is rehashed using a new function chosen in initialisation. Both initialisation, Algorithm \ref{algorithm-initialisation}, and rehash, Algorithm \ref{algorithm-rehash}, take an argument $m$ specifying the new size, so the table is rehashed into a possibly larger or smaller table.
 
-Find is very straightforward. Let us notice that the linked list manipulation operations return \textbf{true} in the successful case, if an element is found, deleted or inserted, and otherwise return \textbf{false}. Insert is slightly complicated compared to the original one. The checks for both rules are required and a rehash is done if needed.  The only difference to the classic delete is the load factor rule check.
+Find is very straightforward. Let us notice that the linked list manipulation operations return \textbf{true} in the successful case, if an element is found, deleted or inserted, and otherwise return \textbf{false}. Insert and delete  operations are slightly complicated compared to the original ones because of the both rules we require to be valid.
 
 \begin{algorithm}[p]
 \caption{Initialisation of the hash table}
@@ -388,7 +388,7 @@ $i \leftarrow h(x)$
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[p]
+\begin{algorithm}[ph!]
 \caption{Insert operation}
 \label{algorithm-insert}
 \floatname{algorithm}{Insert operation}
@@ -397,25 +397,24 @@ $i \leftarrow h(x)$
 \STATE
 $i \leftarrow h(x)$
 \IF{T[i].Chain.Insert(x)}
-	\STATE \COMMENT{Set the number of stored elements.}
+%	\STATE \COMMENT{Set the number of stored elements.}
 	\STATE $Count \leftarrow Count + 1$
 	\STATE $T[i].Size \leftarrow T[i].Size + 1$
 	\STATE
 	\STATE $Rehash \leftarrow \mathbf{false}$
-	\STATE \COMMENT{The load factor rule may be violated.}
-	\IF{$Count > Size * \alpha_{max}$}
+	\IF{$Count > Size * \alpha_{max}$} % \COMMENT{The load factor rule may be violated.}
 		\STATE $NewSize \leftarrow 2 * Size$
 		\STATE $Rehash \leftarrow \mathbf{true}$
 	\ELSE
 		\STATE $NewSize \leftarrow Size$	
 	\ENDIF
 	\STATE
-	\STATE \COMMENT{The chain limit rule may be violated.}
+%	\STATE \COMMENT{The chain limit rule may be violated.}
 	\IF{$T[i].Size > Limit(Size)$}
 		\STATE $Rehash \leftarrow \mathbf{true}$
 	\ENDIF
 	\STATE
-	\STATE \COMMENT{Rehash the table if needed, new function is chosen.}
+%	\STATE \COMMENT{Rehash the table if needed, new function is chosen.}
 	\IF{$Rehash$}
 		\STATE $Rehash(NewSize)$
 	\ENDIF
@@ -427,7 +426,7 @@ $i \leftarrow h(x)$
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[p]
+\begin{algorithm}[ph!]
 \caption{Delete operation}
 \label{algorithm-delete}
 \floatname{algorithm}{Delete operation}
@@ -436,11 +435,11 @@ $i \leftarrow h(x)$
 \STATE
 $i \leftarrow h(x)$
 \IF{T[i].Chain.Remove(x)}
-	\STATE \COMMENT{Set the number of stored elements.}
+%	\STATE \COMMENT{Set the number of stored elements.}
 	\STATE $Count \leftarrow Count - 1$
 	\STATE $T[i].Size \leftarrow T[i].Size - 1$
 	\STATE
-	\STATE \COMMENT{The load factor rule may be violated.}
+%	\STATE \COMMENT{The load factor rule may be violated.}
 	\IF{$Count < Size * \alpha_{min}$}
 		\STATE Rehash($Size / 2$)
 	\ENDIF
@@ -451,35 +450,6 @@ $i \leftarrow h(x)$
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
-
-\section{Potential Method} 
-In Section \ref{section-time-complexity} we estimate the expected amortised time complexity using the potential method. So let us explain it first. Assume that we have a data structure and a sequence of operations performed $\{o\}_{i = 1}^{n}$ on it. We want to estimate the running time of every operation. Of course, we can use the worst case time. Now consider a simple array when we put the elements to the end of the array. If there is a free position, we store the element. When the array is full, then we double the array and store the element. Question is, what time is needed to store $n$ elements in such array. The worst case analysis gives the result $O(n ^ 2)$. Amortised analysis gives a far better result, $O(n)$. This result can be seen in a way that the fast inserts accumulated some potential that is used by a following slow insert. The amortised time of the operation thus may be seen as the time consumed by all operations uniformly distributed across the operations. To bound the amortised complexity of every operation in general, we must take the supremum through all the sequences of the same length.
-\begin{definition}
-Let $\{o\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then the amortised complexity of an operation is $\lim\limits_{n \rightarrow \infty}\frac{\sup_{o}T_o}{n}$.
-\end{definition}
-
-Now we show a potential method -- method how to estimate the amortised complexity. First, we define a potential function, $\{p\}_{i = 0}^{n}$. The constant $p_0$ is the starting potential, often chosen as zero. After each operation the data structure is associated with a new potential $p_i$. The operations not only change the data structure, they change its potential, too. Put $a_i = t_i + p_{i} - p_{i - 1}$ as the amortised complexity of the $i$\textsuperscript{th} operation where $t_i$ is its running time. The time taken by the operations, $T_o = \sum\displaystyle_{i = 1}^{n} t_i$, may then be estimated by the amortised time, $A_o = \sum\displaystyle_{i = 1}^{n} a_i$, as
-\[
-	T_o = \sum\displaystyle_{i = 1}^{n} t_i = \sum\displaystyle_{i = 1}^{n} (a_i - p_i + p_{i - 1}) = A_o + p_0 - p_n \text{.}
-\]
-
-Let $p^o$ denote the potential after performing the sequence $\{o\}_{i = 1}^{n}$. Amortised complexity of an operation is hence
-\[
-	t = \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_o T_o}{n} = \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_o (A_o + p_0 - p^o)}{n} \text{.}
-\]
-
-Let us show some facts regarding the potential functions and amortised complexity. Also let us note that the first approach of the following remark is used later in Theorem \ref{theorem-delete-time}.
-\begin{claim}
-\label{claim-amortised-complexity}
-Assume that we estimate the amortised complexity by a potential function.
-\begin{enumerate}
-\item [(1)] If $p_0 = 0$, then $T = A - p^o$. An operation's amortised complexity then equals \[ \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_o A_o}{n} - \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_o p^o}{n} \text{.} \] It is constant if for every sequence $\{o_i\}_{i = 1}^{n}$ $a_i$ is constant and $\lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_o p^o}{n} < \infty$.
-\item [(2)] If $p_i \geq 0$, then $T \leq A + p_0$. Moreover, if $p_0 = 0$, then $T \leq A$.
-\item [(3)] If $p_i \leq 0$, then $T \leq A - p^o$.
-\end{enumerate}
-\end{claim}
-
-This description of the potential method may be found in \cite{VK-skripta}.
 
 \section{Time Complexity of Computing a Hash Value}
 \label{section-time-complexity}
@@ -493,7 +463,44 @@ If the size of the universe is bounded, this time is constant. Despite the bette
 
 In addition, when hashing is applied, elements usually fit in the word of the underlying architecture. Therefore the arithmetic operations become constant and this is our case, too. Sometimes it is possible to cache once computed hash value within the element. This solution is a trade-of that improves the time complexity but consumes additional memory.
 
-\section{The Expected Amortised Complexity}
+\section{Potential Method} 
+In Section \ref{section-time-complexity} we estimate the expected amortised time complexity using the potential method. So let us explain it first. Assume that we have a data structure and a sequence of operations $\{o\}_{i = 1}^{n}$ performed on it. We want to estimate the running time of the sequence. Of course, we can use the worst case time for each operation but this may be very misleading. 
+
+Consider a simple array. The elements are placed at the array's end. If there is a free position, we store the element. When the array is full, then we double its size and store the element. Question is, what time is needed to store $n$ elements in such array. The worst case analysis gives the result $O(n ^ 2)$. Amortised analysis gives a far better result, $O(n)$. This result can be explained by the fact that the fast inserts accumulated some potential that is later used by a following slow insert. The amortised time of the operation thus may be seen as the time consumed by all operations uniformly distributed across the operations. To bound the amortised complexity of every operation in a sequence of length $n$, we must take the supremum through all the sequences of the same length $n$.
+\begin{definition}[Amortised complexity]
+Let $\{o\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then the \emph{amortised complexity} of an operation is $\lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}T_o}{n}$.
+\end{definition}
+
+Now we describe the potential method -- a method how to estimate the amortised complexity. First, we define a potential function, $\{p\}_{i = 0}^{n}$. The constant $p_0$ is the starting potential, often chosen as zero. After each operation the data structure is associated with a new potential $p_i$. The operations not only change the data structure, they change its potential, too. Put $a_i = t_i + p_{i} - p_{i - 1}$ as the amortised complexity of the $i$\textsuperscript{th} operation where $t_i$ is its running time. The time taken by the operations in a sequence $o$, $T_o = \sum\displaystyle_{i = 1}^{n} t_i$, may be estimated by the amortised time of the sequence, $A_o = \sum\displaystyle_{i = 1}^{n} a_i$, as
+\[
+	T_o = \sum\displaystyle_{i = 1}^{n} t_i = \sum\displaystyle_{i = 1}^{n} (a_i - p_i + p_{i - 1}) = A_o + p_0 - p_n \text{.}
+\]
+
+Let $p^o$ denote the potential after performing the sequence $\{o\}_{i = 1}^{n}$. Amortised complexity of an operation is hence
+\[
+	t = \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} T_o}{n} = \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} (A_o + p_0 - p^o)}{n} \text{.}
+\]
+
+Let us show some facts regarding the potential functions and amortised complexity. Also let us note that the first approach of the following remark is used later in Theorem \ref{theorem-delete-time}.
+\begin{claim}
+\label{claim-amortised-complexity}
+Assume that we estimate the amortised complexity by a potential function.
+\begin{enumerate}
+\item [(1)] If $p_0 = 0$, then $T = A - p^o$. An operation's amortised complexity then equals \[ \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} A_o}{n} - \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} p^o}{n} \text{.} \] If for every sequence $\{o_i\}_{i = 1}^{n}$ the value $a_i$ is constant and $\lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} p^o}{n} < \infty$, then the amortised complexity of every operation is constant.
+\item [(2)] If $p_i \geq 0$, then $T \leq A + p_0$. Moreover, if $p_0 = 0$, then $T \leq A$.
+\item [(3)] If $p_i \leq 0$, then $T \leq A - p^o$.
+\end{enumerate}
+\end{claim}
+
+For randomised algorithms we take the expected time consumed by the sequence. We also could take the expectation before the limit and have the choices for the algorithm given in advance. Since the lengths of the sequences are prolonging to infinity and so the running times and the number of random choices, we would need infinite sequences of random answers. Thus, it seems easier to find the amortised complexity in the expected case.
+
+\begin{definition}[Expected amortised complexity]
+Let $\{o\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations of a randomised algorithm. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then by the \emph{expected amortised complexity} of an operation we understand \[ \lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}\Expect{T_o}}{n} \text{.} \]
+\end{definition}
+
+This description of the potential method may be found in \cite{VK-skripta}.
+
+\section{Expected Amortised Complexity}
 Expected amortised time complexity of the introduced scheme is analysed in the next two theorems in either of the two cases -- if the delete operation is allowed or not.
 
 \begin{theorem}
@@ -528,7 +535,7 @@ However, we can distribute time spent on fixing the chain limit rule from an inc
 One can find a better potential function proving the previous result more formally. We use such an explicitly expressed potential function in the next theorem. We assume that the delete operation is allowed.
 \begin{theorem}
 \label{theorem-delete-time}
-If the initial hash table is empty and the delete operation is allowed, then the expected amortised time complexity of every operation converges to $O(1)$.
+If the initial hash table is empty and the delete operation is allowed, then the expected amortised time complexity of every operation is constant.
 \end{theorem}
 \begin{proof}
 In this proof we have two types of the operation cycles. We need to distinguish between the work performed to enforce the load factor rule and the time spent by keeping the chain limit rule. In the previous theorem these cycles were the same, we did not permit the delete operation. And recall the difference, the limiting value is computed for $\alpha = 1.5$.
@@ -575,17 +582,46 @@ The analysis of the first two cases of the insert operation remains similar to t
 We clarify why the expected number of fails in one l-cycle is equal to $e$. The reason is similar to the reason why we expect $em$ time to enforce the chain limit rule in one cycle of the previous proof. Because the load factor is maintained lower than 1 we need at least $0.5 m$ successful insert operations to raise it above $1.5$. Therefore inserts in one l-cycle, when omitting deletes, can cause raise of the load factor to $1.5$ at most. Since the limiting value $l(m)$ is computed for the $\alpha = 1.5$ and $S \subset S_e$ we expect only $e$ rehash operations in one l-cycle to enforce the chain limit rule.
 \end{itemize}
 
-The fraction $\frac{(ce - r)m}{o}$ converges to zero with the growing number of operations $o$. This follows from the Weak Law of Large Numbers -- Theorem \ref{theorem-weak-law-of-large-numbers} and from the fact that $o \in \Omega(m)$. To be precise, define the random variable $C_i$ as the number of rehashes required to fix the chain limit rule in the $i$\textsuperscript{th} l-cycle for $i = 1, \dots, c$. The random variable $X_i = m C_i$ then denotes the time required to fix the chain limit rule in the $i$\textsuperscript{th} l-cycle. From Lemma \ref{lemma-linear-transformations-tries} we have that $\Variance{C_i} \leq c$ for a constant $c \in \mathbb{R}^{+}$. By using Lemma \ref{lemma-expected-value-properties} we obtain that $\Variance{X_i} = \Variance{mC_i} = m ^ 2 \Variance{C_i} = cm ^ 2$.
+We already showed that $a_i = t_i + p_i - p_{i - 1}$ is constant for every operation. Next, we need that $\frac{(ce - r)m}{o} = 0 $ in the expected case. This holds and thus the amortised complexity in the expected case is constant, Claim \ref{claim-amortised-complexity}.
 
-Clearly $\Expect{X_i} = em$, $r = \sum\displaystyle_{i = 1}^{c} C_i$, $o \geq m \geq c > 0$ and $\Variance{X_i}$ is finite. It follows that
+To be precise when proving the previous facts, define the random variable $C_i$ as the number of rehashes required to fix the chain limit rule in the $i$\textsuperscript{th} l-cycle for $i = 1, \dots, c$. From Lemma \ref{lemma-linear-transformations-tries} it follows that $\Expect{C_i} = e$. Clearly $r = \sum\displaylimits_{i = 1}^{c} C_i$, $o \geq m > 0$. From Lemma \ref{lemma-expected-value-properties} it follows that
+\[
+	\Expect{\frac{(ce - r)m}{o}} \leq \frac{m}{m}\left(ce - \Expect{\displaystyle\sum_{i = 1}^{c} C_i}\right) = ce - c\Expect{C_1} = c(e - e) = 0 \text{.}
+\]
+
+The remaining parts of both potentials $p_1$ and $p_2$ are non-negative, thus $p \geq 0$. The starting potential is zero. So from Claim \ref{claim-amortised-complexity} we have that the amortised complexity of every operation is constant, in the expected case.
+\end{proof}
+
+Fact $\left|\frac{(ce - r)m}{o}\right| \xrightarrow{o \rightarrow \infty} 0$ might indicate that it is possible to show that the amortised complexity is constant, even without any expectation. Since universal hashing is a randomised algorithm, such result would be certainly remarkable. However, if the statement was really true, there still would by many troubles along the way.
+
+So, one may ask if using the Law of Large Numbers, Theorem \ref{theorem-weak-law-of-large-numbers}, can not help. Indeed, from Lemma \ref{lemma-linear-transformations-tries} we have that $\Variance{C_i}$ is finite and it may be applied:
 \[
 \begin{split}
 \left|\frac{(ce - r)m}{o}\right|
-	& \leq \left|\frac{cem - \sum\displaylimits_{i = 1}^{c} X_i}{c}\right| \\
-	& \leq \left|\frac{c\Expect{X_1}}{c} - \frac{\sum\displaylimits_{i = 1}^{c} X_i}{c}\right| \\
-	& = \left|\Expect{X_1} - \frac{\sum\displaylimits_{i = 1}^{c} X_i}{c}\right| \xrightarrow{c \rightarrow \infty} 0 \text{.}
+	& \leq m \left|\frac{ce - \sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \\
+	& \leq m \left|\frac{c\Expect{C_1}}{c} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \\
+	& = m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \text{.}
 \end{split}
 \]
 
-By Claim \ref{claim-amortised-complexity} we have that the amortised complexity of every operation is constant.
-\end{proof}
+Clearly, the convergence in probability stated by Theorem \ref{theorem-weak-law-of-large-numbers} holds:
+\[
+	\left|\Expect{X_1} - \frac{\sum\displaylimits_{i = 1}^{c} X_i}{c}\right| \xrightarrow{c \rightarrow \infty} 0 \text{.}
+\]
+
+But in the case of $m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right|$ we have to be careful. There is an infinite class of sequences $\{o\}_{i = 1}^{n}$ for which $c \in \Omega(m)$. Thus for these sequences, if $m \rightarrow \infty$, then $c \rightarrow \infty$ as well.
+
+In order to obtain convergence in probability we have that
+\[
+\begin{split}
+\Prob{m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \geq \epsilon} 
+	& = \Prob{\left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \geq \frac{\epsilon}{m}}  \\
+	& = \frac{\Variance{C_i} m ^ 2}{m \epsilon ^ 2} = \frac{m\Variance{C_i}}{\epsilon ^ 2} \text{.}
+\end{split}
+\]
+This is a problem, since when $m \rightarrow \infty$, we can not expected that the probability converges to zero for fixed $\epsilon$. 
+
+ For the class of sequences satisfying $c \in \Omega(m)$ the inequalities we used for estimate of $\left|\frac{(ce - r)m}{o}\right|$ mean only a multiplicative factor. Thus the estimate is tight and wee see that the bound obtained from the Chebyshev's inequality is not sufficient. The asymptotic rate is not high enough and the factor $m$ appears. However, we know the probability distribution of $C_i$. Maybe we can exploit it and be more accurate. This problem remains open.
+
+
+
