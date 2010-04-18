@@ -1,11 +1,11 @@
 \chapter{The Model of Universal Hashing}
 \label{chapter-proposed-model}
 
-The hashing scheme we propose later in this chapter is a solution to the set representation problem. Solution of this problems usually provide some basic operations such as \emph{Insert}, \emph{Delete} and \emph{Find}. These operations allow querying if an element is stored within the represented set, accessing the stored elements and inserting the element. Some schemes, e.g. double hashing, do not implement the element removal at all or the efficient implementation is not known.
+The hashing scheme we propose later in this chapter is a solution to the set representation problem. Solution of this problems usually provide some basic operations such as \emph{Insert}, \emph{Delete} and \emph{Find}. These operations allow querying if an element is stored within the represented set, accessing the stored elements and inserting an element. Some schemes, e.g. double hashing, do not implement the element removal at all or the efficient implementation is not known.
 
 The must important are the operations' running times. Various solutions to many algorithmic problems prefer different operations when representing sets. For instance some applications query the stored data rarely, e.g. log files. On the other hand, other applications of the set representation problem may store the data that is almost never changed -- find operation is preferred. Therefore the running times of only selected operations are considered crucial. 
 
-In the case of a simple array we have $O(1)$ time for the find procedure provided that we know an element's index. But insertion or deletion may take $O(n)$ time. Better bounds for dynamic arrays can be obtained using the amortised complexity. Another example are balanced trees, they have running times typically bounded by the logarithmic time. As already mentioned the right answer what data structure should be used lies in the estimated structure of the operations. Making the right choice can be an asymptotic improvement. Anyway, this does not change the fact that the short running times are welcomed.
+In the case of a simple array we have $O(1)$ time for the find procedure provided that we know an element's index. But insertion or deletion may take $O(n)$ time. Better bounds for dynamic arrays can be obtained using the amortised complexity. Another example are balanced trees, they have running times typically bounded by the logarithmic time. As already mentioned, the right answer what data structure should be used lies in the estimated structure of the operations. Making the right choice can be an asymptotic improvement. Anyway, this does not change the fact that the short running times are welcomed.
 
 We analyse the running times of the universal hashing, first by mentioning the known facts. Then, we extend this analysis to the universal hashing using the system of linear transformations over vector spaces. Finally, we propose a model that guarantees the worst case complexity of the find operation.
 
@@ -27,7 +27,7 @@ We find the expected length of a chain containing arbitrary element $x \in U$. T
 	& = \frac{\sum\displaylimits_{h \in H} \sum\displaylimits_{y \in S} I(h(x) = h(y))}{|H|} \\
 	& = \frac{\sum\displaylimits_{y \in S} \sum\displaylimits_{h \in H} I(h(x) = h(y))}{|H|}  \\
 	& = \sum\displaylimits_{y \in S} \Prob{h(x) = h(y)} \\
-	& = \frac{cn}{m} = c \alpha \text{.}
+	& \leq \frac{cn}{m} = c \alpha \text{.}
 \end{split}
 \end{displaymath}
 \end{proof}
@@ -36,7 +36,7 @@ We find the expected length of a chain containing arbitrary element $x \in U$. T
 If we hash using a $c$-universal class and $\alpha$ denotes the table's load factor, then the expected time of the find operation is $1 + c\alpha$.
 \end{corollary}
 \begin{proof}
-The running time of the find operation is proportional to the length of the chain where the searched element belongs. In the worst case the operation must iterate the whole chain. We must also add the unit time for retrieving the element's hash value and for checking if the chain is not empty. From previous lemma it follows that the expected length of a chain is $c\alpha$. Remark, that we have no other assumption on the distribution of the input. The expected running time is then bounded by $1 + c\alpha$. 
+The running time of the find operation is proportional to the length of the chain where the searched element belongs. In the worst case the operation must iterate the whole chain. We must also add the unit time for retrieving the element's hash value and for checking if the chain is not empty. From previous lemma it follows that the expected length of a chain is $c\alpha$. Remark that we have no other assumption on the distribution of the input. The expected running time is then bounded by $1 + c\alpha$. 
 \end{proof}
 
 \begin{corollary}
@@ -54,16 +54,16 @@ Following computations support and motivate our later statements and ideas. The 
 
 Expected length of the longest chain gives us a generic hint when the table should be rehashed if the worst case time for the find operation is guaranteed. The lower the value $\Expect{\lpsl}$, or the tighter its estimate is, the better worst case \emph{limit} is achieved.
 
-Mentioned probability bound computed from the expected value can be further improved. If the probability density function of the random variable $\lpsl$ is known, then it may be used directly. For the system of linear mappings we have already discovered it. In addition, we have consequently improved it in. To sum up, the approach with the expected length is more general but achieves worse performance. However, it is more general because whenever we know the probability density function, then we should able to find the expected value.
+Mentioned probability bound computed from the expected value can be further improved. If the probability density function of the random variable $\lpsl$ is known, then it may be used directly. For the system of linear mappings we have already discovered it. In addition, we have consequently improved it. To sum up, the approach with the expected length is more general but achieves worse performance. However, it is more general because whenever we know the probability density function, then we should able to find the expected value.
 
 \begin{definition}[Chain length limiting function, long chain, $p$-trimmed-system, trimming rate]
-Let $H$ be a universal system mapping an universe $U$ to a hash table $B$. Let $m$ be the size of the hash table, $\alpha$ be its load factor and $S \subset U$ be the stored set. 
+Let $H$ be a universal system mapping a universe $U$ to a hash table $B$. Let $m$ be the size of the hash table, $\alpha$ be its load factor and $S \subset U$ be the stored set. 
 
 Then function $l: \mathbb{N} \times \mathbb{R}_{0}^{+} \rightarrow \mathbb{N}$ of variables $m$ and $\alpha$, $l(m, \alpha)$, is a \emph{chain length limiting function}. 
 
-We say that function $h \in H$ creates a \emph{long chain} if there is a chain of length longer than limiting value $l(m, \alpha)$.
+We say that function $h \in H$ creates a \emph{long chain} if there is a chain of length strictly longer than the limiting value $l(m, \alpha)$.
 
-Moreover let $p \in (0, 1)$ be probability such that $\Prob{\lpsl \geq l(m, \alpha)} \leq p$, then system $H_p = \{ h \in H \setdelim h \text{ does not create a long chain} \}$ is called a \emph{$p$-trimmed system}. The probability $p$ is called the \emph{trimming rate}.
+Moreover let $p \in (0, 1)$ be probability such that $\Prob{\lpsl > l(m, \alpha)} \leq p$, then system $H_p = \{ h \in H \setdelim h \text{ does not create a long chain} \}$ is called a \emph{$p$-trimmed system}. The probability $p$ is called the \emph{trimming rate}.
 \end{definition}
 
 Probability bound $p \in (0, 1)$ of the existence of a long chain has important consequences for the model that limits chains.
@@ -83,8 +83,8 @@ Simply use the definition of $H_p$ and that of the trimming rate $p$:
 \begin{split}
 |H_p|
 	& = |\lbrace h \in H \setdelim \text{ h does not create a long chain} \rbrace| \\
-	& =\Prob{\lpsl < l(m, \alpha)} |H| \\
-	& = \left(1 - \Prob{\lpsl \geq l(m, \alpha)}\right) |H| \\
+	& =\Prob{\lpsl \leq l(m, \alpha)} |H| \\
+	& = \left(1 - \Prob{\lpsl > l(m, \alpha)}\right) |H| \\
 	& \geq (1 - p)|H| \text{.}
 \end{split}
 \]
@@ -125,16 +125,16 @@ Next statement summarises results for the systems of linear transformations.
 For every trimming rate $0 < p < 1$ the $p$-trimmed system of linear transformations, $LT(U, B)_p$, is $\frac{1}{1 - p}$-universal.
 \end{corollary}
 \begin{proof}
-System of linear transformations is $1$-universal as seen in Remark \ref{remark-system-of-linear-transformations}. The fact then follows from the previous theorem.
+System of linear transformations is $1$-universal as seen in Remark \ref{remark-system-of-linear-transformations}. The fact then follows from  Theorem \ref{theorem-p-trimmed-is-universal}.
 \end{proof}
 
-Theorem \ref{theorem-expected-chain-length-universal} implies that the expected chain length still remains constant provided that the load factor $\alpha$ is bounded. It naturally gets larger and certainly depends on our choice of $p$. The looser the value of the trimming rate is, the better expected results are obtained. However, for benevolent choices of $p$ the worst case warranty is adequately worsened.
+Theorem \ref{theorem-expected-chain-length-universal} implies that the expected chain length still remains constant provided that the load factor $\alpha$ is bounded. It certainly depends on our choice of $p$ and naturally gets greater with smaller values of $p$. The looser the value of the trimming rate is, the better expected results are obtained. However, for benevolent choices of $p$ the worst case warranty is adequately worsened.
 
 Every limit $l(m, \alpha)$ comes with an associated trimming rate -- probability of the event $\lpsl > l(m, \alpha)$. This probability determines the expected number of tries to find a suitable function, as stated in the next lemma.
 
 \begin{lemma}
 \label{lemma-linear-transformations-tries}
-Let $l$ be a chain length limiting function and $p$ be the trimming rate, \[ \Prob{\lpsl \geq l(m, \alpha)} \leq p \text{.} \] Then the expected number of tries to find a function, which does not create a long chain, is $\frac{1}{(1 - p)^2}$ and the variance of this number is finite.
+Let $l$ be a chain length limiting function and $p$ be the trimming rate, \[ \Prob{\lpsl > l(m, \alpha)} \leq p \text{.} \] Then the expected number of tries to find a function, which does not create a long chain, is $\frac{1}{(1 - p)^2}$ and the variance of this number is finite.
 \end{lemma}
 \begin{proof}
 The estimate of failing $k$ times in a row is clearly bounded by the geometric distribution with  the parameter $p$. The probability of the failure is thus less or equals $p ^ k$. The expected time of success is then given by:
@@ -172,7 +172,7 @@ In either case $\Prob{\lpsl > l(m)} \leq 0.5$.
 For $\alpha \in (0, \infty)$ and $p \in (0, 1)$ the chain limit $l(m) = a \log \log m + b \log m$ for $a, b \in \mathbb{R}$ depending only $\alpha$ and $p$.
 \end{theorem}
 \begin{proof}
-First set $f(x) = x ^ {\log b - \log \alpha - \log x - \log \log x}$. From Corollary \ref{corollary-f1} it follows that the function $f(x)$ is decreasing in the interval $\left[2, \infty \right]$.
+First set $f(x) = x ^ {\log b - \log \alpha - \log x - \log \log x}$. From Corollary \ref{corollary-f1} it follows that the function $f(x)$ is decreasing in the interval $\left[2, \infty \right)$.
 
 If the assumptions of Remark \ref{remark-lpsl-pdf-linear-amount} are satisfied we have that 
 \[
@@ -464,19 +464,19 @@ If the size of the universe is bounded, this time is constant. Despite the bette
 In addition, when hashing is applied, elements usually fit in the word of the underlying architecture. Therefore the arithmetic operations become constant and this is our case, too. Sometimes it is possible to cache once computed hash value within the element. This solution is a trade-of that improves the time complexity but consumes additional memory.
 
 \section{Potential Method} 
-In Section \ref{section-time-complexity} we estimate the expected amortised time complexity using the potential method. So let us explain it first. Assume that we have a data structure and a sequence of operations $\{o\}_{i = 1}^{n}$ performed on it. We want to estimate the running time of the sequence. Of course, we can use the worst case time for each operation but this may be very misleading. 
+In Section \ref{section-time-complexity} we estimate the expected amortised time complexity using the potential method. So let us explain it first. Assume that we have a data structure and a sequence of operations $\{o_i\}_{i = 1}^{n}$ performed on it. We want to estimate the running time of the sequence. Of course, we can use the worst case time for each operation but this may be very misleading. 
 
 Consider a simple array. The elements are placed at the array's end. If there is a free position, we store the element. When the array is full, then we double its size and store the element. Question is, what time is needed to store $n$ elements in such array. The worst case analysis gives the result $O(n ^ 2)$. Amortised analysis gives a far better result, $O(n)$. This result can be explained by the fact that the fast inserts accumulated some potential that is later used by a following slow insert. The amortised time of the operation thus may be seen as the time consumed by all operations uniformly distributed across the operations. To bound the amortised complexity of every operation in a sequence of length $n$, we must take the supremum through all the sequences of the same length $n$.
 \begin{definition}[Amortised complexity]
-Let $\{o\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then the \emph{amortised complexity} of an operation is $\lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}T_o}{n}$.
+Let $\{o_i\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then the \emph{amortised complexity} of an operation is $\lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}T_o}{n}$.
 \end{definition}
 
-Now we describe the potential method -- a method how to estimate the amortised complexity. First, we define a potential function, $\{p\}_{i = 0}^{n}$. The constant $p_0$ is the starting potential, often chosen as zero. After each operation the data structure is associated with a new potential $p_i$. The operations not only change the data structure, they change its potential, too. Put $a_i = t_i + p_{i} - p_{i - 1}$ as the amortised complexity of the $i$\textsuperscript{th} operation where $t_i$ is its running time. The time taken by the operations in a sequence $o$, $T_o = \sum\displaystyle_{i = 1}^{n} t_i$, may be estimated by the amortised time of the sequence, $A_o = \sum\displaystyle_{i = 1}^{n} a_i$, as
+Now we describe the potential method -- a method how to estimate the amortised complexity. First, we define a potential function, $\{p_i\}_{i = 0}^{n}$. The constant $p_0$ is the starting potential, often chosen as zero. After each operation the data structure is associated with a new potential $p_i$. The operations not only change the data structure, they change its potential, too. Put $a_i = t_i + p_{i} - p_{i - 1}$ as the amortised complexity of the $i$\textsuperscript{th} operation where $t_i$ is its running time. The time taken by the operations in a sequence $o$, $T_o = \sum\displaystyle_{i = 1}^{n} t_i$, may be estimated by the amortised time of the sequence, $A_o = \sum\displaystyle_{i = 1}^{n} a_i$, as
 \[
-	T_o = \sum\displaystyle_{i = 1}^{n} t_i = \sum\displaystyle_{i = 1}^{n} (a_i - p_i + p_{i - 1}) = A_o + p_0 - p_n \text{.}
+	T_o = \displaystyle\sum_{i = 1}^{n} t_i = \displaystyle\sum_{i = 1}^{n} (a_i - p_i + p_{i - 1}) = A_o + p_0 - p_n \text{.}
 \]
 
-Let $p^o$ denote the potential after performing the sequence $\{o\}_{i = 1}^{n}$. Amortised complexity of an operation is hence
+Let $p^o$ denote the potential after performing the sequence $\{o_i\}_{i = 1}^{n}$. Amortised complexity of an operation is hence
 \[
 	t = \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} T_o}{n} = \lim\limits_{n \rightarrow \infty} \frac{\sup\displaylimits_{o, |o| = n} (A_o + p_0 - p^o)}{n} \text{.}
 \]
@@ -495,7 +495,7 @@ Assume that we estimate the amortised complexity by a potential function.
 For randomised algorithms we take the expected time consumed by the sequence. We also could take the expectation before the limit and have the choices for the algorithm given in advance. Since the lengths of the sequences are prolonging to infinity and so the running times and the number of random choices, we would need infinite sequences of random answers. Thus, it seems easier to find the amortised complexity in the expected case.
 
 \begin{definition}[Expected amortised complexity]
-Let $\{o\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations of a randomised algorithm. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then by the \emph{expected amortised complexity} of an operation we understand \[ \lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}\Expect{T_o}}{n} \text{.} \]
+Let $\{o_i\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations of a randomised algorithm. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then by the \emph{expected amortised complexity} of an operation we understand \[ \lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}\Expect{T_o}}{n} \text{.} \]
 \end{definition}
 
 This description of the potential method may be found in \cite{VK-skripta}.
@@ -527,7 +527,7 @@ Seeking a suitable function for the stored set $S$ during a cycle is remarkably 
 Now we compute the amortised complexity of the insert operations causing the violation of the chain limit rule in a single cycle. There are exactly $0.5 m$ insert operations raising the load factor from $\alpha = 0.5$ to $\alpha = 1$ for the table of size $m$. The expected time spent by fixing the chain limit rule in a cycle is then $\frac{1}{(1 - p)^2}O(m)$. We can distribute this amount of time along the cycle of $0.5 m$ inserts. This does not violate $O(1)$ expected amortised time for every insert operation.
 \end{itemize}
 
-Slightly weaker statement holds, if the number of the insert operations is not a power of two. We have one issue to care about. In the last case we distributed the time evenly throughout the cycle. If the number of inserts is not a power of two, we could distribute a long time over a non-complete cycle. Then we can not obtain a constant amortised time for the insert operation. However, for complete cycles the complexity estimates hold.
+If the number of the insert operations is not a power of two, then a slightly weaker statement holds. We have one issue to care about. In the last case we distributed the time evenly throughout the cycle. If the number of inserts is not a power of two, we could distribute a long time over a non-complete cycle. Then we can not obtain a constant amortised time for the insert operation. However, for complete cycles the complexity estimates hold.
 
 However, we can distribute time spent on fixing the chain limit rule from an incomplete cycle along all the insert operations performed. Amortised time of the insert operation then converges to $O(1)$ with a growing number of insert operations.
 \end{proof}
@@ -542,7 +542,7 @@ In this proof we have two types of the operation cycles. We need to distinguish 
 
 We deal with the amortised time of the find and unsuccessful insert or delete operation in advance. Their expected running time is proportional to the expected chain length. From Theorem \ref{theorem-expected-chain-length-universal} it follows that this value is constant. The find operation does not change the potential\footnote{The potential is defined later in the proof.}. Our analysis is thus simplified by omitting the find and unsuccessful delete and insert operations.
 
-Let the sequence $O = \{o_i\}_{i=1}^o$ denote the performed operations, the $i$\textsuperscript{th} operation $o_i \in \lbrace Insert, Delete \rbrace$. The following two definitions make the analysis more exact and clear.
+Let the sequence $O = \{o_i\}_{i=1}^{n}$ denote the performed operations, the $i$\textsuperscript{th} operation $o_i \in \lbrace Insert, Delete \rbrace$. The following two definitions make the analysis more exact and clear.
 
 \begin{definition}[$\alpha$-cycle]
 The \emph{$\alpha$-cycle} consists of the operations between the two immediate rehash operations causing the violation of the load factor rule. Every $\alpha$-cycle contains the last operation -- the one causing the violation.
@@ -560,7 +560,7 @@ The \emph{l-cycles} are the partitioning of the sequence $O$ such that every l-c
 \end{definition}
 The l-cycle allows us to analyse the work caused by the chain limit rule. Both l-cycles and $\alpha$-cycles divide the sequence $O$. Notice that if an $\alpha$-cycle ends at the position $i$, the corresponding l-cycle also ends at the same position. 
 
-The analysis now takes the $i$\textsuperscript{th} operation for every $i = 1, \dots, o$. We show that the expected amortised time complexity of the opertion $o_i$ is $O(1)$ independently on its type. The potential now consists of the two parts, $p_1$ and $p_2$. Let $e = \frac{1}{(1 - p) ^ 2}$ denote the expected number of rehash operations, the expected number of tries, when finding a suitable function. 
+The analysis now takes the $i$\textsuperscript{th} operation for every $i = 1, \dots, n$. We show that the expected amortised time complexity of the opertion $o_i$ is $O(1)$ independently on its type. The potential now consists of the two parts, $p_1$ and $p_2$. Let $e = \frac{1}{(1 - p) ^ 2}$ denote the expected number of rehash operations, the expected number of tries, when finding a suitable function. 
 
 Above all we want every simple insertion and deletion to take $O(1)$ time only. Thus the potential consists of the part $p_1 = 4ei_{\alpha} + 8ed_{\alpha}$ where $i_{\alpha}$ is the number inserts and $d_{\alpha}$ is the number of delete operations performed so far in the current $\alpha$-cycle. 
 
@@ -582,22 +582,22 @@ The analysis of the first two cases of the insert operation remains similar to t
 We clarify why the expected number of fails in one l-cycle is equal to $e$. The reason is similar to the reason why we expect $em$ time to enforce the chain limit rule in one cycle of the previous proof. Because the load factor is maintained lower than 1 we need at least $0.5 m$ successful insert operations to raise it above $1.5$. Therefore inserts in one l-cycle, when omitting deletes, can cause raise of the load factor to $1.5$ at most. Since the limiting value $l(m)$ is computed for the $\alpha = 1.5$ and $S \subset S_e$ we expect only $e$ rehash operations in one l-cycle to enforce the chain limit rule.
 \end{itemize}
 
-We already showed that $a_i = t_i + p_i - p_{i - 1}$ is constant for every operation. Next, we need that $\frac{(ce - r)m}{o} = 0 $ in the expected case. This holds and thus the amortised complexity in the expected case is constant, Claim \ref{claim-amortised-complexity}.
+We already showed that $a_i = t_i + p_i - p_{i - 1}$ is constant for every operation. Next, we need that $\frac{(ce - r)m}{n} = 0 $ in the expected case. This holds and thus the amortised complexity in the expected case is constant, Claim \ref{claim-amortised-complexity}.
 
-To be precise when proving the previous facts, define the random variable $C_i$ as the number of rehashes required to fix the chain limit rule in the $i$\textsuperscript{th} l-cycle for $i = 1, \dots, c$. From Lemma \ref{lemma-linear-transformations-tries} it follows that $\Expect{C_i} = e$. Clearly $r = \sum\displaylimits_{i = 1}^{c} C_i$, $o \geq m > 0$. From Lemma \ref{lemma-expected-value-properties} it follows that
+To be precise when proving the previous facts, define the random variable $C_i$ as the number of rehashes required to fix the chain limit rule in the $i$\textsuperscript{th} l-cycle for $i = 1, \dots, c$. From Lemma \ref{lemma-linear-transformations-tries} it follows that $\Expect{C_i} = e$. Clearly $r = \sum\displaylimits_{i = 1}^{c} C_i$, $n \geq m > 0$. From Lemma \ref{lemma-expected-value-properties} it follows that
 \[
-	\Expect{\frac{(ce - r)m}{o}} \leq \frac{m}{m}\left(ce - \Expect{\displaystyle\sum_{i = 1}^{c} C_i}\right) = ce - c\Expect{C_1} = c(e - e) = 0 \text{.}
+	\Expect{\frac{(ce - r)m}{n}} \leq \frac{m}{m}\left(ce - \Expect{\displaystyle\sum_{i = 1}^{c} C_i}\right) = ce - c\Expect{C_1} = c(e - e) = 0 \text{.}
 \]
 
 The remaining parts of both potentials $p_1$ and $p_2$ are non-negative, thus $p \geq 0$. The starting potential is zero. So from Claim \ref{claim-amortised-complexity} we have that the amortised complexity of every operation is constant, in the expected case.
 \end{proof}
 
-Fact $\left|\frac{(ce - r)m}{o}\right| \xrightarrow{o \rightarrow \infty} 0$ might indicate that it is possible to show that the amortised complexity is constant, even without any expectation. Since universal hashing is a randomised algorithm, such result would be certainly remarkable. However, if the statement was really true, there still would by many troubles along the way.
+Fact $\left|\frac{(ce - r)m}{n}\right| \xrightarrow{n \rightarrow \infty} 0$ might indicate that it is possible to show that the amortised complexity is constant, even without any expectation. Since universal hashing is a randomised algorithm, such result would be certainly remarkable. However, if the statement was really true, there still would by many troubles along the way.
 
 So, one may ask if using the Law of Large Numbers, Theorem \ref{theorem-weak-law-of-large-numbers}, can not help. Indeed, from Lemma \ref{lemma-linear-transformations-tries} we have that $\Variance{C_i}$ is finite and it may be applied:
 \[
 \begin{split}
-\left|\frac{(ce - r)m}{o}\right|
+\left|\frac{(ce - r)m}{n}\right|
 	& \leq m \left|\frac{ce - \sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \\
 	& \leq m \left|\frac{c\Expect{C_1}}{c} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \\
 	& = m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \text{.}
@@ -609,7 +609,7 @@ Clearly, the convergence in probability stated by Theorem \ref{theorem-weak-law-
 	\left|\Expect{X_1} - \frac{\sum\displaylimits_{i = 1}^{c} X_i}{c}\right| \xrightarrow{c \rightarrow \infty} 0 \text{.}
 \]
 
-But in the case of $m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right|$ we have to be careful. There is an infinite class of sequences $\{o\}_{i = 1}^{n}$ for which $c \in \Omega(m)$. Thus for these sequences, if $m \rightarrow \infty$, then $c \rightarrow \infty$ as well.
+But in the case of $m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right|$ we have to be careful. There is an infinite class of sequences $\{o_i\}_{i = 1}^{n}$ for which $c \in \Omega(m)$. Thus for these sequences, if $m \rightarrow \infty$, then $c \rightarrow \infty$ as well.
 
 In order to obtain convergence in probability we have that
 \[
@@ -621,7 +621,7 @@ In order to obtain convergence in probability we have that
 \]
 This is a problem, since when $m \rightarrow \infty$, we can not expected that the probability converges to zero for fixed $\epsilon$. 
 
- For the class of sequences satisfying $c \in \Omega(m)$ the inequalities we used for estimate of $\left|\frac{(ce - r)m}{o}\right|$ mean only a multiplicative factor. Thus the estimate is tight and wee see that the bound obtained from the Chebyshev's inequality is not sufficient. The asymptotic rate is not high enough and the factor $m$ appears. However, we know the probability distribution of $C_i$. Maybe we can exploit it and be more accurate. This problem remains open.
+ For the class of sequences satisfying $c \in \Omega(m)$ the inequalities we used for estimate of $\left|\frac{(ce - r)m}{n}\right|$ mean only a multiplicative factor. Thus the estimate is tight and wee see that the bound obtained from the Chebyshev's inequality is not sufficient. The asymptotic rate is not high enough and the factor $m$ appears. However, we know the probability distribution of $C_i$. Maybe we can exploit it and be more accurate. This problem remains open.
 
 
 

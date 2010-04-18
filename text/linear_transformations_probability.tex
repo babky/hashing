@@ -63,7 +63,7 @@ The next lemma and its corollaries are so simple that one can think they should 
 Let $f: (0, 1) \rightarrow \mathbb{R}$ be a decreasing function. Then the function $x ^ {f(x)}$ is increasing in the interval $(0, 1)$.
 \end{lemma}
 \begin{proof}
-To prove the lemma assume that $a, b \in (0, 1)$ and $a < b$. It follows that $f(a) > f(b)$. Observe that the the function $a ^ x$ of variable $x$ is decreasing and the function $x ^ f(b)$ of variable $x$ is increasing. Hence
+To prove the lemma assume that $a, b \in (0, 1)$ and $a < b$. It follows that $f(a) > f(b)$. Observe that the the function $a ^ x$ of variable $x$ is decreasing and the function $x ^ {f(b)}$ of variable $x$ is increasing. Hence
 \[
 a ^ {f(a)} < a ^ {f(b)} < b ^ {f(b)} \text{.}
 \]
@@ -79,10 +79,13 @@ Use Lemma \ref{lemma-f-decreasing} and note that the function $\log \log \left(\
 
 \begin{corollary}
 \label{corollary-f1}
-The function $x ^ {c - \log x - \log \log x}$ is increasing in the interval $(1, \infty)$ for every $c \in \mathbb{R}$.
+The function $x ^ {c - \log x - \log \log x}$ is decreasing in the interval $(1, \infty)$ for every $c \in \mathbb{R}$.
 \end{corollary}
 \begin{proof}
-Follows from Lemma \ref{lemma-f-decreasing} for the function $y ^ {-c + \log \left(\frac{1}{y}\right) + \log \log \left(\frac{1}{y}\right)} = x ^ {c - \log x - \log \log x}$ where $y = \frac{1}{x}$. 
+Set the function $g(y) = y ^ {-c + \log \left(\frac{1}{y}\right) + \log \log \left(\frac{1}{y}\right)}$ for $0 < y < 1$. From Lemma \ref{lemma-f-decreasing} for $g(y)$ it follows that $g$ is increasing in $(0, 1)$. Then for every $x > 1$ the function $f(x) = x ^ {c - \log x - \log \log x} = g\left(\frac{1}{x}\right)$. Thus the function $f$ is decreasing since for $1 < a < b$ we have
+\[
+	f(a) = g\left(\frac{1}{a}\right) > g\left(\frac{1}{b}\right) = f(b) \text{.}
+\] 
 \end{proof}
 
 The following lemma is a~very technical one. It is later used to estimate probabilities of events related to the system of linear maps. These events correspond to the existence of a large set having a singleton image -- to the existence of a long chain.
@@ -124,7 +127,7 @@ The statement thus holds for $k = 0$.
 \[
 	\Prob{\mu_{k + 1} \geq t} \leq \mu_0 ^ {c + 1 + \log \log \left(\frac{1}{\mu_0}\right)} \text{.}
 \]
-Whenever exponent $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) \leq 0$, the estimate holds because $\mu_0 < 1$. We can restrict ourselves to the case when $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) > 0$. To prove our statement we fix the value of the variable $\mu_1$ and use the induction hypothesis for $k$. For a value $a \in \left[0, \mu_0\right]$ define $g(a) = \Prob{\mu_{k + 1} \geq t \mid \mu_1 = a}$. First, we prove the following claim.
+Whenever exponent $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) \leq 0$, the estimate holds because $\mu_0 < 1$. We can restrict ourselves to the case when $c + 1 + \log \log \left(\frac{1}{\mu_0}\right) > 0$. To prove our statement we fix the value of the variable $\mu_1$ and use the induction hypothesis for $k$. For a value $a \in \left[0, \mu_0\right]$ define $g(a) = \Prob{\mu_{k + 1} \geq t \mid \mu_1 = a}$. First, we give the following claim.
 \begin{claim}
 \label{claim-expected-value}
 \[
@@ -175,7 +178,7 @@ f_0(x_1) = {x_1} ^ {c + \log \log \left(\frac{1}{x_1}\right)} = {x_1} ^ {c - c} 
 Since $-c > -c + 1 -\log e$, the inequality $x_1 < x_s$ holds and thus point $x_1$ is still in the increasing phase of the function $\frac{f_0(x)}{x}$.
 By Corollary \ref{corollary-f0} the function $f_0(x)$ is increasing in the interval $\left[x_1, 1\right)$. Therefore for every $x \in \left[x_1, 1\right)$ we have that $f_0(x) \geq f_0(x_1) = 1$ and $f(x) = \min \{1, f_0(x)\} = 1$.
 
-At last, define the \emph{third point} $x_2 = x_1 ^ 2 = 2 ^ {-2 ^ {-c - 1}}$. The inequality $x_2 > x_s$ follows from $-c - 1 < -c + 1 - \log e$. The point $x_2$ then lies in the decreasing phase of the function $\frac{f_0(x)}{x}$. For $x_2$ the following statement holds:
+At last, define the \emph{third point} $x_2 = \sqrt{x_1} = 2 ^ {-2 ^ {-c - 1}}$. The inequality $x_2 > x_s$ follows from $-c - 1 < -c + 1 - \log e$. The point $x_2$ then lies in the decreasing phase of the function $\frac{f_0(x)}{x}$. For $x_2$ the following statement holds:
 \[
 \begin{split}
 \frac{f_0(x_2)}{x_2} 
@@ -268,44 +271,44 @@ We perform the random uniform choice of a linear surjective transformation $T$ a
 Let us define a bounded sequence of sets $S_0 = S$ and $S_i = S_{i - 1} \cup (S_{i - 1} + \vec{v_i})$ and set $\mu_i = 1 - \frac{|S_i|}{2 ^ f}$ for $i \in \{ 1, \dots, k \}$. When considering $\mu_i$ random variables, then by using Lemma \ref{lemma-choose-random-vector}  we can derive that $\Expect{\mu_i} = \mu_{i - 1} ^ 2$ for every $i \in \{1, \dots, k \}$. Because every set $S_i$ is an extension of the previous set $S_{i - 1}$ it follows that $0 < \mu = \mu_0 < 1$ and $\mu_i \leq \mu_{i - 1}$ for all $i = 1, \dots, k$. The assumptions of Lemma \ref{lemma-random-variable} are now satisfied and we obtain
 \[
 \begin{split}
-\Prob{\mu_s \geq 2 ^ {-b}} 
+\Prob{\mu_k \geq 2 ^ {-b}} 
 	& \leq \mu ^ {k - \log \log \left(\frac{1}{2 ^ {-b}}\right) + \log \log \left( \frac{1}{\mu} \right)} \\
 	& = \mu ^ {k - \log b + \log \log \left(\frac{1}{\mu}\right)} \\
 	& = \mu ^ {f - b - \log b + \log \log \left(\frac{1}{\mu}\right)} \text{.}
 \end{split}
 \]
 
-If we prove that the event $T(S_s) = \vecspace{b}$ occurs whenever $\mu_s < 2^{-b}$, then the statement will be almost proved. Since $\mu_s = 1 - \frac{|S_s|}{2 ^ f}$ the size of the set $S_s$ equals ${2 ^ f}(1~-~\mu_s)$. Using the assumption $\mu_s < 2 ^ {-b}$ it follows that $|S_s| > 2 ^ f - 2 ^ {f - b}$. To get the contradiction we assume that there is a vector $\vec{x} \in \vecspace{b} - T(S_s)$ or equivalently $T(S_s) \neq \vecspace{b}$. Under these conditions it is clear that $T ^ {-1}(\vec{x})$ and $S_s$ are disjoint. From Lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(\vec{x})| = 2 ^ {f - b}$. It follows that
+If we prove that the event $T(S_k) = \vecspace{b}$ occurs whenever $\mu_k < 2^{-b}$, then the statement will be almost proved. Since $\mu_k = 1 - \frac{|S_k|}{2 ^ f}$ the size of the set $S_k$ equals ${2 ^ f}(1~-~\mu_k)$. Using the assumption $\mu_k < 2 ^ {-b}$ it follows that $|S_k| > 2 ^ f - 2 ^ {f - b}$. To get the contradiction we assume that there is a vector $\vec{x} \in \vecspace{b} - T(S_k)$ or equivalently $T(S_k) \neq \vecspace{b}$. Under these conditions it is clear that $T ^ {-1}(\vec{x})$ and $S_k$ are disjoint. From Lemma \ref{lemma-linear-transformation-domain-distribution} we have $|T ^ {-1}(\vec{x})| = 2 ^ {f - b}$. It follows that
 \[
-2 ^ f = |\vecspace{f}| \geq |S_s \cup T^{-1}(\vec{x})| > 2 ^ f - 2 ^ {f - b} + 2 ^ {f - b} = 2 ^ f \text{.}
+2 ^ f = |\vecspace{f}| \geq |S_k \cup T^{-1}(\vec{x})| > 2 ^ f - 2 ^ {f - b} + 2 ^ {f - b} = 2 ^ f \text{.}
 \]
 This is a contradiction. 
 
-To prove the theorem rewrite the statement, $\mu_s < 2 ^ {-b} \Rightarrow T(S_s) = \vecspace{b}$, in terms of probability:
+To prove the theorem rewrite the statement, $\mu_k < 2 ^ {-b} \Rightarrow T(S_k) = \vecspace{b}$, in terms of probability:
 \[
-	\Prob{\mu_s < 2^{-b}} \leq \Prob{T(S_s) = \vecspace{b}} \text{.}
+	\Prob{\mu_k < 2^{-b}} \leq \Prob{T(S_k) = \vecspace{b}} \text{.}
 \]
 
-Because $\vecspace{f}$ is a vector space over the field $\mathbb{Z}_2$, by induction over $i \in \{ 1, \dots, k \}$, we obtain that $S_i = S_{i - 1} \cup (\vec{v_i} + S_{i - 1}) = S_0 + \vecspan{\vec{v_1}, \dots, \vec{v_i}}$. Note that $T(\vec{v_i}) = \vec{0}$ because the mapping $T$ is chosen so that every vector $\vec{v_i}$ is placed in the kernel of $T$. This simply implies $T(S_s) = T(S)$.
+Because $\vecspace{f}$ is a vector space over the field $\mathbb{Z}_2$, by induction over $i \in \{ 1, \dots, k \}$, we obtain that $S_i = S_{i - 1} \cup (\vec{v_i} + S_{i - 1}) = S_0 + \vecspan{\vec{v_1}, \dots, \vec{v_i}}$. Note that $T(\vec{v_i}) = \vec{0}$ because the mapping $T$ is chosen so that every vector $\vec{v_i}$ is placed in the kernel of $T$. This simply implies $T(S_k) = T(S)$.
 
 The proof of the theorem is finished by putting the previous notes together,
 
 \[
 \begin{split}
 \Prob{T(S) \neq \vecspace{b}} 
-	& = \Prob{T(S_s) \neq \vecspace{b}}  \\
-	& = 1 - \Prob{T(S_s) = \vecspace{b}} \\
-	& \leq 1 - \Prob{\mu_s < 2 ^ {-b}} \\
-	& = \Prob{\mu_s \geq 2 ^ {-b}} \\
+	& = \Prob{T(S_k) \neq \vecspace{b}}  \\
+	& = 1 - \Prob{T(S_k) = \vecspace{b}} \\
+	& \leq 1 - \Prob{\mu_k < 2 ^ {-b}} \\
+	& = \Prob{\mu_k \geq 2 ^ {-b}} \\
 	& \leq \mu ^ {f - b - \log b + \log \log \left(\frac{1}{\mu}\right)} \text{.}
 \end{split}
 \]
 \end{proof}
 
-The next theorem shows the probability of the complementary event, $T(S) \neq \vecspace{b}$, if the set $S$ is large enough.
+The next theorem shows the probability of the complementary event, $T(S) = \vecspace{b}$, if the set $S$ is large enough.
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
-Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear map. For every $\epsilon \in (0, 1)$ there is a constant $c_\epsilon > 0$ such that for every subset $S$ of the domain $\vecspace{u}$, $|S| \geq c_\epsilon b 2 ^ b$ we have
+Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear map. For every $\epsilon \in (0, 1)$ there is a constant $c_\epsilon > 0$ such that for every subset $S$ of the domain $\vecspace{u}$ with $|S| \geq c_\epsilon b 2 ^ b$ we have that
 \[
 	\Prob{T(S) = \vecspace{b}} \geq 1 - \epsilon \text{.}
 \]
@@ -321,7 +324,7 @@ As observed in the next corollary, we may apply Theorem \ref{theorem-set-onto-by
 
 \begin{corollary}
 \label{corollary-affine-e2}
-Let $U_A$ and $F_A$ be affine vector subspaces of the vector spaces $\vecspace{u}$ and $\vecspace{f}$. Let $T_A: U_A \rightarrow F_A$ be a random uniformly chosen affine linear map, $\epsilon \in (0, 1)$ and $S_A \subseteq U_A$ such that $|S_A| \geq c_\epsilon |F_A| \log |F_A|$ where the constant $c_{\epsilon}$ is that from Theorem \ref{theorem-set-onto-by-linear-transform}. Then
+Let $U_A$ and $F_A$ be affine vector subspaces of the vector spaces $\vecspace{u}$ and $\vecspace{f}$. Let $T_A: U_A \rightarrow F_A$ be a random uniformly chosen affine linear map, $\epsilon \in (0, 1)$, constant $c_\epsilon$ be chosen so that Theorem \ref{theorem-set-onto-by-linear-transform} is satisfied and $S_A \subseteq U_A$ such that $|S_A| \geq c_\epsilon |F_A| \log |F_A|$. Then
 \[
 	\Prob{T_A(S) = F_A} \geq 1 - \epsilon \text{.}
 \]
@@ -374,16 +377,21 @@ The number of all colliding pairs can be computed now as
 
 \begin{statement}
 \label{statement-good-c-e}
-For every $\epsilon \in (0, 1)$ the value of the constant $c_\epsilon$ from Theorem $\ref{theorem-set-onto-by-linear-transform}$ may be chosen minimal so that it satisfies Inequality \ref{inequality-good-c-e}:
+For every $\epsilon \in (0,1)$ Theorem \ref{theorem-set-onto-by-linear-transform} holds if the constant $c_{\epsilon}$ for some parameters $k, l \geq 1$ satisfies the inequalities:
+\stepcounter{definition}
 \begin{equation}
 \label{inequality-good-c-e}
-c_\epsilon \geq 2 ^ {\frac{\log \left( \left( \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\mu'}^{\log \epsilon - l - \log \log \left(\frac{1}{\mu'}\right)}\right)}{\log \mu'}} \text{ where $\mu' = 1 - \frac{\epsilon}{2k2 ^ l}$.}
+c_\epsilon \geq 2 ^ {\frac{\log \left( \left( \epsilon - \frac{\epsilon}{(k - 1) 2 ^ l}\right) {\mu'}^{\log \epsilon - l - \log \log \left(\frac{1}{\mu'}\right)}\right)}{\log \mu'}} \text{ where $\mu' = 1 - \frac{\epsilon}{2k2 ^ l}$}
 \end{equation}
+and 
+\[
+	l + \log c_{\epsilon} + \log b  - log \epsilon \geq 0 \text{.}
+\]
 \end{statement}
 \begin{proof}
-We parametrise the original proof of Theorem \ref{theorem-set-onto-by-linear-transform} by two real variables $k$ and $l$. As already mentioned in the introduction of Lemma \ref{lemma-collision-count}, the parameter $k$ manages the size of the set $T_0(S)$. The limit is changed to $\frac{|S|}{k}$ for $k \in \mathbb{R}$, $k \geq 1$. Another constant is present in the dimension $f$ of the factor space $F$, $f = \left\lceil \log \left(\frac{2|S|}{\epsilon}\right) \right\rceil$. The second parameter $l$ is obtained by setting $f = \left\lceil \log \left( \frac{2 ^ l |S|}{\epsilon} \right) \right\rceil$.
+We parametrise the original proof of Theorem \ref{theorem-set-onto-by-linear-transform} by two real variables $k$ and $l$. As already mentioned in the introduction of Lemma \ref{lemma-collision-count}, the parameter $k$ controls the size of the set $T_0(S)$. The limit is changed to $\frac{|S|}{k}$ for $k \in \mathbb{R}$, $k \geq 1$. Another constant is present in the dimension $f$ of the factor space $F$, $f = \left\lceil \log \left(\frac{2|S|}{\epsilon}\right) \right\rceil$. The second parameter $l$ is obtained by setting $f = \left\lceil \log \left( \frac{2 ^ l |S|}{\epsilon} \right) \right\rceil$.
 
-We summarise the claims of the original proof and recall its objects that are present in the current one. We factorise a random uniformly chosen linear transformation $T: \vecspace{u} \rightarrow \vecspace{b}$ through the vector space $\vecspace{f}$. From Model \ref{remark-model-uniform-linear-map-selection} we obtained two linear mappings $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and a $T_1$ from $\vecspace{f}$ onto $\vecspace{b}$. For the existence of a surjective transformation $T_1$ we need $f \geq b$. Hence for the computed value of the constant $c_\epsilon$ and its parameters we have to verify that $f \geq b$.
+We summarise the claims of the original proof and recall its objects that are present in the current one. We factorise a random uniformly chosen linear transformation $T: \vecspace{u} \rightarrow \vecspace{b}$ through the vector space $\vecspace{f}$. From Model \ref{remark-model-uniform-linear-map-selection} we obtained two linear mappings $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and a $T_1$ from $\vecspace{f}$ onto $\vecspace{b}$. For the existence of a surjective transformation $T_1$ we need $f \geq b$. Since \[ f = \left\lceil \log\left(\frac{2 ^ l |S|}{\epsilon}\right) \right\rceil \geq l + \log c_{\epsilon} + b + \log b - \log \epsilon \] then from the inequality $l + \log c_{\epsilon} + \log b -\log \epsilon \geq 0$ it follows $f \geq b$.
 
 We continue by using the Law of Total Probability as in the original proof:
 \[
@@ -454,13 +462,14 @@ The probability estimate of $\Prob{T(S) \neq \vecspace{b}}$ follows from Claim \
 \[
 \begin{split}
 & \Prob{T(S) \neq \vecspace{b}} \\
-	& \qquad \leq \Prob{|T_0(S)| \leq \frac{|S|}{k}} + \Prob{T_1(T_0(S)) \neq Z_2^t \wedge |T_0(S)| > \frac{|S|}{k}} \\ 
-	& \qquad \leq \frac{\epsilon}{(k - 1) 2 ^ l} + {\mu'} ^ {l + \log c_\epsilon - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} \\
-	& \qquad \leq \epsilon \text{.}
+	& \qquad \leq \Prob{|T_0(S)| \leq \frac{|S|}{k}} + \Prob{T_1(T_0(S)) \neq \vecspace{b} \wedge |T_0(S)| > \frac{|S|}{k}} \\ 
+	& \qquad \leq \frac{|S|}{(k - 1)2 ^ f} + \mu ^ { l + \log c_{\epsilon} - \log \epsilon + \log \log \left(\frac{1}{\mu}\right)} \\
+	& \qquad \leq \frac{\epsilon |S|}{(k - 1) |S| 2 ^ l} + {\mu'} ^ {l + \log c_\epsilon - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} \\
+	& \qquad \leq \frac{\epsilon}{(k - 1) 2 ^ l} + {\mu'} ^ {l + \log c_\epsilon - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} \text{.}
 \end{split}
 \]
 
-The last inequality is the bound that is required to be proved. Realise that it is achieved by a convenient but minimal possible choice of the constant $c_\epsilon$:
+Our goal is to choose $c_{\epsilon}$ such that it is minimal possible and this probability will be less than $\epsilon$. Thus we can compute
 \[
 \begin{split}
 \frac{\epsilon}{(k - 1) 2 ^ l} + {\mu'}^{\log c_\epsilon + l - \log \epsilon + \log \log \left(\frac{1}{\mu'}\right)} & \leq \epsilon \\
@@ -491,27 +500,31 @@ When we use the estimate of Statement \ref{statement-good-c-e} in Theorem \ref{t
 We bring novel ideas and again improve the value of $c_\epsilon$ in the next statement.
 \begin{statement}
 \label{statement-better-c-e}
-For every $\epsilon \in (0, 1)$ the value of the constant $c_\epsilon$ from Theorem $\ref{theorem-set-onto-by-linear-transform}$ may be chosen minimal so that it satisfies Inequality \ref{inequality-better-c-e}:
+For every $\epsilon \in (0,1)$ Theorem \ref{theorem-set-onto-by-linear-transform} holds if the constant $c_{\epsilon}$ for some parameters $k, l \geq 1$ satisfies the inequalities:
 \stepcounter{definition}
 \begin{equation}
 \label{inequality-better-c-e}
-c_\epsilon \geq 2 ^ {\frac{\log \left({\epsilon - \frac{2^l}{2^l k - 2}}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}}} \text{ where $\mu' = 1 - \frac{1}{k}$.}
+c_\epsilon \geq 2 ^ {\frac{\log \left({\epsilon - \frac{2^l}{2^l k - 2}}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}}} \text{ where $\mu' = 1 - \frac{1}{k}$}
 \end{equation}
+and 
+\[
+	\log b + \log c_{\epsilon} - l \geq 0 \text{.}
+\]
 \end{statement}
 \begin{proof}
 The proof we present is fully parametrised like that of Statement \ref{statement-good-c-e}. We can choose values of its arguments to optimise the value of the constant $c_\epsilon$. To briefly present the sketch of the proof recall that we need a factor space $\vecspace{f}$, $f \geq b$. Then we decompose a uniformly chosen random linear map $T$ into two mappings $T_0$ and a surjective $T_1$ such that $T = T_1 \circ T_0$ going through the vector space $\vecspace{f}$.
 
-Instead of making the factor space $\vecspace{f}$ larger than the set $S$, we bound it between $2 ^ b$ and $\frac{2|S|}{2 ^ l}$ where $l \geq 1$ is a parameter. The use of Model \ref{remark-model-uniform-linear-map-selection} requires existence of a surjective linear mapping $T_1: \vecspace{f} \rightarrow \vecspace{b}$. This clarifies the first bound because if a surjective function $T_1$ exists, then $|\vecspace{f}| \geq |\vecspace{b}|$. Of course, this is possible regarding the assumption $|S| \geq c_\epsilon b 2 ^ b$ and constants $c_\epsilon$ that emerge.
+Instead of making the factor space $\vecspace{f}$ larger than the set $S$, we bound its size between $\frac{|S|}{2 ^ l}$ and $\frac{2|S|}{2 ^ l}$ where $l \geq 1$ is a parameter. In order to exist a surjective linear transformation from $\vecspace{f}$ onto $\vecspace{b}$ it must be $|\vecspace{f}| \geq |\vecspace{b}|$. By the inequality $\log b + \log c_{\epsilon} - l \geq 0$ and the requirement $|S| \geq c_\epsilon b 2 ^ b$ it will be satisfied.
 
-For every value $\frac{|S|}{2^l}$, $l \in \mathbb{R}, l \geq 1$, there is an uniquely determined number $f \in \mathbb{N}$ such that $\frac{|S|}{2 ^ l} \leq 2 ^ f \leq \frac{2|S|}{2 ^ l}$. More formally $f = \left\lceil \log \left( \frac{|S|}{2 ^ l} \right) \right\rceil$. 
+For every value $\frac{|S|}{2^l}$, $l \in \mathbb{R}, l \geq 1$, there is an uniquely determined number $f \in \mathbb{N}$ such that $\frac{|S|}{2 ^ l} \leq 2 ^ f \leq \frac{2|S|}{2 ^ l}$. More formally $f = \left\lceil \log \left( \frac{|S|}{2 ^ l} \right) \right\rceil$. Then \[ f = \left\lceil \log|S| \right\rceil - l \geq \left\lceil \log c_{\epsilon} + \log b \right\rceil - l + b \geq b \text{.} \]
 
-The second novel idea is not to make the size of the set $T_0(S)$ relative to that of the set $S$. We refer to the size of the factor space $\vecspace{f}$ instead. We introduce a new parameter $k \in \mathbb{R}$, $k \geq 1$. We show, if $|T_0(S)| \leq \frac{2 ^ f}{k}$, then there are at least $\frac{|S|}{2}\left(\frac{k|S|}{2 ^ f} - 1\right)$ collisions caused by $T_0$. We use Lemma \ref{lemma-collision-count} for the set $S$ and the fraction of resulting elements $\frac{|S|}{k'} = \frac{2 ^ f}{k}$. Since the resulting number of collisions equals $\frac{|S|}{2}(k' - 1)$ and $k' = \frac{k|S|}{2 ^ f}$, we get the mentioned bound.
+The second novel idea is not to make the size of the set $T_0(S)$ relative to that of the set $S$. We refer to the size of the factor space $\vecspace{f}$ instead. We introduce a new parameter $k \in \mathbb{R}$, $k \geq 1$. We show, if $|T_0(S)| \leq \frac{2 ^ f}{k}$, then there are at least $\frac{|S|}{2}\left(\frac{k|S|}{2 ^ f} - 1\right)$ collisions caused by $T_0$. If $|T_0(S)| \leq \frac{|S|}{k'}$ for some $k' \geq 1$ then, by Lemma \ref{lemma-collision-count}, there are at least $\frac{|S|(k' - 1)}{2}$ collisions for $S$ and $T_0$. Hence if $\frac{|S|}{k'} = \frac{2 ^ f}{k}$,  then $k' = \frac{k|S|}{2 ^ f}$ and thus if $|T_0(S)| \leq \frac{S}{k'} = \frac{2 ^ f}{k}$, then there exist at least $\frac{|S|}{2}(\frac{k|S|}{2 ^ f} - 1)$ collisions for $S$ and $T_0$.
 
-As in the previous proof we estimate the two probabilities obtained by the Law of Total Probability. Recall that the random variable $d_S$ denotes the number of collisions and $\Expect{d_S} = \dbinom{|S|}{S}2 ^ {-f}$. The bound on the first probability, $\Prob{|T_0(S)| \leq \frac{2 ^ f}{k}}$, is found again using the Markov's inequality,
+As in the previous proof we estimate the two probabilities obtained by the Law of Total Probability. Recall that the random variable $d_S$ denotes the number of collisions and $\Expect{d_S} = \dbinom{|S|}{2}2 ^ {-f}$. The bound on the first probability, $\Prob{|T_0(S)| \leq \frac{2 ^ f}{k}}$, is found again using the Markov's inequality,
 \[
 \begin{split}
 \Prob{|T_0(S)| \leq \frac{2 ^ f}{k}} 
-	& =  \Prob{d_S \geq \frac{|S|}{2} \left( \frac{k|S|}{2 ^ f} - 1 \right)} \\
+	& \leq \Prob{d_S \geq \frac{|S|}{2} \left( \frac{k|S|}{2 ^ f} - 1 \right)} \\
 	& \leq \frac{|S|(|S| - 1)}{2 \cdot 2^f \frac{|S|}{2}\left(\frac{k|S|}{2 ^ f} - 1\right)} \\
 	& \leq \frac{|S|}{k|S| - 2 ^ f} \\
 	& \leq \frac{|S|}{k|S| - \frac{2|S|}{2^l}} \\ 
@@ -537,7 +550,7 @@ From the choice of the dimension $f$ and the assumption of Theorem \ref{theorem-
 	f = \left\lceil \log \left( \frac{|S|}{2 ^ l} \right) \right\rceil \geq \log c_\epsilon + \log b  + b - l \text{.}
 \]
 
-From Theorem \ref{theorem-linear-function-set-onto} used for the set $T_0(S)$, the source space $\vecspace{u}$, the inverse density $\mu$, the target space $\vecspace{b}$ and the transformation $T_1$ we have 
+From Theorem \ref{theorem-linear-function-set-onto} used for the set $T_0(S)$, the source space $\vecspace{f}$, the inverse density $\mu$, the target space $\vecspace{b}$ and the transformation $T_1$ we have 
 \[
 \begin{split}
 \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac {2 ^ f}{k}} 
@@ -555,28 +568,28 @@ This result is worth remembering.
 \]
 \end{claim}
 
-Recall, we use the Law of Total Probability, Theorem \ref{theorem-law-of-total-probability}, to split the expression $\Prob{T(S) \neq \vecspace{b}}$. To prove the statement, the probability of event $T(S) \neq \vecspace{b}$ must be less than $\epsilon$.
+Recall, we use the Law of Total Probability, Theorem \ref{theorem-law-of-total-probability}, to split the expression $\Prob{T(S) \neq \vecspace{b}}$. To prove the statement, the probability of event $T(S) \neq \vecspace{b}$ must be less than $\epsilon$. Hence it suffices
 \[
 \begin{split}
 & \Prob{T(S) \neq \vecspace{b}} \\
-	& \qquad = \Prob{T(S) \neq \vecspace{t} \wedge |T_0(S)| \leq \frac {2 ^ f}{k}} + \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac {2 ^ f}{k}} \\
+	& \qquad = \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| \leq \frac {2 ^ f}{k}} + \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac {2 ^ f}{k}} \\
 	& \qquad \leq \Prob{|T_0(S)| \leq \frac {2 ^ f}{k}} + \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac {2 ^ f}{k}} \\
 	& \qquad \leq \epsilon \text{.}
 \end{split}
 \]
 
-Put $\mu' = 1 - \frac{1}{k}$. Constant $c_\epsilon$ may be computed directly from the above estimate, Claim \ref{claim-better-c-e-probability-1} and Claim \ref{claim-better-c-e-probability-2} as
+Put $\mu' = 1 - \frac 1k$. From Claims \ref{claim-better-c-e-probability-1} and \ref{claim-better-c-e-probability-2} we obtain
 \[
 \begin{split}
 \frac{2^l}{2^l k - 2} + {\mu'}^{\log c_\epsilon + \log \log \left( \frac{1}{\mu'} \right) - l} & \leq \epsilon \\
-{\epsilon - \frac{2^l}{2^l k - 2}}\cdot{{\mu'} ^ {l - \log \log \left(\frac{1}{\mu'}\right)}} & \geq {\mu'}^{\log c_\epsilon} \\
-\frac{\log \left({\epsilon - \frac{2^l}{2^l k - 2}}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}} & \leq \log c_\epsilon \text{.}
+{\left(\epsilon - \frac{2^l}{2^l k - 2}\right)}\cdot{{\mu'} ^ {l - \log \log \left(\frac{1}{\mu'}\right)}} & \geq {\mu'}^{\log c_\epsilon} \\
+\frac{\log \left({\left(\epsilon - \frac{2^l}{2^l k - 2}\right)}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}} & \leq \log c_\epsilon \text{.}
 \end{split}
 \]
 
-Thus the value of the constant $c_\epsilon$ may be chosen as the minimal one satisfying the inequality:
+Thus the value of the constant $c_\epsilon$ may be chosen as the minimal one satisfying for some $k, l \geq 1$ the inequality:
 \[
-c_\epsilon \geq 2 ^ {\frac{\log \left({\epsilon - \frac{2^l}{2^l k - 2}}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}}} \text{.}
+c_\epsilon \geq 2 ^ {\frac{\log \left({\left(\epsilon - \frac{2^l}{2^l k - 2}\right)}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}}} \text{.}
 \]
 \end{proof}
 
@@ -585,5 +598,5 @@ The following corollary shows an interesting value of $c_\epsilon$ achieved by t
 For $\epsilon = 0.8967$ the value of the constant $c_\epsilon$ may be chosen as $17.31$.
 \end{corollary}
 \begin{proof}
-Use the previous statement for $k = 2.06$ and $l = 2$. We have to verify that $f \geq b$ but this is certainly true since $f \geq \log c_\epsilon + \log b + b - l \geq b$.
+Use the previous statement for $k = 2.06$ and $l = 2$. Clearly, \[ \log c_{\epsilon} + \log b - l \geq 0 \text{.} \]
 \end{proof}

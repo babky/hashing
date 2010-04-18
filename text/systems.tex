@@ -59,9 +59,9 @@ The above definitions of universal classes can be rewritten in terms of probabil
 In the same manner we can reformulate and use definitions for the other universal systems.
 
 In the remainder of this chapter we sum up some basic facts regarding universal systems, show remarks about their combinations and derive some theoretic bounds of strongly $k$-universal systems.
-\begin{remark}
+\begin{theorem}
 Every strongly $2$-universal class of hash functions is also 1-universal.
-\end{remark}
+\end{theorem}
 \begin{proof}
 Let $H$ be strongly $2$-universal class containing functions from a universe $U$ into a set $B$. We have to find the number of functions in $H$ which make a given pair of different elements $x, y \in U$ collide. 
 
@@ -72,10 +72,10 @@ First, define the set of functions that map both $x$ and $y$ on the image $t \in
 The number of all colliding functions is then less or equal to $\frac{H}{|B|}$ and the system $H$ is clearly $1$-universal.
 \end{proof}
 
-\begin{remark}
+\begin{theorem}
 \label{remark-n-to-k}
 Every strongly $n$-universal class of functions is strongly $k$-universal for every $1 \leq k \leq n$.
-\end{remark}
+\end{theorem}
 \begin{proof}
 Let $H$ be a $n$-universal class consisting of functions from a universe $U$ into a hash table $B$. Similarly to the previous proof there are $k$ different elements $x_1, \dots, x_k \in U$ that should be mapped to the prescribed buckets $y_1, \dots, y_k \in B$. For every choice of their images $y_1, \dots, y_k \in B$ we need to find the number of functions mapping the element $x_i$ to its image $y_i$, $1 \leq i \leq k$. 
 
@@ -155,9 +155,9 @@ Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the syst
 
 An important application of the multiplicative system is the construction of a perfect hash function shown in \cite{1884} by Fredman, Koml\'os and Szemeredi.
 
-\begin{theorem}
+\begin{remark}
 For a prime $p$ and $m < p$ the multiplicative system is $2$-universal.
-\end{theorem}
+\end{remark}
 \begin{proof}
 Let $x$ and $y$ be different elements of the universe. We have to find the number of functions in the multiplicative system that make their images the same. For a collision function we have that
 \begin{displaymath}
@@ -384,7 +384,6 @@ Let $H = \{h_1, \dots, h_{|H|}\}$. By induction we create sequence $U_0, U_1, \d
 
 From the Dirichlet's principle size of every set $U_i$ satisfies $|U_i| \geq \frac{|U_{i - 1}|}{m}$. Hence we obtain $|U_i| \geq \frac{|U|}{m^i}$.
 
-%TODO: veta, ked mam silne k univerzalny, tak prechod na pravdepodobnost kolizie jednej fcie.
 Let $i$ be the greatest index with $|U_i| \geq k$. Functions $h_1, h_2,\dots, h_i$ map at least $k$ elements of set $U_i$ to a singleton. By Remark \ref{remark-n-to-k}, the probability of this event is less or equal to $\frac{1}{m ^ {k-1}}$. It follows that $i \leq \frac{|H|}{m ^ {k - 1}}$. Since $i$ is the greatest index with the property $|U_i| \geq k$ we also have that $\frac{|U|}{m ^ {i + 1}} \leq |U_{i + 1}| < k$. 
 
 From $\frac{N}{m^{i + 1}} < k$ it follows $\frac{N}{km} < m ^ {i}$ and thus $\log_m \left( \frac{N}{km} \right) < i$.
