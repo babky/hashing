@@ -2,7 +2,7 @@
 \label{chapter-elpsl}
 
 \section{Length of a Chain}
-In Lemma \ref{lemma-expected-list-time} we explain why the length of a chain is so important for hashing. Assume a model of hashing in which chains, representing the elements stored within a single bucket, are represented by a linked list. To find an element in a bucket (or chain) we need to iterate it. Thus the time of the find operation is linear with respect to the number of elements of a chain. An approach, how to estimate the expected length of the longest chain, for both classic and universal hashing is shown.
+In Lemma \ref{lemma-expected-list-time} we explain why the length of a chain is so important for hashing. Consider a model of hashing which assumes that chains, representing the elements of a single slot, are stored by linked lists. To find an element in a bucket (or chain) we need to iterate it. Thus the time of the find operation is linear with respect to the number of elements of a chain. An approach, how to estimate the expected length of the longest chain, for both classic and universal hashing is shown.
 
 \begin{definition}[Equality indicator]
 Let $x$ and $y$ be two variables from the same domain $B$. Then the function $\mathbf{I}: B \times B \rightarrow \{0, 1\}$ such that
@@ -16,8 +16,8 @@ Let $x$ and $y$ be two variables from the same domain $B$. Then the function $\m
 is called \emph{equality indicator}.
 \end{definition}
 
-\begin{definition}[Length of a chain, Length of the longest chain]
-Let $U$ be a universe, $B$ a hash table and $h: U \rightarrow B$ be a hash function. Let $b \in B$ be a bucket and $S \subseteq U$ be a stored set. Then the \emph{length of the chain} representing the bucket $b$ when hashing with the function $h$ is denoted by $\psl(b, h) = \displaystyle \sum_{x \in S} \Indicator(h(x) = b)$. The value $\lpsl(h) = \displaystyle \max_{b \in B} (\psl(b, h))$ is called the \emph{length of the longest chain} when hashing with the function $h$.
+\begin{definition}[Length of a chain, length of the longest chain]
+Let $U$ be a universe, $B$ be a hash table and $h: U \rightarrow B$ be a hash function. Let $b \in B$ be a bucket and $S \subset U$ be a stored set. Then the \emph{length of the chain} representing the bucket $b$ when hashing with the function $h$ is denoted by $\psl(b, h) = \displaystyle \sum_{x \in S} \Indicator(h(x) = b)$. The value $\lpsl(h) = \displaystyle \max_{b \in B} (\psl(b, h))$ is called the \emph{length of the longest chain} when hashing with the function $h$.
 \end{definition}
 
 Notation \emph{probe sequence} comes from the open addressing. Open addressing assumes that chains are represented directly in the hash table. In addition, the chains from various buckets may be merged together. Thus they may contain elements with different hash values. Many authors refer to the process of finding an element in a chain as to the probing a sequence. Authors denote corresponding random variables by names $\psl$ and $\lpsl$ as well, for example in \cite{10.1109/SFCS.1985.48}.
@@ -29,27 +29,27 @@ When taking the probability into an account we define random variables $\psl(b)$
 \label{definition-psl}
 Random variable $\psl(b)$ denotes the \emph{length of the chain} representing a bucket $b \in B$. Its values are natural numbers and probability density function is defined as:
 \[
-\Prob{\psl(b) = k} = \frac{\sum_{h \in H} \Indicator(\psl(a, h) = k)}{|H|} \text{ for } k \in \mathbb{N} \text{.}
+\Prob{\psl(b) = k} = \frac{\sum_{h \in H} \Indicator(\psl(b, h) = k)}{|H|} \text{ for } k \in \mathbb{N} \text{.}
 \]
 
 Random variable $\lpsl$ denoting the \emph{length of the longest chain} is defined as
 \[
-\lpsl = \displaystyle\max_{a \in B}(\psl(a))\text{.}
+\lpsl = \displaystyle\max_{b \in B}(\psl(b))\text{.}
 \]
 \end{definition}
 
 In universal hashing the expected value of both random variables $\psl$ and $\lpsl$ is taken over the choice of a function $h \in H$. Hence the bounds on the variable $\lpsl$ are valid for any stored set $S \subset U$. They frequently depend on the size of the stored set and on the size of the hash table but are independent of the stored elements. The value $\Expect{\lpsl}$ is not only important characteristic of the expected worst case. As shown later in Chapter \ref{chapter-proposed-model}, if we are able to find a tight upper bound on $\Expect{\lpsl}$, then we are also able to guarantee the worst case behaviour of the model.
 
 \begin{section}{Estimate for Separate Chaining}
-The standard result of classic hashing is the bound $O\left(\frac{\log n}{\log \log n}\right)$ on the length of the longest chain. We can reuse calculations in its proof found in \cite{DBLP:books/sp/Mehlhorn84} to show the same bound for universal hashing with strongly $\omega$-universal class. In either case when proving this result, we need to estimate the probability of collision of $k$ elements. In the classic model of hashing the estimate follows from the assumptions given in Section \ref{section-assumptions}. This assumption is not necessarily satisfied. However, the assumption is strong enough to solve the problem in the area of classic hashing. 
+The standard result of classic hashing is the bound $O\left(\frac{\log n}{\log \log n}\right)$ on the length of the longest chain. We can reuse calculations in its proof found in \cite{DBLP:books/sp/Mehlhorn84} to show the same bound for universal hashing with a strongly $\omega$-universal class. In either case when proving this result, we need to estimate the probability of collision of $k$ elements. In the classic model of hashing the estimate follows from the assumptions given in Section \ref{section-assumptions}. The assumptions are strong enough to solve the problem in the area of classic hashing. However, they are not necessarily satisfied for many real world situations. 
 
 Definition \ref{definition-psl} of the random variables $\lpsl$ and $\psl$ are made for models of universal hashing. Yet, they are easy to understand with the standard hashing, too. 
 
 Remark, when using the standard model, we do not have to mention the additional parameter $h$ of the variables $\psl$ and $\lpsl$ because the standard model assumes a single hash function only. Recall that the probability space of this model corresponds to the choice of a stored set. 
 
-Additional restrictions placed on the hash function require that it distributes the elements of the universe uniformly across the hash table. Hence the other parameter, bucket $b \in B$, of the variable $\psl$ is no longer necessary, too. From this fact it follows that for two arbitrary buckets $a, b \in B$ the random variables $\psl(a)$ and $\psl(b)$ are equal: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{ for every } k \in \mathbb{N} \text{.}\] 
+Additional restriction placed on the hash function requires that it distributes the elements of the universe uniformly across the hash table. Hence the other parameter, bucket $b \in B$, of the variable $\psl$ is no longer necessary, too. From this fact it follows that for two arbitrary buckets $a, b \in B$ the random variables $\psl(a)$ and $\psl(b)$ are equal: \[\Prob{\psl(a) = k} = \Prob{\psl(b) = k} \text{ for every } k \in \mathbb{N} \text{.}\] 
 
-In this chapter we use notation from Section \ref{section-notation}. So $U$ is a universe, $m$ denotes the size of the hash table $B$ and $n$ is the size of the stored set $S \subset U$.
+In this chapter we use the notation from Section \ref{section-notation}. So $U$ is a universe, $m$ denotes the size of the hash table $B$ and $n$ is the size of the stored set $S \subset U$.
 
 \begin{theorem}
 Assume the model of separate chaining with $\alpha < 1$. Then 
@@ -60,7 +60,7 @@ Assume the model of separate chaining with $\alpha < 1$. Then
 \begin{proof}
 The probability estimate for the variable $\lpsl$ is simply obtained from the probability estimate of $\psl$ as:
 \begin{displaymath}
-\Prob{\lpsl \geq i} \leq m \Prob{\psl(a) \geq i \text{ for any } a \in B} \text{.}
+\Prob{\lpsl \geq i} \leq m \Prob{\psl(b) \geq i \text{ for any } b \in B} \text{.}
 \end{displaymath}
 
 We use the definition of the expected value to find $\Expect{\lpsl}$:
@@ -94,7 +94,7 @@ We can finish the estimate of the variable $\lpsl$ by computing:
 \end{split}
 \end{displaymath}
 
-If we assume that the table's load factor $\alpha < 1$, we can complete the proof. The details of the estimate can be found in \cite{DBLP:books/sp/Mehlhorn84}.
+If we assume that the table's load factor $\alpha < 1$, we can complete the proof. The details of the estimate can be found in \cite{DBLP:books/sp/Mehlhorn84} and in \cite{VK-skripta}.
 \end{proof}
 \end{section}
 
@@ -129,11 +129,11 @@ The relation between the size of a set $M$ and its indicator is described by the
 
 Now we present a method how to estimate the probability of collision of $k$ elements.
 \begin{definition}[Collision sets of $k$ elements]
-Let $h \in H$ be a function, $S \subset U$ be a set and $a \in B$. For a natural number $k$ define
+Let $h \in H$ be a function, $S \subset U$ be a set and $b \in B$. For a natural number $k$ define
 \[
 \begin{split}
-M_{\geq k}(h, a) & = \{Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{a\}\}, \\
-M_{= k}(h, a) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{a\}\}  \text{.}
+M_{\geq k}(h, b) & = \{Y \subseteq S \setdelim |Y| \geq k, h(Y) = \{b\}\}, \\
+M_{= k}(h, b) & = \{Y \subseteq S \setdelim |Y| = k, h(Y) = \{b\}\}  \text{.}
 \end{split}
 \]
 \end{definition}
@@ -142,16 +142,16 @@ When it is clear, we can omit parametrisation of the sets and use the notation $
 
 \begin{lemma}
 \label{lemma-indicator-k-collision}
-Let $U$ be a universe, $B$ a hash table, $b \in B$ a bucket, $S \subset U$ be a stored set and $h: U \rightarrow B$. Then non-emptiness of the set $M_{\geq k}(h, a)$ is equivalent to the non-emptiness of the set $M_{= k}(h, a)$. Equivalently
+Let $U$ be a universe, $B$ represent a hash table, $b \in B$ a bucket, $S \subset U$ be a stored set and $h: U \rightarrow B$. Then the non-emptiness of the set $M_{\geq k}(h, b)$ is equivalent to the non-emptiness of the set $M_{= k}(h, b)$. Equivalently
 \begin{displaymath}
-\Indicator(M_{\geq k}(h, a)) = \Indicator(M_{= k}(h, a)) \text{.}
+\Indicator(M_{\geq k}(h, b)) = \Indicator(M_{= k}(h, b)) \text{.}
 \end{displaymath}
 \begin{proof}
 Let $M_{\geq k}$ be a non empty set, then:
 \begin{displaymath}
 \begin{split}
 Y \in M_{\geq k} 
-	& \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{a\} \\
+	& \Rightarrow \forall Y' \subseteq Y, |Y'| = k: h(Y') = \{b\} \\
 	& \Leftrightarrow \forall Y' \subseteq Y, |Y'| = k: Y' \in M_{=k} \\
 	& \Rightarrow \exists Y' \subseteq Y, |Y'| = k: Y' \in M_{=k} \text{.}
 \end{split}
@@ -184,7 +184,7 @@ We add some remarks clarifying the following calculations:
 \begin{itemize}
 \item Every chain is determined by a bucket $b \in B$.
 \item Probability estimate is always computed for a fixed set $S$.
-\item We have to find an estimate \[ \Prob{\psl(b) \geq k} \leq p(B, U, H, |S|) \] for some $p(B,U,H,|S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl(h) \geq k} \leq |B| p(B, U, H, |S|) \text{.} \] 
+\item We have to find an estimate \[ \Prob{\psl(b) \geq k} \leq p(B, U, H, |S|) \] for some $p(B,U,H,|S|)$. This estimate is then used to estimate the distribution function of $\lpsl$: \[ \Prob{\lpsl \geq k} \leq |B| p(B, U, H, |S|) \text{.} \] 
 \item The obtained estimate does not depend on the elements of the stored set $S$. However, it depends on its size $n = |S|$.
 \end{itemize}
 
@@ -219,8 +219,8 @@ If $H$ is a strongly $\omega$-universal system, then $\Expect{\lpsl} \in O\left(
 Estimate the probability of the existence of a chain consisting of at least $k \in \mathbb{N}$ elements:
 \begin{displaymath}
 \begin{split}
-P(\psl(a) \geq k) 
-	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{a\} \}|}{|H|} \\
+\Prob{\psl(b) \geq k}
+	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{b\} \}|}{|H|} \\
 	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|B|}^{k}}}{|H|} \\
 	& = \dbinom{|S|}{k}\frac{1}{{|B|}^k} \text{.}
 \end{split}

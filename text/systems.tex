@@ -11,6 +11,8 @@ Probability that the selected universal function is not suitable for a stored se
 % TODO: Odkazy na jednotlive systemy
 % TODO: Citacia na clanok s definiciami.
 
+Various definitions of universal classes may be found in \cite{DBLP:journals/jcss/CarterW79}, \cite{VK-skripta}, \cite{DBLP:books/sp/MehlhornS2008} and \cite{DBLP:books/sp/Mehlhorn84}. Their various application are shown in \cite{1382617} and \cite{Universal-hashing}. Originally for strongly $n$-universal classes the equality in the probability estimate holds in \cite{1382617}. Various situations may satisfy only inequality and therefore their definition is a bit changed in this work. We also define nearly strongly $n$-universal classes.
+
 \begin{definition}[$c$-universal class of hash functions]
 \label{c_universal_system}
 Let $c \in R$ be a positive number and $H$ be a multiset of functions $h: U \rightarrow B$ such that for each pair of elements $x, y \in U$, $x \neq y$ we have 
@@ -106,7 +108,7 @@ In this section we show some examples of common universal classes of hash functi
 
 % Linear systems
 \paragraph{Linear system.}
-System of linear functions was among the first systems of universal hash functions that were discovered. They were introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79} where they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation. Nowadays various modifications of linear systems are known and are presented in the following text. 
+System of linear functions was among the first systems of universal hash functions that were discovered. They were introduced by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79} where they showed basic properties of universal hashing. Above all they mentioned the expected constant time of the find operation of universal hashing. Nowadays various modifications of linear systems are known and are presented in the following text. The system is also mentioned in \cite{VK-skripta} and \cite{DBLP:books/sp/MehlhornS2008}.
 
 \begin{definition}[Linear system]
 \label{definition-linear-system}
@@ -153,7 +155,7 @@ For examining the properties of the original linear system simpler and smaller m
 Let $p$ be a prime and $m$, $m < p$ be the size of the hash table. Then the system \[ \mathrm{Mult}_{m, p} = \lbrace h:\mathbb{Z}_p \rightarrow \mathbb{Z}_m \setdelim h(x) = (kx \bmod p) \bmod m \text{ for } k \in \mathbb{Z}_p - \{0\} \rbrace \] is called the \emph{multiplicative system}.
 \end{definition}
 
-An important application of the multiplicative system is the construction of a perfect hash function shown in \cite{1884} by Fredman, Koml\'os and Szemeredi.
+An important application of the multiplicative system is the construction of a perfect hash function shown in \cite{1884} by Fredman, Koml\'os and Szemeredi. The system and its other properties are also mentioned in \cite{DBLP:books/sp/MehlhornS2008}.
 
 \begin{remark}
 For a prime $p$ and $m < p$ the multiplicative system is $2$-universal.
@@ -176,11 +178,11 @@ Notice that the parameter $l \neq 0$ since $k \neq 0$. Thus for every choice of 
 \end{proof}
 % End of multiplicative system
 
-% Linear transformations
-Previous systems contain only simple linear functions from natural numbers to natural numbers. An analogous class can be constructed by using linear transformations between vector spaces. The systems have various similar properties but the latter one gives us a suitable bound on the size of the largest bucket.
+Previous systems contain only simple linear functions from natural numbers to natural numbers. An analogous class can be constructed by using linear transformations between vector spaces. The systems have various similar properties but the latter one gives us a suitable bound on the size of the largest bucket. 
 
+% Linear transformations
 \paragraph{System of linear transformations.} 
-Systems of linear transformations are studied later in Chapter \ref{chapter-linear-systems}. We use them in Chapter \ref{chapter-proposed-model} to create a new model of universal hashing.
+Systems of linear transformations are studied later in Chapter \ref{chapter-linear-systems}. We use them in Chapter \ref{chapter-proposed-model} to create a new model of universal hashing. The system is discussed in a very detail way in \cite{DBLP:journals/jacm/AlonDMPT99}.
 
 \begin{definition}[The set of all linear transformations, the set of all surjective linear transformations]
 \label{definition-linear-transformations}
@@ -275,7 +277,7 @@ The bit string system is thus $\frac{p}{l}$-universal.
 
 % Polynomials
 \paragraph{Polynomials over finite fields.}
-The following system is a generalisation of so far discussed linear functions and linear transformations to polynomials. The advantage delivered by the system of polynomials is its strong universality. Unfortunately it is traded for the bigger size of the system.
+The following system is a generalisation of so far discussed linear functions and linear transformations to polynomials. The advantage delivered by the system of polynomials is its strong universality. Unfortunately it is traded for the bigger size of the system. The class is briefly mentioned in \cite{1382617}.
 
 \begin{definition}[System of polynomial functions]
 Let $N$ be a prime number and $n \in \mathbb{N}$. Define $U = \{0, \dots, N - 1 \}$ and $B = \{0, \dots, m - 1\}$ The system of functions \[ P_n = \left\lbrace h_{c_0, \dots, c_n}(x): U \rightarrow B \setdelim c_i \in U, 0 \leq i \leq n \right\rbrace \] where \[ h_{c_0, \dots, c_n}(x) = \left( \left(\displaystyle \sum_{i=0}^{n} c_i x^i \right) \bmod N \right) \bmod m \] is called the \emph{system of polynomial functions} of the $n$-th degree.
@@ -310,7 +312,7 @@ Although the choice of $U = B$ is not very practical one, however it gives us a 
 
 % All functions
 \paragraph{System of all functions.}
-The strongly $\omega$-universality is a powerful property. The question is whether a system that satisfies the property exists. One example, although not very useful, can be immediately constructed -- it is a set of all functions between two sets.
+The strongly $\omega$-universality is a powerful property. The question is whether a system that satisfies the property exists. One example, although not very useful, can be immediately constructed -- it is a set of all functions between two sets. The applicable construction of the system is taken from \cite{1382617}.
 
 \begin{definition}[System of all functions]
 Let $U$ and $B$ be sets such that $|B| < |U|$. The family of functions
@@ -371,7 +373,7 @@ gives strongly $k$-universal classes of functions.
 Both of the operations are left cancellative because they are group operations.
 \end{proof}
 
-Next step is to discover the dependence of the parameter $k$ of strongly $k$-universal classes on their size. This will show us the best possible probability bound for the collision of $k$ different elements depending on the size of the system.
+Next step is to discover the dependence of the parameter $k$ of strongly $k$-universal classes on their size. Theorem \ref{theorem-strong-size} shows us the best possible probability bound for the collision of $k$ different elements depending on the size of the system when considering the strongly $k$-universality of a system. Original proof for $c$-universal classes may be found in \cite{DBLP:books/sp/Mehlhorn84} and \cite{VK-skripta}. We slightly modify it to obtain a lower bound on the size of a strongly $k$-universal class.
 \begin{theorem}
 \label{theorem-strong-size}
 Let $H$ be a strongly $k$-universal system of functions from a universe $U$ of size $N$ to a table $B$ of size $m$. Size of the system $H$ is then bounded by:

@@ -1,6 +1,8 @@
 \section{Minimising the Integrals}
 This integral $I_\epsilon$ is a part of the multiplicative constant $4c_\epsilon(4 + I_\epsilon)$. The next lemma states a way how to estimate it and compute the value of the multiplicative constant so that it is minimal.
 
+In the original proof of Theorem \ref{theorem-n-logn-to-n} in \cite{DBLP:journals/jacm/AlonDMPT99} only the special case $I_{\frac{1}{2}}$ is considered. We moved to $I_\epsilon$ because choosing other values for $\epsilon \in (0, 1)$ may bring an improvement for the value of the multiplicative constant. Indeed, if we select different value of $\epsilon$ and use better estimates for the constant $c_\epsilon$, then we really obtain a smaller value of the multiplicative constant and a tighter bound on $\Expect{\lpsl}$.
+
 \label{section-integral-estimate}
 \begin{lemma}
 \label{lemma-convergent-I-e}
@@ -14,8 +16,6 @@ We recall that the integral $I_\epsilon$ equals
 \[
 I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]
-
-In the original proof of Theorem \ref{theorem-n-logn-to-n} in \cite{DBLP:journals/jacm/AlonDMPT99} only the special case $I_{\frac{1}{2}}$ is considered. We moved to $I_\epsilon$ because choosing other values for $\epsilon \in (0, 1)$ may bring an improvement for the value of the multiplicative constant. Indeed, if we select different value of $\epsilon$ and use better estimates for the constant $c_\epsilon$, then we really obtain a smaller value of the multiplicative constant and a tighter bound on $\Expect{\lpsl}$.
 
 Evaluation of the integral $I_\epsilon$ is split into two parts. We compare the integrand of $I_\epsilon$ to a function $f: \mathbb{R} \rightarrow \mathbb{R}$ which has a convergent improper integral $\int_{4}^{\infty} f(x) dx$. The function $f$ chosen here is $x ^ {-1.5}$. 
 
