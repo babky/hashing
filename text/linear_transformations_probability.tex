@@ -5,6 +5,8 @@ Many of the following claims are taken from \cite{DBLP:journals/jacm/AlonDMPT99}
 
 Once again, see Appendix \ref{appendix-linear-algebra} for the exact definitions of the set \[ \vec{v} + A = \{ \vec{v} + \vec{a} \setdelim \vec{a} \in A \} \] and the set \[ A + B = \{ \vec{a} + \vec{b} \setdelim \vec{a} \in A, \vec{b} \in B \} \text{.} \]
 
+Original Lemma \ref{lemma-choose-random-vector} can be found in \cite{DBLP:books/sp/Mehlhorn84}, however our proof is more exact and clear.
+
 \begin{lemma}
 \label{lemma-choose-random-vector}
 Let $V$ be a~finite vector space and $A$ be its subset. Define $\mu = 1 - \frac{|A|}{|V|}$ as the inverse density of the set $A$ in the vector space $V$. Let $\vec{v} \in V$ be a random uniformly chosen vector independent of $A$. Then
@@ -88,7 +90,7 @@ Set the function $g(y) = y ^ {-c + \log \left(\frac{1}{y}\right) + \log \log \le
 \] 
 \end{proof}
 
-The following lemma is a~very technical one. It is later used to estimate probabilities of events related to the system of linear maps. These events correspond to the existence of a large set having a singleton image -- to the existence of a long chain.
+The following lemma is a~very technical one and is taken from \cite{DBLP:books/sp/Mehlhorn84}. It is later used to estimate probabilities of events related to the system of linear maps. These events correspond to the existence of a large set having a singleton image -- to the existence of a long chain.
 \begin{lemma}
 \label{lemma-random-variable}
 Let $0 < \mu_0 < 1$ be a constant and for every $i$, $1 \leq i \leq k$, let $\mu_i$ be a random variable. Let us assume that for every random variable $\mu_i$, $1 \leq i \leq k$, the following holds:
@@ -256,6 +258,8 @@ To prove the lemma in this case, it is sufficient to show that the exponent, $c 
 The inequality, $\Prob{\mu_{k + 1} \geq t} \leq \mu ^ {c + 1 + \log \log \left( \frac{1}{\mu_0} \right)}$, holds for every of the three cases and the induction step is thus complete.
 \end{proof}
 
+Theorem \ref{theorem-linear-function-set-onto} is also taken from \cite{DBLP:books/sp/Mehlhorn84} and is used to estimate the probability of the event that a subset of the domain is not mapped onto whole target space.
+
 \begin{theorem}
 \label{theorem-linear-function-set-onto}
 Let $f, b \in \mathbb{N}$ such that $b \leq f$. Let $S$ be a proper and non-empty subset of the vector space $\vecspace{u}$. Set $\mu = 1 - \frac{|S|}{2 ^ f}$ as the inverse density of the set $S$ in the vector space $\vecspace{f}$. Then for a random uniformly chosen surjective linear map $T: \vecspace{f} \rightarrow \vecspace{b}$ we have
@@ -305,7 +309,7 @@ The proof of the theorem is finished by putting the previous notes together,
 \]
 \end{proof}
 
-The next theorem shows the probability of the complementary event, $T(S) = \vecspace{b}$, if the set $S$ is large enough.
+Theorem \ref{theorem-set-onto-by-linear-transform} shows the probability of the complementary event, $T(S) = \vecspace{b}$, if the set $S$ is large enough. It is taken from \cite{DBLP:books/sp/Mehlhorn84} and is consequently improved by our Statements \ref{statement-good-c-e} and \ref{statement-better-c-e}.
 \begin{theorem}
 \label{theorem-set-onto-by-linear-transform}
 Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear map. For every $\epsilon \in (0, 1)$ there is a constant $c_\epsilon > 0$ such that for every subset $S$ of the domain $\vecspace{u}$ with $|S| \geq c_\epsilon b 2 ^ b$ we have that
@@ -504,7 +508,7 @@ For every $\epsilon \in (0,1)$ Theorem \ref{theorem-set-onto-by-linear-transform
 \stepcounter{definition}
 \begin{equation}
 \label{inequality-better-c-e}
-c_\epsilon \geq 2 ^ {\frac{\log \left({\epsilon - \frac{2^l}{2^l k - 2}}\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}}} \text{ where $\mu' = 1 - \frac{1}{k}$}
+c_\epsilon \geq 2 ^ {\frac{\log \left(\left({\epsilon - \frac{2^l}{2^l k - 2}}\right)\cdot{{\mu'} ^ {l - \log \log \left( \frac{1}{\mu'} \right)}}\right)}{\log {\mu'}}} \text{ where $\mu' = 1 - \frac{1}{k}$}
 \end{equation}
 and 
 \[

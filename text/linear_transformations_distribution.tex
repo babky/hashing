@@ -10,9 +10,10 @@ First let us summarise what is shown in the following pages. We use two basic id
 
 Then we show Remark \ref{remark-probability-long-chain} that comes from the original work \cite{DBLP:journals/jacm/AlonDMPT99}. It is immediately improved and the results are later applied for hashing. The theorems we state are not expressed in the notation of hashing. Rather we say them in general terms of linear algebra. Then we use the theorems in the model proposed by us. 
 
-The notation of the section is the following. The source space, represents later the universe, is the vector space $\vecspace{u}$. The target space, becomes a representation of the hash table, is denoted by $\vecspace{b}$. As done many times before, we factor a random uniformly chosen linear transformation $T \in LT(\vecspace{u}, \vecspace{b})$ through the factor space $\vecspace{f}$. Model \ref{remark-model-uniform-linear-map-selection} shows the existence of two linear functions $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$. In addition the last one is surjective and they are chosen uniformly among $LT(\vecspace{u}, \vecspace{f})$ and $LTS(\vecspace{f}, \vecspace{b})$.
+The notation of the section is the following. The source space, represents later the universe, is the vector space $\vecspace{u}$. The target space, becomes a representation of the hash table, is denoted by $\vecspace{b}$. As done many times before, we factor a random uniformly chosen linear transformation $T \in LT(\vecspace{u}, \vecspace{b})$ through the factor space $\vecspace{f}$. Model \ref{remark-model-uniform-linear-map-selection} shows the existence of two linear functions $T_0: \vecspace{u} \rightarrow \vecspace{f}$ and $T_1: \vecspace{f} \rightarrow \vecspace{b}$. In addition the last one is surjective and they are chosen uniformly among $LT(\vecspace{u}, \vecspace{f})$ and $LTS(\vecspace{f}, \vecspace{b})$. Definitions \ref{definition-E1} and \ref{definition-E2}, Remarks \ref{remark-e2-probability}, \ref{remark-prob-l-length-chain} and Remark \ref{remark-probability-long-chain} stating the basic probability estimate and Theorem \ref{theorem-n-logn-to-n} giving the basic estimate of $\Expect{\lpsl}$ are from \cite{DBLP:books/sp/Mehlhorn84}, too.
 
 \begin{definition}[Event $E_1(S, T, l)$]
+\label{definition-E1}
 Let $l \in \mathbb{N}$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a linear transformation and $S \subset \vecspace{u}$. \emph{Event $E_1(S, T, l)$} occurs if there is a subset of $S$ containing at least $l$ elements mapped by the function $T$ on a singleton,
 
 \[ 
@@ -21,6 +22,7 @@ Let $l \in \mathbb{N}$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a linear t
 \end{definition}
 The event $E_1$ corresponds to the existence of a chain of length at least $l$. The second event is defined to simplify the estimate of probability of the event $E_1$. It may seem quite unnatural but it fits the scheme of Theorem \ref{theorem-linear-function-set-onto} as shown later.
 \begin{definition}[Event $E_2(S, T_0, T_1)$]
+\label{definition-E2}
 Let $T_0: \vecspace{u} \rightarrow \vecspace{f}, T_1: \vecspace{f} \rightarrow \vecspace{b}$ be linear transformations with $T_1$ being surjective and $S \subset \vecspace{u}$. \emph{Event $E_2(S, T_0, T_1)$} occurs if
 \[
 	E_2(S, T_0, T_1) \equiv \exists \vec{y} \in \vecspace{b}: T_1^{-1}(\vec{y}) \subseteq T_0(S) \text{.}
@@ -145,7 +147,7 @@ In the second case, $d = \frac{2 ^ f}{\alpha 2 ^ b}$:
 \]
 The wanted estimate thus holds.
 
-Second, we find the $\log d$ in either case. In the first one, $d = \frac{2 ^ f}{\alpha b 2 ^ b}$:
+Secondly, we find the $\log d$ in either case. In the first one, $d = \frac{2 ^ f}{\alpha b 2 ^ b}$:
 \[
 	\log d = f - \log \alpha - b - \log b \text{.}
 \]
