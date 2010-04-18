@@ -42,7 +42,7 @@ Set $K_\epsilon = 4 c_\epsilon b \log b$. When estimating $\Prob{\lpsl > r \alph
 \[
 	\Prob{\lpsl > r \alpha K_\epsilon} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]
-Since $\alpha \leq 1$, then $\log \alpha \leq 0$, and it follows that
+Since $\alpha \leq 1$, then $\log \alpha \leq 0$ and thus we conclude that
 \[
 	\Prob{\lpsl > r \alpha K_\epsilon} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{- \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
 \]
@@ -79,9 +79,9 @@ From Remark \ref{remark-lpsl-pdf-linear-amount}, Lemma \ref{lemma-expected-value
 \[
 \begin{split}
 & \Expect{\lpsl}
-	= \int\limits_0^\infty \Prob{\lpsl \geq l} dl \\ 
-	& \qquad \leq 8 c_\epsilon \alpha + \int\limits_{8 c_\epsilon \alpha}^\infty \Prob{\lpsl \geq l} dl \\ 
-	& \qquad = 8c_\epsilon \alpha + 2 c_\epsilon \alpha \int\limits_{4}^\infty \Prob{\lpsl \geq 2c_\epsilon \alpha r} dr \\
+	= \int\limits_0^\infty \Prob{\lpsl > l} dl \\ 
+	& \qquad \leq 8 c_\epsilon \alpha + \int\limits_{8 c_\epsilon \alpha}^\infty \Prob{\lpsl > l} dl \\ 
+	& \qquad = 8c_\epsilon \alpha + 2 c_\epsilon \alpha \int\limits_{4}^\infty \Prob{\lpsl > 2c_\epsilon \alpha r} dr \\
 	& \qquad = 2c_\epsilon \alpha \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \right) \\ 
 	& \qquad \leq 2c_\epsilon \alpha \left( 4 + \frac{1}{1-\epsilon}\left( 2 b \log b - 4 + J_{\alpha, b} \right) \right) \text{.}
 \end{split}

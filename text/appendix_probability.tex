@@ -110,12 +110,12 @@ The reverse implication holds since
 \end{proof}
 
 \begin{lemma}{Properties of Probability}
-\begin{itemize}
-\item $\Prob{\emptyset} = 0$
-\item $\Prob{\Omega} = 1$
-\item $0 \leq \Prob{A} \leq 1$
-\item $\Prob{A \cup B} = \Prob{A} + \Prob{B} - \Prob{A \cap B}$
-\end{itemize}
+\begin{enumerate}
+\item[(1)] $\Prob{\emptyset} = 0$
+\item[(2)] $\Prob{\Omega} = 1$
+\item[(3)] $0 \leq \Prob{A} \leq 1$
+\item[(4)] $\Prob{A \cup B} = \Prob{A} + \Prob{B} - \Prob{A \cap B}$
+\end{enumerate}
 \end{lemma}
 
 \begin{theorem}[The Law of Total Probability]
@@ -149,18 +149,18 @@ In the continuous probability we usually assume that the vector space $\Omega$ i
 \emph{Continuous random variable} $X$ is a function $X: \Omega \rightarrow \mathbb{R}$. 
 
 Function $F: \mathbb{R} \rightarrow \left[0, 1\right]$ is the \emph{cumulative probability density function} of the random variable $X$ if the following conditions are satisfied
-\begin{itemize}
-\item $\lim\limits_{t \rightarrow -\infty} F(t) = 0$,
-\item $\lim\limits_{t \rightarrow \infty} F(t) = 1$.
-\item The function $F$ is non-decreasing.
-\item $F(t) = \Prob{X \leq t} $ for every $t \in \mathbb{R}$.
-\end{itemize}
+\begin{enumerate}
+\item[(1)] $\lim\limits_{t \rightarrow -\infty} F(t) = 0$,
+\item[(2)] $\lim\limits_{t \rightarrow \infty} F(t) = 1$.
+\item[(3)] The function $F$ is non-decreasing.
+\item[(4)] $F(t) = \Prob{X \leq t} $ for every $t \in \mathbb{R}$.
+\end{enumerate}
 
 Function $f: \mathbb{R} \rightarrow \mathbb{R}^{*}$ such that $f(t) = F'(t)$ for every $t \in \mathbb{R}$ is the \emph{probability density function} of the random variable $X$. The probability density function $f$ satisfies that
-\begin{itemize}
-\item $\int\limits_{-\infty}^{\infty} f(t) dt = 1$,
-\item $\int\limits_{-\infty}^{t} f(x) dx = F(t)$.
-\end{itemize}
+\begin{enumerate}
+\item[(1)] $\int\limits_{-\infty}^{\infty} f(t) dt = 1$,
+\item[(2)] $\int\limits_{-\infty}^{t} f(x) dx = F(t)$.
+\end{enumerate}
 \end{definition}
 
 More formal definitions of random variables use the Lebesgue measure and Borel sets to measure the probability $\Prob{X = x}$. However previous definitions are sufficient for our needs.
@@ -197,10 +197,10 @@ We only show the basic properties of the expected value and variance without the
 \begin{lemma}
 Assume that $X$ and $Y$ are random variables and $a, b, c \in \mathbb{R}$. Then
 \label{lemma-expected-value-properties}
-\begin{itemize}
-\item $\Expect{aX + bY + c} = a\Expect{X} + b\Expect{Y} + c$
-\item $\Variance{aX + bY + c} = a ^ 2 \Variance{X} + b ^ 2 \Variance{Y}$
-\end{itemize}
+\begin{enumerate}
+\item[(1)] $\Expect{aX + bY + c} = a\Expect{X} + b\Expect{Y} + c$
+\item[(2)] $\Variance{aX + bY + c} = a ^ 2 \Variance{X} + b ^ 2 \Variance{Y}$
+\end{enumerate}
 \end{lemma}
 
 \begin{definition}[Expected value of a function of a random variable]
