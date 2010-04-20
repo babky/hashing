@@ -221,7 +221,7 @@ Estimate the probability of the existence of a chain consisting of at least $k \
 \begin{split}
 \Prob{\psl(b) \geq k}
 	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{b\} \}|}{|H|} \\
-	& = \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|B|}^{k}}}{|H|} \\
+	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} \frac{|H|}{{|B|}^{k}}}{|H|} \\
 	& = \dbinom{|S|}{k}\frac{1}{{|B|}^k} \text{.}
 \end{split}
 \end{displaymath}
@@ -229,5 +229,5 @@ Estimate the probability of the existence of a chain consisting of at least $k \
 Now we carry on as in the case of standard hashing. The probability estimate of collision of $k$ elements is exactly the same. Thus we can obtain the same result $\Expect{\lpsl} = O\left(\frac{\log n}{\log \log n}\right)$.
 \end{proof}
 
-Constructing small strongly $\omega$-universal systems is difficult. Later in this work we investigate the system of linear transformations. Although the system is not strongly $\omega$-universal, its specific properties, independent of the strong $\omega$-universality, give an interesting upper bound on the distribution function of the variable $\lpsl$.
+A construction of a small strongly $\omega$-universal system is difficult. Later in this work we investigate the system of linear transformations. Although the system is not strongly $\omega$-universal, its specific properties, independent of the strong $\omega$-universality, give an interesting upper bound on the distribution function of the variable $\lpsl$.
 \end{section}
