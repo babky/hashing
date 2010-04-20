@@ -19,7 +19,7 @@ Let $c \in R$ be a positive number and $H$ be a multiset of functions $h: U \rig
 \[ 
 	\left| \lbrace h \in H \setdelim h(x) = h(y) \rbrace \right| \leq \frac {c |H|}{|B|}
 \] 
-where the the set on the left side is also considered a multiset. The system of functions $H$ is called \emph{$c$-universal class} of hash functions.
+where the set on the left side is also considered a multiset. The system of functions $H$ is called \emph{$c$-universal class} of hash functions.
 \end{definition}
 
 First notice that the bound on the number of colliding functions for each pair of elements is proportional to the size of the class $H$. More interesting is the inverse proportionality to the size of the hash table. A generalisation of the above definition for more than two elements provides us with a better estimate on the number of colliding functions. This count becomes inversely proportional to the power of the table size.
@@ -30,7 +30,7 @@ Let $n \in \mathbb{N}$, $c \in \mathbb{R}, c \geq 1$ and $H$ be a multiset of fu
 \[ 
 	\left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{c|H|}{|B|^n}
 \] 
-where the the set on the left side is also considered a multiset. The system of functions $H$ is called \emph{nearly strongly $n$-universal class} of hash functions with constant $c$.
+where the set on the left side is also considered a multiset. The system of functions $H$ is called \emph{nearly strongly $n$-universal class} of hash functions with constant $c$.
 \end{definition}
 
 \begin{definition}[Strongly $n$-universal class of hash functions]
@@ -39,7 +39,7 @@ Let $n \in \mathbb{N}$ and $H$ be a multiset of functions $h: U \rightarrow B$ s
 \[ 
 	\left|\lbrace h \in H \setdelim h(x_1) = y_1, h(x_2) = y_2, \dots, h(x_n) = y_n \rbrace \right| \leq \frac{|H|}{|B|^n}
 \] 
-where the the set on the left side is also considered a multiset. The system of functions $H$ is called \emph{strongly $n$-universal class} of hash functions.
+where the set on the left side is also considered a multiset. The system of functions $H$ is called \emph{strongly $n$-universal class} of hash functions.
 \end{definition}
 
 Every strongly $n$-universal class of hash functions is nearly strongly $n$-universal class with constant one. Most of the presented strongly universal classes not only satisfy the inequality from Definition \ref{strong_universal_n_system} but the bound equals the number of the colliding functions.
@@ -52,7 +52,7 @@ Family of functions $H$ is \emph{strongly $\omega$-universal} if it is strongly 
 % TODO: Citacia na clanok o systeme omega univerzalnych funkcii.
 The strongly $\omega$-universal systems provide us with an estimate of the expected length of the longest chain. This bound can be proved directly from the above property without regarding any other special attributes of a system. As shown later the above property is difficult to be satisfied by a small class of functions. A~straightforward example of a strongly $\omega$-universal class is the set of all functions from a domain $U$ to a hash table $B$. It is obvious that the system is not very convenient because of its size. Simple construction of the system of all functions is briefly discussed later and shown in \cite{1382617}.
 
-One may ask if there are classes that are strongly $\omega$-universal other than the empty class or the class of all functions. However, there are classes that are not necessarily strongly $\omega$-universal, but give the asymptotic bound on $\Expect{\lpsl} = O\left(\frac{\log n}{\log \log n}\right)$. The bound is the same for standard hashing and for strongly $\omega$-universal systems as shown in Chapter \ref{chapter-elpsl}. The families are based on the system of polynomials or linear systems and are quite large and not very efficient compared to the standard systems. "Distinct large families of functions were given by Siegel \cite{90406} and by Dietzfelbinger and Meyer auf der Heide \cite{1398663}. Both provide families of size $|U|^{n^\epsilon}$. Their functions can be evaluated in a constant time on a RAM." The families are somewhat more complex to implement when compared to the class of linear functions as stated in \cite{1382617}. However, these classes may be cosidered "nearly" strongly $\omega$-universal, in fact they are strongly $\log n$-universal.
+One may ask if there are classes that are strongly $\omega$-universal other than the empty class or the class of all functions. However, there are classes that are not necessarily strongly $\omega$-universal, but give the asymptotic bound on the expected length of the longest chain $O\left(\frac{\log n}{\log \log n}\right)$. The bound is the same for standard hashing and for strongly $\omega$-universal systems as shown in Chapter \ref{chapter-elpsl}. The families are based on the system of polynomials or linear systems and are quite large and not very efficient compared to the standard systems. "Distinct large families of functions were given by Siegel \cite{90406} and by Dietzfelbinger and Meyer auf der Heide \cite{1398663}. Both provide families of size $|U|^{n^\epsilon}$. Their functions can be evaluated in a constant time on a RAM." The families are somewhat more complex to implement when compared to the class of linear functions as stated in \cite{1382617}. However, these classes may be cosidered "nearly" strongly $\omega$-universal, in fact they are strongly $\log n$-universal.
 
 The above definitions of universal classes can be rewritten in terms of probability as well. The probability space corresponds to the uniform choice of a function from the system of functions. For example in Definition \ref{c_universal_system} of $c$-universal class $H$, probability of collision of two different elements $x$ and $y$ can be rewritten as
 \[
@@ -104,7 +104,7 @@ Now we can see that the class of functions $H$ is strongly $k$-universal, too.
 \end{proof}
 
 \section{Examples of universal classes of functions}
-In this section we show some examples of common universal classes of hash functions. With each system we provide a simple proof of its universality or strong universality. Presented systems not only differ in contained functions but also in their domains and codomains. However every system can be thought of as a mapping from a subset of natural numbers onto another subset of natural numbers.
+In this section we show some examples of common universal classes of hash functions. With each system we provide a simple proof of its universality or strong universality. Presented systems not only differ in contained functions but also in their domains and co-domains. However every system can be thought of as a mapping from a subset of natural numbers onto another subset of natural numbers.
 
 % Linear systems
 \paragraph{Linear system.}

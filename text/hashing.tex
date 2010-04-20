@@ -2,13 +2,13 @@
 \label{chapter-hashing}
 Hashing is one of the approaches designed for the efficient solving of the dictionary problem. Various implementations differ in many ways. However usage of a hash function and a quickly accessible table, typically represented by an array, is common to most of them. Every hash function transforms the elements of the universe into the addresses of the table.
 
-Represented sets are always small when compared to the size of the universe. In order to prevent waste of space we are forced to use tables as small as possible. Typically the size of the hash table containing the represented elements is chosen so that it is comparable to those of the stored sets. 
+Represented sets are always small when compared to the size of the universe. In order to prevent waste of space we are forced to use tables as small as possible. Typically the size of the hash table containing the represented elements is chosen so that it is comparable to the size of the stored set. 
 
 The fact that the hash table is much smaller than the universe and any two elements may represented means that the elements may share the same address after hashing. This event is called a \emph{collision}. For hashing it is very important how collisions are handled. This is also the most interesting distinctive feature for distinct hashing models. In fact, collision handling is crucial when determining the time complexity of the scheme.
 
-When two elements collide they should be stored in a single \emph{bucket}, cell of the hash table. A bucket is often represented by the simplest data structure possible. For instance singly linked list should be sufficient in many cases. More sophisticated schemes, like perfect hashing, represent every chain in another hash table without collisions.
+When two elements collide they should be stored in a single \emph{bucket}, cell of the hash table. A bucket is often represented by the simplest data structure possible. For instance, a singly linked list should be sufficient in many cases. More sophisticated schemes, like perfect hashing, represent every chain in another hash table without collisions.
 
-For imagination the find operation of a hash table works in the following way. Every element is placed as an argument for the hash function. The element's address is then computed and used as an index of the hash table. Then we look into the bucket lying at the returned address if the element is stored inside or not.
+The find operation of a hash table works in the following way. Every element is placed as an argument for the hash function. The element's address is then computed and used as an index of the hash table. Then we look into the bucket lying at the returned address if the element is stored inside or not.
 
 \begin{figure}
   \centering
@@ -52,7 +52,7 @@ Let $n$ be the size of the represented set and $m$ be the size of the hash table
 To take control of the table's overhead it is sufficient to keep the load factor in a predefined interval. Not only the empty buckets cause troubles. The overfilled ones are another extreme especially if there are too many collisions.
 \begin{definition}[Collision]
 \label{definition-collision}
-Let $x, y \in U$ be two distinct elements. We say that the elements $x$ and $y$ \emph{collide} if $h(x) = h(y)$.
+Let $h$ be a hash function and $x, y \in U$ be two distinct elements. We say that the elements $x$ and $y$ \emph{collide} if $h(x) = h(y)$.
 \end{definition}
 
 Above all the collision handling is what differentiates distinct hash tables and determines their performance.
@@ -65,7 +65,7 @@ In Lemma \ref{lemma-expected-list-time} we computed the expected time of the fin
 \begin{itemize}
 \item Hash function $h$ distributes the elements of universe uniformly across the hash table:
 \[
-||h^{-1}(x)| - |h^{-1}(y)|| \leq 1 \text{ for every }x, y \in U \text{.}
+||h^{-1}(x)| - |h^{-1}(y)|| \leq 1 \text{ for every }x, y \in B \text{.}
 \]
 \item Every set has the same probability of being stored among the sets of the same size:
 \[
@@ -82,10 +82,10 @@ These assumptions provide us with a probabilistic model for the average case ana
 \section{Separate Chaining}
 Separate chaining \cite{The-art-of-computer-programming}, \cite{DBLP:books/sp/Mehlhorn84} and \cite{DBLP:books/sp/MehlhornS2008} may be considered the most basic hash table implementation. However, it provides a sufficient framework for illustration of various problems and analyses. Separate chaining usually utilises one hash function mapping elements to an address -- an index of the array representing the hash table. Every represented element is stored within a bucket given by its hash address. Every bucket is represented by a singly linked list. 
 
-Separate chaining, like the other classic models of hashing, is quite dependent on the stored input. The previous assumptions are required for its average case analysis. This model assumes hashing of the universe $U = \{0, \dots, N - 1\}$ for $N \in \mathbb{N}$ into a table of size $m$. Number $m$ is much smaller then $N$ and moreover it is chosen to be a prime. Primality of $m$ improves the ability of the hash function to uniformly distribute the stored set across the table.  Following example clarifies why primality is important for the choice of $m$.
+Separate chaining, like the other classic models of hashing, is quite dependent on the stored input. The previous assumptions are required for its average case analysis. This model assumes hashing of the universe $U = \{0, \dots, N - 1\}$ for $N \in \mathbb{N}$ into a table of size $m$. Number $m$ is much smaller then $N$ and moreover it is chosen to be a prime. Primality of $m$ improves the ability of the hash function to uniformly distribute the stored set across the table.  The following example clarifies why primality is important for the choice of $m$.
 
 \begin{example}
-Consider set $S = \{5n \setdelim n \in \{0, \dots, 5\} \}$ and a table consisting of $10$ buckets. Set $S$ contains only 6 elements, so the table's load factor equals $0.6$. If we use function $x \bmod 10$, then it maps the elements of the set $S$ just onto two addresses, $0$ and $5$. The hash table is not used effectively. Choosing $m$ to be a prime number improves the results but is not a remedy.
+Consider the set $S = \{5n \setdelim n \in \{0, \dots, 5\} \}$ and a table consisting of $10$ buckets. Set $S$ contains only 6 elements, so the table's load factor equals $0.6$. If we use function $x \bmod 10$, then it maps the elements of the set $S$ just onto two addresses, $0$ and $5$. The hash table is not used effectively. Choosing $m$ to be a prime number improves the results but is not a remedy.
 \end{example}
 
 The apparent disadvantage of classic hashing is usage of a single hash function known in advance. For example if  the stored set $S$ is chosen, by an adversary, so that $S \subseteq f^{-1}(b)$ for a single bucket $b \in B$, we run into problems. Because our assumptions say that the probability of having such an input is quite low, these inputs may be neglected.
@@ -182,7 +182,7 @@ The proof is shown in \cite{DBLP:books/sp/Mehlhorn84}.
 \end{proof}
 
 \section{Universal Hashing}
-Universal hashing uses a universal system of functions instead of a single function. This removes the dependence of universal hashing on the uniformity of its input. It does not require the assumptions of standard hashing made in Section \ref{section-assumptions}. Universal hashing is a randomised algorithm and the probability space is determined by the uniform choice of a hash function, instead of the selection of a stored set. We study universal hashing and its systems in a more detail way in Chapter \ref{chapter-universal-classes}.
+Universal hashing uses a universal system of functions instead of a single function. This removes the dependence of universal hashing on the uniformity of its input. It does not require the assumptions of standard hashing made in Section \ref{section-assumptions}. Universal hashing is a randomised algorithm and the probability space is determined by the uniform choice of a hash function, instead of the selection of a stored set. We study universal hashing and its systems in a more detailed way in Chapter \ref{chapter-universal-classes}.
 
 \section{Perfect Hashing}
 Assume that the stored set $S$ is known in advance. The problem solved by perfect hashing is how to create a hash table and a hash function such that the find operation takes only a constant time. Insert and delete operations are forbidden, the stored set $S$ remains fixed. Additional requirements are placed on the size of the scheme. Size of the hash table is not the only problem. We must also take care about the space needed to represent the constructed hash function since it becomes quite complex. The problem is solved in \cite{1884}.
@@ -191,7 +191,7 @@ Assume that the stored set $S$ is known in advance. The problem solved by perfec
 \label{section-modern-approaches}
 Modern approaches to hashing are nowadays often based on their probabilistic properties. Authors adapt and change their models to improve the asymptotic results in the average case and in the expected worst case. The algorithms still remain fast and are enriched by simple rules. 
 
-Straightforward use of a single function is not enough and various universal systems are used. Theoretical analyses of the models do not necessarily involve the ideas of universal hashing. Universal classes are used as an heuristic. Although the algorithms are not complicated, their analyses become more and more difficult.
+Straightforward use of a single function is not enough and various universal systems are used. Theoretical analyses of the models do not necessarily involve the ideas of universal hashing. Universal classes are used as a heuristic. Although the algorithms are not complicated, their analyses become more and more difficult.
 
 A model called \emph{robin hood hashing} \cite{10.1109/SFCS.1985.48}, \cite{Devroye04onworst} is an improvement of the double hashing. In double hashing we are able to access the chain at an arbitrary position in constant time. The main idea of robin hood hashing is to minimise the variance of the expected chain length. If probing starts from the average chain length the expected time of the find operation becomes constant.
 
@@ -204,5 +204,5 @@ Hashing, compared to other data structures solving the dictionary problem, e.g. 
 
 The obvious advantage of hashing is its simplicity. In addition, its constant expected time of the find operation may seem far better than the logarithmic time of trees. On the other hand, if provided with an unsuitable, input hashing often degrades. Balanced trees provide warranties for every input they are provided with. This is a tradeoff that has to be decided by the user -- excellent expected and poor worst case time compared to the logarithmic time in every case.
 
-To sum up, when we need a fast and simple to implement mapping of an object to another one, hashing is a good solution. Especially, when the assumptions from Section \ref{section-assumptions} are satisfied. These conditions are often met with objects having the artificial identifiers. However, the worst case guarantee is poor. Despite this, the expected worst case warranty is similar to that of trees, as shown later in the work. Nowadays simplicity does not mean any extra advantage. Standard libraries of current programming languages provide us with many implementations of hashing and trees.
+To sum up, when we need a fast and simple to implement mapping of an object to another one, hashing is a good solution. Especially, when the assumptions from Section \ref{section-assumptions} are satisfied. These conditions are often met with objects having artificial identifiers. However, the worst case guarantee is poor. Despite this, the expected worst case warranty is similar to that of trees, as shown later in the work. Nowadays simplicity does not mean any extra advantage. Standard libraries of current programming languages provide us with many implementations of hashing and trees.
 
