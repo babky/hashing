@@ -12,8 +12,16 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test-suite", "..\test-suite\vcproj\test-suite.vcproj", "{EC64D6B3-3991-4585-8187-C264AEA4DFA1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "table-length-test", "..\table-length-test\vcproj\table-length-test.vcproj", "{8B5A3427-A4E9-4CD1-A388-4EBD04968BE2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC64D6B3-3991-4585-8187-C264AEA4DFA1} = {EC64D6B3-3991-4585-8187-C264AEA4DFA1}
+		{4519D5CC-CD95-4022-8B99-46F33A6F0F51} = {4519D5CC-CD95-4022-8B99-46F33A6F0F51}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cwlf-dynamic-test", "..\cwlf-dynamic-test\vcproj\cwlf-dynamic-test.vcproj", "{4DD73344-FAF2-4D2C-B58A-0249830EDD90}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC64D6B3-3991-4585-8187-C264AEA4DFA1} = {EC64D6B3-3991-4585-8187-C264AEA4DFA1}
+		{4519D5CC-CD95-4022-8B99-46F33A6F0F51} = {4519D5CC-CD95-4022-8B99-46F33A6F0F51}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

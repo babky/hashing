@@ -60,7 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;"
+				AdditionalDependencies="table-lib.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\..\..\trunk\hash\vcproj\Debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -131,7 +133,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;"
+				AdditionalDependencies="table-lib.lib"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\..\..\trunk\hash\vcproj\Release&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
