@@ -48,7 +48,7 @@ Follows from the previous corollary.
 \end{proof}
 
 \section{Consequences of Trimming Long Chains}
-The model of hashing we propose guarantees the worst case bound on the length of the longest chain. Hence it bounds the running times of the operations. Knowledge of the value $\Expect{\lpsl}$ provides a \emph{limit} when to stop inserting into a long chain. If a long chain is found, then the whole table is rehashed. In this situation the algorithm seeks a more suitable function; a function that does create such long chains. This \emph{bound} corresponds to the probability of the existence of a long chain. In fact we set it according to this probability. In this section we examine consequences of such \emph{limits} on models of universal hashing.
+The model of hashing we propose guarantees the worst case bound on the length of the longest chain. Hence it bounds the running times of the operations. Knowledge of the value $\Expect{\lpsl}$ provides a \emph{limit} when to stop inserting into a long chain. If a long chain is found, then the whole table is rehashed. In this situation the algorithm seeks a more suitable function; a function that does not create such long chains. This \emph{bound} corresponds to the probability of the existence of a long chain. In fact we set it according to this probability. In this section we examine consequences of such \emph{limits} on models of universal hashing.
 
 Following computations support and motivate our later statements and ideas. The fact that \[ \Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k} \] may be obtained by direct use of the Markov's inequality. This fact, for instance, means that less than half of all the universal functions create longest chains longer than $2 \Expect{\lpsl}$ for arbitrary stored set. For the system of linear transformations we choose the \emph{limit} as $2\Expect{\lpsl} \leq \text{1 076} \log m \log \log m + 88$. This \emph{bound} follows from Corollary \ref{corollary-best-elpsl}.
 
@@ -57,13 +57,13 @@ Expected length of the longest chain gives us a generic hint when the table shou
 Mentioned probability bound computed from the expected value can be further improved. If the probability density function of the random variable $\lpsl$ is known, then it may be used directly. For the system of linear mappings we have already discovered it. In addition, we have consequently improved it. To sum up, the approach with the expected length is more general but achieves worse performance. However, it is more general because whenever we know the probability density function, then we should able to find the expected value.
 
 \begin{definition}[Chain length limiting function, long chain, $p$-trimmed-system, trimming rate]
-Let $H$ be a universal system mapping a universe $U$ to a hash table $B$. Let $m$ be the size of the hash table, $\alpha$ be its load factor and $S \subset U$ be the stored set. 
+Let $H$ be a universal system of functions that map a universe $U$ to a hash table $B$. Let $m$ be the size of the hash table, $\alpha$ be its load factor and $S \subset U$ be the stored set. 
 
 Then function $l: \mathbb{N} \times \mathbb{R}_{0}^{+} \rightarrow \mathbb{N}$ of variables $m$ and $\alpha$, $l(m, \alpha)$, is a \emph{chain length limiting function}. 
 
-We say that function $h \in H$ creates a \emph{long chain} if there is a chain of length strictly longer than the limiting value $l(m, \alpha)$.
+We say that function $h \in H$ creates a \emph{long chain} if there is a chain of length strictly longer than the limiting value $l(m, \alpha)$ when hashing the set $S$.
 
-Moreover let $p \in (0, 1)$ be probability such that $\Prob{\lpsl > l(m, \alpha)} \leq p$, then system $H_p = \{ h \in H \setdelim h \text{ does not create a long chain} \}$ is called a \emph{$p$-trimmed system}. The probability $p$ is called the \emph{trimming rate}.
+Moreover let $p \in (0, 1)$ be probability such that $\Prob{\lpsl > l(m, \alpha)} \leq p$, then system $H_p^S = \{ h \in H \setdelim h \text{ does not create a long chain when hashing the set $S$} \}$ is called a \emph{$p$-trimmed system}. The probability $p$ is called the \emph{trimming rate}.
 \end{definition}
 
 Probability bound $p \in (0, 1)$ of the existence of a long chain has important consequences for the model that limits chains.
@@ -75,14 +75,14 @@ Probability bound $p \in (0, 1)$ of the existence of a long chain has important 
 
 \begin{lemma}
 \label{lemma-size-of-trimmed-system}
-If $H_p$ is a $p$-trimmed system, then $|H_p| \geq (1 - p)|H|$.
+If $H_p^S$ is a $p$-trimmed system, then $|H_p^S| \geq (1 - p)|H|$.
 \end{lemma}
 \begin{proof}
-Simply use the definition of $H_p$ and that of the trimming rate $p$:
+Simply use the definition of $H_p^S$ and that of the trimming rate $p$:
 \[
 \begin{split}
-|H_p|
-	& = |\lbrace h \in H \setdelim \text{ h does not create a long chain} \rbrace| \\
+|H_p^S|
+	& = |\lbrace h \in H \setdelim \text{ $h$ does not create a long chain} \rbrace| \\
 	& =\Prob{\lpsl \leq l(m, \alpha)} |H| \\
 	& = \left(1 - \Prob{\lpsl > l(m, \alpha)}\right) |H| \\
 	& \geq (1 - p)|H| \text{.}
@@ -90,21 +90,21 @@ Simply use the definition of $H_p$ and that of the trimming rate $p$:
 \]
 \end{proof}
 
-Regarding that every function is chosen uniformly and the unsuitable ones are discarded, we still perform the uniform selection of a hash function. The choice is now restricted to the functions that do not create long chains; to the class $H_p$. Note that the restriction to the functions of the original universal system $H$ comes from an information about the stored set.
+Regarding that every function is chosen uniformly and the unsuitable ones are discarded, we still perform the uniform selection of a hash function. The choice is now restricted to the functions that do not create long chains; to the class $H_p^S$. Note that the restriction to the functions of the original universal system $H$ comes from an information about the stored set.
 
-Previous remarks are quite interesting. So now, we ask, if it is possible to use the family $H_p$ as a universal one.
+Previous remarks are quite interesting. So now, we ask, if it is possible to use the family $H_p^S$ as a universal one.
 \begin{theorem}
 \label{theorem-p-trimmed-is-universal}
-Let $H$ be a $c$-universal system of hash functions, $U$ be a universe and $B$ be a hash table. Let $p \in (0, 1)$ be the trimming rate and set $m = |B|$. Then the system of functions $H_p$ is $\frac{c}{1 - p}$-universal. Equivalently:
+Let $H$ be a $c$-universal system of hash functions, $U$ be a universe and $B$ be a hash table. Let $p \in (0, 1)$ be the trimming rate and set $m = |B|$. Then for every $S \subset U$ the system of functions $H_p^S$ is $\frac{c}{1 - p}$-universal. Equivalently:
 \[
-	\Prob{h(x) = h(y) \text{ for } h \in H_p} \leq \frac{1}{1 - p} \Prob{h(x) = h(y) \text{ for } h \in H} \text{.}
+	\Prob{h(x) = h(y) \text{ for } h \in H_p^S} \leq \frac{1}{1 - p} \Prob{h(x) = h(y) \text{ for } h \in H} \text{.}
 \]
 \end{theorem}
 \begin{proof}
 From Lemma \ref{lemma-size-of-trimmed-system} and from the assumption of $c$-universality of the original system it follows that 
 \[
 \begin{split}
-& \Prob{h(x) = h(y) \text{ for } h \in H_p}  \\
+& \Prob{h(x) = h(y) \text{ for } h \in H_p^S}  \\
 	& \qquad =  \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{|\lbrace h \in H \mid \textit{ h does not create long chains} \rbrace|} \\
 	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{(1 - p)|H|} \\ 
 	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \}|}{(1 - p)|H|} \\
@@ -113,7 +113,7 @@ From Lemma \ref{lemma-size-of-trimmed-system} and from the assumption of $c$-uni
 \end{split}
 \]
 
-Hence the system $H_p$ is $\frac{c}{1 - p}$-universal.
+Hence the system $H_p^S$ is $\frac{c}{1 - p}$-universal.
 \end{proof}
 
 Similar restrictions for the other universal systems may be found. Resulting probability is always $\frac{1}{1 - p}$ times higher than the original one following from the strong $k$-universality, in this case.
@@ -122,7 +122,7 @@ Next statement summarises results for the systems of linear transformations.
 
 \begin{corollary}
 \label{corollary-trimming-linear}
-For every trimming rate $0 < p < 1$ the $p$-trimmed system of linear transformations, $LT(U, B)_p$, is $\frac{1}{1 - p}$-universal.
+For every trimming rate $0 < p < 1$ the $p$-trimmed system of linear transformations, $LT(U, B)_p^S$, is $\frac{1}{1 - p}$-universal.
 \end{corollary}
 \begin{proof}
 System of linear transformations is $1$-universal as seen in Remark \ref{remark-system-of-linear-transformations}. The fact then follows from  Theorem \ref{theorem-p-trimmed-is-universal}.
@@ -137,7 +137,16 @@ Every limit $l(m, \alpha)$ comes with an associated trimming rate -- probability
 Let $l$ be a chain length limiting function and $p$ be the trimming rate, \[ \Prob{\lpsl > l(m, \alpha)} \leq p \text{.} \] Then the expected number of tries to find a function, which does not create a long chain, is $\frac{1}{(1 - p)^2}$ and the variance of this number is finite.
 \end{lemma}
 \begin{proof}
-The estimate of failing $k$ times in a row is clearly bounded by the geometric distribution with  the parameter $p$. The probability of the failure is thus less or equals $p ^ k$. The expected time of success is then given by:
+The estimate of failing $k$ times in a row is clearly bounded by the geometric distribution with  the parameter $p$. The probability of the failure is thus less or equals $p ^ k$. 
+
+All of the following statements, that are used in the following computation and may be found in \cite{Jeffrey:1177618},
+\begin{gather*}
+	\displaystyle\sum_{i = 0}^{\infty} p ^ i = \frac{1}{(1 - p)} \text{,} \\
+	\displaystyle\sum_{i = 0}^{\infty} i p ^ i = \frac{p}{(1 - p) ^ 2} \text{,} \\
+	\displaystyle\sum_{i = 0}^{\infty} i^2 p ^ i = \frac{p(1 + p)}{(1 - p) ^ 3} \text{.} \\
+\end{gather*}
+
+The expected time of success is then given by:
 \[
 \sum_{i = 0}^{\infty} (i + 1)p^i = \sum_{i = 0}^{\infty}p^i + \sum_{i = 0}^{\infty}ip^i = \frac{1}{1 - p} + \frac{p}{(1- p)^2} = \frac{1}{(1 - p)^2} \text{.}
 \]
@@ -145,16 +154,16 @@ The estimate of failing $k$ times in a row is clearly bounded by the geometric d
 Now we estimate the variance:
 \[
 \begin{split}
-\sum_{i = 0}^{\infty} \left(i + 1 - \frac{1}{(1 - p) ^ 2}\right) ^ 2  
+\sum_{i = 0}^{\infty} \left(i + 1 - \frac{1}{(1 - p) ^ 2}\right) ^ 2  p ^ i
 	& = \sum_{i = 0}^{\infty} \left(i + 1\right) ^ 2 p ^ i - \sum_{i = 0}^{\infty} \frac{2(i + 1)p ^ i}{(1 - p) ^ 2} +   \sum_{i = 0}^{\infty} \frac{p ^ i}{(1 - p) ^ 4} \\
-	& = \frac{1}{p}\left(\sum_{i = 0}^{\infty} i ^ 2 p ^ i - 1 \right) - \frac{2}{(1 - p) ^ 4} + \frac{1}{(1 - p) ^ 5} \\
-	& = \frac{1}{p}\left(\frac{p(1 + p)}{(1 - p) ^ 3} - 1\right) - \frac{2}{(1 - p) ^ 4} + \frac{1}{(1 - p) ^ 5}
-	\text{.}
+	& = \frac{1}{p}\left(\sum_{i = 0}^{\infty} i ^ 2 p ^ i \right) - 1 - \frac{2}{(1 - p) ^ 4} + \frac{1}{(1 - p) ^ 5} \\
+	& = \frac{1}{p}\frac{p(1 + p)}{(1 - p) ^ 3} - 1 - \frac{2}{(1 - p) ^ 4} + \frac{1}{(1 - p) ^ 5} \\
+	& = \frac{(1 + p)}{(1 - p) ^ 3} - 1 - \frac{2}{(1 - p) ^ 4} + \frac{1}{(1 - p) ^ 5} \text{.}
 \end{split}
 \]
 \end{proof}
 
-The most interesting and the most important idea of trimming is that every $p$-trimmed system is an adaptation of the original class to the stored set. We showed that in the expected case we need a constant number of tries to find a suitable function -- a function from the family $H_p$. In addition from Theorem \ref{theorem-p-trimmed-is-universal} it follows that the $p$-trimmed systems are still $\frac{c}{1 - p}$-universal where $c$ is the universality constant of the original system.
+The most interesting and the most important idea of trimming is that every $p$-trimmed system is an adaptation of the original class to the stored set. We showed that in the expected case we need a constant number of tries to find a suitable function -- a function from the family $H_p^S$. In addition from Theorem \ref{theorem-p-trimmed-is-universal} it follows that the $p$-trimmed systems are still $\frac{c}{1 - p}$-universal where $c$ is the universality constant of the original system.
 
 \section{Chain Length Limit}
 \label{section-linear-systems-linear-amount-constant-estimate}
@@ -164,17 +173,17 @@ From now on we concentrate on obtaining a tightest possible limit on the chain l
 \label{theorem-model-chain-limit-rule}
 Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $m = 2 ^ b$ and $S \subset \vecspace{u}$.
 \begin{itemize}
-\item If $|S| = 1.5 m$, then set $l(m) = 57.29 \log m \log \log m$.
-\item If $|S| = m$, then set $l(m) = 47.63 \log m \log \log m$.
+\item If $|S| \leq 1.5 m$, then set $l(m) = 57.29 \log m \log \log m$.
+\item If $|S| \leq m$, then set $l(m) = 47.63 \log m \log \log m$.
 \end{itemize}
 In either case $\Prob{\lpsl > l(m)} \leq 0.5$.
 
-For $\alpha \in (0, \infty)$ and $p \in (0, 1)$ the chain limit $l(m) = a \log \log m + b \log m$ for $a, b \in \mathbb{R}$ depending only $\alpha$ and $p$.
+For every $\alpha \in (0, \infty)$ and $p \in (0, 1)$ the chain limit can be written in the form \[ l(m) = a \log \log m + b \log m \] for some $a, b \in \mathbb{R}$ depending only on $\alpha$ and $p$.
 \end{theorem}
 \begin{proof}
 First set $f(x) = x ^ {\log b - \log \alpha - \log x - \log \log x}$. From Corollary \ref{corollary-f1} it follows that the function $f(x)$ is decreasing in the interval $\left[2, \infty \right)$.
 
-If the assumptions of Remark \ref{remark-lpsl-pdf-linear-amount} are satisfied we have that 
+First, we introduce a parameter $\epsilon \in (0, 1)$ which is used later in the proof to minimise the value of the limit function. If the assumptions of Remark \ref{remark-lpsl-pdf-linear-amount} are satisfied, for every $\epsilon \in (0, 1)$, we have that 
 \[
 	\Prob{\lpsl > 2 \alpha c_\epsilon r} \leq \frac{1}{1 - \epsilon} f\left(\frac{r}{\log r}\right) \text{.}
 \]
@@ -199,7 +208,7 @@ The value of $r$ is thus $r = 2d \log d \geq 4$.
 
 The probability estimate of the event $\lpsl > 2 c_\epsilon \alpha r$ requires that $r \geq 4$. For the choice of the value $r$ from Claim \ref{claim-choose-r} it follows that $r \geq 4$ when $d \geq 2$. Because we choose $d \geq 2$, we no longer pay attention to the assumption of Remark \ref{remark-lpsl-pdf-linear-amount}. The remaining one $\alpha < \frac{\log r}{2}$ may cause a problem. Its validity must be verified at the end, immediately after we state the exact choice of $r$.
 
-To finish the proof set the lower bound $d = j b$ for a positive constant $j$. Instead of finding exact value of $d$, it is sufficient to find a minimal value of $j$. The simplification is motivated by the fact that we already know that the asymptotic growth of $\Expect{\lpsl}$. It is in the order of $b \log b$. We just need find as small multiplicative constant as possible. In Claim \ref{claim-whole-limit} we show that putting $d = jb$ respects this asymptotic growth.
+To finish the proof set the lower bound $d = j b$ for a positive constant $j$. Instead of finding exact value of $d$, it is sufficient to find a minimal value of $j$. The simplification is motivated by the fact that we already know the asymptotic growth of $\Expect{\lpsl}$. It is in the order of $b \log b$. We just need find as small multiplicative constant as possible. In Claim \ref{claim-whole-limit} we show that putting $d = jb$ respects this asymptotic growth.
 
 \begin{claim}
 \label{claim-whole-limit}
@@ -468,7 +477,8 @@ In Section \ref{section-time-complexity} we estimate the expected amortised time
 
 Consider a simple array. The elements are placed at the array's end. If there is a free position, we store the element. When the array is full, then we double its size and store the element. Question is, what time is needed to store $n$ elements in such array. The worst case analysis gives the result $O(n ^ 2)$. Amortised analysis gives a far better result, $O(n)$. This result can be explained by the fact that the fast inserts accumulated some potential that is later used by a following slow insert. The amortised time of the operation thus may be seen as the time consumed by all operations uniformly distributed across the operations. To bound the amortised complexity of every operation in a sequence of length $n$, we must take the supremum through all the sequences of the same length $n$.
 \begin{definition}[Amortised complexity]
-Let $\{o_i\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations. Let $T_o$ be the time required to perform the operations $o_i$ for $i = 1, \dots, n$ in this order. Then the \emph{amortised complexity} of an operation is $\lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}T_o}{n}$.
+% Let $\{o_i\}_{i = 1}^{n}$ be the sequence of $n \in \mathbb{N}$ operations. 
+Let $T_o$ be the time required to perform the sequence $o=\{o_i\}_{i=1}^n$ of operations $o_i$ in this order. Then the \emph{amortised complexity} of an operation is $\lim\limits_{n \rightarrow \infty}\frac{\sup_{o, |o| = n}T_o}{n}$.
 \end{definition}
 
 Now we describe the potential method -- a method how to estimate the amortised complexity. First, we define a potential function, $\{p_i\}_{i = 0}^{n}$. The constant $p_0$ is the starting potential, often chosen as zero. After each operation the data structure is associated with a new potential $p_i$. The operations not only change the data structure, they change its potential, too. Put $a_i = t_i + p_{i} - p_{i - 1}$ as the amortised complexity of the $i$\textsuperscript{th} operation where $t_i$ is its running time. The time taken by the operations in a sequence $o$, $T_o = \sum\displaystyle_{i = 1}^{n} t_i$, may be estimated by the amortised time of the sequence, $A_o = \sum\displaystyle_{i = 1}^{n} a_i$, as
