@@ -55,8 +55,8 @@ p = \Prob{A} = \frac{|A|}{|\Omega|}
 \]
 \end{proof}
 
-\begin{definition}[Joint event, joint probability]
-Let $A, B \subseteq \Omega$ be events. The \emph{joint event} is denoted by $A, B$ and equals the event $A \cap B$. The \emph{joint probability} of the event $A, B$ is
+\begin{definition}[Intersection]
+Let $A, B \subseteq \Omega$ be events. The \emph{event that both $A$ and $B$ occur} is denoted by $A, B$ and equals the event $A \cap B$. The probability of the event $A, B$ is
 \[
 \Prob{A, B} = \Prob{A \cap B} \text{.}
 \]
@@ -212,7 +212,7 @@ Let $X$ be a continuous random variable and $g: \mathbb{R} \rightarrow \mathbb{R
 
 \begin{lemma}
 \label{lemma-expect-probability}
-Let $X, Y$ be random variables and $t \in \mathbb{R}$. For every $z \in [0, 1]$ set $\omega_t = \{y \in \mathbb{R} \setdelim z = \Prob{X = t \mid Y = y} \}$. Let $Z$ be a random variable bounded in the interval $[0, 1]$ such that \[\Prob{Z = z} = \int\limits_{\omega_t} \Prob{Y = y} dy \text{.} \] Then $\Prob{X = t} = \Expect{Z}$.
+Let $X, Y$ be random variables and $t \in \mathbb{R}$. For every $z \in [0, 1]$ set $\omega_t(z) = \{y \in \mathbb{R} \setdelim z = \Prob{X = t \mid Y = y} \}$. Let $Z_t$ be a random variable bounded in the interval $[0, 1]$ such that \[\Prob{Z_t = z} = \int\limits_{\omega_t(z)} \Prob{Y = y} dy \text{.} \] Then $\Prob{X = t} = \Expect{Z_t}$.
 \end{lemma}
 \begin{proof}
 By the Law of Total Probability we state the following fact:
@@ -221,8 +221,8 @@ By the Law of Total Probability we state the following fact:
 \Prob{X = t} 
 	& = \int\limits_{-\infty}^{\infty} \Prob{X = t, Y = y} dy \\
 	& = \int\limits_{-\infty}^{\infty} \Prob{X = t \mid Y = y} \Prob{Y = y} dy \\
-	& = \int\limits_{0}^{1} z \Prob{Z = z} dz \\
-	& = \Expect{Z} \text{.}
+	& = \int\limits_{0}^{1} z \Prob{Z_t = z} dz \\
+	& = \Expect{Z_t} \text{.}
 \end{split}
 \]
 
@@ -247,7 +247,7 @@ For the indicator $\Indicator(|X| \geq t)$ we have that $t\Indicator(|X| \geq t)
 \Expect{|X|} 
 	& = \int\limits_{0}^{\infty} |X| \Prob{|X| = x} dx \\
 	& \geq \int\limits_{0}^{\infty} t \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
-	& \geq t \int\limits_{0}^{\infty} \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
+	& = t \int\limits_{0}^{\infty} \Indicator(|X| \geq t) \Prob{|X| = x} dx \\
 	& = t \Prob{|X| \geq t} \text{.}
 \end{split}
 \]
@@ -272,7 +272,7 @@ First observe that the event $|X - \Expect{X}| \geq \epsilon$ is equivalent to t
 From the Chebyshev's inequality it follows that the average converges to the expected value. This fact is commonly referred to as the Weak Law of Large Numbers.
 \begin{theorem}[Weak Law of Large Numbers]
 \label{theorem-weak-law-of-large-numbers}
-Let $n \in \mathbb{N}$, $\epsilon > 0$ and $X_1$, \dots, $X_n$ be identically independent distributed random variables. Then 
+Let $n \in \mathbb{N}$, $\epsilon > 0$ and $X_1$, \dots, $X_n$ be independent identically distributed random variables. Then 
 \[
 \Prob{\left| \frac{\sum\displaylimits_{i = 1}^{n} X_i}{n} - \Expect{X_1} \right| \geq \epsilon} \leq \frac{\Variance{X_1}}{n\epsilon ^ 2} \text{.}
 \]
