@@ -1,0 +1,33 @@
+\chapter{Introduction}
+One of the successful tasks done by the computers today is the data storage and its representation. By this term we not only mean the database management systems storing large amounts of data. This term includes various forms of the \emph{set representation problem} \cite{VK-skripta} -- representation and storing sets of elements. There are a lot of approaches, that solve this problem and deal with the situations from representing small sets stored in the main memory to enormous databases stored distributively on distinct systems.
+
+Solving this problem has many apparent practical applications from databases in business environment to more hidden ones. Consider bus stops of a city represented by objects of a programming language. Think about solving the shortest path problem by graph library. This library does not provide an association of the library's node object with its city. But you need a fast mapping of the nodes onto stops to build the path. This mapping is usually provided by the data structures solving the set representation problem. Nowadays these data structures are commonly present as HashTables, ArrayLists or Dictionaries in the standard libraries of many current programming languages. Their fast implementation plays an important role in the quality of solutions provided by programmers.
+
+The set representation problem, also known as the \emph{dictionary problem}, is a storage of a set consisting of chosen elements of a universe. The universe includes all the representable elements. Basic operations provided by a \emph{data structure} solving this problem allow a modification of the stored set and querying if an element is stored within it.
+
+\begin{itemize}
+\item $Member(x)$ -- returns true if the element $x$ is contained by the represented set.
+\item $Access(x)$ -- returns the data associated with the element $x$ if it is contained within the stored set.
+\item $Insert(x)$ -- adds the element into the stored set.
+\item $Delete(x)$ -- removes the element from the stored set.
+\end{itemize}
+
+There are plenty of different data structures solving the problems providing us with various running times of these operations \cite{Cormen01introductionto}. If our algorithms prefer some operations to the others, we can gain an asymptotic improvement in their running times by a good choice of the underlying data structure. 
+
+The data structures can also guarantee the worst case running time of every operation. Other promise to be quick in the average case but their worst case running time can be linear with the number of elements stored. For example the running time of balanced trees, AVL trees \cite{AVL}, red-black trees \cite{DBLP:conf/focs/GuibasS78} or B-trees \cite{DBLP:journals/acta/BayerM72} is logarithmic for every operation. Hash tables \cite{DBLP:books/sp/MehlhornS2008}, \cite{VK-skripta}, \cite{DBLP:journals/jcss/CarterW79}, \cite{The-art-of-computer-programming} should run in $O(1)$ expected time but we may get unlucky when iterating a chain of large length. The most simple data structures such as arrays or lists are preferred because they have certain operations running in constant times but the other are definitely linear.
+
+The warranties, provided by the data structures, mean a trade off with the expected times. For instance binary search trees are expected to be faster in the expected case when assuming uniformity of the input than red black trees or AVL trees. These comparisons are discussed in \cite{63531} and later results in \cite{765571} or \cite{DBLP:journals/algorithmica/Drmota01}. If the uniformity of input may not be assumed we are made to use the conservative solution.
+
+There are special data structures, such as heaps, that do not implement the basic operations effectively. We can not consider it as a flaw, their use is also special. In the case of the heaps it means efficient finding of minimal or maximal element of the set. On the other hand some data structures may allow other operations. 
+\begin{itemize}
+\item $Ord(k)$, $k \in \mathbb{N}$ -- returns the $k$\textsuperscript{th} element of the stored set.
+\item $Pred(x)$, $Succ(x)$ -- returns the predecessor or successor of $x$ in the set.
+\item $Min(x)$, $Max(x)$ -- returns the minimal or maximal element of the stored set.
+\end{itemize}
+
+In this work we try to design a hash table which has the constant expected running time of every operation. In addition it also guarantees a reasonable worst case bound, $O\left(\log n \log \log n\right)$. We can not expect running it as fast as classic hashing when assuming the input's uniformity. The computations indicate that it runs much faster than balanced or binary search trees.
+
+The concept of hashing is introduced in Chapter \ref{chapter-hashing}. It continues by description of different models of hashing and finally mentions current approaches and fields of interests of many authors.
+In the third chapter the principle of universal hashing is discussed. It also introduces many universal classes of functions and states their basic properties.
+In Chapter $\ref{chapter-elpsl}$ we show how to compute the expected length of the longest chain and discuss its importance.
+The work later continues by the chapter where we show the already known results regarding the system of linear transformations. In the following chapters we improve the results obtained when using universal hashing with the system. In the last chapter, we show the properties of the proposed model based on the new results.
