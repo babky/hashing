@@ -1,4 +1,8 @@
-\section{The Power of Two Choices Applied to Universal Hashing}
+\section{Notation}
+
+\section{Universal Hashing}
+
+\section{The Power of Two Choices in Universal Hashing}
 
 Mitzenmacher and Upfal in \cite{1076315} showed that if we use $d$ independent hash functions and put the presently saved object into a bin with the shorter chain, then the the longest chain contains at most $\frac{\ln \ln n}{\ln d}$ elements.
 
@@ -19,7 +23,7 @@ Let $H$ be a $c$-universal system of hash functions. Let $f, g \in H$ be two fun
 
 \begin{theorem}
 \label{theorem-universal-hashing-two-choices}
-Assume the model of universal hashing using at least a $c$-universal system of hash functions. Also assume that the functions in the system are independent. Also assume that we store $n$ elements into a table of size $m$ using $d$ random uniformly chosen functions from the system and that $\alpha c \leq 1$. If every stored value is placed into a shorter chain given by the values of the $d$ chosen hash functions, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 4} \in o\left(\frac{1}{n}\right) \textit{.}$$
+Assume the model of universal hashing using at least a $c$-universal system of hash functions. Also assume that the functions in the system are independent. Also assume that we store $n$ elements into a table of size $m$ using $d$ random uniformly chosen functions from the system and that $\alpha c \leq 1$. If every stored value is placed into a shorter chain given by the values of the $d$ chosen hash functions, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in o\left(\frac{1}{n}\right) \textit{.}$$
 \end{theorem}
 
 \subsection{Notation}
@@ -40,7 +44,7 @@ The sequence is used to show that $\Prob{\nu_{i^{*}} > 1} \in o(1/n)$ and $i^* =
 
 \begin{lemma}
 \label{lemma-height-of-inserted-ball}
-If $\beta_i > v_i(t)$, then $\Prob{h(t + 1) > i} \leq \left(\frac{c(\beta_i)}{m}\right) ^ d$.
+If $\beta_i > \nu_i(t)$, then $\Prob{h(t + 1) > i} \leq \left(\frac{c(\beta_i)}{m}\right) ^ d$.
 \end{lemma}
 \begin{proof}
 First we estimate the probability of placing an element into a set of chains. Let $x \in U$, $R \subseteq B$ and $|R| \leq \beta_i$, then $$\Prob{f(x) \in R} = \displaystyle\sum_{r \in R} \Prob{f(x) = r} \leq \frac{c\beta_i}{m} \textit{.}$$
@@ -124,3 +128,283 @@ p_i = \left(\frac{c\beta_i}{m}\right) ^ d \leq \left(\frac{\alpha c}{2 ^ {d ^ {i
 \]
 
 Next, for $1 < \alpha c$, we are not always able to satisfiy the inequality $np_i < 6 \ln n$. Thus the load factor must be chosen as $\alpha \leq \frac{1}{c}$.
+
+\section{Model of Universal Hashing}
+The hashing scheme we propose is a solution to the set representation problem allowing operations \emph{Find}, \emph{Insert} and \emph{Delete}. Moreover our model of hashing guarantees a sublogarithmic worst case time for Find operation and has constant expected amortised time complexity for each operation. We are able to give this warrany since we forbid chain longer than a prescribed limit which depends on the size of the table and maximum allowed load factor. If a successful Insert operation creates a chain longer than the limit, then the whole table is rehashed. By rehashing we understand creating a table using a new hash function chosen from the universal system and representing the same set. When rehashing we always seek for a function until a suitable function, a function which does not create a long chain, is found. 
+
+At first we focus on a way how to choose the limit function and what is the probability of having a long chain. Then we have to estimate the number of trials needed to find a suitable function during a sequence of update operations and this enables us to finish the amortised analysis.
+
+The proof of Theorem \ref{theorem-universal-hashing-two-choices} unfortunately holds only for static sets; or more precisely for schemes allowing \emph{Find} and \emph{Insert} operations only. Although deleting an element from a hash table does not prolong chain lengths, the proven bound may get violated since the number of stored elements is decreased by a successful delete. As shown later using a limit function for a higher load factor than the maximal one possible in the hash table is enough in order to successfuly perform an amortised analysis of the expected case. In addition we show it is sufficient to allow Delete operation, too. 
+
+We have to mention that there are modifications of Theorem \ref{theorem-universal-hashing-two-choices} which allow deletions and are called dynamic models. These results are harder to prove and moreover give slightly worse estimates as the original one. Without any significant loss we can use the simpler original one, in addition it may be more convenient than the dynamic models as discussed later.
+
+The formal definitions considering the limit function of $\lpsl$ and of the associated probability of existence of a long chain are given. Notice that, in each of the following definitions we assume model of universal hashing and use the notation given at the beginning.
+
+\begin{definition}[Limit function, trimming rate, function not creating a long chain]
+Let $l: \mathbb{N} \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \mathbb{N}$ and $p \in (0, 1)$.  We say that $p$ is a \emph{trimming rate} and that $l$ is a \emph{limit function} if  $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
+
+Function $h \in H$ \emph{does not create a long chain} for a limit function $l$ and a trimming rate $p$ if $\lpsl < \l(m, \alpha, p)$.
+\end{definition}
+
+We define system of suitable functions, the ones not creating a long chain, for a hashed set.
+\begin{definition}[$(p, l)$ - trimmed system]
+Let $l$ be a limit function and $p$ be a trimming rate. The system of functions \[ H(p, l, S) = \{ h \in H \setdelim h \textit{ does not create a long chain for l and p} \} \] is called \emph{$(p, l)$-trimmed system}.
+\end{definition}
+
+Now we describe our model and use the associated algorithms to explain the above notation. The model we propose is a slight modification of the simplest model of universal hashing with separated chains. We distinguish two cases -- when Delete operation is not allowed, which is simpler to analyse, or when the stored elements can be removed.
+
+\begin{itemize}
+\item \textbf{Universal class.} We suppose using at least $c$-universal system of functions. Also assume that for the selected system we have a limit function $l$ and a trimming rate $p$. Function $l(m, \alpha, p)$ limits the length of the longest chain with respect to the table's size, load factor and prescribed trimming rate. In addition limit function should certainly be sublinear with respect to $m$. In order to provide an interesting warranty we use limit functions giving approximately logarithmic or better estimates.
+
+\item \textbf{Load factor rule.} The load factor of the table is kept in a predefined interval $[\alpha_l, \alpha_u] \subset (0, 1)$. If the load factor is outside the interval, then the table is rehashed into a greater or smaller table according to which bound is violated. New size is chosen so that the load factor is as near as possible to a prescribed value $\alpha_m$, $\alpha_l < \alpha_m < \alpha_u$. 
+
+\item \textbf{Chain limit rule.} Assume we are given a parameter $\alpha'$. This parameter specifies the load factor in respect to which the limit function is computed. When there is a chain longer than the limit value $l(m, \alpha', p)$, then the table is rehashed using a function that does not create a long chain. 
+\end{itemize}
+
+\input{algorithms}
+
+First we have to ask if a universal system of functions with a reasonable limit function exists. Let $U = \mathrm{Z}_2^t$ and $B = \mathrm{Z}_2^b$ and interpret these sets as vector spaces over the field $\mathrm{Z_2}$. It is easy to verify that the system of functions \[ H = \{h \in H \setdelim h: U \rightarrow B \wedge h \textit{ is a linear transformation}\} \] is $1$-universal. From \cite{DBLP:journals/jacm/AlonDMPT99} it follows $\Expect \lpsl \in O(\log m \log \log m)$ if universal hashing is used with $H$. By improving results already presented in \cite{DBLP:journals/jacm/AlonDMPT99} we were able to prove that $l(m, 1, 0.5) = 47.63 \log m \log \log m$ and $l(m, 1.5, 0.5) = 57.29 \log m \log \log m$ are valid limit functions.
+
+To be complete we have to mention the following facts. From Markov inequality it directly follows that $\Prob{\lpsl \geq k \Expect \lpsl)} \leq \frac{1}{k}$. This remark has two consequences -- a practical and a theoretical one. First notice that if we knew $\Expect \lpsl$ for a universal system, then we would be able to choose a limit function for the system. So it is sufficient to find $\Expect \lpsl$ for universal systems. In order to show the second implication we present the fact that any $\omega$-universal system has $\Expect \lpsl \in O\left(\frac{\log n}{\log \log n}\right)$. But choosing a $\omega$-universal system is possible only in theory. Nowadays it is known that $\omega$-universal systems are either too complex and large to be practicaly used or their functions are too slow to be computed.
+
+\subsection{Expected Length of a Chain}
+Now we deal with the time complexity of operations in expected case. Realise that the expected length of a chain is constant provided that the table's load factor is upper bounded. 
+\begin{theorem}
+\label{theorem-expected-chain-length-universal}
+Assume universal hashing using at least $c$-universal system of hash functions, then the expected length of a chain is lower or equals $c \alpha$.
+\begin{proof}
+The proof of the theorem may be found in \cite{DBLP:journals/jcss/CarterW79}.
+\end{proof}
+\end{theorem}
+\begin{corollary}
+\label{corollary-c-universal-find}
+Assume universal hashing with a $c$-universal class of functions. Let $\alpha$ denote the table's load factor, then the expected time of Find operation is $O(1 + c\alpha$).
+\end{corollary}
+\begin{corollary}
+\label{corollary-find-time}
+Assume a model of universal hashing using at least $c$-universal system. If the table's load factor is bounded, then the expected time of Find operation is $O(1)$.
+\end{corollary}
+
+\section{Consequences of Trimming Long Chains}
+The model of hashing we propose guarantees the worst case bound on the length of the longest chain. Hence it bounds the worst-case running times of operations, without charging for possible Rehash. We examine the consequences of limit on lengths of chains in the expected case and further study the number of trials needed to find a suitable function. 
+
+\begin{lemma}
+\label{lemma-size-of-trimmed-system}
+Let $H$ be a universal system, $p$ be a trimming rate and $l$ be a limit function. If $H(p, l, S)$ is a $(p, l)$-trimmed system, then $|H(p, l, S)| \geq (1 - p)|H|$.
+\end{lemma}
+\begin{proof}
+Proof is a straightforward use of definition of the system $H(p, l, S)$ and of the trimming rate $p$.
+\[
+\begin{split}
+|H(p, l, S)| 
+	& = |\lbrace h \in H \setdelim \text{ $h$ does not create a long chain} \rbrace| \\
+	& =\Prob{\lpsl \leq l(m, \alpha)} |H| \\
+	& = \left(1 - \Prob{\lpsl > l(m, \alpha)}\right) |H| \\
+	& \geq (1 - p)|H| \text{.}
+\end{split}
+\]
+\end{proof}
+
+Provided that every function is chosen uniformly from $H$ and the unsuitable ones are discarded, we still perform the uniform selection of a hash function. However now the choice is restricted to the class $H(p, l, S)$. Notice that the restriction uses information about the stored set.
+
+Following lemma shows that it is possible to use the family $H(p, l, S)$ as a universal system, too. In fact, we may restrict $H$ by using any set $S$ and use the system for storing any other unrelated set using the system $H(p, l, S)$.
+\begin{theorem}
+\label{theorem-p-trimmed-is-universal}
+Let $H$ be a $c$-universal system, $p$ be a trimming rate and $l$ be a limit function. For every $S \subset U$ the system of functions $H(p, l, S)$ is $\frac{c}{1 - p}$-universal. Equivalently:
+\[
+	\Prob{h(x) = h(y) \text{ for } h \in H(p, l, S)} \leq \frac{1}{1 - p} \Prob{h(x) = h(y) \text{ for } h \in H} \text{.}
+\]
+\end{theorem}
+\begin{proof}
+Choose two arbitrary elements $x, y \in U$ such that $x \neq y$. From Lemma \ref{lemma-size-of-trimmed-system} and from the assumption of $c$-universality of the original system $H$ it follows that 
+\[
+\begin{split}
+& \Prob{h(x) = h(y) \text{ for } h \in H(p, l, S)}  \\
+	& \qquad =  \frac{|\{ h \in H \mid h(x) = h(y) \wedge h \in H(p, l, S)\}|}{|H(p, l, S)|} \\
+	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \wedge \textit{ h does not create long chains} \}|}{(1 - p)|H|} \\ 
+	& \qquad \leq \frac{|\{ h \in H \mid h(x) = h(y) \}|}{(1 - p)|H|} = \frac{1}{1 - p} \Prob{h(x) = h(y) \text{ for } h \in H} \\
+	& \qquad \leq \frac{c}{(1 - p) m} \text{.}
+\end{split}
+\]
+
+Hence the system $H_p^S$ is $\frac{c}{1 - p}$-universal.
+\end{proof}
+
+Similar statements hold for strongly universal systems. The probability of a collision in the system $H(p, l, S)$ is at most $\frac{1}{1 - p}$ times higher than the probability of a collision in the original system $H$.
+
+The expected number of trials of function from the system $H$ needed to find a suitable function, a one in the system $H(p, l, S)$ is a crucial characteristic. It determines the time needed to rehash the whole table when load factor rule or chain length limit rule are violated. 
+
+\begin{lemma}
+\label{lemma-linear-transformations-trials}
+Let $p$ be a trimming rate and $l$ be a limit function. Then the expected number of trials needed to find a function, which does not create a long chain, is at most $\frac{1}{(1 - p) ^ 2}$.
+\end{lemma}
+\begin{proof}
+The probability of $k$ independent unsuccessful searches for a function with short chains is at most $p ^ k$. The probability of success is bounded by $1$. Thus the bound $e$ on the expected value of the number of trials may be computed as
+\[
+e = \sum_{i = 0}^{\infty} (k + 1)p^k = \frac{p}{(1 - p) ^ 2} + \frac{1}{1 - p} = \frac{1}{(1 - p) ^ 2} \text{.}
+\]
+\end{proof}
+
+\section{Analysis}
+
+\begin{definition}[Expected amortised complexity]
+Assume that an operation of a randomised data structure is performed and the operation runs in time $t$. Let $p_b$ be the potential before performing the operation and $p_a$ be the potential after. Then the \emph{expected amortised complexity} of the operation is defined as \[ a = \Expect{t + p_a - p_{b}} \text{.} \]
+\end{definition}
+
+Expected amortised time complexity of the introduced scheme is analysed in the next two theorems in either of the two cases -- when Delete operation is allowed or not.
+
+Let us discuss the situation of Lemma \ref{lemma-sets}. We are given a sequence of sets $S_1 \subseteq \dots \subseteq S_k \subseteq S_e$ that should be represented in a hash table. We start with the initial hash function $h_0$. Set $S_1$ causes violation of the chain limit rule for function $h_0$. In order to enforce the rule, we select random functions $h_1, h_2, \dots$ until we find a suitable function for the set $S_1$, denote it $h_{i_1}$. Later, after some inserts, we obtain a set $S_2$ and the function $h_{i_1}$ is no longer suitable. We continue by selecting functions $h_{i_1 + 1}, \dots, h_{i_2}$ with $h_{i_2}$ being suitable for the set $S_2$. The chain length limit function is chosen for the set $S_e$ and for the trimming rate $p$ from Theorem \ref{theorem-model-chain-limit-rule}. We need to find the expected number of trials, the number of selected functions, needed to enforce the chain limit rule for the sets $S_1, \dots, S_k$. The set $S_e$ is a set that comes from the analysis, we use the same set $S_e$ is in Theorem \ref{theorem-model-chain-limit-rule}.
+
+\begin{lemma}
+\label{lemma-sets}
+Let $\vecspace{u}$ be the universe, $\vecspace{b}$ be the hash table with the size $m = 2 ^ b$, $p \in (0, 1)$ be the trimming rate and $\alpha' \in \{1, 1.5\}$. Let the chain length limit function be chosen according to Theorem \ref{theorem-model-chain-limit-rule} for $\alpha'$ and $p$. 
+
+Let $S_1 \subseteq \dots \subseteq S_k$ be a sequence of represented sets and $S_e \subset \vecspace{u}$ be a set such that $|S_e| \leq \alpha'm$ and $S_k \subseteq S_e$. Let $h_0, h_1, \dots, h_l$ be a sequence of random uniformly chosen linear transformations selected to enforce the chain limit rule for the sequence of sets. Assume that $0 = i_0 < \dots < i_k = l$ is the sequence such that 
+\begin{enumerate}
+\item[(1)] the functions $h_{i_{j}}, h_{i_{j} + 1}, \dots, h_{i_{j + 1} - 1}$ create a long chain for the set $S_{j + 1}$ for every $j \in \{0, \dots, k - 1 \}$,
+\item[(2)] the function $h_{i_{j}}$ does not create a long chain for the set $S_j$, $j \in \{1, \dots, k\}$.
+\end{enumerate}
+Then $\Expect{l} = \frac{1}{1 - p}$.
+\end{lemma}
+\begin{proof}
+First, observe that if a function $h$ is suitable for the set $S_e$, then it is suitable for every set $S_1, \dots, S_k$.
+
+By Lemma \ref{lemma-linear-transformations-trials} the expected number of trials needed to represent the set $S_e$ without a long chain is $\frac{1}{1 - p}$.
+
+The sequence of functions $h_1, \dots, h_l$ is random and the selection of every function is uniform. The chain length limit function is chosen according to Theorem \ref{theorem-model-chain-limit-rule} -- it fits for the set $S_e$. Hence if we do not consider the sets $S_1, \dots, S_k$, we have that $\Expect{l} = \frac{1}{1 - p}$.
+
+If a function $h_a$, $1 \leq a < l$ creates a long chain for a set $S_b$, $i_{b - 1} \leq a < i_b$, then it certainly creates a long chain for the set $S_e$. Thus if we fail with the function $h_a$ for the set $S_b$, then we fail with the same function for the set $S_e$, too. In this situation we continue by choosing functions $h_{a + 1}, h_{a + 2}, \dots$. The sequence of functions $h_1, \dots, h_l$ for the sequence of sets, remains the same for the single set $S_e$, provided that the random choice is the same. So the functions selected for the sequence of sets may be selected when rehashing the set $S_e$, too. Hence we do not need to consider the sequence of sets when choosing a right function for the set $S_e$. 
+
+Thus $\Expect{l} = \frac{1}{1 - p}$ as observed before.
+\end{proof}
+
+\begin{theorem}
+\label{theorem-no-delete-time}
+Consider hashing with forbidden Delete operation. Then the operations Find and Insert have the expected amortised time complexity $O(1)$. Moreover, if the size of a hash table is $m$, then the find operation runs in $O(\log m \log \log m)$ time in the worst case.
+\end{theorem}
+\begin{proof}
+For the expected amortised complexity analysis we use the potential method. Let the expression $\alpha m - m$ denote the potential of the scheme. This is the negative value of the number of the remaining successful insert operations which would make the table's load factor reach one. Whenever a successful insertion is performed we check if 
+\begin{itemize} 
+\item the prolonged chain does not violate the chain limit rule or
+\item the load factor is not greater than $1$.
+\end{itemize} If either of the two conditions is violated the whole table is rehashed. We have four cases to analyse.
+\begin{itemize}
+\item \emph{Find operation} or an \emph{unsuccessful Insertion operation} is performed. From Theorem \ref{theorem-expected-chain-length-universal} and Corollary \ref{corollary-trimming-linear} we know that it takes $O(1)$ expected time only. The potential does not change. Since the chains are bounded by $l(m)$, its worst case running time is $O(\log m \log \log m)$.
+
+\item \emph{Insert operation} is performed and the \emph{Rehash operation} is \emph{not necessary}. Then from Theorem \ref{theorem-expected-chain-length-universal} the operation takes $O(1)$ time in the expected case. The potential is increased by one.
+
+\item \emph{Rehash operation} after an \emph{Insert operation} is required because the \emph{load factor} exceeds one. The rehash itself takes the $O(m)$ time and the size of the table is doubled. Thus the resulting potential is $-m$. The potential before the operation equals $0$. So the operation took $O(1)$ expected amortised time.
+
+\item Suppose that a Rehash operation after an \emph{Insert} is needed because of the \emph{violation of the chain limit rule}. We seek for a new function satisfying the rule without resizing the table. For convenience we define a sub-sequence of operations called a \emph{cycle}.
+\begin{definition}
+\label{cycle}
+\emph{Cycles} create a partitioning of the original sequence of operations. Each \emph{cycle} is a sub-sequence consisting of the operations between two immediate inserts which cause the violation of the load factor rule. The first insert causing the violation is included in the cycle and the second one belongs to the next cycle.
+\end{definition}
+  
+We refer to the current cycle as to the cycle which contains the analysed operation. Now we find the number of rehash operations that are caused by the chain limit rule violation and occur in a single cycle. Let $S_e$ be the set represented at the end of the current cycle. Then by Lemma \ref{lemma-sets} we need just $\frac{1}{1 - p}$ trials in the current cycle.
+
+Now we compute the expected amortised complexity of the insert operations causing the violation of the chain limit rule in a single cycle. For every table that consists of $m$ slots at the beginning of the cycle, there are exactly $0.5 m$ insert operations raising the load factor from $0.5$ to $1$. The expected time spent by fixing the chain limit rule in a cycle is, by Lemma \ref{lemma-sets}, $\frac{1}{(1 - p)}O(m)$. We can divide this amount of time along the cycle of $0.5 m$ inserts. This distribution raises the expected amortised time for every insert operation only by a constant. The potential is incremented by one. The expected time of Insert operation without Rehash operation is $O(1)$.
+\end{itemize}
+
+We have one issue to care about. In the last case we distributed the time evenly along a complete cycle. If the number of inserts is not a power of two, we may possibly distribute a long time along a non-complete cycle. With this distribution we can not obtain a constant amortised time for the insert operation. However, we can distribute the time spent by fixing the chain limit rule from the last incomplete cycle along all the insert operations performed so far.
+
+Thus the expected amortised time complexity of every analysed operation is $O(1)$.
+\end{proof}
+
+One can find a better potential function proving the previous result more formally. We use such an explicitly expressed potential function in the next theorem. We assume that Delete operation is allowed.
+\begin{theorem}
+\label{theorem-delete-time}
+If the initial hash table is empty and Delete operation is allowed, then the expected amortised time complexity of every operation is constant. Moreover, if the size of a hash table is $m$, then the find operation runs in $O(\log m \log \log m)$ time in the worst case.
+\end{theorem}
+\begin{proof}
+In this proof we have two types of the operation cycles. We need to distinguish between the work required to enforce the load factor rule and the time spent by keeping the chain limit rule. In the analysis with forbidden Delete operation the situation is simpler and these cycles are the same. And recall the difference, the chain length limit function is computed for $\alpha' = 1.5$. The load factor $\alpha$ is now in the interval $\left[0.25, 1\right]$.
+
+We deal with the amortised time of Find and unsuccessful Insert or Delete operations in advance. Their expected running time is proportional to the expected chain length. From Theorem \ref{theorem-expected-chain-length-universal} it follows that this value is constant. Since chains are bounded by $l(m)$ we have that the worst case time of Find operation is $O(\log m \log \log m)$. These operations do not change the potential\footnote{The potential is defined later in the proof.}. Our analysis is thus simplified by omitting finds and unsuccessful delete and insert operations.
+
+Let the sequence $o = \{o_i\}_{i=1}^{n}$ denote the performed operations, the $i$\textsuperscript{th} operation $o_i \in \lbrace Insert, Delete \rbrace$. The following two definitions make the analysis more exact and clear.
+
+\begin{definition}[$\alpha$-cycle]
+The \emph{$\alpha$-cycle} consists of the operations between the two immediate operations that cause the violation of the load factor rule. Every $\alpha$-cycle contains the second operation causing the violation and the first one is included in the previous $\alpha$-cycle. The operation $o_1$ is contained in the first $\alpha$-cycle.
+\end{definition}
+First, notice that for this definition it is not important if the upper or lower bound of the load factor is the cause of the violation. When a rehash operation is executed, the table size is chosen so that the load factor $\alpha$ was as near $0.5$ as possible. 
+
+The next definition of the $\alpha$-cycle is intended for the analysis of the time spent by fixing the violations of the load factor rule.
+
+\begin{definition}[l-cycle]
+The \emph{l-cycles} are the partitioning of the sequence $o$ such that every l-cycle ends 
+\begin{itemize}
+\item after an operation causing the violation of the load factor rule or
+\item when we performed $0.5 m$ insertions from the beginning of the l-cycle and the load factor did not exceed the value of $1$.
+\end{itemize}
+\end{definition}
+The l-cycle allows us to analyse the work caused by the chain limit rule. Both l-cycles and $\alpha$-cycles divide the sequence $o$. Notice that if an $\alpha$-cycle ends at the position $i$, the corresponding l-cycle also ends at the same position. 
+
+The analysis now takes the $i$\textsuperscript{th} operation for every $i = 1, \dots, n$. We show that the expected amortised time complexity of the opertion $o_i$ is $O(1)$ independently on its type. The potential now consists of the two parts, $p_1$ and $p_2$. Let $e = \frac{1}{(1 - p)}$ denote the expected number of rehash operations, the expected number of trials, when finding a suitable function. 
+
+Above all we want every simple insertion and deletion to take $O(1)$ time only. Thus the potential consists of the part $p_1 = 4ei_{\alpha} + 8ed_{\alpha}$ where $i_{\alpha}$ is the number inserts and $d_{\alpha}$ is the number of delete operations performed so far in the current $\alpha$-cycle. 
+
+Next, we need to distribute the work caused by the chain limit rule. The second part of the potential $p_2 = 2ei_{l} + (ce - r) m$. The value $i_l$ denotes the number of insertions performed so far in the current l-cycle. The variable $r$ denotes the number of performed Rehash operations, which are caused by the chain limit rule violation, from the initial state. The variable $c$ denotes the number of started l-cycles from the beginning so far. The overall potential $p = p_1 + p_2$.
+
+The analysis of Delete operation is simpler and comes first. When a deletion is performed we have to discuss the two cases:
+\begin{itemize}
+\item Simple successful deletion is expected to take $O(1)$ time. We search in chains that have constant expected length. The potential is increased by $8e$ since the number of deletions in $p_1$ gets increased by one.
+
+\item The load factor $\alpha$ violates the lower bound of the load factor rule. Realise that there are at least $0.25 m$ deletions performed in the current $\alpha$-cycle, let us explain why. At the beginning of the cycle the table has the size of $m$ slots and the load factor equals $0.5$. At the end of the cycle the load factor decreased to $0.25$. Such a descent may be caused by at least $0.25 m$ successful delete operations. Let us discuss the potential change. First, the potential difference of the part $p_1$ is less or equals $-2em$ since $i_{\alpha}$ and $d_{\alpha}$ get zeroed. The second part $p_2$ gets increased by at most $em$ since a new l-cycle is started and the value $i_l$ is zeroed. Rehashing of the table takes $O(em)$ expected time. Hence the expected amortised cost of the operation is $O(1)$. 
+\end{itemize}
+
+The analysis of the first two cases of Insert operation remains similar to the case with forbidden Delete:
+\begin{itemize}
+\item Suppose no Rehash operation after an Insert is performed. The searched chain has the constant expected length and the potential is increased by $4e + 2e$.
+
+\item If the load factor exceeds the upper bound, then there are at least $0.5m$ insertions in the current $\alpha$-cycle. It follows that the potential $p_2$ is certainly greater or equals $2em$. After performing the operation a new l-cycle is started. The potential $p_2$ is raised by $em$ because the variable $c$ gets incremented by one. But it is also lowered by at least $2em$ because $i_l$ is set to zero. The rehash operation is expected to take $O(em)$ time. Regarding the fact that the potential $p_1$ only decreases we expect $O(1)$ amortised time for Insert operation violating the load factor rule.
+
+\item Insert operation is the last one in the l-cycle and the chain limit rule is not violated. Then there are $0.5 m$ insertions in the current l-cycle, equivalently $i_l = 0.5m$ and $p_2 = em + (ce - r)m$. Since a new l-cycle is started, the $i_l$ term is set to zero and the value $c$ is incremented by one. Therefore there is no potential change in the part $p_2$. The part $p_1$ only decreases.
+
+\item Analysis of Insert operation, which violates the chain limit rule, remains. Time spent by Rehash operation equals $O(m)$ times the number of fails when finding a suitable function. The potential $p_2$ is decreased by the same value, since the variable $r$ gets incremented by the number of fails. The potential increase in the part $p_1$ and $p_2$ equals $6e$. Without Rehash operation the expected time of Insert is $O(1)$. The expected amortised time complexity of the analysed operation is thus constant provided that $\Expect{(ce - r)m} = 0$.
+
+First, we show why the expected number of fails in one l-cycle equals $e$. Let $S$ be the set stored after performing the analysed operation. Let $S_e$ be the set created from the set $S$ by the remaining inserts of the current l-cycle. Because the table's load factor is maintained lower than 1 and there are at most $0.5 m$ inserts in every l-cycle, we have that $|S_e| \leq 1.5m$ and $S \subseteq S_e$. From Lemma \ref{lemma-sets} we have that $e = \frac{1}{1 - p}$ is the expected number trials needed to find a suitable function for every l-cycle.
+
+Second, we show that $\Expect{(ce - r)m} = 0$. Define the random variable $C_i$ equal to the number of rehash operations required to fix the chain limit rule in the $i$\textsuperscript{th} l-cycle for $i = 1, \dots, c$. From the previous observation it follows that $\Expect{C_i} = e$. Clearly $r = \sum\displaylimits_{i = 1}^{c} C_i$. From Lemma \ref{lemma-expected-value-properties} it follows that
+\[
+	\Expect{{(ce - r)m}} \leq {m}\left(ce - \Expect{\displaystyle\sum_{i = 1}^{c} C_i}\right) = m(ce - c\Expect{C_1}) = mc(e - e) = 0 \text{.}
+\]
+Since $\Expect{(ce - r)m} = 0$ and $p_0 = 0$, the expected potential is always non-negative. Hence $T_o = A_o + p_0 - p_n \leq A_o$ and our analysis is thus correct.
+\end{itemize}
+
+We showed that the expected amortised complexity is constant for every operation.
+\end{proof}
+
+Let us note that the fact $\left|\frac{(ce - r)m}{n}\right| \xrightarrow{n \rightarrow \infty} 0$ indicates that it might be possible to show that the amortised complexity is constant, without any expectation. Since universal hashing is a randomised algorithm, such result would be certainly remarkable. However, if it was really true, there would be still many troubles showing the result.
+
+So, one may ask if using the Law of Large Numbers, Theorem \ref{theorem-weak-law-of-large-numbers}, can not help. Indeed, from Lemma \ref{lemma-linear-transformations-trials} we have that $\Variance{C_i}$ is finite and it may be applied:
+\[
+\begin{split}
+\left|\frac{(ce - r)m}{n}\right|
+	& \leq m \left|\frac{ce - \sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \\
+	& \leq m \left|\frac{c\Expect{C_1}}{c} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \\
+	& = m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \text{.}
+\end{split}
+\]
+
+Clearly, the convergence in probability stated by Theorem \ref{theorem-weak-law-of-large-numbers} holds:
+\[
+	\left|\Expect{X_1} - \frac{\sum\displaylimits_{i = 1}^{c} X_i}{c}\right| \xrightarrow{c \rightarrow \infty} 0 \text{.}
+\]
+
+But in the case of $m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right|$ we have to be careful. There is an infinite class of sequences $\{o_i\}_{i = 1}^{n}$ for which $m \in \Omega(c)$. Thus for these sequences, if $c \rightarrow \infty$, then $m \rightarrow \infty$ as well.
+
+In order to obtain convergence in probability we have that
+\[
+\begin{split}
+\Prob{m \left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \geq \epsilon} 
+	& = \Prob{\left|\Expect{C_1} - \frac{\sum\displaylimits_{i = 1}^{c} C_i}{c}\right| \geq \frac{\epsilon}{m}}  \\
+	& \leq \frac{\Variance{C_i} m ^ 2}{m \epsilon ^ 2} = \frac{m\Variance{C_i}}{\epsilon ^ 2} \text{.}
+\end{split}
+\]
+This is a problem, since when $m \rightarrow \infty$, we can not expect that the probability converges to zero for a fixed $\epsilon$.
+
+For the class of sequences satisfying $m \in \Omega(c)$ the inequalities we used for estimate of $\left|\frac{(ce - r)m}{n}\right|$ mean only a multiplicative factor. Thus the estimate is tight and we see that the bound obtained from the Chebyshev's inequality is not sufficient. Its asymptotic rate is not high enough and the factor $m$ appears. However, because we know the probability distribution of $C_i$, maybe we could exploit it and be more accurate. This problem remains open.
+
+\section{Putting It Together}
+\section{Experimental Results}
+
