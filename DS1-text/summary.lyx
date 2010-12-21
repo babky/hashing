@@ -1,0 +1,1912 @@
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass report
+\use_default_options true
+\begin_modules
+theorems-ams
+\end_modules
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 2
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\OO}{\mathcal{O}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\Bi}{\mathrm{Bi}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\Exp}[1]{\mathrm{E}\left[#1\right]}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\interval}[2]{\left\langle #1,#2\right\rangle }
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter*
+Prerequisites
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\OO$
+\end_inset
+
+-notation
+\end_layout
+
+\begin_layout Itemize
+basic data structures: pointers, singly and doubly linked lists, arrays
+\end_layout
+
+\begin_layout Itemize
+basics of probability theory, combinatorics and graph theory
+\end_layout
+
+\begin_layout Chapter
+Hashing
+\end_layout
+
+\begin_layout Itemize
+We are solving the 
+\emph on
+dictionary problem
+\emph default
+: we have some universe set 
+\begin_inset Formula $U=\{0,\dotsc,N-1\}$
+\end_inset
+
+ and we want to store a set 
+\begin_inset Formula $S\subseteq U$
+\end_inset
+
+, 
+\begin_inset Formula $|S|=n$
+\end_inset
+
+, only using 
+\begin_inset Formula $\OO(n)$
+\end_inset
+
+ space.
+ To do so, we use an array of length 
+\begin_inset Formula $m$
+\end_inset
+
+ and hash functions of type 
+\begin_inset Formula $h:U\rightarrow\{0,\dotsc,m-1\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+In these dictionaries we need to support operations 
+\noun on
+insert
+\noun default
+, 
+\noun on
+delete
+\noun default
+ and 
+\noun on
+member
+\noun default
+ for manipulating the represented set 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ Moreover, we aim to implement them in 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ expected time.
+\end_layout
+
+\begin_layout Itemize
+Usual assumptions:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The hash function can be evaluated in 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ time and it uniformly distributes the universe set 
+\begin_inset Formula $\left(\forall y_{1},y_{2}\;\left|h^{-1}(y_{1})\right|-\left|h^{-1}(y_{2})\right|\le1\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Any element of the universe set is equally likely to be an argument of any
+ of the operations (this is used in expected-time analyses).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Sometimes we will need to 
+\emph on
+rehash
+\emph default
+: iterate over the contents of the whole structure, insert all the keys
+ into a new hash table (possibly with different setting of 
+\begin_inset Formula $m$
+\end_inset
+
+, 
+\begin_inset Formula $h$
+\end_inset
+
+, etc.) and delete the old structure.
+\end_layout
+
+\begin_layout Itemize
+The event that two different elements in 
+\begin_inset Formula $S$
+\end_inset
+
+ have the same hash is called a 
+\emph on
+collision
+\emph default
+.
+\end_layout
+
+\begin_layout Section
+Separate chaining
+\end_layout
+
+\begin_layout Itemize
+The simplest method, our array contains singly linked lists of elements
+ to resolve hash collisions.
+ On index 
+\begin_inset Formula $i$
+\end_inset
+
+ the array has a linked list that contains the set 
+\begin_inset Formula $\{x\in S\mid h(x)=i\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+When performing an operation on the argument 
+\begin_inset Formula $x$
+\end_inset
+
+, we first compute 
+\begin_inset Formula $i=h(x)$
+\end_inset
+
+ and only work with the 
+\begin_inset Formula $i$
+\end_inset
+
+-th linked list.
+ The operations 
+\noun on
+insert
+\noun default
+, 
+\noun on
+delete
+\noun default
+ and 
+\noun on
+member
+\noun default
+ on a linked list need time proportional to the length of the list.
+\end_layout
+
+\begin_layout Theorem*
+The expected length of a chosen list equals 
+\begin_inset Formula $\frac{n}{m}\equiv\alpha$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Following from the uniformity assumptions, the length of a chain is distributed
+ according to binomial distribution 
+\begin_inset Formula $\Bi\left(n,\frac{1}{m}\right)$
+\end_inset
+
+.
+ It only remains to prove that 
+\begin_inset Formula $\Exp{\Bi(n,p)}=np$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+Periodic rebuilding
+\end_layout
+
+\begin_layout Standard
+The previous theorem suggests we should use a table of 
+\begin_inset Formula $m=\OO(n)$
+\end_inset
+
+.
+ That way we get expected times of operations 
+\begin_inset Formula $\OO\left(\frac{n}{m}\right)=\OO(1)$
+\end_inset
+
+ and the needed space is 
+\begin_inset Formula $\OO(n+m)=\OO(n)$
+\end_inset
+
+, which is optimal (we need to store the 
+\begin_inset Formula $n$
+\end_inset
+
+ elements).
+ To maintain the property, we can for example choose two constants and maintain
+ 
+\begin_inset Formula $\frac{n}{m}\in\interval{\alpha_{1}}{\alpha_{2}}$
+\end_inset
+
+.
+ Whenever we break the constraint, we rehash the whole table with 
+\begin_inset Formula $m:=\frac{2}{\alpha_{1}+\alpha_{2}}n$
+\end_inset
+
+.
+ The rehash takes 
+\begin_inset Formula $\OO(m)$
+\end_inset
+
+ time, but we had to do at least 
+\begin_inset Formula $\frac{\alpha_{2}-\alpha_{1}}{2}m$
+\end_inset
+
+ insertions or deletions since the last rehash, so the time can be 
+\emph on
+amortized
+\emph default
+ into additional 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ time per modifying operation.
+\end_layout
+
+\begin_layout Theorem*
+The expected length of the longest list is 
+\begin_inset Formula $\OO\left(\frac{\log n}{\log\log n}\right)$
+\end_inset
+
+ (we suppose 
+\begin_inset Formula $n\le m$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+However, in the improbable worst case we have all the elements in one chain
+ and so the wost-case complexity is 
+\begin_inset Formula $\OO(n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+We usually insert elements to the front of the list.
+ It is also possible to insert at the end of the list or to maintain the
+ list in sorted order.
+ Maintaining sorted order allows us to reduce the time needed for unsuccessful
+ searches in the list -- on average we save half of the time (the asymptotic
+ times are unchanged).
+\end_layout
+
+\begin_layout Subsubsection
+Storing chains in the array
+\end_layout
+
+\begin_layout Standard
+The array normally only contains pointers to the beginnings of the lists,
+ but it is also possible to implement the linked lists inside of the array
+ (we need 
+\begin_inset Formula $m\ge n$
+\end_inset
+
+).
+ We show two methods.
+ In both we need to be able to find a free index in the array in constant
+ time, which can be accomplished by maintaining another chain with all free
+ positions.
+ The operation complexities only differ by constant amount needed for an
+ extra test or relocation.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Hashing with relocations.
+ 
+\emph default
+Every index of the array contains fields 
+\noun on
+key
+\noun default
+, 
+\noun on
+next
+\noun default
+ and 
+\noun on
+prev
+\noun default
+ where 
+\noun on
+next
+\noun default
+ and 
+\noun on
+prev
+\noun default
+ act as pointers in a doubly linked list containing the chain.
+ When inserting into a nonempty list, we find an empty index of the array,
+ store the 
+\noun on
+key
+\noun default
+ in it and connect it with the list.
+ When inserting into an empty list, it can happen that the index where the
+ list should start is occupied by another item.
+ In this situation we first have to 
+\emph on
+move
+\emph default
+ the item to another free position (that's why the list is doubly linked).
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Hashing with two pointers.
+
+\emph default
+ As the need to move elements is annoying, we show a modified scheme where
+ every index of the array contains fields 
+\noun on
+begin
+\noun default
+, 
+\noun on
+key
+\noun default
+ and 
+\noun on
+next
+\noun default
+.
+ 
+\noun on
+Begin
+\noun default
+ contains the index of the chain that hashes to this position or a special
+ value if the chain is empty.
+ The other two fields form the actual singly linked lists: 
+\noun on
+key
+\noun default
+ contains the stored key and 
+\noun on
+next
+\noun default
+ contains the index of the next element in the chain or a special value
+ if this is the last item.
+\end_layout
+
+\begin_layout Section
+Coalesced hashing
+\end_layout
+
+\begin_layout Itemize
+We want to store the chains in the array and want to save more space, although
+ it can make the chains longer (again, we need 
+\begin_inset Formula $m\ge n$
+\end_inset
+
+).
+ The array items contains fields 
+\noun on
+key
+\noun default
+ and 
+\noun on
+next
+\noun default
+, the chains are formed by the 
+\noun on
+next
+\noun default
+ links.
+ There are two groups of methods:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Standard coalesced hashing
+\emph default
+ (SCH) uses a standard array of length 
+\begin_inset Formula $m$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Coalesced hashing
+\emph default
+ (CH) uses a little longer array, where the auxiliary part is used for better
+ handling of collisions (so the chains coalesce less).
+ When finding a free position for a new colliding element, we first check
+ the auxiliary part.
+ Consequently, until the auxiliary part fills up, the chains don't coalesce
+ (they are separated).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Since the chains coalesce, we can't in general case perform normal 
+\noun on
+delete
+\noun default
+s.
+ Instead, we have to mark the elements as deleted, so we can skip them while
+ searching (
+\emph on
+fake
+\emph default
+ 
+\emph on
+deletion
+\emph default
+).
+ To dispose of these ghosts, we additionally have to rehash the table after
+ performing many deletions (rehashing omits the marked elements).
+\end_layout
+
+\begin_layout Itemize
+There are various methods of CH and SCH that differ in the position within
+ chain into which the new colliding elements are inserted.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+EICH and EISCH (
+\emph on
+early insertion
+\emph default
+) insert the elements after the first element in the chain.
+\end_layout
+
+\begin_layout Itemize
+LICH and LISCH (
+\emph on
+late insertion
+\emph default
+) insert the elements after the last element in the chain.
+\end_layout
+
+\begin_layout Itemize
+VICH (
+\emph on
+varied insertion
+\emph default
+) act like LICH in the auxiliary part and like EICH in the main part of
+ the table.
+ That is, the method inserts the new element after the last element in the
+ chain that is still in the auxiliary part of the table (or after the first
+ element if the whole chain is in the main part).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+When maintaining a constant load factor 
+\begin_inset Formula $\alpha$
+\end_inset
+
+, all the coalesced methods have expected 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ performance.
+ Generally, the auxiliary memory in CH methods helps to speed up the operations
+ in comparison to SCH methods.
+ Early insertion is considered better than late insertion because usually
+ it holds that the elements inserted later are more likely to be accessed.
+ The VICH method has the best performance.
+\end_layout
+
+\begin_layout Itemize
+All coalesced methods perform well even when filling the whole table (on
+ average, using the uniformity assumptions).
+ The optimal division of memory between the main and the auxiliary part
+ of the array is around 
+\begin_inset Formula $80\%:20\%$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Open addressing
+\end_layout
+
+\begin_layout Itemize
+We want to get rid of the additional fields in the array and so further
+ improve the constant involved in memory consumption.
+ These techniques are the most popular in practice, although they are more
+ sensitive to a bad choice of the hash function for the input (in practice
+ it usually doesn't hold that all inputs are equally probable, which can
+ break our average-case analyses).
+\end_layout
+
+\begin_layout Itemize
+The array only contains the keys and chains always start on their given
+ indices, so the chains for different hashes can coalesce.
+ It follows that in like in coalesced hashing, we can only perform fake
+ deletions and free the space by rehashing.
+\end_layout
+
+\begin_layout Itemize
+All the algorithms iterate over the indices belonging into the chain until
+ they find an empty space (the end of the chain).
+ It is clear that when the table fills up, all the elements coalesce into
+ one huge chain.
+ That's why we have to keep lower load factor than in other hashing methods
+ (we can afford that, because we use the memory more efficiently).
+\end_layout
+
+\begin_layout Itemize
+We show two methods that differ in the way of finding the next index of
+ the element in the chain.
+\end_layout
+
+\begin_layout Subsubsection
+Hashing with linear probing
+\end_layout
+
+\begin_layout Itemize
+Hashing with linear probing chooses the next index in the array as the position
+ of the following element (circularly, going to the first index after the
+ last).
+ That makes the algorithm very simple and it behaves well with memory caches.
+ 
+\end_layout
+
+\begin_layout Itemize
+The load factor has to be kept low to prevent forming too long chains (
+\begin_inset Formula $\alpha<0.7$
+\end_inset
+
+ is recommended).
+ The method is also very sensitive to breaking the uniformity assumptions.
+\end_layout
+
+\begin_layout Itemize
+When 
+\begin_inset Formula $\alpha\le\alpha'$
+\end_inset
+
+ for some 
+\begin_inset Formula $\alpha'<1$
+\end_inset
+
+, the algorithms need 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ expected time per operation.
+\end_layout
+
+\begin_layout Subsubsection
+Double hashing
+\end_layout
+
+\begin_layout Itemize
+Double hashing uses two hash functions 
+\begin_inset Formula $h_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $h_{2}$
+\end_inset
+
+ where 
+\begin_inset Formula $h_{2}(x)\neq0$
+\end_inset
+
+.
+ For an element 
+\begin_inset Formula $x$
+\end_inset
+
+, the position of 
+\begin_inset Formula $i$
+\end_inset
+
+-th element of its chain is 
+\begin_inset Formula $\left(h_{1}(x)+ih_{2}(x)\right)\bmod m$
+\end_inset
+
+.
+ In order to cover the whole array with any of those sequences, we need
+ 
+\begin_inset Formula $\gcd\left(h_{2}(x),m\right)=1$
+\end_inset
+
+ which is easily achieved by choosing prime 
+\begin_inset Formula $m$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The hashing with linear probing is a special case with 
+\begin_inset Formula $h_{2}(x)=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Since for every element the chain jumps over different locations in the
+ table, the coalescing isn't such a problem.
+ The recommended load factor is 
+\begin_inset Formula $\alpha<0.9$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Restricting 
+\begin_inset Formula $m$
+\end_inset
+
+ to primes can be a problem when resizing the table.
+ It holds that 
+\begin_inset Formula $\forall k>0\ \exists\mbox{prime}\in\interval k{2k}$
+\end_inset
+
+, but it isn't as easy to find it (inttt practice we would precompute a
+ suitable sequence of prime sizes).
+\end_layout
+
+\begin_layout Section
+Universal hashing
+\end_layout
+
+\begin_layout Itemize
+The assumption that all elements of the universe are equally likely to be
+ worked with is very unrealistic.
+ Universal hashing methods drop this assumption and bound the running time
+ for any input averaging over all possible outputs of a (pseudo)random generator.
+\end_layout
+
+\begin_layout Itemize
+The basic algorithm works just like hashing with separate chaining with
+ the difference that the hash function is previously randomly chosen from
+ a universal family of functions.
+\end_layout
+
+\begin_layout Itemize
+A multiset of functions 
+\begin_inset Formula $H=\{h_{i}\mid i\in I\}$
+\end_inset
+
+, 
+\begin_inset Formula $h_{i}:U\rightarrow\{0,\dotsc,m-1\}$
+\end_inset
+
+ is called 
+\begin_inset Formula $c$
+\end_inset
+
+-universal for 
+\begin_inset Formula $c\in\mathbb{R}$
+\end_inset
+
+ iff 
+\begin_inset Formula $\forall x,y\in U$
+\end_inset
+
+, 
+\begin_inset Formula $x\neq y$
+\end_inset
+
+: 
+\begin_inset Formula $\left|\left\{ i\in I\mid h_{i}(x)=h_{i}(y)\right\} \right|\le\frac{c|I|}{m}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The most popular (in theory) 
+\begin_inset Formula $c$
+\end_inset
+
+-universal family is 
+\begin_inset Formula $H\,=\,\left\{ h_{a,b}\mid a,b\in\{0,\dotsc,p-1\}\right\} $
+\end_inset
+
+ where 
+\begin_inset Formula $p\ge|U|$
+\end_inset
+
+ is a prime, 
+\begin_inset Formula $m$
+\end_inset
+
+ is the size of the table and 
+\begin_inset Formula $h_{a,b}(x)=\left((ax+b)\bmod p\right)\bmod m$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Let 
+\begin_inset Formula $x,y\in U$
+\end_inset
+
+, 
+\begin_inset Formula $x\neq y$
+\end_inset
+
+ be fixed.
+ We want to show that the number of pairs 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+ such that 
+\begin_inset Formula $h_{a,b}(x)=h_{a,b}(y)$
+\end_inset
+
+ is at most 
+\begin_inset Formula $\frac{cp^{2}}{m}$
+\end_inset
+
+ for some 
+\begin_inset Formula $c$
+\end_inset
+
+.
+ For any such pair we denote 
+\begin_inset Formula $i:=h_{a,b}(x)=h_{a,b}(y)$
+\end_inset
+
+ and it must hold
+\begin_inset Formula \begin{eqnarray*}
+ax+b & \equiv & i+rm\pmod{p}\\
+ay+b & \equiv & i+sm\pmod{p}\end{eqnarray*}
+
+\end_inset
+
+for some 
+\begin_inset Formula $r,s\in\left\{ 0,\dotsc,\left\lceil \frac{p}{m}\right\rceil -1\right\} $
+\end_inset
+
+.
+ We can also write the congruence in a matrix form.
+\begin_inset Formula \[
+\left(\begin{array}{cc}
+x & 1\\
+y & 1\end{array}\right)\cdot\left(\begin{array}{c}
+a\\
+b\end{array}\right)\equiv\left(\begin{array}{c}
+i+rm\\
+i+sm\end{array}\right)\pmod{p}\]
+
+\end_inset
+
+Since 
+\begin_inset Formula $x\neq y$
+\end_inset
+
+ the first matrix is regular and we are solving a set of linear equations
+ over a Galois field.
+ From a linear algebraic theorem we get that for any combination of the
+ 
+\begin_inset Formula $i,r,s$
+\end_inset
+
+ parameters there is exatly one pair 
+\begin_inset Formula $(a,b)\in\{0,\dotsc,p-1\}^{2}\supseteq U^{2}$
+\end_inset
+
+.
+ Therefore, the number of such pairs is bounded by the number of 
+\begin_inset Formula $i,r,s$
+\end_inset
+
+ combinations, which is 
+\begin_inset Formula $m\left\lceil \frac{p}{m}\right\rceil ^{2}=(1+\epsilon)\frac{p^{2}}{m}$
+\end_inset
+
+ for some 
+\begin_inset Formula $\epsilon>0$
+\end_inset
+
+ (created by rounding).
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Properties of 
+\begin_inset Formula $c$
+\end_inset
+
+-universal systems
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $i\in I$
+\end_inset
+
+ and 
+\begin_inset Formula $x,y\in U$
+\end_inset
+
+ we define 
+\begin_inset Formula $\delta_{i}(x,y):=\begin{cases}
+1 & \mbox{if }x\neq y\mbox{ and }h_{i}(x)=h_{i}(y)\\
+0 & \mbox{otherwise}\end{cases}$
+\end_inset
+
+.
+ Moreover, for 
+\begin_inset Formula $S\subseteq U$
+\end_inset
+
+ we define 
+\begin_inset Formula $\delta_{i}(x,S):=\sum_{z\in S}\delta_{i}(x,z)$
+\end_inset
+
+.
+ This is the number of elements colliding with 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The expected number of elements colliding with 
+\begin_inset Formula $x$
+\end_inset
+
+ equals 
+\begin_inset Formula \[
+\frac{1}{|I|}\sum_{i\in I}\delta_{i}(x,S)=\frac{1}{|I|}\sum_{i\in I}\sum_{z\in S}\delta_{i}(x,z)=\frac{1}{|I|}\sum_{z\in S}\sum_{i\in I}\delta_{i}(x,z)\le\frac{1}{|I|}\sum_{z\in S\setminus\{x\}}\frac{c|I|}{m}=\frac{c\left|S\setminus\{x\}\right|}{m}\le\alpha c\]
+
+\end_inset
+
+Note that 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $S$
+\end_inset
+
+ were arbitrary.
+ Consequently we have the expected length of a chain bounded by 
+\begin_inset Formula $\alpha c$
+\end_inset
+
+ and so when maintaining a constant load factor, the expected complexity
+ of operations is 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+There is a lower bound on the size of a 
+\begin_inset Formula $c$
+\end_inset
+
+-universal family of functions: 
+\begin_inset Formula $|I|\ge\frac{m}{c}\left(\left\lceil \log_{m}N\right\rceil -1\right)$
+\end_inset
+
+.
+ As a consequence, the number of random bits for choosing a function is
+ at least 
+\begin_inset Formula $\log|I|\gtrapprox\log m-\log c+\log\log N-\log\log m$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+There exists a 
+\begin_inset Formula $c$
+\end_inset
+
+-universal system that asymptotically achieves the lower bound on the number
+ of needed random bits.
+\end_layout
+
+\begin_layout Itemize
+For an arbitrary 
+\begin_inset Formula $c$
+\end_inset
+
+-universal system it holds 
+\begin_inset Formula $c\ge1-\frac{m}{N}\doteq1$
+\end_inset
+
+ (usually 
+\begin_inset Formula $m\ll N$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section
+Perfect hashing
+\end_layout
+
+\begin_layout Itemize
+In perfect hashing we try to find for a set 
+\begin_inset Formula $S\subseteq U$
+\end_inset
+
+ a function 
+\begin_inset Formula $h$
+\end_inset
+
+ that satisfies the following requirements:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $h$
+\end_inset
+
+ has no collisions: 
+\begin_inset Formula $\nexists x,y\in S:\, x\neq y,\, h(x)=h(y)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $m$
+\end_inset
+
+ is sufficiently small.
+ We will need 
+\begin_inset Formula $m\in\OO(n)$
+\end_inset
+
+, so the table takes linear space.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $h$
+\end_inset
+
+ is easily computable, ideally we can find 
+\begin_inset Formula $h(x)$
+\end_inset
+
+ in 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Enumerate
+The description of 
+\begin_inset Formula $h$
+\end_inset
+
+ doesn't take much space (if 
+\begin_inset Formula $h$
+\end_inset
+
+ was defined by a table of all values, it would not help us).
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Perfect families
+\end_layout
+
+\begin_layout Itemize
+A family 
+\begin_inset Formula $H$
+\end_inset
+
+ of hash functions is called 
+\emph on
+
+\begin_inset Formula $(N,m,n)$
+\end_inset
+
+-perfect
+\emph default
+ iff for every 
+\begin_inset Formula $S\subseteq U$
+\end_inset
+
+ of size 
+\begin_inset Formula $n$
+\end_inset
+
+ there is 
+\begin_inset Formula $h\in H$
+\end_inset
+
+ such that it uses a table of size 
+\begin_inset Formula $m$
+\end_inset
+
+ and it is perfect for 
+\begin_inset Formula $S$
+\end_inset
+
+ (no collisions on 
+\begin_inset Formula $S$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+There are lower bounds on the size of a 
+\begin_inset Formula $(N,m,n)$
+\end_inset
+
+-perfect system.
+ 
+\begin_inset Formula \[
+|H|\ge\max\left\{ \frac{\binom{N}{n}}{\binom{m}{k}\left(\frac{N}{m}\right)^{n}},\,\frac{\log N}{\log m}\right\} \]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+It is possible to prove the existence of a 
+\begin_inset Formula $(N,m,n)$
+\end_inset
+
+-perfect family of functions by examining all possible functions, but the
+ proof doesn't guarantee the requirements (3) and (4) and it only shows
+ the existence, not a way of finding the function.
+\end_layout
+
+\begin_layout Subsubsection
+Construction of a perfect function
+\end_layout
+
+\begin_layout Itemize
+We show an algorithm that constructs a two-level static hash table such
+ that it satisfies all the mentioned requirements.
+ We use a 
+\begin_inset Formula $c$
+\end_inset
+
+-universal family 
+\begin_inset Formula $H$
+\end_inset
+
+ of hash functions.
+ The first level will be a hash table of size 
+\begin_inset Formula $m=2cn$
+\end_inset
+
+ with hash function 
+\begin_inset Formula $h$
+\end_inset
+
+ such that the number of collisions 
+\begin_inset Formula $R\le n$
+\end_inset
+
+, dividing the 
+\begin_inset Formula $n$
+\end_inset
+
+ elements into chains of length 
+\begin_inset Formula $n_{i}$
+\end_inset
+
+.
+ Every chain will be stored in a 
+\emph on
+perfect
+\emph default
+ table of size 
+\begin_inset Formula $m_{i}=2cn_{i}^{2}$
+\end_inset
+
+ by a hash function 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+.
+ We also need to store the parameters of these functions 
+\begin_inset Formula $h$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ so we can evaluate them when working with the table.
+\end_layout
+
+\begin_layout Itemize
+We describe the idea of a proof:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We know that the the expected number of collisions with a fixed 
+\begin_inset Formula $x\in U$
+\end_inset
+
+ is at most 
+\begin_inset Formula $\alpha c=\frac{n}{m}c$
+\end_inset
+
+, so the expected number of collisions in 
+\begin_inset Formula $S$
+\end_inset
+
+ is at most 
+\begin_inset Formula $\sum_{x\in S}\frac{n}{m}c=\frac{n^{2}}{m}c$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $h$
+\end_inset
+
+ we chose 
+\begin_inset Formula $m=2cn$
+\end_inset
+
+, so 
+\begin_inset Formula $\Exp R\le\frac{n^{2}}{m}c=\frac{n^{2}}{2cn}c=\frac{n}{2}$
+\end_inset
+
+ and by Markov inequality we get that the probability of finding a suitable
+ function in 
+\begin_inset Formula $H$
+\end_inset
+
+ (with 
+\begin_inset Formula $R\le n)$
+\end_inset
+
+ is at least 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ we chose 
+\begin_inset Formula $m_{i}=2cn_{i}^{2}$
+\end_inset
+
+, so 
+\begin_inset Formula $\Exp{R_{i}}\le\frac{n_{i}^{2}}{m_{i}}c=\frac{n_{i}^{2}}{2cn_{i}^{2}}c=\frac{1}{2}$
+\end_inset
+
+ and by Markov inequality we get that the probability of finding a perfect
+ function 
+\begin_inset Formula $h_{i}\in H$
+\end_inset
+
+ is at least 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The tables obviously need space 
+\begin_inset Formula \[
+\OO\left(m+\sum_{i}m_{i}\right)=\OO\left(n+\sum_{i}n_{i}^{2}\right)=\OO\left(n+R+n\right)=\OO(n)\]
+
+\end_inset
+
+where the middle equality is due to the fact that the number of collisions
+ 
+\begin_inset Formula $R$
+\end_inset
+
+ can be written as follows.
+ 
+\begin_inset Formula \[
+R=\sum_{i}n_{i}(n_{i}-1)=\sum_{i}n_{i}^{2}-\sum_{i}n_{i}=\sum_{i}n_{i}^{2}-n\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Note that this static construction can be modified to a dynamically maintained
+ perfect hash table (with bigger constant factors).
+ That gives us 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ search in the wost case and 
+\begin_inset Formula $\OO(1)$
+\end_inset
+
+ expected amortized updates in 
+\begin_inset Formula $\OO(n)$
+\end_inset
+
+ space.
+\end_layout
+
+\begin_layout Section
+Exendible hashing
+\end_layout
+
+\begin_layout Paragraph
+The external memory model
+\end_layout
+
+\begin_layout Itemize
+The external memory is divided into blocks and it can't be accessed directly.
+ We can only read a block from disc to (internal) memory or write a block
+ to disc.
+ When storing keys on the disc we denote 
+\begin_inset Formula $b$
+\end_inset
+
+ the number of keys that fit into one block and we suppose 
+\begin_inset Formula $b>1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+We can only keep a limited number of blocks in memory.
+\end_layout
+
+\begin_layout Itemize
+The accesses to discs are so slow compared to memory that we only count
+ the number of disc operations for the time complexity.
+\end_layout
+
+\begin_layout Subsubsection
+The hashing method
+\end_layout
+
+\begin_layout Itemize
+We use a hash function 
+\begin_inset Formula $h$
+\end_inset
+
+ that hashes every element into a word consisting of ones and zeros.
+\end_layout
+
+\begin_layout Itemize
+The structure consists of a directory that holds pointers to disc blocks
+ containing the actual keys.
+ The directory is an array of length 
+\begin_inset Formula $2^{l}$
+\end_inset
+
+ and on index 
+\begin_inset Formula $i$
+\end_inset
+
+ it contains the identifier of the block that stores all the keys whose
+ first 
+\begin_inset Formula $l$
+\end_inset
+
+ bits of hash are equal to 
+\begin_inset Formula $i$
+\end_inset
+
+ (and there may be some other keys).
+\end_layout
+
+\begin_layout Itemize
+Every block 
+\begin_inset Formula $P$
+\end_inset
+
+ has a number 
+\begin_inset Formula $l_{P}\le l$
+\end_inset
+
+ which is the number of starting bits that are guaranteed to be common for
+ all the keys stored within 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ This common prefix of length 
+\begin_inset Formula $l_{P}$
+\end_inset
+
+ is called 
+\emph on
+critical word
+\emph default
+.
+ The indices in the directory that point to the block 
+\begin_inset Formula $P$
+\end_inset
+
+ are exactly those that start with the critical word of 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ As a consequence we have 
+\begin_inset Formula $2^{l-l_{P}}$
+\end_inset
+
+ pointers to 
+\begin_inset Formula $P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+The operation algorithms
+\end_layout
+
+\begin_layout Standard
+When describing the operations we suppose that the directory is held in
+ the main memory.
+ Otherwise we would need more block reading and writing, especially when
+ resizing the directory.
+\end_layout
+
+\begin_layout Standard
+If we wanted to store some additional data associated with the key, the
+ operations would need some additional block reading or writing proportional
+ to the size of stored data.
+\end_layout
+
+\begin_layout Paragraph
+Operation 
+\noun on
+find
+\noun default
+
+\begin_inset Formula $(x)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+first computes the first 
+\begin_inset Formula $l$
+\end_inset
+
+ bits of the hash value 
+\begin_inset Formula $h(x)$
+\end_inset
+
+ and on this index of the directory it finds the indentifier of a block
+ (pointer to a block).
+ If the pointer equals 
+\family sans
+nil
+\family default
+ we exit immediately, otherwise we read the block into the memory and search
+ its contents for 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Thus we at most need to read one block.
+\end_layout
+
+\begin_layout Paragraph
+Operation 
+\noun on
+insert
+\noun default
+
+\begin_inset Formula $(x)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+first finds the block 
+\begin_inset Formula $P$
+\end_inset
+
+ in which 
+\begin_inset Formula $x$
+\end_inset
+
+ belongs (reading 
+\begin_inset Formula $P$
+\end_inset
+
+ in the process).
+ If 
+\begin_inset Formula $x$
+\end_inset
+
+ is in 
+\begin_inset Formula $P$
+\end_inset
+
+, we terminate the operation.
+ Otherwise we insert 
+\begin_inset Formula $x$
+\end_inset
+
+ into 
+\begin_inset Formula $P$
+\end_inset
+
+ but if it was full, we have to split 
+\begin_inset Formula $P$
+\end_inset
+
+ first as follows.
+\end_layout
+
+\begin_layout Standard
+The hashes of the keys in 
+\begin_inset Formula $P$
+\end_inset
+
+ share the first 
+\begin_inset Formula $l_{P}$
+\end_inset
+
+ bits.
+ To free one more position in 
+\begin_inset Formula $P$
+\end_inset
+
+ we have to find 
+\begin_inset Formula $l_{P}'$
+\end_inset
+
+: a higher value for 
+\begin_inset Formula $l_{P}$
+\end_inset
+
+ such that it splits away at least one element.
+ The value 
+\begin_inset Formula $l_{P}+1$
+\end_inset
+
+ usually suffices, but 
+\begin_inset Formula $l_{p}'$
+\end_inset
+
+ may have to get higher.
+ Every increment of 
+\begin_inset Formula $l_{P}$
+\end_inset
+
+ splits in half the part of the universe set covered by the block.
+ If both of the halves contain at least one key, we fit in.
+ Otherwise we have to split again.
+  This divides the keys from 
+\begin_inset Formula $P$
+\end_inset
+
+ into two blocks (and possibly some 
+\begin_inset Quotes eld
+\end_inset
+
+empty blocks
+\begin_inset Quotes erd
+\end_inset
+
+ which we don't allocate and represent pointers to them by the special 
+\family sans
+nil
+\family default
+ value).
+ We allocate a new block on disc and write the new contents into the two
+ blocks (we reuse the old block of 
+\begin_inset Formula $P$
+\end_inset
+
+).
+ Then we have to update our directory.
+\end_layout
+
+\begin_layout Standard
+First we have to check that the directory is large enough 
+\begin_inset Formula $\left(l\ge l_{P}'\right)$
+\end_inset
+
+ and increase its size if it isn't.
+ The resize just creates the new directory array of length 
+\begin_inset Formula $2^{l_{P}'}$
+\end_inset
+
+ and every block pointer from the old array is replaced by its copies on
+ consecutive 
+\begin_inset Formula $2^{l_{P}'-l}$
+\end_inset
+
+ indices.
+ The usual case is increasing 
+\begin_inset Formula $l$
+\end_inset
+
+ by 
+\begin_inset Formula $1$
+\end_inset
+
+ so every pointer is doubled.
+ Since usually we suppose that the directory fits into the main memory,
+ the resize needs no disc operations.
+\end_layout
+
+\begin_layout Standard
+Whether we increased the size of our directory or not, its update then consists
+ of changing the indices that pointed to 
+\begin_inset Formula $P$
+\end_inset
+
+ to point to the correct of the two blocks or 
+\family sans
+nil
+\family default
+.
+ There was 
+\begin_inset Formula $2^{l-l_{P}}$
+\end_inset
+
+ pointers to 
+\begin_inset Formula $P$
+\end_inset
+
+ and we find them on the indices corresponding to 
+\begin_inset Formula $P$
+\end_inset
+
+'s 
+\emph on
+critical word
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+To sum up, the worst case for needed disc block operations is when 
+\begin_inset Formula $P$
+\end_inset
+
+ has to be split and it consists of one reading, one writing and one allocation
+ with writing.
+\end_layout
+
+\begin_layout Paragraph
+Operation 
+\noun on
+delete
+\noun default
+
+\begin_inset Formula $(x)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+first finds the block 
+\begin_inset Formula $P$
+\end_inset
+
+ in which 
+\begin_inset Formula $x$
+\end_inset
+
+ belongs (reading 
+\begin_inset Formula $P$
+\end_inset
+
+ in the process).
+ If 
+\begin_inset Formula $x$
+\end_inset
+
+ isn't in 
+\begin_inset Formula $P$
+\end_inset
+
+, we terminate the operation.
+ Otherwise we delete 
+\begin_inset Formula $x$
+\end_inset
+
+ from 
+\begin_inset Formula $P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then we need to find out if we can merge 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ We take the 
+\emph on
+critical word
+\emph default
+ of 
+\begin_inset Formula $P$
+\end_inset
+
+ (the first common 
+\begin_inset Formula $l_{P}$
+\end_inset
+
+ bits), flip the least significant bit and look at the resulting index in
+ our directory.
+ If it points to such a block 
+\begin_inset Formula $Q$
+\end_inset
+
+ that 
+\begin_inset Formula $l_{P}=l_{Q}$
+\end_inset
+
+ and their keys can fit into a single block (we read 
+\begin_inset Formula $Q$
+\end_inset
+
+ in the process), we merge 
+\begin_inset Formula $P$
+\end_inset
+
+ and 
+\begin_inset Formula $Q$
+\end_inset
+
+.
+ That consists of deallocating 
+\begin_inset Formula $Q$
+\end_inset
+
+, writing the new contents into 
+\begin_inset Formula $P$
+\end_inset
+
+ and replacing pointers to 
+\begin_inset Formula $Q$
+\end_inset
+
+ by pointers to 
+\begin_inset Formula $P$
+\end_inset
+
+ (
+\begin_inset Formula $l_{P}$
+\end_inset
+
+ is decreased by one).
+ It also may be possible to merge the resulting block with adjacent 
+\begin_inset Quotes eld
+\end_inset
+
+empty blocks
+\begin_inset Quotes erd
+\end_inset
+
+ represented in the directory by 
+\family sans
+nil
+\family default
+ pointers (the inverse case to multiple splitting during
+\family sans
+ 
+\noun on
+insert
+\family default
+\noun default
+).
+\end_layout
+
+\begin_layout Standard
+As we decreased 
+\begin_inset Formula $l_{P}$
+\end_inset
+
+, we can reduce the size of the dictionary if now 
+\begin_inset Formula $l>\max\left\{ l_{R}\mid\mbox{block }R\right\} $
+\end_inset
+
+.
+ To be able to find this out, we can store the 
+\begin_inset Formula $l_{R}$
+\end_inset
+
+ values within the directory and always scan them (if it can be kept in
+ the main memory).
+ A more efficient way is to maintain the total counts of used 
+\begin_inset Formula $l_{R}$
+\end_inset
+
+ values, which is just an array of length 
+\begin_inset Formula $l$
+\end_inset
+
+ containing small integers.
+\end_layout
+
+\begin_layout Standard
+Resizing the dictionary is again straightforward.
+ Let 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $l'=\max\left\{ l_{R}\mid\mbox{block }R\right\} $
+\end_inset
+
+, then we are guaranteed that the consecutive segments of length 
+\begin_inset Formula $2^{l-l'}$
+\end_inset
+
+ in the dictionary contain the same block pointers, so we can replace the
+ segments by single items.
+\end_layout
+
+\begin_layout Standard
+To sum up, the worst case for needed disc block operations is when 
+\begin_inset Formula $P$
+\end_inset
+
+ is merged and it consists of two readings, one writing and one deallocation.
+\end_layout
+
+\begin_layout Subsubsection
+Expected properties
+\end_layout
+
+\begin_layout Itemize
+We suppose the usual uniformity assumptions for simple hashing.
+\end_layout
+
+\begin_layout Itemize
+The expected number of pages used equals 
+\begin_inset Formula $\frac{n}{b\ln2}$
+\end_inset
+
+.
+ That is, the blocks are expected to be 69% full.
+\end_layout
+
+\begin_layout Itemize
+The expected size of the directory equals 
+\begin_inset Formula $\frac{b\mathbb{e}}{\ln2}n^{1+1/b}$
+\end_inset
+
+.
+ This can be a problem for low 
+\begin_inset Formula $b$
+\end_inset
+
+ values where the size of the directory grows almost quadratically.
+\end_layout
+
+\end_body
+\end_document
