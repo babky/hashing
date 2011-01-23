@@ -1908,5 +1908,383 @@ The expected size of the directory equals
  values where the size of the directory grows almost quadratically.
 \end_layout
 
+\begin_layout Chapter
+Trees
+\end_layout
+
+\begin_layout Section
+The ordered dictionary problem
+\end_layout
+
+\begin_layout Standard
+We suppose an arbitrary universe set that is totally ordered (for any pair
+ of keys we can decide their correct order).
+ All keys are opaque and we only read, write or compare them (e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+\begin_inset space ~
+\end_inset
+
+no arithmetics like in hashing).
+ We again study data structures for holding a subset of the universe set.
+\end_layout
+
+\begin_layout Subsubsection
+Supported operations
+\end_layout
+
+\begin_layout Standard
+We know the basic operations from hashing: 
+\noun on
+insert
+\noun default
+
+\begin_inset Formula $(T,x)$
+\end_inset
+
+, 
+\noun on
+delete
+\noun default
+
+\begin_inset Formula $(T,X)$
+\end_inset
+
+ and 
+\noun on
+find
+\noun default
+
+\begin_inset Formula $(T,x)$
+\end_inset
+
+.
+ Tree structures often support additional operations:
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+min
+\noun default
+
+\begin_inset Formula $(T)$
+\end_inset
+
+ and 
+\noun on
+max
+\noun default
+
+\begin_inset Formula $(T)$
+\end_inset
+
+ find the extremes of the represented set.
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+split
+\noun default
+
+\begin_inset Formula $(T,x)$
+\end_inset
+
+ splits the represented set by 
+\begin_inset Formula $x$
+\end_inset
+
+ into two trees 
+\begin_inset Formula $T_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $T_{2}$
+\end_inset
+
+.
+ The resulting trees contain the keys from 
+\begin_inset Formula $T$
+\end_inset
+
+ that are less than 
+\begin_inset Formula $x$
+\end_inset
+
+ or greater than 
+\begin_inset Formula $x$
+\end_inset
+
+, respectively.
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+join2
+\noun default
+
+\begin_inset Formula $(T_{1},T_{2})$
+\end_inset
+
+ and 
+\noun on
+join3
+\noun default
+
+\begin_inset Formula $(T_{1},x,T_{2})$
+\end_inset
+
+ are the inverse operations to 
+\noun on
+split
+\noun default
+.
+ We require that 
+\begin_inset Formula $\max T_{1}<x<\min T_{2}$
+\end_inset
+
+ and the result is a tree that represents all the keys from 
+\begin_inset Formula $T_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $T_{2}$
+\end_inset
+
+ and also 
+\begin_inset Formula $x$
+\end_inset
+
+ in the case of 
+\noun on
+join3
+\noun default
+.
+ In various structures we only show the simpler of the operations and the
+ other one can be simulated by adding an extra insertion or deletion.
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $(T,k)$
+\end_inset
+
+ finds the 
+\begin_inset Formula $k$
+\end_inset
+
+-th smallest key in 
+\begin_inset Formula $T$
+\end_inset
+
+ (counting from zero).
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+rank
+\noun default
+
+\begin_inset Formula $(T,x)$
+\end_inset
+
+ returns the number of keys less than 
+\begin_inset Formula $x$
+\end_inset
+
+ that are in 
+\begin_inset Formula $T$
+\end_inset
+
+ (an inverse query to 
+\noun on
+ord
+\noun default
+).
+\end_layout
+
+\begin_layout Standard
+Like in hashing the keys can also have some data associated with them.
+ We won't discuss this extension because it is simple as the data don't
+ affect how the structures behave.
+\end_layout
+
+\begin_layout Section
+(a,b)-trees
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+-trees are rooted trees where:
+\end_layout
+
+\begin_layout Itemize
+all leaves are in the same depth, one for every represented key (in practice
+ we would rather represent between 
+\begin_inset Formula $c$
+\end_inset
+
+ and 
+\begin_inset Formula $d$
+\end_inset
+
+ keys in one leaf node but that is a straightforward extension of the structure)
+\end_layout
+
+\begin_layout Itemize
+the number of child nodes of the root node is between 2 and 
+\begin_inset Formula $b$
+\end_inset
+
+ (inclusively)
+\end_layout
+
+\begin_layout Itemize
+the number of child nodes of a nonleaf nonroot node is between 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+The depth of any 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+-tree with 
+\begin_inset Formula $n$
+\end_inset
+
+ leaves is between 
+\begin_inset Formula $\log_{b}n$
+\end_inset
+
+ and 
+\begin_inset Formula $1+\log_{a}\frac{n}{2}$
+\end_inset
+
+.
+ That is, the depth is 
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+By induction we show that the number of a tree with depth 
+\begin_inset Formula $h$
+\end_inset
+
+ is between X and Y.
+ TODO
+\end_layout
+
+\begin_layout Standard
+Every nonleaf node 
+\begin_inset Formula $v$
+\end_inset
+
+ of the tree consists of the following fields:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $p(v)$
+\end_inset
+
+ is the number of child nodes of 
+\begin_inset Formula $v$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $S_{v}\left[1\dots p(v)\right]$
+\end_inset
+
+ is an array of pointers to child nodes
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $H_{v}\left[1\dots p(v)-1\right]$
+\end_inset
+
+ is an array of keys such that 
+\begin_inset Formula $H_{v}[i]$
+\end_inset
+
+ is the maximum key represented by 
+\begin_inset Formula $S_{v}[i]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In the usual variant of 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+-trees we need that 
+\begin_inset Formula $a\ge2$
+\end_inset
+
+ and 
+\begin_inset Formula $b\ge2a-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Standard algorithms
+\end_layout
+
+\begin_layout Subsubsection
+Parallel algorithms
+\end_layout
+
+\begin_layout Subsubsection
+Order statistics
+\end_layout
+
+\begin_layout Subsubsection
+Finger trees
+\end_layout
+
+\begin_layout Section
+Binary search trees
+\end_layout
+
+\begin_layout Subsection
+Basic BSTs
+\end_layout
+
+\begin_layout Subsection
+AVL trees
+\end_layout
+
+\begin_layout Subsection
+Red-black trees
+\end_layout
+
 \end_body
 \end_document
