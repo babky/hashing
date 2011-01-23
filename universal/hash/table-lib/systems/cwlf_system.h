@@ -3,6 +3,7 @@
 
 #include "utils/hash_assert.h"
 #include "utils/rehash_observer.h"
+#include "utils/static_random_generator.h"
 
 namespace Hash {
 
@@ -41,8 +42,8 @@ namespace Hash {
 		}
 
 		void reset(void) {
-			Hash::Utils::IntegralGeneratorWrapper<size_t> g = 
-					Hash::Utils::IntegralGeneratorWrapper<size_t>(0, this->getUniversumMax());
+			Hash::Utils::IntegralGeneratorWrapper<size_t> g =
+				Hash::Utils::IntegralGeneratorWrapper<size_t>(0, this->getUniversumMax());
 
 			this->a = g.generate();
 			this->b = g.generate();
