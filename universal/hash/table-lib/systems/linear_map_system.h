@@ -1,6 +1,7 @@
 #ifndef LINEAR_MAP_SYSTEM_H
 #define LINEAR_MAP_SYSTEM_H
 
+#include <boost/config.hpp>
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512 4127 4100)
 #endif

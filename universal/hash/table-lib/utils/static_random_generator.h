@@ -2,6 +2,7 @@
 #define STATIC_RANDOM_GENERATOR_H
 
 #include "random_generator.h"
+#include <boost/config.hpp>
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512 4127 4100)
 #endif
