@@ -25,11 +25,18 @@ class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFu
 };
 
 int main(int, const char **) {
-	const size_t TABLE_SIZE = 100000;
-	Table<int, ConstantComparer<int>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage> t(TABLE_SIZE);
+	const size_t TEST_LENGTH = 1 << 24;
+	RandomGenerator<size_t> generator(0, 8 * TEST_LENGTH, true);
+	Table<int, ConstantComparer<int>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage> t(TEST_LENGTH);
 	
-	for (size_t i = 0; i < TABLE_SIZE; ++i) {
-		t.insert(i);
+	for (size_t i = 0; i < TEST_LENGTH; ++i) {
+		t.insert(generator.generate());
+
+		/*if (0 == i % 1000) {
+			StorageStatistics s;
+			t.computeStatistics(s);
+			std::cout << s;
+		}*/
 	}
 
 	StorageStatistics s;

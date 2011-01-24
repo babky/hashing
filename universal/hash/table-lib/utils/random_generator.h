@@ -1,10 +1,10 @@
 #ifndef RANDOM_GENERATOR_H
 #define RANDOM_GENERATOR_H
 
+#include <boost/config.hpp>
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512 4127 4100)
 #endif
-#include <boost/config.hpp>
 #include <boost/date_time.hpp>
 #include <boost/random.hpp>
 #ifdef BOOST_MSVC

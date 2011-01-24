@@ -48,6 +48,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
+				WarnAsError="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -117,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\trunk\hash\table-lib&quot;;..\..\..\..\vendor\boost"
+				AdditionalIncludeDirectories="&quot;..\..\table-lib&quot;;..\..\..\..\vendor\boost"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -139,7 +140,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="table-lib.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\..\..\trunk\hash\vcproj\Release&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\vcproj\Release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
