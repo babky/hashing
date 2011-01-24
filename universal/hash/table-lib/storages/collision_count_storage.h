@@ -1,7 +1,8 @@
 #ifndef COLLISION_COUNT_STORAGE_H
 #define COLLISION_COUNT_STORAGE_H
 
-#include "../storage.h"
+#include "utils/chain_length_aware_storage_info.h"
+#include "storage.h"
 #include "utils/constant_comparer.h"
 
 namespace Hash { namespace Storages {
@@ -15,7 +16,7 @@ namespace Hash { namespace Storages {
 	 * @typeparam Hash Type of the hash value.
 	 */
 	template <typename T, typename Comparer, typename Hash> 
-	class CollisionCountStorage : public Storage<T, Comparer, Hash> {
+	class CollisionCountStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
 	public:
 		/**
          * A single item of storage -- length of the chain.
@@ -155,6 +156,11 @@ namespace Hash { namespace Storages {
 			size_t chainIndex;
 			CollisionCountStorage * storage;
 		};
+
+		// ChainLengthAwareStorage
+		virtual size_t getChainLength(size_t address) const {
+			return storage[address];
+		}
 
 	protected:
 		virtual void init(void) {

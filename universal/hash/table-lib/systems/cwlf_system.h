@@ -14,7 +14,7 @@ namespace Hash {
 	public:
 		typedef size_t HashType;
 		
-		UniversalFunctionCWLF(size_t length = START_LENGTH, size_t universumMax = START_UNIVERSUM_MAX) {
+		explicit UniversalFunctionCWLF(size_t length = START_LENGTH, size_t universumMax = START_UNIVERSUM_MAX) {
 			this->setUniversumMax(universumMax);
 			this->setLength(length);
 			this->reset();
@@ -65,7 +65,6 @@ namespace Hash {
 	private:
 		class RehashObserver : public Hash::Utils::RehashObserver {
 		public:
-
 			RehashObserver(UniversalFunctionCWLF<T> * function):
 			  f(function){
 			}
@@ -76,7 +75,6 @@ namespace Hash {
 				
 		private:
 			UniversalFunctionCWLF<T> * f;
-
 		};
 
 		const static size_t START_UNIVERSUM_MAX = 65537;

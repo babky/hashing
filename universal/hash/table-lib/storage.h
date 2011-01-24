@@ -73,8 +73,8 @@ namespace Hash {
 	/**
 	 * Interface for the storage.
 	 */
-	template <typename T, typename Comparer, typename Hash>
-	class Storage : public StorageInfo {
+	template <typename T, typename Comparer, typename Hash, class StorageInfoType = StorageInfo>
+	class Storage : public StorageInfoType {
 	public:
 		/**
 		 * Inserts the {@code element} into the table.
