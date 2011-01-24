@@ -1,7 +1,13 @@
 #ifndef LINEAR_MAP_SYSTEM_H
 #define LINEAR_MAP_SYSTEM_H
 
+#ifdef BOOST_MSVC
+	#pragma warning(disable: 4512 4127 4100)
+#endif
 #include <boost/integer_traits.hpp>
+#ifdef BOOST_MSVC
+	#pragma warning(default: 4512 4127 4100)
+#endif
 #include <utils/hash_assert.h>
 #include <utils/static_random_generator.h>
 #include <utils/hash_math.h>

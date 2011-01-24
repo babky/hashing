@@ -46,7 +46,6 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="4"
-				WarnAsError="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -221,6 +220,10 @@
 				Name="Utils"
 				>
 				<File
+					RelativePath="..\utils\constant_comparer.h"
+					>
+				</File>
+				<File
 					RelativePath="..\utils\definitions.h"
 					>
 				</File>
@@ -306,6 +309,10 @@
 				</File>
 				<File
 					RelativePath="..\storages\chained_storage.h"
+					>
+				</File>
+				<File
+					RelativePath="..\storages\collision_count_storage.h"
 					>
 				</File>
 			</Filter>

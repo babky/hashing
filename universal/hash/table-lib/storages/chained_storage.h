@@ -477,7 +477,7 @@ namespace Hash { namespace Storages {
 					this->chainIterator = this->storage->storage[this->chainIndex].getBeginning();
 				}
 
-				return (*this);
+				return *this;
 			}
 
 			ChainedStorageIterator operator++(int) {
