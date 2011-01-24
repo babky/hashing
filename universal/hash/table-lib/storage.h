@@ -115,7 +115,8 @@ namespace Hash {
 		virtual Comparer getComparer(void) const = 0;
 
 		/**
-		 * Minimality check.
+		 * Minimality check, checks if the table has the minimal possible size. It is the size of the table just after
+		 * initialization.
 		 *
 		 * @return Minimality status of the table.
 		 */

@@ -4,7 +4,7 @@
 namespace Hash { namespace Storages {
 
 	/**
-	 * Typical storage for a hashing table - linear chaining.
+	 * Typical storage for a hashing table - separate chaining.
 	 *
 	 * @typeparam T Type of the stored items.
 	 * @typeparam Comparer Comparer used.
@@ -477,7 +477,7 @@ namespace Hash { namespace Storages {
 					this->chainIterator = this->storage->storage[this->chainIndex].getBeginning();
 				}
 
-				return (*this);
+				return *this;
 			}
 
 			ChainedStorageIterator operator++(int) {
