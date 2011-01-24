@@ -1,7 +1,7 @@
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
 set(SOURCES 
-  ../two-way-test.cpp
+  ../table_two_way_test.cpp
 )
 
 include_directories( 
