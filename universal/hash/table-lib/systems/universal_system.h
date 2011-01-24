@@ -5,10 +5,21 @@ namespace Hash { namespace Systems {
 
 	/**
 	 * Abstraction of a system of universal functions.
+	 * Also note that each of the systems must provide the definition HashType - type of the hash value returned by the
+	 * system.
+	 *
+	 * @typeparam T The type of the hashed values.
 	 */
 	template<typename T>
 	class UniversalSystem {
 	public:
+		/**
+		 * Initializes the system and adapts it to the given storage.
+		 *
+		 * @param info Storage information according to which the system should be adapted.
+		 */
+		virtual void initialize(Hash::Utils::ChainLengthAwareStorageInfo & info) = 0;
+
 		/**
 		 * Resets the function - chooses another from the universal system.
 		 */
