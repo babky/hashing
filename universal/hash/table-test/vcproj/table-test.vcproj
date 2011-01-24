@@ -40,13 +40,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\trunk\hash\table-lib&quot;;..\..\..\..\vendor\boost;&quot;..\..\..\..\trunk\hash\test-suite&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\table-lib&quot;;..\..\..\..\vendor\boost;&quot;..\..\test-suite&quot;"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="4"
-				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -62,7 +62,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="table-lib.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\..\..\trunk\hash\vcproj\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\vcproj\Debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
