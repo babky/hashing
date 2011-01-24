@@ -90,6 +90,17 @@ namespace Hash {
 		/**
 		 * Constructor.
 		 *
+		 * @param tableLength Length of the table.
+		 */
+		explicit Table(size_t tableLength):
+		  storage(HashStorage(tableLength)),
+		  rehashObserver(0) {
+			init();
+		}
+
+		/**
+		 * Constructor.
+		 *
 		 * @param comparer Comparer used to determine the equality of items.
 		 */
 		explicit Table(const EqualityComparer & comparer):
