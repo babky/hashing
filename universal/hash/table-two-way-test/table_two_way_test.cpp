@@ -114,7 +114,7 @@ private:
 	size_t testLength;
 };
 
-int main(int argc, const char ** argv) {
+int main(int argc, char ** argv) {
 	const size_t DEFAULT_TEST_LENGTH = 1 << 10;
 	const size_t DEFAULT_THREADS = 1;
 	const size_t DEFAULT_REPEATS = 1 << 5;
