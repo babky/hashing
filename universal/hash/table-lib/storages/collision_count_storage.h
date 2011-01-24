@@ -111,6 +111,9 @@ namespace Hash { namespace Storages {
 			return CollisionCountStorageIterator(this, false);
 		}
 
+		/**
+		 * Iterator for the table.
+		 */
 		class CollisionCountStorageIterator {
 		public:
 			CollisionCountStorageIterator(CollisionCountStorage * s, bool beginning):
@@ -136,11 +139,15 @@ namespace Hash { namespace Storages {
 			}
 
 			CollisionCountStorageIterator operator ++(void) {
-				while (tableIndex < storage->storageSize && storage->storage[tableIndex] == 0) {
-					++tableIndex;
+				// Move.
+				++chainIndex;
+				if (chainIndex >= storage[tableIndex]) {
+					// We are behind the last element, find the next chain.
+					chainIndex = 0;
+					while (tableIndex < storage->storageSize && storage->storage[tableIndex] == 0) {
+						++tableIndex;
+					}
 				}
-
-				chainIndex = 0;
 
 				return *this;
 			}
@@ -152,8 +159,19 @@ namespace Hash { namespace Storages {
 			}
 
 		private:
+			/**
+			 * Index of the iterated chain.
+			 */
 			size_t tableIndex;
+
+			/**
+			 * Index of the element in the chain.
+			 */
 			size_t chainIndex;
+
+			/**
+			 * Storage which is iterated.
+			 */
 			CollisionCountStorage * storage;
 		};
 
@@ -163,6 +181,9 @@ namespace Hash { namespace Storages {
 		}
 
 	protected:
+		/**
+		 * Initializes the table - sizes of all chains are zeroed.
+		 */
 		virtual void init(void) {
 			// TODO: memset!
 			for (size_t i = 0; i < storageSize; ++i) {

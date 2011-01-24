@@ -8,15 +8,27 @@
 namespace Hash { namespace Systems {
 
 	/**
-	 * System allowing two way universal hash function.
+	 * System allowing two way universal hash function. The value is hashed to the shorter chain.
+	 *
+	 * @typeparam T Type of the hashed values.
+	 * @typeparam System The universal system which will be used.
 	 */
 	template <typename T, template <typename> class System>
-	class TwoWaySystem {
+	class TwoWaySystem : public UniversalSystem<T> {
 	public:
+		/**
+		 * Single function type, it is chosen randomly from the given universal system.
+		 */
 		typedef System<T> Function;
 
+		/**
+		 * Hash value type.
+		 */
 		typedef size_t HashType;
 
+		/**
+		 * C-tor.
+		 */
 		TwoWaySystem(void) {
 			reset();
 		}
@@ -64,8 +76,19 @@ namespace Hash { namespace Systems {
 		}
 
 	private:
+		/**
+		 * Universal function.
+		 */
 		Function f;
+		
+		/**
+		 * Universal function.
+		 */
 		Function g;
+		
+		/**
+		 * Currently used storage.
+		 */
 		Utils::ChainLengthAwareStorageInfo * storage;
 	};
 
