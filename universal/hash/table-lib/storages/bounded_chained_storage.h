@@ -6,7 +6,8 @@
 namespace Hash { namespace Storages {
 
 	/**
-	 * Typical storage for a hashing table - linear chaining.
+	 * Typical storage for a hashing table - seperate chaining. Tracks the information about the lengths of the chain
+	 * lenghts.
 	 *
 	 * @typeparam T Type of the stored items.
 	 * @typeparam Comparer Comparer used.

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="table-length-test"
-	ProjectGUID="{8B5A3427-A4E9-4CD1-A388-4EBD04968BE2}"
-	RootNamespace="tablelengthtest"
+	Name="table-two-way-test"
+	ProjectGUID="{3B07E08A-0F61-4BC6-AD66-0718C25FB97F}"
+	RootNamespace="tabletwowaytest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\table-lib&quot;;..\..\..\..\vendor\boost"
+				AdditionalIncludeDirectories="&quot;..\..\table-lib&quot;;..\..\..\..\vendor\boost;&quot;..\..\test-suite&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,6 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
 				AdditionalDependencies="table-lib.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\vcproj\Debug&quot;"
@@ -118,13 +119,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\trunk\hash\table-lib&quot;;..\..\..\..\vendor\boost"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\trunk\hash\table-lib&quot;;..\..\..\..\vendor\boost;&quot;..\..\..\..\trunk\hash\test-suite&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				WarnAsError="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -138,9 +140,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="table-lib.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\..\..\vendor\boost\stage\lib;..\..\..\..\trunk\hash\vcproj\Release"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\..\..\trunk\hash\vcproj\Release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -179,7 +180,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\test.cpp"
+				RelativePath="..\two-way-test.cpp"
 				>
 			</File>
 		</Filter>
@@ -188,10 +189,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath="..\test.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
