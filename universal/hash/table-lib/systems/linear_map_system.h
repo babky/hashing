@@ -14,6 +14,7 @@
 #include <utils/static_random_generator.h>
 #include <utils/hash_math.h>
 #include <utils/rehash_observer.h>
+#include <stdexcept>
 
 namespace Hash {
 
@@ -110,7 +111,9 @@ namespace Hash {
 		}
 
 		void setUniversumMax(T) {
-			throw new std::exception("Can not change universum max for linear map system.");
+			// TODO: Nicer exception. Can not change the universum max for the linear maps system.
+			// TODO: Better implement.
+			throw new std::exception();
 		}
 
 		UniversalFunctionLinearMap(const UniversalFunctionLinearMap<T> & rhs):

@@ -16,6 +16,9 @@ namespace Hash { namespace Systems {
 	template <typename T, template <typename> class System>
 	class TwoWaySystem : public UniversalSystem<T> {
 	public:
+		// Use the former HashType;
+		using UniversalSystem<T>::HashType;
+	
 		/**
 		 * Single function type, it is chosen randomly from the given universal system.
 		 */
@@ -60,8 +63,8 @@ namespace Hash { namespace Systems {
 		}
 
 		virtual size_t hash(const T & x, size_t length) {
-			HashType hf = f.hash(x, length);
-			HashType hg = g.hash(x, length);
+			size_t hf = f.hash(x, length);
+			size_t hg = g.hash(x, length);
 
 			return storage->getChainLength(hf) < storage->getChainLength(hg) ? hf : hg;
 		}
