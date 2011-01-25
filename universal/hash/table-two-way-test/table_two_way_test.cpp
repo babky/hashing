@@ -1,6 +1,7 @@
 #include "storages/collision_count_storage.h"
 #include "systems/two_way_system.h"
 #include "systems/cwlf_system.h"
+#include "systems/linear_map_system.h"
 #include "table.h"
 #include "function.h"
 #include "universal_systems.h"
@@ -24,10 +25,15 @@ template <typename T>
 class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionCWLF> {
 };
 
+template <typename T>
+class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionLinearMap> {
+};
+
 int main(int, const char **) {
 	const size_t TEST_LENGTH = 1 << 24;
-	RandomGenerator<size_t> generator(0, 8 * TEST_LENGTH, true);
-	Table<int, ConstantComparer<int>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage> t(TEST_LENGTH);
+	typedef boost::uint_fast64_t ValueType;
+	RandomGenerator<ValueType> generator(0, boost::integer_traits<ValueType>::const_max, true);
+	Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, Hash::Storages::CollisionCountStorage> t(TEST_LENGTH);
 	
 	for (size_t i = 0; i < TEST_LENGTH; ++i) {
 		t.insert(generator.generate());
