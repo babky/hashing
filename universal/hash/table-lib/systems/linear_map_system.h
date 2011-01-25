@@ -72,14 +72,16 @@ namespace Hash {
 			);
 
 			// Represent the number in the form of a binary vector.
-			T y = 0;
+			size_t y = 0;
 
 			// Perform matrix and vector multiplication.
 			T c, digits, digits2;
-			const size_t bits = boost::integer_traits<size_t>::digits;
+			const size_t bits = boost::integer_traits<T>::digits;
 
 			for (size_t i = 0; i != this->tableBitSize; ++i) {
 				c = this->matrix[i] & x;
+
+				// Find the parity of c.
 				for (digits = bits / 2; digits != 0; digits /= 2) {
 					digits2 = bits - digits;
 					c = ((c << digits2) >> digits2) ^ (c >> digits);
@@ -88,10 +90,10 @@ namespace Hash {
 				simple_assert(c <= 1, "Parity must be a bit.");
 
 				y <<= 1;
-				y += c;
+				y += (size_t) c;
 			}
 
-			return (size_t) y;
+			return y;
 		}
 
 		size_t operator()(const T & a, size_t length) {
