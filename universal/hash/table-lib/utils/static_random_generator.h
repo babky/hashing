@@ -24,7 +24,7 @@ namespace Hash { namespace Utils {
 			return *generator;
 		}
 
-		static void initialize(T min, T max) {
+		static void initialize(T min = boost::integer_traits<T>::const_min, T max = boost::integer_traits<T>::const_max) {
 			StaticRandomGenerator<T>::generator = new RandomGenerator<T>(min, max, true);
 		}
 
@@ -35,30 +35,6 @@ namespace Hash { namespace Utils {
 	private:
 		static RandomGenerator<T> * generator;
 	}; 
-
-	
-	template<>
-	class StaticRandomGenerator<size_t> {
-	public:
-		static Hash::Utils::RandomGenerator<size_t> & getGenerator(void) {
-			if (!isInitialized()) {
-				initialize();
-			}
-
-			return *generator;
-		}
-
-		static void initialize(size_t min = 0, size_t max = boost::integer_traits<size_t>::const_max) {
-			StaticRandomGenerator<size_t>::generator = new RandomGenerator<size_t>(min, max, true);
-		}
-
-		static bool isInitialized(void) {
-			return StaticRandomGenerator<size_t>::generator != 0;
-		}
-
-	private:
-		static RandomGenerator<size_t> * generator;
-	};
 
 	template<typename T>
 	class IntegralGeneratorWrapper {
