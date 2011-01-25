@@ -1,6 +1,7 @@
 #ifndef LINEAR_MAP_SYSTEM_H
 #define LINEAR_MAP_SYSTEM_H
 
+#include "systems/universal_system.h"
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512 4127 4100)
@@ -19,37 +20,35 @@ namespace Hash {
 	/**
 	 * Linear maps.
 	 */
-	template <typename Type>
-	class UniversalFunctionLinearMap {
+	template <typename T>
+	class UniversalFunctionLinearMap : public Hash::Systems::UniversalSystem<T> {
 	public:
-		const static size_t UNIVERSUM_MAX_VALUE = boost::integer_traits<size_t>::const_max;
+		const static T UNIVERSUM_MAX_VALUE = boost::integer_traits<T>::const_max;
 		const static size_t START_LENGTH = 10;
-
-		typedef Type HashType;
 
 		UniversalFunctionLinearMap():
 		  tableBitSize(START_LENGTH),
 		  tableSize(1 << START_LENGTH),
-		  T(0) {
+		  matrix(0) {
 			reset();
 		}
 
 		~UniversalFunctionLinearMap(void) {
-			delete [] this->T;
-			this->T = 0;
+			delete [] this->matrix;
+			this->matrix = 0;
 		}
 
 		Hash::Utils::RehashObserver * getRehashObserver(void) {
 			return new RehashObserver(this);
 		}
 
-		void setTableSize(size_t length) {
-			this->tableSize = length;
-			this->tableBitSize = Hash::Math::log2exact(length);
-		}
-
 		size_t getTableSize(void) const {
 			return this->tableSize;
+		}
+
+		void setTableSize(size_t size) {
+			this->tableSize = size;
+			this->tableBitSize = Hash::Math::log2exact(size);
 		}
 
 		size_t getTableBitSize(void) const {
@@ -57,30 +56,30 @@ namespace Hash {
 		}
 
 		void reset(void) {
-			delete [] this->T;
-			this->T = new size_t[this->tableBitSize];
+			delete [] this->matrix;
+			this->matrix = new T[this->tableBitSize];
 
-			Hash::Utils::RandomGenerator<size_t> & g = Hash::Utils::StaticRandomGenerator<size_t>::getGenerator();
+			Hash::Utils::RandomGenerator<T> & g = Hash::Utils::StaticRandomGenerator<T>::getGenerator();
 			for (size_t i = 0; i != this->tableBitSize; ++i) {
-				this->T[i] = g.generate();
+				this->matrix[i] = g.generate();
 			}
 		}
 
-		size_t hash(const HashType & x, size_t length) {
+		size_t hash(const T & x, size_t length) {
 			simple_assert(
 				length == this->tableSize, 
 				"Expected table's size differs from the current one for linear map universal function."
 			);
 
-			// Represent a number in the form of a binary vector.
-			size_t y = 0;
+			// Represent the number in the form of a binary vector.
+			T y = 0;
 
 			// Perform matrix and vector multiplication.
-			size_t c, digits, digits2;
+			T c, digits, digits2;
 			const size_t bits = boost::integer_traits<size_t>::digits;
 
 			for (size_t i = 0; i != this->tableBitSize; ++i) {
-				c = this->T[i] & x;
+				c = this->matrix[i] & x;
 				for (digits = bits / 2; digits != 0; digits /= 2) {
 					digits2 = bits - digits;
 					c = ((c << digits2) >> digits2) ^ (c >> digits);
@@ -92,10 +91,10 @@ namespace Hash {
 				y += c;
 			}
 
-			return y;
+			return (size_t) y;
 		}
 
-		size_t operator()(const HashType & a, size_t length) {
+		size_t operator()(const T & a, size_t length) {
 			return hash(a, length);
 		}
 
@@ -104,33 +103,41 @@ namespace Hash {
 			this->reset();
 		}
 
-		UniversalFunctionLinearMap(const UniversalFunctionLinearMap<HashType> & rhs):
+		T getUniversumMax(void) const {
+			return UNIVERSUM_MAX_VALUE;
+		}
+
+		void setUniversumMax(T) {
+			throw new std::exception("Can not change universum max for linear map system.");
+		}
+
+		UniversalFunctionLinearMap(const UniversalFunctionLinearMap<T> & rhs):
 			tableSize(rhs.tableSize),
 			tableBitSize(rhs.tableBitSize) {
 
-			this->T = new size_t[this->tableBitSize];
+			this->matrix = new T[this->tableBitSize];
 			for (size_t i = 0; i < this->tableBitSize; ++i) {
-				this->T[i] = rhs.T[i];
+				this->matrix[i] = rhs.matrix[i];
 			}
 		}
 
-		UniversalFunctionLinearMap<HashType> & operator =(const UniversalFunctionLinearMap<HashType> & rhs) {
-			UniversalFunctionLinearMap<HashType> cpy = rhs;
+		UniversalFunctionLinearMap<T> & operator =(const UniversalFunctionLinearMap<T> & rhs) {
+			UniversalFunctionLinearMap<T> cpy = rhs;
 			swap(*this, cpy);
 			return *this;
 		}
 
-		friend void swap(UniversalFunctionLinearMap<HashType> & a, UniversalFunctionLinearMap<HashType> & b) {
+		friend void swap(UniversalFunctionLinearMap<T> & a, UniversalFunctionLinearMap<T> & b) {
 			std::swap(a.tableSize, b.tableSize);
 			std::swap(a.tableBitSize, b.tableBitSize);
-			std::swap(a.T, b.T);
+			std::swap(a.matrix, b.matrix);
 		}
 
 	private:
 		class RehashObserver : public Hash::Utils::RehashObserver {
 		public:
 
-			RehashObserver(UniversalFunctionLinearMap<HashType> * function):
+			RehashObserver(UniversalFunctionLinearMap<T> * function):
 			  f(function) {
 			}
 
@@ -139,17 +146,16 @@ namespace Hash {
 			}
 
 		private:
-			UniversalFunctionLinearMap<HashType> * f;
-
+			UniversalFunctionLinearMap<T> * f;
 		};
 
 		/**
-		 * Length of the table.
+		 * Length of the table. Power of two.
 		 */
 		size_t tableSize;
 
 		/**
-		 * Number of 
+		 * Number of bits of the table size. 
 		 */
 		size_t tableBitSize;
 
@@ -157,7 +163,7 @@ namespace Hash {
 		 * Pointer to the table - linear map description. Implementation invariant: always a zero pointer or a valid 
 		 * one.
 		 */
-		size_t * T;
+		T * matrix;
 	};
 
 }

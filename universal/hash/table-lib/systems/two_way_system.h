@@ -22,11 +22,6 @@ namespace Hash { namespace Systems {
 		typedef System<T> Function;
 
 		/**
-		 * Hash value type.
-		 */
-		typedef size_t HashType;
-
-		/**
 		 * C-tor.
 		 */
 		TwoWaySystem(void) {
@@ -44,34 +39,34 @@ namespace Hash { namespace Systems {
 			g.reset();
 		}
 
-		virtual size_t getLength(void) const {
-			simple_assert(f.getLength() == g.getLength(), "Lengths for the two functions must be the same.");
-			return f.getLength();
+		virtual size_t getTableSize(void) const {
+			simple_assert(f.getTableSize() == g.getTableSize(), "Lengths for the two functions must be the same.");
+			return f.getTableSize();
 		}
 
-		virtual void setLength(size_t length) {
-			f.setLength(length);
-			g.setLength(length);
+		virtual void setTableSize(size_t length) {
+			f.setTableSize(length);
+			g.setTableSize(length);
 		}
 
-		virtual size_t getUniversumMax(void) const {
-			simple_assert(f.getLength() == g.getLength(), "Universum sizes the two functions must be the same.");
+		virtual T getUniversumMax(void) const {
+			simple_assert(f.getUniversumMax() == g.getUniversumMax(), "Universum sizes the two functions must be the same.");
 			return f.getUniversumMax();
 		}
 
-		virtual void setUniversumMax(size_t universumMax) {
+		virtual void setUniversumMax(T universumMax) {
 			f.setUniversumMax(universumMax);
 			g.setUniversumMax(universumMax);
 		}
 
-		virtual HashType hash(const T & x, size_t length) {
+		virtual size_t hash(const T & x, size_t length) {
 			HashType hf = f.hash(x, length);
 			HashType hg = g.hash(x, length);
 
 			return storage->getChainLength(hf) < storage->getChainLength(hg) ? hf : hg;
 		}
 
-		virtual HashType operator()(const T & a, size_t length) {
+		virtual size_t operator()(const T & a, size_t length) {
 			return hash(a, length);
 		}
 
