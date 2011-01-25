@@ -1,6 +1,7 @@
 #ifndef CWLF_SYSTEM_H
 #define CWLF_SYSTEM_H
 
+#include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include "utils/rehash_observer.h"
 #include "utils/static_random_generator.h"
@@ -11,13 +12,11 @@ namespace Hash {
 	 * Carter - Wegman system of linear functions.
 	 */
 	template <typename T>
-	class UniversalFunctionCWLF {
+	class UniversalFunctionCWLF : public Hash::Systems::UniversalSystem<T> {
 	public:
-		typedef size_t HashType;
-		
 		explicit UniversalFunctionCWLF(size_t length = START_LENGTH, size_t universumMax = START_UNIVERSUM_MAX) {
 			this->setUniversumMax(universumMax);
-			this->setLength(length);
+			this->setTableSize(length);
 			this->reset();
 		}
 
@@ -25,19 +24,19 @@ namespace Hash {
 			return new RehashObserver(this);
 		}
 
-		void setUniversumMax(size_t universumMax) {
+		void setUniversumMax(T universumMax) {
 			this->universumMax = universumMax;
 		}
 
-		size_t getUniversumMax(void) const {
+		T getUniversumMax(void) const {
 			return this->universumMax;
 		}
 
-		void setLength(size_t length) {
-			this->length = length;
+		void setTableSize(size_t size) {
+			this->length = size;
 		}
 
-		size_t getLength(void) const {
+		size_t getTableSize(void) const {
 			return this->length;
 		}
 
@@ -59,7 +58,7 @@ namespace Hash {
 		}
 
 		void initialize(Hash::StorageInfo & info) {
-			this->setLength(info.getTableSize());
+			this->setTableSize(info.getTableSize());
 			this->reset();
 		}
 

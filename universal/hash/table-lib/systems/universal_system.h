@@ -14,11 +14,9 @@ namespace Hash { namespace Systems {
 	class UniversalSystem {
 	public:
 		/**
-		 * Initializes the system and adapts it to the given storage.
-		 *
-		 * @param info Storage information according to which the system should be adapted.
+		 * Resulting hash type.
 		 */
-		virtual void initialize(Hash::Utils::ChainLengthAwareStorageInfo & info) = 0;
+		typedef size_t HashType;
 
 		/**
 		 * Resets the function - chooses another from the universal system.
@@ -26,33 +24,33 @@ namespace Hash { namespace Systems {
 		virtual void reset(void) = 0;
 
 		/**
-		 * Current length of the hash table.
+		 * Current size of the hash table.
 		 *
-		 * @return The length of the hash table which is supposed by the current hash function.
+		 * @return The size of the hash table which is supposed by the current hash function.
 		 */
-		virtual size_t getLength(void) const = 0;
+		virtual size_t getTableSize(void) const = 0;
 		
 		/**
-		 * Sets the length of the table which will be used by the current hash function.
+		 * Sets the size of the table which will be used by the current hash function.
 		 *
 		 *
-		 * @param length New length of the table.
+		 * @param size New size of the table.
 		 */
-		virtual void setLength(size_t length) = 0;
+		virtual void setTableSize(size_t size) = 0;
+
+		/**
+		 * Maximum value of the universe retrieval.
+		 *
+		 * @return Maximal possible value.
+		 */
+		virtual T getUniversumMax(void) const = 0;
 
 		/**
 		 * Maximum value of the universe.
 		 *
 		 * @param Maximal possible value.
-		 */
-		virtual size_t getUniversumMax(void) const = 0;
-
-		/**
-		 * Maximum value of the universe.
-		 *
-		 * @param Maximal possible value.
-		 */
-		virtual void setUniversumMax(size_t universumMax) = 0;
+		 */		
+		virtual void setUniversumMax(T universumMax) = 0;
 
 		/**
 		 * Hash value of the element x
