@@ -141,7 +141,7 @@ namespace Hash { namespace Storages {
 			CollisionCountStorageIterator operator ++(void) {
 				// Move.
 				++chainIndex;
-				if (chainIndex >= storage[tableIndex]) {
+				if (chainIndex >= storage->storage[tableIndex]) {
 					// We are behind the last element, find the next chain.
 					chainIndex = 0;
 					while (tableIndex < storage->storageSize && storage->storage[tableIndex] == 0) {
