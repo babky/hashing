@@ -57,6 +57,11 @@ namespace Hash { namespace Storages {
 			  init();
 		}
 
+		virtual ~CollisionCountStorage(void) {
+			delete [] storage;
+			storage = 0;
+		}
+
 		virtual void insert(const T &, Hash hash) {
 			++storage[hash];
 			++size;

@@ -43,7 +43,7 @@ namespace Hash { namespace Utils {
 		 * @param max Maximum value.
 		 * @param initializeSeed Automatic (based on current timestamp) seed initialization.
 		 */
-		explicit RandomGenerator(IntType min, IntType max, bool initializeSeed = false):
+		RandomGenerator(IntType min, IntType max, bool initializeSeed = false):
 		  engine(Engine()),
 		  generator(Generator(engine, Distribution(min, max))) {
 			if (initializeSeed) {
