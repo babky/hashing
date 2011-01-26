@@ -21,7 +21,8 @@ namespace Hash { namespace Utils {
 	void hash_assert(bool status, std::string message, std::string file, size_t line);
 
 #ifdef HASH_DEBUG
-	#define simple_assert(status, message) Hash::Utils::hash_assert(status, message, __FILE__, __LINE__);
+	#define simple_assert(status, message) ;
+	// Hash::Utils::hash_assert(status, message, __FILE__, __LINE__);
 #else
 	#define simple_assert(status, message) ;
 #endif
