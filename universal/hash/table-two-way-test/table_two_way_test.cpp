@@ -91,8 +91,6 @@ private:
 		  table(aTable),
 		  generator(new GeneratorType(integer_traits<ValueType>::const_min, integer_traits<ValueType>::const_max)) {
 			generator->setSeed(seed);
-
-			cout << "Running thread with seed " << seed << ".\n";
 		}
 
 		void operator()(void) {
@@ -129,7 +127,7 @@ int main(int argc, char ** argv) {
 
 	options_description optsDesc("Table Two Way Test allowed options.");
 	optsDesc.add_options()
-		("help", "Help")
+		("help", "prints this help message")
 		("output-file", value<string>(&outputFile)->default_value(""))
 		("threads", value<size_t>(&threads)->default_value(DEFAULT_THREADS))
 		("test-length", value<size_t>(&testLength)->default_value(DEFAULT_TEST_LENGTH))
@@ -138,6 +136,11 @@ int main(int argc, char ** argv) {
 	variables_map vm;
 	store(parse_command_line(argc, argv, optsDesc), vm);
 	notify(vm);
+
+	if (vm.count("help")) {
+		cout << optsDesc;
+		return 0;
+	}
 
 	ofstream fout(outputFile.c_str());
 	ostream & out = fout.good() ? fout : cout;
