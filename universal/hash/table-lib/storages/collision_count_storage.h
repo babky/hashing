@@ -54,7 +54,7 @@ namespace Hash { namespace Storages {
 		  storageSize(tableLength),
 		  storage(new StorageItem[tableLength]),
 		  comparer(comparer) {
-			  init();
+			init();
 		}
 
 		virtual ~CollisionCountStorage(void) {

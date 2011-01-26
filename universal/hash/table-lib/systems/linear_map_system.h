@@ -111,9 +111,8 @@ namespace Hash {
 		}
 
 		void setUniversumMax(T) {
-			// TODO: Nicer exception. Can not change the universum max for the linear maps system.
 			// TODO: Better implement.
-			throw new std::exception();
+			throw new std::invalid_argument("Can not change the universum max for the linear maps system.");
 		}
 
 		UniversalFunctionLinearMap(const UniversalFunctionLinearMap<T> & rhs):
