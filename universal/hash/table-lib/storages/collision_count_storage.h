@@ -60,13 +60,13 @@ namespace Hash { namespace Storages {
 		/**
 		 * Copy C-tor.
 		 */
-		CollisionCountStorage(const CollisionCountStorage & storage):
-		  size(storage.size), 
-		  storageSize(storage.storageSize), 
-		  storage(new StorageItem[storage.storageSize]),
-		  comparer(storage.comparer) {
+		CollisionCountStorage(const CollisionCountStorage & aStorage):
+		  size(aStorage.size),
+		  storageSize(aStorage.storageSize),
+		  storage(new StorageItem[aStorage.storageSize]),
+		  comparer(aStorage.comparer) {
 			for (size_t i = 0; i < storageSize; ++i) {
-				storage[i] = storage.storage[i];
+				this->storage[i] = aStorage.storage[i];
 			}
 		}
 
