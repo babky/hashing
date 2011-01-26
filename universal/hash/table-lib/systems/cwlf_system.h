@@ -1,6 +1,7 @@
 #ifndef CWLF_SYSTEM_H
 #define CWLF_SYSTEM_H
 
+#include <algorithm>
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include "utils/rehash_observer.h"
@@ -62,6 +63,13 @@ namespace Hash {
 			this->reset();
 		}
 
+		void swap(UniversalFunctionCWLF<T> & system) {
+			std::swap(universumMax, system.universumMax);
+			std::swap(a, system.a);
+			std::swap(b, system.b);
+			std::swap(length, system.length);
+		}
+
 	private:
 		class RehashObserver : public Hash::Utils::RehashObserver {
 		public:
@@ -91,9 +99,7 @@ namespace std {
 
 	template <typename T>
 	void swap(Hash::UniversalFunctionCWLF<T> & a, Hash::UniversalFunctionCWLF<T> & b) {
-		Hash::UniversalFunctionCWLF<T> tmp = a;
-		a = b;
-		b = tmp;
+		a.swap(b);
 	}
 
 }

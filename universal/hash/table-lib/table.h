@@ -300,8 +300,8 @@ namespace Hash {
 		 * @param b Hash table to be swapped.
 		 */
 		void swap(HashTable & b) {
-			std::swap<T, EqualityComparer, HashType>(storage, b.storage);
-			std::swap<T>(function, b.function);
+			storage.swap(b.storage);
+			function.swap(b.function);
 			std::swap(rehashObserver, b.rehashObserver);
 			std::swap(rehashPolicy, b.rehashPolicy);
 		}

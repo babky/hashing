@@ -133,14 +133,18 @@ namespace Hash {
 
 		UniversalFunctionLinearMap<T> & operator =(const UniversalFunctionLinearMap<T> & rhs) {
 			UniversalFunctionLinearMap<T> cpy = rhs;
-			swap(*this, cpy);
+			swap(cpy);
 			return *this;
+		}
+		
+		void swap(UniversalFunctionLinearMap<T> & b) {
+			std::swap(tableSize, b.tableSize);
+			std::swap(tableBitSize, b.tableBitSize);
+			std::swap(matrix, b.matrix);
 		}
 
 		friend void swap(UniversalFunctionLinearMap<T> & a, UniversalFunctionLinearMap<T> & b) {
-			std::swap(a.tableSize, b.tableSize);
-			std::swap(a.tableBitSize, b.tableBitSize);
-			std::swap(a.matrix, b.matrix);
+			a.swap(b);
 		}
 
 	private:

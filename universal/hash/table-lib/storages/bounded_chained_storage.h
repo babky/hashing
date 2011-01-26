@@ -104,6 +104,15 @@ namespace Hash { namespace Storages {
 				this->computeStatistics(stats);
 			}
 		}
+		
+		void swap(BoundedChainedStorage & b) {
+			ChainedStorage<T, Comparer, Hash>::swap(b);
+			std::swap(currentStats, b.currentStats);
+		}
+		
+		friend void swap(BoundedChainedStorage & a, BoundedChainedStorage & b) {
+			a.swap(b);
+		}
 
 	private:
 		class StorageStatistics : public Utils::StorageStatistics {
@@ -147,5 +156,14 @@ namespace Hash { namespace Storages {
 	};
 
 } }
+
+namespace std {
+
+	template <typename T, typename Comparer, typename HashType>
+	void swap(Hash::Storages::BoundedChainedStorage<T, Comparer, HashType> & a, Hash::Storages::BoundedChainedStorage<T, Comparer, HashType> & b) {
+		a.swap(b);
+	}
+
+}
 
 #endif /* BOUNDED_CHAINED_STORAGE_H */

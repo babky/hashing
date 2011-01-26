@@ -25,6 +25,9 @@ namespace Hash {
 		void initialize(Hash::StorageInfo &) {
 		}
 
+		void swap(Function &) {
+		}
+
 	};
 
 }
