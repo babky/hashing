@@ -31,7 +31,9 @@ namespace Hash { namespace Utils {
 		 * @param ptr A non-null pointer.
 		 */
 		static inline void referencedCheckPointer(const T * ptr) {
-			simple_assert(ptr != 0, "R-value contained null.");
+			if (ptr == 0) {
+				throw std::invalid_argument("R-value contained null.");
+			}
 		}
 	};
 
