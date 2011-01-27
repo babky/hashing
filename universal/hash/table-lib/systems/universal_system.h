@@ -14,6 +14,12 @@ namespace Hash { namespace Systems {
 	class UniversalSystem {
 	public:
 		/**
+		 * D-tor.
+		 */
+		virtual ~UniversalSystem(void) {
+		};
+
+		/**
 		 * Resulting hash type.
 		 */
 		typedef size_t HashType;

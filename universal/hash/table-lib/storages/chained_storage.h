@@ -52,8 +52,7 @@ namespace Hash { namespace Storages {
 		 * @param comparer Used comparer.
 		 * @param tableLength Starting length of the table.
 		 */
-		explicit ChainedStorage(const EqualityComparer & comparer, 
-				size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		explicit ChainedStorage(const EqualityComparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  elementCount(0),
 		  storageLength(tableLength),
 		  storage(new StorageItem[tableLength]),
@@ -93,6 +92,8 @@ namespace Hash { namespace Storages {
 		}
 
 		void insert(const T & item, HashType hash) {
+			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+
 			if (!this->storage[hash].insert(item, this->comparer)) {
 				throw ItemStoredException<T>(item);
 			}
@@ -101,6 +102,8 @@ namespace Hash { namespace Storages {
 		}
 
 		bool remove(const T & item, HashType hash) {
+			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+
 			if (this->storage[hash].remove(item, this->comparer)) {
 				--this->elementCount;
 				return true;
@@ -179,9 +182,9 @@ namespace Hash { namespace Storages {
 			 * @param item Item stored inside the chain node.
 			 * @param next Next node in the chain.
 			 */
-			explicit ChainedNode(const T & item, ChainedNode * next = 0) {
-				this->item = item;
-				this->next = next;
+			explicit ChainedNode(const T & aItem, ChainedNode * aNext = 0):
+			  item(aItem),
+			  next(aNext) {
 			}
 
 			/**
@@ -276,9 +279,9 @@ namespace Hash { namespace Storages {
 			/**
 			 * Empty list creation.
 			 */
-			ChainedList(void) {
-				this->first = 0;
-				this->elementCount = 0;
+			ChainedList(void):
+			  first(0),
+			  elementCount(0) {
 			}
 
 			/**
@@ -286,9 +289,9 @@ namespace Hash { namespace Storages {
 			 *
 			 * @param element First item of the list.
 			 */
-			explicit ChainedList(const T & element) {
-				this->elementCount = 1;
-				this->first = new ChainedNode(element);
+			explicit ChainedList(const T & element):
+			  first(new ChainedNode(element)), 
+			  elementCount(1) {
 			}
 
 			/**
@@ -360,14 +363,13 @@ namespace Hash { namespace Storages {
 			bool insert(const T & item, EqualityComparer & comparer) {
 				ChainedNode ** n = 0;
 				for (n = &(this->first); (*n) != 0; n = &((*n)->next)) {
-					// TODO: assert(hash of item == hash of n->item);
 					if (comparer((*n)->item, item)) {
 						return false;
 					}
 				}
 
-				// TODO: assert(n != 0);
 				*n = new ChainedNode(item);
+				simple_assert(*n != 0, "Newly created item may not be null.");
 				++this->elementCount;
 				return true;
 			}
@@ -380,7 +382,6 @@ namespace Hash { namespace Storages {
 			 */
 			bool remove(const T & item, EqualityComparer & comparer) {
 				for (ChainedNode ** n = &(this->first); (*n) != 0; n = &((*n)->next)) {
-					// TODO: assert(hash of item == hash of n->item);
 					if (comparer((*n)->item, item)) {
 						// Remember the node.
 						ChainedNode * c = (*n);
@@ -537,6 +538,7 @@ namespace Hash { namespace Storages {
 		 */
 		friend void swap(ChainedStorage<T, EqualityComparer, HashType> & a, ChainedStorage<T, EqualityComparer, HashType> & b) {
 			std::swap(a.storage, b.storage);
+			std::swap(a.comparer, b.comparer);
 			std::swap(a.elementCount, b.elementCount);
 			std::swap(a.storageLength, b.storageLength);
 		}
