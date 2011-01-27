@@ -37,13 +37,72 @@ template <typename T>
 class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionLinearMap> {
 };
 
-template<typename ValueType, class TableType>
+template <typename T>
+class TestLinearGenerator {
+public:
+	TestLinearGenerator(T aMin, T):
+	  min(aMin),
+	  i(0) {
+	}
+
+	void setSeed(T) {
+	}
+
+	void setThreadNo(size_t) {
+	}
+	
+	void setFrom(T from) {
+		min = from;
+	}
+
+	void setPartLength(size_t) {
+	}
+
+	T generate(void) {
+		return i++ + min;
+	}
+
+private:
+	T min;
+	T i;
+};
+
+template <typename T>
+class TestRandomGenerator {
+public:
+	TestRandomGenerator(T aMin, T aMax):
+	  generator(aMin, aMax) {
+	}
+
+	void setSeed(int aSeed) {
+		generator.setSeed(aSeed);
+	}
+
+	void setThreadNo(size_t) {
+	}
+	
+	void setFrom(T) {
+	}
+
+	void setPartLength(size_t) {
+	}
+
+	T generate(void) {
+		return generator.generate();
+	}
+
+private:
+	RandomGenerator<T> generator;
+};
+
+template<typename ValueType, class TableType, class GeneratorType>
 class Test {
 public:
 	Test(size_t aThreads, size_t aTestLength):
 	  threads(aThreads), 
 	  testLength(aTestLength),
-	  table(aTestLength) {
+	  table(aTestLength),
+	  seedFromThread(false) {
 	}
 
 	TableType & getTable(void) {
@@ -54,19 +113,33 @@ public:
 		return const_cast<Test *> (this)->getTable();
 	}
 
+	bool getSeedFromThread(void) {
+		return seedFromThread;
+	}
+
+	void setSeedFromThread(bool aSeedFromThread) {
+		seedFromThread =  aSeedFromThread;
+	}
+
 	void run(void) {
 		table.clear();
 		size_t partLength = testLength / threads;
 
 		boost::thread ** testThreads = new boost::thread*[threads];
+		size_t currentLength, from = 0;
 		for (size_t t = 0; t < threads; ++t) {
+			currentLength = t == 0 ? testLength - (threads - 1) * partLength : partLength;
 			testThreads[t] = new boost::thread(
 					TestPart(
-						t == 0 ? testLength - (threads - 1) * partLength : partLength, 
-						&table,
-						StaticRandomGenerator<size_t>::getGenerator().generate()
+						from,
+						currentLength, 
+						StaticRandomGenerator<size_t>::getGenerator().generate(),
+						t,
+						this
 					)
 				);
+
+			from += currentLength;
 		}
 
 		for (size_t t = 0; t < threads; ++t) {
@@ -84,37 +157,43 @@ public:
 private:
 	class TestPart {
 	public:
-		typedef RandomGenerator<ValueType> GeneratorType;
-		
-		TestPart(size_t aPartLength, TableType * aTable, size_t seed):
+		TestPart(size_t aFrom, size_t aPartLength, size_t seed, size_t aThreadNo, Test<ValueType, TableType, GeneratorType> * aTest):
+		  from(aFrom),
 		  partLength(aPartLength),
-		  table(aTable),
-		  generator(new GeneratorType(integer_traits<ValueType>::const_min, integer_traits<ValueType>::const_max)) {
+		  generator(new GeneratorType(integer_traits<ValueType>::const_min, integer_traits<ValueType>::const_max)),
+		  threadNo(aThreadNo),
+		  test(aTest) {
 			generator->setSeed(seed);
+			generator->setThreadNo(threadNo);
+			generator->setFrom(from);
+			generator->setPartLength(partLength);
 		}
 
 		void operator()(void) {
 			ValueType e;
 			for (size_t i = 0; i < partLength; ++i) {
 				e = generator->generate();
-				table->insert(e);
+				test->getTable().insert(e);
 			}
 		}
 
 	private:
+		size_t from;
 		size_t partLength;
-		TableType * table;
 		SmartPointer<GeneratorType> generator;
+		size_t threadNo;
+		Test<ValueType, TableType, GeneratorType> * test;
 	};
 
 	TableType table;
 	size_t threads;
 	size_t testLength;
+	bool seedFromThread;
 };
 
 int main(int argc, char ** argv) {
 	const size_t DEFAULT_TEST_LENGTH = 1 << 10;
-	const size_t DEFAULT_THREADS = 1;
+	const size_t DEFAULT_THREADS = 2;
 	const size_t DEFAULT_REPEATS = 1 << 5;
 	
 	typedef boost::uint_fast64_t ValueType;
@@ -145,7 +224,7 @@ int main(int argc, char ** argv) {
 	ofstream fout(outputFile.c_str());
 	ostream & out = fout.good() ? fout : cout;
 
-	Test<ValueType, TableType> test(threads, testLength);
+	Test<ValueType, TableType, TestLinearGenerator<ValueType> > test(threads, testLength);
 	StorageStatistics stats;
 
 	for (size_t run = 1; run <= repeats; ++run) {
