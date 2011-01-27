@@ -81,6 +81,12 @@ namespace Hash { namespace Tests {
 			t.rehash();
 			t.insert(4);
 			t.rehash();
+
+			Hash::Utils::StorageStatistics stats;
+			t.computeStatistics(stats);
+			this->assertEqual<size_t>(stats.getTableLength(), 16, "Default size should be enough for 2 elements.");
+			this->assertEqual<size_t>(stats.getElementCount(), t.getSize(), "Stats and table size must be the same.");
+			this->assertEqual<size_t>(stats.getElementCount(), 2, "We only have 2 elements.");
 		}
 
 		virtual void testCopyCtor(void) {
@@ -97,6 +103,11 @@ namespace Hash { namespace Tests {
 			}
 
 			this->assertEqual(5000, t.getSize(), "After inserting n distinct elements we expect table length of n.");
+
+			for (int i = 0; i < 5000; ++i) {
+				this->assertTrue(t.contains(5 * i), "Table must contain the inserted element.");
+			}
+
 		}
 
 	};

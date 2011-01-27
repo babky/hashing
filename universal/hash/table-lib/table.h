@@ -225,9 +225,6 @@ namespace Hash {
 					break;
 			}
 
-			Utils::StorageStatistics s;
-			this->storage.computeStatistics(s);
-
 			HashTable t(this->storage.getComparer(), newLength);
 			this->getRehashObserver().rehash(t.storage);
 

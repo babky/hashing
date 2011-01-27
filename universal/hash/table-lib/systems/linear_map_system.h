@@ -7,6 +7,7 @@
 	#pragma warning(disable: 4512 4127 4100)
 #endif
 #include <boost/integer_traits.hpp>
+#include <boost/integer.hpp>
 #ifdef BOOST_MSVC
 	#pragma warning(default: 4512 4127 4100)
 #endif
@@ -24,6 +25,7 @@ namespace Hash {
 	template <typename T>
 	class UniversalFunctionLinearMap : public Hash::Systems::UniversalSystem<T> {
 	public:
+		typedef typename boost::uint_t<8 * sizeof(T)>::least UT;
 		const static T UNIVERSUM_MAX_VALUE = boost::integer_traits<T>::const_max;
 		const static size_t START_LENGTH = 10;
 
@@ -58,7 +60,7 @@ namespace Hash {
 
 		void reset(void) {
 			delete [] this->matrix;
-			this->matrix = new T[this->tableBitSize];
+			this->matrix = new UT[this->tableBitSize];
 
 			Hash::Utils::RandomGenerator<T> & g = Hash::Utils::StaticRandomGenerator<T>::getGenerator();
 			for (size_t i = 0; i != this->tableBitSize; ++i) {
@@ -73,14 +75,18 @@ namespace Hash {
 			);
 
 			// Represent the number in the form of a binary vector.
-			size_t y = 0;
+			size_t y = 0, digits, digits2;
+			const size_t bits = boost::integer_traits<UT>::digits;
+
+			// Parity accumulator of each column.
+			UT c;
+
+			// Interpret the value in the form without a sign.
+			const UT & ux = reinterpret_cast<const UT &> (x);
 
 			// Perform matrix and vector multiplication.
-			T c, digits, digits2;
-			const size_t bits = boost::integer_traits<T>::digits;
-
 			for (size_t i = 0; i != this->tableBitSize; ++i) {
-				c = this->matrix[i] & x;
+				c = this->matrix[i] & ux;
 
 				// Find the parity of c.
 				for (digits = bits / 2; digits != 0; digits /= 2) {
@@ -88,10 +94,10 @@ namespace Hash {
 					c = ((c << digits2) >> digits2) ^ (c >> digits);
 				}
 
-				simple_assert(c <= 1, "Parity must be a bit.");
+				simple_assert(c == 1 || c == 0, "Parity must be a bit.");
 
 				y <<= 1;
-				y += (size_t) c;
+				y |= (size_t) c;
 			}
 
 			return y;
@@ -119,7 +125,7 @@ namespace Hash {
 			tableSize(rhs.tableSize),
 			tableBitSize(rhs.tableBitSize) {
 
-			this->matrix = new T[this->tableBitSize];
+			this->matrix = new UT[this->tableBitSize];
 			for (size_t i = 0; i < this->tableBitSize; ++i) {
 				this->matrix[i] = rhs.matrix[i];
 			}
@@ -167,7 +173,7 @@ namespace Hash {
 		 * Pointer to the table - linear map description. Implementation invariant: always a zero pointer or a valid 
 		 * one.
 		 */
-		T * matrix;
+		UT * matrix;
 	};
 
 }

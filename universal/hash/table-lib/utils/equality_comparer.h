@@ -17,8 +17,8 @@ namespace Hash { namespace Utils {
 		 * @param b Argument to be checked for equality.
 		 * @return Equality status.
 		 */
-		 bool operator()(const T & a, const T & b) {
-			return a == b;
+		bool operator()(const T & a, const T & b) {
+ 			return a == b;
 		}
 
 	};
