@@ -130,7 +130,7 @@ namespace Hash { namespace Storages {
 		}
 
 		double getLoadFactor(void) const {
-			// TODO: assert storageLength != 0
+			simple_assert(storageLength != 0, "Storage must contain at least one slot.");
 			return static_cast<double>(this->elementCount) / this->storageLength;
 		}
 
