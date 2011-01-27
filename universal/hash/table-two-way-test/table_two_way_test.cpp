@@ -40,12 +40,16 @@ class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::Univer
 template <typename T>
 class TestLinearGenerator {
 public:
-	TestLinearGenerator(T aMin, T):
+	TestLinearGenerator(T aMin, T aMax):
 	  min(aMin),
-	  i(0) {
+	  max(aMax),
+	  i(0),
+	  seed(1),
+	  tableLength(0) {
 	}
 
-	void setSeed(T) {
+	void setSeed(T aSeed) {
+		seed = aSeed;
 	}
 
 	void setThreadNo(size_t) {
@@ -58,13 +62,26 @@ public:
 	void setPartLength(size_t) {
 	}
 
+	void setTableLength(size_t aTableLength) {
+		tableLength = aTableLength;
+	}
+
+	void initialize(void) {
+		if (seed % 2) {
+			seed *= tableLength;
+		}
+	}
+	
 	T generate(void) {
-		return i++ + min;
+		return (seed * i++) % (max - min) + min;
 	}
 
 private:
 	T min;
+	T max;
 	T i;
+	T seed;
+	size_t tableLength;
 };
 
 template <typename T>
@@ -86,6 +103,10 @@ public:
 
 	void setPartLength(size_t) {
 	}
+
+	void setTableLength(size_t) {
+	}
+	
 
 	T generate(void) {
 		return generator.generate();
@@ -167,10 +188,13 @@ private:
 			generator->setThreadNo(threadNo);
 			generator->setFrom(from);
 			generator->setPartLength(partLength);
+			generator->setTableLength(test->getTable().getTableSize());
 		}
 
 		void operator()(void) {
 			ValueType e;
+			generator->initialize();
+
 			for (size_t i = 0; i < partLength; ++i) {
 				e = generator->generate();
 				test->getTable().insert(e);
