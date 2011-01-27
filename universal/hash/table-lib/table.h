@@ -180,7 +180,8 @@ namespace Hash {
 		 * Clears the stored set.
 		 */
 		void clear(void) {
-			this->storage.clear();
+			storage.clear();
+			function.reset();
 		}
 
 		/**
