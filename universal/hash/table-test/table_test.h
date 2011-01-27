@@ -9,6 +9,7 @@
 #include "storages/chained_storage.h"
 #include "storages/bounded_chained_storage.h"
 #include "systems/linear_map_system.h"
+#include "systems/two_way_system.h"
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include "default_test.h"
@@ -107,7 +108,6 @@ namespace Hash { namespace Tests {
 			for (int i = 0; i < 5000; ++i) {
 				this->assertTrue(t.contains(5 * i), "Table must contain the inserted element.");
 			}
-
 		}
 
 	};

@@ -29,4 +29,15 @@ namespace Hash {
 
 }
 
+namespace std {
+		
+	template <typename T>
+	void swap(Hash::Function<T> & a, Hash::Function<T> & b) {
+		Hash::Function<T> tmp = a;
+		a = b;
+		b = tmp;
+	}
+
+}
+
 #endif /* FUNCTION_H */

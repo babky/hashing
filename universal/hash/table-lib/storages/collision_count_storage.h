@@ -57,9 +57,34 @@ namespace Hash { namespace Storages {
 			init();
 		}
 
+		/**
+		 * Copy C-tor.
+		 */
+		CollisionCountStorage(const CollisionCountStorage & storage):
+		  size(storage.size), 
+		  storageSize(storage.storageSize), 
+		  storage(new StorageItem[storage.storageSize]),
+		  comparer(storage.comparer) {
+			for (size_t i = 0; i < storageSize; ++i) {
+				storage[i] = storage.storage[i];
+			}
+		}
+
+		/**
+		 * D-tor.
+		 */
 		virtual ~CollisionCountStorage(void) {
 			delete [] storage;
 			storage = 0;
+		}
+
+		/**
+		 * Assignment operator.
+		 */
+		CollisionCountStorage & operator=(const CollisionCountStorage & storage) {
+			CollisionCountStorage tmp(storage);
+			swap(tmp);
+			return *this;
 		}
 
 		virtual void insert(const T &, Hash hash) {
@@ -216,7 +241,19 @@ namespace Hash { namespace Storages {
 		 */
 		Utils::ConstantComparer<T> comparer;
 
-	private:
+	public:
+		/**
+ 		 * Swapping of the two storages.
+		 *
+		 * @param b Storage to be swapped.
+		 */
+		void swap(CollisionCountStorage<T, Comparer, Hash> & b) {
+			std::swap(storage, b.storage);
+			std::swap(storageSize, b.storageSize);
+			std::swap(size, b.size);
+			std::swap(comparer, b.comparer);
+		}
+
 		/**
 		 * Swapping of the two storages.
 		 *
@@ -224,14 +261,26 @@ namespace Hash { namespace Storages {
 		 * @param b Storage to be swapped.
 		 */
 		friend void swap(CollisionCountStorage<T, Comparer, Hash> & a, CollisionCountStorage<T, Comparer, Hash> & b) {
-			std::swap(a.storage, b.storage);
-			std::swap(a.storageSize, b.storageSize);
-			std::swap(a.size, b.size);
-			std::swap(a.comparer, b.comparer);
+			a.swap(b);	
 		}
 
 	};
 
 } }
+
+namespace std {
+
+	/**
+	 * Swapping of the two storages.
+	 *
+	 * @param a Storage to be swapped.
+	 * @param b Storage to be swapped.
+	 */
+	template <typename T, typename Comparer, typename HashType>
+	void swap(Hash::Storages::CollisionCountStorage<T, Comparer, HashType> & a, Hash::Storages::CollisionCountStorage<T, Comparer, HashType> & b) {
+		a.swap(b);
+	}
+
+}
 
 #endif /* COLLISION_COUNT_STORAGE_H */
