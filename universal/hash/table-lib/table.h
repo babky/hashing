@@ -232,7 +232,7 @@ namespace Hash {
 				t.insert(*it);
 			}
 
-			swap(*this, t);
+			swap(t);
 		}
 
 		/**
@@ -297,14 +297,23 @@ namespace Hash {
 		/**
 		 * Swapping the hash tables.
 		 *
+		 * @param b Hash table to be swapped.
+		 */
+		void swap(HashTable & b) {
+			std::swap<T, EqualityComparer, HashType>(storage, b.storage);
+			std::swap<T>(function, b.function);
+			std::swap(rehashObserver, b.rehashObserver);
+			std::swap(rehashPolicy, b.rehashPolicy);
+		}
+
+		/**
+		 * Swapping the hash tables.
+		 *
 		 * @param a Hash table to be swapped.
 		 * @param b Hash table to be swapped.
 		 */
 		friend void swap(HashTable & a, HashTable & b) {
-			std::swap(a.function, b.function);
-			swap(a.storage, b.storage);
-			std::swap(a.rehashObserver, b.rehashObserver);
-			std::swap(a.rehashPolicy, b.rehashPolicy);
+			a.swap(b);
 		}
 
 		/**

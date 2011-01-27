@@ -87,4 +87,15 @@ namespace Hash {
 
 }
 
+namespace std {
+
+	template <typename T>
+	void swap(Hash::UniversalFunctionCWLF<T> & a, Hash::UniversalFunctionCWLF<T> & b) {
+		Hash::UniversalFunctionCWLF<T> tmp = a;
+		a = b;
+		b = tmp;
+	}
+
+}
+
 #endif /* CWLF_SYSTEM */

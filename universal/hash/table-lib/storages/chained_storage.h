@@ -1,6 +1,10 @@
 #ifndef CHAINED_STORAGE_H
 #define CHAINED_STORAGE_H
 
+#include <algorithm>
+#include "utils/chain_length_aware_storage_info.h"
+#include "storage.h"
+
 namespace Hash { namespace Storages {
 
 	/**
@@ -11,7 +15,7 @@ namespace Hash { namespace Storages {
 	 * @typeparam Hash Type of the hash.
 	 */
 	template <typename T, typename Comparer, typename Hash>
-	class ChainedStorage : public Storage<T, Comparer, Hash> {
+	class ChainedStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
 	public:
 		/**
 		 * Storage type used.
@@ -87,7 +91,7 @@ namespace Hash { namespace Storages {
 		 */
 		ChainedStorage & operator =(const ChainedStorage & storage) {
 			ChainedStorage tmp = storage;
-			swap(*this, tmp);
+			swap(tmp);
 			return *this;
 		}
 
@@ -157,6 +161,10 @@ namespace Hash { namespace Storages {
 
 		Iterator getEnd(void) {
 			return ChainedStorageIterator(this, false);
+		}
+
+		size_t getChainLength(HashType address) const {
+			return storage[address].getSize();
 		}
 
 	private:
@@ -493,17 +501,6 @@ namespace Hash { namespace Storages {
 			ChainIterator chainIterator;
 		};
 
-	protected:
-		/**
-		 * Length of the given chain retrieval.
-		 *
-		 * @param hash Chain id.
-		 * @return Chain length.
-		 */
-		size_t getChainLength(HashType hash) const {
-			return this->storage[hash].getSize();
-		}
-
 	private:
 		/**
 		 * Table of chains.
@@ -530,22 +527,37 @@ namespace Hash { namespace Storages {
 		 */
 		mutable EqualityComparer comparer;
 
+	public:
 		/**
 		 * Swapping of the two storages.
 		 *
 		 * @param a Storage to be swapped.
 		 * @param b Storage to be swapped.
 		 */
-		friend void swap(ChainedStorage<T, EqualityComparer, HashType> & a, ChainedStorage<T, EqualityComparer, HashType> & b) {
-			std::swap(a.storage, b.storage);
-			std::swap(a.comparer, b.comparer);
-			std::swap(a.elementCount, b.elementCount);
-			std::swap(a.storageLength, b.storageLength);
+		void swap(ChainedStorage<T, EqualityComparer, HashType> & b) {
+			using std::swap;
+
+			swap(storage, b.storage);
+			swap(comparer, b.comparer);
+			swap(elementCount, b.elementCount);
+			swap(storageLength, b.storageLength);
+		}
+
+		friend void swap(ChainedStorage & a, ChainedStorage & b) {
+			a.swap(b);
 		}
 
 	};
 
-
 } }
+
+namespace std {
+
+	template <typename T, typename Comparer, typename HashType>
+	void swap(Hash::Storages::ChainedStorage<T, Comparer, HashType> & a, Hash::Storages::ChainedStorage<T, Comparer, HashType> & b) {
+		a.swap(b);
+	}
+
+}
 
 #endif /* CHAINED_STORAGE_H */

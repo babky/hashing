@@ -2,11 +2,13 @@
 #define TWO_WAY_SYSTEM_H
 
 #include "utils/chain_length_aware_storage_info.h"
+#include "systems/linear_map_system.h"
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
+#include <algorithm>
 
 namespace Hash { namespace Systems {
-
+	
 	/**
 	 * System allowing two way universal hash function. The value is hashed to the shorter chain.
 	 *
@@ -27,7 +29,8 @@ namespace Hash { namespace Systems {
 		/**
 		 * C-tor.
 		 */
-		TwoWaySystem(void) {
+		TwoWaySystem(void):
+		  storage(0) {
 			reset();
 		}
 
@@ -73,6 +76,17 @@ namespace Hash { namespace Systems {
 			return hash(a, length);
 		}
 
+		void swap(TwoWaySystem & b) {
+			using std::swap;
+
+			swap<Function>(f, b.f);
+			swap<Function>(g, b.g);
+		}
+
+		friend void swap(TwoWaySystem & a, TwoWaySystem & b) {
+			a.swap(b);
+		}
+		
 	private:
 		/**
 		 * Universal function.
@@ -90,6 +104,27 @@ namespace Hash { namespace Systems {
 		Utils::ChainLengthAwareStorageInfo * storage;
 	};
 
+	/**
+	 * The possibility of two way linear hashing.
+	 */
+	template <typename T>
+	class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionLinearMap> {
+	};
+
 } }
+
+namespace std {
+		
+	template <typename T, template <typename> class System>
+	void swap(Hash::Systems::TwoWaySystem<T, System> & a, Hash::Systems::TwoWaySystem<T, System> & b) {
+		a.swap(b);
+	}	
+	
+	template <typename T>
+	void swap(Hash::Systems::TwoWaySystemLinearMap<T> & a, Hash::Systems::TwoWaySystemLinearMap<T> & b) {
+		a.swap(b);
+	}
+
+}
 
 #endif /* TWO_WAY_SYSTEM_H */

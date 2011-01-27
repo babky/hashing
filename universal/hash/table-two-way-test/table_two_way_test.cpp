@@ -34,10 +34,6 @@ class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFu
 };
 
 template <typename T>
-class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionLinearMap> {
-};
-
-template <typename T>
 class TestLinearGenerator {
 public:
 	TestLinearGenerator(T aMin, T aMax):
