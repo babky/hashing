@@ -1,6 +1,7 @@
 #include "storages/collision_count_storage.h"
 #include "systems/two_way_system.h"
 #include "systems/cwlf_system.h"
+#include "systems/polynomial_system.h"
 #include "systems/linear_map_system.h"
 #include "table.h"
 #include "utils/constant_comparer.h"
@@ -212,12 +213,12 @@ private:
 };
 
 int main(int argc, char ** argv) {
-	const size_t DEFAULT_TEST_LENGTH = 1 << 10;
+	const size_t DEFAULT_TEST_LENGTH = 1 << 20;
 	const size_t DEFAULT_THREADS = 2;
 	const size_t DEFAULT_REPEATS = 1 << 5;
 	
 	typedef boost::uint_fast64_t ValueType;
-	typedef Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, Hash::Storages::CollisionCountStorage> TableType;
+	typedef Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, Hash::Storages::CollisionCountStorage> TableType;
 
 	string outputFile;
 	size_t threads;
