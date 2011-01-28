@@ -67,6 +67,8 @@ public:
 		if (seed % 2) {
 			seed *= tableLength;
 		}
+		
+		seed = 1;
 	}
 	
 	T generate(void) {
