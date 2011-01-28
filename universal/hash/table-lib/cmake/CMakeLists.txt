@@ -14,6 +14,7 @@ set(SOURCES
     ../policies/guaranteed_rehash_policy.cpp
     ../policies/worst_case_rehash_policy.cpp
     ../storage.cpp
+    ../math/double_word.cpp
 )
 
 include_directories ( .. ${Boost_INCLUDE_DIRS} )
