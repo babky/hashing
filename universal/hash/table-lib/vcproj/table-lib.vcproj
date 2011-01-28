@@ -305,6 +305,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\systems\polynomial_system.h"
+					>
+				</File>
+				<File
 					RelativePath="..\systems\two_way_system.h"
 					>
 				</File>
@@ -326,6 +330,18 @@
 				</File>
 				<File
 					RelativePath="..\storages\collision_count_storage.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Math"
+				>
+				<File
+					RelativePath="..\math\double_word.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\math\double_word.h"
 					>
 				</File>
 			</Filter>
