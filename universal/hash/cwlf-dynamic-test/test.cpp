@@ -17,7 +17,7 @@ void LengthTest::runTest(void) {
 	cout << "Running " << TEST_COUNT << " tests.\n";
 
 	for (size_t t = 0; t < TEST_COUNT; ++t) {
-		TableCWLF table;
+		LengthTestTable table;
 
 		for (size_t i = 0; i < TEST_LENGTH; ++i) {
 			try {

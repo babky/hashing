@@ -4,6 +4,7 @@
 #include "utils/chain_length_aware_storage_info.h"
 #include "systems/linear_map_system.h"
 #include "systems/polynomial_system.h"
+#include "systems/cwlf_system.h"
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include <algorithm>
@@ -118,6 +119,14 @@ namespace Hash { namespace Systems {
 	template <typename T>
 	class TwoWaySystemPolynomial : public Hash::Systems::TwoWaySystem<T, Hash::Systems::PolynomialSystem> {
 	};
+
+	/**
+	 * The possibility of two way CWLF.
+	 */	
+	template <typename T>
+	class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionCWLF> {
+	};
+
 
 } }
 
