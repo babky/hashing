@@ -11,10 +11,12 @@
 
 using namespace Hash::Math;
 
+// Primes taken from http://primes.utm.edu/lists/2small/0bit.html.
+
 template<>
 const size_t Prime<size_t>::GREATEST_PRIME = (size_t) 4294967291;
 
 template<>
-const boost::uint_fast64_t Prime<boost::uint_fast64_t>::GREATEST_PRIME = (boost::uint_fast64_t) 18446744073709551557;
+const boost::uint_fast64_t Prime<boost::uint_fast64_t>::GREATEST_PRIME = boost::integer_traits<boost::uint_fast64_t>::const_max - 58;
 
 

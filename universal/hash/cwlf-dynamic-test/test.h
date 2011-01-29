@@ -13,10 +13,10 @@ namespace Hash { namespace Tests {
 
 	class LengthTest {
 	public:
-		typedef Hash::Table<int, Hash::Utils::EqualityComparer<int>, Hash::UniversalFunctionCWLF, 
-			Hash::Storages::ChainedStorage> TableCWLF;
-//		typedef Hash::Table<int, Hash::Utils::EqualityComparer<int>, Hash::UniversalFunctionLinearMap, 
-//			Hash::Storages::ChainedStorage> TableCWLF;
+		typedef Hash::Table<size_t, Hash::Utils::EqualityComparer<size_t>, Hash::UniversalFunctionCWLF, 
+			Hash::Storages::ChainedStorage> LengthTestTable;
+//		typedef Hash::Table<size_t, Hash::Utils::EqualityComparer<size_t>, Hash::UniversalFunctionLinearMap, 
+//			Hash::Storages::ChainedStorage> LengthTestTable;
 
 		void runTest(void);
 	};

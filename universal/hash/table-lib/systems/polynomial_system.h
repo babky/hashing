@@ -12,7 +12,7 @@ namespace Hash { namespace Systems {
 		const static size_t START_LENGTH = 16;
 		const static size_t START_DEGREE = 2;
 
-		explicit PolynomialSystem(size_t aLength = START_LENGTH, size_t aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = START_DEGREE):
+		explicit PolynomialSystem(size_t aLength = START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = START_DEGREE):
 		  universumMax(aUniversumMax),
 		  coefficients(0),
 		  length(aLength),
@@ -77,7 +77,7 @@ namespace Hash { namespace Systems {
 			using namespace Hash::Math;
 
 			simple_assert(this->length == length, "Polynomial system table's size differs from the wanted size.");
-			simple_assert(x < this->getUniversumMax(), "Polynomial system table's size differs from the wanted size.");
+			simple_assert(x < this->getUniversumMax(), "Given element is greater than the universum max.");
 
 			T r = 0;
 			for (size_t i = 0; i < degree; ++i) {

@@ -45,15 +45,15 @@ int main(int, const char **) {
 	using namespace Hash::Policies::Rehash;
 	using namespace std;
 
-	TableTest<Table<size_t, EqualityComparer<size_t>, PolynomialSystem, ChainedStorage> > test_univ_pol_32b;
+	TableTest<Table<size_t, EqualityComparer<boost::uint_fast64_t>, PolynomialSystem, ChainedStorage> > test_univ_pol_32b;
 	test_univ_pol_32b.runTest();
 	cout << test_univ_pol_32b.getAssertionResult();
 
-	TableTest<Table<boost::uint_fast64_t, EqualityComparer<size_t>, PolynomialSystem, ChainedStorage> > test_univ_pol_64b;
+	TableTest<Table<boost::uint_fast64_t, EqualityComparer<boost::uint_fast64_t>, PolynomialSystem, ChainedStorage> > test_univ_pol_64b;
 	test_univ_pol_64b.runTest();
 	cout << test_univ_pol_64b.getAssertionResult();
 
-	TableTest<Table<int, EqualityComparer<int>, UniversalFunctionCWLF, ChainedStorage> > test_univ_cwlf;
+	TableTest<Table<size_t, EqualityComparer<size_t>, UniversalFunctionCWLF, ChainedStorage> > test_univ_cwlf;
 	test_univ_cwlf.runTest();
 	cout << test_univ_cwlf.getAssertionResult();
 

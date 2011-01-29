@@ -31,18 +31,15 @@ using namespace boost;
 using namespace boost::program_options;
 
 template <typename T>
-class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionCWLF> {
-};
-
-template <typename T>
 class TestLinearGenerator {
 public:
-	TestLinearGenerator(T aMin, T aMax):
+	TestLinearGenerator(T aMin, T aMax, bool aAcceptSeed): 
 	  min(aMin),
 	  max(aMax),
 	  i(0),
 	  seed(1),
-	  tableLength(0) {
+	  tableLength(0),
+	  acceptSeed(aAcceptSeed) {
 	}
 
 	void setSeed(T aSeed) {
@@ -68,7 +65,9 @@ public:
 			seed *= tableLength;
 		}
 		
-		seed = 1;
+		if (!acceptSeed) {
+			seed = 1;
+		}
 	}
 	
 	T generate(void) {
@@ -81,17 +80,24 @@ private:
 	T i;
 	T seed;
 	size_t tableLength;
+	bool acceptSeed;
 };
 
 template <typename T>
 class TestRandomGenerator {
 public:
-	TestRandomGenerator(T aMin, T aMax):
+	static const size_t DEFAULT_SEED = 1;
+
+	TestRandomGenerator(T aMin, T aMax, bool aAcceptSeed):
+	  acceptSeed(aAcceptSeed),
 	  generator(aMin, aMax) {
+		generator.setSeed(DEFAULT_SEED);
 	}
 
 	void setSeed(int aSeed) {
-		generator.setSeed(aSeed);
+		if (acceptSeed) {
+			generator.setSeed(aSeed);
+		}
 	}
 
 	void setThreadNo(size_t) {
@@ -106,23 +112,35 @@ public:
 	void setTableLength(size_t) {
 	}
 	
+	void initialize(void) {
+	}
 
 	T generate(void) {
 		return generator.generate();
 	}
 
 private:
+	bool acceptSeed;
 	RandomGenerator<T> generator;
 };
 
-template<typename ValueType, class TableType, class GeneratorType>
 class Test {
 public:
-	Test(size_t aThreads, size_t aTestLength):
+	virtual ~Test(void) {
+	}
+
+	virtual void run(void) = 0;
+	virtual void computeStatistics(Hash::Utils::StorageStatistics & stats) = 0;
+};
+
+template<typename ValueType, class TableType, class GeneratorType>
+class TestImpl : public Test {
+public:
+	TestImpl(size_t aThreads, size_t aTestLength, bool aAcceptSeed):
 	  threads(aThreads), 
 	  testLength(aTestLength),
 	  table(aTestLength),
-	  seedFromThread(false) {
+	  acceptSeed(aAcceptSeed) {
 	}
 
 	TableType & getTable(void) {
@@ -133,15 +151,7 @@ public:
 		return const_cast<Test *> (this)->getTable();
 	}
 
-	bool getSeedFromThread(void) {
-		return seedFromThread;
-	}
-
-	void setSeedFromThread(bool aSeedFromThread) {
-		seedFromThread =  aSeedFromThread;
-	}
-
-	void run(void) {
+	virtual void run(void) {
 		table.clear();
 		size_t partLength = testLength / threads;
 
@@ -173,29 +183,41 @@ public:
 
 		delete [] testThreads;
 	}
+
+	virtual void computeStatistics(Hash::Utils::StorageStatistics & stats) {
+		table.computeStatistics(stats);
+	}
+
+	bool getAcceptSeed(void) const {
+		return acceptSeed;
+	}
 	
 private:
 	class TestPart {
 	public:
-		TestPart(size_t aFrom, size_t aPartLength, size_t seed, size_t aThreadNo, Test<ValueType, TableType, GeneratorType> * aTest):
+		TestPart(size_t aFrom, size_t aPartLength, size_t seed, size_t aThreadNo, TestImpl<ValueType, TableType, GeneratorType> * aTest):
 		  from(aFrom),
 		  partLength(aPartLength),
-		  generator(new GeneratorType(integer_traits<ValueType>::const_min, integer_traits<ValueType>::const_max)),
+		  generator(new GeneratorType(integer_traits<ValueType>::const_min, integer_traits<ValueType>::const_max, aTest->getAcceptSeed())),
 		  threadNo(aThreadNo),
 		  test(aTest) {
+			generator->setPartLength(partLength);
+			generator->setTableLength(test->getTable().getTableSize());
 			generator->setSeed(seed);
 			generator->setThreadNo(threadNo);
 			generator->setFrom(from);
-			generator->setPartLength(partLength);
-			generator->setTableLength(test->getTable().getTableSize());
 		}
 
 		void operator()(void) {
 			ValueType e;
 			generator->initialize();
+			ValueType universumMax = test->getTable().getFunction().getUniversumMax();
 
 			for (size_t i = 0; i < partLength; ++i) {
-				e = generator->generate();
+				do {
+					e = generator->generate();
+				} while (e >= universumMax);
+
 				test->getTable().insert(e);
 			}
 		}
@@ -205,35 +227,99 @@ private:
 		size_t partLength;
 		SmartPointer<GeneratorType> generator;
 		size_t threadNo;
-		Test<ValueType, TableType, GeneratorType> * test;
+		TestImpl<ValueType, TableType, GeneratorType> * test;
 	};
 
 	TableType table;
 	size_t threads;
 	size_t testLength;
-	bool seedFromThread;
+	bool acceptSeed;
 };
 
+template<typename ValueType>
+Test * AssembleTest(string system, bool twoWay, bool random, size_t threads, size_t testLength, bool acceptSeed) {
+	if (system == "linear-map") {
+		if (twoWay) {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		} else {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		}
+	} else if (system == "cwlf") {
+		if (twoWay) {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		} else {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		}
+	} else if (system == "polynomial") {
+		if (twoWay) {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		} else {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		}
+	} else {
+		return 0;
+	}
+}
+
 int main(int argc, char ** argv) {
-	const size_t DEFAULT_TEST_LENGTH = 1 << 20;
+	// Parse the options.
+	const size_t DEFAULT_TEST_LENGTH = 1 << 16;
 	const size_t DEFAULT_THREADS = 2;
 	const size_t DEFAULT_REPEATS = 1 << 5;
-	
-	typedef boost::uint_fast64_t ValueType;
-	typedef Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, Hash::Storages::CollisionCountStorage> TableType;
+	const string DEFAULT_SYSTEM = "linear-map";
+	const bool DEFAULT_TWO_WAY = true;
+	const bool DEFAULT_SEED = true;
+	const bool DEFAULT_RANDOM = false;
+	const string DEFAULT_APPENDIX = "";
 
 	string outputFile;
 	size_t threads;
 	size_t testLength;
 	size_t repeats;
+	size_t bits;
+	string system;
+	string appendix;
+	bool twoWay;
+	bool seed;
+	bool random;
 
 	options_description optsDesc("Table Two Way Test allowed options.");
 	optsDesc.add_options()
 		("help", "prints this help message")
-		("output-file", value<string>(&outputFile)->default_value(""))
-		("threads", value<size_t>(&threads)->default_value(DEFAULT_THREADS))
-		("test-length", value<size_t>(&testLength)->default_value(DEFAULT_TEST_LENGTH))
-		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS));
+		("output-file", value<string>(&outputFile)->default_value(""), "file containing the test result")
+		("threads", value<size_t>(&threads)->default_value(DEFAULT_THREADS), "number of filling threads")
+		("test-length", value<size_t>(&testLength)->default_value(DEFAULT_TEST_LENGTH), "number of hashed elements")
+		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS), "number of repeats of the test")
+		("bits", value<size_t>(&bits), "base two logarithm of test-length")
+		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "default system to be used")
+		("two-way", value<bool>(&twoWay)->default_value(DEFAULT_TWO_WAY), "should we use the two hashing")
+		("random", value<bool>(&random)->default_value(DEFAULT_RANDOM), "should we use truly random set")
+		("seed", value<bool>(&seed)->default_value(DEFAULT_SEED), "should we use random seed");
+		("appendix", value<string>(&appendix)->default_value(DEFAULT_APPENDIX), "appendix added to the name of the file");
 
 	variables_map vm;
 	store(parse_command_line(argc, argv, optsDesc), vm);
@@ -244,16 +330,51 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-	ofstream fout(outputFile.c_str());
-	ostream & out = fout.good() ? fout : cout;
+	if (vm.count("bits")) {
+		testLength = 1 << bits;
+	} 
+	
+	if (outputFile.length() == 0) {
+		stringstream ss;
+		ss << "UHT-";
+		ss << (twoWay ? "two-way" : "plain") << "-";
+		ss << system << "-";
+		ss << (random ? "random" : "linear") << "-";
+		ss << (seed ? "random-seeded" : "not-seeded") << "-";
+		ss << testLength << "e-";
+		ss << repeats << "r-";
+		ss << threads << "t-";
+		if (appendix.length()) {
+			ss << appendix << "-";
+		}
+		ss << "test.txt";
 
-	Test<ValueType, TableType, TestLinearGenerator<ValueType> > test(threads, testLength);
+		outputFile = ss.str();
+	}
+
+	// Assemble the test.
+	SmartPointer<Test> test(AssembleTest<boost::uint_fast64_t>(system, twoWay, random, threads, testLength, seed));
 	StorageStatistics stats;
 
+	// Open the output.
+	ofstream fout;
+	if (outputFile != "--") {
+		fout.open(outputFile.c_str());
+
+		if (!fout.good()) {
+			cerr << "Could not open output file'" << outputFile << "'.";
+			return 2;
+		}
+	}
+	
+	// Use the output.
+	ostream & out = fout.good() ? fout : cout;
+
+	// Run it!
 	for (size_t run = 1; run <= repeats; ++run) {
 		out << "Running test " << run << ".\n";
-		test.run();
-		test.getTable().computeStatistics(stats);
+		test->run();
+		test->computeStatistics(stats);
 		out << stats;
 		out << endl;
 	}

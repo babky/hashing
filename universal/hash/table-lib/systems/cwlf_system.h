@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
+#include "math/double_word.h"
 #include "utils/rehash_observer.h"
 #include "utils/static_random_generator.h"
 
@@ -15,22 +16,22 @@ namespace Hash {
 	template <typename T>
 	class UniversalFunctionCWLF : public Hash::Systems::UniversalSystem<T> {
 	public:
-		explicit UniversalFunctionCWLF(size_t length = START_LENGTH, size_t universumMax = START_UNIVERSUM_MAX) {
-			this->setUniversumMax(universumMax);
-			this->setTableSize(length);
-			this->reset();
+		explicit UniversalFunctionCWLF(size_t aLength = START_LENGTH, size_t aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME):
+		  universumMax(aUniversumMax),
+		  length(aLength) {
+			reset();
 		}
 
 		Hash::Utils::RehashObserver * getRehashObserver(void) {
 			return new RehashObserver(this);
 		}
 
-		void setUniversumMax(T universumMax) {
-			this->universumMax = universumMax;
+		void setUniversumMax(T aUniversumMax) {
+			universumMax = aUniversumMax;
 		}
 
 		T getUniversumMax(void) const {
-			return this->universumMax;
+			return universumMax;
 		}
 
 		void setTableSize(size_t size) {
@@ -42,16 +43,19 @@ namespace Hash {
 		}
 
 		void reset(void) {
-			Hash::Utils::IntegralGeneratorWrapper<size_t> g =
-				Hash::Utils::IntegralGeneratorWrapper<size_t>(0, this->getUniversumMax());
+			Hash::Utils::IntegralGeneratorWrapper<T> g = Hash::Utils::IntegralGeneratorWrapper<T>(0, this->getUniversumMax());
 
-			this->a = g.generate();
-			this->b = g.generate();
+			a = g.generate();
+			b = g.generate();
 		}
 
 		size_t hash(const T & x, size_t length) {
 			simple_assert(this->length == length, "CWLF system table's size differs from the wanted size.");
-			return ((this->a * x + this->b) % this->universumMax) % this->length;
+			return Hash::Math::UnsignedDoubleWord<T>::add(
+					Hash::Math::UnsignedDoubleWord<T>::multiply(a, x, universumMax), 
+					b, 
+					universumMax
+				) % length;
 		}
 
 		size_t operator()(const T & a, size_t length) {
@@ -85,11 +89,10 @@ namespace Hash {
 			UniversalFunctionCWLF<T> * f;
 		};
 
-		const static size_t START_UNIVERSUM_MAX = 65537;
-		const static size_t START_LENGTH = 10;
+		const static size_t START_LENGTH = 16;
 
-		size_t universumMax;
-		size_t a, b;
+		T universumMax;
+		T a, b;
 		size_t length;
 	};
 
