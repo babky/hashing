@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ulimit -S -t unlimited
-./TableTwoWayTest --appendix=`hostname` $@
+nice -n 6 ./TableTwoWayTest --appendix=`hostname` $@
