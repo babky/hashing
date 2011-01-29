@@ -315,10 +315,10 @@ int main(int argc, char ** argv) {
 		("test-length", value<size_t>(&testLength)->default_value(DEFAULT_TEST_LENGTH), "number of hashed elements")
 		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS), "number of repeats of the test")
 		("bits", value<size_t>(&bits), "base two logarithm of test-length")
-		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "default system to be used")
+		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "system to be used [linear-map, polynomial, cwlf]")
 		("two-way", value<bool>(&twoWay)->default_value(DEFAULT_TWO_WAY), "should we use the two hashing")
 		("random", value<bool>(&random)->default_value(DEFAULT_RANDOM), "should we use truly random set")
-		("seed", value<bool>(&seed)->default_value(DEFAULT_SEED), "should we use random seed");
+		("seed", value<bool>(&seed)->default_value(DEFAULT_SEED), "should we use random seed")
 		("appendix", value<string>(&appendix)->default_value(DEFAULT_APPENDIX), "appendix added to the name of the file");
 
 	variables_map vm;
