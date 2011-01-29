@@ -3,6 +3,7 @@
 
 #include "utils/chain_length_aware_storage_info.h"
 #include "systems/linear_map_system.h"
+#include "systems/polynomial_system.h"
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include <algorithm>
@@ -111,6 +112,13 @@ namespace Hash { namespace Systems {
 	class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionLinearMap> {
 	};
 
+	/**
+	 * The possibility of two way polynomial hashing.
+	 */
+	template <typename T>
+	class TwoWaySystemPolynomial : public Hash::Systems::TwoWaySystem<T, Hash::Systems::PolynomialSystem> {
+	};
+
 } }
 
 namespace std {
@@ -128,3 +136,4 @@ namespace std {
 }
 
 #endif /* TWO_WAY_SYSTEM_H */
+
