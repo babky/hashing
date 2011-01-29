@@ -148,7 +148,7 @@ public:
 	}
 
 	const TableType & getTable(void) const {
-		return const_cast<Test *> (this)->getTable();
+		return const_cast<TestImpl *> (this)->getTable();
 	}
 
 	virtual void run(void) {
