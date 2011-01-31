@@ -236,6 +236,18 @@ private:
 	bool acceptSeed;
 };
 
+template<typename T>
+class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T> {
+public:
+	explicit PolynomialSystem32(size_t aStartLength = Hash::Systems::PolynomialSystem<T>::START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
+	  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
+	}
+};
+
+template<typename T>
+class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, PolynomialSystem32> {
+};
+
 template<typename ValueType>
 Test * AssembleTest(string system, bool twoWay, bool random, size_t threads, size_t testLength, bool acceptSeed) {
 	if (system == "linear-map") {
@@ -278,6 +290,20 @@ Test * AssembleTest(string system, bool twoWay, bool random, size_t threads, siz
 				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
 			} else {
 				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		}
+	} else if (system == "polynomial-32") {
+		if (twoWay) {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
+			}
+		} else {
+			if (random) {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, acceptSeed);
+			} else {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, acceptSeed);
 			}
 		}
 	} else {
