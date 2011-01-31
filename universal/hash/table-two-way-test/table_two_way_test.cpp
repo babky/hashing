@@ -240,7 +240,7 @@ template<typename T>
 class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T> {
 public:
 	explicit PolynomialSystem32(size_t aStartLength = Hash::Systems::PolynomialSystem<T>::START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
-	  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
+	  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
 	}
 };
 
