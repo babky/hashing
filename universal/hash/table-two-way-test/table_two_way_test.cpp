@@ -269,15 +269,15 @@ Test * AssembleTest(string system, bool twoWay, bool random, size_t threads, siz
 	} else if (system == "cwlf") {
 		if (twoWay) {
 			if (random) {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, 2 * testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, 9 * testLength / 8, acceptSeed);
 			} else {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, 2 * testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, 9 * testLength / 8, acceptSeed);
 			}
 		} else {
 			if (random) {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, 2 * testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, Hash::Storages::CollisionCountStorage>, TestRandomGenerator<ValueType> >(threads, testLength, 9 * testLength / 8, acceptSeed);
 			} else {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, 2 * testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, Hash::Storages::CollisionCountStorage>, TestLinearGenerator<ValueType> >(threads, testLength, 9 * testLength / 8, acceptSeed);
 			}
 		}
 	} else if (system == "polynomial") {
