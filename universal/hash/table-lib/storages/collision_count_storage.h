@@ -4,6 +4,7 @@
 #include "utils/chain_length_aware_storage_info.h"
 #include "storage.h"
 #include "utils/constant_comparer.h"
+#include <boost/thread.hpp>
 
 namespace Hash { namespace Storages {
 
@@ -68,6 +69,8 @@ namespace Hash { namespace Storages {
 			for (size_t i = 0; i < storageSize; ++i) {
 				this->storage[i] = aStorage.storage[i];
 			}
+
+			mutexes = new boost::shared_mutex[MUTEXES];
 		}
 
 		/**
@@ -76,6 +79,9 @@ namespace Hash { namespace Storages {
 		virtual ~CollisionCountStorage(void) {
 			delete [] storage;
 			storage = 0;
+
+			delete [] mutexes;
+			mutexes = 0;
 		}
 
 		/**
@@ -88,6 +94,12 @@ namespace Hash { namespace Storages {
 		}
 
 		virtual void insert(const T &, Hash hash) {
+			// get upgradable access
+			boost::upgrade_lock<boost::shared_mutex> l(mutexes[hash * MUTEXES / storageSize]);
+
+			// get exclusive access
+			boost::upgrade_to_unique_lock<boost::shared_mutex> uL(l);
+
 			++storage[hash];
 			++size;
 		}
@@ -207,10 +219,15 @@ namespace Hash { namespace Storages {
 
 		// ChainLengthAwareStorage
 		virtual size_t getChainLength(size_t address) const {
+			boost::shared_lock<boost::shared_mutex> l(mutexes[address * MUTEXES / storageSize]);
 			return storage[address];
 		}
 
 	protected:
+		static const size_t MUTEXES = 4;
+
+		mutable boost::shared_mutex * mutexes;
+
 		/**
 		 * Initializes the table - sizes of all chains are zeroed.
 		 */
@@ -219,6 +236,8 @@ namespace Hash { namespace Storages {
 			for (size_t i = 0; i < storageSize; ++i) {
 				storage[i] = 0;
 			}
+
+			mutexes = new boost::shared_mutex[MUTEXES];
 		}
 
 		/**
@@ -252,6 +271,7 @@ namespace Hash { namespace Storages {
 			std::swap(storageSize, b.storageSize);
 			std::swap(size, b.size);
 			std::swap(comparer, b.comparer);
+			std::swap(mutexes, b.mutexes);
 		}
 
 		/**
