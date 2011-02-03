@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
-find_package( Boost 1.34 COMPONENTS random REQUIRED )
+find_package( Boost 1.34 COMPONENTS random thread REQUIRED )
 
 link_directories ( ${Boost_LIBRARY_DIRS} )
 
