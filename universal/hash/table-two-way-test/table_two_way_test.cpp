@@ -190,8 +190,6 @@ public:
 			r |= (T) 1 << (digits[i] - 1);
 		}
 
-		cout << r << endl;
-
 		// Increment digits.
 		for (size_t i = 0; i < boost::integer_traits<size_t>::digits; ++i) {
 			++digits[i];
