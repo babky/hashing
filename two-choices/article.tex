@@ -1,3 +1,8 @@
+\section{Abstract}
+We study the possibility 
+
+\section{Introduction}
+
 \section{The Power of Two Choices in Universal Hashing}
 
 Mitzenmacher and Upfal showed in \cite{1076315} that if we use $d$ independent hash functions and put the presently saved object into a bin with the shorter chain, then the longest chains contain at most $\frac{\ln \ln n}{\ln d} + O(1)$ elements with a high probability. In this paper we use their approach to show a similar result for universal hashing with separated chains.
@@ -148,7 +153,7 @@ First notice that the bound $\frac{6 \ln n}{n}$ may be achieved only if $\alpha 
 p_i = \left(\frac{c\beta_i}{m}\right) ^ d \leq \left(\frac{\alpha c}{2 ^ {d ^ {i - 4}}}\right) ^ d \leq \frac{1}{2 ^ {de^{\ln \ln n}}} = \frac{1}{2 ^ {d \ln n}} = \frac{1}{n ^ {d \ln 2}} < \frac{6 \ln n}{n}\\
 \]
 
-Next, for $1 < \alpha c$, we are not always able to satisfiy the inequality $np_i < 6 \ln n$. Thus the load factor must be chosen as $\alpha \leq \frac{1}{c}$.
+Next, for $1 < \alpha c$, we are not always able to satisfy the inequality $np_i < 6 \ln n$. Thus the load factor must be chosen as $\alpha \leq \frac{1}{c}$.
 
 \section{Model of Universal Hashing}
 The hashing scheme we propose is a solution to the set representation problem allowing operations \emph{Find}, \emph{Insert} and \emph{Delete}. Moreover our model of hashing guarantees a double-logarithmic worst-case time for Find operation and has constant expected amortised time complexity for each of the operations. We are able to provide this warranty since chains longer than a prescribed limit, which depends on the size of the table and the maximal allowed load factor, are forbidden. If a successful \emph{Insert} operation creates a chain longer than the limit, then the whole table is rehashed. By rehashing we understand creating a table using a new hash function chosen from the universal system and representing the same set. When rehashing we always seek for a function until a suitable function, a function which does not create a long chain, is found. 
