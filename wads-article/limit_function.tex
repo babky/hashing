@@ -1,0 +1,50 @@
+\section{Obtaining the limit function}
+\label{section-limit}
+Limit function plays a crucial role in our model. The idea of the limit function should be understood as follows. If the hash table contains a chain longer than the value of the limit function, then the whole table should be rehashed. Thus the lower the values of limit function are the better warranty is obtained. Apparently each limit function has to depend on the size of the table and the load factor. However our concept of the limit function is also to estimate from above the probability that a chosen function creates a long chain. When thinking about this probability notice that there are two choices standing against each other. The lower the limit is the greater the probability of a random function being unsuitable.
+
+\begin{definition}[Limit function, trimming rate]
+Let $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ and $p \in (0, 1)$.  We say that $l$ is a \emph{limit function} with \emph{trimming rate} $p$ if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
+
+Function $f \in H$ \emph{does not create a long chain} for a limit function $l$ with a trimming rate $p$ if $\lpsl < l(m, \alpha, p)$. Where $\lpsl$ denotes the value of the random variable for the particular function $f$ and set $S$.
+\end{definition}
+
+Notice one way how to extract a limit function we know the value of $\Expect{\lpsl}$. From Markov inequality it follows that $\Prob{\lpsl > k \Expect{\lpsl}} \leq \frac{1}{k}$. Better values may be found when we know the exact probability distribution function of $\lpsl$.
+
+Let us discuss various universal systems and limit functions that are possible to obtain with them.
+
+\subsection{Linear hash functions}
+Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos showed in \cite{DBLP:journals/jacm/AlonDMPT99} an interesting upper bound on $\Expect \lpsl$. They used the system of linear functions between two vector spaces over the field $\bbbz_2$. The use of vector spaces is not limiting at all since each binary number may be seen as a vector from a sufficiently large vector space over $\bbbz_2$. And since when rehashing the size of the hash table is doubled or halved so it is sufficient to choose the start size to be a power of two.
+
+\begin{theorem}{\cite{DBLP:journals/jacm/AlonDMPT99}}
+\label{theorem-linear-hash-functions-dietzefelbinger}
+If $n \log n$ elements are placed into the table of size $n$ using the system of linear functions, then $\Expect{\lpsl} = \bigo(\log n \log \log n)$. 
+\end{theorem}
+
+The major problem of Theorem \ref{theorem-linear-hash-functions-dietzefelbinger} is the multiplicative constant. However further computations show that the it can be significantly reduced by a combination of various techniques. First, in order to obtain a valid limit function the dependence of $\lpsl$ on $\alpha$ has to be discovered. Further improvement is obtained by assuming that we hash $n$ elements into a table of size $m$ and $n = \bige(m)$. Finally the greatest improvement is obtained by a refined analysis of the original proof. We changed some choices and optimised values of the variables that appeared in it.
+
+\begin{theorem}
+Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. Then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44,$$ $$\Prob{\lpsl \geq 57.29 \log m \log \log m} < 0.5.$$
+\end{theorem}
+
+Let us note that constants for different probabilities and load factors may be found by a simple computer program. However, for our use of the limit function we only need the stated results.
+
+\subsection{Two choices paradigm}
+This paradigm comes from the study of balls and bins systems. The first bounds with the separate chaining with a single perfectly random function give that $\Expect{\lpsl} = \bigo\left(\frac{\log n}{\log \log n}\right)$ and may be found e.g. in \cite{DBLP:books/sp/Mehlhorn84}. It is obvious that with a single function chosen from an almost universal system the same bound holds. On the other hand with a limited independence this problems becomes harder and satisfactory general bounds are not available.
+
+The further study of balls and bins systems discovered that usage of $d \geq 2$ independent fully random hash functions gives far better results \cite{DBLP:conf/stoc/AzarBKU94}. If each stored element is put inside a least loaded bin of $d$ ones, we obtain longest chains which do not contain more than $\frac{\ln \ln n}{\ln d} + O(1)$ elements with high probability. It is not so hard to realise that the results of the two choices paradigm hold in case of universal hashing with almost uniform systems. Bounds that are possible to achieve with limited independence, e.g. with $k$-wise independent systems, for a general $S \subset U$ are not known so far.
+
+In the following definition we use the notation that for a $\vec{x} \in U^k$ the value of $f(\vec{x}) = (f(x_1), \dots, f(x_k))$.
+\begin{definition}[Independent hash functions]
+\label{definition-independent-hash-functions}
+Let $H$ be a uniform system of hash functions and $f, g \in H$ be two functions chosen uniformly at random from the system $H$. We say that the functions $f, g$ are \emph{independent} if for every $\vec{x} \in U^n$ such that the elements of $\vec{x}$ are different and $y, z \in V^n$ $$\Prob{f(\vec{x}) = \vec{y}, g(\vec{x}) = \vec{z}} = \Prob{f(\vec{x}) = \vec{y}} \Prob{g(\vec{x}) = \vec{z}}.$$
+\end{definition}
+
+Theorem \ref{theorem-universal-hashing-two-choices} is a straightforward restatement of results pioneered in \cite{DBLP:conf/stoc/AzarBKU94} for almost universal systems.
+
+\begin{theorem}
+\label{theorem-universal-hashing-two-choices}
+Let $H$ be an almost uniform universal system with constant $c > 0$, $n \leq m$ and $c \alpha \leq 1$. Assume that $d$ independent hash functions $f_1, \dots, f_d$ are chosen uniformly from $H$ and each stored element $x \in S$ is placed inside the shortest chain of chains $f_1(x), \dots, f_d(x)$. Then for each $S \in U$ $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in o\left(\frac{1}{n}\right).$$
+\end{theorem}
+\begin{proof}
+We only point out the changes that have to be made in the proof of the result for perfectly random functions given in \cite{Mitzenmacher:2005:PCR:1076315}. 
+\end{proof}

@@ -1,0 +1,60 @@
+% This is the LaTeX source for the article dealing with Worst-Case 
+% Aware Universal Hashing. The source code is a modification of the 
+% file typeinst.tex which may be found at http://www.springer.com/lncs
+% and ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e
+
+\documentclass[runningheads,a4paper]{llncs}
+\include{definitions}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{url}
+
+\urldef{\mail}\path|babkys@gmail.com, vcunat@matfyz.cz, vaclav.koubek@ktiml.mff.cuni.cz|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\mainmatter
+
+\author{Martin Babka
+%\thanks{We would like to thank the anonymous reviewers for approving this article.}
+\and Vladimír Čunát? \and Václav Koubek?}
+\authorrunning{Martin Babka \and Vladimír Čunát? \and Václav Koubek?}
+
+\title{Worst-Case Aware Universal Hashing}
+
+\titlerunning{Worst-Case Aware Universal Hashing}
+
+\institute{Faculty of Mathematics and Physics, Charles University Prague, \\Mala Strana, Praha, Ceska republika\\
+\mail\\
+\url{http://www.ktiml.mff.cuni.cz/~babka/hashing}}
+
+\toctitle{Worst-Case Aware Universal Hashing}
+\tocauthor{Martin Babka?, Vladimír Čunát?, Václav Koubek?}
+\maketitle
+
+\begin{abstract}
+We deal with the concept of universal hashing and make it aware of the worst case running time of the find operation. 
+The behaviour of the underlying universal system of functions is studied and exploited so that the hash table guarantees the worst-case running time of the find operation.
+The mentioned time warranty strongly depends on the used universal system and we present two systems capable of interesting bounds. 
+We also propose and show the possibility of using the "two choices paradigm" with universal hashing which gives the $\bigo(\log \log n)$ bound.
+The amortised complexity of the other operations is constant in the expected case independently of the achieved bound.
+
+\keywords{universal hashing, data structures, two choices}
+\end{abstract}
+
+\input{introduction}
+\input{our_approach}
+\input{limit_function}
+\input{model}
+\input{alternative_approaches}
+\input{bibliography}
+\input{appendix_two_choices_uniform}
+
+\end{document}
