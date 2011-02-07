@@ -1,0 +1,52 @@
+\section{Introduction}
+Dictionary is a data structure which allows storing and querying data associated with a given key. There are many ways how to implement such a data structure. If we have no assumptions on the set of the keys, e.g. ordering, then we are particularly interested in \emph{hashing}. We only need a suitable function mapping the keys to positions in a table and the hash table provides operations \emph{Find}, \emph{Insert} and \emph{Delete}. 
+
+We assume that the given hash function behaves randomly in some way. With the assumption of the full randomness hashing guarantees a constant time per operation in the expected case. In our work we are interested in a way how to provide worst case guarantee for Find operation.
+
+Basically there are two major possibilities how to deal with randomness. The first approach is to accept an assumption of the uniform and independent distribution of the input data. This approach is formally stated for example in \cite{DBLP:books/sp/Mehlhorn84}. This assumption is not necessarily satisfied in all applications. Then we may switch to the randomisation performed by a uniform selection of a hash function from a system of functions. This method is known as \emph{universal hashing} and was described by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. 
+
+The main difference between universal and plain hashing is that we switch to a different probability space. We move from the space formed by the uniform and independent selection of the input data to the uniform selection of a hash function from a finite system. Probability space of universal hashing involves much more dependencies when considering the probability of collision of given elements.
+
+Common universal hashing schemes guarantee the constant time in the expected case only. However there are various extensions of universal hashing which guarantee optimal constant running time for the static problem \cite{Fredman:1984:SST:828.1884}. In order to add update operations the dynamization of perfect hashing is solved \cite{DBLP:journals/siamcomp/DietzfelbingerKMHRT94}. Dietzfelbinger with Meyer auf der Heide designed real time hash tables \cite{DBLP:conf/icalp/DietzfelbingerH90} with update operation running in expected constant time. Together with Cuckoo Hashing \cite{DBLP:conf/esa/PaghR01} they guarantee a constant worst case look up time and have constant expected amortised running times of all operations.
+
+In order to achieve our goal we simply modify uniform hashing with separate chaining. We stick to a different way compared to cuckoo hashing which more or less resembles open addressing. And we do not use doubled hash tables which is the case of perfect hashing. Since the running time of Find operation is proportional to the length of the longest chain we bound the length of the longest chain by a predefined limit function.
+
+\subsection{Notation}
+In the paper we use the following notation. The set $U$ denotes the universe, the set of possible key values. The set $V$ denotes the addresses of the hash table. We refer to $S \subset U$ as to the set of the stored set keys. The size of the hash table is denoted by $m = |V|$ and the number of stored elements is $n = |S|$, usually $n \ll |U|$. The hash table's load factor is denoted by $\alpha = \frac{n}{m}$. The load factor is kept in a predefined interval so that the space is not wasted. Its maximal value is usually less than 1.
+
+Function $f\colon U \rightarrow V$ denotes the currently used hash function chosen from a universal system. We are dealing with the probabilistic probabilities of the various systems immediately.
+
+For our analysis we need two random variables. The length of the chain at an address $y \in V$ for the stored set $S$ is denoted by $\psl(y, S)$\footnote{The probability space is formed by a uniform random choice of the hash function.}. We define the second variable $\lpsl(S)$ as the length of the longest chain, $$\lpsl = \max_{y \in V} \psl(y, S).$$ We omit the parameter $S$ when we talk about bounds that hold for every $S \subseteq U$.
+
+\subsection{Universal hashing}
+Universal hashing is a randomised algorithm with randomisation caused by a uniform choice of a hash function from a predefined universal system $H$. The properties of the system $H$ ensure that for each stored $S$ there are many functions in $H$ behaving properly in some way.
+
+The proper behaviour may be understood differently and leads to various definitions of universal systems. However each of the definitions is so strong that in the expected case there is only a constant number of elements colliding with a given element. Thus the expected length of a chain is constant. This expected length is a motivation for defining $c$-universality.
+
+\begin{definition}[$c$-universal system]
+\label{definition-c-universal-system}
+Let $H$ be a multiset of hash functions $f\colon U \rightarrow V$. We say that the class $H$ is a \emph{$c$-universal system of functions} if there exists $c > 0$ such that for every $x, y \in U$
+\[
+\left|\lbrace f \in H \setdelim f(x) = f(y) \rbrace\right| \leq \frac{c|H|}{m}.
+\]
+\end{definition}
+
+To be precise the set on the left side of the above expression is also considered to be a multiset. Since each function $f$ is chosen uniformly from $H$ we can equivalently restate our definition in terms of probability as
+\[
+\Prob{f(x) = y} \leq \frac{c}{m}.
+\]
+
+The uniform choice of a hash function $h$ from the system $H$ and all the above mentioned sets are assumed later without any special referral.
+
+More powerful definitions include strong\emph{$k$-universality} which is also called \emph{$k$-wise independence} and cover \emph{strongly $\omega$-universal} systems and \emph{uniform} systems.
+\begin{definition}
+Let $k > 0$ be an integer. System of functions $H$ is 
+\begin{itemize}
+	\item \emph{almost strongly $k$-universal} with constant $c > 0$ if for any sequence of pairwise different $x_1, \dots, x_k \in U$ and arbitrary $y_1, \dots, y_k \in V$ \[\Prob{f(x_1) = y_1, \dots, f(x_k) = y_k} \leq \frac{c}{m^k}\mbox{,}\]
+	\item \emph{strongly $k$-universal} if it is nearly strongly $k$-universal with $c = 1$,
+	\item \emph{strongly $\omega$-universal} if it is strongly $k$-universal for each $k \in \bbbn$,
+	\item \emph{(almost) uniform} if it is (almost) strongly $n$-universal.
+\end{itemize}
+\end{definition}
+
+Notice that strongly $k$-universal systems provide probability estimates for $k$ different elements. These systems usually provide only a limited randomness but behave as fully random for $k$ elements. On the other hand strongly $\omega$ universal systems provide a fully random hash function. However there are exactly $n$ stored elements in the hash table and we usually need estimates for the given $n$ elements. In this case the concept of uniform systems is as powerful as full randomness.
