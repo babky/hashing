@@ -41,40 +41,39 @@ Notice that the independent choice of $f_1, \dots, f_d$ from $H$ is sufficient f
 
 \begin{theorem}
 \label{theorem-universal-hashing-two-choices}
-Let $H$ be an almost uniform universal system with constant $c > 0$, $n \leq m$ and $c \alpha \leq 1$. Assume that $d$ independent hash functions $f_1, \dots, f_d$ are chosen uniformly from $H$ and each stored element $x \in S$ is placed inside the shortest chain of chains $f_1(x), \dots, f_d(x)$. Then for each $S \in U$ $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+Let $H$ be an almost uniform universal system with a constant $c$, such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x \in S$ is placed into a bucket with the shortest chain of buckets $f_1(x), \dots, f_d(x)$ given by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
 \end{theorem}
 \begin{proof}
-We only point out problems that appear in the proof for perfectly random functions given in \cite{Mitzenmacher:2005:PCR:1076315}. Observe that the probability of collision of $k$, $k \leq n$, different elements is at most $c$ times higher than ${1}/{m^k}$ -- the probability of collision of the same sequence of elements with a truly random function. From independence of the $d$ chosen function it is clear that $\Prob{f(x) \in R, g(x) \in R} = \Prob{f(x) \in R}\Prob{g(x)\in R}$ for arbitrary $x \in U$ and $R \subseteq V$. So if $c = 1$, then no change has to be done. In the case when $c > 1$, however our assumption $\alpha c \leq 1$ is sufficient for the result to hold.
+We only discuss problems that arise when considering a proof for perfectly random functions found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94}. Observe that the probability of collision of $k$, $k \leq n$, different elements is at most ${c}/{m^k}$. The probability of collision of the same sequence of elements with a truly random function equals ${1}/{m^k}$. Thus we have to calculate with the multiplicative constant. From the independence of functions $f_1, \dots, f_d$ it is clear that $\Prob{f_i(x) \in R,\, i \in \{0, \dots, d\}} = \prod_{i = 1}^{d}\Prob{f_i(x) \in R}$ for each $x \in U$ and $R \subseteq V$. Hence for $c = 1$ no change has to be done. However for $c > 1$ our assumption $\alpha c \leq 1$ is sufficient to prove the result.
 \qed
 \end{proof}
 
-The last thing that has to be discussed what is the efficiency of a uniform system. It is obvious that system of all functions is $\omega$-universal and thus uniform but. The main problem is encoding of such system which requires $\bigo(|U| \log |V|)$ bits. Other $\omega$-universal classes are known but they are quite large. Despite the fact that hash values may be computed within a constant time these classes are complex and not efficient enough. 
+To be precise we have to discuss existence and efficiency of uniform systems. It is obvious that the system of all functions is strongly $\omega$-universal and hence uniform. The main problem are space requirements -- $\bigo(|U| \log |V|)$ bits. There are other $\omega$-universal classes known but they are quite complex. Although their functions may be computed in a constant time they are not efficient enough. 
 
-A more suitable example of a uniform system appeared in \cite{DBLP:journals/siamcomp/PaghP08}. It is uniform with a high probability as stated in Theorem \ref{theorem-uniform-system}.
+A convenient example of a uniform system appeared in \cite{DBLP:journals/siamcomp/PaghP08}. Its construction is randomized and the system is uniform with a high probability.
 \begin{theorem}[\cite{DBLP:journals/siamcomp/PaghP08}]
 \label{theorem-uniform-system}
 For any constant $c > 0$ there is a RAM algorithm constructing a random family of functions from $U$ to $V$ in expected $\littleo(n) + (\log \log|U|)^{\bigo(1)}$ time and $\littleo(n)$ words of space, such that:
 \begin{itemize}
 \item With probability $1 - \bigo(1 / n^c)$ the family is uniform on $S$.
-\item There is a RAM data structure of $\bigo(n \log|V| + \log \log|U|)$ bits, which is optimal, representing its functions such that function values can be computed in constant time. The data structure can be initialized to a random function in $\bigo(n)$ time.
+\item There is a RAM data structure of $\bigo(n \log|V| + \log \log|U|)$ bits, which is optimal, representing its functions such that function values can be computed in a constant time. The data structure can be initialized to a random function in $\bigo(n)$ time.
 \end{itemize}
 \end{theorem}
 
-Let us note that for this system we use RAM having words of size $\bige(\log |U| + \log |V|)$. Now since the construction of the system is probabilistic there is only a certain probability that the system is good. So the probability that our estimate for the limit function holds may be computed as 
+The underlying RAM has words of size $\bige(\log |U| + \log |V|)$ bits. Since the construction of the system is probabilistic and it does not have to be uniform the limit function is valid only with a certain probability. Because the limit function is valid when $H$ is uniform the overall trimming rate may be computed as
 \[
 \begin{split} 
-& \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7 \mbox{ and } H \mbox{ is uniform}} \\
-	& \qquad = \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7 | H \mbox{ is uniform}} \Prob{H \mbox{ is uniform}} \\ 
+& \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7,\, H \mbox{ is uniform}} \\
+	& \qquad = \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7 \mid H \mbox{ is uniform}} \Prob{H \mbox{ is uniform}} \\ 
 	& \qquad = \left(1 - \littleo\left(\frac{1}{n}\right)\right)\left(1 - \bigo\left(\frac{1}{n^c}\right)\right). \\
 \end{split}
 \]
-The positive fact is that this probability tends to one as $n$ increases. The negative fact is that with this system choosing a new function means regenerating the whole system.
+The positive fact is that this probability tends to one as $n$ increases. More unpleasant thing is that choosing a new function means regenerating the system and takes $\bigo(n)$ time.
 
 \subsection{Truly random functions}
 \label{subsection-truly-random-functions}
-In \cite{DBLP:conf/soda/MitzenmacherV08} there are many examples when strong $2$-universality is sufficient for the results obtained with truly random functions to hold. Good performance arises from combination of randomness and data. Simply said if new data (stored elements) has some entropy given old data (already stored elements), then the performance of $2$-wise functions has high quality. With these assumptions we can use limit functions holding for truly random functions.
+In plain hashing we get full randomness because of the probabilistic properties of input. Although these assumptions are seldom correct we often have in some way randomly distributed data. As observed in \cite{DBLP:conf/soda/MitzenmacherV08} strong $2$-universality may behave like a truly random function when input contains certain amount of entropy. If the requirements are satisfied, then we can use limit functions holding for truly random functions.
 
-In case of two choices paradigm the limit function is $\bigo(\log \log n / \log d)$ and with a single hash function $\bigo(\log n / \log \log n)$. However bounds discussed above hold for arbitrary stored set without any other assumption and rely on the randomness inherited in the used universal system what may be inefficient in some situations.
+In case of two choices paradigm the limit function is $\bigo(\log \log n)$ and with a single hash function $\bigo(\log n / \log \log n)$ and these bounds are tight.
 
-
-
+Notice that bounds discussed in previous sections hold for any stored set without any other assumption. They rely only on the randomness inherited by using a high quality universal system. In the situation when data is random it is correct and much more efficient to use simpler universal system with the assumption of full randomness.
