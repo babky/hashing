@@ -92,10 +92,10 @@ To do so we partition the sequence into two types of cycles and for both of them
 Cycles partition operations of the analyzed sequence.
 Each \emph{$\alpha$-cycle} ends just after the operation causing violation of Load Factor Rule.
 Each l-cycle ends after each operation satisfying either of the following conditions:
-\begin{enumerate}
+\begin{itemize}
 \item The operation causes violation of Load Factor Rule (both cycles end).
 \item The operation is $(\alpha' - \alpha_u) m$\textsuperscript{th} successful insertion counted from the beginning of the l-cycle.
-\end{enumerate}
+\end{itemize}
 \end{definition}
 
 Let us define $e = 1/(1-p)$. Let ($i_{\alpha}$, $d_\alpha$, $i_l$) be the number of successful (insertions, deletions, insertions) performed in the current ($\alpha$, $\alpha$, l)-cycle. Let $r$ be the number of performed trials of a hash function caused by violation of Chain Limit Rule and $c$ be the number of started l-cycles. Both $r$ and $c$ are counted from the initial state. We define the potential $p_1 = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and the potential $p_2 = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.  The overall potential is $p = p_1 + p_2$.
