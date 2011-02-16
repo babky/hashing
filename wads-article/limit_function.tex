@@ -1,0 +1,83 @@
+\section{Obtaining the limit function}
+\label{section-limit}
+Limit functions play a crucial role in our model. The lower the values of a~limit function the better warranty is obtained. Apparently each limit function depends on the size of the table and the load factor. However, our concept also estimates the probability that a selected function creates a chain longer than the predefined limit. When thinking about this probability, there are two choices standing against each other. The lower the limit the greater the probability of a~random function being unsuitable.
+
+\begin{definition}[Limit function, trimming rate, suitable function]
+\label{definition-limit-function}
+Let $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ and $p \in (0, 1)$.  We say that $l$ is a \emph{limit function} with \emph{trimming rate} $p$ if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
+
+Let $l$ be a limit function with a~trimming rate $p$. We say that a function $f \in H$ \emph{does not create a long chain}, or equivalently is \emph{suitable}, if $\lpsl \le l(m, \alpha, p)$ where $\lpsl$ is the value of the random variable $\lpsl$ for the the function $f$.
+\end{definition}
+
+Notice one way of extraction of a limit function when we know $\Expect{\lpsl}$. From Markov inequality it follows that $\Prob{\lpsl \ge k \Expect{\lpsl}} \leq \frac{1}{k}$. Better limit functions may be found if we have an upper bound on probability distribution function of the random variable $\lpsl$.
+
+\subsection{Linear hash functions}
+Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos \cite{DBLP:journals/jacm/AlonDMPT99} found an interesting upper bound on $\Expect \lpsl$. They used the system of all linear functions between two vector spaces over the field $\bbbz_2$. Representing $U$ and $V$ as vector spaces does not cause any problem. Each key -- binary number may be represented as a vector from a sufficiently large vector space over $\bbbz_2$. If the initial size of the hash table is a power of two and rehash may only double or halve it, then $V$ is always a vector space over $\bbbz_2$.
+
+\begin{theorem}[\cite{DBLP:journals/jacm/AlonDMPT99}]
+\label{theorem-linear-hash-functions-dietzefelbinger}
+Suppose universal hashing with the system of linear functions from $U$ to $V$. When storing $m \log m$ elements, $\Expect{\lpsl} = \bigo(\log m \log \log m)$. 
+\end{theorem}
+
+The major problem of Theorem \ref{theorem-linear-hash-functions-dietzefelbinger} is the high multiplicative constant but it can be significantly reduced by a refinement of the original proof. First, in order to obtain a valid limit function, a dependence of $\lpsl$ on $\alpha$ needs to be discovered. Further improvement is obtained by storing $n$ elements for $n = \bige(m)$ instead of $n = m \log m$. In our computations we also introduced some variables and optimized their values in order to reduce the multiplicative constant.
+
+\begin{theorem}
+Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. When storing $n = \bige(m)$ elements, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44,$$ $$\Prob{\lpsl \geq 57.29 \log m \log \log m} < 0.5.$$
+\end{theorem}
+
+Let us note that the exact constants for different probabilities and load factors can be found by a simple computer program. Now we need only the stated results.
+
+\subsection{Two choices paradigm}
+The two choices paradigm comes from the area of balls and bins systems. For separate chaining with a single perfectly random function it is known that $\Expect{\lpsl} = \bigo\left({\log n}/{\log \log n}\right)$. A proof of this bound may be found in \cite{DBLP:books/sp/Mehlhorn84}. The same bound also holds with a single function chosen from an almost uniform system. On the other hand with a limited independence this problem becomes harder and general bounds for universal hashing are not available.
+
+A further study of balls and bins systems discovered that hashing with $d$, $d \geq 2$, independent fully random hash functions brings far better results \cite{DBLP:conf/stoc/AzarBKU94}. If each stored element is put inside a least loaded bin of $d$ ones, we obtain longest chains which do not contain more than ${\ln \ln n}/{\ln d} + \bigo(1)$ elements with high probability. It is not so hard to realize that these results also hold in case of universal hashing with almost uniform systems. Bounds that can be achieved with a limited independence for a general $S \subset U$, are not known so far.
+
+In the following definition for an $\vec{x} \in U^k$ and $f \in H$ the notation $f(\vec{x})$ means a vector from $V^k$ and $f(\vec{x}) = (f(x_1), \dots, f(x_k))$.
+\begin{definition}[Independent hash functions]
+\label{definition-independent-hash-functions}
+Let $H$ be a uniform system of hash functions and $f, g \in H$ be two functions chosen uniformly at random from the system $H$. We say that the functions $f, g$ are \emph{independent} if for arbitrary $\vec{x_1}, \vec{x_2} \in U^n$  and $\vec{y_1}, \vec{y_2} \in V^n$ $$\Prob{f(\vec{x_1}) = \vec{y_1}, g(\vec{x_2}) = \vec{y_2}} = \Prob{f(\vec{x_1}) = \vec{y_1}} \Prob{g(\vec{x_2}) = \vec{y_2}}.$$
+\end{definition}
+
+Notice that the independent choice of $f_1, \dots, f_d$ from $H$ is sufficient for the functions to be independent in terms of Definition \ref{definition-independent-hash-functions}. Theorem \ref{theorem-universal-hashing-two-choices} is a straightforward restatement of results pioneered in \cite{DBLP:conf/stoc/AzarBKU94} which originally hold only with fully random functions.
+
+\begin{theorem}
+\label{theorem-universal-hashing-two-choices}
+Let $H$ be an almost uniform universal system with a constant $c$ such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x \in S$ is placed into a bucket with the shortest chain of buckets $f_1(x), \dots, f_d(x)$ given by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+\end{theorem}
+\begin{proof}
+We only discuss differences from the proof for perfectly random functions found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94}. Observe that the probability of collision of $k$, $k \leq n$, different elements is at most ${c}/{m^k}$. The probability of collision of the same sequence of elements with a truly random function equals an most ${1}/{m^k}$. Thus we have to calculate with the multiplicative constant.
+%^TODO: unclear - what constant?
+From the independence of functions $f_1, \dots, f_d$ it is clear that $\Prob{f_i(x) \in R,\, \forall i \in \{0, \dots, d\}} = \prod_{i = 1}^{d}\Prob{f_i(x) \in R}$ for each $x \in U$ and $R \subseteq V$. Hence for $c = 1$ no change has to be done. However, for $c > 1$ our assumption $\alpha c \leq 1$ is sufficient to prove the result.
+\qed
+\end{proof}
+
+To be precise we have to discuss existence and efficiency of uniform systems. It is obvious that the system of all functions is strongly $\omega$-universal and hence uniform. The main problem are space requirements -- $\bigo(|U| \log |V|)$ bits. There are other $\omega$-universal classes known but they are quite complex. Although their functions may be computed in a constant time, they are not efficient enough. 
+
+A convenient example of a uniform system appeared in \cite{DBLP:journals/siamcomp/PaghP08}. Its construction is randomized and the system is uniform with a high probability.
+\begin{theorem}[\cite{DBLP:journals/siamcomp/PaghP08}]
+\label{theorem-uniform-system}
+For any constant $c > 0$ there is a RAM algorithm constructing a random family of functions from $U$ to $V$ in expected $\littleo(n) + (\log \log|U|)^{\bigo(1)}$ time and $\littleo(n)$ words of space, such that:
+\begin{itemize}
+\item With probability $1 - \bigo(1 / n^c)$ the family is uniform on $S$.
+\item There is a RAM data structure of $\bigo(n \log|V| + \log \log|U|)$ bits, which is optimal, representing its functions such that function values can be computed in constant time. The data structure can be initialized to a random function in $\bigo(n)$ time.
+\end{itemize}
+\end{theorem}
+
+The underlying RAM has words of size $\bige(\log |U| + \log |V|)$ bits. Since the construction of the system is probabilistic and it does not have to be uniform, the limit function is valid only with a certain probability. Because the limit function is valid when $H$ is uniform, the overall trimming rate may be computed as
+\[
+\begin{split} 
+& \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7,\, H \mbox{ is uniform}} \\
+	& \qquad = \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7 \mid H \mbox{ is uniform}} \Prob{H \mbox{ is uniform}} \\ 
+	& \qquad = \left(1 - \littleo\left(\frac{1}{n}\right)\right)\left(1 - \bigo\left(\frac{1}{n^c}\right)\right). \\
+\end{split}
+\]
+The positive fact is that this probability tends to one as $n$ increases. A more unpleasant thing is that choosing a new function means regenerating the system and takes $\bigo(n)$ time.
+%^TODO: tends?
+
+\subsection{Truly random functions}
+\label{subsection-truly-random-functions}
+In plain hashing we get full randomness because of the probabilistic properties of input. Although these assumptions are seldom correct, we often have in some way randomly distributed data. As observed in \cite{DBLP:conf/soda/MitzenmacherV08}, strong $2$-universality may behave like a truly random function when input contains certain amount of entropy. If the requirements are satisfied, then we can use the same limit functions as for truly random functions.
+
+In case of the two choices paradigm the limit function is $\bigo(\log \log n)$ and with a~single hash function $\bigo(\log n / \log \log n)$ and these bounds are tight.
+
+Notice that bounds discussed in previous sections hold for any stored set without any other assumption. They rely only on the randomness inherited by using a high-quality universal system. In the situation when data is random it is correct and much more efficient to use a simpler universal system with the assumption of full randomness.

@@ -1,0 +1,60 @@
+% This is the LaTeX source for the article dealing with Worst-Case 
+% Aware Universal Hashing. The source code is a modification of the 
+% file typeinst.tex which may be found at http://www.springer.com/lncs
+% and ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e
+
+\documentclass[runningheads,a4paper]{llncs}
+\include{definitions}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{url}
+
+\urldef{\mail}\path|babkys@gmail.com|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\mainmatter
+
+\author{Martin Babka}
+%\thanks{We would like to thank the anonymous reviewers for approving this article.}
+\authorrunning{Martin Babka}
+
+\title{Worst Case Aware Universal Hashing}
+
+\titlerunning{Worst Case Aware Universal Hashing}
+
+\institute{Faculty of Mathematics and Physics, Charles University Prague, \\Malostranké náměstí 25, Prague, Czech Republic \\
+\mail\\
+\url{http://www.ktiml.mff.cuni.cz/~babka/hashing}}
+
+\toctitle{Worst Case Aware Universal Hashing}
+\tocauthor{Martin Babka}
+\maketitle
+
+\begin{abstract}
+Hash tables are one of the simplest yet often used solutions of the dictionary problem. 
+We study possibilities of designing a simple hash table giving a worst case time warranty for Find operation.
+We exploit properties of various universal families of functions so that a hash table is able to guarantee the worst case running time of Find operation.
+Because the mentioned time warranty strongly depends on the used universal system, we present various systems capable of interesting bounds.
+We also combine the "two choices paradigm" with universal hashing which gives the $\bigo(\log \log n)$ bound with certain reasonable requirements.
+The proposed hash table achieves constant running times of all operations in the expected case.
+
+\keywords{universal hashing, data structures, two choices}
+\end{abstract}
+
+\input{introduction}
+\input{our_approach}
+\input{limit_function}
+\input{model}
+\input{conclusion}
+\input{bibliography}
+\input{appendix_two_choices_uniform}
+
+\end{document}

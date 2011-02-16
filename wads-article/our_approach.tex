@@ -1,0 +1,9 @@
+\subsection{Our approach}
+We aim to design a model of universal hashing which guarantees the worst case running time of Find operation independently of the stored set. In addition, we want the operations to have constant amortized running times in the expected case. One obvious reason for amortization is the fact that we have to keep the load factor in some predefined bounds. Reasonable space consumption determines a~lower bound and the expected chain length give an upper bound.
+
+The achieved warranty strongly depends on the underlying universal system. Our first step is to point out some systems for which estimates on the expected length of the longest chain are known. The second step is to connect these classes with our model.
+
+An obvious way of giving such worst case warranty is to rehash the whole table whenever the length of the longest chain exceeds the prescribed limit. However, we need one requirement on the bound. The probability that a random function \emph{creates a long chain} is less than a prescribed probability rate. The requirement means that a randomly chosen function is likely to work with the stored set well.
+%^TODO unclear: what is the requirement?
+
+The concept of limit functions is formalized in Sect.~\ref{section-limit} and in order to find them we deal with various universal systems. In Sect. \ref{section-model} we describe our model and connect it with the discussed systems. Section~\ref{section-conclusion} points out further improvements and alternatives of the model. Possibilities of finding other limit functions are discussed, too. The newly proposed approaches should be competitive with current plain hashing and have better behavior than chained hashing in practice.
