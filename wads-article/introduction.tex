@@ -1,46 +1,46 @@
 \section{Introduction}
-Dictionary is a data structure which allows storing and querying data associated with a given key. If there are no assumptions on the set of the keys, e.g. it is not ordered, then we often represent such dictionaries by \emph{hash tables}. We just need a suitable function, which maps keys to positions in a hash table, and the table provides operations \emph{Find}, \emph{Insert} and \emph{Delete}. 
+Dictionary is a data structure which allows storing and querying data associated with a given key. If there are no assumptions on the set of the keys, e.g. it is not ordered, then we often represent such dictionaries by \emph{hash tables}. We just need a suitable function that maps keys to positions in a table and we can easily perform operations \emph{Find}, \emph{Insert} and \emph{Delete}. 
 
-We always assume that the hash function behaves randomly in some way. Provided its full randomness each operation has expected constant running time. There are two major ways how to deal with the randomness. The first approach is to assume uniformly and independently distributed input data. The formal description of the requirements may be found in \cite{DBLP:books/sp/Mehlhorn84}. In some situations they are not necessarily satisfied but weaker conditions may hold. In this case we switch to a randomization provided by the uniform selection of a hash function from a family of functions. This method is known as \emph{universal hashing} and was pioneered by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. 
+We always assume that the hash function behaves randomly in some way, which ensures each operation has expected constant running time. There are two major ways how to deal with the randomness. The first approach is to assume uniformly and independently distributed input data. The formal description of the requirements may be found in \cite{DBLP:books/sp/Mehlhorn84}. In some situations they are not necessarily satisfied but weaker conditions may hold. In this case we switch to randomization provided by uniform selection of the hash function from a universal family. This method is known as \emph{universal hashing} and was pioneered by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. 
 
-The main difference between universal and plain hashing is that we switch to a different probability space. In the area of plain hashing the probability space is formed by a uniform and independent selection of the input data. On the other in case of universal hashing a random hash function from is chosen uniformly from a finite family of functions. Unfortunately dealing with common universal systems brings up a lot of dependencies when considering probabilities of collisions.
+The main difference between universal and plain hashing is that we switch to a different probability space. In the area of plain hashing the probability space is formed by uniform and independent selection of the input data. On the other hand in the case of universal hashing a random hash function is chosen uniformly from a finite family of functions. Unfortunately dealing with common universal systems brings a lot of dependencies when considering probabilities of collisions.
 
-Although universal hashing provides Find operation running in expected constant time in some situations it is not enough and we need a worst case warranty. Perfect hashing \cite{Fredman:1984:SST:828.1884} is an extension of universal hashing which addresses this problem for static sets. In order to add update operations various dynamizations of perfect hashing \cite{DBLP:journals/siamcomp/DietzfelbingerKMHRT94} and a real time hash table \cite{DBLP:conf/icalp/DietzfelbingerH90} were proposed. Perfect hashing, real time hash tables together with cuckoo hashing \cite{DBLP:conf/esa/PaghR01} guarantee a constant look up and the other operations run in expected amortized constant time.
+Although universal hashing guarantees expected constant time, this is not enough when we need a worst case warranty. Perfect hashing \cite{Fredman:1984:SST:828.1884} is an extension of universal hashing which addresses this problem for static sets. In order to add update operations various dynamizations of perfect hashing \cite{DBLP:journals/siamcomp/DietzfelbingerKMHRT94} and a real time hash table \cite{DBLP:conf/icalp/DietzfelbingerH90} were proposed. Perfect hashing, real time hash tables together with cuckoo hashing \cite{DBLP:conf/esa/PaghR01} guarantee a constant look up and the other operations run in expected amortized constant time.
 
 Our motivation is to close the gap between perfect hashing and plain universal hashing. We propose a simple modification of universal hashing giving a worst case warranty to Find operation. A natural way how to do it is to bound lengths of chains by a convenient limit function and rehash the table when this rule is violated. This is the case of our model.
 
-Main advantage of the model is its simplicity when compared to perfect hashing. Since we do not need a perfect hash function the update operations should run faster. Even greater speedup may be achieved when just a simple universal class is required. Unlike cuckoo hashing, which resembles open addressing, we have chosen a different approach. On the other hand the amortization technique, that we present, may be used with double hashing, too. Compared to perfect hashing our method does not use second level hash tables. However, utilization of this technique is possible and significantly improves the warranty.
+Main advantage of the model is its simplicity when compared to perfect hashing. Since we do not need a perfect hash function, the update operations should run faster. Even greater speedup may be achieved when just a simple universal class is required. Unlike cuckoo hashing, which resembles open addressing, we have chosen a different approach. On the other hand the amortization technique that we present may be used with double hashing, too. Compared to perfect hashing our method does not use second level hash tables. However, utilization of this technique is possible and significantly improves the warranty.
 
 \subsection{Notation}
-$U$ denotes the universe, the set of possible key values. $V$ denotes the addresses of the hash table. We refer to $S \subset U$ as to the set of the stored set keys. The size of the hash table is denoted by $m = |V|$ and the number of stored elements is $n = |S|$, usually $n \ll |U|$. The hash table's load factor is denoted by $\alpha = \frac{n}{m}$. It is kept in a predefined interval so that the space is not wasted, usually its maximal value is less than one.
+$U$ denotes the universe, the set of possible key values. $V$ denotes the addresses of the hash table. We refer to $S \subset U$ as to the set of stored keys. The size of the hash table is denoted by $m = |V|$ and the number of stored elements is $n = |S|$, usually $n \ll |U|$. The load factor of the table is denoted by $\alpha = \frac{n}{m}$. It is kept in a predefined interval so that the space is not wasted and its maximal value is usually less than one.
 
-Mapping $f\colon U \rightarrow V$ denotes a current hash function. We will discuss the probabilistic properties of hash functions and their families in more detail later.
+Mapping $f\colon U \rightarrow V$ denotes the current hash function. We will discuss probabilistic properties of hash functions and their families in more detail later.
 
-We often work with the following two random variables. The length of the chain at the address $y \in V$ for a fixed stored set $S$ is denoted by $\psl(y, S)$. The length of the longest chain, $\lpsl(S)$, is defined as $\lpsl = \max_{y \in V} \psl(y, S).$ We omit the parameter $S$ when we talk about bounds that hold for each $S \subseteq U$.
+We often work with the following two random variables for a fixed stored set~$S$. The length of the chain at address $y \in V$ is denoted by $\psl(y, S)$. The length of the longest chain, $\lpsl(S)$, is defined as $\lpsl = \max_{y \in V} \psl(y, S).$ We omit the parameter $S$ when we talk about bounds that hold for any $S \subseteq U$.
 
 \subsection{Universal hashing}
-Universal hashing solves dictionary problem using explicit randomization. Hash functions are picked from a universal system. These classes of hash functions ensure that for each stored set there are many functions behaving "properly".
+Universal hashing solves the dictionary problem using explicit randomization. Hash functions are picked from a universal system. These classes of hash functions ensure that for any stored set there are many functions  behaving "properly".
 
-This proper behavior may be understood differently and leads to various definitions of universal systems. However, from each of the definitions it follows that there is only a constant number of elements colliding with a given element. Hence the expected length of a chain is constant and thus expected time complexity of Find operation is constant, too.
+This proper behavior may be understood differently and leads to various definitions of universal systems. However, from each of the definitions it follows that there is only a constant number of elements colliding with a given element. Hence the expected length of a chain is constant and thus the expected time complexity of Find operation is constant, too.
 
 \begin{definition}[$c$-universal system \cite{DBLP:journals/jcss/CarterW79}]
 \label{definition-c-universal-system}
-Let $H$ be a multiset of hash functions from $U$ to $V$. We say that $H$ is a \emph{$c$-universal system} where $c \in \bbbr_0^+$ if for different $x, y \in U$
+Let $H$ be a multiset of hash functions from $U$ to $V$. We say that $H$ is a \emph{$c$-universal system} where $c \in \bbbr_0^+$ if for arbitrary different $x, y \in U$
 \[
 \left|\lbrace f \in H \setdelim f(x) = f(y) \rbrace\right| \leq \frac{c|H|}{m}.
 \]
 \end{definition}
 
-To be precise the set on the left side of the above expression is also a multiset. Since functions are chosen from $H$ uniformly we may equivalently restate our definition in terms of probability as
+To be precise, the set on the left side of the above expression is also a multiset. Since functions are chosen from $H$ uniformly, we may equivalently restate our definition in terms of probability as
 \[
-\Prob{f(x) = y} \leq \frac{c}{m}.
+\Prob{f(x) = f(y)} \leq \frac{c}{m}.
 \]
 
-From now on we assume the uniform choice of the current hash function $f$ from a universal system $H$ without any further reference.
+From now on we assume the uniform choice of the current hash function $f$ from a~universal system $H$ without any further reference.
 
-More powerful definitions include strong \emph{$k$-universality}, which is also called \emph{$k$-wise independence}, cover \emph{strongly $\omega$-universal} systems and \emph{uniform} systems.
+More powerful definitions include strong \emph{$k$-universality}, which is also called \emph{$k$-wise independence}, \emph{strongly $\omega$-universal} systems and \emph{uniform} systems.
 \begin{definition}
-Let $k > 0$ be an integer. System of functions $H$ is 
+Let $k > 0$ be an integer. System of functions $H$ is
 \begin{itemize}
 	\item \emph{almost strongly $k$-universal} with constant $c > 0$ if for any sequence of pairwise different elements $x_1, \dots, x_k \in U$ and arbitrary $y_1, \dots, y_k \in V$ \[\Prob{f(x_1) = y_1, \dots, f(x_k) = y_k} \leq \frac{c}{m^k}\mbox{,}\]
 	\item \emph{strongly $k$-universal} \cite{DBLP:conf/focs/WegmanC79} if it is almost strongly $k$-universal with $c = 1$,
@@ -49,13 +49,14 @@ Let $k > 0$ be an integer. System of functions $H$ is
 \end{itemize}
 \end{definition}
 
-Notice that strongly $k$-universal systems are fully random for up to $k$ different elements and provide only a \emph{limited randomness} for more than $k$ elements. On the other hand strongly $\omega$-universal systems behave fully randomly. When we need estimates only for the $n$ stored elements, then the concept of uniform systems is as powerful as full randomness.
+Notice that strongly $k$-universal systems are fully random for up to $k$ different elements and provide only \emph{limited randomness} for more than $k$ elements. On the other hand strongly $\omega$-universal systems behave fully randomly. When we need estimates only for the $n$ stored elements, then the concept of uniform systems is as powerful as full randomness.
 
 \subsection{Our approach}
-We aim to design a model of universal hashing which guarantees the worst case running time of Find operation independently on the stored set. In addition we want the operations to have constant amortized running times in the expected case. The reason for amortization is the fact that we have to keep the load factor in the predefined bounds. Reasonable space consumption determines the lower bound and the expected chain length give the upper bound.
+We aim to design a model of universal hashing which guarantees the worst case running time of Find operation independently of the stored set. In addition, we want the operations to have constant amortized running times in the expected case. One obvious reason for amortization is the fact that we have to keep the load factor in some predefined bounds. Reasonable space consumption determines a~lower bound and the expected chain length give an upper bound.
 
 The achieved warranty strongly depends on the underlying universal system. Our first step is to point out some systems for which estimates on the expected length of the longest chain are known. The second step is to connect these classes with our model.
 
-An obvious way of giving such worst case warranty is to rehash the whole hash table if the length of the longest chain exceeds the prescribed limit. However, we need an extra requirement on the bound. The probability that a random function \emph{creates a long chain} is less than a prescribed probability rate. The requirement means that a randomly chosen function is likely to work well with the stored set.
+An obvious way of giving such worst case warranty is to rehash the whole table whenever the length of the longest chain exceeds the prescribed limit. However, we need an extra requirement on the bound. The probability that a random function \emph{creates a long chain} is less than a prescribed probability rate. The requirement means that a randomly chosen function is likely to work well with the stored set.
+%^TODO unclear: what is the requirement?
 
-Concept of limit functions is formalized in Sect. \ref{section-limit} and in order to find them we deal with various universal systems. In Sect. \ref{section-model} we describe our model and connect it with the discussed systems. Section \ref{section-conclusion} points out further improvements and alternatives of the model. Possibilities of finding other limit functions are discussed, too. Newly proposed approaches should be competitive with current plain hashing and should have better behavior than chained hashing in practice.
+The concept of limit functions is formalized in Sect.~\ref{section-limit} and in order to find them we deal with various universal systems. In Sect. \ref{section-model} we describe our model and connect it with the discussed systems. Section~\ref{section-conclusion} points out further improvements and alternatives of the model. Possibilities of finding other limit functions are discussed, too. The newly proposed approaches should be competitive with current plain hashing and they should have better behavior than chained hashing in practice.

@@ -1,4 +1,5 @@
 \section*{Appendix -- proof of Theorem \ref{theorem-universal-hashing-two-choices}}
+%TODO I would repeat the theorem
 \subsection{Notation}
 For the proof of Theorem \ref{theorem-universal-hashing-two-choices} we need further notation which comes from the original proof found in \cite{Mitzenmacher:2005:PCR:1076315}. By $\mathrm{Bi}(n, p)$ we understand a binomial random variable with parameters $n$ and $p$. Elements of the stored set $S$ are placed inside the table in an arbitrary but fixed order. Let $x_1$ be the first inserted element, $x_2$ the second and $x_n$ be the last one. By the state of the system at the time $t$ we understand the placement of all elements in the table immediately after the insertion of the element $x_t$. 
 
@@ -37,7 +38,7 @@ From the previous observation if follows that
 \end{split}
 \]
 
-Now because of uniformity of the system $H$ it is true that $$\Prob{\sum_{t = 1}^{n} Y_t^i > k} \leq \Prob{\mathrm{Bi}(n, p) > k}.$$ If the system was not uniform, then we would have to deal with the problem of numerous dependencies. However, in the case of uniformity of the universal system from Lemma \ref{lemma-height-of-inserted-ball} we know that if $\beta_i \geq \nu_i$, then $Y_t^i$ holds with probability at most $p_i$ independently on $Y_{t'}^i$ for $t' < t$. Now if $\beta_i < \nu_i$, then $Y_t^i$ can not be 1 and thus $\Prob{Y_t^i = 1} \leq p_i$ independently on $\epsilon_i$.
+Now because of uniformity of the system $H$ it is true that $$\Prob{\sum_{t = 1}^{n} Y_t^i > k} \leq \Prob{\mathrm{Bi}(n, p) > k}.$$ If the system was not uniform, then we would have to deal with the problem of numerous dependencies. However, in the case of uniformity of the universal system from Lemma \ref{lemma-height-of-inserted-ball} we know that if $\beta_i \geq \nu_i$, then $Y_t^i$ holds with probability at most $p_i$ independently of $Y_{t'}^i$ for $t' < t$. Now if $\beta_i < \nu_i$, then $Y_t^i$ can not be 1 and thus $\Prob{Y_t^i = 1} \leq p_i$ independently on $\epsilon_i$.
 
 If we substitute $2np_i$ into $k$, then we get
 \[
@@ -47,7 +48,7 @@ Moreover, if we assume that $np_i \geq 6 \ln n$, we have that
 \[
 \Prob{\nu_{i + 1} > \beta_{i + 1}} = \Prob{\nu_{i + 1} > 2np_i | \epsilon_i} = \Prob{\neg \epsilon_{i + 1}} \leq \frac{1}{n ^ 2\Prob{\epsilon_i}} \textit{.}
 \]
-So our desired bound works whenever $np_i \geq 6 \ln n$. Let $i^*$ be the least $i \in \bbbn$ such that $np_i < 6 \ln n$. We later show that $i^*$ is sufficiently low. Now we perform one step of the layered induction assuming that $i<i^*$. As a result we obtain the bound for $\epsilon_{i + 1}$.
+So our desired bound works whenever $np_i \geq 6 \ln n$. Let $i^*$ be the least $i \in \bbbn$ such that $np_i < 6 \ln n$. We are going to show later that $i^*$ is sufficiently low. Now we perform one step of the layered induction assuming that $i<i^*$. As a result we obtain the bound for $\epsilon_{i + 1}$.
 \[
 \begin{split}
 \Prob{\neg \epsilon_{i + 1}} 
