@@ -22,6 +22,7 @@ Suppose universal hashing with the system of linear functions from $U$ to $V$. W
 The major problem of Theorem \ref{theorem-linear-hash-functions-dietzefelbinger} is the high multiplicative constant. It can be significantly reduced by a refinement of the original proof. First, in order to obtain a valid limit function a dependence of $\lpsl$ on $\alpha$ needs to be discovered. Further improvement is obtained by storing $n$ elements for $n = \bige(m)$ instead of $n = m \log m$. In our computations we also introduced some variables and optimized their values in order to reduce the multiplicative constant.
 
 \begin{theorem}
+\label{theorem-linear-refined}
 Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. When storing $n = \bige(m)$ elements, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44,$$ $$\Prob{\lpsl \geq 57.29 \log m \log \log m} < 0.5.$$
 \end{theorem}
 
