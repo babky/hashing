@@ -22,7 +22,7 @@ We often work with the following two random variables for a fixed stored set~$S$
 \subsection{Universal hashing}
 Universal hashing solves the dictionary problem using explicit randomization. Hash functions are picked from a universal system. These classes of hash functions ensure that for any stored set there are many functions  behaving "properly".
 
-This proper behavior may be understood differently and leads to various definitions of universal systems. However, from each of the definitions it follows that there is only a constant number of elements colliding with a given element. Hence the expected length of a chain is constant and thus the expected time complexity of Find operation is constant, too.
+This proper behavior may be understood differently and leads to various definitions of universal systems. However, from each of the definitions it follows that for a given element the expected number of collisions is constant. Hence the expected length of a chain is constant and thus the expected time complexity of Find operation is constant, too.
 
 \begin{definition}[$c$-universal system \cite{DBLP:journals/jcss/CarterW79}]
 \label{definition-c-universal-system}
@@ -53,10 +53,10 @@ Let $k > 0$ be an integer. System of functions $H$ is
 Notice that strongly $k$-universal systems are fully random for up to $k$ different elements and provide only \emph{limited randomness} for more than $k$ elements. On the other hand strongly $\omega$-universal systems behave fully randomly. When we need estimates only for the $n$ stored elements, then the concept of uniform systems is as powerful as full randomness.
 
 \subsection{Our approach}
-We aim to design a model of universal hashing which guarantees the worst case running time of Find operation independently of the stored set. In addition we want the operations to have constant amortized running times in the expected case. The reason for amortization is the fact that we have to keep the load factor in some predefined bounds. Reasonable space consumption determines a~lower bound and the expected chain length give an upper bound.
+We aim to design a model of universal hashing which guarantees the worst case running time of Find operation independently of the stored set. In addition we want the operations to have constant amortized running times in the expected case. The reason for amortization is the fact that we have to keep the load factor in some predefined bounds. Reasonable space consumption determines a~lower bound and the expected chain length gives an upper bound.
 
 The achieved warranty strongly depends on the underlying universal system. Our first step is to point out some systems for which estimates on the expected length of the longest chain are known. The second step is to connect these classes with our model.
 
 An obvious way of giving such worst case warranty is to rehash the whole hash table if the length of the longest chain exceeds the prescribed limit. However, we need an extra requirement on the bound. We need the probability that a random function \emph{creates a long chain} to be less than a prescribed probability rate. The requirement means that a randomly chosen function is likely to work well with the stored set.
 
-The concept of limit functions is formalized in Sect.~\ref{section-limit} and in order to find them we deal with various universal systems. In Sect. \ref{section-model} we describe our model and connect it with the discussed systems. Section~\ref{section-conclusion} points out further improvements and alternatives of the model. Possibilities of finding other limit functions are discussed, too. The newly proposed approaches should have better behavior than chained hashing in practice and be competitive with current plain hashing.
+The concept of limit functions is formalized in Sect.~\ref{section-limit} and in order to find them we deal with various universal systems. In Sect. \ref{section-model} we describe our model and connect it with the discussed systems. Section~\ref{section-conclusion} points out further improvements and alternatives of the model. Possibilities of finding other limit functions are discussed, too. The modified approaches should have better behavior than chained hashing in practice and be competitive with current plain hashing.

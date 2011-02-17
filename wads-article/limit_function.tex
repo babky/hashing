@@ -4,7 +4,7 @@ Limit functions play a crucial role in our model. The lower the values of a~limi
 
 \begin{definition}[Limit function, trimming rate, suitable function]
 \label{definition-limit-function}
-Let $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ and $p \in (0, 1)$.  We say that $l$ is a \emph{limit function} with \emph{trimming rate} $p$ if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
+Let $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$, $m$ be the size of the hash table and $p \in (0, 1)$.  We say that $l$ is a \emph{limit function} with \emph{trimming rate} $p$ if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
 
 Let $l$ be a limit function with a~trimming rate $p$. We say that a function $f \in H$ \emph{does not create a long chain}, or equivalently is \emph{suitable}, if $\lpsl \le l(m, \alpha, p)$ where $\lpsl$ is the value of the random variable $\lpsl$ for the the function $f$.
 \end{definition}
@@ -47,7 +47,7 @@ Notice that the independent choice of $f_1, \dots, f_d$ from $H$ is sufficient f
 Let $H$ be an almost uniform universal system with a constant $c$ such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x$ is placed into a least loaded bucket from $f_1(x), \dots, f_d(x)$. The addresses are determined by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
 \end{theorem}
 \begin{proof}
-We only discuss differences from the proof for perfectly random functions found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94}. Observe that the probability of collision of $k$, $k \leq n$, different elements is at most ${c}/{m^k}$. The probability of collision of the same sequence of elements with a truly random function equals ${1}/{m^k}$. Thus we have to calculate with the multiplicative constant $c$.
+We only discuss differences from the proof for perfectly random functions found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94}. Observe that the probability of collisions of $k$, $k \leq n$, different elements is at most ${c}/{m^k}$. The probability of collisions in the same sequence of elements with a truly random function equals ${1}/{m^k}$. Thus we have to calculate with the multiplicative constant $c$.
 From the independence of functions $f_1, \dots, f_d$ it is clear that $\Prob{f_i(x) \in R,\, \forall i \in \{0, \dots, d\}} = \prod_{i = 1}^{d}\Prob{f_i(x) \in R}$ for each $x \in U$ and $R \subseteq V$. Hence for $c = 1$ no change has to be done. However, for $c > 1$ our assumption $\alpha c \leq 1$ is sufficient to prove the result.
 \qed
 \end{proof}
@@ -60,7 +60,7 @@ A convenient example of a uniform system appeared in \cite{DBLP:journals/siamcom
 For any constant $c > 0$ there is a RAM algorithm constructing a random family of functions from $U$ to $V$ in expected $\littleo(n) + (\log \log|U|)^{\bigo(1)}$ time and $\littleo(n)$ words of space, such that:
 \begin{itemize}
 \item With probability $1 - \bigo(1 / n^c)$ the family is uniform on $S$.
-\item There is a RAM data structure of $\bigo(n \log|V| + \log \log|U|)$ bits, which is optimal, representing its functions such that function values can be computed in constant time. The data structure can be initialized to a random function in $\bigo(n)$ time.
+\item There is a RAM data structure of $\bigo(n \log|V| + \log \log|U|)$ bits, which is optimal, representing its functions such that function values can be computed in constant time. Choosing a function from the system takes $\bigo(n)$ time.
 \end{itemize}
 \end{theorem}
 
