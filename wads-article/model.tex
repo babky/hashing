@@ -23,7 +23,7 @@ In order to analyze the expected length of a chain we define a system of suitabl
 Let $l$ be a limit function with a~trimming rate $p$. The system of functions \[ H(p, l, S) = \{ f \in H \setdelim f \textit{ does not create a long chain for l with p} \} \] is called \emph{$(p, l)$-trimmed system}.
 \end{definition}
 
-The restriction of $H$ to $H(p, l, S)$ is informed about the stored set since it has a feedback if a function is suitable or not. Moreover, uniform choice from the original system $H$ with refusal of the unsuitable functions is equivalent to uniform choice from the restricted system $H(p, l, S)$.
+The restriction of $H$ to $H(p, l, S)$ is informed about the stored set since it has a feedback if a function is suitable or not. Moreover, uniform choice from the original system $H$ with refusal of the unsuitable functions is equivalent to uniform choice from the restricted system $H(p, l, S)$. To find a suitable function, a function from $H(p, l, S)$, we uniformly select a function $f \in H$ and store $S$ using $f$. While there is a chain with more than $l(m, \alpha, p)$ elements, the choice is repeated.
 
 We show that a $(l, p)$-trimmed system has the constant of universality at most $1 / (1 - p)$ times higher than the original system. So these systems are universal only with a higher constant and thus $\Expect{\psl} \leq c\alpha/(1-p)$ where $c$ is the constant of universality of the original system $H$.
 
@@ -32,7 +32,7 @@ We show that a $(l, p)$-trimmed system has the constant of universality at most 
 If $H$ is a universal system with a constant $c$ and $l$ is a limit function with a trimming rate $p$, then $|H(p, l, S)| \geq (1 - p)|H|$ and  \[ \Prob{f(x) = f(y) \mbox{ for } f \in H(p, l, S)} \leq \frac{1}{1 - p} \cdot \Prob{f(x) = f(y) \mbox{ for } f \in H}. \]
 \end{lemma}
 \begin{proof}
-From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-function} it is clear that $\Prob{f \in H(p, l, S)} \geq 1 - p$ and as a result $|H(p, l, S)| \geq (1 - p)|H|$. In addition for different $x, y \in U$ 
+From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-function} it is clear that $\Prob{f \in H(p, l, S)} \geq 1 - p$ and, as a result, $|H(p, l, S)| \geq (1 - p)|H|$. In addition for different $x, y \in U$ 
 \[
 \begin{split}
 & \Prob{f(x) = f(y) \mid f \in H(p, l, S)} 
@@ -43,7 +43,7 @@ From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-funct
 \qed
 \end{proof}
 
-For a $k$-wise independent class $H$ the probability of a collision with $H(p, l, S)$ is at most $1 / (1 - p)$ times the probability of the same collision with $H$.
+For a $k$-wise independent class $H$ the probability of a collision when using the system $H(p, l, S)$ is at most $1 / (1 - p)$ times the probability of the same collision when using the system $H$.
 
 Lemma \ref{lemma-no-trials} gives an estimate on the expected number of trials needed to find a function $f \in H(p, l, S)$ if $f$ is chosen uniformly from $H$.
 
@@ -88,26 +88,22 @@ To prove the theorem assume that we are given a sequence of operations. Since Fi
 
 To do so we partition the sequence into two types of cycles and for both of them we define a potential. The first cycle type is used to amortize violations of Load Factor Rule. With the second one we are able to distribute the time required to repair violations of Chain Length Limit Rule.
 
-\begin{definition}[$\alpha$-cycle, l-cycle]
+\begin{definition}[$\alpha$-cycle, $l$-cycle]
 Cycles partition operations of the analyzed sequence.
 Each \emph{$\alpha$-cycle} ends just after the operation causing violation of Load Factor Rule.
-Each l-cycle ends after each operation satisfying either of the following conditions:
-\begin{itemize}
-\item The operation causes violation of Load Factor Rule (both cycles end).
-\item The operation is $(\alpha' - \alpha_u) m$\textsuperscript{th} successful insertion counted from the beginning of the l-cycle.
-\end{itemize}
+Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation which causes violation of Load Factor Rule (both cycles end).
 \end{definition}
 
-Let us define $e = 1/(1-p)$. Let ($i_{\alpha}$, $d_\alpha$, $i_l$) be the number of successful (insertions, deletions, insertions) performed in the current ($\alpha$, $\alpha$, l)-cycle. Let $r$ be the number of performed trials of a hash function caused by violation of Chain Limit Rule and $c$ be the number of started l-cycles. Both $r$ and $c$ are counted from the initial state. We define the potential $p_1 = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and the potential $p_2 = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.  The overall potential is $p = p_1 + p_2$.
+Let us define $e = 1/(1-p)$. Let ($i_{\alpha}$, $d_\alpha$, $i_l$) be the number of successful (insertions, deletions, insertions) performed in the current ($\alpha$, $\alpha$, l)-cycle. Let $r$ be the number of performed trials of a hash function caused by violation of Chain Limit Rule and $c$ be the number of started $l$-cycles. Both $r$ and $c$ are counted from the initial state. We define the potential $p_1 = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and the potential $p_2 = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.  The overall potential is $p = p_1 + p_2$.
 
 We decompose each update operation into an actual update and a possible rehashing part. Since the expected length of a chain is constant the expected running time of an update is constant as well. Observe that the overall potential is increased by a constant if the analyzed operation is not the last one in a cycle. Hence the amortized complexity of an update is constant. 
 
-Each trial of a function from $H$ caused by Chain Limit Rule violation is amortized by incrementing $r$. When we break Load Factor Rule, the $\alpha$-cycle ends so $p_1$ decreases by at least $2em$ and $p_2$ is increased by at most $em$, hence $\Delta p \leq -em$ which can pay for the rehashing work. Similarly when an l-cycle is ended because $i_l = (\alpha' - \alpha_u)m$, then $\Delta p_2 = 0$. 
+Each trial of a function from $H$ caused by Chain Limit Rule violation is amortized by incrementing $r$. When we break Load Factor Rule, the $\alpha$-cycle ends so $p_1$ decreases by at least $2em$ and $p_2$ is increased by at most $em$, hence $\Delta p \leq -em$ which can pay for the rehashing work. Similarly when an $l$-cycle is ended because $i_l = (\alpha' - \alpha_u)m$, then $\Delta p_2 = 0$. 
 
-Now we argue that $\Expect{ce - r} \geq 0$. If we omitted deletes from each l-cycle, we would get a sequence of sets created only be insertions. Deletes may not prolong chains so from Lemma \ref{lemma-sets} it follows that the expected number of hash function trials in an l-cycle is at most $e$. Since $c$ is the number of started l-cycles and $r$ is the total number of such trials, we have $\Expect{ce} \geq \Expect{r}$ and thus $\Expect{p_k} \geq 0$. The theorem now follows because our potential is expected to be non-negative, $p_0 = \bigo(1)$ and as we have already seen $\Expect{T} \leq \Expect{A} - \Expect{p_k} + \Expect{p_0}$.
+Now we argue that $\Expect{ce - r} \geq 0$. If we omitted deletes from each $l$-cycle, we would get a sequence of sets created only be insertions. Deletes may not prolong chains so from Lemma \ref{lemma-sets} it follows that the expected number of hash function trials in an $l$-cycle is at most $e$. Since $c$ is the number of started $l$-cycles and $r$ is the total number of such trials, we have $\Expect{ce} \geq \Expect{r}$ and thus $\Expect{p_k} \geq 0$. The theorem now follows because our potential is expected to be non-negative, $p_0 = \bigo(1)$ and as we have already seen $\Expect{T} \leq \Expect{A} - \Expect{p_k} + \Expect{p_0}$.
 \qed
 \end{proof}
 
-In case of "insertion only" limit functions Delete operation may be allowed as well without any further change. If each l-cycle started with a rehash, then we would obtain an insertion only hash table. Observe that one additional rehash in each l-cycle can be amortized to constant time by introducing another potential $p_3 = {ei_{l}}/{(\alpha' - \alpha_u)}$. Moreover, performing the mentioned rehash is not necessary and as a result the first rehash in each l-cycle may be caused by invalidity of the limit function.
+In case of "insertion only" limit functions Delete operation may be allowed as well without any further change. If each $l$-cycle started with a rehash, then we would obtain an insertion only hash table. Observe that one additional rehash in each $l$-cycle can be amortized to constant time by introducing another potential $p_3 = {ei_{l}}/{(\alpha' - \alpha_u)}$. Moreover, performing the mentioned rehash is not necessary and, as a result, the first rehash in each $l$-cycle may be caused by invalidity of the limit function.
 
 With trimming rates which tend to zero with growing $n$, e.g. in case of the two choices paradigm, the amortization overhead caused by Chain Length Limit Rule gradually disappears. It is caused by the fact that for a sufficiently large $n$ almost each function is suitable for every $S$.
