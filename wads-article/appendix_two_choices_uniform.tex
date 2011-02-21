@@ -1,5 +1,10 @@
 \section*{Appendix -- proof of Theorem \ref{theorem-universal-hashing-two-choices}}
-%TODO I would repeat the theorem
+\setcounter{theorem}{2}
+
+\begin{theorem}
+Let $H$ be an almost uniform universal system with a constant $c$ such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x$ is placed into a least loaded bucket from $f_1(x), \dots, f_d(x)$. The addresses are determined by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+\end{theorem}
+
 \subsection{Notation}
 For the proof of Theorem \ref{theorem-universal-hashing-two-choices} we need further notation which comes from the original proof found in \cite{Mitzenmacher:2005:PCR:1076315}. By $\mathrm{Bi}(n, p)$ we understand a binomial random variable with parameters $n$ and $p$. Elements of the stored set $S$ are placed inside the table in an arbitrary but fixed order. Let $x_1$ be the first inserted element, $x_2$ the second and $x_n$ be the last one. By the state of the system at the time $t$ we understand the placement of all elements in the table immediately after the insertion of the element $x_t$. 
 

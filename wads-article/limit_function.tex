@@ -37,7 +37,6 @@ Because of the following definition we have to extend the notation. For $k \in \
 \begin{definition}[Independent hash functions]
 \label{definition-independent-hash-functions}
 Let $H$ be a uniform system of hash functions and $f, g \in H$ be two functions chosen uniformly at random from the system $H$. We say that the functions $f, g$ are \emph{independent} if for each $\vec{x} \in U^n$ with different elements and arbitrary $y, z \in V^n$ $$\Prob{f(\vec{x}) = \vec{y}, g(\vec{x}) = \vec{z}} = \Prob{f(\vec{x}) = \vec{y}} \Prob{g(\vec{x}) = \vec{z}}.$$
-%TODO revise
 \end{definition}
 
 Notice that the independent choice of $f_1, \dots, f_d$ from $H$ is sufficient for the functions to be independent in terms of Definition \ref{definition-independent-hash-functions}. Theorem \ref{theorem-universal-hashing-two-choices} is a straightforward restatement of results pioneered in \cite{DBLP:conf/stoc/AzarBKU94} which originally hold only with fully random functions.
