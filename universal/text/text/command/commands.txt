@@ -1,1 +1,0 @@
-/home/babky/Documents/hash/docs/text/command/compile.sh
