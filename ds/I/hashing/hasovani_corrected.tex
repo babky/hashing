@@ -52,7 +52,8 @@ pr\accent23um\v ern\'em p\v r\'\i pad\v e nebo amortizovan\v e.
 
 \flushpar Literatura:\newline 
 K.~Mehlhorn: Data Structures and Algorithms 1: Sorting 
-and Searching, Springer 1984\newline http://www.mpi-sb.mpg.de/$^{\thicksim}$mehlhorn/DatAlgbooks.html
+and Searching, Springer 1984\newline 
+http://www.mpi-sb.mpg.de/$^{\thicksim}$mehlhorn/DatAlgbooks.html
 \smallskip
 
 \flushpar J.~S.~Vitter, W.-Ch.~Chen: Design and Analysis of 
@@ -108,7 +109,8 @@ Algoritmy operac\'\i
 Spo\v c\'\i t\'ame $i:=h(x)$, $t:=NIL$\newline 
 {\bf if} $i$-t\'y seznam je nepr\'azdn\'y {\bf then\newline 
 \phantom{{\rm ---}}$t:=$}prvn\'\i\ prvek $i$-t\'eho seznamu\newline 
-\phantom{---}{\bf while} $t\ne x$ a $t\ne$posledn\'\i\ prvek $i$-t\'eho seznamu {\bf do\newline \phantom{{\rm ------}}$t:=$}n\'asleduj\'\i c\'\i\ prvek $i$-t\'eho seznamu\newline 
+\phantom{---}{\bf while} $t\ne x$ a $t\ne$posledn\'\i\ prvek $i$-t\'eho seznamu {\bf do\newline 
+\phantom{{\rm ------}}$t:=$}n\'asleduj\'\i c\'\i\ prvek $i$-t\'eho seznamu\newline 
 \phantom{---}{\bf enddo\newline 
 endif\newline 
 if} $t=x$ {\bf then V\'ystup}: $x\in S$ {\bf else V\'ystup}: $x\notin 
@@ -162,7 +164,8 @@ $-1\le |h^{-1}(i)|-|h^{-1}(j)|\le 1$ pro $i,j\in \{0,1,\dots,m-1\}$);
 $S$ je n\'ahodn\v e vybran\'a z univerza $U$ (tj. pro dan\'e $
 n=|S|$ 
 jsou v\v sechny podmno\v zi\-ny $U$ o velikosti $n$ reprezentovanou 
-mno\v zinou $S$ se stejnou pravd\v epodobnost\'\i );\item
+mno\v zinou $S$ se stejnou pravd\v epodobnost\'\i );
+\item
 ka\v zd\'y prvek z $U$ m\'a stejnou pravd\v epodobnost b\'yt 
 argumentem operace;
 \item
@@ -219,7 +222,8 @@ $$\align E(l^2)=&E(l(l-1))+E(l),\\
 E(l(l-1&))=\sum_{l=0}^nl(l-1)\binom nl(\frac 1m)^l(1-\frac 1m)^{n
 -l}=\\
 &\frac {n(n-1)}{m^2}\sum_{l=2}^n\binom {n-2}{l-2}(\frac 1m)^{l-2}
-(1-\frac 1m)^{(n-2)-(l-2)}=\\&\frac {n(n-1)}{m^2}\sum_{l=0}^{n-2}\binom {n-2}l(\frac 1m)^l(1-\frac 
+(1-\frac 1m)^{(n-2)-(l-2)}=\\
+&\frac {n(n-1)}{m^2}\sum_{l=0}^{n-2}\binom {n-2}l(\frac 1m)^l(1-\frac 
 1m)^{n-2-l}=\\
 &\frac {n(n-1)}{m^2},\\
 E(l^2)=&\frac {n(n-1)}{m^2}+\frac nm=\frac nm(1+\frac {n-1}m).\endalign$$
@@ -274,7 +278,8 @@ pravd\v epodobnost disjunkce jev\accent23u je men\v s\'\i\ ne\v z
 sou\v cet pravd\v epodobnost\'\i\ jev\accent23u, dru\-h\'a nerovnost 
 plyne z toho, \v ze $i$-t\'y \v ret\v ezec m\'a d\'elku alespo\v n $
 j$, jakmile existuje 
-podmno\v zina $A\subseteq S$ takov\'a, \v ze $|A|=j$ (t\v echto mo\v znost\'\i\ je $\binom nj$) a pro ka\v zd\'e $x\in A$ plat\'\i\ $h(x)=i$ (pravd\v epo\-dob\-nost 
+podmno\v zina $A\subseteq S$ takov\'a, \v ze $|A|=j$ (t\v echto mo\v znost\'\i\ je 
+$\binom nj$) a pro ka\v zd\'e $x\in A$ plat\'\i\ $h(x)=i$ (pravd\v epo\-dob\-nost 
 tohoto jevu je $(\frac 1m)^j$). 
 \proclaim{D\accent23usledek}
 $$\Prob(\max_i(\ell (i))\ge j)\le\min\{1,n(\frac nm)^{j-1}\frac 1{
@@ -329,6 +334,7 @@ Shrneme z\'\i skan\'y v\'ysledek
 se se\-parovan\'ymi \v ret\v ezci horn\'\i\ odhad o\v cek\'avan\'e d\'elky 
 maxim\'aln\'\i ho \v re\-t\v ez\-ce $O(\frac {\log n}{\log\log n}
 )$.  
+
 \flushpar Kdy\v z $0.5\le\alpha\le 1$, je to z\'arove\v n i doln\'\i\ odhad.
 \endproclaim
 
@@ -383,6 +389,7 @@ $$1+2+\dots+l=\binom {l+1}2.$$
 prvk\accent23u v n\v ejak\'em \v ret\v ezci je 
 $$\sum_l\binom {l+1}2\Prob(\ell (i)=l)=\sum_l\binom {l+1}2p_{n,l}.$$
 \medskip
+
 \flushpar O\v cek\'an\'y po\v cet test\accent23u p\v ri vyhled\'an\'\i\ v\v sech 
 prvk\accent23u v tabulce je $m\sum_l\binom {l+1}2p_{n,l}$.
 \medskip
@@ -546,7 +553,8 @@ if} $t=x$ {\bf then} odstran\'\i me $x$ z $i$-t\'eho seznamu {\bf endif}
 \flushpar Polo\v zky tabulky:\newline 
 \phantom{---}key,\newline 
 \phantom{---}odkaz na ulo\v zen\'a data,\newline 
-\phantom{---}polo\v zky pro pr\'aci s tabulkou.\medskip
+\phantom{---}polo\v zky pro pr\'aci s tabulkou.
+\medskip
 
 \flushpar P\v redpokl\'ad\'ame, \v ze data jsou velk\'a, v tom p\v r\'\i pad\v e se 
 ukl\'adaj\'\i\ mimo tabulku. V tabulce je jen odkaz na ulo\v zen\'a data. 
@@ -600,7 +608,8 @@ Spo\v c\'\i t\'ame $i:=h(x)$\newline
 x\notin S$, stop {\bf endif \newline 
 while} $i.next\ne$pr\'azdn\'e a $i.key\ne x$ {\bf do} $i:=i.next$ {\bf enddo}\newline 
 {\bf if} $i.key=x$ {\bf then V\'ystup}: $x\in S$ {\bf else V\'ystup}: $
-x\notin S$ {\bf endif\medskip
+x\notin S$ {\bf endif
+\medskip
 
 \flushpar DELETE$(x)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h(x)$\newline 
@@ -655,6 +664,7 @@ if} $i.key\ne x$ {\bf then}\newline
 endif\newline 
 endif}
 \bigskip
+
 \flushpar V p\v r\'\i kladu provedeme {\bf INSERT$(28)$}, nov\'y \v r\'adek je 4. \v r\'adek\newline 
 -- v\'ysledn\'a ha\v sovac\'\i\ tabulka
 $$\vtop{\offinterlineskip\halign {\strut\vrule\ # & \vrule\ # & \vrule\ # & \vrule \hfil # \hfil \vrule\cr\noalign{\hrule}\v r\'adek & key & next & previous\hfil \cr\noalign{\hrule}P(0) & & &\hfill \cr\noalign{\hrule}P(1) & 1 & 9 &\hfill \cr\noalign{\hrule}P(2) & & &\hfill \cr\noalign{\hrule}P(3) & 73 & 6 &\hfill \cr\noalign{\hrule}P(4) & 11 & 5 & 9 \cr\noalign{\hrule}P(5) & 161 & & 4 \cr\noalign{\hrule}P(6) & 53 & & 3 \cr\noalign{\hrule}P(7) & 7 & &\hfill \cr\noalign{\hrule}P(8) & 28 &  &\hfill  \cr\noalign{\hrule}P(9) & 141 & 4 & 1 \cr\noalign{\hrule}}}$$
@@ -709,6 +719,7 @@ Spo\v c\'\i t\'ame $i:=h(x)$\newline
 if} $i.key=x$ {\bf then V\'ystup}: $x\in S$ {\bf else V\'ystup}: $
 x\notin S$ {\bf endif
 \medskip
+
 \flushpar DELETE$(x)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h(x)$\newline 
 {\bf if} $i.begin=$pr\'azdn\'e {\bf then} stop {\bf else} $j:=i$, $

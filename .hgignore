@@ -22,3 +22,5 @@ ds/.*/.*\.aux
 ds/.*/.*\.log
 ds/.*/.*\.out
 ds/.*/.*\.pdf
+ds/.*/.*\.dvi
+

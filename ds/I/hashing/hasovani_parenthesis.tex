@@ -135,7 +135,7 @@ Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $t:=NIL$\newline
 \phantom{---}{\bf enddo\newline 
 endif\newline 
 if} $t=x$ {\bf then} odstran\'\i me $x$ z $i$-t\'eho seznamu {\bf endif}
-skip
+\bigskip
 
 \flushpar V n\'asleduj\'\i c\'\i\ anal\'yze p\v redpokl\'ad\'ame, \v ze hodnota funkce $
 h\left(x\right)$ 
@@ -329,6 +329,7 @@ Shrneme z\'\i skan\'y v\'ysledek
 se se\-parovan\'ymi \v ret\v ezci horn\'\i\ odhad o\v cek\'avan\'e d\'elky 
 maxim\'aln\'\i ho \v re\-t\v ez\-ce $O\left(\frac {\log n}{\log\log n}
 \right)$.  
+
 \flushpar Kdy\v z $0.5\le\alpha\le 1$, je to z\'arove\v n i doln\'\i\ odhad.
 \endproclaim
 
@@ -383,6 +384,7 @@ $$1+2+\dots+l=\binom {l+1}2.$$
 prvk\accent23u v n\v ejak\'em \v ret\v ezci je 
 $$\sum_l\binom {l+1}2\Prob\left(\ell \left(i\right)=l\right)=\sum_l\binom {l+1}2p_{n,l}.$$
 \medskip
+
 \flushpar O\v cek\'an\'y po\v cet test\accent23u p\v ri vyhled\'an\'\i\ v\v sech 
 prvk\accent23u v tabulce je $m\sum_l\binom {l+1}2p_{n,l}$.
 \medskip
@@ -535,7 +537,7 @@ Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $t:=NIL$
 \phantom{---}{\bf enddo\newline 
 endif\newline 
 if} $t=x$ {\bf then} odstran\'\i me $x$ z $i$-t\'eho seznamu {\bf endif}
-\medskip
+\bigskip
 
 \flushpar Nev\'yhody ha\v sovan\'\i\ se separovan\'ymi \v ret\v ezci --\newline 
 \phantom{---}nevyu\v zit\'\i\ alokovan\'e pam\v eti (nehospod\'arn\'e)\newline 
@@ -654,7 +656,8 @@ if} $i.key\ne x$ {\bf then}\newline
 \phantom{---}{\bf endif\newline 
 endif\newline 
 endif}
-\smallskip
+\bigskip
+
 \flushpar V p\v r\'\i kladu provedeme {\bf INSERT$\left(28\right)$}, nov\'y \v r\'adek je 4. \v r\'adek\newline 
 -- v\'ysledn\'a ha\v sovac\'\i\ tabulka
 $$\vtop{\offinterlineskip\halign {\strut\vrule\ # & \vrule\ # & \vrule\ # & \vrule \hfil # \hfil \vrule\cr\noalign{\hrule}\v r\'adek & key & next & previous\hfil \cr\noalign{\hrule}P(0) & & &\hfill \cr\noalign{\hrule}P(1) & 1 & 9 &\hfill \cr\noalign{\hrule}P(2) & & &\hfill \cr\noalign{\hrule}P(3) & 73 & 6 &\hfill \cr\noalign{\hrule}P(4) & 11 & 5 & 9 \cr\noalign{\hrule}P(5) & 161 & & 4 \cr\noalign{\hrule}P(6) & 53 & & 3 \cr\noalign{\hrule}P(7) & 7 & &\hfill \cr\noalign{\hrule}P(8) & 28 &  &\hfill  \cr\noalign{\hrule}P(9) & 141 & 4 & 1 \cr\noalign{\hrule}}}$$
@@ -764,7 +767,7 @@ else}\newline
 \phantom{------}{\bf endif}\newline
 \phantom{---}{\bf endif\newline 
 endif}
-skip
+\bigskip
 
 \flushpar V p\v r\'\i kladu provedeme {\bf INSERT$\left(28\right)$}, nov\'y \v r\'adek je 4. 
 \v r\'adek\newline 
@@ -1134,7 +1137,7 @@ Algoritmy
 
 \flushpar Algoritmus operace {\bf MEMBER} je pro tyto metody 
 stejn\'y jako pro LISCH a EISCH
-skip
+\bigskip
 
 \flushpar {\bf MEMBER$\left(x\right)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h\left(x\right)$\newline 
@@ -1203,7 +1206,7 @@ if} $i.key\ne x$ {\bf then}\newline
 \phantom{------}{\bf endif}\newline 
 \phantom{---}{\bf endif\newline 
 endif}
-skip
+\bigskip
 
 \flushpar Slo\v zitost algoritm\accent23u pro sr\accent23ustaj\'\i c\'\i\ ha\v sov\'an\'\i .\newline 
 Zna\v cen\'\i : $n$ -- velikost ulo\v zen\'e mno\v ziny,\newline 
@@ -1311,7 +1314,7 @@ Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $j:=0$\newline
 i:=i+1\bmod m${\bf ,} $j:=j+1$ {\bf enddo\newline 
 if} $j=m$ {\bf then V\'ystup}: p\v repln\v en\'\i , stop {\bf endif\newline 
 if} $i.key=$pr\'azdn\'y {\bf then} $i.key:=x$ {\bf endif
-skip
+\bigskip
 
 }\flushpar P\v r\'\i klad: M\'ame universum $U=\left\{1,2,\dots,1000\right\}$, 
 ha\v sovac\'\i\ funk\-ci $h\left(x\right)=x\bmod10$ a mno\v zinu  
@@ -2732,7 +2735,7 @@ $g$, $h_l$ a $\phi_{q_0}$. Pak ha\v sujeme do tabulky s m\'en\v e ne\v z $
 6n$ 
 \v r\'adky, ale o\v cek\'avan\'y \v cas pro nalezen\'\i\ $f$ je 
 $O\left(n\log n\left(\log n+\log\log N\right)\right)$.
-skip
+\bigskip
 
 \flushpar Tuto metodu navrhli Fredman, Koml\'os a Szemer\'edi.
 \medskip
@@ -2834,7 +2837,7 @@ y$ do $T_j$ na pozici $h_j\left(y\right)$ {\bf enddo}\newline
 \phantom{------}{\bf RehashAll}\newline
 \phantom{---}{\bf endif\newline 
 endif
-skip
+\bigskip
 
 \flushpar RehashAll}:\newline 
 projdeme tabulku $T$ a tabulky $T_i$ a vytvo\v r\'\i me seznam 
@@ -2859,13 +2862,13 @@ S_i${\bf do}\newline
 \phantom{---}{\bf enddo\newline 
 enddo\newline 
 for every} $x\in S$ {\bf do INSERT$\left(x\right)$ enddo
-skip
+\bigskip
 
 \flushpar DELETE$\left(x\right)$}:\newline 
 $j:=h\left(x\right)$, $n:=n-1$, $|S_j|:=|S_j|-1$\newline 
 odstran\'\i me $x$ z pozice $h_j\left(x\right)$ v tabulce $T_j$, pozice bude pr\'azdn\'a \newline 
 {\bf if} $n<\frac m{1+2c}$ {\bf then RehashAll endif
-skip
+\bigskip
 
 \flushpar MEMBER$\left(x\right)$}: \newline 
 $j:=h\left(x\right)$\newline 
@@ -2874,7 +2877,7 @@ $j:=h\left(x\right)$\newline
 {\bf else\newline 
 \phantom{{\rm ---}}V\'ystup}: $x$ nen\'\i\ prvkem $S$\newline 
 {\bf endif
-skip
+\bigskip
 
 }\flushpar Algoritmy p\v edpokl\'adaj\'\i , \v ze p\v ri operaci {\bf INSERT$
 \left(x\right)$  }
@@ -2896,7 +2899,7 @@ O\left(1\right)$.
 \flushpar Toto zobecn\v en\'\i\ Fredman-Koml\'os-Szemer\'ediho metody navrhli 
 Dietzfelbinger, Karlin, Mehl\-horn, Meyer auf der Heide, Rohnert 
 a Tarjan.
-skip
+\bigskip
 
 \flushpar Dal\v s\'\i\ nev\'yhoda Fredman-Koml\'os-Szemer\'ediho metody:\newline 
 Navr\v zen\'a metoda pracuje pro $m<3n$, ale nezajist\'\i\ $m=n$. 
@@ -3209,7 +3212,7 @@ adresy str\'anek p\v ri\v razen\'e $\left(2i+1\right)$-\'\i mu slovu a $\left(2i
 slovu o d\'elce $d\left(S\right)$ jsou stejn\'e pro v\v sechna $i$, 
 pak se tato slova spoj\'\i\ a $d\left(S\right)$ se zmen\v s\'\i\ o $1$). Upraven\'y 
 adres\'a\v r {\bf ulo\v z\'\i me}. Konec.
-skip
+\bigskip
 
 \flushpar N\'asleduj\'\i c\'\i\ v\v eta ukazuje, \v ze jsme n\'a\v s hlavn\'\i\ c\'\i l splnili. Pro jednoduchost p\v redpokl\'ad\'ame, \v ze 
 adres\'a\v r je tak\'e ulo\v zen na extern\'\i\ pam\v eti a \v ze v 
