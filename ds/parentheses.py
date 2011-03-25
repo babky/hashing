@@ -19,8 +19,7 @@ class Processor:
 
 	def log(self, message):
 		return
-		if self.state['line_no'] > 1330 and self.state['line_no'] < 1350:
-			print self.state['line_no'], message
+		print self.state['line_no'], message
 
 	def findNearestChange(self, line, pos):
 		oldPos = pos
@@ -84,7 +83,9 @@ class Processor:
 		pos = 0
 		resLine = []
 		atDollar = False
-		line = line.replace('\\big', '')
+		for r in self.replacements:
+			line = line.replace('\\big' + r, r)
+		line = line.replace('\\big\n', '\n')
 		stop = len(line)
 
 		while pos < stop:
