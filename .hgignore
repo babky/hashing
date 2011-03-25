@@ -23,4 +23,10 @@ ds/.*/.*\.log
 ds/.*/.*\.out
 ds/.*/.*\.pdf
 ds/.*/.*\.dvi
+vcproj/Debug
+vcproj/Release
+.*\.user$
+.*\.orig$
+.*\.ncb$
+.*\.suo$
 
