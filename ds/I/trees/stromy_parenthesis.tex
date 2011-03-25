@@ -39,7 +39,7 @@ mno\v zinu $S\subseteq U$ a navrhnout algoritmy pro tyto operace:\newline
 {\bf MEMBER}, {\bf INSERT}, {\bf DELETE\newline 
 MIN} -- nalezne nejmen\v s\'\i\ prvek v $S$,\newline 
 {\bf MAX} -- nalezne nejv\v et\v s\'\i\ prvek v $S$,\newline 
-$\bold S\bold P\bold L\bold I\bold T\left(x\right)$ -- zkonstruuje reprezentace dvou mno\v zin 
+$\bold S\bold P\bold L\bold I\bold T\left(x\right)$ -- zkonstruuje reprezentace mno\v zin 
 $S_1=\left\{s\in S\mid s<x\right\}$ a $S_2=\left\{s\in S\mid s>x\right\}$ a ozn\'am\'\i , zda 
 $x\in S$,\newline 
 {\bf JOIN} -- pou\v z\'\i vaj\'\i\ se dv\v e verze t\'eto operace:\newline 
@@ -854,8 +854,8 @@ t\v echto odhad\accent23u d\'a po\v zadovan\'y v\'ysledek.
 
 \flushpar M\v ejme $\left(a,b\right)$-strom $T$, pro vnit\v rn\'\i\ vrchol 
 $v$ r\accent23uzn\'y od ko\v rene definuj\-me 
-$b\left(v\right)=\min\left\{\rho \left(v\right)-a,b-\rho \left(v\right),c\right\}$, pro 
-ko\v ren $r$ definuj\-me $b\left(r\right)=\min\left\{\rho \left(r\right)-2,b-\rho \left(r\right),c\right\}$. 
+$$b\left(v\right)=\min\left\{\rho \left(v\right)-a,b-\rho \left(v\right),c\right\},$$ pro 
+ko\v ren $r$ definuj\-me $$b\left(r\right)=\min\left\{\rho \left(r\right)-2,b-\rho \left(r\right),c\right\}.$$ 
 \medskip
 
 \proclaim{Pozorov\'an\'\i}Pro vnit\v rn\'\i\ vrchol stromu $v$  
@@ -2301,8 +2301,7 @@ o boolskou prom\v ennou $b\left(v\right)$, kde $b\left(v\right)=0$ znamen\'a, \v
 \medskip
 
 \flushpar Pop\'\i\v seme proceduru {\bf Vyvaz-INSERT$\left(v\right)$} (p\v redpokl\'ad\'ame, \v ze 
-$v$ je obarven \v cerven\v e). Pro zjednodu\v sen\'\i\ $s\left(v
-\right)=levy$, kdy\v z $v=\levy\left(\otec\left(v\right)\right)$, a $s\left(v\right)=pravy$ pro  
+$v$ je obarven \v cerven\v e). Pro zjednodu\v sen\'\i\ $s(v)=levy$, kdy\v z $v=\levy(\otec(v))$, a $s(v)=pravy$ pro  
 $v=\pravy\left(\otec\left(v\right)\right)$.
 skip
 
