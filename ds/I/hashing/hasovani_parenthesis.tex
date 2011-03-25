@@ -504,10 +504,10 @@ Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $t:=NIL$\newline
 \phantom{{\rm ------}}$t:=$}n\'asleduj\'\i c\'\i\ prvek $i$-t\'eho seznamu\newline
 \phantom{---}{\bf enddo\newline 
 endif \newline 
-if} $t=x$ {\bf then} $x\in S$ {\bf else} $x\notin S$ {\bf endif
+if} $t=x$ {\bf then} $x\in S$ {\bf else} $x\notin S$ {\bf endif}
 \medskip
 
-\flushpar INSERT$\left(x\right)$}:\newline 
+\flushpar {\bf INSERT$\left(x\right)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $t:=NIL$\newline 
 {\bf if} $i$-t\'y seznam je nepr\'azdn\'y {\bf then\newline 
 \phantom{{\rm ---}}$t:=$}prvn\'\i\ prvek $i$-t\'eho seznamu\newline 
@@ -523,10 +523,10 @@ t$\newline
 \phantom{------}vlo\v z\'\i me $x$ do $i$-t\'eho seznamu za prvek $
 t$\newline 
 \phantom{---}{\bf endif\newline 
-endif
+endif}
 \medskip
 
-\flushpar DELETE$\left(x\right)$}:\newline 
+\flushpar {\bf DELETE$\left(x\right)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $t:=NIL$
 {\bf if} $i$-t\'y seznam je nepr\'azdn\'y {\bf then\newline 
 \phantom{{\rm ---}}$t:=$}prvn\'\i\ prvek $i$-t\'eho seznamu\newline 
@@ -535,7 +535,7 @@ Spo\v c\'\i t\'ame $i:=h\left(x\right)$, $t:=NIL$
 \phantom{---}{\bf enddo\newline 
 endif\newline 
 if} $t=x$ {\bf then} odstran\'\i me $x$ z $i$-t\'eho seznamu {\bf endif}
-skip
+\medskip
 
 \flushpar Nev\'yhody ha\v sovan\'\i\ se separovan\'ymi \v ret\v ezci --\newline 
 \phantom{---}nevyu\v zit\'\i\ alokovan\'e pam\v eti (nehospod\'arn\'e)\newline 
@@ -654,7 +654,7 @@ if} $i.key\ne x$ {\bf then}\newline
 \phantom{---}{\bf endif\newline 
 endif\newline 
 endif}
-skip
+\smallskip
 \flushpar V p\v r\'\i kladu provedeme {\bf INSERT$\left(28\right)$}, nov\'y \v r\'adek je 4. \v r\'adek\newline 
 -- v\'ysledn\'a ha\v sovac\'\i\ tabulka
 $$\vtop{\offinterlineskip\halign {\strut\vrule\ # & \vrule\ # & \vrule\ # & \vrule \hfil # \hfil \vrule\cr\noalign{\hrule}\v r\'adek & key & next & previous\hfil \cr\noalign{\hrule}P(0) & & &\hfill \cr\noalign{\hrule}P(1) & 1 & 9 &\hfill \cr\noalign{\hrule}P(2) & & &\hfill \cr\noalign{\hrule}P(3) & 73 & 6 &\hfill \cr\noalign{\hrule}P(4) & 11 & 5 & 9 \cr\noalign{\hrule}P(5) & 161 & & 4 \cr\noalign{\hrule}P(6) & 53 & & 3 \cr\noalign{\hrule}P(7) & 7 & &\hfill \cr\noalign{\hrule}P(8) & 28 &  &\hfill  \cr\noalign{\hrule}P(9) & 141 & 4 & 1 \cr\noalign{\hrule}}}$$
@@ -704,12 +704,23 @@ Algoritmy
 
 \flushpar {\bf MEMBER$\left(x\right)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h\left(x\right)$\newline 
-{\bf if} $i.begin=$pr\'azdn\'e {\bf then V\'ystup}: $x\notin S$, stop {\bf else} i:=i.begin {\bf endif}\newline 
-{\bf while} $i.next\ne$pr\'azdn\'e a $i.key\ne x$ {\bf do} $i:=i.next$ {\bf enddo \newline 
-if} $i.key=x$ {\bf then V\'ystup}: $x\in S$ {\bf else V\'ystup}: $
-x\notin S$ {\bf endif
+{\bf if} $i.begin=$ pr\'azdn\'e {\bf then} \newline 
+\phantom{---}{\bf V\'ystup}: $x\notin S$, stop \newline 
+{\bf else} \newline
+\phantom{---} $i:=i.begin$ \newline 
+
+{\bf endif} \newline 
+{\bf while} $i.next\ne$ pr\'azdn\'e a $i.key\ne x$ {\bf do} \newline 
+\phantom{---} $i:=i.next$ \newline 
+{\bf enddo} \newline
+{\bf if} $i.key=x$ {\bf then} \newline 
+\phantom{---} {\bf V\'ystup}: $x\in S$ \newline 
+{\bf else} \newline 
+\phantom{---} {\bf V\'ystup}: $x\notin S$ \newline 
+{\bf endif}
 \medskip
-\flushpar DELETE$\left(x\right)$}:\newline 
+
+\flushpar {\bf DELETE$\left(x\right)$}:\newline 
 Spo\v c\'\i t\'ame $i:=h\left(x\right)$\newline 
 {\bf if} $i.begin=$pr\'azdn\'e {\bf then} stop {\bf else} $j:=i$, $
 i:=i.begin$ {\bf endif\newline 
@@ -1332,8 +1343,8 @@ vede k v\'yrazn\'emu zpomalen\'\i\ metody. \newline
 Idea jak odstranit tuto nev\'yhodu: Pou\v zijeme dv\v e 
 ha\v sovac\'\i\ funkce $h_1$ a $h_2$ a p\v ri operaci {\bf INSERT$
 \left(x\right)$ }
-nalezneme nejmen\v s\'\i\ $i=0,1,\dots$ takov\'e, \v ze 
-$\left(h_1\left(x\right)+ih_2\left(x\right)\right)\bmod m$ je pr\'azdn\'y \v r\'adek, a tam ulo\v z\'\i me 
+nalezneme nejmen\v s\'\i\ $i=0,1,\dots$ takov\'e, \v ze \v r\'adek 
+$\left(h_1\left(x\right)+ih_2\left(x\right)\right)\bmod m$ je pr\'azdn\'y, a tam ulo\v z\'\i me 
 prvek $x$.\newline 
 Tabulka m\'a jedinou polo\v zku -- key.\newline 
 Po\v zadavky na korektnost: Pro ka\v zd\'e $x$ mus\'\i\ b\'yt $h_
@@ -1704,7 +1715,7 @@ i\left(x\right)=h_i\left(y\right)\right\}|\le\frac {c|I|}m.$$
 \medskip
 
 Jako ekvivalentn\'\i\ definici lze pou\v z\'\i t toto tvrzen\'\i: syst\'em funkc\'\i\ $H$ z univerza $U$ do mno\v ziny $\left\{0,1,\dots,m-1\right\}$ je $c$-univerz\'aln\'\i ,
-kdy\v z vyb\'\i r\'ame $h\in H$ s rovnom\v ern\'ym rozd\v elen\'\i m, pak pro 
+kdy\v z vyb\'\i r\'ame funkci $h\in H$ s rovnom\v ern\'ym rozd\v elen\'\i m, pak pro 
 ka\v zd\'e dv\v e r\accent23uzn\'a $x,y\in U$, plat\'\i\ 
 $$\Prob\left(h\left(x\right)=h\left(y\right)\right)\le\frac cm.$$
 
@@ -1930,7 +1941,7 @@ mno\v zina.
 \medskip
 
 \flushpar Proto\v ze ha\v sujeme do tabulky velikosti $m$, plat\'\i\ 
-$|U_i|\ge\left\lceil\frac {|U_{i-1}|}m\right\rceil$. Proto\v ze $|U_0|=N$, dost\'av\'ame indukc\'\i , \v ze 
+$|U_i|\ge\left\lceil\frac {|U_{i-1}|}m\right\rceil$. Proto\v ze $|U_0|=N$, indukc\'\i\ dostaneme, \v ze 
 $|U_i|\ge\left\lceil\frac N{m^i}\right\rceil$ pro ka\v zd\'e $i$. Zvolme $i=
 \left\lceil\log_mN\right\rceil -1$. Pak $i$ je 
 nejv\v et\v s\'\i\ p\v rirozen\'e \v c\'\i slo takov\'e, \v ze $\frac 
@@ -1944,7 +1955,7 @@ $$i\le |\left\{j\in I\mid h_j\left(x\right)=h_j\left(y\right)\right\}|\le\frac {
 univerzum $U$ o velikosti $N$ ha\v suj\'\i c\'\i\ do tabulky s $m$ \v r\'adky, pak 
 $$|I|\ge\frac mc\left(\left\lceil\log_mN\right\rceil -1\right).$$
 Posloupnosti $0$ a $1$ p\v ri n\'ahodn\'e volb\v e $i$ z $I$ mus\'\i\ m\'\i t 
-d\'elku alespo\v n $\left\lceil \left(\log m-\log c+\log\log N-\log\log m\right)\right\rceil$ (zde v\v sechny logaritmy 
+d\'elku alespo\v n $$\left\lceil \left(\log m-\log c+\log\log N-\log\log m\right)\right\rceil$$ (zde v\v sechny logaritmy 
 jsou o z\'akladu $2$).
 \endproclaim
 \medskip
@@ -2474,8 +2485,8 @@ existuje deterministick\'y algoritmus, jen\v z v \v case $O\left(nN\right)$
 nalezne $k$ takov\'e, \v ze $$\sum_{i=0}^{m-1}\left(b_i^k\right)^2<3n;$$
 \item"{(b)}"
 existuje pravd\v epodobnostn\'\i\ algoritmus, kter\'y 
-nalezne v \v case $O\left(n\right)$ takov\'e $k$, \v ze $\sum_{i=0}^{m-1}\left(b_
-i^k\right)^2<4n$ -- o\v cek\'avan\'y po\v cet iterac\'\i\ v\'ypo\v ctu je nejv\'y\v se $
+nalezne takov\'e $k$, \v ze $\sum_{i=0}^{m-1}\left(b_
+i^k\right)^2<4n$ v \v case $O\left(n\right)$ -- o\v cek\'avan\'y po\v cet iterac\'\i\ v\'ypo\v ctu je nejv\'y\v se $
 4$.
 \endroster
 D\'ale 
@@ -2645,7 +2656,7 @@ perfektn\'\i\ s prav\-d\v e\-po\-dob\-nost\'\i\ $\ge\frac 12$. Tedy n\'ahodn\v e
 \v c\'\i slo $p\le 9cn^2\ln N$ spl\v nuje test s pravd\v e\-po\-dob\-nost\'\i\ 
 $\Theta \left(\frac 1{\ln\left(9cn^2\ln N\right)}\right)$, a proto o\v cek\'a\-va\-n\'y po\v cet ne\'usp\v e\v sn\'ych 
 test\accent23u je $O\left(\ln\left(9cn^2\ln N\right)\right)$. Tedy o\v cek\'a\-van\'y \v cas 
-algoritmu je $O\left(n\log n\left(\log n+\log\log N\right)\right)$.
+algoritmu je $$O\left(n\log n\left(\log n+\log\log N\right)\right).$$
 
 \proclaim{V\v eta}Pro danou mno\v zinu $S\subseteq U$ takovou, \v ze 
 $|S|=n$, deterministick\'y algoritmus nalezne prvo\v c\'\i slo 
@@ -2760,9 +2771,8 @@ p\v redpokl\'ad\'ame, \v ze n\'ahodn\v e zvol\'\i me $j_i\in \Cal H_{
 2\left(b_i^k\right)^2}$ takov\'e, \v ze 
 $h_{j_i}$ je prost\'a na mno\v zin\v e $S_i=\left\{s\in S\mid h_k\left(s\right)=i
 \right\}$ (z p\v redchoz\'\i ho textu v\'\i me, \v ze kdy\v z zvol\'\i me n\'ahodn\v e 
-$j_i=0,1,\dots,N-1$, pak s pravd\v epodobnost\'\i\ ales\-po\v n $\frac 
-12$ je $h_{j_i}$ 
-prost\'a na $S_i$). Pro jednoduchost p\v redpokl\'ad\'ame, \v ze mno\v ziny $
+$j_i=0,1,\dots,N-1$, pak $h_{j_i}$ je prost\'a na $S_i$ s pravd\v epodobnost\'\i\ ales\-po\v n $\frac 
+12$). Pro jednoduchost p\v redpokl\'ad\'ame, \v ze mno\v ziny $
 S_i$ 
 pro $i=0,1,\dots,s-1$ ulo\v z\'\i me do tabulek $T_i$ a tabulky 
 $T_0,T_1,\dots,T_{s-1}$ budou ulo\v zeny v tabulce $T$. Kdy\v z $
