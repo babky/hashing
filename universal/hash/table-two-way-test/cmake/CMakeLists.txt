@@ -8,12 +8,13 @@ set(SOURCES
   ../table_two_way_test.cpp
 )
 
-include_directories( 
+include_directories(
+  ${Boost_INCLUDE_DIRS} 
   ../../table-lib
   ../../test-suite
 )
 
-link_directories ( ../../test-suite/cmake ../../table-lib/cmake link_directories ${Boost_INCLUDE_DIRS} )
+link_directories ( ../../test-suite/cmake ../../table-lib/cmake link_directories ${Boost_LIBRARY_DIRS} )
 
 add_executable ( TableTwoWayTest ${SOURCES} )
 
