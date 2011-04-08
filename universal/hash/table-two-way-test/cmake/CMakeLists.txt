@@ -6,6 +6,7 @@ link_directories ( ${Boost_LIBRARY_DIRS} )
 
 set(SOURCES 
   ../table_two_way_test.cpp
+  ../tests/test.cpp
 )
 
 include_directories(
