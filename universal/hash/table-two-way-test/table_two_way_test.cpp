@@ -3,6 +3,7 @@
 #include "systems/cwlf_system.h"
 #include "systems/polynomial_system.h"
 #include "systems/linear_map_system.h"
+#include "systems/two_way_system_randomized.h"
 #include "table.h"
 #include "utils/constant_comparer.h"
 #include "generators/generator.h"
@@ -52,6 +53,14 @@ template<typename T>
 class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, PolynomialSystem32> {
 };
 
+template<typename T>
+class TwoWaySystemRandomizedCWLF : public Hash::Systems::TwoWaySystemRandomized<T, TwoWaySystemCWLF, TwoWaySystemCWLF> {
+};
+
+template<typename T>
+class RandomizedUniversalFunctionCWLF : public Hash::Systems::TwoWaySystemRandomized<T, UniversalFunctionCWLF, UniversalFunctionCWLF> {
+};
+
 /*
 template<typename T, typename Comparer, typename Hash>
 class CollisionCountStorage16b : public Hash::Storages::template CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
@@ -92,6 +101,24 @@ Test * AssembleTest(string system, bool twoWay, string generator, size_t threads
 				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
 				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			}
+		}
+	} else if (system == "randomized-cwlf") {
+		if (twoWay) {
+			if (generator == "random") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemRandomizedCWLF, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "unit-input") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemRandomizedCWLF, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "linear") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemRandomizedCWLF, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			}
+		} else {
+			if (generator == "random") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, RandomizedUniversalFunctionCWLF, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "unit-input") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, RandomizedUniversalFunctionCWLF, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "linear") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, RandomizedUniversalFunctionCWLF, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		}
 	} else if (system == "cwlf") {
@@ -183,7 +210,7 @@ int main(int argc, char ** argv) {
 		("test-length", value<size_t>(&testLength)->default_value(DEFAULT_TEST_LENGTH), "number of hashed elements")
 		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS), "number of repeats of the test")
 		("bits", value<size_t>(&bits), "base two logarithm of test-length")
-		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "system to be used [linear-map, polynomial, cwlf]")
+		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "system to be used [linear-map, polynomial, cwlf, randomized-cwlf]")
 		("two-way", value<bool>(&twoWay)->default_value(DEFAULT_TWO_WAY), "should we use the two hashing")
 		("generator", value<string>(&generator)->default_value(DEFAULT_GENERATOR), "should we use truly random set")
 		("seed", value<bool>(&seed)->default_value(DEFAULT_SEED), "should we use random seed")
