@@ -25,7 +25,7 @@ namespace Hash { namespace Storages {
 	 * @typeparam Hash Type of the hash value.
 	 * @typeparam ChainLengthType Length of the chain.
 	 */
-	template <typename T, typename Comparer, typename Hash, typename ChainLengthType = boost::uint16_t> 
+	template <typename T, typename Comparer, typename Hash, typename ChainLengthType = size_t> 
 	class CollisionCountStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
 	public:
 		/**
@@ -281,7 +281,7 @@ namespace Hash { namespace Storages {
 		 *
 		 * @param b Storage to be swapped.
 		 */
-		void swap(CollisionCountStorage<T, Comparer, Hash> & b) {
+		void swap(CollisionCountStorage<T, Comparer, Hash, ChainLengthType> & b) {
 			std::swap(storage, b.storage);
 			std::swap(storageSize, b.storageSize);
 			std::swap(size, b.size);
@@ -295,7 +295,7 @@ namespace Hash { namespace Storages {
 		 * @param a Storage to be swapped.
 		 * @param b Storage to be swapped.
 		 */
-		friend void swap(CollisionCountStorage<T, Comparer, Hash> & a, CollisionCountStorage<T, Comparer, Hash> & b) {
+		friend void swap(CollisionCountStorage<T, Comparer, Hash, ChainLengthType> & a, CollisionCountStorage<T, Comparer, Hash, ChainLengthType> & b) {
 			a.swap(b);	
 		}
 

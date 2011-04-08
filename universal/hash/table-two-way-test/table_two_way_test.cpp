@@ -54,15 +54,19 @@ template<typename T, typename Comparer, typename Hash>
 class CollisionCountStorage16b : public Hash::Storages::CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
 public:
 	explicit CollisionCountStorage16b(const Comparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-	  CollisionCountStorage<T, Comparer, Hash>(comparer, tableLength) {
+	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(comparer, tableLength) {
 	}		
 	  
 	explicit CollisionCountStorage16b(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-	  CollisionCountStorage<T, Comparer, Hash>(tableLength) {
+	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(tableLength) {
 	}
 
-	CollisionCountStorage16b(const CollisionCountStorage16b & aStorage):
-	  CollisionCountStorage<T, Comparer, Hash>(aStorage) {
+	CollisionCountStorage16b(const CollisionCountStorage16b<T, Comparer, Hash> & aStorage):
+	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(aStorage) {
+	}
+
+	void swap(CollisionCountStorage16b<T, Comparer, Hash> & b) {
+		((CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> *) this)->swap((CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> &) b);
 	}
 };
 
