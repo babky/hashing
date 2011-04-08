@@ -3,6 +3,15 @@
 
 #include "test.h"
 #include "utils/smart_pointer.h"
+#include "utils/static_random_generator.h"
+#ifdef BOOST_MSVC
+	#pragma warning(disable: 4512 4127 4100)
+#endif
+#include <boost/integer_traits.hpp>
+#include <boost/integer.hpp>
+#ifdef BOOST_MSVC
+	#pragma warning(default: 4512 4127 4100)
+#endif
 
 namespace Hash { namespace Tests { 
 
@@ -72,7 +81,7 @@ namespace Hash { namespace Tests {
 			TestPart(size_t aFrom, size_t aPartLength, size_t seed, size_t aThreadNo, TestImpl<ValueType, TableType, GeneratorType> * aTest):
 			  from(aFrom),
 			  partLength(aPartLength),
-			  generator(new GeneratorType(integer_traits<ValueType>::const_min, integer_traits<ValueType>::const_max, aTest->getAcceptSeed())),
+			  generator(new GeneratorType(boost::integer_traits<ValueType>::const_min, boost::integer_traits<ValueType>::const_max, aTest->getAcceptSeed())),
 			  threadNo(aThreadNo),
 			  test(aTest) {
 				generator->setPartLength(partLength);
