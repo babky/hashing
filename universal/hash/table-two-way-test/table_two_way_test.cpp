@@ -32,6 +32,7 @@ using namespace Hash::Utils;
 using namespace Hash::Generators;
 using namespace Hash::Systems;
 using namespace Hash::Tests;
+using namespace Hash::Storages;
 
 using namespace std;
 using namespace boost;
@@ -49,19 +50,19 @@ template<typename T>
 class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, PolynomialSystem32> {
 };
 
-template<typename T, class Comparer, typename Hash>
-class CollisionCountStorage16b : public Hash::Storages::CollisionCountStorage<T, Comparer, Hash> {
+template<typename T, typename Comparer, typename Hash>
+class CollisionCountStorage16b : public Hash::Storages::CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
 public:
 	explicit CollisionCountStorage16b(const Comparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-	  CollisionCountStorage(comparer, tableLength) {
+	  CollisionCountStorage<T, Comparer, Hash>(comparer, tableLength) {
 	}		
 	  
 	explicit CollisionCountStorage16b(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-	  CollisionCountStorage(tableLength) {
+	  CollisionCountStorage<T, Comparer, Hash>(tableLength) {
 	}
 
 	CollisionCountStorage16b(const CollisionCountStorage16b & aStorage):
-	  CollisionCountStorage(aStorage) {
+	  CollisionCountStorage<T, Comparer, Hash>(aStorage) {
 	}
 };
 
