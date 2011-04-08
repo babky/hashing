@@ -51,7 +51,7 @@ class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, Polynomia
 };
 
 template<typename T, typename Comparer, typename Hash>
-class CollisionCountStorage16b : public Hash::Storages::CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
+class CollisionCountStorage16b : public Hash::Storages::template CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
 public:
 	explicit CollisionCountStorage16b(const Comparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(comparer, tableLength) {
