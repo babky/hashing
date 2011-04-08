@@ -10,7 +10,7 @@ set(SOURCES
 )
 
 include_directories(
-  ${Boost_INCLUDE_DIRS} 
+  ${Boost_INCLUDE_DIRS}
   ../../table-lib
   ../../test-suite
 )

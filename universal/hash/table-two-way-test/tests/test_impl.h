@@ -46,7 +46,7 @@ namespace Hash { namespace Tests {
 						TestPart(
 							from,
 							currentLength, 
-							StaticRandomGenerator<size_t>::getGenerator().generate(),
+							Hash::Utils::StaticRandomGenerator<size_t>::getGenerator().generate(),
 							t,
 							this
 						)

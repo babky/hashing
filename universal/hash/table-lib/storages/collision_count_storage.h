@@ -5,11 +5,19 @@
 #include "storage.h"
 #include "utils/constant_comparer.h"
 #include <boost/thread.hpp>
+#ifdef BOOST_MSVC
+	#pragma warning(disable: 4512 4127 4100)
+#endif
+#include <boost/integer_traits.hpp>
+#include <boost/integer.hpp>
+#ifdef BOOST_MSVC
+	#pragma warning(default: 4512 4127 4100)
+#endif
 
 namespace Hash { namespace Storages {
 
-	/** 
-	 * Test storage which actually does not store the elements, it only counts the number of elements that would be 
+	/**
+	 * Test storage which actually does not store the elements, it only counts the number of elements that would be
 	 * stored inside the chain.
 	 *
 	 * @typeparam T Type of the stored items. It is ignored, this storage does not store the data.
@@ -21,7 +29,7 @@ namespace Hash { namespace Storages {
 	class CollisionCountStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
 	public:
 		/**
-         * A single item of storage -- length of the chain.
+		 * A single item of storage -- length of the chain.
 		 */
 		typedef ChainLengthType StorageItem;
 
