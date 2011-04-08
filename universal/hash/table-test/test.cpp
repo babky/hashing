@@ -1,5 +1,6 @@
 #include "table_test.h"
 #include "systems/polynomial_system.h"
+#include "systems/two_way_system_randomized.h"
 #include "math/double_word.h"
 #include <iostream>
 
@@ -68,10 +69,17 @@ int main(int, const char **) {
 	TableTest<Table<int, EqualityComparer<int>, UniversalFunctionLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_bs;
 	test_univ_lin_map_bs.runTest();
 	cout << test_univ_lin_map_bs.getAssertionResult();
+	
+	/*
+	TableTest<Table<int, EqualityComparer<int>, TwoWaySystemRandomizedLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_2wr_bs;
+	test_univ_lin_map_2wr_bs.runTest();
+	cout << test_univ_lin_map_2wr_bs.getAssertionResult();
 
-	/*TableTest<Table<int, EqualityComparer<int>, TwoWaySystemLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_2w_bs;
+	/*
+	TableTest<Table<int, EqualityComparer<int>, TwoWaySystemLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_2w_bs;
 	test_univ_lin_map_2w_bs.runTest();
-	cout << test_univ_lin_map_2w_bs.getAssertionResult();*/
+	cout << test_univ_lin_map_2w_bs.getAssertionResult();
+	*/
 
 	MathTest mathTest;
 	mathTest.runTest();
