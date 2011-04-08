@@ -191,6 +191,42 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<Filter
+				Name="Generators"
+				>
+				<File
+					RelativePath="..\generators\generator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\generators\linear_generator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\generators\random_generator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\generators\unit_input_generator.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Tests"
+				>
+				<File
+					RelativePath="..\tests\test.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\tests\test.h"
+					>
+				</File>
+				<File
+					RelativePath="..\tests\test_impl.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

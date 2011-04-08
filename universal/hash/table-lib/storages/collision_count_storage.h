@@ -15,14 +15,15 @@ namespace Hash { namespace Storages {
 	 * @typeparam T Type of the stored items. It is ignored, this storage does not store the data.
 	 * @typeparam Comparer Comparer used do determine the key equality.  This parameters is ignored, too.
 	 * @typeparam Hash Type of the hash value.
+	 * @typeparam ChainLengthType Length of the chain.
 	 */
-	template <typename T, typename Comparer, typename Hash> 
+	template <typename T, typename Comparer, typename Hash, typename ChainLengthType = boost::uint16_t> 
 	class CollisionCountStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
 	public:
 		/**
          * A single item of storage -- length of the chain.
 		 */
-		typedef size_t StorageItem;
+		typedef ChainLengthType StorageItem;
 
 		// Forward declaration for iterator.
 		class CollisionCountStorageIterator;
@@ -224,8 +225,14 @@ namespace Hash { namespace Storages {
 		}
 
 	protected:
+		/**
+		 * The number of mutexes when accessing the table.
+		 */
 		static const size_t MUTEXES = 4;
 
+		/**
+		 * Mutexes.
+		 */
 		mutable boost::shared_mutex * mutexes;
 
 		/**
