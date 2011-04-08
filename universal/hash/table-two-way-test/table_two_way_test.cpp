@@ -21,6 +21,8 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/integer_traits.hpp>
+#include <boost/integer.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/thread/thread.hpp>
 #ifdef BOOST_MSVC
