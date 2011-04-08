@@ -52,6 +52,7 @@ template<typename T>
 class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, PolynomialSystem32> {
 };
 
+/*
 template<typename T, typename Comparer, typename Hash>
 class CollisionCountStorage16b : public Hash::Storages::template CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
 public:
@@ -71,79 +72,80 @@ public:
 		((CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> *) this)->swap((CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> &) b);
 	}
 };
+*/
 
 template<typename ValueType> 
 Test * AssembleTest(string system, bool twoWay, string generator, size_t threads, size_t testLength, bool acceptSeed) {
 	if (system == "linear-map") {
 		if (twoWay) {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemLinearMap, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		} else {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionLinearMap, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		}
 	} else if (system == "cwlf") {
 		if (twoWay) {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLF, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		} else {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, UniversalFunctionCWLF, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		}
 	} else if (system == "polynomial") {
 		if (twoWay) {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		} else {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		}
 	} else if (system == "polynomial-32") {
 		if (twoWay) {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemPolynomial32, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		} else {
 			if (generator == "random") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage16b>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "unit-input") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage16b>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			} else if (generator == "linear") {
-				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage16b>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		}
 	}
