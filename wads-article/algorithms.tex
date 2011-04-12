@@ -1,0 +1,122 @@
+We present the exact algorithms of the operations. To keep the pseudocode simple we represent the hash table as an object. The object keeps the size of the hash table in the variable $Size$, the number of represented elements is stored in the variable $Count$ and the array $T$ is the representtation of the hash table. Function $Limit$ denotes the limit function and the variable $Hash$ is the used universal function. Every record $T[i]$ contains two variables. $T[i].Size$ is the number of elements inside the bucket, length of the chain, and $T[i].Chain$ is the linked list representing the elements in the bucket.
+
+\begin{algorithm}[H]
+\caption{Initialisation of the hash table}
+\label{algorithm-initialisation}
+\floatname{algorithm}{Initialisation of the hash table}
+\begin{algorithmic}
+\REQUIRE $m \in \mathbb{N}$ - size of the table
+\STATE
+\ENSURE the random uniform choice of a function $Hash$ from universal system
+\STATE
+\STATE create the table $T$ of size $m$
+\STATE initialise the trimming rate $p$
+\STATE initialise the limit function $l$
+\STATE initialise the values $\alpha_l < \alpha_m < \alpha_u$ and load factor $\alpha'$ used for computing $l$
+\STATE uniformly at random choose a hash function $Hash$
+\STATE $Size \leftarrow m$
+\STATE $Count \leftarrow 0$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Rehash operation}
+\label{algorithm-rehash}
+\floatname{algorithm}{Rehash operation}
+\begin{algorithmic}
+\REQUIRE $m \in \mathbb{N}$ - size of the new hash table, default value is $Size$ of the current table
+\STATE
+\REPEAT
+	\STATE $T'.Initialise(m)$
+	\STATE turn off the chain limit rule in $T'$
+	\STATE turn off the load factor rule in $T'$
+	\FORALL{element $x$ stored in the hash table}
+		\STATE $T'.Insert(x)$
+	\ENDFOR
+\UNTIL{chain limit rule is satisfied in $T'$}
+\STATE
+\STATE swap $T$ and $T'$
+\STATE turn on the chain limit rule in $T'$
+\STATE turn on the load factor rule in $T'$
+\STATE free $T$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Find operation}
+\label{algorithm-find}
+\floatname{algorithm}{Find operation}
+\begin{algorithmic}
+\REQUIRE $x \in U$ - saught element
+\STATE
+$i \leftarrow h(x)$
+\IF{T[i].Chain.Contains(x)}
+	\RETURN \textbf{true} \COMMENT{Successful find.}
+\ELSE
+	\RETURN \textbf{false} \COMMENT{Unsuccessful find.}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[ph!]
+\caption{Insert operation}
+\label{algorithm-insert}
+\floatname{algorithm}{Insert operation}
+\begin{algorithmic}
+\REQUIRE $x \in U$ - inserted element
+\STATE $i \leftarrow h(x)$
+\IF{T[i].Chain.Insert(x)}
+	\STATE \COMMENT{Set the number of stored elements.}
+	\STATE $Count \leftarrow Count + 1$
+	\STATE $T[i].Size \leftarrow T[i].Size + 1$
+	\STATE
+	\STATE $Rehash \leftarrow \mathbf{false}$
+	\STATE \COMMENT{The load factor rule may be violated.}
+	\IF{$Count > Size * \alpha_{max}$} 
+		\STATE $NewSize \leftarrow 2 * Size$
+		\STATE $Rehash \leftarrow \mathbf{true}$
+	\ELSE
+		\STATE $NewSize \leftarrow Size$	
+	\ENDIF
+	\STATE
+	\STATE \COMMENT{The chain limit rule may be violated.}
+	\IF{$T[i].Size > Limit(Size)$}
+		\STATE $Rehash \leftarrow \mathbf{true}$
+	\ENDIF
+	\STATE
+	\STATE \COMMENT{Rehash the table if needed, new function is chosen.}
+	\IF{$Rehash$}
+		\STATE $Rehash(NewSize)$
+	\ENDIF
+	\STATE
+	\RETURN \textbf{true} \COMMENT{Successful insert.}
+\ELSE
+	\RETURN \textbf{false} \COMMENT{Unsuccessful insert.}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Delete operation}
+\label{algorithm-delete}
+\floatname{algorithm}{Delete operation}
+\begin{algorithmic}
+\REQUIRE $x \in U$ - deleted element
+\STATE
+$i \leftarrow h(x)$
+\IF{T[i].Chain.Remove(x)}
+%	\STATE \COMMENT{Set the number of stored elements.}
+	\STATE $Count \leftarrow Count - 1$
+	\STATE $T[i].Size \leftarrow T[i].Size - 1$
+	\STATE
+%	\STATE \COMMENT{The load factor rule may be violated.}
+	\IF{$Count < Size * \alpha_{min}$}
+		\STATE Rehash($Size / 2$)
+	\ENDIF
+	\STATE
+	\RETURN \textbf{true} \COMMENT{Successful delete.}
+\ELSE
+	\RETURN \textbf{false} \COMMENT{Unsuccessful delete.}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}

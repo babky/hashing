@@ -1,0 +1,121 @@
+\begin{algorithm}[H]
+\caption{Initialisation of the hash table}
+\label{algorithm-initialisation}
+\floatname{algorithm}{Initialisation of the hash table}
+\begin{algorithmic}
+\REQUIRE $p \in (0, 1)$, default 0.5
+\REQUIRE $m \in \mathbb{N}$, default 4 096
+\STATE
+\ENSURE the random uniform choice of a linear transformation $Hash$
+\STATE
+\STATE initialise the value $\alpha'$ according to the delete operation
+\STATE use Algorithm \ref{algorithm-scheme-3} to compute the bound $Limit(m)$ for the prescribed $p$ and $\alpha'$
+\STATE initialise the variables $\alpha_{min}$ and $\alpha_{max}$
+\STATE create the table $T$ of size $m$
+\STATE $Size \leftarrow m$
+\STATE $Count \leftarrow 0$
+\STATE choose the hash function -- random binary matrix $Hash$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Rehash operation}
+\label{algorithm-rehash}
+\floatname{algorithm}{Rehash operation}
+\begin{algorithmic}
+\REQUIRE $m \in \mathbb{N}$, default $Size$ \COMMENT{New size of the hash table.}
+\STATE
+\REPEAT
+	\STATE $T'.Initialise(m)$
+	\STATE turn off the chain limit rule in $T'$
+	\STATE turn off the load factor rule in $T'$
+	\FORALL{element $x$ stored in the hash table}
+		\STATE $T'.Insert(x)$
+	\ENDFOR
+\UNTIL{chain limit rule is satisfied in $T'$}
+\STATE
+\STATE swap $T$ and $T'$
+\STATE turn on the chain limit rule in $T'$
+\STATE turn on the load factor rule in $T'$
+\STATE free $T$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Find operation}
+\label{algorithm-find}
+\floatname{algorithm}{Find operation}
+\begin{algorithmic}
+\REQUIRE $x \in U$
+\STATE
+$i \leftarrow h(x)$
+\IF{T[i].Chain.Contains(x)}
+	\RETURN \textbf{true} \COMMENT{Successful find.}
+\ELSE
+	\RETURN \textbf{false} \COMMENT{Unsuccessful find.}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[ph!]
+\caption{Insert operation}
+\label{algorithm-insert}
+\floatname{algorithm}{Insert operation}
+\begin{algorithmic}
+\REQUIRE $x \in U$
+\STATE $i \leftarrow h(x)$
+\IF{T[i].Chain.Insert(x)}
+	\STATE \COMMENT{Set the number of stored elements.}
+	\STATE $Count \leftarrow Count + 1$
+	\STATE $T[i].Size \leftarrow T[i].Size + 1$
+	\STATE
+	\STATE $Rehash \leftarrow \mathbf{false}$
+	\STATE \COMMENT{The load factor rule may be violated.}
+	\IF{$Count > Size * \alpha_{max}$} 
+		\STATE $NewSize \leftarrow 2 * Size$
+		\STATE $Rehash \leftarrow \mathbf{true}$
+	\ELSE
+		\STATE $NewSize \leftarrow Size$	
+	\ENDIF
+	\STATE
+	\STATE \COMMENT{The chain limit rule may be violated.}
+	\IF{$T[i].Size > Limit(Size)$}
+		\STATE $Rehash \leftarrow \mathbf{true}$
+	\ENDIF
+	\STATE
+	\STATE \COMMENT{Rehash the table if needed, new function is chosen.}
+	\IF{$Rehash$}
+		\STATE $Rehash(NewSize)$
+	\ENDIF
+	\STATE
+	\RETURN \textbf{true} \COMMENT{Successful insert.}
+\ELSE
+	\RETURN \textbf{false} \COMMENT{Unsuccessful insert.}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Delete operation}
+\label{algorithm-delete}
+\floatname{algorithm}{Delete operation}
+\begin{algorithmic}
+\REQUIRE $x \in U$
+\STATE
+$i \leftarrow h(x)$
+\IF{T[i].Chain.Remove(x)}
+%	\STATE \COMMENT{Set the number of stored elements.}
+	\STATE $Count \leftarrow Count - 1$
+	\STATE $T[i].Size \leftarrow T[i].Size - 1$
+	\STATE
+%	\STATE \COMMENT{The load factor rule may be violated.}
+	\IF{$Count < Size * \alpha_{min}$}
+		\STATE Rehash($Size / 2$)
+	\ENDIF
+	\STATE
+	\RETURN \textbf{true} \COMMENT{Successful delete.}
+\ELSE
+	\RETURN \textbf{false} \COMMENT{Unsuccessful delete.}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
