@@ -1,13 +1,13 @@
 \begin{algorithm}[ht]
-\caption{Operations in the hash table.}
+\caption{Implementation of the hash table.}
 \label{algorithm-hash-table}
 \begin{minipage}[t]{0.5\linewidth}
 \begin{algorithmic}
 \Procedure{Insert}{$x$}
 	\If{$x$ is not inside chain $t[f(x)]$}
 		\State insert $x$ into the chain $t[f(x)]$
-		\State $lc \leftarrow $ length of the chain $t[f(x)]$
-		\If{$\alpha > \alpha_u$ \textbf{or} $l(m, \alpha', p) < lc$}
+		\State $l_c \leftarrow $ length of the chain $t[f(x)]$
+		\If{$\alpha > \alpha_u$ \textbf{or} $l(m, \alpha', p) < l_c$}
 			\State \Call{Rehash}{}
 		\EndIf
 		\State \textbf{return} \textbf{true} \Comment{successful case}

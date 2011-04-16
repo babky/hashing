@@ -23,7 +23,7 @@ Currently the most outstanding method is Backyard Cuckoo Hashing \cite{DBLP:conf
 It achieves constant running times of the operations with high probability.
 
 \subsection{Our results}
-Our aim is to fit in the gap between perfect hashing and common universal hashing -- to provide a worst case guarantee for Find without worsening updates.
+Our aim is to fit in the gap between perfect hashing and common universal hashing -- to provide a worst case guarantee for Find without worsening updates in linear space.
 First, we analyze a simple natural modification of universal hashing with separate chains.
 We bound lengths of chains by a convenient probabilistic limit function and rehash the table whenever there exists a chain violating this condition.
 Our analysis shows that this approach leads to constant expected amortized time for each operation with a worst case guarantee for lookup.
@@ -56,7 +56,7 @@ An equivalent restatement of the definition in probability terms requires that $
 \begin{definition}
 Let $k > 0$ be an integer. System of functions $H$ is
 \begin{itemize}
-	\item \emph{strongly $k$-universal} with constant $c$, for $c > 0$, if for each sequence of $k$ pairwise different elements $x_1, \dots, x_k \in U$ and arbitrary $y_1, \dots, y_k \in V$: $\Prob{f(x_1) = y_1, \dots, f(x_k) = y_k} \leq {c}/{m^k}$,
+	\item \emph{strongly $k$-universal} with constant $c$, for $c >= 1$, if for each sequence of $k$ pairwise different elements $x_1, \dots, x_k \in U$ and arbitrary $y_1, \dots, y_k \in V$: $\Prob{f(x_1) = y_1, \dots, f(x_k) = y_k} \leq {c}/{m^k}$,
 	\item \emph{strongly $k$-universal} if it is strongly $k$-universal with $c = 1$,
 	\item \emph{strongly $\omega$-universal} if it is strongly $k$-universal for each $k \in \{1, \dots, |U|\}$,
 	\item \emph{(almost) uniform} if it is (almost) strongly $n$-universal.
