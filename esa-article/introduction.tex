@@ -9,29 +9,29 @@ Hash tables are therefore considered to be one of the most efficient solutions t
 
 \subsection{Known results and methods}
 Hashing is an old method and has overcome a great development. 
-The first methods of \emph{plain hashing}, formerly separate chaining and linear probing or more recently Hopscotch hashing \cite{DBLP:conf/wdag/HerlihyST08}, rely on the randomness of the input data. 
-They were analyzed using assumptions of full randomness, a complete list may be found in \cite{DBLP:books/sp/Mehlhorn84} which are not always met.
+The first methods of \emph{plain hashing}, formerly separate chaining and linear probing or more recently Hopscotch hashing \cite{DBLP:conf/wdag/HerlihyST08}, rely on the randomness provided by the input data. 
+These methods are usually analyzed under the assumption of full randomness, which is discussed in more detail in \cite{DBLP:books/sp/Mehlhorn84}.
 
-In some situations we can not rely on the randomness of input and switch to a randomization provided by a uniform selection of a hash function from a universal family. 
-This method is known as \emph{universal hashing} and was pioneered by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}. 
-Find operation runs in expected constant time but in general no non-trivial worst case bound is known.
+In some situations we can not rely on the randomness of input and have to switch to a randomization provided by a uniform selection of a hash function from a universal family. 
+This method is known as \emph{universal hashing} and was pioneered by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}.
+It achieves Find operation running in expected constant time but in general no non-trivial worst case bound is known.
 
 \emph{Perfect hashing} \cite{Fredman:1984:SST:828.1884} is an extension of universal hashing which addresses the problem of worst case running time for Find operation in case of static dictionaries. 
 In order to add update operations various dynamizations of perfect hashing \cite{DBLP:journals/siamcomp/DietzfelbingerKMHRT94} and a real time hash table \cite{DBLP:conf/icalp/DietzfelbingerH90} were proposed. 
 These methods together with cuckoo hashing \cite{DBLP:conf/esa/PaghR01} guarantee a constant worst case lookup time and the other operations run in expected amortized constant time.
-Currently the most outstanding method is Backyard Cuckoo Hashing \cite{DBLP:conf/focs/ArbitmanNS10} which address the problem of worst case time for updates and memory consumption of cuckoo hashing.
+Currently the most outstanding method is Backyard Cuckoo Hashing \cite{DBLP:conf/focs/ArbitmanNS10} which addresses the problem of worst case time for updates and memory consumption of cuckoo hashing.
 It achieves constant running times of the operations with high probability.
 
 \subsection{Our results}
-Our aim is to address the gap between perfect hashing and common universal hashing.
-First, we analyze a simple and natural modification of universal hashing with separate chains.
-We bound their lengths by a convenient probabilistic limit function and rehash the table whenever there exists a chain violating this condition.
-Our analysis shows that this natural approach leads to constant expected amortized times with a worst case guarantee for lookup.
+Our aim is to fit in the gap between perfect hashing and common universal hashing -- to provide a worst case guarantee for Find without worsening updates.
+First, we analyze a simple natural modification of universal hashing with separate chains.
+We bound lengths of chains by a convenient probabilistic limit function and rehash the table whenever there exists a chain violating this condition.
+Our analysis shows that this approach leads to constant expected amortized time for each operation with a worst case guarantee for lookup.
 
 The main advantage of the model is its simplicity and no need for a perfect hash function when compared to dynamic perfect hashing.
 To compare with cuckoo hashing, we utilize a different approach which unfortunately does not achieve a constant worst case running time.
 On the other hand we can tune the space consumption of the hash table, and the speed loss is compensated by use of simpler universal classes.
-By design it addresses the dynamic resizing which causes certain problems in case of Backyard Cuckoo Hashing.
+By design it solves the dynamic resizing which causes certain problems in case of Backyard Cuckoo Hashing.
 
 The proposed technique is generic. It may be used with double hashing and linear probing, too. 
 When compared to two-level perfect hashing with linear memory we provide a more detailed analysis. 

@@ -1,55 +1,68 @@
-The exact definition of algorithms now follows. 
-Variables available inside the procedures include the parameters of the model, variable $t$ denotes the array used to store the chains and $h \in H$ is the current hash function.
-
-\begin{algorithmic}
-\Procedure{Find}{$x$}
-	\If{$x$ is inside chain $t[h(x)]$}
-		\State \textbf{return} \textbf{true} \Comment{Successful Find}
-	\Else
-		\State \textbf{return} \textbf{false} \Comment{Unsuccessful Find}
-	\EndIf
-\EndProcedure
-\State
-\end{algorithmic}
+\begin{algorithm}[ht]
+\caption{Operations in the hash table.}
+\label{algorithm-hash-table}
+\begin{minipage}[t]{0.5\linewidth}
 \begin{algorithmic}
 \Procedure{Insert}{$x$}
-	\If{$x$ is not inside chain $t[h(x)]$}
-		\State insert $x$ into chain $t[h(x)]$
-		\If{$\alpha > \alpha_u$ \textbf{or} chain $t[h(x)]$ violates Chain Length Limit Rule}
+	\If{$x$ is not inside chain $t[f(x)]$}
+		\State insert $x$ into the chain $t[f(x)]$
+		\State $lc \leftarrow $ length of the chain $t[f(x)]$
+		\If{$\alpha > \alpha_u$ \textbf{or} $l(m, \alpha', p) < lc$}
 			\State \Call{Rehash}{}
 		\EndIf
-		\State \textbf{return} \textbf{true} \Comment{Successful Insert}
+		\State \textbf{return} \textbf{true} \Comment{successful case}
 	\Else
-		\State \textbf{return} \textbf{false} \Comment{Unsuccessful Insert}
+		\State \textbf{return} \textbf{false} \Comment{unsuccessful case}
 	\EndIf
 \EndProcedure
 \end{algorithmic}
+\vspace{0.1cm}
 \begin{algorithmic}
 \Procedure{Delete}{$x$}
-	\If {$x$ is inside chain $t[h(x)]$}	
-		\State delete $x$ from chain $t[h(x)]$
+	\If {$x$ is inside chain $t[f(x)]$}	
+		\State delete $x$ from chain $t[f(x)]$
 		\If{$\alpha < \alpha_l$}
 			\State \Call{Rehash}{}
 		\EndIf
-		\State \textbf{return} \textbf{true} \Comment{Successful Delete}
+		\State \textbf{return} \textbf{true} \Comment{successful case}
 	\Else
-		\State \textbf{return} \textbf{false} \Comment{Unsuccessful Delete}
+		\State \textbf{return} \textbf{false} \Comment{unsuccessful case}
 	\EndIf
 \EndProcedure
 \end{algorithmic}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\linewidth}
 \begin{algorithmic}
-\Procedure{Rehash}{}\Comment{Also finds a suitable hash function.}
-	\State $t_{old} \leftarrow t$
-	\State choose a new function $h$ from $H$
+\Procedure{Find}{$x$}
+	\If{$x$ is inside chain $t[f(x)]$}
+		\State \textbf{return} \textbf{true} \Comment{successful case}
+	\Else
+		\State \textbf{return} \textbf{false} \Comment{unsuccessful case}
+	\EndIf
+\EndProcedure
+\end{algorithmic}
+\vspace{0.1cm}
+\begin{algorithmic}
+\Procedure{Rehash}{}
+	\State \Comment{Also finds suitable hash function.}
 	\If{$\alpha < \alpha_l$ \textbf{or} $\alpha > \alpha_u$}
 		\State $m \leftarrow \lceil\alpha_m m\rceil$
 		\State $\alpha = n / m$
 	\EndIf
+	\State $t_{old} \leftarrow t$
+	\State choose a new function $h$ from $H$
 	\Repeat
-	\State create a new table $t$ with the size $m$
+	\State create a new table $t$ of size $m$
 	\ForAll{$x$ in the $t_{old}$}
-		\State place $x$ into chain $h(x)$ in $t$
+		\State add $x$ into the chain $f(x)$ in $t$
 	\EndFor
-	\Until{all rules are satisfied}
+	\Until{$\lpsl < l(m, \alpha', p)$}
 \EndProcedure
 \end{algorithmic}
+\end{minipage}
+\begin{minipage}[t]{\linewidth}
+\vspace{0.3cm}
+Variables available inside the procedures include the parameters of the model; the variable $t$ denotes the array used to store the chains and $f \in H$ is the currently used hash function.
+\end{minipage}
+\end{algorithm}
