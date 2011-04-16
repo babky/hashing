@@ -22,40 +22,40 @@ We consider the value of the random variable $\lpsl$ for the the function $f$.
 \subsection{Algorithms}
 The comprehensive list of all parameters of the hash table:
 \begin{itemize}
-	\item {$m_0$}: initial size of the hash table;
-	\item {$\alpha_l < \alpha_u$}: lower and upper bound on the load factor, lower bound may be violated when $m = m_0$;
-	\item {$\alpha_m$, $\alpha_m \in (\alpha_l, \alpha_u)$}: target load factor, when rehashing because of having more than $\alpha_u m$ or less than $\alpha_l m$ elements, we choose new $m$ so that $\alpha = \alpha_m$;
-	\item \textbf{$\alpha'$, $\alpha' < \alpha_u$}: the load factor for which we bound $\lpsl$, this parameter sets the tradeoff between the worst case guarantee and the trimming rate.
+	\item {$m_0$}, initial size of the hash table;
+	\item {$\alpha_l$, $\alpha_u$, $\alpha_l < \alpha_u$}, lower and upper bound on the load factor, lower bound may be violated when $m = m_0$;
+	\item {$\alpha_m$, $\alpha_m \in (\alpha_l, \alpha_u)$}, target load factor, when rehashing because of having more than $\alpha_u m$ or less than $\alpha_l m$ elements, we choose new $m$ so that $\alpha = \alpha_m$;
+	\item \textbf{$\alpha'$, $\alpha' < \alpha_u$}, the load factor for which we bound $\lpsl$, this parameter sets the tradeoff between the worst case guarantee and the trimming rate.
 \end{itemize}
 Following three invariants briefly describe the model. 
 \begin{itemize}
-\item \textbf{Universal class and limit function.} The chosen class $H$ must be at least a $c$-universal system which has a limit function $l$ with a trimming rate $p$.
-
-\item \textbf{Load Factor Rule.} The load factor of the table is kept in a predefined interval $[\alpha_l, \alpha_u]$ except when $m = m_0$.
-
-\item \textbf{Chain Length Limit Rule.} If there is a chain longer than $l(m, \alpha', p)$, then the table is rehashed using a new chosen uniformly at random from $H$.
+\item[(1)] \textbf{Universal class and limit function.} The chosen class $H$ must be at least a $c$-universal system which has a limit function $l$ with a trimming rate $p$.
+\item[(2)] \textbf{Load Factor Rule.} The load factor of the table is kept in a predefined interval $[\alpha_l, \alpha_u]$ except when $m = m_0$.
+\item[(3)] \textbf{Chain Length Limit Rule.} If there is a chain longer than $l(m, \alpha', p)$, then the table is rehashed using a new chosen uniformly at random from $H$.
 \end{itemize}
 
 \input{algorithms}
 
 \subsection{Consequences of Trimming Long Chains}
-Now we deal with with the effects of rehashing when a long chain appears on the expected length of a chain.
-We begin by defining the system of all suitable functions for arbitrary stored set $S$.
+Now we deal with with the effects of Chain Length Limit Rule on the expected length of a chain.
+We begin by definition of the system of all suitable functions for arbitrary stored set $S$.
 \begin{definition}[$(l, p)$ - trimmed system]
 \label{definition-trimmed-system}
-Let $l$ be a limit function with a~trimming rate $p$. The \emph{$(p, l)$-trimmed system} is the multiset of functions \[ H(p, l, S) = \{ f \in H \setdelim f \textit{ does not create a long chain for l with p} \}. \]
+Let $l$ be a limit function with a~trimming rate $p$.
+The \emph{$(p, l)$-trimmed system} is the multiset of functions \[ H(p, l, S) = \{ f \in H \setdelim f \textit{ does not create a long chain for the limit function $l$} \}. \]
 \end{definition}
 
-The restriction of $H$ to $H(p, l, S)$ is informed about the stored set since it has a feedback if a function is suitable or not. Moreover, uniform choice from the original system $H$ with refusal of the unsuitable functions is equivalent to uniform choice from the restricted system $H(p, l, S)$. To find a suitable function, a function from $H(p, l, S)$, we uniformly select a function $f \in H$ and store $S$ using $f$. While there is a chain with more than $l(m, \alpha, p)$ elements, the choice is repeated.
+The restriction of $H$ to $H(p, l, S)$ is informed about the stored set since it has a feedback if a function is suitable or not. 
+Furthermore, the uniform choice of function from the original system $H$ with refusal of the unsuitable functions is equivalent to the uniform choice of a function from the restricted system.
 
-We show that a $(l, p)$-trimmed system has the constant of universality at most $1 / (1 - p)$ times higher than the original system. So these systems are universal only with a higher constant and thus $\Expect{\psl} \leq c\alpha/(1-p)$ where $c$ is the constant of universality of the original system $H$.
-
+We show that $(l, p)$-trimmed systems are still universal with a higher constant of universality. 
 \begin{lemma}
 \label{lemma-trimmed-system}
-If $H$ is a universal system with a constant $c$ and $l$ is a limit function with a trimming rate $p$, then $|H(p, l, S)| \geq (1 - p)|H|$ and  \[ \Prob{f(x) = f(y) \mbox{ for } f \in H(p, l, S)} \leq \frac{1}{1 - p} \cdot \Prob{f(x) = f(y) \mbox{ for } f \in H}. \]
+If $H$ is a universal system with a constant $c$ and $l$ is a limit function with a trimming rate $p$, then $|H(p, l, S)| \geq (1 - p)|H|$ and $H(p, l, S)$ is $c/(1 - p)$ universal.
 \end{lemma}
 \begin{proof}
-From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-function} it is clear that $\Prob{f \in H(p, l, S)} \geq 1 - p$ and, as a result, $|H(p, l, S)| \geq (1 - p)|H|$. In addition for different $x, y \in U$ 
+From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-function} it is clear that $\Prob{f \in H(p, l, S)} \geq 1 - p$ and, as a result, $|H(p, l, S)| \geq (1 - p)|H|$.
+Moreover for different $x, y \in U$ it holds that
 \[
 \begin{split}
 & \Prob{f(x) = f(y) \mid f \in H(p, l, S)} 
@@ -66,53 +66,50 @@ From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-funct
 \qed
 \end{proof}
 
-For a $k$-wise independent class $H$ the probability of a collision when using the system $H(p, l, S)$ is at most $1 / (1 - p)$ times the probability of the same collision when using the system $H$.
+Because the expected length of a chain is upper bounded by $c\alpha$ for $c$-universal systems, for $(l, p)$-trimmed systems we obtain that $\Expect{\psl} \leq c\alpha/(1-p)$.
 
 Lemma \ref{lemma-no-trials} gives an estimate on the expected number of trials needed to find a function $f \in H(p, l, S)$ if $f$ is chosen uniformly from $H$.
-
 \begin{lemma}
 \label{lemma-no-trials}
 If $l$ is a limit function with a trimming rate $p$, then the expected number of trials needed to find a function from $H(p, l, S)$ is at most ${1}/{(1 - p)}$.
 \end{lemma}
 \begin{proof}
-Since the subsequent choices are independent, we know that \[\Prob{\mbox{at least }k\mbox{ trials are required}} \leq p^{k - 1}.\]
-Hence the expected value is at most $\sum_{k = 1}^{\infty} p^{k - 1} = \sum_{k = 0}^{\infty} p^k = {1}/{(1 - p)}.$
+Because the subsequent choices are independent, we know that the probability of having at least $k$ trials is at most $p^{k - 1}$. Hence the expected value is upper bounded by $\sum_{k = 1}^{\infty} p^{k - 1} = \sum_{k = 0}^{\infty} p^k = {1}/{(1 - p)}.$
 \qed
 \end{proof}
 
 \subsection{Amortized Analysis}
-%TODO: Staticke odhady.
-%Although deletion of an element can not prolong chains, such static bound may be invalid since the assumed static model is no longer preserved. Let us note that dynamic extensions of Theorem \ref{theorem-universal-hashing-two-choices} are available and discussed in \cite{DBLP:journals/jacm/Vocking03}. However, it is easy to see that allowing deletions with the static estimates does not cause any problem in our model .
-
-The expected amortized complexity of the model is analyzed using the potential method. Let $p_i$ be the potential of the dictionary after performing $i$\textsuperscript{th} operation, $t_i$ be the time consumed by the operation and we define its amortized complexity as $a_i = t_i + p_i - p_{i - 1}$. The expected amortized complexity of the sequence, $A$, is
+We analyze the amortized complexity of the model with the potential method. Let $p_i$ be the potential of the hash table after performing $i$\textsuperscript{th} operation and $t_i$ be the time consumed by the operation. We define the amortized complexity of the operation as $a_i = t_i + p_i - p_{i - 1}$. The expected amortized complexity of the sequence $A$ equals
 \[
 \Expect{A} = \sum_{i=1}^{k} \Expect{a_i} = \sum_{i = 1}^{k} \left(\Expect{t_i} + \Expect{p_i} - \Expect{p_{i - 1}}\right) = \Expect T + \Expect{p_k} - \Expect{p_0}.
 \]
-The expected time of any sequence of operations may be estimated using the potential method as $\Expect T = \Expect A - \Expect{p_k} + \Expect{p_0}$.
 
-Lemma \ref{lemma-sets} states an upper bound on the expected number of trials needed to enforce Chain Length Limit Rule for a sequence of sets $S_1, \dots, S_k$.
-\begin{lemma}
-\label{lemma-sets}
-Let $S_1 \subset \dots \subset S_k$ be a sequence of sets such that $|S_k| \leq \alpha' m$ and $h_0 \in H$ be an initial function. Let $h_1, \dots, h_l \in H$ be a sequence of independently and uniformly chosen functions tried to enforce Chain Length Limit Rule. Assume that $0 = i_0 < \dots < i_k = l$ is a sequence of integers such that for each $j \in \{0, \dots, k - 1\}$
-\begin{itemize}
-\item the functions $h_{i_{j}}, h_{i_{j} + 1}, \dots, h_{i_{j + 1} - 1}$ are not suitable for the set $S_{j + 1}$ and 
-\item the function $h_{i_{j}}$ is suitable for the set $S_j$.
-\end{itemize}
-Then $\Expect{l} \leq {1}/{(1 - p)}$.
-\end{lemma}
-\begin{proof}
-A function $h$ is suitable for the set $S_k$ only if it is suitable for all the sets $S_1, \dots, S_k$. Using Lemma \ref{lemma-no-trials} for the set $S_k$ completes the proof.
-\qed
-\end{proof}
+%TODO: Staticke odhady.
+%Although deletion of an element can not prolong chains, such static bound may be invalid since the assumed static model is no longer preserved. Let us note that dynamic extensions of Theorem \ref{theorem-universal-hashing-two-choices} are available and discussed in \cite{DBLP:journals/jacm/Vocking03}. However, it is easy to see that allowing deletions with the static estimates does not cause any problem in our model .
+%TODO: Kolaps lemy 3?
+%Lemma \ref{lemma-sets} states an upper bound on the expected number of trials needed to enforce Chain Length Limit Rule for a sequence of sets $S_1, \dots, S_k$.
+%\begin{lemma}
+%\label{lemma-sets}
+%Let $S_1 \subset \dots \subset S_k$ be a sequence of sets such that $|S_k| \leq \alpha' m$ and $h_0 \in H$ be an initial function. Let $h_1, \dots, h_l \in H$ be a sequence of independently and uniformly chosen functions tried to enforce Chain Length Limit Rule. Assume that $0 = i_0 < \dots < i_k = l$ is a sequence of integers such that for each $j \in \{0, \dots, k - 1\}$
+%\begin{itemize}
+%\item the functions $h_{i_{j}}, h_{i_{j} + 1}, \dots, h_{i_{j + 1} - 1}$ are not suitable for the set $S_{j + 1}$ and 
+%\item the function $h_{i_{j}}$ is suitable for the set $S_j$.
+%\end{itemize}
+%Then $\Expect{l} \leq {1}/{(1 - p)}$.
+%\end{lemma}
+%\begin{proof}
+%A function $h$ is suitable for the set $S_k$ only if it is suitable for all the sets $S_1, \dots, S_k$. Using Lemma \ref{lemma-no-trials} for the set $S_k$ completes the proof.
+%\qed
+%\end{proof}
 
 \begin{theorem}
 \label{theorem-amortised-expected-time}
-Suppose a model of universal hashing with Load Factor and Chain Length Limit Rules with initially empty stored set. If $l$ is a limit function with a trimming rate $p$, then the expected amortized time complexity of each operation is constant and the worst case running time of Find operation is $\bigo(1 + l(m, \alpha', p))$.
+Assume the hash table described in Algorithm \ref{algorithm-hash-table} obeying the invariants (1) -- (3). Then the expected amortized time complexity of each operation is constant and the worst case running time of Find operation is $\bigo(1 + l(m, \alpha', p))$.
 \end{theorem}
 \begin{proof}
-To prove the theorem assume that we are given a sequence of operations. Since Find, unsuccessful Delete and unsuccessful Insert operations do not change the stored set and have no effect on the dictionary, we may omit them from the sequence. Because Chain Length Limit Rule is enforced, the worst case complexity of Find is clear and its expected running time follows from Lemma \ref{lemma-trimmed-system}. Now we have to prove the statement for the remaining real update operations.
+To prove the theorem assume that we are given a sequence of operations Insert, Delete and Find. We consider Insert and Delete to be successful or unsuccessful according to the comments in Algorithm \ref{algorithm-hash-table}. Since Find, unsuccessful Delete and unsuccessful Insert do not change the stored set, they do not have any effect on the dictionary and its potential and thus we may omit them from the sequence. The worst case complexity of Find follows from Chain Length Limit Rule. The expected running time of Find and unsuccessful updates follows from Lemma \ref{lemma-trimmed-system}. 
 
-To do so we partition the sequence into two types of cycles and for both of them we define a potential. The first cycle type is used to amortize violations of Load Factor Rule. With the second one we are able to distribute the time required to repair violations of Chain Length Limit Rule.
+Now we have to prove the statement for successful update operations. To do so we partition the sequence into two types of cycles and for both of them we define a potential. The first cycle type is used to amortize violations of Load Factor Rule. With the second one we are able to distribute the time required to repair violations of Chain Length Limit Rule.
 
 \begin{definition}[$\alpha$-cycle, $l$-cycle]
 Cycles partition operations of the analyzed sequence.
