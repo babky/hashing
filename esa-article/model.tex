@@ -1,6 +1,16 @@
 \section{Model of Universal Hashing}
 \label{section-model}
-The hashing scheme we propose is a dictionary allowing operations Find, Insert and Delete. Moreover, the model guarantees a worst case time for Find operation determined by the underlying universal system. Of course constant expected time complexity of universal hashing is inherited. 
+In this section we provided the analysis in case of universal hashing with separate chaining. The way we manage to achieve worst-case lookup time is to keep all chains shorter than the prescribed limit. First we introduce the concept of limit function which bounds length of the longest chain with a reasonable probability. It turns out that time needed to keep chains short can be amortized to a constant.
+
+\subsection{Limit function}
+Limit functions play a crucial role in our model. The lower the values of a~limit function are the better warranty is obtained. Apparently each limit function depends on the size of the table and the load factor. However, our concept also estimates the probability that a selected function creates a chain longer than the predefined limit. When thinking about this probability, there are two choices standing against each other. Naturally the probability of a random function being unsuitable is higher for small limit functions.
+
+\begin{definition}[Limit function, trimming rate, suitable function]
+\label{definition-limit-function}
+Let $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$, $m$ be the size of the hash table and $p \in (0, 1)$.  We say that $l$ is a \emph{limit function} with \emph{trimming rate} $p$ if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
+
+Let $l$ be a limit function with a~trimming rate $p$. We say that a function $f \in H$ \emph{does not create a long chain}, or equivalently is \emph{suitable}, if $\lpsl \le l(m, \alpha, p)$ where $\lpsl$ is the value of the random variable $\lpsl$ for the the function $f$.
+\end{definition}
 
 \subsection{Algorithms}
 With separate chaining we are able to provide a worst case warranty if there is not a chain longer than the value of the limit function. If there is a chain violating this bound, the whole table is rehashed. Naturally when rehashing we always seek a function which does not create such a long chain. Similarly in case of linear probing we ask if all probe sequences are shorter than the prescribed limit. The following rules exactly describe the implementation of the model.

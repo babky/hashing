@@ -1,13 +1,5 @@
 \section{Obtaining the limit function}
 \label{section-limit}
-Limit functions play a crucial role in our model. The lower the values of a~limit function are the better warranty is obtained. Apparently each limit function depends on the size of the table and the load factor. However, our concept also estimates the probability that a selected function creates a chain longer than the predefined limit. When thinking about this probability, there are two choices standing against each other. Naturally the probability of a random function being unsuitable is higher for small limit functions.
-
-\begin{definition}[Limit function, trimming rate, suitable function]
-\label{definition-limit-function}
-Let $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$, $m$ be the size of the hash table and $p \in (0, 1)$.  We say that $l$ is a \emph{limit function} with \emph{trimming rate} $p$ if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
-
-Let $l$ be a limit function with a~trimming rate $p$. We say that a function $f \in H$ \emph{does not create a long chain}, or equivalently is \emph{suitable}, if $\lpsl \le l(m, \alpha, p)$ where $\lpsl$ is the value of the random variable $\lpsl$ for the the function $f$.
-\end{definition}
 
 When we know $\Expect{\lpsl}$, then a limit function may be found easily using Markov inequality. For the trimming rate $1/k$ the limit function $k \Expect{\lpsl}$ is valid since from Markov inequality it follows that $\Prob{\lpsl \geq k \Expect{\lpsl}} \leq {1}/{k}$. Better limit functions may be obtained when we have an upper bound on probability distribution function of the random variable $\lpsl$.
 
