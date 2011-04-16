@@ -4,7 +4,9 @@ model/command
 model/output
 universal/text/text/command
 universal/text/text/output
-wads-article/output
+esa-article/output
+esa-article/output
+wads-article/command
 wads-article/command
 cmake/CMakeFiles
 CMakeCache.txt
