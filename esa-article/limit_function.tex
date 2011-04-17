@@ -1,24 +1,36 @@
 \section{Obtaining the limit function}
 \label{section-limit}
 
-When we know $\Expect{\lpsl}$, then a limit function may be found easily using Markov inequality. For the trimming rate $1/k$ the limit function $k \Expect{\lpsl}$ is valid since from Markov inequality it follows that $\Prob{\lpsl \geq k \Expect{\lpsl}} \leq {1}/{k}$. Better limit functions may be obtained when we have an upper bound on probability distribution function of the random variable $\lpsl$.
+So far we have studied the possibility of providing a worst case guarantee for Find if we are given a limit function. 
+In this section we are interested in a way how to find such a limit function.
 
 \subsection{Linear hash functions}
-Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos \cite{DBLP:journals/jacm/AlonDMPT99} found an interesting upper bound on $\Expect \lpsl$. They used the system of all linear functions between two vector spaces over the field $\bbbz_2$. Representing $U$ and $V$ as vector spaces does not cause any problem. Each key -- binary number may be represented as a vector from a sufficiently large vector space over $\bbbz_2$. If the initial size of the hash table is a power of two and rehash may only double or halve it, then $V$ is always a vector space over $\bbbz_2$.
+Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos \cite{DBLP:journals/jacm/AlonDMPT99} found an interesting upper bound on $\Expect \lpsl$ with the system of all linear functions between two vector spaces over the field $\bbbz_2$. 
+Representing the universe $U$ and the addresses of the hash table $V$ as vector spaces is natural and causes no problem. 
+If $m_0$ is a power of two at the end of $\alpha$-cycle we just double or halve the address space and thus $V$ is kept to be a vector space over $\bbbz_2$.
 
 \begin{theorem}[\cite{DBLP:journals/jacm/AlonDMPT99}]
 \label{theorem-linear-hash-functions-dietzefelbinger}
-Suppose universal hashing with the system of linear functions from $U$ to $V$. When storing $m \log m$ elements, $\Expect{\lpsl} = \bigo(\log m \log \log m)$. 
+Suppose universal hashing with the system of linear functions from $U$ to $V$. 
+When storing $m \log m$ elements, $\Expect{\lpsl} = \bigo(\log m \log \log m)$. 
 \end{theorem}
 
-The major problem of Theorem \ref{theorem-linear-hash-functions-dietzefelbinger} is the high multiplicative constant but it can be significantly reduced by a refinement of the original proof. First, in order to obtain a valid limit function, a dependence of $\lpsl$ on $\alpha$ needs to be discovered. Further improvement is obtained by storing $n$ elements for $n = \bige(m)$ instead of $n = m \log m$. In our computations we also introduced some variables and optimized their values in order to reduce the multiplicative constant.
+The major problem of Theorem \ref{theorem-linear-hash-functions-dietzefelbinger} is the high multiplicative constant but it can be significantly reduced by a refinement of the original proof. 
+First, in order to obtain a valid limit function, a dependence of $\lpsl$ on $\alpha$ needs to be discovered.
+Further improvement is obtained by storing $n$ elements for $n = \bige(m)$ instead of $n = m \log m$.
+In our computations we also introduced some variables and optimized their values in order to reduce the multiplicative constant.
+The improved result is stated in Theorem \ref{theorem-linear-refined}.
 
 \begin{theorem}
 \label{theorem-linear-refined}
-Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. When storing $n = \bige(m)$ elements, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44,$$ $$\Prob{\lpsl \geq 57.29 \log m \log \log m} < 0.5.$$
+Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. 
+Let $p \in (0, 1)$ be the trimming rate and $\alpha > 0$. 
+If $n = \alpha m$ elements are stored inside the hash table of size $m$, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44\mbox{, and}$$ $$\Prob{\lpsl \geq a_{\alpha, p} \log m \log \log m + b_{\alpha, p}\log m} < p.$$ where constants $a$ and $b$ depend on the choice of $\alpha$ and $p$.
 \end{theorem}
 
-Let us note that the exact constants for different probabilities and load factors can be found by a simple computer program. Now we need only the stated results.
+Let us note that the exact constants for different trimming rates and load factors can be found by a simple computer program.
+For example the choice of $\alpha = 1.5$ and $p = 0.5$ yields $a = 57.29$ and $b = 0$.
+In addition, constant $a$ can get arbitrarily close to $1$ but such estimates hold only for large $n$.
 
 \subsection{Two choices paradigm}
 The two choices paradigm comes from the area of balls and bins systems. For separate chaining with a single perfectly random function it is known that $\Expect{\lpsl} = \bigo\left({\log n}/{\log \log n}\right)$. A proof of this bound may be found in \cite{DBLP:books/sp/Mehlhorn84}. The same bound also holds with a single function chosen from an almost uniform system. On the other hand for $k$-wise independence this problem becomes harder and general bounds for universal hashing are not available.

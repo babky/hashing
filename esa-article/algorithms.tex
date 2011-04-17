@@ -3,13 +3,8 @@
 \label{algorithm-hash-table}
 \begin{minipage}[t]{0.5\linewidth}
 \begin{algorithmic}
-\Procedure{Insert}{$x$}
-	\If{$x$ is not inside chain $t[f(x)]$}
-		\State insert $x$ into the chain $t[f(x)]$
-		\State $l_c \leftarrow $ length of the chain $t[f(x)]$
-		\If{$\alpha > \alpha_u$ \textbf{or} $l(m, \alpha', p) < l_c$}
-			\State \Call{Rehash}{}
-		\EndIf
+\Procedure{Find}{$x$}
+	\If{$x$ is inside chain $t[f(x)]$}
 		\State \textbf{return} \textbf{true} \Comment{successful case}
 	\Else
 		\State \textbf{return} \textbf{false} \Comment{unsuccessful case}
@@ -18,11 +13,16 @@
 \end{algorithmic}
 \vspace{0.1cm}
 \begin{algorithmic}
-\Procedure{Delete}{$x$}
-	\If {$x$ is inside chain $t[f(x)]$}	
-		\State delete $x$ from chain $t[f(x)]$
-		\If{$\alpha < \alpha_l$ \textbf{and} $m > m_0$}
-			\State \Call{Rehash}{}
+\Procedure{Insert}{$x$}
+	\If{$x$ is not inside chain $t[f(x)]$}
+		\State insert $x$ into the chain $t[f(x)]$
+		\If{$n/m > \alpha_u$}
+			\State \Call{Rehash}{\textbf{true}}
+		\Else
+			\State $l_c \leftarrow $ length of the chain $t[f(x)]$
+			\If{$l_c > l(m, \alpha', p)$}
+				\State \Call{Rehash}{\textbf{false}}
+			\EndIf
 		\EndIf
 		\State \textbf{return} \textbf{true} \Comment{successful case}
 	\Else
@@ -34,8 +34,12 @@
 \hfill
 \begin{minipage}[t]{0.49\linewidth}
 \begin{algorithmic}
-\Procedure{Find}{$x$}
-	\If{$x$ is inside chain $t[f(x)]$}
+\Procedure{Delete}{$x$}
+	\If {$x$ is inside chain $t[f(x)]$}	
+		\State delete $x$ from chain $t[f(x)]$
+		\If{$n/m < \alpha_l$ \textbf{and} $m > m_0$}
+			\State \Call{Rehash}{\textbf{true}}
+		\EndIf
 		\State \textbf{return} \textbf{true} \Comment{successful case}
 	\Else
 		\State \textbf{return} \textbf{false} \Comment{unsuccessful case}
@@ -44,19 +48,18 @@
 \end{algorithmic}
 \vspace{0.1cm}
 \begin{algorithmic}
-\Procedure{Rehash}{}
+\Procedure{Rehash}{$Resize$}
 	\State \Comment{Also finds suitable hash function.}
-	\If{$\alpha < \alpha_l$ \textbf{or} $\alpha > \alpha_u$}
-		\State $m \leftarrow \lceil\alpha_m m\rceil$
-		\State $\alpha = n / m$
+	\If{$Resize$}
+		\State $m \leftarrow n / \alpha_m$
 	\EndIf
 	\State $t_{old} \leftarrow t$
-	\State choose a new function $h$ from $H$
 	\Repeat
-	\State create a new table $t$ of size $m$
-	\ForAll{$x$ in the $t_{old}$}
-		\State add $x$ into the chain $f(x)$ in $t$
-	\EndFor
+		\State create a new table $t$ of size $m$
+		\State choose a new function $h$ from $H$
+		\ForAll{$x$ in the $t_{old}$}
+			\State add $x$ into the chain $f(x)$ in $t$
+		\EndFor
 	\Until{$\lpsl < l(m, \alpha', p)$}
 \EndProcedure
 \end{algorithmic}

@@ -6,17 +6,15 @@ First we introduce the concept of limit function which bounds the length of the 
 It turns out that the time needed to keep chains short can be amortized to a constant in expectation.
 
 \subsection{Limit function}
-Limit functions play a crucial role in our model. 
 Obviously, the lower the values of a~limit function are the better warranty is obtained. 
-Apparently each limit function depends on the size of the table, on the load factor and on the probability with which the bound appears.
+Apparently each limit function depends on the size of the table, the load factor and the probability with which the bound holds.
 
 \begin{definition}[Limit function, trimming rate, suitable function]
 \label{definition-limit-function}
-The function $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ is called a \emph{limit function} with \emph{trimming rate} $p$, for $p \in (0, 1)$, if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.
+The function $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ is called a \emph{limit function} with \emph{trimming rate} $p$, $p \in (0, 1)$, if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.\footnote{Probability is taken over choice of a hash function and the bound holds for each $S$.}
 
 Let $l$ be a limit function with a~trimming rate $p$.
-We say that a function $f \in H$ is \emph{suitable}, or \emph{does not create a long chain}, for the set $S$ if $\,\lpsl(S) \le l(m, \alpha, p)$. 
-We consider the value of the random variable $\lpsl$ for the the function $f$.
+We say that a function $f \in H$ is \emph{suitable}, or \emph{does not create a long chain}, for the set $S$ if $\,\lpsl(S) \le l(m, \alpha, p)$.\footnote{The value of the random variable $\lpsl$ is considered for the chosen function $f$.}
 \end{definition}
 
 \subsection{Algorithms}
@@ -57,7 +55,7 @@ On the other hand, it means that we do not use all the possible functions from $
 We show that $(l, p)$-trimmed systems are still universal with a higher constant of universality.
 \begin{lemma}
 \label{lemma-trimmed-system}
-If $H$ is a universal system with a constant $c$ and $l$ is a limit function with a trimming rate $p$, then $|H(p, l, S)| \geq (1 - p)|H|$ and $H(p, l, S)$ is $c/(1 - p)$ universal.
+If $H$ is a $c$-universal system and $l$ is a limit function with a trimming rate $p$, then $|H(p, l, S)| \geq (1 - p)|H|$ and $H(p, l, S)$ is $c/(1 - p)$-universal.
 \end{lemma}
 \begin{proof}
 From Definitions \ref{definition-trimmed-system} and \ref{definition-limit-function} it is clear that $\Prob{f \in H(p, l, S)} \geq 1 - p$ and, as a result, $|H(p, l, S)| \geq (1 - p)|H|$.
