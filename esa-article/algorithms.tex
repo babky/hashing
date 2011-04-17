@@ -21,7 +21,7 @@
 \Procedure{Delete}{$x$}
 	\If {$x$ is inside chain $t[f(x)]$}	
 		\State delete $x$ from chain $t[f(x)]$
-		\If{$\alpha < \alpha_l$}
+		\If{$\alpha < \alpha_l$ \textbf{and} $m > m_0$}
 			\State \Call{Rehash}{}
 		\EndIf
 		\State \textbf{return} \textbf{true} \Comment{successful case}
@@ -63,6 +63,6 @@
 \end{minipage}
 \begin{minipage}[t]{\linewidth}
 \vspace{0.3cm}
-Variables available inside the procedures include the parameters of the model; the variable $t$ denotes the array used to store the chains and $f \in H$ is the currently used hash function.
+The available variables include the parameters of the model, the variable $t$ denotes the array used to store the chains and $f \in H$ is the used hash function.
 \end{minipage}
 \end{algorithm}
