@@ -154,24 +154,25 @@ The worst case complexity of Find follows directly from Chain Length Limit Rule 
 The expected running time of Find and unsuccessful updates is $\bigo\left(1 + \Expect{\psl}\right)$.
 Since $(l, p)$-trimmed systems are $c/(1 - p)$-universal, the expected length of a chain is bounded from above by $c\alpha/(1 - p)$ and hence it is constant for any choice of parameters.
 
-To analyze the successful updates we split the operation into the actual update and possible call of Rehash procedure and analyze them separately.
+To analyze successful updates we first note that just ending an $l$-cycle doesn't change the potential.
+In that moment we have $i_l = (\alpha' - \alpha_u)m$ and so setting $i_l = 0$ and incrementing $c$ doesn't change the potential at all.
+Now we split the analyzed operation into the actual update and possible call of Rehash procedure and analyze them separately.
 \begin{itemize}
 	\item \textbf{Update part.} 
 The potential change caused by the update part is constant. 
 For Insert we have $\Delta p = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)$ and in case of Delete $\Delta p = 2e/(\alpha_m - \alpha_l)$. 
 The expected amortized complexity of the update part is thus constant. 
 
-	\item \textbf{Both $\alpha$-cycle and $l$-cycle end.} 
+	\item \textbf{$\alpha$-cycle ends.} 
 Subsequent Rehash can be paid from the potential change since $\Delta p_\alpha \leq -2em$ and $\Delta p_l \leq em$. 
 Hence $\Delta p \leq -em$ and after rescaling it is enough to pay for the expected complexity of Rehash which is $\bigo(em)$ by Lemma \ref{lemma-no-trials}.
-
-	\item \textbf{Just $l$-cycle ends.} 
-Then $i_l = (\alpha' - \alpha_u)m$ and the potential is transferred from the first part of $p_l$ to incrementing the value of $c$. Hence $\Delta p_l = 0$, $\Delta p_\alpha = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)$ and thus $\Delta p = \bigo(1)$. 
 
 	\item \textbf{Chain Length Limit Rule is violated.} Each trial of a function corresponds to a single iteration of the repeat loop in Rehash procedure of Algorithm \ref{algorithm-hash-table} and takes $\bigo(m)$ time. Because the value of $r$ is increased by the number of trials, the potential $p_l$ is decreased by $\Delta rm$.  Rehash procedure took $\bigo\left(rm\right)$ time we compensate this time by the loss of the potential.
 \end{itemize}
 
-So we can conclude that the update part runs in $\bigo(1)$ expected amortized time and Rehash part may be compensated from the potential. However, it is not clear why  the expected potential loss needed to compensate trials can not be high. In order to prove the result we have to show that $\Expect{p} \geq 0$ after each operation.
+So we can conclude that the update part runs in $\bigo(1)$ expected amortized time and Rehash part may be compensated from the potential.
+However, it is not clear why  the expected potential loss needed to compensate trials can not be high.
+In order to prove the result, we have to show that $\Expect{p} \geq 0$ after any sequence of operations.
 
 We analyze two sequences of sets stored after each operation in the $l$-cycle. 
 If we omitted deletes from each $l$-cycle, we would get another sequence of sets created only by insertions.
