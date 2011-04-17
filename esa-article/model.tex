@@ -84,9 +84,9 @@ Hence the expected value is upper bounded by $\sum_{k = 1}^{\infty} p^{k - 1} = 
 We analyze the amortized complexity of the model with the potential method. 
 Let $p_i$ be the potential of the hash table after performing $i$\textsuperscript{th} operation and $t_i$ be the time consumed by the operation. 
 We define the amortized complexity of the operation as $a_i = t_i + p_i - p_{i - 1}$. 
-The expected amortized complexity of the whole sequence of operations $A$ equals
+The expected complexity of a sequence of operations $\Expect{T}$ then equals
 \[
-\Expect{A} = \sum_{i=1}^{k} \Expect{a_i} = \sum_{i = 1}^{k} \left(\Expect{t_i} + \Expect{p_i} - \Expect{p_{i - 1}}\right) = \Expect T + \Expect{p_k} - \Expect{p_0}.
+\Expect{T} = \sum_{i=1}^{k} \Expect{t_i} = \sum_{i = 1}^{k} \left(\Expect{a_i} - \Expect{p_i} + \Expect{p_{i - 1}}\right) = \Expect A - \Expect{p_k} + \Expect{p_0}.
 \]
 
 %TODO: Staticke odhady.
