@@ -86,7 +86,7 @@ Hence the expected value is upper bounded by $\sum_{k = 1}^{\infty} p^{k - 1} = 
 We analyze the amortized complexity of the model with the potential method. 
 Let $p_i$ be the potential of the hash table after performing $i$\textsuperscript{th} operation and $t_i$ be the time consumed by the operation. 
 We define the amortized complexity of the operation as $a_i = t_i + p_i - p_{i - 1}$. 
-The expected amortized complexity of the sequence $A$ equals
+The expected amortized complexity of the whole sequence of operations $A$ equals
 \[
 \Expect{A} = \sum_{i=1}^{k} \Expect{a_i} = \sum_{i = 1}^{k} \left(\Expect{t_i} + \Expect{p_i} - \Expect{p_{i - 1}}\right) = \Expect T + \Expect{p_k} - \Expect{p_0}.
 \]
@@ -111,22 +111,14 @@ The expected amortized complexity of the sequence $A$ equals
 
 \begin{theorem}
 \label{theorem-amortised-expected-time}
-Assume the hash table described in Algorithm \ref{algorithm-hash-table} obeying the invariants (1) -- (3). 
-Then the expected amortized time complexity of each operation is constant and the worst case running time of Find operation is $\bigo(1 + l(m, \alpha', p))$.
+Assume the hash table described in Algorithm \ref{algorithm-hash-table}. 
+If the table is empty in the initial state, then the expected amortized time complexity of each operation is constant and Find operation takes at most $\bigo(1 + l(m, \alpha', p))$ time.
 \end{theorem}
 \begin{proof}
 To prove the theorem assume that we are given a sequence of operations Insert, Delete and Find. 
-We consider Insert and Delete to be successful or unsuccessful according to the comments in Algorithm \ref{algorithm-hash-table}. 
-Since Find and unsuccessful updates do not change the hash table, they have no effect on the potential of the dictionary.
-Therefore we may omit them from the analyzed sequence. 
+We consider Insert and Delete to be successful or unsuccessful according to the comments in Algorithm \ref{algorithm-hash-table}.
 
-The worst case complexity of Find follows directly from Chain Length Limit Rule.
-The expected running time of Find and unsuccessful updates is $\bigo\left(\Expect{\psl}\right)$.
-In case of $c$-universal systems the expected length of a chain is upper bounded by $c\alpha$ \cite{DBLP:conf/focs/WegmanC79}.
-From Lemma \ref{lemma-trimmed-system} it immediately follows that $\Expect{\psl} \leq c\alpha/(1-p)$ for $(l, p)$-trimmed systems.
-
-It remains to prove the statement for successful updates. 
-To do so we partition the analyzed sequence of operations, the sequence obtained after omitting Finds and unsuccessful updates, into two types of cycles. 
+First, we partition the analyzed sequence into two types of cycles. 
 For both of them we have a single potential and the final potential is their sum.
 The first cycle type is used to amortize violations of Load Factor Rule. 
 With the second one we are able to distribute the time required to repair violations of Chain Length Limit Rule.
@@ -134,43 +126,69 @@ With the second one we are able to distribute the time required to repair violat
 \begin{definition}[$\alpha$-cycle, $l$-cycle]
 Cycles partition operations of the analyzed sequence.
 Each \emph{$\alpha$-cycle} ends just after the operation causing violation of Load Factor Rule.
-Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation which causes violation of Load Factor Rule (both cycles end).
+Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation violating of Load Factor Rule (both cycles end).
 \end{definition}
 
-Each cycle is a subsequence of operations which starts when the table is in a good shape or the accumulated potential is high. 
-After each $\alpha$-cycle a Rehash is required but there is enough potential accumulated during the cycle so that we may afford it.
+First, we define the potential used in the proof.
+Let $e = 1/(1 - p)$, $r$ be the number of trials of a hash function caused by violations of Chain Length Limit Rule and $c$ be the number of started $l$-cycles.
+Both variables $r$ and $c$ are counted from the initial state and $e$ is a constant.
+We refer to the current cycle as to the cycle containing the analyzed operation.
+Put $i_\alpha$ to be the number of successful insertions performed in the current $\alpha$-cycle prior execution of the analyzed operation.
+Similarly, $d_\alpha$ and $i_l$ denote the number deletions and insertions in the current $\alpha$-cycle and $l$-cycle before the analyzed operation.
+We define $p_\alpha = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and $p_l = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.
+The overall potential $p = p_\alpha + p_l$.
 
-On the other hand, after finishing an $l$-cycle because of the $(\alpha'-\alpha_u)m$-th successful insertion the condition of the table is not clear.
-It may happen that the updates have created a few longer chains and a Rehash will be triggered soon. 
-Fortunately, in this case we transfer the potential needed to pay such a Rehash into the subsequent $l$-cycle.
-Finally, we show that in each $l$-cycle we are expected to distribute only a constant amount of the overhead work along the $\Theta(m)$ operations of the cycle.
+After each $\alpha$-cycle Rehash is required because size of the table has to change.
+Because a single Rehash is expected to take $\bigo(em)$ time and there are $(\alpha_u - \alpha_m)m$ insertions or $(\alpha_m - \alpha_l)m$ deletes in each $\alpha$-cycle we have chosen the potential $p_\alpha$ so that can pay Rehash from it.
 
-Let us define $e = 1/(1-p)$ and $i_\alpha$ be the number of successful insertions performed in the $\alpha$-cycle of the analyzed operation prior its execution. 
-Similarly define $d_\alpha$ and $i_l$ to be the number deletions and insertions in the ``current'' $\alpha$-cycle and $l$-cycle before the analyzed operation.
-Let $r$ be the number of trials of a hash function caused by violation of Chain Length Limit Rule and $c$ be the number of started $l$-cycles.
-Both $r$ and $c$ are counted from the initial state.
-We define the potential $p_1 = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and the potential $p_2 = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.
-The overall potential is $p = p_1 + p_2$.
+On the other hand, after finishing an $l$-cycle the state of the table is not clear.
+There may exist a few chains which could violate Chain Length Limit Rule soon.
+Fortunately, in this case we have transferred the potential needed to pay such a Rehash from the previous cycle.
+This is the reason why the initial potential $p_1 = em_0 = \bigo(1)$.
+In addition, we will show that in each $l$-cycle we are expected to spend $\bigo(em)$ time in Rehash procedure.
+So each $l$-cycle has to pay $\bigo(em)$ time and this clarifies the choice of $(ce - r)m$ part.
+And we accumulate this potential by $(\alpha'-\alpha_u)m$ operations in the first part of the potential $p_l$.
 
-First, we decompose each update operation into the actual update and into the possible rehashing part and analyze the two parts independently.
-Since the expected length of a chain is constant the expected running time of the update part is constant, too.
-Observe that the overall potential is increased by a constant if the analyzed operation is not the last one in the corresponding cycle. 
-Hence the amortized complexity of the update part is constant. 
+Since Find and unsuccessful updates have no effect on the potential we omit them from the analyzed sequence. 
+The worst case complexity of Find follows directly from Chain Length Limit Rule because $\lpsl \leq l(m, \alpha', p)$.
+The expected running time of Find and unsuccessful updates is $\bigo\left(1 + \Expect{\psl}\right)$.
+Since $(l, p)$-trimmed systems are $c/(1 - p)$-universal the expected length of a chain is upper bounded by $c\alpha/(1 - p)$ and hence it is constant for each choice of parameters.
 
-Each trial of a function from $H$ corresponds to a single iteration of the repeat loop in Rehash procedure of Algorithm \ref{algorithm-hash-table}.
-A single trial is paid by incrementing the value of $r$. 
-Notice that the value of $r$ is increased by the number of trials.
-Because the potential is decreased by $\Delta rm$ and a single trial takes $\bigo\left(m\right)$ time, we compensate the time spent by Rehash procedure by the potential loss.
+To analyze the successful updates we split the operation into the actual update and possible call of Rehash procedure and analyze them separately.
+\begin{itemize}
+	\item \textbf{Update part.} 
+The potential change caused by the update part is constant. 
+For Insert we have $\Delta p = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)$ and in case of Delete $\Delta p = 2e/(\alpha_m - \alpha_l)$. 
+The expected amortized complexity of the update part is thus constant. 
 
-If the $\alpha$-cycle ends after the analyzed operation, then $p_1$ decreases by at least $2em$ and $p_2$ is increased by at most $em$.
-Hence $\Delta p \leq -em$.
-Similarly when the $l$-cycle ends because $i_l = (\alpha' - \alpha_u)m$, then $\Delta p_2 = 0$ and $\Delta p_1 = \bigo\left(1\right)$. 
+	\item \textbf{Both $\alpha$-cycle and $l$-cycle end.} 
+Subsequent Rehash can be paid from the potential change since $\Delta p_1 \leq -2em$ and $p_2 \leq em$. 
+Hence $\Delta p \leq -em$ and after rescaling it is enough to pay for the expected complexity of Rehash which is $\bigo(em)$ by Lemma \ref{lemma-no-trials}.
 
-Now we argue why $\Expect{ce - r} \geq 0$ and thus $\Expect{p_k} \geq 0$ for each $k >0$. If we omitted deletes from each $l$-cycle, we would get a sequence of sets created only be insertions. Deletions may not prolong chains so in a single $l$-cycle we expect $e$ trials of a hash function. Since $c$ is the number of started $l$-cycles and $r$ is the total number of such trials, we have $\Expect{ce} \geq \Expect{r}$ and thus $\Expect{p_k} \geq 0$. We have already observed that $\Expect{T} = \Expect{A} - \Expect{p_k} + \Expect{p_0}$. The theorem now follows because our potential is expected to be non-negative and $p_0 = \bigo(1)$. 
+	\item \textbf{Just $l$-cycle ends.} 
+Then $i_l = (\alpha' - \alpha_u)m$ and the potential is transferred from the first part of $p_l$ to incrementing the value of $c$. Hence $\Delta p_l = 0$, $\Delta p_\alpha = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)$ and thus $\Delta p = \bigo(1)$. 
+
+	\item \textbf{Chain Length Limit Rule is violated.} Each trial of a function corresponds to a single iteration of the repeat loop in Rehash procedure of Algorithm \ref{algorithm-hash-table} and takes $\bigo(m)$ time. Because the value of $r$ is increased by the number of trials, the potential $p_l$ is decreased by $\Delta rm$.  Rehash procedure took $\bigo\left(rm\right)$ time we compensate this time by the loss of the potential.
+\end{itemize}
+
+So we can conclude that the update part runs in $\bigo(1)$ expected amortized time and Rehash part may be compensated from the potential. However, it is not clear why  the expected potential loss needed to compensate trials can not be high. In order to prove the result we have to show that $\Expect{p} \geq 0$ after each operation.
+
+We analyze two sequences of sets stored after each operation in the $l$-cycle. 
+If we omitted deletes from each $l$-cycle, we would get another sequence of sets created only by insertions.
+Consider the set $S'$ in such a sequence at the end of each $l$-cycle. 
+Clearly, for each set $S$ represented in the dictionary during the $l$-cycle we have that $S \subseteq S'$. 
+Since we compute the value limit function for the load factor $\alpha'$, which is chosen so that $\alpha' > \alpha_u$, and there are at most $(\alpha' - \alpha_u)m$ insertions in the $l$-cycle we get that $|S'| \leq \alpha' m$.
+
+Notice that each suitable function for $S'$ is also suitable for $S$ because $S \subseteq S'$. 
+Therefore we reject even smaller number of functions than the testing for the complete set $S'$ would. 
+In addition, each function that would be rejected for $S$ would be rejected for $S'$, too.
+From Lemma \ref{lemma-no-trials} it follows that we expect at most $e$ trials to find a suitable function for $S'$. 
+Omitting deletions can not cause any harm since deletions do not prolong chains and the limit function does not depend on $\alpha$ but on the parameter $\alpha'$.
+Hence the expected number of trials during each $l$-cycle is at most $e$. 
+
+So in a single $l$-cycle we expect only $e$ trials of a hash function.
+Since $c$ is incremented at the beginning of each $l$-cycle, we may state that $\Expect{ce} \geq \Expect{r}$ after each operation.
+Hence $\Expect{p} \geq 0$. 
+The theorem now follows from the facts that $\Expect{T} = \Expect{A} - \Expect{p} + \Expect{p_0} \leq \Expect{A} + \bigo(1)$ and the amortized complexity of each operation is constant.
 \qed
 \end{proof}
-
-% TODO: Budeme to riesit, netreba to...
-%In case of "insertion only" limit functions Delete operation may be allowed as well without any further change. If each $l$-cycle started with a rehash, then we would obtain an insertion only hash table. Observe that one additional rehash in each $l$-cycle can be amortized to constant time by introducing another potential $p_3 = {ei_{l}}/{(\alpha' - \alpha_u)}$. Moreover, performing the mentioned rehash is not necessary and, as a result, the first rehash in each $l$-cycle may be caused by invalidity of the limit function.
-
-With trimming rates which tend to zero with growing $n$, e.g. in case of the two choices paradigm, the amortization overhead caused by Chain Length Limit Rule gradually disappears. It is caused by the fact that for a sufficiently large $n$ almost each function is suitable for every $S$.

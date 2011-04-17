@@ -72,3 +72,6 @@ In plain hashing we get full randomness because of the probabilistic properties 
 In case of the two choices paradigm the limit function is $\bigo(\log \log n)$ and with a~single hash function $\bigo(\log n / \log \log n)$. These bounds are tight.
 
 Notice that bounds discussed in previous sections hold for any stored set without any other assumption. They rely only on the randomness inherited by using a high-quality universal system. In a situation when the input data are random enough it is correct and much more efficient to use a simpler universal system with the assumption of full randomness.
+
+% With trimming rates which tend to zero with growing $n$, e.g. in case of the two choices paradigm, the amortization overhead caused by Chain Length Limit Rule gradually disappears. It is caused by the fact that for a sufficiently large $n$ almost each function is suitable for every $S$.
+
