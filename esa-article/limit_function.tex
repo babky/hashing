@@ -39,24 +39,31 @@ The same bound holds with a single function chosen from an almost uniform system
 On the other hand for $k$-wise independence this problem becomes harder and general bounds for universal hashing are not available.
 
 A further study \cite{DBLP:conf/stoc/AzarBKU94} of balls and bins systems discovered that hashing with at least two independent fully random hash functions brings far better results. 
-Another multiplicative improvement has been brought by witness tree analysis by Vöcking \cite{DBLP:journals/jacm/Vocking03}. 
-If each stored element is put inside a least loaded chain of $d$ ones, then with a high probability the most loaded bin contains ${\ln \ln n}/d {\ln \phi_d} + \bige(1)$ elements \cite{DBLP:journals/jacm/Vocking03} where $\phi_d$ is the golden ratio of the Fibonacci sequence of order $d$. 
+If each stored element is put inside a least loaded chain of $d$ ones, then with a high probability the most loaded bin contains ${\ln \ln n}/\ln d + \bige(1)$.
+Another improvement, which allowed removing the balls and achieved a better multiplicative constant, has been brought by witness tree analysis by Vöcking \cite{DBLP:journals/jacm/Vocking03}. 
 
-It is simple to realize that these results hold in case of universal hashing with almost uniform systems. Bounds for $k$-wise independence with constant number of functions and general $S \subset U$ are not known so far.
+It is simple to realize that these results hold in case of universal hashing with almost uniform systems. However, bounds for $k$-wise independence with constant number of functions and general $S \subset U$ are not known so far.
 
 \begin{theorem}
 \label{theorem-universal-hashing-two-choices}
-Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d \in H$ are chosen uniformly and independently. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 3c^2 + 2} \in \littleo\left(1\right).$$
 \end{theorem}
 \begin{proof}
-We only discuss differences from the proof for perfectly random functions found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94}. Observe that the probability of collisions of $k$, $k \leq n$, different elements is at most ${c}/{m^k}$. The probability of collisions in the same sequence of elements with a truly random function equals ${1}/{m^k}$. Thus we have to calculate with the multiplicative constant $c$.
-From the independence of functions $f_1, \dots, f_d$ it is clear that $\Prob{f_i(x) \in R,\, \forall i \in \{0, \dots, d\}} = \prod_{i = 1}^{d}\Prob{f_i(x) \in R}$ for each $x \in U$ and $R \subseteq V$. Hence for $c = 1$ no change has to be done. However, for $c > 1$ our assumption $\alpha c \leq 1$ is sufficient to prove the result.
+The layered induction technique found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94} is not sufficient here. 
+We have to apply the witness tree analysis from \cite{DBLP:journals/jacm/Vocking03}. 
+Observe that the probability of mapping $k$, $k \leq n$, different elements to a prescribed image is at most ${c}/{m^k}$. 
+The probability of the same event in case of truly random function equals ${1}/{m^k}$. 
+Therefore we have to compensate the multiplicative factor $c$ by redefinition of the leaf event. 
+The bin containing the ball assigned to a leaf has to contain at least $3c^2$ elements at the time of placing the ball inside the bin.
+A complete proof is given in the appendix.
+Let us note that the improvements from \cite{DBLP:journals/jacm/Vocking03}, the asymmetric choice and storing $\bige(m)$ elements, are possible in our situation as well. 
+In addition, they may be shown using the same argument.
 \qed
 \end{proof}
 
-To be precise we have to discuss existence and efficiency of uniform systems. It is obvious that the system of all functions is strongly $\omega$-universal and hence uniform. The main problem here are space requirements -- $\bigo(|U| \log |V|)$ bits. There are other $\omega$-universal classes known but they are quite complex. Although their functions may be computed in a constant time, they are not efficient enough. 
+Although the worst case warranty achieved by two choices is impressive we have to discuss existence and efficiency of uniform systems. It is obvious that the system of all functions is strongly $\omega$-universal and hence uniform. The main problem here are space requirements -- $\bigo(|U| \log |V|)$ bits. There are other $\omega$-universal classes known but they are quite complex. Although their functions may be computed in a constant time, they are not efficient enough. 
 
-A convenient example of a uniform system appeared in \cite{DBLP:journals/siamcomp/PaghP08}. Its construction is randomized and the system is uniform with a high probability.
+However, a convenient example of a uniform system appeared in \cite{DBLP:journals/siamcomp/PaghP08}. Its construction is randomized and the system is uniform with a high probability.
 \begin{theorem}[\cite{DBLP:journals/siamcomp/PaghP08}]
 \label{theorem-uniform-system}
 For any constant $c > 0$ there is a RAM algorithm constructing a random family of functions from $U$ to $V$ in expected $\littleo(n) + (\log \log|U|)^{\bigo(1)}$ time and $\littleo(n)$ words of space, such that:
@@ -66,23 +73,26 @@ For any constant $c > 0$ there is a RAM algorithm constructing a random family o
 \end{itemize}
 \end{theorem}
 
-The underlying RAM has words of size $\bige(\log |U| + \log |V|)$ bits. Since the construction of the system is probabilistic and it does not have to be uniform, the limit function is valid only with a certain probability. Because the limit function is valid when $H$ is uniform, the overall trimming rate may be computed as
+The underlying RAM has words of size $\bige(\log |U| + \log |V|)$ bits. Since the construction of the system is probabilistic, the obtained function is uniform only with a certain probability. The overall trimming rate may be computed as
 \[
 \begin{split} 
-& \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7,\, H \mbox{ is uniform}} \\
-	& \qquad = \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 7 \mid H \mbox{ is uniform}} \Prob{H \mbox{ is uniform}} \\ 
-	& \qquad = \left(1 - \littleo\left(\frac{1}{n}\right)\right)\left(1 - \bigo\left(\frac{1}{n^c}\right)\right). \\
+& \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 3c^2 + 2} \\
+	& \qquad \geq \Prob{\lpsl \leq \frac{\ln \ln n}{\ln d} + 3c^2 + 2 \mid H \mbox{ is uniform}} \Prob{H \mbox{ is uniform}} \\ 
+	& \qquad = \left(1 - \littleo\left(1\right)\right)\left(1 - \bigo\left({1}/{n^c}\right)\right) = 1 - \littleo(1). \\
 \end{split}
 \]
-The positive fact is that this probability tends to one as $n$ increases. The unpleasant thing is that choosing a new function means regenerating the system and takes $\bigo(n)$ time.
+The positive fact is that this probability tends to one as $n$ increases. The unpleasant thing is that choosing a new function takes $\bigo(n)$ time. Nevertheless it can be payed from the potential since Rehash already takes $\bige(m)$ time. 
+
+% TODO: d=log log n a zavislost!
 
 \subsection{Truly random functions}
 \label{subsection-truly-random-functions}
-In plain hashing we get full randomness because of the probabilistic properties of input. Although these assumptions are seldom correct, we often have in some way randomly distributed data. As observed in \cite{DBLP:conf/soda/MitzenmacherV08}, strong $2$-universality may behave like a truly random function when input contains certain amount of entropy. If the requirements are satisfied, then we can use the same limit functions as for truly random functions.
+In plain hashing we get full randomness because of the probabilistic properties of input. Although these assumptions are seldom correct, we often have in some way randomly distributed data. As observed in \cite{DBLP:conf/soda/MitzenmacherV08}, strong $2$-universality may behave like a truly random function when input contains certain amount of entropy. When the input data are random enough it is correct and much more efficient to use a simpler universal system with the assumption of full randomness than a high-quality universal system.
 
-In case of the two choices paradigm the limit function is $\bigo(\log \log n)$ and with a~single hash function $\bigo(\log n / \log \log n)$. These bounds are tight.
+If the requirements are satisfied, then we can use the same limit functions as for truly random functions. In case of the two choices paradigm we get the limit function $\bigo(\log \log n)$ and with a~single hash function $\bigo(\log n / \log \log n)$. 
 
-Notice that bounds discussed in previous sections hold for any stored set without any other assumption. They rely only on the randomness inherited by using a high-quality universal system. In a situation when the input data are random enough it is correct and much more efficient to use a simpler universal system with the assumption of full randomness.
+With trimming rates which tend to zero with growing $n$, e.g. in case of the two choices paradigm, the amortization overhead caused by Chain Length Limit Rule gradually disappears. 
+It is caused by the fact that for a sufficiently large $n$ almost each function is suitable for every $S$.
 
-% With trimming rates which tend to zero with growing $n$, e.g. in case of the two choices paradigm, the amortization overhead caused by Chain Length Limit Rule gradually disappears. It is caused by the fact that for a sufficiently large $n$ almost each function is suitable for every $S$.
-
+All the mentioned limit functions except linear hash functions with $n = \bige(m)$ are well known results sometimes restated with a small adjustment for $c > 1$. 
+The advantage of the method is that whenever there is an improvement in the field of universal classes, we get a better limit function and thus a better guarantee, too.
