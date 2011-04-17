@@ -13,8 +13,7 @@ Apparently each limit function depends on the size of the table, the load factor
 \label{definition-limit-function}
 The function $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ is called a \emph{limit function} with \emph{trimming rate} $p$, $p \in (0, 1)$, if $\Prob{\lpsl > l(m, \alpha, p)} \leq p$.\footnote{Probability is taken over choice of a hash function and the bound holds for each $S$.}
 
-Let $l$ be a limit function with a~trimming rate $p$.
-We say that a function $f \in H$ is \emph{suitable}, or \emph{does not create a long chain}, for the set $S$ if $\,\lpsl(S) \le l(m, \alpha, p)$.\footnote{The value of the random variable $\lpsl$ is considered for the chosen function $f$.}
+We say that a function $f \in H$ is \emph{suitable} for $S$ and $l$ if $\,\lpsl(S) \le l(m, \alpha, p)$.\footnote{The value of the random variable $\lpsl$ is taken for the chosen function $f$.}
 \end{definition}
 
 \subsection{Algorithms}
@@ -45,7 +44,7 @@ Now we deal with with the effects of Chain Length Limit Rule on the expected len
 \begin{definition}[$(l, p)$ - trimmed system]
 \label{definition-trimmed-system}
 Let $l$ be a limit function with a~trimming rate $p$.
-The \emph{$(l, p)$-trimmed system} is the multiset of functions \[ H(p, l, S) = \{ f \in H \setdelim f \textit{ does not create a long chain for the limit function $l$} \}. \]
+The \emph{$(l, p)$-trimmed system} is the multiset of functions \[ H(p, l, S) = \{ f \in H \setdelim f \textit{ is suitable for the limit function $l$ and the set $S$} \}. \]
 \end{definition}
 
 Notice that after each update we keep the function to be from the system $H(p, l, S)$.
