@@ -119,8 +119,8 @@ We consider Insert and Delete to be successful or unsuccessful according to the 
 
 First, we partition the analyzed sequence into two types of cycles. 
 For both of them we have a single potential and the final potential is their sum.
-The first cycle type is used to amortize violations of Load Factor Rule. 
-With the second one we are able to distribute the time required to repair violations of Chain Length Limit Rule.
+The first cycle type, $\alpha$-cycle, is used to amortize violations of Load Factor Rule. 
+With the second type, $l$-cycles, which are partitioning of $\alpha$-cycles, we are able to distribute the time required to repair violations of Chain Length Limit Rule.
 
 \begin{definition}[$\alpha$-cycle, $l$-cycle]
 Cycles partition operations of the analyzed sequence.
@@ -130,9 +130,9 @@ Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion i
 
 First, we define the potential used in the proof.
 Let $e = 1/(1 - p)$, $r$ be the number of trials of a hash function caused by violations of Chain Length Limit Rule and $c$ be the number of started $l$-cycles.
-Both variables $r$ and $c$ are counted from the initial state and $e$ is a constant.
+Both variables $r$ and $c$ are counted from the initial state and $e$ is the constant depending on the trimming rate.
 We refer to the current cycle as to the cycle containing the analyzed operation.
-Put $i_\alpha$ to be the number of successful insertions performed in the current $\alpha$-cycle prior execution of the analyzed operation.
+Let $i_\alpha$ be the number of successful insertions performed in the current $\alpha$-cycle prior to execution of the analyzed operation.
 Similarly, $d_\alpha$ and $i_l$ denote the number deletions and insertions in the current $\alpha$-cycle and $l$-cycle before the analyzed operation.
 We define $p_\alpha = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and $p_l = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.
 The overall potential $p = p_\alpha + p_l$.
@@ -148,7 +148,8 @@ In addition, we will show that in each $l$-cycle we are expected to spend $\bigo
 So each $l$-cycle has to pay $\bigo(em)$ time and this clarifies the choice of $(ce - r)m$ part.
 And we accumulate this potential by $(\alpha'-\alpha_u)m$ operations in the first part of the potential $p_l$.
 
-Since Find and unsuccessful updates have no effect on the potential we omit them from the analyzed sequence. 
+Since Find and unsuccessful updates have no effect on the potential, we omit them from the analyzed sequence. 
+%TODO: Zmienka o WC pre neuspesne updaty.
 The worst case complexity of Find follows directly from Chain Length Limit Rule because $\lpsl \leq l(m, \alpha', p)$.
 The expected running time of Find and unsuccessful updates is $\bigo\left(1 + \Expect{\psl}\right)$.
 Since $(l, p)$-trimmed systems are $c/(1 - p)$-universal the expected length of a chain is upper bounded by $c\alpha/(1 - p)$ and hence it is constant for each choice of parameters.

@@ -25,7 +25,7 @@ The improved result is stated in Theorem \ref{theorem-linear-refined}.
 \label{theorem-linear-refined}
 Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. 
 Let $p \in (0, 1)$ be the trimming rate and $\alpha > 0$. 
-If $n = \alpha m$ elements are stored inside the hash table of size $m$, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44\mbox{, and}$$ $$\Prob{\lpsl \geq a_{\alpha, p} \log m \log \log m + b_{\alpha, p}\log m} < p.$$ where constants $a$ and $b$ depend on the choice of $\alpha$ and $p$.
+If $n = \alpha m$ elements are stored inside the hash table of size $m$, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44\mbox{ and}$$ $$\Prob{\lpsl \geq a_{\alpha, p} \log m \log \log m + b_{\alpha, p}\log m} < p.$$ where constants $a$ and $b$ depend on the choice of $\alpha$ and $p$.
 \end{theorem}
 
 Let us note that the exact constants for different trimming rates and load factors can be found by a simple computer program.
@@ -33,21 +33,20 @@ For example the choice of $\alpha = 1.5$ and $p = 0.5$ yields $a = 57.29$ and $b
 In addition, constant $a$ can get arbitrarily close to $1$ but such estimates hold only for large $n$.
 
 \subsection{Two choices paradigm}
-The two choices paradigm comes from the area of balls and bins systems. For separate chaining with a single perfectly random function it is known that $\Expect{\lpsl} = \bigo\left({\log n}/{\log \log n}\right)$. A proof of this bound may be found in \cite{DBLP:books/sp/Mehlhorn84}. The same bound also holds with a single function chosen from an almost uniform system. On the other hand for $k$-wise independence this problem becomes harder and general bounds for universal hashing are not available.
+For separate chaining with a single perfectly random function it is known that $\Expect{\lpsl} = \bigo\left({\log n}/{\log \log n}\right)$. 
+A proof of this bound may be found in \cite{DBLP:books/sp/Mehlhorn84}. 
+The same bound holds with a single function chosen from an almost uniform system, too.
+On the other hand for $k$-wise independence this problem becomes harder and general bounds for universal hashing are not available.
 
-A further study \cite{DBLP:conf/stoc/AzarBKU94} of balls and bins systems discovered that hashing with at least two independent fully random hash functions brings far better results. If each stored element is put inside a least loaded bin of $d$ ones, then with a high probability the most loaded bin contains less than ${\ln \ln n}/{\ln d} + \bigo(1)$ elements. It is not so hard to realize that these results hold in case of universal hashing with almost uniform systems. Bounds that are possible to achieve with a limited independence for a general $S \subset U$, are not known so far.
+A further study \cite{DBLP:conf/stoc/AzarBKU94} of balls and bins systems discovered that hashing with at least two independent fully random hash functions brings far better results. 
+Another multiplicative improvement has been brought by witness tree analysis by Vöcking \cite{DBLP:journals/jacm/Vocking03}. 
+If each stored element is put inside a least loaded chain of $d$ ones, then with a high probability the most loaded bin contains ${\ln \ln n}/d {\ln \phi_d} + \bige(1)$ elements \cite{DBLP:journals/jacm/Vocking03} where $\phi_d$ is the golden ratio of the Fibonacci sequence of order $d$. 
 
-Because of the following definition we have to extend the notation. For $k \in \bbbn$, $x_1, \dots, x_k \in U$ and $f \in H$ the function $f$ applied to a vector $(x_1, \dots, x_k) \in U^k$ is defined as $f((x_1, \dots, x_k)) = (f(x_1), \dots, f(x_k))$.
-\begin{definition}[Independent hash functions]
-\label{definition-independent-hash-functions}
-Let $H$ be a uniform system of hash functions and $f, g \in H$ be two functions chosen uniformly at random from the system $H$. We say that the functions $f, g$ are \emph{independent} if for each $\vec{x} \in U^n$ with different elements and arbitrary $y, z \in V^n$ $$\Prob{f(\vec{x}) = \vec{y}, g(\vec{x}) = \vec{z}} = \Prob{f(\vec{x}) = \vec{y}} \Prob{g(\vec{x}) = \vec{z}}.$$
-\end{definition}
-
-Notice that the independent choice of $f_1, \dots, f_d$ from $H$ is sufficient for the functions to be independent in terms of Definition \ref{definition-independent-hash-functions}. Theorem \ref{theorem-universal-hashing-two-choices} is a straightforward restatement of results pioneered in \cite{DBLP:conf/stoc/AzarBKU94} which originally hold only with fully random functions.
+It is simple to realize that these results hold in case of universal hashing with almost uniform systems. Bounds for $k$-wise independence with constant number of functions and general $S \subset U$ are not known so far.
 
 \begin{theorem}
 \label{theorem-universal-hashing-two-choices}
-Let $H$ be an almost uniform universal system with a constant $c$ such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x$ is placed into a least loaded bucket from $f_1(x), \dots, f_d(x)$. The addresses are determined by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d \in H$ are chosen uniformly and independently. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
 \end{theorem}
 \begin{proof}
 We only discuss differences from the proof for perfectly random functions found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94}. Observe that the probability of collisions of $k$, $k \leq n$, different elements is at most ${c}/{m^k}$. The probability of collisions in the same sequence of elements with a truly random function equals ${1}/{m^k}$. Thus we have to calculate with the multiplicative constant $c$.
