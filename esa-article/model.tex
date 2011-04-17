@@ -162,7 +162,7 @@ For Insert we have $\Delta p = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)
 The expected amortized complexity of the update part is thus constant. 
 
 	\item \textbf{Both $\alpha$-cycle and $l$-cycle end.} 
-Subsequent Rehash can be paid from the potential change since $\Delta p_1 \leq -2em$ and $p_2 \leq em$. 
+Subsequent Rehash can be paid from the potential change since $\Delta p_\alpha \leq -2em$ and $\Delta p_l \leq em$. 
 Hence $\Delta p \leq -em$ and after rescaling it is enough to pay for the expected complexity of Rehash which is $\bigo(em)$ by Lemma \ref{lemma-no-trials}.
 
 	\item \textbf{Just $l$-cycle ends.} 
