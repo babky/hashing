@@ -43,7 +43,10 @@ The set $U$ denotes the universe, the set of possible keys. $V$ denotes the addr
 
 The mapping $f\colon U \rightarrow V$ denotes the current hash function. We discuss probabilistic properties of hash functions and their families in more detail later.
 
-We often work with the following two random variables defined for a fixed stored set~$S$. The length of the chain at address $y \in V$ is denoted by $\psl(y, S)$. The length of the longest chain, $\lpsl(S)$, is defined as $\lpsl = \max_{y \in V} \psl(y, S).$ We omit the parameter $S$ when we talk about bounds that hold for any $S \subseteq U$.
+We need the following random variables defined for a fixed stored set~$S$.
+The length of the chain at the address $y \in V$ is denoted by $\psl(y, S)$. 
+The length of the longest chain, $\lpsl(S)$, is defined as $\lpsl(S) = \max_{y \in V} \psl(y, S).$
+We omit the parameter $S$ when we talk about bounds that hold for any $S \subseteq U$.
 
 From now we assume the uniform choice of a hash function $f$ from a universal system.
 
