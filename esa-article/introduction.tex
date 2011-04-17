@@ -23,8 +23,9 @@ Currently the most outstanding method is Backyard Cuckoo Hashing \cite{DBLP:conf
 It achieves constant running times of the operations with high probability.
 
 \subsection{Our results}
-Our aim is to fit in the gap between perfect hashing and common universal hashing -- to provide a worst case guarantee for Find without worsening updates in linear space.
-First, we analyze a simple natural modification of universal hashing with separate chains.
+Our aim is to fit in the gap between perfect hashing and common universal hashing.
+We provide a hash table which uses linear space and provides a worst case guarantee for Find.
+In fact, we analyze a simple modification of universal hashing with separate chaining and show that the method can be generalized.
 We bound lengths of chains by a convenient probabilistic limit function and rehash the table whenever there exists a chain violating this condition.
 Our analysis shows that this approach leads to constant expected amortized time for each operation with a worst case guarantee for lookup.
 
