@@ -152,7 +152,7 @@ Since Find and unsuccessful updates have no effect on the potential, we omit the
 %TODO: Zmienka o WC pre neuspesne updaty.
 The worst case complexity of Find follows directly from Chain Length Limit Rule because $\lpsl \leq l(m, \alpha', p)$.
 The expected running time of Find and unsuccessful updates is $\bigo\left(1 + \Expect{\psl}\right)$.
-Since $(l, p)$-trimmed systems are $c/(1 - p)$-universal the expected length of a chain is upper bounded by $c\alpha/(1 - p)$ and hence it is constant for each choice of parameters.
+Since $(l, p)$-trimmed systems are $c/(1 - p)$-universal, the expected length of a chain is bounded from above by $c\alpha/(1 - p)$ and hence it is constant for any choice of parameters.
 
 To analyze the successful updates we split the operation into the actual update and possible call of Rehash procedure and analyze them separately.
 \begin{itemize}
