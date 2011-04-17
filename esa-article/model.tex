@@ -25,18 +25,19 @@ The comprehensive list of all parameters of the hash table:
 	\item {$m_0$}, initial size of the hash table;
 	\item {$\alpha_l$, $\alpha_u$, $\alpha_l < \alpha_u$}, lower and upper bound on the load factor, lower bound may be violated when $m = m_0$;
 	\item {$\alpha_m$, $\alpha_m \in (\alpha_l, \alpha_u)$}, target load factor, when rehashing because of having more than $\alpha_u m$ or less than $\alpha_l m$ elements, we choose new $m$ so that $\alpha = \alpha_m$;
-	\item \textbf{$\alpha'$, $\alpha' < \alpha_u$}, the load factor for which we bound $\lpsl$, this parameter sets the tradeoff between the worst case guarantee and the trimming rate.
+	\item \textbf{$\alpha'$, $\alpha' < \alpha_u$}, the load factor for which we compute the value of the limit function and with respect to which we bound $\lpsl$.
 \end{itemize}
 Following three invariants briefly describe the model. 
 \begin{itemize}
 \item[(1)] \textbf{Universal class and limit function.} The chosen class $H$ must be at least a $c$-universal system which has a limit function $l$ with a trimming rate $p$.
-\item[(2)] \textbf{Load Factor Rule.} The load factor of the table is kept in a predefined interval $[\alpha_l, \alpha_u]$ except when $m = m_0$.
+\item[(2)] \textbf{Load Factor Rule.} The load factor of the table is kept in a predefined interval $[\alpha_l, \alpha_u]$. If $m = m_0$, then it may happen that $\alpha \leq \alpha_0$.
 \item[(3)] \textbf{Chain Length Limit Rule.} If there is a chain longer than $l(m, \alpha', p)$, then the table is rehashed using a new function chosen uniformly from $H$.
 \end{itemize}
 
 When thinking about trimming rates there is a tradeoff between the obtained worst case guarantee and the time spent per update.
-If Chain Length Limit Rule holds with a high probability, corresponds to lower trimming rates, then the guarantee tends to be weaker. 
-On the other hand for strict limits, the trimming rate is higher, we are likely to spend a more time by finding a convenient function.
+If Chain Length Limit Rule holds with a high probability, lower trimming rates, then the guarantee tends to be weaker. 
+On the other hand for strict limits, higher trimming rates, we are likely to spend more time by updates.
+The tradeoff is set up by the choice of $\alpha'$.
 
 \input{algorithms}
 
