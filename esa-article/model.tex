@@ -84,10 +84,11 @@ Hence the expected value is upper bounded by $\sum_{k = 1}^{\infty} p^{k - 1} = 
 We analyze the amortized complexity of the model with the potential method. 
 Let $p_i$ be the potential of the hash table after performing $i$\textsuperscript{th} operation and $t_i$ be the time consumed by the operation. 
 We define the amortized complexity of the operation as $a_i = t_i + p_i - p_{i - 1}$. 
-The expected complexity of a sequence of operations $\Expect{T}$ then equals
+The expected complexity of a sequence of $k$ operations $\Expect{T}$ then equals
 \[
-\Expect{T} = \sum_{i=1}^{k} \Expect{t_i} = \sum_{i = 1}^{k} \left(\Expect{a_i} - \Expect{p_i} + \Expect{p_{i - 1}}\right) = \Expect A - \Expect{p_k} + \Expect{p_0}.
+\Expect{T} = \sum_{i=1}^{k} \Expect{t_i} = \sum_{i = 1}^{k} \Expect{a_i - p_i + p_{i - 1}} = \sum_{i=0}^{k} \Expect {a_i} - \Expect{p_k} + \Expect{p_0}.
 \]
+For our potential we show that $\Expect{p_k} \geq 0$ and thus $\Expect{T} \leq \sum_{i=0}^{k} \Expect {a_i} + \Expect{p_0}$.
 
 %TODO: Staticke odhady.
 %Although deletion of an element can not prolong chains, such static bound may be invalid since the assumed static model is no longer preserved. Let us note that dynamic extensions of Theorem \ref{theorem-universal-hashing-two-choices} are available and discussed in \cite{DBLP:journals/jacm/Vocking03}. However, it is easy to see that allowing deletions with the static estimates does not cause any problem in our model .
