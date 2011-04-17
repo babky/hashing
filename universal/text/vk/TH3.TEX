@@ -1,0 +1,116 @@
+\input amstex
+\input amsppt.sty
+
+\magnification=\magstep1
+
+\proclaim{Theorem}Let $u$ and $t$ be non-zero natural numbers and 
+let $p$ be a prime.  Then the family of all linear mappings from 
+$\Bbb Z^u_p$ into $\Bbb Z_p^t$ is $1$-universal.  
+\endproclaim
+
+\demo{Proof}Let $A=\{\vec {a}_1,\vec {a}_2,\dots,\vec {a}_u\}$ be a base of $
+\Bbb Z_p^u$. It is well 
+known that for every mapping $f:A@>>>\Bbb Z_p^t$ there exists a 
+unique linear mapping extended $f$ and $|\Bbb Z^t_p|=p^t$. Thus the 
+number of linear mapping from $\Bbb Z_p^u$ into $\Bbb Z^t_u$ is $
+(p^t)^u=p^{tu}$. Let 
+$\vec {x}$ and $\vec {y}$ be distinct vectors of $\Bbb Z_p^u$ and let $
+j\in \{1,2,\dots,u\}$ such 
+that if $\vec {x}-\vec {y}=\sum_{i=1}^nb_i\vec {a}_i$ then $b_j\ne 
+0$ (since $\vec {0}\ne\vec {x}-\vec {y}$ such $j$ 
+exists). Then $f:\Bbb Z^u_p@>>>\Bbb Z_p^t$ is a 
+linear mapping with $f(x)=f(y)$ if and only if 
+$f(\vec {x}-\vec {y})=f(\vec {x})-f(\vec {y})=\vec {0}$. Thus for every mapping 
+$g:A\setminus \{a_j\}@>>>\Bbb Z_p^t$ there exists exactly one linear mapping 
+$f:\Bbb Z^u_p@>>>\Bbb Z^t_p$ with $f(x)=f(y)$ because necessarily
+$$f(\vec {a}_j)=\sum_{i=1,i\ne j}^ib_ig(\vec {a}_i).$$
+Hence the number of linear mappings $f:\Bbb Z^u_p@>>>\Bbb Z_p^t$ with 
+$f(\vec {x})=f(\vec {y})$ is equal to $(p^t)^{u-1}=p^{t(u-1)}$. From $
+p^{t(u-1)}=\frac {p^{tu}}{p^t}$ it 
+follows that the family of all linear mappings from $\Bbb Z^u_p$ into 
+$\Bbb Z^T_p$ is $1$-universal. \qed
+\enddemo
+
+\proclaim{Theorem 3}For every $\varepsilon$ with $0<\varepsilon <
+1$ there exists a 
+constant $c_{\varepsilon}>0$ such that for all natural numbers $w$ and $
+t$ 
+and for every set $A\subseteq \Bbb Z_2^w$ with $|A|\ge c_{\varepsilon}
+t2^t$ we have 
+$$\bold P(T(A)=\Bbb Z^t_2)\ge 1-\varepsilon$$
+for every random uniformly chosen linear mapping 
+$T:\Bbb Z_2^w@>>>\Bbb Z^t_2$.
+\endproclaim
+
+\demo{Proof}Set $u=\lceil\log(\frac {2|A|}{\varepsilon})\rceil$. Let $
+T_1:\Bbb Z_2^u@>>>\Bbb Z_2^t$ be a random 
+uniformly chosen surjective linear mapping (since $u\ge t$ such 
+mapping exists). Fix $T_1$. Then 
+for every random uniformly chosen linear mapping $T:\Bbb Z_2^w@>>>
+\Bbb Z_2^t$ 
+there exists a linear mapping $T_0:\Bbb Z_2^w@>>>\Bbb Z_2^u$ with $
+T=T_0\circ T_1$ 
+and $T_0$ is a random linear mapping with uniform distribution. 
+Since the family of all linear mappings from $\Bbb Z_2^w$ into $\Bbb Z^
+u_2$ is 
+$1$-universal we conclude that 
+$$\bold P(T_0(\vec {x})=T_0(\vec {y}))=2^{-u}$$
+for all distinct vectors $\vec {x}$ and $\vec {y}$ from $\Bbb Z^w_
+2$. If $d_A$ is the number of 
+all pairs of distinct vectors $\vec {x},\vec {y}\in A$ with $T_0(
+\vec {x})=T_0(\vec {y})$ then 
+the expected value of a random variable $d_A$ is
+$$\bold E(d_A)=\binom {|A|}22^{-u}.$$
+If $|T_0(A)|\le\frac {|A|}2$ then there exist at least $\frac {|A
+|}2$ pairs of distinct 
+vectors $\vec {x},\vec {y}\in A$ with $T_0(\vec {x})=T_0(\vec {y}
+)$. By Markov inequality 
+$$\bold P(c_A\ge k\binom {|A|}22^{-u})\le\frac 1k.$$
+Thus if we set $k=\frac {|A|2^u}{2\binom {|A|}2}$ then we obtain  
+$$\bold P(|T_0(A)|\ge\frac {|A|}2)\le \bold P(d_A\ge\frac {|A|}2)
+\le\frac {2\binom {|A|}2}{|A|2^u}=\frac {|A|-1}{2^u}<\frac {|A|}{
+2^u}\le\frac {\varepsilon |A|}{2|A|}=\frac {\varepsilon}2$$
+We can summarize that
+$$\bold P(T(A)\ne \Bbb Z^t_2\wedge |T_0(A)|\le\frac {|A|}2)\le\frac {
+\varepsilon}2.$$
+
+Secondly we compute $\bold P(T(A)\ne \Bbb Z_2^t\wedge |T_0(A)|\ge\frac {
+|A|}2)$. By Theorem 6 
+for $T_1:\Bbb Z^u_2@>>>\Bbb Z^t_2$ and $T_0(A)\subseteq \Bbb Z^u_
+2$, we have
+$$\bold P(T(A)=T_1(T_0(A))\ne \Bbb Z^t_2\wedge |T_0(A)|\ge\frac {
+|A|}2)\le\alpha^{u-t-\log t+\log\log(\frac 1{\alpha})}$$
+where $\alpha =1-\frac {|T_0(A)|}{2^u}$. Clearly
+$$\alpha <1-\frac {|A|}22^{-\log(\frac {2|A|}{\varepsilon})-1}=1-\frac {
+|A|}{4\frac {2|A|}{\varepsilon}}=1-\frac {\varepsilon}8\le e^{-\frac {
+\varepsilon}8}.$$
+Set $c_{\varepsilon}=4(\frac 2{\varepsilon})^{\frac 8{\varepsilon}}$. Then we can estimate 
+$$\align-\frac {\varepsilon}8(u-t-\log t+&\log\log(\frac 1{\alpha}
+))=-\frac {\varepsilon}8(\lceil\log(\frac {2|A|}{\varepsilon})\rceil 
+-t-\log t+\log\log(\frac 1{\alpha}))=\\
+&-\frac {\varepsilon}8(\lceil\log(\frac {8(\frac 2{\varepsilon})^{\frac 
+8{\varepsilon}}t2^t}{\varepsilon})\rceil -t-\log t+\log\log(\frac 
+1{\alpha}))\le\\
+&-\frac {\varepsilon}8(3+\frac 8{\varepsilon}\log\frac 2{\varepsilon}
+-\log\varepsilon +\log t+t-t-\log t+\log(\frac {\varepsilon}8\log 
+e))=\\
+&-\frac {\varepsilon}8(3-\log\varepsilon +\frac 8{\varepsilon}\log
+(\frac 2{\varepsilon})+\log\varepsilon -3+\log\log e)=\\
+&-\frac {\varepsilon}8(\frac 8{\varepsilon}\log(\frac 2{\varepsilon}
+)+\log\log e)=\\
+&\log\frac {\varepsilon}2-\frac {\varepsilon}8\log\log e\le\log\frac {
+\varepsilon}2.\endalign$$
+Hence we infer that
+$$\align \bold P(T(A)=T_1(T_0(A))\ne \Bbb Z^t_2\wedge |T_0(A)|\ge\frac {
+|A|}2)\le&\alpha^{u-t-\log t+\log\log(\frac 1{\alpha})}\le\\
+&e^{-\frac {\varepsilon}8(u-t-\log t+\log\log(\frac 1{\alpha}))}\le\\
+&e^{\log(\frac {\varepsilon}2)}\le e^{\ln(\frac {\varepsilon}2)}=\frac {
+\varepsilon}2.\endalign$$
+If we connect both alternatives we deduce that
+$$\bold P(T(A)=T_1(T_0(A))\ne \Bbb Z^t_2)\le\frac {\varepsilon}2+\frac {
+\varepsilon}2=\varepsilon$$
+and form this it follows that $\bold P(T(A)=\Bbb Z^t_2)\ge 1-\varepsilon$. \qed
+\enddemo
+
+\end
+

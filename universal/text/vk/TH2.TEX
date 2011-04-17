@@ -1,0 +1,60 @@
+\input amstex
+\input amsppt.sty
+
+
+\magnification=\magstep1
+\def \spam{\operatorname{spam}}
+
+\proclaim{Theorem 6}Let $t$ and $u$ be natural numbers with 
+$0\le t<u$ and let $A$ be a proper non-empty subset of the vector 
+space $\Bbb Z_2^u$.  Set $\alpha =1-\frac {|A|}{2^u}$.  Then for a random uniformly chosen 
+surjective linear mapping $T:\Bbb Z_2^u@>>>\Bbb Z_2^t$ we have 
+$$\bold P(T(A)\ne \Bbb Z_2^t)\le\alpha^{u-t-\log t+\log\log\frac 
+1{\alpha}}.$$
+\endproclaim
+
+\demo{Proof} Set $s=u-t$. Choose vectors $\vec {v}_1,\vec {v}_2,\dots
+,\vec {v}_s$ 
+independently and randomly according uniform distribution. Let 
+$\Cal T$ be a set of all surjective linear mappings $T:\Bbb Z_2^u@>>>
+\Bbb Z_2^t$ with 
+$T(\vec {v}_i)=\vec {0}$ for all $i=1,2,\dots,s$. Then $T$ is a random uniformly 
+chosen linear surjective mapping from $\Bbb Z_2^u$ onto $\Bbb Z^t_
+2$. The set 
+$\{\vec {v}_1,\vec {v}_2,\dots,\vec {v}_s\}$ of vectors need not be linearly independent. Let 
+us define $A_0=A$ and $A_i=A_{i-1}\cup (A_{i-1}+\vec {v}_i)$ and set $
+\alpha_i=1-\frac {|A_i|}{2^u}$. 
+If we consider that $\alpha_i$ is a random variable then, by Lemma 2, 
+$\bold E(\alpha_i)=\alpha_{i-1}^2$ for all $i=1,2,\dots,s$. Then $
+0<\alpha_0<1$ and clearly 
+$\alpha_i\le\alpha_{i-1}$ for all $i=1,2,\dots,s$. Thus the assumptions of Lemma 
+3 are fulfilled and, by Lemma 3, 
+$$\align \bold P(\alpha_s\ge 2^{-t})\le&\alpha^{s-\log\log(\frac 
+1{2^{-t}})+\log\log(\frac 1{\alpha})}=\\
+&\alpha^{s-\log t+\log\log(\frac 1{\alpha})}=\alpha^{u-t-\log t+\log\log
+(\frac 1{\alpha})}.\endalign$$
+
+Since $\alpha_s=1-\frac {|A_s|}{2^u}$ we infer that $|A_s|=2^u(1-
+\alpha_s)$ and hence from 
+$\alpha_s<2^{-t}$ it follows that $|A_s|>2^u-2^{u-t}$. Since kernel of $
+T$ has a 
+size $2^{u-t}$ we infer that $T(A_s)=T(\Bbb Z_2^u)$ and hence $T(
+A_s)=\Bbb Z_2^t$ 
+because $T$ is surjective. Thus 
+$$\bold P(\alpha_s<2^{-t})=\bold P(T(A_s)=\Bbb Z_2^t).$$
+
+Since $\Bbb Z_2^u$ is a vector space over a field $\Bbb Z_2$ we obtain, by 
+induction over $i$ that $A_i=A+\spam(\vec {v}_1,\vec {v}_2,\dots,
+\vec {v}_s)$. Since 
+$T(\vec {v}_i)=\vec {0}$ for all $i=1,2,\dots,i$ we state that $T
+(A)=T(A_i)$ for 
+all $i=1,2,\dots,s$. Hence 
+$$\bold P(T(A)\ne \Bbb Z_2^t)=\bold P(T(A_s)\ne \Bbb Z_2^t)=\bold P
+(\alpha_s\ge 2^{-t})\le\alpha^{u-t-\log t+\log\log(\frac 1{\alpha}
+)}$$
+and the proof follows. \qed
+\enddemo
+
+\end
+
+

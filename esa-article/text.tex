@@ -1,0 +1,68 @@
+% This is the LaTeX source for the article dealing with Worst Case
+% Aware Universal Hashing. The source code is a modification of the
+% file typeinst.tex which may be found at http://www.springer.com/lncs
+% and ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e
+
+\documentclass[runningheads,a4paper]{llncs}
+\include{definitions}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\urldef{\mail}\path|babkys@gmail.com,vcunat@gmail.com|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\mainmatter
+
+%TODO: Coslo GAUKu dopisat.
+%TODO: Pozri worst-case -> worst case, look-up -> lookup, warranty -> guarantee.
+\author{Martin Babka\thanks{Moj GAUK} \and Vladimír Čunát\thanks{This research was partially supported by SVV project number 263 314.}}
+\authorrunning{Martin Babka, Vladimír Čunát}
+
+\title{A Worst Case Aware Version of Universal Hashing}
+\titlerunning{A Worst Case Aware Version of Universal Hashing}
+\toctitle{A Worst Case Aware Version of Universal Hashing}
+
+\institute{Faculty of Mathematics and Physics, Charles University,\\ Prague, Czech Republic \\
+\mail\\
+\url{http://www.ktiml.mff.cuni.cz/~babka/hashing}}
+
+\tocauthor{Martin Babka, Vladimír Čunát}
+\maketitle
+
+\begin{abstract}
+In this work we propose and analyze a simple hash table giving a worst case time guarantee in case of Find operation with all operations running in constant expected amortized time.
+To achieve this goal we exploit known properties of some universal families of functions.
+Since the mentioned guarantee strongly depends on the quality of the underlying universal system, we show various systems capable of interesting bounds.
+With reasonable assumptions we can also combine the proposed model with the "two choices paradigm" and obtain $\bigo(\log \log n)$ worst case bound.
+The main advantage of the method is its simplicity and genericness because it may be used with separating chaining as well as with linear probing.
+
+\keywords{universal hashing, data structures, worst case lookup}
+\end{abstract}
+
+\input{introduction}
+\input{model}
+\input{limit_function}
+\input{conclusion}
+
+\subsubsection*{Acknowledgments.}
+% TODO: Lepsia formulacia (others).
+We would like to thank Václav Koubek and others for their helpful comments.
+
+\input{bibliography}
+
+\clearpage
+\input{appendix_linear_functions}
+\input{appendix_two_choices_uniform}
+
+\end{document}
