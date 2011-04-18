@@ -1,104 +1,154 @@
 \section*{Appendix -- proof of Theorem \ref{theorem-universal-hashing-two-choices}}
-\setcounter{theorem}{2}
+\setcounter{theorem}{3}
 
 \begin{theorem}
-Let $H$ be an almost uniform universal system with a constant $c$ such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x$ is placed into a least loaded bucket from $f_1(x), \dots, f_d(x)$. The addresses are determined by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 3c^2 + 4} \in \littleo\left(1\right).$$
 \end{theorem}
 
-\subsection{Notation}
-For the proof of Theorem \ref{theorem-universal-hashing-two-choices} we need further notation which comes from the original proof found in \cite{Mitzenmacher:2005:PCR:1076315}. By $\mathrm{Bi}(n, p)$ we understand a binomial random variable with parameters $n$ and $p$. Elements of the stored set $S$ are placed inside the table in an arbitrary but fixed order. Let $x_1$ be the first inserted element, $x_2$ the second and $x_n$ be the last one. By the state of the system at the time $t$ we understand the placement of all elements in the table immediately after the insertion of the element $x_t$. 
+We state that the original result \cite{DBLP:journals/jacm/Vocking03} of Vöcking holds in case of $c > 1$.
+A more detailed proof can be found in the original paper. 
+First we state the result when the size of the table is the same as the number of elements, $m = n$.
+Here we briefly describe the construction but emphasize all the changes.
+It is obvious that in case of universal system with $c = 1$ the statement holds since we may assume full independence up to $n$ elements and the probability bounds used in the proof are automatically correct.
+When $c > 1$ we have to compensate higher collision probability by slightly increasing the height of the witness tree.
 
-The position of element $x_t$ in the chain, where it is placed, is referred to as $h(t)$. Let $\mu_i(t)$ be the number of already stored elements at the time $t$ that are at least at $i$\textsuperscript{th} position in their chains. The number of chains that contain at least $i$ elements at the time $t$ is denoted by $\nu_i(t)$. Remark that $\nu_i(t) \leq \mu_i(t)$ for every $t \in \{1, \dots, n \}$. Let $\mu_i = \mu_i(n)$ and $\nu_i = \nu_i(n)$.
+First, we show that if there is a chain containing $L + 3c^2$ elements, then we are able to construct an activated pruned witness tree of order $L$.
+The next step is to estimate from above the probability of existence of an activated pruned witness tree of order $L$.
+Hence we obtain the bound on the probability of having a chain consisting of at least $L + 3c^2$ elements.
 
-\subsection{The Actual Proof}
-First we create a sequence of values $\beta_i$ such that $\beta_i \geq \nu_i$ with a high probability. To estimate the probabilities we use Chernoff bound stated in Lemma \ref{lemma-chernoff-bound}. Low probabilities of the event $\beta_i < \nu_i$ are obtained using a technique called layered induction. The induction is stopped when $i = i^* > \ln \ln n/\ln d + 4$ since for $i > i^*$ Chernoff bound is no longer able to provide a good estimate. Finally the probability that $\nu_{i^*+3} \geq 1$ is obtained using a few raw estimates. The result then immediately follows from the fact that $\lpsl \geq i^*+3 \Leftrightarrow \nu_{i^* + 3} \geq 1$.
+\subsection{Witness tree}
+\begin{definition}[Witness tree]
+\emph{Witness tree} of order $L$ is a complete oriented $d$-ary tree with edges oriented in the direction from root to the leaves. Each node of the tree is assigned an element of the stored set $S$.
+\end{definition}
 
-\begin{lemma}[Chernoff bound]
-\label{lemma-chernoff-bound}
-Let $n \in \bbbn$ and $p \in (0, 1)$. Then $$\Prob{\mathrm{Bi}(n, p) > 2np} \leq e ^ {- \frac{np}{3}} \textit{.}$$
-\end{lemma}
+We freely exchange the roles of a node and the element assigned to it because this simplification does not cause any mistake.
+We refer to the element assigned to a node $v$ as to the variable $v$ without any further notification.
+The value $f(x)$ denotes the chain where the element $x \in S$ is placed.
 
-\begin{lemma}
-\label{lemma-height-of-inserted-ball}
-If $\beta_i > \nu_i(t)$, then $\Prob{h(t + 1) > i} \leq \left(\frac{c\beta_i}{m}\right) ^ d$.
-\end{lemma}
-\begin{proof}
-First we estimate the probability of placing an element into a set of bins $R$, which contains bins with $i$ or more elements, by a single function $f_1$. So let $x \in U$, $R \subseteq V$ such that $|R| \leq \beta_i$, then $$\Prob{f_1(x) \in R} = \displaystyle\sum_{r \in R} \Prob{f_1(x) = r} \leq \frac{c\beta_i}{m}.$$
-The element $x_{t + 1}$ may get behind $i$\textsuperscript{th} position in the chain only when each of $d$ functions places it inside $R$. Since the functions are mutually independent we obtain the desired bound.
-\qed
-\end{proof}
+\begin{definition}[Edge event, leaf event, activated witness tree]
+We associate two types of events with the tree:
+\begin{itemize}
+	\item \textbf{Edge event} Consider en edge $(u, v)$. The \emph{edge event associated with the edge $(u, v)$} occurs if $\exists i \in \{1, \dots, d \} \colon f(u) = f_i(v)$.
+	\item \textbf{Leaf event} Consider a leaf $v$. The \emph{leaf event associated with the leaf $v$} occurs if the chain $f(v)$ at the insertion time of $v$ contains at least $3c^2$ elements.
+\end{itemize}
 
-Now we define the sequence of values $\beta_i$. To make an insight into the way how it is chosen let $p_i = \left({c\beta_i}/{m}\right) ^ d$. If $\nu_i \leq \beta_i$, then $p_i$ is greater than the probability of placing an element behind the $i$\textsuperscript{th} position as observed in Lemma \ref{lemma-height-of-inserted-ball}. From Lemma \ref{lemma-chernoff-bound} we have that $\Prob{\mathrm{Bi}(n, p_i) \geq 2np_i} \leq \exp\left({-np_i}/{3}\right)$. Random variable $\Prob{\mathrm{Bi}(n, p_i) > k}$ majorizes $\Prob{\mu_{i + 1} > k}$ and with a high probability we have that $2np_i \geq \mu_{i + 1} \geq \nu_{i + 1}$. So if we need a sequence of values $\beta_i$ such that $\beta_i \geq \nu_{i}$ with a high probability, then we have a good reason to put $\beta_{i + 1} = 2np_i = 2n\left({c\beta_i}/{m}\right) ^ d$.
+We say that \emph{witness tree is activated} if all the edge and leaf events occur.
+\end{definition}
 
-Let the event $\epsilon_i$ occur if and only if $\beta_i \geq \nu_i$. Now put $\beta_4 = \frac{n}{4}$ and remark that $\Prob{\epsilon_4} = 1$. Assume that $\epsilon_4$ does not hold. Then $n \leq 4 \nu_4 < 4 \frac{n}{4} = n$ which is not possible. And finally, let us define a random binary variable $Y_t^i$ as $$Y_t^i = 1 \Leftrightarrow h(t) \geq i + 1 \mbox{ and } \nu_i(t - 1) \leq \beta_i \textit{.}$$
+\subsection{Construction of the activated witness tree}
+We just repeat the original construction. 
+Let $y$ be the chain having at least $L + 3c^2$ elements. 
+We create an activated witness tree of order $L$ witnessing the event of having a chain of length $L + 3c^2$ elements.
+We begin by assigning the topmost element $x$ of the chain $y$ to the root. 
+Then we look at the chains $f_1(x), \dots, f_d(x)$ and they must contain at least $L + 3c^2 - 1$ elements. 
+The topmost elements in these chains are assigned to the children of the root and the process continues recursively. 
 
-If the event $\epsilon_i$ occurs for every $i \in \{1, \dots, n\}$, then $\sum_{t = 1}^{n} Y_t^i = \mu_{i + 1}$. This statement holds because $\beta_i \geq \nu_i \geq \nu_i(t)$ for every $t \in \{1, \dots, n\}$ and thus the second condition for $Y_t^i$ is satisfied. Also we add one for each ball placed behind $i$\textsuperscript{th} position. 
-From the previous observation if follows that
+Notice that leaves are assigned elements placed into the chains containing at least $3c^2$ elements at their insertion times.
+Hence all the leaf events occur.
+Realize that all the edge events, too, because on each edge $(u, v)$ the element $v$ is chosen to be from the chains $f_1(u), \dots, f_d(u)$.
+
+\subsection{Probability of the activation of a witness tree}
+We estimate from above the probability that there is an activate witness tree of order $L$.
+First we make a simplifying assumption that elements assigned to the nodes of the tree are different.
+In the following we will get rid of the assumption and obtain a complete proof of the statement.
+Let $N$ be the number of all nodes in the tree of order $L$. The number of edges in the tree is thus $N - 1$ and the number of leaves is $d^L$.
+\begin{itemize}
+	\item The number of all assignments of elements to the nodes is at most $n^N$.
+	\item The probability that en edge event occurs is at most ${cd}/{n}$ because we use an almost uniform system with the constant $c$.
+	\item 
+		Since we have $n$ elements, there are at most ${n}/{3c^2}$ chains consisting of at least $3c^2$ elements.
+		The probability that an leaf event occurs is hence at most $({3c})^{-d}$ because each of $d$ function must place the element inside a chain having at least $3c^2$ elements.
+\end{itemize}
+
+We use the following estimates in the computation $N \leq 2d^L$ and $2d^2 \leq 3^d$.
+Since we assume hashing with a uniform system and that the nodes are assigned different elements the leaf and edge events are independent.
+Thus we can conclude that the probability of existence of an activated witness tree of order $L$ is at most:
 \[
 \begin{split}
-\Prob{\nu_{i + 1} > k | \epsilon_i} 
-	& \leq \Prob{\mu_{i + 1} > k | \epsilon_i} \\
-	& = \Prob{\displaystyle\sum_{t = 1}^{n} Y_t^{i} > k | \epsilon_i} \\
-	& \leq \frac{\Prob{\sum_{t = 1}^{n} Y_t^{i} > k}}{\Prob{\epsilon_i}}. \\
+n^N \cdot \left(\frac{cd}{n}\right)^{N - 1} \cdot \left({3c})^{-d}\right)^{d^L} 
+	& \leq n \cdot \left(\frac{c^2 d^2}{(3c)^{d}}\right)^{d^L} \\
+	& \leq n \cdot \left(\frac{c^2 3^d}{2(3c)^{d}}\right)^{d^L} \\
+	& \leq n \cdot 2^{-d^L}.
 \end{split}
 \]
 
-Now because of uniformity of the system $H$ it is true that $$\Prob{\sum_{t = 1}^{n} Y_t^i > k} \leq \Prob{\mathrm{Bi}(n, p) > k}.$$ If the system was not uniform, then we would have to deal with the problem of numerous dependencies. However, in the case of uniformity of the universal system from Lemma \ref{lemma-height-of-inserted-ball} we know that if $\beta_i \geq \nu_i$, then $Y_t^i$ holds with probability at most $p_i$ independently of $Y_{t'}^i$ for $t' < t$. Now if $\beta_i < \nu_i$, then $Y_t^i$ can not be 1 and thus $\Prob{Y_t^i = 1} \leq p_i$ independently on $\epsilon_i$.
+To make the probability estimate a function from $\littleo(1)$ it is sufficient to choose $L = \log_d \log_2 n + \log_d(1 + \alpha)$ for any constant $\alpha > 0$.
 
-If we substitute $2np_i$ into $k$, then we get
-\[
-\Prob{\nu_{i + 1} > 2np_i | \epsilon_i} \leq \frac{1}{\exp(\frac{np_i}{3})\Prob{\epsilon_i}}.
-\]
-Moreover, if we assume that $np_i \geq 6 \ln n$, we have that 
-\[
-\Prob{\nu_{i + 1} > \beta_{i + 1}} = \Prob{\nu_{i + 1} > 2np_i | \epsilon_i} = \Prob{\neg \epsilon_{i + 1}} \leq \frac{1}{n ^ 2\Prob{\epsilon_i}} \textit{.}
-\]
-So our desired bound works whenever $np_i \geq 6 \ln n$. Let $i^*$ be the least $i \in \bbbn$ such that $np_i < 6 \ln n$. We are going to show later that $i^*$ is sufficiently low. Now we perform one step of the layered induction assuming that $i<i^*$. As a result we obtain the bound for $\epsilon_{i + 1}$.
+\subsection{Pruned witness tree}
+Our witness tree of order $L$ witness the event of having a chain consisting of $L + 3c^2$ elements, which is slightly more than in the original result when $c > 1$.
+This is the way how we managed to get the same upper bound on the probability of existence of a activated witness tree.
+Now we remove the assumption that the nodes of the tree are assigned different elements.
+
+For more comprehensive definitions consult the original proof, however these definitions are satisfactory in our situation.
+
+\begin{definition}[Full witness tree, edge events]
+Let $\mathcal{K} \geq 2$ be an integer. Full witness tree of order $L$ is a tree which root has exactly $\mathcal{K}$ children. Each of these children has exactly one child that is the parent of a witness tree of order $L$. Labeling of nodes is done in this way:
+\begin{itemize}
+	\item Root is assigned one of the $n$ chains. 
+	\item Each child of the root is assigned an element $x \in S$ and a number $i \in \{1, \dots, d\}$.
+	\item Elements assigned to the children of the root are different.
+	\item Grandchildren of the root conform to the assignment defined for witness trees.
+\end{itemize}
+
+Let $r$ be the root of the full witness tree.
+The edge events for the added edges need to be defined. 
+\begin{itemize}
+	\item Edge event on the edge $(r, u)$ occurs if $\exists i: f_i(u) = r$.
+	\item Assume that $u$ is a child of $r$ and $i$ is the number assigned to the node $u$. Edge event on the edge $(u, v)$ occurs if $\exists j: f_j(v) = f_i(u)$.
+\end{itemize}
+\end{definition}
+
+We prune full witness tree so that the nodes in the remaining tree are assigned different elements.
+The tree which is obtained after pruning is called \emph{pruned witness tree}.
+The algorithm for pruning the full witness tree is a BFS procedure which cuts off each edge $(u, v)$ if the element assigned to the node $v$ is has already been encountered before visiting the node $v$.
+The edge $(u, v)$ is called \emph{cutoff}.
+The pruning procedure performs at most $\mathcal{K}$ cutoffs and then stops.
+The visited nodes create the pruned witness tree.
+With each witness tree we also remember the cutoff edges.
+
+First observe that if there is a chain $y$ having $L + \mathcal{K} + 3c^2$ elements, then we can create an activated full witness tree.
+Root is assigned the chain $y$.
+Children of the root are assigned the $\mathcal{K}$ topmost balls of the chain $y$.
+Each child $u$ also needs to have a value $i$ -- it is assigned $i \in \{1, \dots, d\}$ such that $f_i{u} = y$. 
+The child $v$ of the node $u$ is assigned the topmost element in the chain $f_{(i + 1) \bmod d + 1}(u)$ at the insertion time of $u$.
+Also observe that the constructed full witness tree is activated.
+
+Now we estimate the probability of existence of an activated pruned witness tree.
+
+First, assume that there are less than $\mathcal{K}$ cutoff edges in the pruned witness tree.
+Then at least one witness tree rooted at a grandchild of the root has not been pruned at all.
+The probability of its activation is $o(1)$ and this completes the proof for this case.
+
+Now assume that there are exactly $\mathcal{K}$ cutoff edges, the pruned witness tree consists of $q$ leaves and $N$ nodes and full witness tree from which we started contains $M$ nodes.
+
+We estimate, as in the previous case, the number of assignments and the probability of activation of each event.
+\begin{itemize}
+	\item There are at most $M^{\mathcal{K}}$ ways how to created a pruned witness tree from the full one.
+	\item The number of all assignments to the nodes is bounded from above by $n^N \cdot d^\mathcal{K}$.
+	\item The probability that a leaf event occurs is at most $(3c)^{-d}$.
+	\item The probability of each type of edge event is ${cd}/{n}$.
+	\item The probability of existence of a cutoff edge $(u, v)$ is at most ${Mcd}{n}$.
+\end{itemize}
+
+We choose $L = \log_d \log_2 n + \log_d(1 + \alpha)$, as in the case of plain witness trees.
+From that we obtain that $M \leq 1 + \mathcal{K} + \mathcal{K} \cdot d^L \leq 2\mathcal{K}(1+\alpha)\log_2 n$.
+In the following we also need that $N \leq 2q$ and $d^2 \leq 3^d$. 
+
+Hence the probability of existence of an activated pruned witness tree is at most
 \[
 \begin{split}
-\Prob{\neg \epsilon_{i + 1}} 
-	& = \Prob{\neg \epsilon_{i + 1} | \epsilon_i}\Prob{\epsilon_i} + \Prob{\neg \epsilon_{i + 1} | \neg \epsilon_i}\Prob{\neg \epsilon_i} \\
-	& = \Prob{\nu_{i + 1} > \beta_{i + 1} | \epsilon_i}\Prob{\epsilon_i} + \Prob{\neg \epsilon_i} \\
-	& \leq \frac{1}{n ^ 2} + \Prob{\neg \epsilon_i} \leq \frac{i + 1}{n ^ 2} \textit{.}
-\end{split} 
-\]
-From the layered induction we get that $\Prob{\neg \epsilon_{i^*}} \leq i^* / n^2$. 
-
-Since $np_{i^* + 1} < 6 \ln n$ the following computation estimates the probability of the event $\neg \epsilon_{i^* + 1}$. 
-\[
-\begin{split}
-\Prob{\neg \epsilon_{i^* + 1}}
-	\leq \frac{\Prob{\mathrm{Bi}\left(n, \frac{6 \ln n}{n}\right) > 12 \ln n}}{\Prob{\epsilon_{i^*}}} 
-	& \leq \frac{1}{\exp\left(2 \ln n\right)\Prob{\epsilon_{i^*}}} = \frac{1}{n ^ 2 \Prob{\epsilon_{i^*}}} \textit{.}
+M^{\mathcal{K}} \cdot n^N & \cdot d^\mathcal{K} \cdot \left(\frac{cd}{n}\right)^{N - 1} \cdot (3c)^{-dq} \cdot \left(\frac{Mcd}{n}\right)^{\mathcal{K}} \\
+	& \leq n \cdot (cd)^N \cdot (3c)^{-dq} \cdot \left(\frac{M^2 c d^2}{n}\right)^{\mathcal{K}} \\
+	& \leq n \cdot \left((cd)^{2} \cdot (3c)^{-d}\right)^{q} \cdot \left(\frac{M^2 c d^2}{n}\right)^{\mathcal{K}} \\
+	& \leq n \cdot \left(\frac{M^2 c d^2}{n}\right)^{\mathcal{K}} = n^{-\mathcal{K} + 1 + \littleo(1)} = \littleo(1). \\
 \end{split}
 \]
-By using the conditioning similar to the one used in the induction we get
-\[
-\Prob{\neg \epsilon_{i^* + 1}} \leq \Prob{\nu_{i^* + 1} > 12 \ln n} \leq \Prob{\neg \epsilon_{i^*}} + \frac{1}{n ^ 2} \leq \frac{i^* + 1}{n ^ 2} \textit{.}
-\]
 
-The probability of having a chain with at least $i^* + 3$ elements is found in a similar fashion.
-\[
-\begin{split}
-& \Prob{\nu_{i^* + 3} \geq 1}
-	\leq \Prob{\mu_{i^* + 3} \geq 1} \leq \Prob{\mu_{i^* + 2} \geq 2} \\
-	& \quad \leq \Prob{\mu_{i^* + 2} \geq 2 | \epsilon_{i^* + 1}}\Prob{\epsilon_{i^* + 1}} + \Prob{\neg \epsilon_{i^* + 1}} \\
-	& \quad \leq \frac{\Prob{\mathrm{Bi}\left(n, \left(\frac{12 c \ln n}{m}\right) ^ d\right) \geq 2}}{\Prob{\epsilon_{i^* + 1}}} + \Prob{\neg \epsilon_{i^* + 1}} \\
-	& \quad \leq \binom{n}{2} \left(\frac{12 c \ln n}{m}\right) ^ {2d} + \frac{i^* + 1}{n ^ 2} \in o\left(\frac{1}{n}\right) \textit{.}
-\end{split}
-\]
+The theorem is the statement for $\alpha = 3$ and $\mathcal{K} = 2$.
 
-The promised estimate for $i^* = \displaystyle\min \{i \in \bbbn \setdelim np_i < 6 \ln n\} \leq \ln \ln n / \ln d + 4$ follows from the explicit formula for $\beta_i$. By induction on $i$ we prove that $$\beta_{i + 4} = \frac{n \left(\alpha c\right) ^ {\sum_{j = 1}^{i}d ^ j}}{2 ^ {2 d ^ i - \sum_{j = 0}^{i - 1}{d ^ j}}} \textit{.}$$ For $i = 0$ we have that $\beta_4 = \frac{n}{4} = \frac{n\left(\alpha c\right) ^ 0}{2 ^ {2}}$. For a general $i$ we have that
-\[
-\begin{split}
-\beta_{i + 5} 
-	& = 2np_i = 2n \left(\frac{c\beta_{i + 4}}{m}\right) ^ d = 2n \left(\frac{cn\left(\alpha c\right) ^ {\sum_{j = 1}^{i}d ^ j}}{m 2 ^ {2 d ^ i - \sum_{j = 1}^{i}d^j}}\right) ^ d \\
-	& = \frac{n\left(\alpha c\right) ^ {d + \sum_{j = 1}^{i} d ^ {j + 1}}}{2 ^ {2d ^ {i + 1} - \sum_{j = 0}^{i  -1} d ^ {j + 1} - 1}} = \frac{n \left(\alpha c\right) ^ {\sum_{j = 1}^{i + 1} d ^ j}}{2 ^ {2d ^ {i + 1} - \sum_{j = 0}^{i} d ^ j}} \textit{.}
-\end{split}
-\]
+\subsection{Hashing more than $m$ elements}
 
-Because of the assumption that $\alpha c \leq 1$ we are able to state that $\beta_{i + 4} \leq \frac{n}{2 ^ {d ^ i}}$. The fact that $i^* \leq \frac{\ln \ln n}{\ln d} + 4$ follows from
-\[
-p_{i^*} = \left(\frac{c\beta_{i^*}}{m}\right) ^ d \leq \left(\frac{\alpha c}{2 ^ {d ^ {i^* - 4}}}\right) ^ d \leq \frac{1}{2 ^ {de^{\ln \ln n}}} = \frac{1}{2 ^ {d \ln n}} = \frac{1}{n ^ {d \ln 2}} < \frac{6 \ln n}{n}.
-\]
+So far we have considered hashing of $n$ elements into a table of size $n$. For storing $n$, $n < m$, elements the result clearly holds.
+In case of having more than $m$ elements, $\alpha > 1$, we can repeat the same argument as in \cite{DBLP:journals/jacm/Vocking03}.
+
 \qed

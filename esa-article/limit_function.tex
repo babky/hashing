@@ -46,7 +46,7 @@ It is simple to realize that these results hold in case of universal hashing wit
 
 \begin{theorem}
 \label{theorem-universal-hashing-two-choices}
-Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 3c^2 + 2} \in \littleo\left(1\right).$$
+Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 3c^2 + 4} \in \littleo\left(1\right).$$
 \end{theorem}
 \begin{proof}
 The layered induction technique found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94} is not sufficient here. 
@@ -83,6 +83,7 @@ The underlying RAM has words of size $\bige(\log |U| + \log |V|)$ bits. Since th
 \]
 The positive fact is that this probability tends to one as $n$ increases. The unpleasant thing is that choosing a new function takes $\bigo(n)$ time. Nevertheless it can be payed from the potential since Rehash already takes $\bige(m)$ time. 
 
+Also from 
 % TODO: d=log log n a zavislost!
 
 \subsection{Truly random functions}

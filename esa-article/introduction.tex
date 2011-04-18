@@ -3,9 +3,9 @@ Dictionary is a data structure which allows storing and querying data associated
 Dictionaries are often implemented with \emph{hash tables}. 
 This implementation is utilized especially in the case when the set of the possible keys is not linearly ordered or when the performance of the dictionary is crucial to its application.
 With hash tables we can easily and efficiently perform operations \emph{Find}, \emph{Insert} and \emph{Delete}.
-In this paper we are interested in dynamic dictionaries, we allow update operations, and provide a guaranteed lookup time.
-Running times of the operations strongly depend on the properties of the chosen hash function and usually they are considered to be constant in expectation. 
-Hash tables are therefore considered to be one of the most efficient solutions to dictionary problem.
+In this paper we are interested in dynamic dictionaries which allow update operations and provide a guaranteed lookup time.
+Running times of the operations are constant in expectation but strongly depend on the properties of the chosen family of hash functions.
+Hash tables are therefore considered to be one of the most efficient solutions to the dictionary problem.
 
 \subsection{Known results and methods}
 Hashing is an old method and has overcome a great development. 
@@ -24,15 +24,15 @@ It achieves constant running times of the operations with high probability.
 
 \subsection{Our results}
 Our aim is to fit in the gap between perfect hashing and common universal hashing.
-We provide a hash table which uses linear space and provides a worst case guarantee for Find.
-In fact, we analyze a simple modification of universal hashing with separate chaining and show that the method can be generalized.
+We provide a hash table which uses linear space and provides a worst case guarantee for Find operation.
+In fact, we analyze a simple modification of universal hashing with separate chaining and show that the method can be generalized to linear probing.
 We bound lengths of chains by a convenient probabilistic limit function and rehash the table whenever there exists a chain violating this condition.
 Our analysis shows that this approach leads to constant expected amortized time for each operation with a worst case guarantee for lookup.
 
 The main advantage of the model is its simplicity and no need for a perfect hash function when compared to dynamic perfect hashing.
-To compare with cuckoo hashing, we utilize a different approach which unfortunately does not achieve a constant worst case running time.
-On the other hand we can tune the space consumption of the hash table, and the speed loss is compensated by use of simpler universal classes.
-By design it solves the dynamic resizing which causes certain problems in case of Backyard Cuckoo Hashing.
+To compare with cuckoo hashing, we have chosen a different approach which unfortunately does not achieve a constant worst case running time.
+On the other hand, we can tune the space consumption and the speed loss is compensated by use of simpler universal classes.
+It by design solves dynamic resizing of the hash table which causes certain problems to Backyard Cuckoo Hashing.
 
 The proposed technique is generic. It may be used with double hashing and linear probing, too. 
 When compared to two-level perfect hashing with linear memory we provide a more detailed analysis. 
