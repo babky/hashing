@@ -1,0 +1,122 @@
+\begin{chapter}{Facts from Linear Algebra}
+Some definitions and facts, which are used in the work, are mentioned and proved in the appendix. Basic definitions of \emph{vector space}, \emph{linear transformation} and facts about solving linear equations can be found for example in \cite{meyer01}.
+
+\label{appendix-linear-algebra}
+\begin{definition}
+Let $V$ be a vector space and $A$ be a subset of $V$. For a vector $\vec{v} \in V$ define the set $\vec{v} + A$ as
+\[ \vec{v} + A = \{ \vec{v} + \vec{a} \setdelim \vec{a} \in A \} \text{.} \] 
+\end{definition}
+
+\begin{definition}
+Let $V$ be a vector space and $A, B$ be subsets of $V$. Define the set $A + B$ as
+\[ A + B = \{ \vec{a} + \vec{b} \setdelim \vec{a} \in A, \vec{b} \in B \} \text{.} \] 
+\end{definition}
+
+\begin{definition}[Affine subspace]
+\label{definition-affine-subspace}
+Let $V$ be a vector space, $V \leq U$ be its subspace and $\vec{a} \in U$. The set $A = \vec{a} + V$ is an \emph{affine subspace} of the vector space $U$.
+\end{definition}
+
+\begin{lemma}
+\label{lemma-affine-subspace-equality}
+Let $A = \vec{a} + \vec{V}$ be an affine subspace of a vector space $U$ determined by a subspace $V \leq U$ and a vector $\vec{a} \in U$. Then $A = \vec{b} + V$ for every $\vec{b} \in A$.
+\end{lemma}
+\begin{proof}
+Every vector $\vec{x} \in A$ may be written in the form $\vec{x} = \vec{a} + \vec{v_x}$ for a vector $\vec{v_x} \in V$. We need to rewrite it in the form $\vec{x} = \vec{b} + \vec{w_x}$ for a vector $\vec{w_x} \in V$. Since $\vec{b} \in A$ we also have that $\vec{b} = \vec{a} + \vec{v_b}$. Substituting $\vec{a} = \vec{b} - \vec{v_b}$ into $\vec{x} = \vec{a} + \vec{v_x}$ gives that $\vec{x} = \vec{a} + \vec{v_x} = \vec{b} - \vec{v_b} + \vec{v_x}$. Since $V$ is a vector space we have that $\vec{w_x} = \vec{v_x} - \vec{v_b} \in V$. We just proved that $A \subset \vec{b} + V$. The reverse inclusion comes from the fact that $\vec{b} + V$ is an affine subspace and $a \in \vec{b} + V$ and. The proof is symmetric.
+\end{proof}
+
+\begin{definition}[Null-space of a matrix]
+Let $T$ be a field, $A \in T ^ {m \times n}$ be a matrix with $n, m \in \mathbb{N}$. The set $\{ \vec{x} \in T^{n} \setdelim A\vec{x} = \vec{0} \}$ is called the \emph{null-space} of the matrix $A$.
+\end{definition}
+
+There is a one-to-one relationship between a matrix over a field $T$ and a linear transformation between arithmetic vector spaces over the same field. For every vector $\vec{x} \in T^n$ let $[\vec{x}]_\beta$ denote the coordinates of the vector $\vec{x}$ relative to the basis $\beta$ of $T^n$.
+Consider two vector spaces $T^{m}$ and $T^{n}$ and their two fixed ordered bases $\beta = \{\vec{b}_1, \dots, \vec{b}_n\}$ of $T^{n}$ and $\gamma$ of $T^m$. Let $\{\vec{c}_1, \dots, \vec{c}_n \}$ be a subset of $T^{m}$. Then every linear transformation $L: T^{n} \rightarrow T^{m}$ with $L(\vec{b}_i) = \vec{c}_i$ for every $i \in \{1, \dots, n \}$ corresponds to a matrix $A \in T ^ {m \times n}$ such that 
+\[
+A = \begin{pmatrix}
+    &   &   \\
+  [\vec{c}_1]_\gamma & \dots & [\vec{c}_n]_\gamma \\
+    &   &  
+ \end{pmatrix} \text{.}
+\] For the matrix $A$ we have that $A[\vec{x}]_\beta = [L(x)]_\gamma$ for every $\vec{x} \in T^n$. Every matrix $A$ for two fixed bases thus gives a linear transformation, too.
+
+\begin{remark}
+\label{remark-null-space}
+Null-space of every matrix $A \in T ^ {m \times n}$ is a subspace of the vector space $T^{n}$.
+\end{remark}
+\begin{proof}
+Proof is a straightforward verification of the three properties of vector subspaces. In the following assume that $\vec{x}, \vec{y} \in \nullspace{A}$.
+
+\begin{description}
+\item The zero vector is in $\nullspace{A}$ because $A\vec{0} = \vec{0}$.
+\item The sum $\vec{x} + \vec{y} \in \nullspace{A}$,
+\[
+	A(\vec{x} + \vec{y}) = A\vec{x} + A\vec{y} = \vec{0} + \vec{0} = \vec{0} \text{.}
+\]
+
+\item For every $t \in T$ we have that $t \vec{x} \in \nullspace{A}$ because
+\[
+	At\vec{x} = tA\vec{x} = t\vec{0} = \vec{0} \text{.}
+\]
+\end{description}
+\end{proof}
+
+\begin{definition}[Orthogonal complement]
+Let $V$ be a vector subspace of a vector space $U$ and the operation $\langle \vec{u} \mid \vec{v} \rangle$ denote the scalar product of vectors $\vec{u}, \vec{v} \in V$. \emph{Orthogonal complement} of subspace $V$, denoted by $V ^ {\bot}$, is defined as:
+\[
+	V ^ {\bot} = \{ \vec{u} \in U \setdelim \langle \vec{u} \mid \vec{v} \rangle = 0 \text{ for all } \vec{v} \in V \} \text{.}
+\]
+\end{definition}
+
+\begin{definition}[Affine linear transformation]
+\label{definition-affine-linear-map}
+Let $V, U$ be vector spaces, $V_0 \leq V$, $U_0 \leq U$ be their subspaces and $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ with vectors $\vec{v} \in V$ and $\vec{u} \in U$. Function $T_A: V_A \rightarrow U_A$ is an \emph{affine linear transformation} if there is a linear transformation $T_0: V_0 \rightarrow U_0$ such that $T_A(\vec{x}) = \vec{u} + T_0(\vec{x} - \vec{v})$, $\vec{x} \in V_A$.
+\end{definition}
+
+\begin{definition}[Set of all affine linear maps]
+Let $V, U$ be vector spaces and $V_0 \leq V$, $U_0 \leq U$ be their subspaces. Let $V_A = \vec{v} + V_0$ and $U_A = \vec{u} + U_0$ be affine subspaces of $V$ and $U$ respectively with vectors $\vec{v} \in V$ and $\vec{u} \in U$. \emph{Set of all affine linear mappings} between affine spaces $V_A$ and $U_A$, $LT_A(V_A, U_A)$, is defined as:
+\[
+	LT_A(V_A, U_A) = \{ T: V_A \rightarrow U_A \setdelim T \text{ is an affine linear transformation} \} \text{.}
+\]
+\end{definition}
+
+\begin{lemma}
+\label{lemma-linear-transformation-domain-distribution}
+Let $T: \vecspace{f} \rightarrow \vecspace{b}$ for $f \geq b$ be an onto linear map and $\vec{y} \in \vecspace{b}$. Then $T^{-1}(\vec{y})$ is an affine subspace of $\vecspace{f}$ and $|T^{-1}(\vec{y})| = 2 ^ {f - b}$.
+\end{lemma}
+\begin{proof}
+By Remark \ref{remark-null-space}, $T{^-1}(0)$ is a vector subspace of $\vecspace{f}$.
+The set $T^{-1}(\vec{y})$ is an affine subspace of the vector space $\vecspace{f}$ since for every vector $\vec{u} \in T^{-1}(\vec{y})$ we have that $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. First we show, $\vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y})$:
+\[
+\begin{split}
+\vec{v} \in T^{-1}(\vec{0}) 
+	& \Rightarrow T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) = \vec{y} + \vec{0} = \vec{y}  \\
+	& \Rightarrow \vec{u} + T^{-1}(\vec{0}) \subseteq T^{-1}(\vec{y}) \text{.}
+\end{split}
+\]
+The reverse inclusion, $T^{-1}(\vec{y}) \subseteq \vec{u} + T^{-1}(\vec{0})$, holds as well since
+\[
+\begin{split}
+\vec{v} \in T^{-1}(\vec{y}) 
+	& \Rightarrow T(\vec{v} - \vec{u}) = T(\vec{v}) - T(\vec{u}) = \vec{y} - \vec{y} = \vec{0} \\
+	& \Rightarrow \vec{v} - \vec{u} \in T^{-1}(\vec{0}) \\
+	& \Rightarrow T^{-1}(\vec{y}) \subseteq \vec{u} + T^{-1}(\vec{0}) \text{.}
+\end{split}
+\]
+
+Now we use this fact to prove the second statement of the lemma, $|T^{-1}(\vec{y})| = 2 ^ {f - b}$. Fix arbitrary vector $\vec{u} \in T^{-1}(\vec{y})$. From Lemma \ref{lemma-affine-subspace-equality} then follows $T^{-1}(\vec{y}) = \vec{u} + T^{-1}(\vec{0})$. In addition, the equality describes a one-to-one map between $T^{-1}(\vec{0})$ and $T^{-1}(\vec{y})$. The consequence of is that all sets $T^{-1}(\vec{y})$ for every $y \in \vecspace{b}$ have the~same size, exactly $|T^{-1}(\vec{y})| = 2^{f - b}$.
+\end{proof}
+
+\begin{lemma}
+\label{lemma-system-of-linear-equations-solution-count}
+Let $A \in \mathbb{Z}_2^{m \times n}$ be a matrix such that $\rank{A} = m$ and $m \leq n$. Then the system of linear equations $A\vec{x} = \vec{y}$ has $2 ^ {n - m}$ solutions for every vector $\vec{y} \in \vecspace{m}$.
+\end{lemma}
+\begin{proof}
+This is a consequence of Lemma \ref{lemma-linear-transformation-domain-distribution}. We apply it for the linear transformation given by the matrix $A$ and vector $\vec{y} \in \vecspace{m}$.
+
+%Or we can prove it in a similar fashion and use a fact regarding the right null-space of the matrix $A$. First we show that the number of all solutions of the homogeneous equation is $2 ^ {n - m}$. Then, similarly to the previous proof, we show a one-to-one correspondence between the homogeneous and non-homogeneous solutions.
+
+%Consider homogeneous system $A\vec{x} = \vec{0}$. It is a well-known fact that the dimension of the right null-space of the matrix $A$, denoted by $\nullspace{A}$, is equal to \[ \dimension{\nullspace{A}} =n - \rank{A} = n - m \text{.} \] This fact implies that $|\nullspace{A}| = 2 ^ {n - m}$.
+
+%Because $\rank{A} = m$ then for every vector $\vec{y} \in \vecspace{m}$ there is at least one solution $\vec{x} \in \vecspace{n}$ of the non-homogeneous system $A\vec{x} = \vec{y}$. It is clear that for a fixed solution $\vec{x}$, the set of all solutions of the non-homogeneous system is an affine subspace of $\vecspace{n}$ and equals $\vec{x} + \nullspace{A}$. We just constructed a one-to-one map between the set of all solutions and $\nullspace{A}$. It follows that the number of all solutions of non-homogeneous system equals $2 ^ {n - m}$ for every vector $\vec{y}$.
+\end{proof}
+\end{chapter}

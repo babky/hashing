@@ -1,0 +1,104 @@
+\section*{Appendix -- proof of Theorem \ref{theorem-universal-hashing-two-choices}}
+\setcounter{theorem}{2}
+
+\begin{theorem}
+Let $H$ be an almost uniform universal system with a constant $c$ such that $c > 0$ and $d \in \bbbn$. Assume that each stored element $x$ is placed into a least loaded bucket from $f_1(x), \dots, f_d(x)$. The addresses are determined by $d$ independent hash functions $f_1, \dots, f_d \in H$. If $n \leq m$ and $c \alpha \leq 1$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 7} \in \littleo\left(\frac{1}{n}\right).$$
+\end{theorem}
+
+\subsection{Notation}
+For the proof of Theorem \ref{theorem-universal-hashing-two-choices} we need further notation which comes from the original proof found in \cite{Mitzenmacher:2005:PCR:1076315}. By $\mathrm{Bi}(n, p)$ we understand a binomial random variable with parameters $n$ and $p$. Elements of the stored set $S$ are placed inside the table in an arbitrary but fixed order. Let $x_1$ be the first inserted element, $x_2$ the second and $x_n$ be the last one. By the state of the system at the time $t$ we understand the placement of all elements in the table immediately after the insertion of the element $x_t$. 
+
+The position of element $x_t$ in the chain, where it is placed, is referred to as $h(t)$. Let $\mu_i(t)$ be the number of already stored elements at the time $t$ that are at least at $i$\textsuperscript{th} position in their chains. The number of chains that contain at least $i$ elements at the time $t$ is denoted by $\nu_i(t)$. Remark that $\nu_i(t) \leq \mu_i(t)$ for every $t \in \{1, \dots, n \}$. Let $\mu_i = \mu_i(n)$ and $\nu_i = \nu_i(n)$.
+
+\subsection{The Actual Proof}
+First we create a sequence of values $\beta_i$ such that $\beta_i \geq \nu_i$ with a high probability. To estimate the probabilities we use Chernoff bound stated in Lemma \ref{lemma-chernoff-bound}. Low probabilities of the event $\beta_i < \nu_i$ are obtained using a technique called layered induction. The induction is stopped when $i = i^* > \ln \ln n/\ln d + 4$ since for $i > i^*$ Chernoff bound is no longer able to provide a good estimate. Finally the probability that $\nu_{i^*+3} \geq 1$ is obtained using a few raw estimates. The result then immediately follows from the fact that $\lpsl \geq i^*+3 \Leftrightarrow \nu_{i^* + 3} \geq 1$.
+
+\begin{lemma}[Chernoff bound]
+\label{lemma-chernoff-bound}
+Let $n \in \bbbn$ and $p \in (0, 1)$. Then $$\Prob{\mathrm{Bi}(n, p) > 2np} \leq e ^ {- \frac{np}{3}} \textit{.}$$
+\end{lemma}
+
+\begin{lemma}
+\label{lemma-height-of-inserted-ball}
+If $\beta_i > \nu_i(t)$, then $\Prob{h(t + 1) > i} \leq \left(\frac{c\beta_i}{m}\right) ^ d$.
+\end{lemma}
+\begin{proof}
+First we estimate the probability of placing an element into a set of bins $R$, which contains bins with $i$ or more elements, by a single function $f_1$. So let $x \in U$, $R \subseteq V$ such that $|R| \leq \beta_i$, then $$\Prob{f_1(x) \in R} = \displaystyle\sum_{r \in R} \Prob{f_1(x) = r} \leq \frac{c\beta_i}{m}.$$
+The element $x_{t + 1}$ may get behind $i$\textsuperscript{th} position in the chain only when each of $d$ functions places it inside $R$. Since the functions are mutually independent we obtain the desired bound.
+\qed
+\end{proof}
+
+Now we define the sequence of values $\beta_i$. To make an insight into the way how it is chosen let $p_i = \left({c\beta_i}/{m}\right) ^ d$. If $\nu_i \leq \beta_i$, then $p_i$ is greater than the probability of placing an element behind the $i$\textsuperscript{th} position as observed in Lemma \ref{lemma-height-of-inserted-ball}. From Lemma \ref{lemma-chernoff-bound} we have that $\Prob{\mathrm{Bi}(n, p_i) \geq 2np_i} \leq \exp\left({-np_i}/{3}\right)$. Random variable $\Prob{\mathrm{Bi}(n, p_i) > k}$ majorizes $\Prob{\mu_{i + 1} > k}$ and with a high probability we have that $2np_i \geq \mu_{i + 1} \geq \nu_{i + 1}$. So if we need a sequence of values $\beta_i$ such that $\beta_i \geq \nu_{i}$ with a high probability, then we have a good reason to put $\beta_{i + 1} = 2np_i = 2n\left({c\beta_i}/{m}\right) ^ d$.
+
+Let the event $\epsilon_i$ occur if and only if $\beta_i \geq \nu_i$. Now put $\beta_4 = \frac{n}{4}$ and remark that $\Prob{\epsilon_4} = 1$. Assume that $\epsilon_4$ does not hold. Then $n \leq 4 \nu_4 < 4 \frac{n}{4} = n$ which is not possible. And finally, let us define a random binary variable $Y_t^i$ as $$Y_t^i = 1 \Leftrightarrow h(t) \geq i + 1 \mbox{ and } \nu_i(t - 1) \leq \beta_i \textit{.}$$
+
+If the event $\epsilon_i$ occurs for every $i \in \{1, \dots, n\}$, then $\sum_{t = 1}^{n} Y_t^i = \mu_{i + 1}$. This statement holds because $\beta_i \geq \nu_i \geq \nu_i(t)$ for every $t \in \{1, \dots, n\}$ and thus the second condition for $Y_t^i$ is satisfied. Also we add one for each ball placed behind $i$\textsuperscript{th} position. 
+From the previous observation if follows that
+\[
+\begin{split}
+\Prob{\nu_{i + 1} > k | \epsilon_i} 
+	& \leq \Prob{\mu_{i + 1} > k | \epsilon_i} \\
+	& = \Prob{\displaystyle\sum_{t = 1}^{n} Y_t^{i} > k | \epsilon_i} \\
+	& \leq \frac{\Prob{\sum_{t = 1}^{n} Y_t^{i} > k}}{\Prob{\epsilon_i}}. \\
+\end{split}
+\]
+
+Now because of uniformity of the system $H$ it is true that $$\Prob{\sum_{t = 1}^{n} Y_t^i > k} \leq \Prob{\mathrm{Bi}(n, p) > k}.$$ If the system was not uniform, then we would have to deal with the problem of numerous dependencies. However, in the case of uniformity of the universal system from Lemma \ref{lemma-height-of-inserted-ball} we know that if $\beta_i \geq \nu_i$, then $Y_t^i$ holds with probability at most $p_i$ independently of $Y_{t'}^i$ for $t' < t$. Now if $\beta_i < \nu_i$, then $Y_t^i$ can not be 1 and thus $\Prob{Y_t^i = 1} \leq p_i$ independently on $\epsilon_i$.
+
+If we substitute $2np_i$ into $k$, then we get
+\[
+\Prob{\nu_{i + 1} > 2np_i | \epsilon_i} \leq \frac{1}{\exp(\frac{np_i}{3})\Prob{\epsilon_i}}.
+\]
+Moreover, if we assume that $np_i \geq 6 \ln n$, we have that 
+\[
+\Prob{\nu_{i + 1} > \beta_{i + 1}} = \Prob{\nu_{i + 1} > 2np_i | \epsilon_i} = \Prob{\neg \epsilon_{i + 1}} \leq \frac{1}{n ^ 2\Prob{\epsilon_i}} \textit{.}
+\]
+So our desired bound works whenever $np_i \geq 6 \ln n$. Let $i^*$ be the least $i \in \bbbn$ such that $np_i < 6 \ln n$. We are going to show later that $i^*$ is sufficiently low. Now we perform one step of the layered induction assuming that $i<i^*$. As a result we obtain the bound for $\epsilon_{i + 1}$.
+\[
+\begin{split}
+\Prob{\neg \epsilon_{i + 1}} 
+	& = \Prob{\neg \epsilon_{i + 1} | \epsilon_i}\Prob{\epsilon_i} + \Prob{\neg \epsilon_{i + 1} | \neg \epsilon_i}\Prob{\neg \epsilon_i} \\
+	& = \Prob{\nu_{i + 1} > \beta_{i + 1} | \epsilon_i}\Prob{\epsilon_i} + \Prob{\neg \epsilon_i} \\
+	& \leq \frac{1}{n ^ 2} + \Prob{\neg \epsilon_i} \leq \frac{i + 1}{n ^ 2} \textit{.}
+\end{split} 
+\]
+From the layered induction we get that $\Prob{\neg \epsilon_{i^*}} \leq i^* / n^2$. 
+
+Since $np_{i^* + 1} < 6 \ln n$ the following computation estimates the probability of the event $\neg \epsilon_{i^* + 1}$. 
+\[
+\begin{split}
+\Prob{\neg \epsilon_{i^* + 1}}
+	\leq \frac{\Prob{\mathrm{Bi}\left(n, \frac{6 \ln n}{n}\right) > 12 \ln n}}{\Prob{\epsilon_{i^*}}} 
+	& \leq \frac{1}{\exp\left(2 \ln n\right)\Prob{\epsilon_{i^*}}} = \frac{1}{n ^ 2 \Prob{\epsilon_{i^*}}} \textit{.}
+\end{split}
+\]
+By using the conditioning similar to the one used in the induction we get
+\[
+\Prob{\neg \epsilon_{i^* + 1}} \leq \Prob{\nu_{i^* + 1} > 12 \ln n} \leq \Prob{\neg \epsilon_{i^*}} + \frac{1}{n ^ 2} \leq \frac{i^* + 1}{n ^ 2} \textit{.}
+\]
+
+The probability of having a chain with at least $i^* + 3$ elements is found in a similar fashion.
+\[
+\begin{split}
+& \Prob{\nu_{i^* + 3} \geq 1}
+	\leq \Prob{\mu_{i^* + 3} \geq 1} \leq \Prob{\mu_{i^* + 2} \geq 2} \\
+	& \quad \leq \Prob{\mu_{i^* + 2} \geq 2 | \epsilon_{i^* + 1}}\Prob{\epsilon_{i^* + 1}} + \Prob{\neg \epsilon_{i^* + 1}} \\
+	& \quad \leq \frac{\Prob{\mathrm{Bi}\left(n, \left(\frac{12 c \ln n}{m}\right) ^ d\right) \geq 2}}{\Prob{\epsilon_{i^* + 1}}} + \Prob{\neg \epsilon_{i^* + 1}} \\
+	& \quad \leq \binom{n}{2} \left(\frac{12 c \ln n}{m}\right) ^ {2d} + \frac{i^* + 1}{n ^ 2} \in o\left(\frac{1}{n}\right) \textit{.}
+\end{split}
+\]
+
+The promised estimate for $i^* = \displaystyle\min \{i \in \bbbn \setdelim np_i < 6 \ln n\} \leq \ln \ln n / \ln d + 4$ follows from the explicit formula for $\beta_i$. By induction on $i$ we prove that $$\beta_{i + 4} = \frac{n \left(\alpha c\right) ^ {\sum_{j = 1}^{i}d ^ j}}{2 ^ {2 d ^ i - \sum_{j = 0}^{i - 1}{d ^ j}}} \textit{.}$$ For $i = 0$ we have that $\beta_4 = \frac{n}{4} = \frac{n\left(\alpha c\right) ^ 0}{2 ^ {2}}$. For a general $i$ we have that
+\[
+\begin{split}
+\beta_{i + 5} 
+	& = 2np_i = 2n \left(\frac{c\beta_{i + 4}}{m}\right) ^ d = 2n \left(\frac{cn\left(\alpha c\right) ^ {\sum_{j = 1}^{i}d ^ j}}{m 2 ^ {2 d ^ i - \sum_{j = 1}^{i}d^j}}\right) ^ d \\
+	& = \frac{n\left(\alpha c\right) ^ {d + \sum_{j = 1}^{i} d ^ {j + 1}}}{2 ^ {2d ^ {i + 1} - \sum_{j = 0}^{i  -1} d ^ {j + 1} - 1}} = \frac{n \left(\alpha c\right) ^ {\sum_{j = 1}^{i + 1} d ^ j}}{2 ^ {2d ^ {i + 1} - \sum_{j = 0}^{i} d ^ j}} \textit{.}
+\end{split}
+\]
+
+Because of the assumption that $\alpha c \leq 1$ we are able to state that $\beta_{i + 4} \leq \frac{n}{2 ^ {d ^ i}}$. The fact that $i^* \leq \frac{\ln \ln n}{\ln d} + 4$ follows from
+\[
+p_{i^*} = \left(\frac{c\beta_{i^*}}{m}\right) ^ d \leq \left(\frac{\alpha c}{2 ^ {d ^ {i^* - 4}}}\right) ^ d \leq \frac{1}{2 ^ {de^{\ln \ln n}}} = \frac{1}{2 ^ {d \ln n}} = \frac{1}{n ^ {d \ln 2}} < \frac{6 \ln n}{n}.
+\]
+\qed
