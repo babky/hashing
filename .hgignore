@@ -4,10 +4,12 @@ model/command
 model/output
 universal/text/text/command
 universal/text/text/output
-esa-article/output
-esa-article/output
-wads-article/command
-wads-article/command
+esa/command
+esa/output
+wads/command
+wads/output
+wds/paper/command
+wds/paper/output
 cmake/CMakeFiles
 CMakeCache.txt
 Makefile
