@@ -11,7 +11,7 @@ Apparently each limit function depends on the size of the table, the load factor
 
 \begin{definition}[Limit function, trimming rate, suitable function]
 \label{definition-limit-function}
-The function $l\colon \bbbn \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \bbbn$ is called a \emph{limit function} with \emph{trimming rate} $p$, $p \in (0, 1)$, if $\forall S \subseteq U\colon \Prob{\lpsl(S) > l(m, \alpha, p)} \leq p$.\footnote{Probability is taken over the uniform choice of a hash function.}
+The function $l\colon \mathbb{N} \times \mathbb{R}_0^+ \times (0, 1) \rightarrow \mathbb{N}$ is called a \emph{limit function} with \emph{trimming rate} $p$, $p \in (0, 1)$, if $\forall S \subseteq U\colon \Prob{\lpsl(S) > l(m, \alpha, p)} \leq p$.\footnote{Probability is taken over the uniform choice of a hash function.}
 
 We say that a function $f \in H$ is \emph{suitable} for $S$ and $l$ if $\,\lpsl(S) \le l(m, \alpha, p)$.\footnote{The value of the random variable $\lpsl$ is taken for the chosen function $f$.}
 \end{definition}

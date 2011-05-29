@@ -5,9 +5,9 @@ So far we have studied the possibility of providing a worst case guarantee for F
 In this section we are interested in a way how to find such a limit function.
 
 \subsection{Linear hash functions}
-Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos \cite{DBLP:journals/jacm/AlonDMPT99} found an interesting upper bound on $\Expect \lpsl$ with the system of all linear functions between two vector spaces over the field $\bbbz_2$. 
+Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos \cite{DBLP:journals/jacm/AlonDMPT99} found an interesting upper bound on $\Expect \lpsl$ with the system of all linear functions between two vector spaces over the field $\mathbb{Z}_2$. 
 Representing the universe $U$ and the addresses of the hash table $V$ as vector spaces is natural and causes no problem. 
-If $m_0$ is a power of two at the end of $\alpha$-cycle we just double or halve the address space and thus $V$ is kept to be a vector space over $\bbbz_2$.
+If $m_0$ is a power of two at the end of $\alpha$-cycle we just double or halve the address space and thus $V$ is kept to be a vector space over $\mathbb{Z}_2$.
 
 \begin{theorem}[\cite{DBLP:journals/jacm/AlonDMPT99}]
 \label{theorem-linear-hash-functions-dietzefelbinger}
@@ -23,7 +23,7 @@ The improved result is stated in Theorem \ref{theorem-linear-refined}.
 
 \begin{theorem}
 \label{theorem-linear-refined}
-Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. 
+Assume universal hashing with the system of all linear transformations between vector spaces over $\mathbb{Z}_2$. 
 Let $p \in (0, 1)$ be the trimming rate and $\alpha > 0$. 
 If $n = \alpha m$ elements are stored inside the hash table of size $m$, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44\mbox{ and}$$ $$\Prob{\lpsl \geq a_{\alpha, p} \log m \log \log m + b_{\alpha, p}\log m} < p.$$ where constants $a$ and $b$ depend on the choice of $\alpha$ and $p$.
 \end{theorem}
@@ -46,7 +46,7 @@ It is simple to realize that these results hold in case of universal hashing wit
 
 \begin{theorem}
 \label{theorem-universal-hashing-two-choices}
-Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \bbbn$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 3c^2 + 4} \in \littleo\left(1\right).$$
+Let $H$ be an almost uniform universal system with a constant $c$ and $d \in \mathbb{N}$, $d > 1$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $$\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 3c^2 + 4} \in \littleo\left(1\right).$$
 \end{theorem}
 \begin{proof}
 The layered induction technique found in \cite{Mitzenmacher:2005:PCR:1076315} or \cite{DBLP:conf/stoc/AzarBKU94} is not sufficient here. 
