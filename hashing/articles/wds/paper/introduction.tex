@@ -6,18 +6,18 @@ With hash tables we can easily and efficiently perform operations \emph{Find}, \
 In this paper we are interested in dynamic dictionaries which allow update operations and provide a guaranteed sublinear lookup time.
 
 \subsection{Known results and methods}
-Hash tables are considered to be one of the most efficient solutions to the dictionary problem since the expected running time of the operations is constant.
-The first methods of \emph{plain hashing}, formerly separate chaining and linear probing or more recently Hopscotch hashing \cite{DBLP:conf/wdag/HerlihyST08}, rely on the randomness provided by the input data. 
-These methods are usually analyzed under the assumption of full randomness, which is discussed in more detail in \cite{DBLP:books/sp/Mehlhorn84}.
+Hash tables are considered to be one of the most efficient solutions to the dictionary problem since the expected running time of the operations is usually constant.
+The first methods of \emph{plain hashing}, formerly separate chaining and linear probing or more recently Hopscotch hashing\cite{DBLP:conf/wdag/HerlihyST08}, rely on the randomness provided by the input data. 
+These methods are usually analyzed under the assumption of full randomness, which is discussed in more detail in\cite{DBLP:books/sp/Mehlhorn84}.
 
 In some situations we can not rely on the randomness of input and have to switch to a randomization provided by a uniform selection of a hash function from a universal family.
-This method is known as \emph{universal hashing} and was pioneered by Carter and Wegman in \cite{DBLP:journals/jcss/CarterW79}.
+This method is known as \emph{universal hashing} and was pioneered by Carter and Wegman in\cite{DBLP:journals/jcss/CarterW79}.
 It achieves Find operation running in expected constant time but in general no non trivial worst case bound is known.
 
-\emph{Perfect hashing} \cite{Fredman:1984:SST:828.1884} is an extension of universal hashing which addresses the problem of worst case running time for Find operation in case of static dictionaries. 
-In order to add update operations various dynamizations of perfect hashing \cite{DBLP:journals/siamcomp/DietzfelbingerKMHRT94} and a real time hash table \cite{DBLP:conf/icalp/DietzfelbingerH90} were proposed. 
-These methods together with cuckoo hashing \cite{DBLP:conf/esa/PaghR01} guarantee a constant worst case lookup time and the other operations run in expected amortized constant time.
-Currently the most outstanding method is Backyard Cuckoo Hashing \cite{DBLP:conf/focs/ArbitmanNS10} which addresses the problem of worst case time for updates and memory consumption of cuckoo hashing.
+\emph{Perfect hashing}\cite{Fredman:1984:SST:828.1884} is an extension of universal hashing which addresses the problem of worst case running time for Find operation in case of static dictionaries. 
+In order to add update operations various dynamizations of perfect hashing\cite{DBLP:journals/siamcomp/DietzfelbingerKMHRT94} and a real time hash table\cite{DBLP:conf/icalp/DietzfelbingerH90} were proposed. 
+These methods together with cuckoo hashing\cite{DBLP:conf/esa/PaghR01} guarantee a constant worst case lookup time and the other operations run in expected amortized constant time.
+Currently the most outstanding theoretical method is Backyard Cuckoo Hashing\cite{DBLP:conf/focs/ArbitmanNS10} which addresses the problem of worst case time for updates and memory consumption of cuckoo hashing.
 It achieves constant running times of the operations with high probability.
 
 \subsection{Our result}
@@ -32,27 +32,26 @@ To compare with cuckoo hashing, we have chosen a different approach which unfort
 On the other hand, we can tune the space consumption and the speed loss is compensated by use of simpler universal classes.
 
 The proposed technique is generic. It may be used with double hashing and linear probing, too. 
-Furthermore using two-level hashing is possible and significantly improves the worst case guarantee.
+Furthermore using two level hashing is possible and significantly improves the worst case guarantee.
 
 \subsection{Notation}
 The set $U$ denotes the universe, $V$ denotes the set of addresses of the hash table.
 We refer to $S \subset U$ as to the stored set.
-The size of the hash table $m = |V|$ and the number of stored elements $n = |S|$, $n \ll |U|$. 
-The load factor of the table $\alpha = \frac{n}{m}$.
+Let $m$ me be the size of the hash table, $m = |V|$, and $n$ be the number of stored elements, $n = |S|$, $n \ll |U|$. 
+The load factor of the table is denoted by $\alpha$ where $\alpha = {n}/{m}$.
 The function $f\colon U \rightarrow V$ denotes the used hash function. 
 
-In analysis we need the following random variables defined for a fixed set~$S$.
 The length of the chain at the address $y \in V$ is denoted by $\psl(y, S, f) = |h^{-1}(y) \cap S|$. 
 The length of the longest chain, $\lpsl(S, f)$, is defined as $\lpsl(S, f) = \max_{y \in V} \psl(y, S, f).$
 From now we assume the uniform choice of a hash function $f$ from a universal system. 
 This choice forms the probability space.
 
-\begin{definition}[$c$-universal system \cite{DBLP:journals/jcss/CarterW79}]
+\begin{definition}[$c$-universal system\cite{DBLP:journals/jcss/CarterW79}]
 \label{definition-c-universal-system}
 Let $H$ be a multiset of hash functions from $U$ to $V$. We say that $H$ is a \emph{$c$-universal system}, for $c > 0$, if for arbitrary different $x, y \in U$: $\left|\lbrace f \in H \setdelim f(x) = f(y) \rbrace\right| \leq {c|H|}/{m}$.\footnote{The set on the left side of the expression is also considered to be a multiset.}
 \end{definition}
 
-An equivalent restatement of the definition in probability terms requires that $\Prob{f(x) = f(y)} \leq c/m$. There are also various extensions of $c$-universality which include strong \emph{$k$-universality} \cite{DBLP:conf/focs/WegmanC79}, which is also called \emph{$k$-wise independence} \cite{DBLP:conf/focs/WegmanC79}, \emph{strongly $\omega$-universal} \cite{DBLP:conf/focs/WegmanC79} systems and \emph{uniform} \cite{DBLP:journals/siamcomp/PaghP08} systems.
+An equivalent restatement of the definition in probability terms requires that $\Prob{f(x) = f(y)} \leq c/m$. There are also various extensions of $c$-universality which include strong \emph{$k$-universality}\cite{DBLP:conf/focs/WegmanC79}, which is also called \emph{$k$-wise independence}\cite{DBLP:conf/focs/WegmanC79}, \emph{strongly $\omega$-universal}\cite{DBLP:conf/focs/WegmanC79} systems and \emph{uniform}\cite{DBLP:journals/siamcomp/PaghP08} systems.
 \begin{definition}
 Let $k > 0$ be an integer. System of functions $H$ is
 \begin{itemize}
@@ -63,10 +62,12 @@ Let $k > 0$ be an integer. System of functions $H$ is
 \end{itemize}
 \end{definition}
 
-The strongly $k$-universal systems behave fully random for up to $k$ different elements. 
+The strongly $k$-universal systems behave fully random up to $k$ different elements. 
 In case of more than $k$ elements they provide only so called \emph{limited randomness}. 
 On the other hand functions chosen from strongly $\omega$-universal systems behave like truly random functions. 
 We often need truly random estimates only up to $n$ elements.
 In this situation uniformity is as powerful as $\omega$-universality.
 
-In Sect.~\ref{section-model} we describe and analyze the proposed model. Section~\ref{section-limit} deals with various well-known universal systems and connects them with the model. In Sect.~\ref{section-conclusion} we point out extensions and improvements.
+In the following section we describe and analyze the proposed model. 
+Then we deal with various well-known universal systems and connect them with the model. 
+In conclusion we point out further extensions and improvements.

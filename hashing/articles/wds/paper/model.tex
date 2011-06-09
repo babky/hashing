@@ -1,13 +1,13 @@
 \section{Model of Universal Hashing}
 \label{section-model}
-In this section we propose and analyze a separate chaining model. 
+In this section we propose and analyze the model in case of separate chaining. 
 The way we manage to achieve worst case lookup time is to keep chains shorter than the prescribed limit. 
 First we introduce the concept of the limit function which bounds the length of the longest chain with a prescribed probability. 
 It turns out that the time needed to keep chains short can be amortized to a constant in expectation.
 
 \subsection{Limit function}
-Apparently such a limit depends on the size of the table, the load factor and the probability with which the bound holds. 
-The following definition of the limit function takes into account these problems.
+Each limit function has to depend on the size of the table, the load factor and the probability with which the bound holds. 
+The following definition of a limit function takes into account the dependencies.
 
 \begin{definition}[Limit function, trimming rate, suitable function]
 \label{definition-limit-function}
@@ -31,7 +31,7 @@ Following three invariants briefly describe the model.
 \item[(3)] \textbf{Chain Length Limit Rule.} If there is a chain longer than $l(m, \alpha', p)$, then the table is rehashed using a new suitable function chosen uniformly at random $H$.
 \end{itemize}
 
-For lower trimming rates the worst-case guarantee tends to be weaker.
+For lower trimming rates the worst case guarantee tends to be weaker.
 By different choices of the trimming rate we set up the trade-off between the worst case guarantee and the time spent per update.
 
 \input{algorithms}
@@ -96,7 +96,7 @@ With the second type, $l$-cycles, which are partitioning of $\alpha$-cycles, we 
 \begin{definition}[$\alpha$-cycle, $l$-cycle]
 Cycles partition operations of the analyzed sequence.
 Each \emph{$\alpha$-cycle} ends just after the operation causing violation of Load Factor Rule.
-Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation violating of Load Factor Rule (both cycles end).
+Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation violating Load Factor Rule (both cycles end).
 \end{definition}
 
 First, we define the potential used in the proof.
@@ -108,7 +108,7 @@ We define $p_\alpha = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(
 The overall potential $p = p_\alpha + p_l$.
 
 At the end of each $\alpha$-cycle the size of the table has to change and Rehash operation is necessary.
-We will pay Rehash from the potential $p_\alpha$ accumulated in the $\alpha$-cycle.
+We pay Rehash from the potential $p_\alpha$ accumulated in the $\alpha$-cycle.
 When an $l$-cycle starts we pay in advance for the expected number of trials in it.
 The potential required to prepay the cycle is accumulated during the previous $l$-cycle or in the initial potential.
 
