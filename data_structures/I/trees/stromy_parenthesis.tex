@@ -5,8 +5,8 @@
 %\documentstyle{amsppt}
 
 \magnification=\magstep1
-\NoPageNumbers
-\nopagenumbers
+%\NoPageNumbers
+%\nopagenumbers
 \pagewidth{5.4in}
 
 
@@ -236,10 +236,10 @@ if} $\key\left(t\right)\ne x$ {\bf then}\newline
 \phantom{---}{\bf else}\newline 
 \phantom{------}najdi $i$, \v ze $S_u\left(i\right)=t$\newline 
 \phantom{------}$S_u\left(\rho \left(u\right)+1\right):=S\left(\rho \left(u\right)\right)$, $j:=\rho \left(u\right)-1$\newline 
-\phantom{------}{\bf while} $j\ge i$ {\bf do\newline 
-\phantom{---------}$S_u\left(j+1\right):=S_u\left(j\right)$}, $H_u\left(j+1\right):=H_u\left(j\right)$, $j:=j-1$\newline 
-\phantom{------}{\bf enddo\newline 
-\phantom{------}$S_u\left(i\right):=t'$}, $H_u\left(i\right):=x$, $\rho \left(u\right):=\rho \left(u\right)+1$\newline 
+\phantom{------}{\bf while} $j\ge i$ {\bf do}\newline 
+\phantom{---------}$S_u\left(j+1\right):=S_u\left(j\right)$, $H_u\left(j+1\right):=H_u\left(j\right)$, $j:=j-1$\newline 
+\phantom{------}{\bf enddo}\newline 
+\phantom{------}$S_u\left(i\right):=t'$, $H_u\left(i\right):=x$, $\rho \left(u\right):=\rho \left(u\right)+1$\newline 
 \phantom{---}{\bf endif}\newline 
 \phantom{---}$t:=u$\newline 
 \phantom{---}{\bf while} $\rho \left(t\right)>b$ {\bf do \v St\v epen\'\i$\left(t\right)$ enddo\newline 
@@ -250,12 +250,12 @@ endif}
 if} $t$ je ko\v ren stromu {\bf then}\newline 
 \phantom{---}vytvo\v r nov\'y ko\v ren $u$ s jedin\'ym synem $t$\newline 
 {\bf endif}\newline 
-$u:=\otec\left(t\right)$, najdi $i$, \v ze $S_u\left(i\right)=t$,\newline 
+$u:=\otec\left(t\right)$, najdi $i$, \v ze $S_u\left(i\right)=t$\newline 
 vytvo\v r nov\'y vnit\v rn\'\i\ vrchol $t'$, $j:=1$\newline 
 {\bf while} $j<\lfloor\frac {b+1}2\rfloor$ {\bf do}\newline 
 \phantom{---}$S_{t'}\left(j\right):=S_t\left(j+\left\lceil\frac {b+1}2\right\rceil \right)$, $H_{t'}\left(j\right):=H_t\left(j+\left\lceil\frac {b+1}2\right\rceil\right)$, $j:=j+1$\newline 
-{\bf enddo\newline 
-$S_{t'}\left(\lfloor\frac {b+1}2\rfloor \right):=S_t\left(b+1\right)$}, $\rho \left(t\right):=\left\lceil\frac {
+{\bf enddo}\newline 
+$S_{t'}\left(\lfloor\frac {b+1}2\rfloor \right):=S_t\left(b+1\right)$, $\rho \left(t\right):=\left\lceil\frac {
 b+1}2\right\rceil$, $\rho \left(t'\right):=\lfloor\frac {b+1}2\rfloor$,\newline 
 {\bf if} $i<\rho \left(u\right)$ {\bf then} $S_u\left(\rho \left(u\right)+1\right):=S_u\left(\rho \left(u\right)\right)$ {\bf endif\newline}
 $j:=\rho \left(u\right)-1$, $\rho \left(u\right):=\rho \left(u\right)+1$,\newline 
@@ -345,11 +345,13 @@ S_1$ a
 $S_2$ jsou disjunktn\'\i , ale algoritmus nekontroluje jeho spln\v en\'\i )\newline 
 {\bf if} v\'y\v ska $T_1$ je v\v et\v s\'\i\ nebo rovna v\'y\v sce $T_2$ {\bf then}\newline 
 \phantom{---}$t:=$ko\v ren $T_1$, $k:=v\left(T_1\right)-v\left(T_2\right)$\newline 
-\phantom{---}{\bf while} $k>0$ {\bf do} $t:=S_t\left(\rho \left(t\right)\right)$, $k:=k-1$ {\bf enddo}\newline \phantom{---}{\bf Spojen\'\i}$\left(t,\text{ ko\v ren }T_2\right)$, $t:=\otec\left(t\right)$\newline 
+\phantom{---}{\bf while} $k>0$ {\bf do} $t:=S_t\left(\rho \left(t\right)\right)$, $k:=k-1$ {\bf enddo}\newline 
+\phantom{---}{\bf Spojen\'\i}$\left(t,\text{ ko\v ren }T_2\right)$, $t:=\otec\left(t\right)$\newline 
 \phantom{---}{\bf while} $\rho \left(t\right)>b$ {\bf do \v St\v epen\'\i$\left(t\right)$ enddo\newline 
 else}\newline 
 \phantom{---}$t:=$ko\v ren $T_2$, $k:=v\left(T_2\right)-v\left(T_1\right)$ \newline 
-\phantom{---}{\bf while} $k>0$ {\bf do} $t:=S_t\left(1\right)$, $k:=k-1$ {\bf enddo}\newline \phantom{---}{\bf Spojen\'\i}$\left(t,\text{ ko\v ren }T_1\right)$, $t:=\otec\left(t\right)$\newline 
+\phantom{---}{\bf while} $k>0$ {\bf do} $t:=S_t\left(1\right)$, $k:=k-1$ {\bf enddo}\newline 
+\phantom{---}{\bf Spojen\'\i}$\left(t,\text{ ko\v ren }T_1\right)$, $t:=\otec\left(t\right)$\newline 
 \phantom{---}{\bf while} $\rho \left(t\right)>b$ {\bf do \v St\v epen\'\i$\left(t\right)$ enddo\newline 
 endif}
 \medskip
@@ -358,9 +360,9 @@ endif}
 $Z_1$}, $Z_2$ pr\'azdn\'e z\'asobn\'\i ky, $t:=$ko\v ren $T$\newline 
 {\bf while} $t$ nen\'\i\ list {\bf do}\newline
 \phantom{---}$i:=1$\newline 
-\phantom{---}{\bf while} $H_t\left(i\right)<x$ a $i<\rho \left(t\right)$ {\bf do} $i:=i+1$ {\bf enddo}\newline \phantom{---}$t:=S_t\left(i\right)$\newline 
-\phantom{---}{\bf if} $i=2$ {\bf then} vlo\v z podstrom vrcholu $S_t\left(1\right)$ do $Z_1$ 
-{\bf endif}\newline 
+\phantom{---}{\bf while} $H_t\left(i\right)<x$ a $i<\rho \left(t\right)$ {\bf do} $i:=i+1$ {\bf enddo}\newline 
+\phantom{---}$t:=S_t\left(i\right)$\newline 
+\phantom{---}{\bf if} $i=2$ {\bf then} vlo\v z podstrom vrcholu $S_t\left(1\right)$ do $Z_1$ {\bf endif}\newline 
 \phantom{---}{\bf if} $i>2$ {\bf then}\newline 
 \phantom{------}vytvo\v r nov\'y vrchol $t_1$, $\rho \left(t_1\right)=i-1$,\newline 
 \phantom{------}{\bf for every} $j=1,2,\dots,i-2$ {\bf do}\newline 
@@ -369,7 +371,7 @@ $Z_1$}, $Z_2$ pr\'azdn\'e z\'asobn\'\i ky, $t:=$ko\v ren $T$\newline
 \phantom{------}$S_{t_1}\left(i-1\right):=S_t\left(i-1\right)$, vlo\v z podstrom vrcholu $t_1$ do $Z_1$\newline 
 \phantom{---}{\bf endif}\newline 
 \phantom{---}{\bf if} $i=\rho \left(t\right)-1$ {\bf then}\newline 
-\phantom{------}vlo\v z podstrom $S_t\left(\rho \left(t\right)\right)$ do $Z_2$ 
+\phantom{------}vlo\v z podstrom $S_t\left(\rho \left(t\right)\right)$ do $Z_2$\newline 
 \phantom{---}{\bf endif}\newline 
 \phantom{---}{\bf if} $i<\rho \left(t\right)-1$ {\bf then}\newline 
 \phantom{------}vytvo\v r nov\'y vrchol $t_2$, $\rho \left(t_2\right):=\rho \left(t\right)-i$\newline 
@@ -391,10 +393,11 @@ if} $\key\left(t\right)=x$ {\bf then}\newline
 endif}\newline 
 $T_1:=\text{ vrchol }Z_1$, odstra\v n $T_1$ ze $Z_1$\newline 
 {\bf while} $Z_1\ne\emptyset$ {\bf do}\newline 
-\phantom{---}$T':=$vrchol $Z_1$, odstra\v n $T'$ ze $Z_1$, $T_1:=${\bf JOIN}$\left(T',T_1\right)$\newline enddo\newline 
+\phantom{---}$T':=$vrchol $Z_1$, odstra\v n $T'$ ze $Z_1$, $T_1:=${\bf JOIN}$\left(T',T_1\right)$\newline 
+{\bf enddo}\newline 
 $T_2:=\text{ vrchol }Z_2$, odstra\v n $T_2$ ze $Z_2$\newline 
 {\bf while} $Z_2\ne\emptyset$ {\bf do}\newline 
-$T':=\text{ vrchol }Z_2$, odstra\v n $T'$ ze $Z_2$, $T_2:=${\bf JOIN$\left(T_2,T'\right)$\newline 
+\phantom{---}$T':=\text{ vrchol }Z_2$, odstra\v n $T'$ ze $Z_2$, $T_2:=${\bf JOIN$\left(T_2,T'\right)$\newline 
 enddo}
 \medskip
 
@@ -1063,7 +1066,7 @@ c+1}\sum_{j=0}^cm_j\left(l\right)\right)\le\\
 &\left(c+1\right)m,\endalign$$
 kde rovnost jsme z\'\i skali p\v rerovn\'an\'\i m s\v c\'\i tanc\accent23u 
 tak, aby v\'yrazy $\sum_{j=0}^cm_j\left(l\right)$ byly u sebe, a posledn\'\i\ 
-nerovnost plyne z toho, \v ze $\frac a{c+1}\ge 1$, a tedy druh\'y s\v c\'\i tanec 
+nerovnost plyne z toho, \v ze $\frac a{c+1}\ge 1$, a tedy t\v ret\'\i\ s\v c\'\i tanec 
 v p\v redchoz\'\i m v\'yrazu nen\'\i\ kladn\'y. \qed
 \enddemo
  
@@ -1301,10 +1304,12 @@ if} $blok$ {\bf then}\newline
 \phantom{------}{\bf endif}\newline 
 \phantom{------}$typ:=false$\newline 
 \phantom{---}{\bf else}\newline 
-\phantom{------}{\bf if} $\min\left\{h-\left\lceil\frac {d+h}2\right\rceil ,\left\lceil\frac {d+h}2\right\rceil-d\right\}<krok$ {\bf then}\newline 
+\phantom{------}{\bf next}$\left(d,h\right):=\left\lceil\frac {d+h}2\right\rceil$\newline
+\phantom{------}{\bf if} $A\left(\text{{\bf next}}\left(d,h\right)\right)>x$ a $\frac{d-h}2<krok$ {\bf then}\newline
 \phantom{---------}$blok:=false$\newline 
+\phantom{------}{\bf else}\newline
+\phantom{---------}$typ:=true$\newline 
 \phantom{------}{\bf endif}\newline 
-\phantom{------}{\bf next}$\left(d,h\right):=\left\lceil\frac {d+h}2\right\rceil$, $typ:=true$\newline 
 \phantom{---}{\bf endif\newline 
 else}\newline 
 \phantom{---}$krok:=\lfloor\sqrt {h-d}\rfloor$, 
@@ -1480,8 +1485,8 @@ x\notin S$ {\bf endif
 INSERT$\left(x\right)$\newline 
 Vyhledej$\left(x\right)$\newline 
 if} $t$ je list {\bf then}\newline 
-$t$ se zm\v en\'\i\ na vnit\v rn\'\i\ vrchol, $\key\left(t\right):=x$,\newline 
-$\levy\left(t\right)$ a $\pravy\left(t\right)$ jsou nov\'e listy, jejich\v z otcem je $t$\newline 
+\phantom{---}$t$ se zm\v en\'\i\ na vnit\v rn\'\i\ vrchol, $\key\left(t\right):=x$,\newline 
+\phantom{---}$\levy\left(t\right)$ a $\pravy\left(t\right)$ jsou nov\'e listy, jejich\v z otcem je $t$\newline 
 {\bf endif
 \medskip
 
@@ -1531,8 +1536,8 @@ $T_1$ a $T_2$ jsou pr\'azdn\'e stromy\newline
 $u_1:=u_2:=NIL$\newline 
 $t:=\text{\rm ko\v ren stromu }T$\newline 
 {\bf while} $t$ nen\'\i\ list a $\key\left(t\right)\ne x$ {\bf do\newline}
-\phantom{---}{\bf if} $\key\left(t\right)>x$ {\bf then\newline 
-\phantom{------}$u:=\levy\left(t\right)$}, $\levy\left(t\right):=NIL$, $\otec\left(u\right):=NIL$\newline 
+\phantom{---}{\bf if} $\key\left(t\right)>x$ {\bf then}\newline 
+\phantom{------}$u:=\levy\left(t\right)$, $\levy\left(t\right):=NIL$, $\otec\left(u\right):=NIL$\newline 
 \phantom{------}{\bf if} $T_2$ je pr\'azdn\'y strom {\bf then}\newline \phantom{---------}$T_2:=\text{\rm podstrom vrcholu }t$\newline
 \phantom{------}{\bf else}\newline 
 \phantom{---------}$\levy\left(u_2\right):=t$, $\otec\left(t\right):=u_2$\newline 
@@ -1582,13 +1587,12 @@ Kdy\v z hodnoty $\lambda\left(t\right)$ a $\pi\left(t\right)$ jsou pro vrchol $t
 a pro prav\'eho syna $w$ vrcholu $t$ definujeme $\lambda\left(w\right)=\key\left(t\right)$ a $\pi\left(w\right)=\pi\left(t\right)$.
 Nyn\'\i\ dok\'a\v zeme
 
-
 \proclaim{Lemma}Je-li $T'$ podstrom bin\'arn\'\i ho vyhled\'avac\'\i ho 
 stromu $T$ ur\v cen\'y vrcholem $t$, pak $T'$ reprezentuje mno\v zinu 
 $S\cap \left(\lambda \left(t\right),\pi \left(t\right)\right)$. Nav\'\i c interval $\left(\lambda \left(t\right),\pi 
 \left(t\right)\right)$ je nejv\v et\v s\'\i\ interval, 
 kter\'y obsahuje jenom prvky z $S$, kter\'e jsou reprezentov\'any 
-vrcholy podstromu $T'$. Nav\'\i c, kdy\v z $t$ je list, pak $<\lambda\left(t\right),\pi\left(t\right)>$ je interval repreyentovan\'y listem $t$.
+vrcholy podstromu $T'$. Nav\'\i c, kdy\v z $t$ je list, pak $<\lambda\left(t\right),\pi\left(t\right)>$ je interval reprezentovan\'y listem $t$.
 \endproclaim
 
 
@@ -1689,7 +1693,7 @@ je $v$ ko\v ren stromu a interval je $S$ (a $k'=k$), tak na po\v c\'atku
 b\v ehu algoritmu invariant plat\'\i.  P\v redpokl\'adejme, \v ze plat\'\i\ v 
 n\v ekter\'em kroku.  Nech\v t $u$ je lev\'y syn $v$, $w$ je prav\'y syn $
 v$ a 
-$I_a$ je interval reprezovan\'y podstromem $T$ ur\v cen\'ym vrcholem $
+$I_a$ je interval reprezentovan\'y podstromem $T$ ur\v cen\'ym vrcholem $
 a$.  
 Pak $|I_u|=p\left(u\right)-1$, $\max I_u<\key\left(v\right)<\min I_w$ a 
 $I_v=I_u\cup \left\{\key\left(v\right)\right\}\cup I_w$.  Odtud plyne, \v ze kdy\v z $k'
@@ -1709,8 +1713,7 @@ Tedy m\accent23u\v zeme tato fakta shrnout.
 {\bf JOIN3}, {\bf SPLIT} a $\bold o\bold r\bold d\left(k\right)$ pro v\v sechna $
 k$ v roz\v s\'\i\v ren\'ych bin\'ar\-n\'\i ch 
 vy\-hled\'avac\'\i ch stromech vy\v zaduj\'\i\ \v cas $O\left(\hloubka
-\left(T\right)\right)$, kde $T$ je 
-reprezentuj\'\i c\'\i\ strom. 
+\left(T\right)\right)$, kde $T$ je strom reprezentuj\'\i c\'\i\ danou mno\v zinu. 
 \endproclaim
 
 
@@ -1794,10 +1797,10 @@ $p\left(v\right)$ a novou hodnotu $p\left(v\right)$ dostaneme jako
 $p\left(\levy\left(v\right)\right)+p\left(\pravy\left(v\right)\right)$.
 \medskip
 
-\flushpar M\v ejme vrchol $w$ stromu $T$, jeho syna $v$ a jeho 
-syna $u$ takov\'eho, \v ze $u$ nen\'\i\ list a $v$ je prav\'y syn 
-vrcholu $w$, pr\'av\v e kdy\v z $u$ je lev\'y syn vrcholu $v$. Pak 
-{\bf Dvojita}-{\bf rotace$\left(w,v,u\right)$} je zn\'azorn\v ena na obr\'azku a prov\'ad\'\i\ 
+\flushpar M\v ejme vrchol $u$ stromu $T$, jeho syna $v$ a jeho 
+syna $w$ takov\'eho, \v ze $w$ nen\'\i\ list a $v$ je prav\'y syn 
+vrcholu $u$, pr\'av\v e kdy\v z $w$ je lev\'y syn vrcholu $v$. Pak 
+{\bf Dvojita}-{\bf rotace$\left(u,v,w\right)$} je zn\'azorn\v ena na obr\'azku a prov\'ad\'\i\ 
 ji n\'asleduj\'\i c\'\i\ algoritmus.
 
 \midinsert
@@ -1807,29 +1810,29 @@ ji n\'asleduj\'\i c\'\i\ algoritmus.
 \endinsert
 \medskip
 
-{\bf Dvojita}-{\bf rotace$\left(w,v,u\right)$\newline 
-$\otec\left(u\right):=\otec\left(w\right)$\newline 
-if} $w=\levy\left(\otec\left(w\right)\right)$ {\bf then}\newline 
-\phantom{---}$\levy\left(\otec\left(w\right)\right):=u$\newline 
+{\bf Dvojita}-{\bf rotace$\left(u,v,w\right)$\newline 
+$\otec\left(w\right):=\otec\left(u\right)$\newline 
+if} $u=\levy\left(\otec\left(u\right)\right)$ {\bf then}\newline 
+\phantom{---}$\levy\left(\otec\left(w\right)\right):=w$\newline 
 {\bf else}\newline 
-\phantom{---}$\pravy\left(\otec\left(w\right)\right):=u$\newline 
+\phantom{---}$\pravy\left(\otec\left(w\right)\right):=w$\newline 
 {\bf endif}\newline 
-$\otec\left(v\right):=u$, $\otec\left(w\right):=u$\newline 
-{\bf if} $v=\levy\left(w\right)$ {\bf then}\newline  
-\phantom{---}$\levy\left(w\right):=\pravy\left(u\right)$, $\otec\left(\pravy\left(u\right)\right):=w$, $\pravy\left(v\right):=\levy\left(u\right)$\newline \phantom{---}$\otec\left(\levy\left(u\right)\right):=v$, $\levy\left(u\right):=v$, $\pravy\left(u\right):=w$\newline 
+$\otec\left(v\right):=w$, $\otec\left(u\right):=w$\newline 
+{\bf if} $v=\levy\left(u\right)$ {\bf then}\newline  
+\phantom{---}$\levy\left(u\right):=\pravy\left(w\right)$, $\otec\left(\pravy\left(w\right)\right):=u$, $\pravy\left(v\right):=\levy\left(w\right)$\newline \phantom{---}$\otec\left(\levy\left(w\right)\right):=v$, $\levy\left(w\right):=v$, $\pravy\left(w\right):=u$\newline 
 {\bf else}\newline 
-\phantom{---}$\pravy\left(w\right):=\levy\left(u\right)$, $\otec\left(\levy\left(u\right)\right):=w$, $\levy\left(v\right):=\pravy\left(u\right)$\newline 
-\phantom{---}$\otec\left(\pravy\left(u\right)\right):=v$, $\levy\left(u\right):=w$, $\pravy\left(u\right):=v$\newline 
+\phantom{---}$\pravy\left(u\right):=\levy\left(w\right)$, $\otec\left(\levy\left(w\right)\right):=u$, $\levy\left(v\right):=\pravy\left(w\right)$\newline 
+\phantom{---}$\otec\left(\pravy\left(w\right)\right):=v$, $\levy\left(w\right):=u$, $\pravy\left(w\right):=v$\newline 
 {\bf endif}
 \medskip
 
 \flushpar Tak\'e zde m\accent23u\v zeme v \v case $O\left(1\right)$ spo\v c\'\i tat nov\'e hodnoty $
 p$. 
 Pro vrchol $x\ne u,v,w$ se hodnota nem\v en\'\i , nov\'a hodnota 
-$p\left(u\right)$ je 
-rovn\'a p\accent23uvodn\'\i\ hodnot\v e $p\left(w\right)$ a nov\'e hodnoty $
-p\left(v\right)$ 
-a $p\left(w\right)$ 
+$p\left(w\right)$ je 
+rovn\'a p\accent23uvodn\'\i\ hodnot\v e $p\left(u\right)$ a nov\'e hodnoty $
+p\left(u\right)$ 
+a $p\left(v\right)$ 
 z\'\i sk\'ame pod\-le stejn\'eho vzorce  jako v {\bf Rotace}.
 
 \heading
@@ -1959,7 +1962,7 @@ zv\v et\v sila a $t$ nebyl listem p\v red operaci, pak po operaci
 neplat\'\i\ $\omega \left(t\right)=0$.
 \endproclaim
 
-\flushpar Ozna\v cme $u=\pravy\left(v\right)$ a uva\v zme p\v r\'\i pady:\newline 
+\flushpar Ozna\v cme $u=\bratr\left(t\right)=\pravy\left(v\right)$ a uva\v zme p\v r\'\i pady:\newline 
 A) $\omega \left(v\right)=1$, pak $\eta \left(u\right)=a$ a $\eta \left(v\right)=a+1$ se nezm\v enilo, 
 tedy sta\v c\'\i\ polo\v zit $\omega \left(v\right)=0$.\newline 
 B) $\omega \left(v\right)=0$, pak $\eta \left(u\right)=a-1$ a $\eta \left(v\right)=a+1$ se zm\v enilo, 
@@ -2001,17 +2004,17 @@ if} $t=\levy\left(v\right)$ {\bf then}\newline
 \phantom{---------}{\bf if} $\omega \left(t\right)=-1$ {\bf then}\newline 
 \phantom{------------}{\bf Rotace$\left(v,t\right)$}, $\omega \left(v\right):=0$, $\omega \left(t\right):=0$\newline 
 \phantom{---------}{\bf else}\newline 
-\phantom{------------}$w:=\pravy\left(t\right)$, {\bf Dvojita-rotace$\left(v,t,w\right)$},\newline 
-\phantom{------------}{\bf if} $\omega \left(w\right)=0$ {\bf then}\newline 
+\phantom{------------}$t_2:=\pravy\left(t\right)$, {\bf Dvojita-rotace$\left(v,t,t_2\right)$},\newline 
+\phantom{------------}{\bf if} $\omega \left(t_2\right)=0$ {\bf then}\newline 
 \phantom{---------------}$\omega \left(t\right):=0$, $\omega \left(v\right):=0$\newline 
 \phantom{------------}{\bf else}\newline 
-\phantom{---------------}{\bf if} $\omega \left(w\right)=1$ {\bf then}\newline 
+\phantom{---------------}{\bf if} $\omega \left(t_2\right)=1$ {\bf then}\newline 
 \phantom{------------------}$\omega \left(v\right):=0$, $\omega \left(t\right):=-1$\newline 
 \phantom{---------------}{\bf else}\newline 
 \phantom{------------------}$\omega \left(v\right):=1$, $\omega \left(t\right):=0$\newline 
 \phantom{---------------}{\bf endif}\newline 
 \phantom{------------}{\bf endif}\newline 
-\phantom{------------}$\omega \left(w\right):=0$\newline 
+\phantom{------------}$\omega \left(t_2\right):=0$\newline 
 \phantom{---------}{\bf endif}\newline
 \phantom{------}{\bf endif}\newline 
 \phantom{---}{\bf endif\newline 
@@ -2025,17 +2028,17 @@ else}\newline
 \phantom{---------}{\bf if} $\omega \left(t\right)=1$ {\bf then}\newline 
 \phantom{------------}{\bf Rotace$\left(v,t\right)$}, $\omega \left(v\right):=0$, $\omega \left(t\right):=0$\newline 
 \phantom{---------}{\bf else}\newline 
-\phantom{------------}$w:=\levy\left(t\right)$, {\bf Dvojita-rotace$\left(v,t,w\right)$},\newline 
-\phantom{------------}{\bf if} $\omega \left(w\right)=0$ {\bf then}\newline 
+\phantom{------------}$t_1:=\levy\left(t\right)$, {\bf Dvojita-rotace$\left(v,t,t_1\right)$},\newline 
+\phantom{------------}{\bf if} $\omega \left(t_1\right)=0$ {\bf then}\newline 
 \phantom{---------------}$\omega \left(t\right):=0$, $\omega \left(v\right):=0$\newline 
 \phantom{------------}{\bf else}\newline 
-\phantom{---------------}{\bf if} $\omega \left(w\right)=1$ {\bf then}\newline 
+\phantom{---------------}{\bf if} $\omega \left(t_1\right)=1$ {\bf then}\newline 
 \phantom{------------------}$\omega \left(v\right):=0$, $\omega\left(t\right):=-1$\newline 
 \phantom{---------------}{\bf else}\newline 
 \phantom{------------------}$\omega \left(v\right):=1$, $\omega \left(t\right):=0$\newline 
 \phantom{---------------}{\bf endif}\newline 
 \phantom{------------}{\bf endif}\newline 
-\phantom{------------}$\omega \left(w\right):=0$\newline 
+\phantom{------------}$\omega \left(t_1\right):=0$\newline 
 \phantom{---------}{\bf endif}\newline 
 \phantom{------}{\bf endif}\newline 
 \phantom{---}{\bf endif\newline 
@@ -2075,7 +2078,7 @@ je bu\v d p\accent23uvodn\'\i\ hodnota $\eta \left(y\right)$ nebo je p\v resn\v 
 1$).  V 
 podstromu ur\v cen\'em vrcholem $t$ jsou hodnoty $\omega$ aktualizov\'any, 
 $v=\otec\left(t\right)$ a $\omega \left(v\right)$ je p\accent23uvodn\'\i .  P\v redpokl\'adejme 
-$t=\levy\left(v\right)$, $u=\pravy\left(v\right)$ a $\eta \left(t\right)=a$ ($a$ je nezn\'am\'e).  Nast\'avaj\'\i\ 
+$t=\levy\left(v\right)$, $u=\bratr\left(t\right)=\pravy\left(v\right)$ a $\eta \left(t\right)=a$ ($a$ je nezn\'am\'e).  Nast\'avaj\'\i\ 
 p\v r\'\i pady:\newline 
 A) kdy\v z $\omega \left(v\right)=1$, pak $\eta \left(u\right)=a+2$ a $\eta \left(v\right)=a+3$ (p\accent23uvodn\v e 
 bylo $\eta \left(t\right)=a+1$).  Ozna\v cme $u_1=\levy\left(u\right)$, $u_2=\pravy\left(u\right)$.\newline 
@@ -2090,10 +2093,8 @@ A2) $\omega \left(u\right)=0\implies\eta \left(u_1\right)=\eta \left(u_2\right)=
 {\bf Rotace$\left(v,u\right)$}. Vrchol $u_1$ je druh\'ym synem $v$ a plat\'\i\ 
 $\eta \left(t\right)=a$, $\eta \left(u_1\right)=a+1=\eta \left(u_2\right)$, $\eta \left(v\right)=a+2$, $\eta 
 \left(u\right)=a+3$. Polo\v zme 
-$\omega \left(v\right)=1$, $\omega \left(u\right)=-1$ a kon\v c\'\i me.
-\medskip
- 
-\flushpar A3) $\omega \left(u\right)=-1\implies\eta \left(u_1\right)=a+1,\,\eta \left(u_2\right)=a$.  Provedeme 
+$\omega \left(v\right)=1$, $\omega \left(u\right)=-1$ a kon\v c\'\i me.\newline
+A3) $\omega \left(u\right)=-1\implies\eta \left(u_1\right)=a+1,\,\eta \left(u_2\right)=a$.  Provedeme 
 {\bf Dvojita-rotace$\left(v,u,u_1\right)$}.  Pro $u_3=\levy\left(u_1\right)$, 
 $u_4=\pravy\left(u_1\right)$ nastanou p\v r\'\i pady:\newline 
 A3i) $\omega \left(u_1\right)=-1\implies\eta \left(u_3\right)=a,\,\eta \left(u_4\right)=a-1$ a tedy 
@@ -2116,10 +2117,9 @@ zavol\'ame proceduru {\bf Kontrola-DELETE} na vrchol $v$.
 \medskip
 
 {\bf Kontrola-DELETE$\left(t\right)$\newline 
-$v:=\otec\left(t\right)$\newline 
+$v:=\otec\left(t\right)$, $u:=\bratr\left(t\right)$\newline 
 if} $t=\levy\left(v\right)$ {\bf then}\newline 
 \phantom{---}{\bf if} $\omega \left(v\right)=1$ {\bf then}\newline 
-\phantom{------}$u:=\pravy\left(v\right)$\newline 
 \phantom{------}{\bf if} $\omega \left(u\right)\ge 0$ {\bf then}\newline 
 \phantom{---------}{\bf Rotace$\left(v,u\right)$}\newline 
 \phantom{---------}{\bf if} $\omega \left(v\right)=0$ {\bf then}\newline 
@@ -2128,27 +2128,27 @@ if} $t=\levy\left(v\right)$ {\bf then}\newline
 \phantom{------------}$\omega \left(u\right):=\omega \left(v\right):=0$, $t:=u$, {\bf Kontrola-DELETE}$\left(t\right)$\newline 
 \phantom{---------}{\bf endif}\newline 
 \phantom{------}{\bf else}\newline 
-\phantom{---------}$w:=\levy\left(u\right)$, {\bf Dvojita-rotace}$\left(v,u,w\right)$\newline 
-\phantom{---------}{\bf if} $\omega \left(w\right)=1$ {\bf then}\newline 
+\phantom{---------}$u_1:=\levy\left(u\right)$, {\bf Dvojita-rotace}$\left(v,u,u_1\right)$\newline 
+\phantom{---------}{\bf if} $\omega \left(u_1\right)=1$ {\bf then}\newline 
 \phantom{------------}$\omega \left(u\right):=0$, $\omega \left(v\right):=-1$\newline 
 \phantom{---------}{\bf else}\newline 
-\phantom{------------}{\bf if} $\omega \left(w\right):=0$ {\bf then}\newline 
+\phantom{------------}{\bf if} $\omega \left(u_1\right):=0$ {\bf then}\newline 
 \phantom{---------------}$\omega \left(u\right):=0$, $\omega\left(v\right):=0$\newline 
 \phantom{------------}{\bf else}\newline 
 \phantom{---------------}$\omega \left(u\right):=1$, $\omega \left(v\right):=0$\newline 
 \phantom{------------}{\bf endif}\newline 
 \phantom{---------}{\bf endif}\newline 
-\phantom{---------}$\omega \left(w\right):=0$, $t:=w$, {\bf Kontrola-Delete}$\left(t\right)$\newline 
+\phantom{---------}$\omega \left(u_1\right):=0$, $t:=u_1$, {\bf Kontrola-Delete}$\left(t\right)$\newline 
 \phantom{------}{\bf endif}\newline 
-\phantom{---}{\bf endif\newline 
-else}\newline 
-\phantom{---}{\bf if} $\omega \left(v\right)=0$ {\bf then}\newline 
-\phantom{------}$\omega \left(v\right):=1$\newline 
 \phantom{---}{\bf else}\newline 
-\phantom{------}$\omega \left(v\right):=0$, $t:=v$, {\bf Kontrola-DELETE}$\left(t\right)$\newline \phantom{---}{\bf endif\newline 
+\phantom{------}{\bf if} $\omega \left(v\right)=0$ {\bf then}\newline 
+\phantom{---------}$\omega \left(v\right):=1$\newline 
+\phantom{------}{\bf else}\newline 
+\phantom{---------}$\omega \left(v\right):=0$, $t:=v$, {\bf Kontrola-DELETE}$\left(t\right)$\newline 
+\phantom{------}{\bf endif}\newline
+\phantom{---}{endif\newline 
 else}\newline 
 \phantom{---}{\bf if} $\omega \left(v\right)=-1$ {\bf then}\newline 
-\phantom{------}$u:=\levy\left(v\right)$\newline 
 \phantom{------}{\bf if} $\omega \left(u\right)\le 0$ {\bf then}\newline 
 \phantom{---------}{\bf Rotace}$\left(v,u\right)$\newline 
 \phantom{---------}{\bf if} $\omega \left(u\right)=0$ {\bf then}\newline 
@@ -2157,23 +2157,24 @@ else}\newline
 \phantom{------------}$\omega \left(u\right):=\omega \left(v\right):=0$, $t:=u$, {\bf Kontrola-DELETE}$\left(t\right)$\newline 
 \phantom{---------}{\bf endif}\newline 
 \phantom{------}{\bf else}\newline 
-\phantom{---------}$w:=\pravy\left(u\right)$, {\bf Dvojita-rotace$\left(v,u,w\right)$}\newline 
-\phantom{---------}{\bf if} $\omega \left(w\right)=1$ {\bf then}\newline 
+\phantom{---------}$u_2:=\pravy\left(u\right)$, {\bf Dvojita-rotace$\left(v,u,u_2\right)$}\newline 
+\phantom{---------}{\bf if} $\omega \left(u_2\right)=1$ {\bf then}\newline 
 \phantom{------------}$\omega \left(u\right):=-1$, $\omega \left(v\right):=0$\newline 
 \phantom{---------}{\bf else}\newline 
-\phantom{------------}{\bf if} $\omega \left(w\right):=0$ {\bf then}\newline 
+\phantom{------------}{\bf if} $\omega \left(u_2\right):=0$ {\bf then}\newline 
 \phantom{---------------}$\omega \left(u\right):=0$, $\omega\left(v\right):=0$\newline 
 \phantom{------------}{\bf else}\newline 
 \phantom{---------------}$\omega \left(u\right):=0$, $\omega \left(v\right):=1$\newline 
 \phantom{------------}{\bf endif}\newline 
 \phantom{---------}{\bf endif}\newline 
-\phantom{---------}$\omega \left(w\right):=0$, $t:=w$, {\bf Kontrola-Delete}$\left(t\right)$\newline
+\phantom{---------}$\omega \left(u_2\right):=0$, $t:=u_2$, {\bf Kontrola-Delete}$\left(t\right)$\newline
 \phantom{------}{\bf endif}\newline 
 \phantom{---}{\bf else}\newline 
 \phantom{------}{\bf if} $\omega \left(v\right)=0$ {\bf then}\newline 
 \phantom{---------}$\omega \left(v\right):=-1$\newline 
 \phantom{------}{\bf else}\newline 
-\phantom{---------}$\omega \left(v\right):=0$, $t:=v$, {\bf Kontrola-DELETE}$\left(t\right)$\newline \phantom{------}{\bf endif}\newline 
+\phantom{---------}$\omega \left(v\right):=0$, $t:=v$, {\bf Kontrola-DELETE}$\left(t\right)$\newline 
+\phantom{------}{\bf endif}\newline 
 \phantom{---}{\bf endif\newline 
 endif}
 \medskip
@@ -2238,7 +2239,7 @@ Tedy
 \medskip
 
 \proclaim{Tvrzen\'\i}Kdy\v z \v cerveno-\v cern\'y strom $T$ 
-reprezentuje mno\v zinu $S$, pak $$\hloubka\left(T\right)\le 2\log\left(2|S|+2\right)=1+\log\left(|S|+1\right).$$
+reprezentuje mno\v zinu $S$, pak $$\hloubka\left(T\right)\le 2\log\left(2|S|+2\right)=2\left(1+\log\left(|S|+1\right)\right).$$
 \endproclaim
 
 \flushpar Pro \v cerveno-\v cern\'e stromy navrhneme algoritmy 
@@ -2312,8 +2313,8 @@ $v=\pravy\left(\otec\left(v\right)\right)$.
 \phantom{---}{\bf else}\newline 
 \phantom{------}$w:=\otec\left(v\right)$, $u:=\bratr\left(w\right)$\newline 
 \phantom{------}{\bf if} $b\left(u\right)=0$ {\bf then}\newline 
-\phantom{---------}$v:=\otec\left(w\right)$, $b\left(w\right):=1$, $b\left(u\right):=1$\newline 
-\phantom{---------}$b\left(v\right):=0$, {\bf Vyvaz-INSERT$\left(v\right)$} (Viz Obr. 1)\newline 
+\phantom{---------}$t:=\otec\left(w\right)$, $b\left(w\right):=1$, $b\left(u\right):=1$\newline 
+\phantom{---------}$b\left(t\right):=0$, {\bf Vyvaz-INSERT$\left(t\right)$} (Viz Obr. 1)\newline 
 \phantom{------}{\bf else}\newline 
 \phantom{---------}$t:=\otec\left(w\right)$\newline 
 \phantom{---------}{\bf if} $s\left(w\right)=s\left(v\right)$ {\bf then}\newline 
@@ -2385,7 +2386,7 @@ nebo zavol\'an\'\i\ procedury {\bf Vyvaz-DELE\-TE$\left(v'\right)$}, kde $v'$ je
 vrcholu $v$.  Z faktu, \v ze kdy\v z $\left(T,v\right)$ je 3-parci\'aln\'\i\ \v cerveno-\v cern\'y 
 strom a $v$ je jeho ko\v ren, pak $T$ je \v cerveno-\v cern\'y strom, plyne, 
 \v ze aplikac\'\i\ {\bf Vyvaz-DELETE$\left(v\right)$} na 3-parci\'aln\'\i\ \v cerveno-\v cern\'y strom 
-$\left(T,v\right)$ dostaneme \v cerveno-\v cern\'y strom.  
+$\left(T,v\right)$ dostaneme pomoc\'\i p\v r\'\i padn\v e n\v ekolika vol\'an\'\i\ procedury {\bf Vyvaz-DELETE} \v cerveno-\v cern\'y strom.  
 \medskip
 
 {\bf Vyvaz-DELETE$\left(v\right)$\newline 
@@ -2393,7 +2394,7 @@ $u:=\bratr\left(v\right)$}, $t:=\otec\left(v\right)$\newline
 {\bf if} $b\left(u\right)=0$ {\bf then}\newline 
 \phantom{---}{\bf Rotace}$\left(t,u\right)$, $b\left(u\right):=1$, $b\left(t\right):=0$, $u:=\bratr\left(v\right)$\newline 
 {\bf endif\newline}
-(Viz Obr. 4, Koment\'a\v r: nyn\'\i\ $b\left(u\right)=1$)\newline 
+(Viz Obr. 4, Koment\'a\v r: nyn\'\i\ $b\left(u\right)=1$ a $b\left(t\right)=0$)\newline 
 $w_1$ je syn $u$ takov\'y, \v ze $s\left(v\right)=s\left(w_1\right)$, $w_2:=\bratr\left(w_1\right)$\newline 
 {\bf if} $b\left(w_1\right)=b\left(w_2\right)=1$ {\bf then}\newline 
 \phantom{---}$b\left(u\right):=0$\newline 
@@ -2775,7 +2776,7 @@ nejv\'y\v se $cm$ procedur {\bf Rotace} a {\bf Dvojita-rotace}.
 Historick\'y p\v rehled:
 \endheading
 
-$\left(a,b\right)$-stromy zavedli Bayer a McGreght (1972),\newline 
+\flushpar $\left(a,b\right)$-stromy zavedli Bayer a McGreght (1972),\newline 
 v\v ety o po\v ctu vyva\v zovac\'\i ch operac\'\i\ pro $\left(a,b\right)$-stromy dok\'azali 
 Huddleston a Mehlhorn (1982).\newline 
 $A$-sort analyzovali Guibas, McGreight, Plass a Roberts (1977).
@@ -2791,8 +2792,6 @@ AVL-stromy,\newline
 verze algoritmu {\bf DELETE} poch\'az\'\i\ od Tarjana (1983).
 $BB\left(\alpha \right)$-stromy zavedli Nievergelt a Reingold (1973),\newline 
 v\v ety o jejich vyva\v zov\'an\'\i\ dok\'azali Blum a Mehlhorn (1980).\newline 
-Priorita AVL-strom\accent23u se odr\'a\v z\'\i\ v 
-jejim hojn\'em pou\v z\'\i v\'an\'\i , i kdy\v z \v cerveno-\v cern\'e stromy 
-jsou efektivn\v ej\v s\'\i . 
+\v Rada u\v zivatel\accent23u pou\v z\'\i v\'a  AVL-stromy, co\v z je d\accent23usledkem jejich dobr\'e efektivity a faktu, \v ze po dlouhou dobu to byla jedin\'a efektivn\'\i\ datov\'a struktura. Zd\'a se v\v sak, \v ze \v cerveno-\v cern\'e stromy jsou efektivn\v ej\v s\'\i\ a v sou\v casn\'e dob\v e jsou nejpou\v z\'\i van\v ej\v s\'\i m typem bin\'arn\'\i ch vyhled\'avac\'\i ch strom\accent23u. 
 
 \end
