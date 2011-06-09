@@ -1,0 +1,47 @@
+\section{Obtaining the limit function}
+\label{section-limit}
+
+So far we have studied the possibility of providing a worst case guarantee for Find if we are given a limit function. 
+In this section we show various examples of sublinear limit functions.
+
+\subsection{Linear hash functions}
+Representing the universe $U$ and the addresses of the hash table $V$ as vector spaces is natural when keys and addresses are interpreted as zero-padded  bitstrings of a fixed length. Alon, Dietzfelbinger, Bro Miltersen, Petrank and Tardos\cite{DBLP:journals/jacm/AlonDMPT99} found an interesting upper bound on $\Expect \lpsl$ with the system of all linear functions between two vector spaces over the field $\mathbb{Z}_2$.
+
+\begin{theorem}
+\label{theorem-linear-hash-functions-dietzefelbinger}
+Suppose universal hashing with the system of linear functions from $U$ to $V$. 
+If $m \log m$ elements are stored in a table of size $m$, then $\Expect{\lpsl} = \bigo(\log m \log \log m)$. 
+\end{theorem}
+
+The major problem of Theorem \ref{theorem-linear-hash-functions-dietzefelbinger} is a high multiplicative constant. However, it can be significantly reduced by a refinement of the original proof. The improved result is stated in Theorem \ref{theorem-linear-refined}.
+
+\begin{theorem}
+\label{theorem-linear-refined}
+Assume universal hashing with the system of all linear transformations between vector spaces over $\mathbb{Z}_2$. 
+Let $p \in (0, 1)$ be the trimming rate and $\alpha > 0$. 
+If $n = \alpha m$ elements are stored inside the hash table of size $m$, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44\mbox{ and}$$ $$\Prob{\lpsl \geq a_{\alpha, p} \log m \log \log m + b_{\alpha, p}\log m} < p.$$ where the values $a$ and $b$ depend only on the choice of $\alpha$ and $p$.
+\end{theorem}
+
+Let us note that the exact constants for different trimming rates and load factors can be found by a simple computer program.
+For example the choice of $\alpha = 1.5$ and $p = 0.5$ yields $a = 57.29$ and $b = 0$.
+In addition, constant $a$ can get arbitrarily close to $1$ but such estimates hold only for large values of $n$.
+
+\subsection{Two choices paradigm}
+A recent study\cite{DBLP:conf/stoc/AzarBKU94} of balls and bins systems discovered that hashing with at least two independent fully random hash functions brings remarkable results if it is done properly. 
+If each stored element is put inside a least loaded chain of $d$ ones, then with a high probability the most loaded bin contains ${\ln \ln n}/\ln d + \bige(1)$ balls.
+Further improvements of the states result may be derived using witness tree analysis\cite{DBLP:journals/jacm/Vocking03}. 
+
+\begin{theorem}
+\label{theorem-universal-hashing-two-choices}
+Let $H$ be an $\omega$-universal system and $d \in \mathbb{N}$, $d \geq 2$. Assume that each stored element $x$ is placed into a least loaded chain of chains $f_1(x), \dots, f_d(x)$ where hash functions $f_1, \dots, f_d$ are chosen uniformly and independently from $H$. If $n \leq m$, then $\Prob{\lpsl > \frac{\ln \ln n}{\ln d} + 5} \in \littleo\left(1\right).$
+\end{theorem}
+
+Bounds for $k$-wise independence with constant number of functions and for general $S \subset U$ do not follow from the stated result and are not trivial.
+On the other hand the stated result holds in case of uniform or almost uniform systems.
+In addition a convenient example of a uniform system appeared in\cite{DBLP:journals/siamcomp/PaghP08}.
+The system consists of functions which can be computed in a constant time. 
+Let us note that a slight increase of the trimming rate occurs when using the uniform system since its uniformity is probabilistic.
+
+The problem of using $k$-wise independent functions is addressed by Woelfel\cite{InProc-Woe2006a}. 
+This work shows how to use simple universal classes with the two choices paradigm.
+So we can conclude that there is a way how obtain an impressive doubly logarithmic worst case warranty with the two choices paradigm.

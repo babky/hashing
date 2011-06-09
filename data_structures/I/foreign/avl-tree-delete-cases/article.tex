@@ -1,0 +1,250 @@
+\section*{AVL Tree}
+
+\section*{Delete}
+
+Works as in common binary search tree but height of a tree may be decreased and rebalancing may be required. 
+
+Let $t$ be the node for which the height of its subtree decreased. Let $v$ be its parent and $u$ be the brother of $t$. Assume that the subtree rooted at the node $t$ is a correct AVL tree and the value $\omega$ stored inside the node $v$ is that before deletion.
+
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) \in \{-1, 0, 1\} \\
+& h(t) \in \{a - 1, a - 2\} \\
+& h(u) \in \{a - 1, a - 2\} \\
+\end{split}
+\]
+
+\vspace{1cm}
+
+In our analysis assume that $t$ is the left son of $v$. Mirror case is the same as the mirror case with insertion.
+
+Now we have tree cases distinguished by $\omega(v)$.
+
+\pagebreak
+
+\paragraph*{\textbf{Case 1}: $\omega(v) = 1$}
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h(u) = a - 1 \\
+& h'(t) = a - 3 \\
+\end{split}
+\]
+
+Now we have three subcases according to $\omega(u)$.
+\paragraph*{\textbf{Case 1a}: $\omega(u) = 0$}
+Rotate edge $u, v$.
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h(u) = a - 1 \\
+& h(u_1) = a - 2 \\
+& h(u_2) = a - 2 \\
+& h'(t) = a - 3 \\
+\end{split}
+\]
+
+Result:
+\[
+\begin{split}
+& \omega'(v) = 1 \\
+& \omega'(u) = -1 \\
+& h'(v) = a - 1 \\
+& h'(u) = a \\
+& h'(u_1) = a - 2 \\
+& h'(u_2) = a - 2 \\
+& h'(t) = a - 3 \\
+\end{split}
+\]
+
+Since the height remains the same we stop.
+
+\paragraph*{\textbf{Case 1b}: $\omega(u) = 1$}
+Rotate edge $u, v$.
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h(u) = a - 1 \\
+& h(u_1) = a - 3 \\
+& h(u_2) = a - 2 \\
+& h'(t) = a - 3 \\
+\end{split}
+\]
+
+Result:
+\[
+\begin{split}
+& \omega'(v) = 0 \\
+& \omega'(u) = 0 \\
+& h'(v) = a - 2 \\
+& h'(u) = a - 1\\
+& h'(u_1) = a - 3 \\
+& h'(u_2) = a - 2 \\
+& h'(t) = a - 3 \\
+\end{split}
+\]
+Since the height decreased we have to continue.
+
+\paragraph*{\textbf{Case 1c}: $\omega(u) = -1$}
+Perform double rotation $u_1, u, v$.
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h(u) = a - 1 \\
+& h(u_1) = a - 2 \\
+& h(u_2) = a - 3 \\
+& h'(t) = a - 3 \\
+\end{split}
+\]
+
+Analysis and the result depends on $\omega(u_1)$. In every case the height of the subtree is decreased and we have to continue with the node $u_1$.
+\paragraph*{\textbf{Case 1cI}: $\omega(u_1) = -1$}
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h'(t) = a - 3 \\
+& h(u) = a - 1 \\
+& \omega(u) = -1 \\
+& h(u_1) = a - 2 \\
+& \omega(u_1) = -1 \\
+& h(u_2) = a - 3 \\
+& h(u_3) = a - 3 \\
+& h(u_4) = a - 4 \\
+\end{split}
+\]
+Result:
+\[
+\begin{split}
+& \omega'(u_1) = 0 \\
+& h'(u_1) = a - 1 \\
+& h'(v) = a - 2 \\
+& \omega'(v) = 0 \\
+& h'(u) = a - 2 \\
+& \omega'(u) = 1 \\
+& h'(t) = a - 3 \\
+& h'(u_3) = a - 3 \\
+& h'(u_4) = a - 4 \\
+& h'(u_2) = a - 3 \\
+\end{split}
+\]
+
+\paragraph*{\textbf{Case 1cII}: $\omega(u_1) = 0$}
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h'(t) = a - 3 \\
+& h(u) = a - 1 \\
+& \omega(u) = -1 \\
+& h(u_1) = a - 2 \\
+& \omega(u_1) = 0 \\
+& h(u_2) = a - 3 \\
+& h(u_3) = a - 3 \\
+& h(u_4) = a - 3 \\
+\end{split}
+\]
+Result:
+\[
+\begin{split}
+& \omega'(u_1) = 0 \\
+& h'(u_1) = a - 1 \\
+& h'(v) = a - 2 \\
+& \omega'(v) = 0 \\
+& h'(u) = a - 2 \\
+& \omega'(u) = 0 \\
+& h'(t) = a - 3 \\
+& h'(u_3) = a - 3 \\
+& h'(u_4) = a - 3 \\
+& h'(u_2) = a - 3 \\
+\end{split}
+\]
+
+\paragraph*{\textbf{Case 1cIII}: $\omega(u_1) = 1$}
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 1 \\
+& h(t) = a - 2 \\
+& h'(t) = a - 3 \\
+& h(u) = a - 1 \\
+& \omega(u) = - 1 \\
+& h(u_1) = a - 2 \\
+& \omega(u_1) = 1 \\
+& h(u_2) = a - 3 \\
+& h(u_3) = a - 4 \\
+& h(u_4) = a - 3 \\
+\end{split}
+\]
+Result:
+\[
+\begin{split}
+& \omega'(u_1) = 0 \\
+& h'(u_1) = a - 1 \\
+& h'(v) = a - 2 \\
+& \omega'(v) = -1 \\
+& h'(u) = a - 2 \\
+& \omega'(u) = 0 \\
+& h'(t) = a - 3 \\
+& h'(u_3) = a - 4 \\
+& h'(u_4) = a - 3 \\
+& h'(u_2) = a - 3 \\
+\end{split}
+\]
+\pagebreak
+
+\paragraph*{\textbf{Case 2}: $\omega(v) = 0$}
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 0 \\
+& h(t) = a - 1 \\
+& h(u) = a - 1 \\
+& h'(t) = a - 2 \\
+\end{split}
+\]
+
+Result:
+\[
+\begin{split}
+& h'(v) = a \\
+& \omega'(v) = 1 \\
+& h'(t) = a - 2 \\
+& h'(u) = a - 1 \\
+\end{split}
+\]
+The height of the subtree did not change we can stop.
+
+\paragraph*{\textbf{Case 3}: $\omega(v) = -1$}
+\[
+\begin{split}
+& h(v) = a \\
+& \omega(v) = 0 \\
+& h(t) = a - 1 \\
+& h(u) = a - 2 \\
+& h'(t) = a - 2 \\
+\end{split}
+\]
+
+Result:
+\[
+\begin{split}
+& h'(v) = a - 1 \\
+& \omega'(v) = 0 \\
+& h'(t) = a - 2 \\
+& h'(u) = a - 2 \\
+\end{split}
+\]
+
+Continue with the node $v$.
