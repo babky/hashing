@@ -112,13 +112,13 @@ kdy\v z vrchol m\'a m\'en\v e ne\v z $d$ syn\accent23u, pak v\v sechny
 vrcholy s v\v et\v s\'\i m \v c\'\i slem jsou listy.
 \endroster
 Toto o\v c\'\i slov\'an\'\i\ se naz\'yv\'a \emph{p\v rirozen\'e} 
-\emph{o\v c\'\i slov\'an\'\i} $d$-regul\'arn\'\i ho stromu. Toto o\v c\'\i slov\'an\'\i\ 
+\emph{o\v c\'\i slov\'an\'\i} $d$-regul\'arn\'\i ho stromu. p\v rirozen\'e o\v c\'\i slov\'an\'\i\ 
 budeme ozna\v covat $o$, to znamen\'a, \v ze pro vrchol $v$ je $o
 \left(v\right)$ jeho 
 \v c\'\i slo/po\v rad\'\i\ v tomto o\v c\'\i slov\'an\'\i.
 
 
-\proclaim{Tvrzen\'\i}$d$-regul\'arn\'\i\ strom m\'a nejv\'y\v se jeden 
+\proclaim{Tvrzen\'\i}$d$-regul\'arn\'\i\ strom m\'a nejv\'y\v se jeden vnit\v rn\'\i\ 
 vrchol, kter\'y m\'a m\'en\v e ne\v z $d$ syn\accent23u. Kdy\v z 
 $d$-regul\'arn\'\i\ strom m\'a $n$ vrchol\accent23u, pak jeho 
 v\'y\v ska je $\left\lceil\log_d\left(n\left(d-1\right)+1\right)\right\rceil-1$. Kdy\v z pro vrchol 
@@ -139,9 +139,9 @@ p\v rirozen\'e o\v c\'\i s\-lo\-v\'a\-n\'\i\ $d$-regul\'arn\'\i ho stromu $
 \left(T,r\right)$, pak halda $H$ je 
 reprezentovan\'a polem $H\left[1..|S|\right]$, kde $H\left(i\right)=\left(\key\left(v\right),f\left(\key\left(v\right)\right)\right)$ a 
 $o\left(v\right)=i$. Algoritmy budeme popisovat pro stromy, proto\v ze 
-je to n\'azor\-n\v ej\-\v s\'\i . P\v reformulovat je pro pole je 
-snadn\'e. Pro jednoduchost z\'apisu $f\left(v\right)$ pro vrchol $v$ 
-ozna\v cuje $f\left(s\right)$, kde $s$ je reprezentov\'an vrcholem $v$. U 
+je to n\'azor\-n\v ej\-\v s\'\i . P\v reformulovat je pro pole, je 
+snadn\'e. Pro jednoduchost z\'apis $f\left(v\right)$ pro vrchol $v$ 
+ozna\v cuje $f\left(s\right)$, kde $s\in S$ je reprezentov\'an vrcholem $v$. U 
 $d$-regul\'arn\'\i ho stromu p\v redpo\-kl\'a\-d\'ame, \v ze zn\'ame p\v rirozen\'e 
 o\v c\'\i slov\'an\'\i\ a fr\'aze `posledn\'\i\ vrchol', `p\v red\-ch\'azej\'\i c\'\i\ 
 vrchol'  atd. se vztahuj\'\i\ k tomuto o\v c\'\i slov\'a\-n\'\i .
@@ -197,8 +197,7 @@ $\key\left(r\right):=\key\left(v\right)$, odstra\v n $v$\newline
 
 DELETE$\left(s\right)$},\newline 
 $v:=$vrchol reprezentuj\'\i c\'\i\ $s$, $w:=$posledn\'\i\ list\newline 
-$t:=\key\left(w\right)$, $\key\left(v\right):=t$\newline 
-odstra\v n $w$\newline 
+$\key\left(v\right):=\key\left(w\right)$, odstra\v n $w$\newline 
 {\bf if} $f\left(t\right)<f\left(s\right)$ {\bf then UP$\left(v\right)$ else DOWN$\left(v\right)$ endif
 \medskip
 
@@ -318,7 +317,7 @@ posloupnosti d\'elek do 1 000 000 by m\v el b\'yt $d=6$ nebo $d=7$.
 
 \subhead
 Nalezen\'\i\ nejkrat\v s\'\i ch cest v grafu z dan\'eho 
-bodu.
+bodu
 \endsubhead
 \smallskip
  
@@ -530,7 +529,7 @@ algoritmus {\bf Oprav} vy\v zaduje \v cas $O\left(\log\left(|S|\right)\right)$.
 \medskip
 
 \subhead
-Ostatn\'\i\ algoritmy.
+Ostatn\'\i\ algoritmy
 \endsubhead
 \bigskip
 
@@ -758,7 +757,7 @@ je podobn\'a jako pro leftist haldy.
 
 {\bf INSERT$\left(x\right)$}:\newline 
 Vytvo\v r\'\i me haldu $\Cal H_1$ reprezentuj\'\i c\'\i\ $\left\{x\right\}$\newline 
-{\bf MERGE}$Cal H,\Cal H_1)$
+{\bf MERGE}$\Cal H,\Cal H_1)$
 \bigskip
 
 {\bf MIN}:\newline 
@@ -784,7 +783,7 @@ binomi\'aln\'\i\ halda, a odtud plyne korekt\-nost ope\-race
 ope\-race {\bf UP} a ope\-race {\bf INCREASE} pomoc\'\i\ 
 ope\-race {\bf DOWN} stejn\v e jako pro regul\'arn\'\i\ haldy. Tato 
 struktura nepodporuje p\v r\'\i mo operaci {\bf DELETE} (d\'a se ud\v elat 
-jedin\v e jako {\bf DECREASE($\infty$)} a pak {\bf DELETEMIN)}) a ope\-race 
+nap\v r\'\i klad jako {\bf DECREASE($\infty$)} a pak {\bf DELETEMIN)}) a ope\-race 
 {\bf MAKEHEAP} se prov\'ad\'\i\ iterac\'\i\ operace {\bf INSERT}.
 \medskip
 
@@ -898,9 +897,9 @@ DELETEMIN}:\newline
 Prohled\'ame v\v sechny stromy v $\Cal H$, nalezneme nejmen\v s\'\i\ prvek 
 repre\-zentovan\'y v ko\v reni n\v ejak\'eho stromu $T\in \Cal H$, stromy 
 rozd\v e\-l\'\i me do mno\v zin $O_i$ obsahuj\'\i c\'\i ch v\v sechny stromy  
-izomorfn\'\i\ s $H_i$ r\accent23uzn\'e od $T$ a d\'ale d\'ame do 
-$O_i$ podstrom $T$ ur\v cen\'y synem ko\v rene $T$, kter\'y je  
-izomorfn\'\i\ s $H_i$.\newline 
+izomorfn\'\i\ s $H_i$ r\accent23uzn\'e od $T$ a d\'ale pro ka\v zd\'eho syna 
+ko\v rene stromu $T$ d\'ame podstrom ur\v cen\'y t\'\i mto synem do 
+$O_i$ jestli\v ze tento podstrom $T$ je izomorfn\'\i\ s $H_i$.\newline 
 {\bf vyvaz$\left(\left\{O_i\mid i=0,1,\dots,\lfloor\log\left(|S|\right)\rfloor \right\}\right)$}
 \bigskip
 
@@ -923,7 +922,7 @@ O\left(1\right)$
 a zmen\v s\'\i\ po\v cet stro\-m\accent23u v seznamech $O_i$ o $1$, 
 dostaneme, \v ze ope\-ra\-ce {\bf vyvaz} vy\v zaduje \v cas $O\left(k+\sum_{i=0}^k|O_i|
 \right)=O\left(k+|\Cal H|\right)$, kde $k$ je po\v cet 
-seznam\accent23u. Z Tvrzen\'\i\ plyne, \v ze $k\le\log\left(|S|\right)$. Ope\-ra\-ce {\bf MIN}
+seznam\accent23u. Z Tvrzen\'\i\ plyne, \v ze $k,|\Cal h|\le\log\left(|S|\right)$. Ope\-ra\-ce {\bf MIN}
 bez podprocedury {\bf vyvaz} vy\v zaduje \v cas $O\left(|\Cal H|\right)$ a operace 
 {\bf DE\-LE\-TEMIN} bez podprocedury {\bf vyvaz} vy\v zaduje \v cas $
 O\left(\Cal H+i\right)$, 
@@ -1000,8 +999,8 @@ Vytvo\v r\'\i me haldu $\Cal H_1$ reprezentuj\'\i c\'\i\ $\left\{x\right\}$\newl
 {\bf MIN}:\newline 
 Prohled\'ame v\v sechny stromy v $\Cal H$, nalezneme nejmen\v s\'\i\ prvek 
 repre\-zentovan\'y v ko\v reni n\v ejak\'eho stromu a stromy 
-rozd\v el\'\i me do mno\v zin $O_i$ obsahuj\'\i c\'\i ch v\v sechny stromy  
-s rankem $i$.\newline 
+rozd\v el\'\i me do mno\v zin $O_i$, kde $O_i$ je mno\v zina v\v sech strom\accent23u 
+v hald\v e s rankem $i$. \newline 
 {\bf vyvaz1$\left(\left\{O_i\mid i=0,1,\dots,\lfloor a\log\left(\sqrt 5|S|+1\right)\rfloor 
 \right\}\right)$
 \bigskip
@@ -1009,9 +1008,9 @@ s rankem $i$.\newline
 DELETEMIN}:\newline 
 Prohled\'ame v\v sechny stromy v $\Cal H$, nalezneme nejmen\v s\'\i\ prvek 
 repre\-zentovan\'y v ko\v reni n\v ejak\'eho stromu $T\in \Cal H$, stromy 
-rozd\v e\-l\'\i me do mno\v zin $O_i$ obsahuj\'\i c\'\i ch v\v sechny stromy  
-s rankem $i$ r\accent23uzn\'e od $T$ a d\'ale do 
-$O_i$ d\'ame v\v sechny podstromy stromu $T$ ur\v cen\'e n\v ejak\'ym synem ko\v rene $T$, kter\'e maj\'\i\ rank $i$.\newline 
+rozd\v e\-l\'\i me do mno\v zin $O_i$, kde $O_i$ obsahuje v\v sechny stromy  
+s rankem $i$ r\accent23uzn\'e od $T$ a d\'ale ka\v zd\'y podstrom $T$ 
+ur\v cen\'y synem ko\v rene $T_i$ d\'ame do $O_i$, pr\'av\v e kdy\v z m\'a rank $i$. \newline 
 {\bf vyvaz1$\left(\left\{O_i\mid i=0,1,\dots,\lfloor a\log\left(\sqrt 5|S|+1\right)\rfloor 
 \right\}\right)$
 \bigskip
@@ -1129,27 +1128,27 @@ ozna\v cen\'e vrcholy se nem\v en\'\i;
 \item"{}"
 {\bf MIN }\v casov\'a slo\v zitost $O\left(|\Cal H|\right)$, po proveden\'\i\ operace 
 r\accent23uzn\'e stro\-my v hald\v e maj\'\i\ r\accent23uzn\'e 
-ranky;  
+ranky, \v z\'adn\'y nov\'y vrchol nebyl ozna\v cen;  
 \item"{}"
-{\bf DELETEMIN }\v casov\'a slo\v zitost $O\left(|\Cal H|+\text{\rm po\v cet syn\accent23u }v\right)$,kde $v$ reprezentoval prvek s nejmen\v s\'\i\ hodnotou $f$, po proveden\'\i\ ope\-ra\-ce r\accent23uzn\'e stromy v hald\v e maj\'\i\ 
+{\bf DELETEMIN }\v casov\'a slo\v zitost $O\left(|\Cal H|+\text{\rm po\v cet syn\accent23u }v\right)$, kde $v$ reprezentoval prvek s nejmen\v s\'\i\ hodnotou $f$, po proveden\'\i\ ope\-ra\-ce r\accent23uzn\'e stromy v hald\v e maj\'\i\ 
 r\accent23uzn\'e ranky, \v z\'adn\'y nov\'y vrchol nebyl ozna\v cen; 
 \item"{}"
 {\bf DECREASE }\v casov\'a slo\v zitost $O\left(1+c\right)$, kde $c$ je po\v cet 
 vrchol\accent23u, kter\'e p\v restaly b\'yt ozna\v cen\'e, 
 bylo p\v rid\'ano $1+c$ nov\'ych strom\accent23u a byl ozna\v cen 
-nejv\'y\v se jeden vrchol;
+nejv\'y\v se jeden nov\'y vrchol;
 \item"{}"
 {\bf INCREASE }\v casov\'a slo\v zitost $O\left(1+c+d\right)$, kde $c$ je po\v cet 
 vrchol\accent23u, kter\'e p\v restaly b\'yt ozna\v cen\'e, $d$ je 
 po\v cet syn\accent23u vrcholu $v$, bylo p\v rid\'ano $1+c+d$ 
 nov\'ych strom\accent23u a byl ozna\v cen nejv\'y\v se jeden 
-vrchol;
+nov\'y vrchol;
 \item"{}"
 {\bf DELETE }\v casov\'a slo\v zitost $O\left(1+c+d\right)$, kde $c$ je po\v cet 
 vrchol\accent23u, kter\'e p\v restaly b\'yt ozna\v cen\'e, $d$ je 
 po\v cet syn\accent23u vrcholu $v$, bylo p\v rid\'ano $c+d$ 
 nov\'ych strom\accent23u a byl ozna\v cen nejv\'y\v se jeden 
-vrchol.
+nov\'y vrchol.
 \endroster
 
 \flushpar Abychom spo\v c\'\i tali amortizovanou slo\v zitost, 
