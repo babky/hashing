@@ -782,8 +782,7 @@ binomi\'aln\'\i\ halda, a odtud plyne korekt\-nost ope\-race
 {\bf DE\-LE\-TEMIN}. Operace {\bf DECREASE} se implementuje pomoc\'\i\ 
 ope\-race {\bf UP} a ope\-race {\bf INCREASE} pomoc\'\i\ 
 ope\-race {\bf DOWN} stejn\v e jako pro regul\'arn\'\i\ haldy. Tato 
-struktura nepodporuje p\v r\'\i mo operaci {\bf DELETE} (d\'a se ud\v elat 
-nap\v r\'\i klad jako {\bf DECREASE($\infty$)} a pak {\bf DELETEMIN)}) a ope\-race 
+struktura nepodporuje p\v r\'\i mo operaci {\bf DELETE} (lze prov\'est p\v r\'\i kazy {\bf DECREASE($\infty$)} a pak {\bf DELETEMIN)}) a ope\-race 
 {\bf MAKEHEAP} se prov\'ad\'\i\ iterac\'\i\ operace {\bf INSERT}.
 \medskip
 
@@ -1378,7 +1377,7 @@ aplikac\'\i ch datov\'ych struktur je nutn\'e ho \v re\v sit.
 probl\'em: {\bf HEAP\-SORT}, {\bf MERGESORT}, {\bf QUICKSORT}. 
 {\bf HEAPSORT} byl prvn\'\i\ algoritmus pou\v z\'\i vaj\'\i c\'\i\ 
 haldy (bin\'arn\'\i\ regul\'ar\-n\'\i\ haldy by\-ly definov\'any p\v ri 
-n\'avrhu {\bf HEAP\-SORTu}). Byl pops\'an jako jedna z 
+n\'avrhu {\bf HEAP\-SORT}u). Byl pops\'an jako jedna z 
 aplikac\'\i\ regul\'arn\'\i ch hald. Je mu  
 st\'ale v\v enov\'ana velk\'a pozornost a bylo navr\v ze\-no n\v ekolik 
 jeho modifikac\'\i . \v Rekneme si v\'\i ce o implementaci 
@@ -1493,11 +1492,12 @@ posloupnost m\'a nejlep\v s\'\i\ o\v cek\'avan\'y \v cas.
 \phantom{---}{\bf while} true {\bf do}\newline 
 \phantom{------}{\bf while} $a_l<a$ {\bf do} $l:=l+1$ {\bf enddo}\newline 
 \phantom{------}{\bf while} $a_q>a$ {\bf do} $q:=q-1$ {\bf enddo}\newline
-\phantom{------}{\bf if} $l\ge q$ {\bf then}\newline 
-\phantom{---------}exit\newline 
+\phantom{------}{\bf if} $l>q$ {\bf then}\newline 
+\phantom{---------}ukon\v cit b\v eh cyklu\newline 
 \phantom{------}{\bf else}\newline 
 \phantom{---------}vym\v en\'\i me $a_l$ a $a_q$, $l:=l+1$, $q:=q-1$\newline 
 \phantom{------}{\bf endif}\newline
+Koment\'a\v r: Situace, kdy $l=q$, nenast\'av\'a.\newline 
 \phantom{---}{\bf enddo}\newline 
 \phantom{---}{\bf if} $i+1=l$ {\bf then}\newline 
 \phantom{------}{\bf V\'ystup}$\left(a,\text{Quick}\left(a_{q+1},a_{q+2},\dots,a_j\right)\right)$\newline
@@ -1515,7 +1515,7 @@ QUICKSORT$\left(a_1,a_2,\dots,a_n\right)$}:\newline
 \bigskip
 
 \flushpar Algoritmus {\bf Quick} t\v r\'\i d\'\i\ posloupnost 
-$\left(a_i,a_{i+1},\dots,a_j\right)$ tak, \v ze posloupnost $\left(a_i,a_{i+1}
+$\left(a_{i+1},a_{i+2},\dots,a_j\right)$ tak, \v ze posloupnost $\left(a_i,a_{i+1}
 ,a_{l-1}\right)$ obsahuje v\v sechny prvky vstupn\'\i\ posloupnosti $<a=a_k$ a  
 posloupnost $\left(a_{q+1},a_{q+2},\dots,a_j\right)$ obsahuje v\v sechny prvky 
 vstupn\'\i\ posloupnosti $>a=a_k$. Na tyto posloupnosti pak 
@@ -1531,7 +1531,7 @@ vy\v zaduje \v cas $O\left(j-i\right)$. Tedy kdyby $a_k$ byl medi\'an
 posloupnosti $\left(a_i,a_{i+1},\dots,a_j\right)$ (tj. prost\v redn\'\i\ prvek), pak 
 by algoritmus {\bf QUICKSORT} vy\-\v zadoval \v cas $O\left(n\log n\right)$. Jak 
 uvid\'\i me pozd\v eji, medi\'an lze nal\'ezt v line\'ar\-n\'\i m \v case, ale 
-pou\v z\'\i t jakoukoliv proceduru pro jeho nalezen\'\i\ m\'a za 
+pou\v z\'\i t jakoukoliv zn\'amou proceduru pro jeho nalezen\'\i\ m\'a za 
 d\accent23usledek, \v ze {\bf MERGESORT} a {\bf HEAPSORT }
 budou rychlej\v s\'\i\ (nikoliv asymptoticky). Proto je t\v reba 
 volit prvek $a_k$ (tento prvek se naz\'yv\'a \emph{pivot}) co 
@@ -1559,10 +1559,9 @@ dostate\v cnou n\'a\-hod\-nost.
 \flushpar Proto\v ze p\v ri ka\v zd\'em vol\'an\'\i\ m\'a {\bf Quick} krat\v s\'\i\ 
 vstupn\'\i\ posloupnost, lze uk\'azat, \v ze p\v ri ka\v zd\'e volb\v e 
 pivota je nejhor\v s\'\i\ \v cas algoritmu {\bf QUICKSORT} $O\left(n^2
-\right)$, a 
-pokud je pivot vybr\'an jedno\-du\-ch\'ym a rychl\'ym 
-zp\accent23usobem (to plat\'\i , i kdy\v z se vol\'\i\ n\'ahodn\v e), pak 
-exi\-stuje konfigurace, kter\'a vy\v zaduje \v cas $O\left(n^2\right)$. Nyn\'\i\ 
+\right)$, a pokud je pivot vybr\'an jedno\-du\-ch\'ym a rychl\'ym 
+zp\accent23usobem, pak exi\-stuje konfigurace, kter\'a vy\v zaduje \v cas $O\left(n^2\right)$
+(kdy\v z se vol\'\i\ n\'ahodn\v e, tak pro ka\v zdou konfiguraci existuje takov\'a volba). Nyn\'\i\ 
 uk\'a\-\v zeme, \v ze o\v cek\'avan\'y \v cas je $O\left(n\log n\right)$. N\'asledn\'a anal\'y\-za 
 je pro n\'a\-hod\-n\v e zvolen\'eho pivota (bez dal\v s\'\i ho p\v redpokladu na 
 vstupn\'\i\ data) nebo pro p\v r\'\i pad, kdy pivot je pevn\v e zvolen a data 
@@ -1572,7 +1571,7 @@ jsou rovno\-m\v ern\v e rozd\v e\-lena.
 \flushpar Uk\'a\v zeme dva v\'ypo\v cty o\v cek\'avan\'eho \v casu.  Jeden 
 je zalo\v zen na n\v ekolika jednoduch\'ych pozorov\'an\'\i ch a druh\'y 
 na rekurzivn\'\i m po\v c\'\i t\'an\'\i .  Hlavn\'\i\ idea v obou 
-v\'ypo\v ctech je zalo\v zena na pozorov\'an\'\i\ 
+v\'ypo\v ctech je zalo\v zena na pozorov\'an\'\i: 
 \smallskip
 \flushpar O\v cek\'avan\'y \v cas algoritmu {\bf QUICKSORT} je \newline 
 $O\left(\text{\rm o\v cek\'avan\'y po\v cet porovn\'an\'\i\ v algoritmu {\bf QUICKSORT}}
@@ -1634,7 +1633,7 @@ posloupnosti, s n\'\i\v z je vol\'ano odpov\'\i daj\'\i c\'\i\ {\bf Quick}.
 Kdy\v z vrchol $v$ odpov\'\i d\'a vol\'an\'\i\ {\bf Quick} s posloupnost\'\i\ 
 $\left(a_i,a_{i+1},\dots,a_j\right)$, pak vrcholy v podstromu lev\'eho syna $
 v$ jsou 
-ohodnoceny prvky z posloupnosti $\left(a_i,a_{i+1},\dots,a_{l-1}\right)$ a vrcholy v 
+ohodnoceny prvky z posloupnosti $\left(a_{i+1},a_{i+2},\dots,a_{l-1}\right)$ a vrcholy v 
 podstromu prav\'eho syna vrcholu $v$ jsou ohodnoceny prvky z posloupnosti 
 $\left(a_{q+1},\dots,a_j\right)$ (po p\v rerovn\'an\'\i\ posloupnosti).
 D\'ale plat\'\i\ $\left\{a_l\mid i\le l\le j\right\}=\left\{b_l\mid i\le l\le j\right\}$.
@@ -1646,7 +1645,7 @@ prav\'emu synu. Nech\v t $\left(c_1,c_2,\dots,c_n\right)$ je posloupnost
 prvk\accent23u $\left\{a_i\mid 1\le i\le n\right\}$ v po\v rad\'\i\ dan\'em t\'\i mto 
 o\v c\'\i slov\'an\'\i m. Pak plat\'\i , \v ze $X_{i,j}=1$, pr\'av\v e kdy\v z prvn\'\i\ 
 prvek v posloupnosti $\left(c_1,c_2,\dots,c_n\right)$ z mno\v zi\-ny 
-$\left\{b_l\mid i\le l\le j\right\}$ je bu\v d $b_i$ nebo $b_j$. Pravd\v epodobnost tohoto 
+$\left\{b_l\mid i\le l\le j\right\}$ je bu\v d $b_i$ nebo $b_j$. Proto\v ze posloupnost $\left(c_1,c_2,\dots,c_n\right)$ se chov\'a jako n\'ahodn\'a s rovnom\v ern\'ym rozlo\v zen\'\i m vzhledem k posloupnosti $\left(b_1,b_2,\dots,b_n\right)$, tak pravd\v epodobnost tohoto 
 jevu je $\frac 2{j-i+1}$, tedy $p_{i,j}=\frac 2{j-i+1}$ pro $1\le 
 i<j\le n$. Odtud 
 o\v cek\'avan\'y po\v cet porovn\'an\'\i\ algoritmu {\bf QUICKSORT} je
@@ -1662,7 +1661,7 @@ Druh\'y v\'ypo\v cet
 \endsubhead
 \smallskip
 
-Ozna\v cme $QS\left(n\right)$ o\v cek\'avan\'y po\v cet 
+\flushpar Ozna\v cme $QS\left(n\right)$ o\v cek\'avan\'y po\v cet 
 porovn\'an\'\i\ proveden\'y algoritmem {\bf QUICKSORT} p\v ri 
 t\v r\'\i d\v en\'\i\ $n$-\v clenn\'e po\-sloupnosti. Pak plat\'\i
 $$\gather QS\left(0\right)=QS\left(1\right)=0\text{\rm\ a }\\
@@ -1709,7 +1708,7 @@ za\v rad\'\i\ na spr\'avn\'e m\'\i sto, a tento proces opakuje.
 
 \flushpar {\bf QUICKSORT} v nejhor\v s\'\i m p\v r\'\i pad\v e vy\v zaduje \v cas 
 $\Theta \left(n^2\right)$, o\v ce\-k\'avan\'y \v cas je $9n\log n$, v 
-nejhor\v s\'\i m p\v r\'\i pad\v e vy\v zaduje $\frac {n^2}2$ porov\-n\'an\'\i ,  
+nej\-hor\v s\'\i m p\v r\'\i pad\v e vy\v zaduje $\frac {n^2}2$ porov\-n\'an\'\i ,  
 o\v cek\'avan\'y po\v cet porov\-n\'an\'\i\ je $1.44n\log n$, 
 pou\v z\'\i v\'a $n+\log n+\text{\rm konstanta}$ pam\v eti. Pou\v z\'\i v\'a p\v r\'\i m\'y 
 p\v r\'\i stup k pam\v eti a nen\'\i\ adaptivn\'\i\ na p\v redt\v r\'\i d\v e\-n\'e 
@@ -1761,8 +1760,8 @@ Situace pro {\bf MERGESORT} je komplikovan\v ej\v s\'\i , hod\-n\v e z\'avis\'\i
 na konkr\'etn\'\i\ verzi algoritmu.  Algoritmus 
 {\bf MER\-GE\-SORT} je nejvhodn\v ej\v s\'\i\ pro extern\'\i\ pam\v eti, proto\v ze 
 pou\v z\'\i v\'a sekven\v cn\'\i\ p\v r\'\i stup, pro intern\'\i\ pam\v e\v t 
-kv\accent23uli velk\'e prostorov\'e n\'aro\v cnosti 
-nen\'\i\ doporu\v cov\'an.  Tak\'e se hod\'\i\ pro 
+kv\accent23uli vet\v s\'\i\ prostorov\'e n\'aro\v cnosti (nap\v r\'\i klad je dvojn\'asobn\'a 
+proti {\bf HEAQPSORT}u) nen\'\i\ doporu\v cov\'an.  Tak\'e se hod\'\i\ pro 
 n\'avrh pa\-ra\-leln\'\i ch algoritm\accent23u. Pro t\v r\'\i d\v en\'\i\ 
 kr\'atk\'ych posloupnost\'\i\ je doporu\v ceno m\'\i sto {\bf QUICKSORTU }
 pro posloupnosti d\'elky $\le 22$ pou\v z\'\i t {\bf SELECTIONSORT} a pro 
@@ -2257,7 +2256,7 @@ for every} $i=1,2,\dots,n$ {\bf do}\newline
 {\bf enddo\newline 
 $i:=0$}, $P:=\emptyset$ \newline 
 {\bf while} $i\le k$ {\bf do}\newline 
-\phantom{---}{\bf HEAPSORT}$\left(Q_i\right)$, 
+\phantom{---}{\bf HEAPSORT}$\left(Q_i\right)$\newline 
 \phantom{---}$P:=$konkatenace $P$ a $Q_i$, $i:=i+1$\newline 
 {\bf enddo\newline 
 $P$} je rostouc\'\i\ posloupnost prvk\accent23u 
@@ -2287,7 +2286,7 @@ p\v redpokl\'adat, \v ze $X_i$ je n\'a\-hodn\'a prom\v enn\'a. Proto\v ze
 pravd\v epodobnost, \v ze $x\in Q_i$, je $\frac 1k$, dost\'a\-v\'ame, \v ze 
 $$\Prob\left(X_i=q\right)=\binom nq\left(\frac 1k\right)^q\left(1-\frac 1k\right)^{n-q}.$$
 O\v cek\'avan\'y \v cas vy\v zadovan\'y t\v ret\'\i m cyklem se pak rovn\'a 
-$$\align E\left(\sum_{i=0}^k1+X_i\log X_i\right)\le&k+k\sum_{q=2}^nq^2\binom 
+$$\align E\left(\sum_{i=0}^k1+X_i\log X_i\right)=&k+\sum_{i=0}^k\sum_{q=1}^nq\log q\binom nq\left(\frac 1k\right)^q\left(1-frac 1k\right)^{n-q}\le\\&k+k\sum_{q=2}^nq^2\binom 
 nq\left(\frac 1k\right)^q\left(1-\frac 1k\right)^{n-q}=\\
 &k+k\left(\frac {n\left(n-1\right)}{k^2}+\frac nk\right)=O\left(n\right),\endalign$$
 proto\v ze $k=\alpha n$ a 
@@ -2500,10 +2499,10 @@ nejmen\v s\'\i\ prvek $m$\newline
 podmno\v zin m\accent23u\v ze m\'\i t m\'en\v e ne\v z 5 prvk\accent23u).\newline 
 \phantom{---}{\bf for every} $j=1,2,\dots,\left\lceil\frac n5\right\rceil$ {\bf do}\newline 
 \phantom{------}najdeme medi\'an $m_j$ mno\v ziny $A_j$\newline 
-\phantom{---}{\bf enddo\newline 
-\phantom{---}$\bar {m}:=$SELECT$\left(\left\{m_j\mid j=1,2,\dots,\left\lceil\frac n5\right\rceil \right\}
+\phantom{---}{\bf enddo}\newline 
+\phantom{---}$\bar {m}:=${\bf SELECT}$\left(\left\{m_j\mid j=1,2,\dots,\left\lceil\frac n5\right\rceil \right\}
 ,\left\lceil\frac n{10}\right\rceil \right)$\newline 
-\phantom{---}$M_1:=\left\{m\in M\mid m<\bar {m}\right\}$}, $M_2:=\left\{m\in M\mid\bar {m}<m\right\}$\newline 
+\phantom{---}$M_1:=\left\{m\in M\mid m<\bar {m}\right\}$, $M_2:=\left\{m\in M\mid\bar {m}<m\right\}$\newline 
 \phantom{---}{\bf if} $|M_1|>i-1$ {\bf then}\newline 
 \phantom{------}$m:=${\bf SELECT}$\left(M_1,i\right)$\newline 
 \phantom{---}{\bf else}\newline 
