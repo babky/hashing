@@ -10,7 +10,7 @@
 \usepackage{lmodern}
 \usepackage{textcomp}
 
-\usecolortheme{wolverine}
+\usecolortheme{crane}
 \usetheme{Pittsburgh}
 
 \usepackage{algpseudocode}
@@ -19,12 +19,29 @@
 \include{csprimes}
 \include{definitions}
 \title{A Worst Case Aware Version of Universal Hashing}
+\institute[Charles University Prague]%
+{
+	Department of Theoretical Computer Science and Mathematical Logic\\
+	Charles University Prague
+}
 \author{Martin Babka}
+
+\AtBeginSection[]
+{
+\begin{frame}{Table of Contents}
+\tableofcontents[currentsection]
+\end{frame}
+}
 
 \begin{document}
 \selectlanguage{english}
 
 \frame{\titlepage}
+
+\begin{frame}{Table of Contents}
+\tableofcontents
+\end{frame}
+
 \input{beamer}
 
 \end{document}

@@ -1,13 +1,14 @@
 \section{Improvements and conclusion}
 \label{section-conclusion}
-With a proper limit function we can create a separate chaining hash table which guarantees a worst case running time of Find operation.
-The advantage of the construction is that it is fully dynamic and works with limit functions derived for static sets.
+Our work shows a model of a hash table which guarantees a worst case running time of Find operation if a proper limit function is provided.
+The advantage of the construction is that it is fully dynamic and works with limit functions derived for static sets as well.
+
 Finally we are able to remove the use of separate chaining.
-
 In case of linear probing when we have a limit function on the length of the probe sequence, then our approach works as well.
-In case of linear probing combined with the two choices if the input data is random enough, we can assume full randomness of the hash function and get the limit function $\bigo(\log \log n)$ as described in \cite{DBLP:conf/soda/MitzenmacherV08} and \cite{Malalla:2004:THS:1124034}. 
-Naturally, without any further assumption we can use an almost uniform system and get the same limit.
+In case of linear probing combined with the two choices if the input data is random enough, we can assume full randomness of the hash function and get the limit function $\bigo(\log \log n)$ as described in\cite{DBLP:conf/soda/MitzenmacherV08} and\cite{Malalla:2004:THS:1124034}. 
+Naturally, without any further assumption we can use the mentioned almost uniform system and get a doubly logarithmic worst case limit.
 
-Also in case of separate chaining representing chains by another hash table significantly improves the provided warranty.
+In case of separate chaining the provided warranty can be improved by representing chains by another hash table.
 Since updates in both hash tables take expected amortized constant time, operations in the combined table are fast.
-Better cache behavior and thus greater improvement should be obtained if chains are represented by a linear probing hash table.
+To conclude better cache utilization and thus greater improvement should be obtained by use of linear probing.
+Experiments confirming the mentioned behavior are the topic of our further study.
