@@ -20,15 +20,15 @@ We say that a function $f \in H$ is \emph{suitable} for $S$ and $l$ if $\,\lpsl(
 The hash table may be adjusted by the following parameters.
 \begin{itemize}
 	\item {$m_0$}, initial size of the hash table;
-	\item {$\alpha_l$, $\alpha_u$, $\alpha_l < \alpha_u$} -- we keep $\alpha \in [\alpha_l, \alpha_m]$, the lower bound may be violated when $m = m_0$;
+	\item {$\alpha_l$, $\alpha_u$, $\alpha_l < \alpha_u$} -- we keep $\alpha \in [\alpha_l, \alpha_u]$, the lower bound may be violated when $m = m_0$;
 	\item {$\alpha_m$, $\alpha_m \in (\alpha_l, \alpha_u)$} -- when rehashing because $\alpha \notin [\alpha_l, \alpha_u]$ we choose new $m$ so that $\alpha \sim \alpha_m$;
-	\item \textbf{$\alpha'$, $\alpha' < \alpha_u$}, is the load factor for which the limit function is computed, thus $\lpsl(S, f) < l(m, \alpha', p)$.
+	\item \textbf{$\alpha'$, $\alpha_u < \alpha'$}, is the load factor for which the limit function is computed, thus $\lpsl(S, f) < l(m, \alpha', p)$.
 \end{itemize}
-Following three invariants briefly describe the model. 
+The following three invariants briefly describe the model. 
 \begin{itemize}
 \item[(1)] \textbf{Universal class and limit function.} The used $c$-universal system $H$ has a limit function $l$ with a trimming rate $p$.
 \item[(2)] \textbf{Load Factor Rule.} The load factor of the table is kept in the predefined interval $[\alpha_l, \alpha_u]$. For $m = m_0$ the lower bound may be violated.
-\item[(3)] \textbf{Chain Length Limit Rule.} If there is a chain longer than $l(m, \alpha', p)$, then the table is rehashed using a new suitable function chosen uniformly at random $H$.
+\item[(3)] \textbf{Chain Length Limit Rule.} If there is a chain longer than $l(m, \alpha', p)$, then the table is rehashed using a new suitable function chosen uniformly at random from $H$.
 \end{itemize}
 
 For lower trimming rates the worst case guarantee tends to be weaker.
@@ -37,7 +37,7 @@ By different choices of the trimming rate we set up the trade-off between the wo
 \input{algorithms}
 
 \subsection{Consequences of Trimming Long Chains}
-We deal with with the effects of Chain Length Limit Rule on the expected length of a chain.
+We deal with the effects of Chain Length Limit Rule on the expected length of a chain.
 
 \begin{definition}[$(l, p)$ - trimmed system]
 \label{definition-trimmed-system}
@@ -71,13 +71,13 @@ Lemma \ref{lemma-no-trials} gives an estimate on the expected number of trials n
 If $l$ is a limit function with a trimming rate $p$, then the expected number of trials needed to find a function from $H(p, l, S)$ is at most ${1}/{(1 - p)}$.
 \end{lemma}
 \begin{proof}
-Because the subsequent choices are independent, we the probability of having at least $k$ trials is at most $p^{k - 1}$. 
+Because the subsequent choices are independent, the probability of having at least $k$ trials is at most $p^{k - 1}$. 
 The expected number of trials is thus at most $\sum_{k = 1}^{\infty} p^{k - 1} = \sum_{k = 0}^{\infty} p^k = {1}/{(1 - p)}.$
 \end{proof}
 
 \subsection{Amortized Analysis}
 We analyze the amortized complexity of the model with the potential method. 
-Let $p_i$ be the potential of the hash table after performing $i$\textsuperscript{th} operation and $t_i$ be the running time of the operation. 
+Let $p_i$ be the potential of the hash table after performing the $i$\textsuperscript{th} operation and $t_i$ be the running time of the operation. 
 We define the \emph{amortized complexity of the $i$\textsuperscript{th} operation} as $a_i = t_i + p_i - p_{i - 1}$. 
 The expected complexity of a sequence of $k$ operations then equals $\Expect{T} = \sum_{i=1}^{k} \Expect{t_i} = \sum_{i = 1}^{k} \Expect{a_i - p_i + p_{i - 1}} = \sum_{i=0}^{k} \Expect {a_i} - \Expect{p_k} + \Expect{p_0}.$
 
@@ -96,14 +96,14 @@ With the second type, $l$-cycles, which are partitioning of $\alpha$-cycles, we 
 \begin{definition}[$\alpha$-cycle, $l$-cycle]
 Cycles partition operations of the analyzed sequence.
 Each \emph{$\alpha$-cycle} ends just after the operation causing violation of Load Factor Rule.
-Each \emph{$l$-cycle} ends after $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation violating Load Factor Rule (both cycles end).
+Each \emph{$l$-cycle} ends after the $(\alpha'-\alpha_u)m$-th successful insertion in the $l$-cycle or after an operation violating Load Factor Rule (both cycles end).
 \end{definition}
 
 First, we define the potential used in the proof.
-Let $e = 1/(1 - p)$, $r$ be the number of trials of a hash function caused by violations of Chain Length Limit Rule and $c$ be the number of started $l$-cycles.
+Let $e = 1/(1 - p)$, $r$ be the number of tried hash functions because of a violation of Chain Length Limit Rule and $c$ be the number of started $l$-cycles.
 Both $r$ and $c$ are counted from the initial state.
 Let $i_\alpha$ be the number of successful insertions performed in an $\alpha$-cycle prior to the execution of an analyzed operation.
-Similarly, $d_\alpha$ and $i_l$ denote the number deletions and insertions in the $\alpha$-cycle and $l$-cycle before the operation.
+Similarly, $d_\alpha$ and $i_l$ denote the number of deletions and insertions in the $\alpha$-cycle and $l$-cycle before the operation.
 We define $p_\alpha = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and $p_l = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.
 The overall potential $p = p_\alpha + p_l$.
 
@@ -140,7 +140,7 @@ Because the value of $r$ is increased by the number of trials, the potential $p_
 The time $\bigo\left(rm\right)$ taken by Rehash procedure is compensated by the loss of the potential.
 \end{itemize}
 
-Now we argue why the expected potential loss needed to compensate trials can not be high.
+Now we argue why the expected potential loss needed to compensate the increase of $r$ can not be high in the expectation.
 In fact, we show that $\Expect{p} \geq 0$ after any sequence of operations.
 To do so we analyze the sequence of sets stored after the operations in the $l$-cycle.
 If we omit deletes from each $l$-cycle, we get another sequence of sets created only by insertions.

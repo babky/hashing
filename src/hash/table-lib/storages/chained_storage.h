@@ -8,7 +8,7 @@
 namespace Hash { namespace Storages {
 
 	/**
-	 * Typical storage for a hashing table - separate chaining.
+	 * Separate chaining storage for a hash table. Chains are represented by linked lists.
 	 *
 	 * @typeparam T Type of the stored items.
 	 * @typeparam Comparer Comparer used.
@@ -85,7 +85,7 @@ namespace Hash { namespace Storages {
 		}
 
 		/**
-		 * Chained storage assignement operator.
+		 * Chained storage assignment operator.
 		 *
 		 * @param storage Copied storage.
 		 */

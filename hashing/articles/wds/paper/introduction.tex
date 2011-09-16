@@ -37,11 +37,11 @@ Furthermore using two level hashing is possible and significantly improves the w
 \subsection{Notation}
 The set $U$ denotes the universe, $V$ denotes the set of addresses of the hash table.
 We refer to $S \subset U$ as to the stored set.
-Let $m$ me be the size of the hash table, $m = |V|$, and $n$ be the number of stored elements, $n = |S|$, $n \ll |U|$. 
+Let $m$ be the size of the hash table, $m = |V|$, and $n$ be the number of stored elements, $n = |S|$, $n \ll |U|$. 
 The load factor of the table is denoted by $\alpha$ where $\alpha = {n}/{m}$.
 The function $f\colon U \rightarrow V$ denotes the used hash function. 
 
-The length of the chain at the address $y \in V$ is denoted by $\psl(y, S, f) = |h^{-1}(y) \cap S|$. 
+The length of the chain at the address $y \in V$ is denoted by $\psl(y, S, f) = |f^{-1}(y) \cap S|$. 
 The length of the longest chain, $\lpsl(S, f)$, is defined as $\lpsl(S, f) = \max_{y \in V} \psl(y, S, f).$
 From now we assume the uniform choice of a hash function $f$ from a universal system. 
 This choice forms the probability space.
@@ -55,7 +55,7 @@ An equivalent restatement of the definition in probability terms requires that $
 \begin{definition}
 Let $k > 0$ be an integer. System of functions $H$ is
 \begin{itemize}
-	\item \emph{strongly $k$-universal} with constant $c$, for $c >= 1$, if for each sequence of $k$ pairwise different elements $x_1, \dots, x_k \in U$ and arbitrary $y_1, \dots, y_k \in V$: $\Prob{f(x_1) = y_1, \dots, f(x_k) = y_k} \leq {c}/{m^k}$,
+	\item \emph{strongly $k$-universal} with constant $c$, for $c \geq 1$, if for each sequence of $k$ pairwise different elements $x_1, \dots, x_k \in U$ and arbitrary $y_1, \dots, y_k \in V$: $\Prob{f(x_1) = y_1, \dots, f(x_k) = y_k} \leq {c}/{m^k}$,
 	\item \emph{strongly $k$-universal} if it is strongly $k$-universal with $c = 1$,
 	\item \emph{strongly $\omega$-universal} if it is strongly $k$-universal for each $k \in \{1, \dots, |U|\}$,
 	\item \emph{(almost) uniform} if it is (almost) strongly $n$-universal.
