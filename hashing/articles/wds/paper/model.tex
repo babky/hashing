@@ -100,12 +100,12 @@ Each \emph{$l$-cycle} ends after the $(\alpha'-\alpha_u)m$-th successful inserti
 \end{definition}
 
 First, we define the potential used in the proof.
-Let $e = 1/(1 - p)$, $r$ be the number of tried hash functions because of a violation of Chain Length Limit Rule and $c$ be the number of started $l$-cycles.
-Both $r$ and $c$ are counted from the initial state.
+Let $e = 1/(1 - p)$, $r$ be the number of tried hash functions because of a violation of Chain Length Limit Rule and $c_l$ be the number of started $l$-cycles.
+Both $r$ and $c_l$ are counted from the initial state.
 Let $i_\alpha$ be the number of successful insertions performed in an $\alpha$-cycle prior to the execution of an analyzed operation.
 Similarly, $d_\alpha$ and $i_l$ denote the number of deletions and insertions in the $\alpha$-cycle and $l$-cycle before the operation.
 We define $p_\alpha = {2ei_{\alpha}}/{(\alpha_u - \alpha_m)} + {2ed_{\alpha}}/{(\alpha_m - \alpha_l)}$ and $p_l = {ei_{l}}/{(\alpha' - \alpha_u)} + (ce - r) m$.
-The overall potential $p = p_\alpha + p_l$.
+The overall potential $p_o = p_\alpha + p_l$.
 
 At the end of each $\alpha$-cycle the size of the table has to change and Rehash operation is necessary.
 We pay Rehash from the potential $p_\alpha$ accumulated in the $\alpha$-cycle.
@@ -120,14 +120,14 @@ Since $(l, p)$-trimmed systems are $c/(1 - p)$-universal, the expected length of
 Now we analyze the sequence consisting of successful updates only. 
 Observe that finishing an $l$-cycle, when the $\alpha$-cycle continues, does not change the potential.
 Before starting a new cycle $i_l = (\alpha' - \alpha_u)m$.
-Putting $i_l = 0$ and incrementing $c$ by one keeps the potential intact.
+Putting $i_l = 0$ and incrementing $c_l$ by one keeps the potential intact.
 Each operation is split into the actual update and into a possible call of Rehash. 
 These parts are analyzed separately.
 \begin{itemize}
 	\item \textbf{Update part.} 
 The potential change caused by the update part is constant. 
-For Insert we have $\Delta p = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)$ and for Delete $\Delta p = 2e/(\alpha_m - \alpha_l)$. 
-Hence $\Delta p = \bigo(1)$.
+For Insert we have $\Delta p_o = 2e/(\alpha_u - \alpha_m) + e/(\alpha' - \alpha_u)$ and for Delete $\Delta p_o = 2e/(\alpha_m - \alpha_l)$. 
+Hence $\Delta p_o = \bigo(1)$.
 
 	\item \textbf{$\alpha$-cycle ends.} 
 At the end of an $\alpha$-cycle either $i_\alpha \geq (\alpha_u - \alpha_m)m$ or $d_\alpha \geq (\alpha_m - \alpha_l)m$. 
@@ -141,7 +141,7 @@ The time $\bigo\left(rm\right)$ taken by Rehash procedure is compensated by the 
 \end{itemize}
 
 Now we argue why the expected potential loss compensating the increase of $r$ cannot be high.
-We show that $\Expect{p} \geq 0$ after any sequence of operations.
+We show that $\Expect{p_o} \geq 0$ after any sequence of operations.
 To do so we analyze the sequence of sets stored after the operations in an $l$-cycle.
 If we omit deletes from the $l$-cycle, we get another sequence of sets created only by insertions.
 Consider the set $S'$ at the end of the $l$-cycle in the insertion only sequence. 
@@ -150,7 +150,7 @@ Clearly, for each set $S$ represented in the dictionary during the $l$-cycle we 
 Therefore during the $l$-cycle we reject even smaller number of functions compared to the insertion only sequence.
 From Lemma \ref{lemma-no-trials} it follows that we expect at most $e$ trials to find a suitable function for $S'$. 
 Hence the expected number of trials during each $l$-cycle is at most $e$.
-Since $c$ is incremented at the beginning of each $l$-cycle, we get that $\Expect{ce} \geq \Expect{r}$ and hence $\Expect{p} \geq 0$ after each operation.
+Since $c_l$ is incremented at the beginning of each $l$-cycle, we get that $\Expect{c_l e} \geq \Expect{r}$ and hence $\Expect{p_o} \geq 0$ after each operation.
 
-The theorem now follows from the fact $\Expect{T} = \Expect{A} - \Expect{p} + \Expect{p_0} \leq \Expect{A} + \bigo(1)$ and because the amortized complexity of each operation is constant.
+The theorem now follows from the fact $\Expect{T} = \Expect{A} - \Expect{p_o} + \Expect{p_0} \leq \Expect{A} + \bigo(1)$ and because the amortized complexity of each operation is constant.
 \end{proof}
