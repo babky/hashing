@@ -140,18 +140,17 @@ Because the value of $r$ is increased by the number of trials, the potential $p_
 The time $\bigo\left(rm\right)$ taken by Rehash procedure is compensated by the loss of the potential.
 \end{itemize}
 
-Now we argue why the expected potential loss needed to compensate the increase of $r$ can not be high in the expectation.
-In fact, we show that $\Expect{p} \geq 0$ after any sequence of operations.
-To do so we analyze the sequence of sets stored after the operations in the $l$-cycle.
-If we omit deletes from each $l$-cycle, we get another sequence of sets created only by insertions.
-Consider the set $S'$ in the insertion only sequence at the end of the $l$-cycle. 
-Clearly, for each set $S$ represented in the dictionary during the $l$-cycle we have that $S \subseteq S'$. 
+Now we argue why the expected potential loss compensating the increase of $r$ cannot be high.
+We show that $\Expect{p} \geq 0$ after any sequence of operations.
+To do so we analyze the sequence of sets stored after the operations in an $l$-cycle.
+If we omit deletes from the $l$-cycle, we get another sequence of sets created only by insertions.
+Consider the set $S'$ at the end of the $l$-cycle in the insertion only sequence. 
 Since there are at most $(\alpha' - \alpha_u)m$ insertions in the $l$-cycle and $\alpha' > \alpha_u$ we get that $|S'| \leq \alpha' m$.
-Recall that the value of the limit function is computed with respect to the parameter $\alpha'$
-Observe that each suitable function for $S'$ is also suitable for $S$ because $S \subseteq S'$. 
-Therefore we reject even smaller number of functions than the testing for the complete set $S'$ would. 
+Clearly, for each set $S$ represented in the dictionary during the $l$-cycle we have that $S \subseteq S'$. 
+Therefore during the $l$-cycle we reject even smaller number of functions compared to the insertion only sequence.
 From Lemma \ref{lemma-no-trials} it follows that we expect at most $e$ trials to find a suitable function for $S'$. 
-Hence the expected number of trials during each $l$-cycle is at most $e$. 
+Hence the expected number of trials during each $l$-cycle is at most $e$.
 Since $c$ is incremented at the beginning of each $l$-cycle, we get that $\Expect{ce} \geq \Expect{r}$ and hence $\Expect{p} \geq 0$ after each operation.
+
 The theorem now follows from the fact $\Expect{T} = \Expect{A} - \Expect{p} + \Expect{p_0} \leq \Expect{A} + \bigo(1)$ and because the amortized complexity of each operation is constant.
 \end{proof}
