@@ -7,7 +7,7 @@
 namespace Hash {
 
 	/**
-	 * Exception thrown when inserted item is already in the collection.
+	 * Exception thrown when the inserted item is already in the collection.
 	 */
 	template<typename T>
 	class ItemStoredException : public std::exception {

@@ -30,6 +30,11 @@ namespace Hash { namespace Utils {
 		size_t getTableLength(void) const;
 
 		/**
+		 * Explicitly sets the length of the hash table.
+		 */
+		void setTableLength(size_t length);
+
+		/**
 		 * Load factor of the table retrieval.
 		 *
 		 * @return Table's load factor.

@@ -204,7 +204,7 @@ namespace Hash { namespace Storages {
 			}
 
 			CollisionCountStorageIterator operator ++(int) {
-				CollisionCountStorage tmp = *this;
+				CollisionCountStorageIterator tmp = *this;
 				++(*this);
 				return tmp;
 			}

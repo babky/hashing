@@ -155,10 +155,6 @@
 				RelativePath="..\storage.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\utils\storage_statistics.cpp"
-				>
-			</File>
 			<Filter
 				Name="Utils"
 				>
@@ -176,6 +172,10 @@
 				</File>
 				<File
 					RelativePath="..\utils\static_random_generator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\utils\storage_statistics.cpp"
 					>
 				</File>
 			</Filter>
@@ -336,6 +336,18 @@
 					RelativePath="..\storages\collision_count_storage.h"
 					>
 				</File>
+				<File
+					RelativePath="..\storages\probing_storage.h"
+					>
+				</File>
+				<Filter
+					Name="Probing"
+					>
+					<File
+						RelativePath="..\storages\probing\policies.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Math"
