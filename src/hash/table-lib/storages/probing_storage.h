@@ -1,9 +1,11 @@
-#ifndef CHAINED_STORAGE_H
-#define CHAINED_STORAGE_H
+#ifndef PROBING_STORAGE_H
+#define PROBING_STORAGE_H
 
 #include <algorithm>
 #include "utils/chain_length_aware_storage_info.h"
+#include "exceptions/item_stored_exception.h"
 #include "storage.h"
+#include "probing/policies.h"
 
 namespace Hash { namespace Storages {
 
@@ -13,15 +15,16 @@ namespace Hash { namespace Storages {
 	 * @typeparam T Type of the stored items.
 	 * @typeparam Comparer Comparer used.
 	 * @typeparam Hash Type of the hash.
+	 * @typeparam ProbingPolicy Policy of probing (linear, quadratic, etc.)
 	 */
-	template <typename T, typename Comparer, typename Hash>
-	class ProbingStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
+	template<
+		typename T, 
+		typename Comparer, 
+		typename Hash, 
+		template <class> class ProbingPolicy
+	>
+	class ProbingStorage : public Storage<T, Comparer, Hash> {
 	public:
-		/**
-		 * Storage type used.
-		 */
-		typedef ProbingStorage<T, Comparer, Hash> Storage;
-
 		/**
 		 * Comparer used.
 		 */
@@ -49,7 +52,8 @@ namespace Hash { namespace Storages {
 		  elementCount(0),
 		  storageLength(StorageParams::STARTING_STORAGE_SIZE),
 		  storage(new StorageItem[StorageParams::STARTING_STORAGE_SIZE]),
-		  comparer(EqualityComparer()) {
+		  comparer(EqualityComparer())
+		{
 		}
 
 		/**
@@ -58,11 +62,13 @@ namespace Hash { namespace Storages {
 		 * @param comparer Used comparer.
 		 * @param tableLength Starting length of the table.
 		 */
-		explicit ProbingStorage(const EqualityComparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		explicit ProbingStorage(const EqualityComparer & comparer, 
+			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  elementCount(0),
 		  storageLength(tableLength),
 		  storage(new StorageItem[tableLength]),
-		  comparer(comparer) {
+		  comparer(comparer)
+		{
 		}
 
 		/**
@@ -99,31 +105,60 @@ namespace Hash { namespace Storages {
 
 		void insert(const T & item, HashType hash) {
 			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+			
+			HashType pos;
+			for (size_t i = 0; ; ++i) {
+				pos = probingPolicy.probe(hash, i) % storageLength;
 
-			if (!this->storage[hash].empty) {
-				throw BucketOccupied<HashType>(hash);
+				if (this->storage[pos].empty) {
+					break;
+				}
+
+				if (this->comparer(item, this->storage[pos].item)) {
+					throw ItemStoredException<T>(item);
+				}
 			}
 
-			this->storage[hash].empty = false;
-			this->storage[hash].item = item;
+			this->storage[pos].empty = false;
+			this->storage[pos].bridge = true;
+			this->storage[pos].item = item;
 			++this->elementCount;
 		}
 
 		bool remove(const T & item, HashType hash) {
 			simple_assert(hash < storageLength, "Hash must be inside the storage!");
 
-			if (this->storage[hash].empty) {
-				return false;
-			} else if (this->comparer(item, this->storage[hash])) {
-				this->storage[hash].empty = true;
-				--this->elementCount;
-			} else {
-				return false;
-			}
+			HashType pos;
+			for (size_t i = 0; ; ++i) {
+				pos = probingPolicy.probe(hash, i) % storageLength;
+
+				if (this->comparer(item, this->storage[pos].item)) {
+					this->storage[pos].empty = true;
+					--this->elementCount;
+					return true;
+				}
+
+				if (!this->storage[pos].bridge) {
+					return false;
+				}
+			};
 		}
 
 		bool contains(const T & item, HashType hash) const {
-			return !this->storage[hash].empty && this->comparer(item, this->storage[hash].item);
+			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+
+			HashType pos;
+			for (size_t i = 0; ; ++i) {
+				pos = probingPolicy.probe(hash, i) % storageLength;
+
+				if (!this->storage[pos].empty && this->comparer(item, this->storage[pos].item)) {
+					return true;
+				}
+
+				if (!this->storage[pos].bridge) {
+					return false;
+				}
+			};
 		}
 
 		size_t getSize(void) const {
@@ -150,6 +185,8 @@ namespace Hash { namespace Storages {
 		void computeStatistics(Utils::StorageStatistics & stats) const {
 			// TODO: Improve the StorageStatistics class so that it can handle probing storage properly.
 			stats.clear();
+			stats.addChain(this->getSize());
+			stats.setTableLength(this->getTableSize());
 		}
 
 		bool isMinimal(void) const {
@@ -161,28 +198,39 @@ namespace Hash { namespace Storages {
 		}
 
 		Iterator getBeginning(void) {
-			return ProbingStorageIterator(this, true);
+			return ProbingStorageIterator(this, 0);
 		}
 
 		Iterator getEnd(void) {
-			return ProbingStorageIterator(this, false);
+			return ProbingStorageIterator(this, getTableSize());
 		}
 
 	private:
 		/**
 		 * Single item for representing a stored element.
 		 */
-		typedef struct {
+		struct StorageItem {
+			StorageItem(void):
+			  empty(true),
+			  bridge(false)
+			{
+			}
+
 			/**
 			 * Flag indicating if the item is empty.
 			 */
 			bool empty;
 
 			/**
+			 * Flag indicating if the item is empty but the chain contains something behind.
+			 */
+			bool bridge;
+
+			/**
 			 * Represented element.
 			 */
 			T item;
-		} StorageItem;
+		};
 
 		/**
 		 * Number of items in the table.
@@ -204,6 +252,11 @@ namespace Hash { namespace Storages {
 		 */
 		mutable EqualityComparer comparer;
 
+		/**
+		 * Probing policy.
+		 */
+		ProbingPolicy<Hash> probingPolicy;
+
 	public:
 		class ProbingStorageIterator {
 		public:
@@ -211,6 +264,46 @@ namespace Hash { namespace Storages {
 			  storage(aStorage),
 			  position(aPosition)
 			{
+				if (storage->storage[position].empty) {
+					++(*this);
+				}
+			}
+
+			friend bool operator ==(const ProbingStorageIterator & a, const ProbingStorageIterator & b) {
+				return a.position == b.position && a.storage == b.storage;
+			}
+
+			friend bool operator !=(const ProbingStorageIterator & a, const ProbingStorageIterator & b) {
+				return !(a == b);
+			}
+
+			T operator *(void) const {
+				return storage->storage[position].item;
+			}
+
+			ProbingStorageIterator operator ++(void) {
+				for (; ;) {
+					// Out of bounds?
+					if (position >= storage->storageLength) {
+						break;
+					}
+
+					// Move.
+					++position;
+
+					// Found an element?
+					if (!storage->storage[position].empty) {
+						break;
+					}
+				}
+
+				return *this;
+			}
+
+			ProbingStorageIterator operator ++(int) {
+				ProbingStorageIterator tmp = *this;
+				++(*this);
+				return tmp;
 			}
 
 		protected:
@@ -224,30 +317,62 @@ namespace Hash { namespace Storages {
 		 * @param a Storage to be swapped.
 		 * @param b Storage to be swapped.
 		 */
-		void swap(ChainedStorage<T, EqualityComparer, HashType> & b) {
+		void swap(ProbingStorage<T, EqualityComparer, HashType, ProbingPolicy> & b) {
 			using std::swap;
 
 			swap(storage, b.storage);
 			swap(comparer, b.comparer);
 			swap(elementCount, b.elementCount);
 			swap(storageLength, b.storageLength);
+			swap(probingPolicy, b.probingPolicy);
 		}
 
-		friend void swap(ChainedStorage & a, ChainedStorage & b) {
+		friend void swap(ProbingStorage & a, ProbingStorage & b) {
 			a.swap(b);
 		}
 
+	};
+
+	template<typename T, class Comparer, typename Hash>
+	class LinearProbingStorage : public ProbingStorage<T, Comparer, Hash, LinearProbingPolicy> {
+	public:
+		typedef LinearProbingStorage<T, Comparer, Hash> Storage;
+
+		LinearProbingStorage(void) {
+		}
+
+		explicit LinearProbingStorage(const EqualityComparer & comparer, 
+			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		  ProbingStorage(comparer, tableLength)
+		{
+		}
+	};
+
+	template<typename T, class Comparer, typename Hash>
+	class QuadraticProbingStorage : public ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy> {
+	public:
+		typedef QuadraticProbingStorage<T, Comparer, Hash> Storage;
+
+		QuadraticProbingStorage(void) {
+		}
+
+		explicit QuadraticProbingStorage(const EqualityComparer & comparer, 
+			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		  ProbingStorage(comparer, tableLength)
+		{
+		}
 	};
 
 } }
 
 namespace std {
 
-	template <typename T, typename Comparer, typename HashType>
-	void swap(Hash::Storages::ChainedStorage<T, Comparer, HashType> & a, Hash::Storages::ChainedStorage<T, Comparer, HashType> & b) {
+	template <typename T, typename Comparer, typename HashType, template <class> class ProbingPolicy>
+	void swap(Hash::Storages::ProbingStorage<T, Comparer, HashType, ProbingPolicy> & a, 
+			Hash::Storages::ProbingStorage<T, Comparer, HashType, ProbingPolicy> & b) {
 		a.swap(b);
 	}
 
 }
 
-#endif /* CHAINED_STORAGE_H */
+#endif /* PROBING_STORAGE_H */

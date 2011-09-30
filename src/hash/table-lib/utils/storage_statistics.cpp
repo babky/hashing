@@ -18,6 +18,10 @@ size_t StorageStatistics::getTableLength(void) const {
 	return this->tableLength;
 }
 
+void StorageStatistics::setTableLength(size_t length) {
+	tableLength = length;
+}
+
 double StorageStatistics::getLoadFactor(void) const {
 	if (this->tableLength == 0) {
 		return 0;
