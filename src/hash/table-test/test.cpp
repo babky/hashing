@@ -1,4 +1,5 @@
 #include "table_test.h"
+#include "storages/probing_storage.h"
 #include "systems/polynomial_system.h"
 #include "systems/two_way_system_randomized.h"
 #include "math/double_word.h"
@@ -79,6 +80,16 @@ int main(int, const char **) {
 	TableTest<Table<int, EqualityComparer<int>, TwoWaySystemLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_2w_bs;
 	test_univ_lin_map_2w_bs.runTest();
 	cout << test_univ_lin_map_2w_bs.getAssertionResult();
+	*/
+
+	TableTest<Table<size_t, EqualityComparer<size_t>, UniversalFunctionCWLF, LinearProbingStorage> > test_lin_prob_cwlf;
+	test_lin_prob_cwlf.runTest();
+	cout << test_lin_prob_cwlf.getAssertionResult();
+
+	/*
+	TableTest<Table<size_t, EqualityComparer<size_t>, UniversalFunctionCWLF, QuadraticProbingStorage> > test_quad_prob_cwlf;
+	test_quad_prob_cwlf.runTest();
+	cout << test_quad_prob_cwlf.getAssertionResult();
 	*/
 
 	MathTest mathTest;

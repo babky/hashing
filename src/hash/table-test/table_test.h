@@ -88,6 +88,8 @@ namespace Hash { namespace Tests {
 			this->assertEqual<size_t>(stats.getTableLength(), 16, "Default size should be enough for 2 elements.");
 			this->assertEqual<size_t>(stats.getElementCount(), t.getSize(), "Stats and table size must be the same.");
 			this->assertEqual<size_t>(stats.getElementCount(), 2, "We only have 2 elements.");
+			this->assertEqual<bool>(t.contains(3), true, "The table must contain 3.");
+			this->assertEqual<bool>(t.contains(4), true, "The table must contain 4.");
 		}
 
 		virtual void testCopyCtor(void) {
@@ -98,14 +100,16 @@ namespace Hash { namespace Tests {
 		}
 
 		virtual void testMassiveFill(void) {
+			const int ELEMENT_COUNT = 5000;
+
 			TableType t;
-			for (int i = 0; i < 5000; ++i) {
+			for (int i = 0; i < ELEMENT_COUNT; ++i) {
 				t.insert(5 * i);
 			}
 
-			this->assertEqual(5000, t.getSize(), "After inserting n distinct elements we expect table length of n.");
+			this->assertEqual(ELEMENT_COUNT, t.getSize(), "After inserting n distinct elements we expect table length of n.");
 
-			for (int i = 0; i < 5000; ++i) {
+			for (int i = 0; i < ELEMENT_COUNT; ++i) {
 				this->assertTrue(t.contains(5 * i), "Table must contain the inserted element.");
 			}
 		}
