@@ -320,6 +320,22 @@
 					RelativePath="..\systems\universal_system.h"
 					>
 				</File>
+				<File
+					RelativePath="..\systems\universal_system_factory.h"
+					>
+				</File>
+				<Filter
+					Name="Uniform"
+					>
+					<File
+						RelativePath="..\systems\uniform\dietzfelbinger_woelfel.h"
+						>
+					</File>
+					<File
+						RelativePath="..\systems\uniform\siegel.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Storages"
