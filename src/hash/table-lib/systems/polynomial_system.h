@@ -2,6 +2,7 @@
 #define POLYNOMIAL_SYSTEM_H
 
 #include "universal_system.h"
+#include "utils/rehash_observer.h"
 #include "math/double_word.h"
 
 namespace Hash { namespace Systems {
