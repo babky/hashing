@@ -105,6 +105,21 @@ namespace Hash { namespace Math {
 		static const size_t WORD_BITS_HALF = boost::integer_traits<Word>::digits / 2;
 	};
 
+	template <>
+	class UnsignedDoubleWord<size_t> {
+	public:
+		typedef size_t Word;
+
+		static Word multiply(const Word x, const Word y, const Word m) {
+			return (static_cast<boost::uint64_t> (x) * static_cast<boost::uint64_t> (y)) % static_cast<boost::uint64_t> (m);
+		}
+
+		static Word add(const Word x, const Word y, const Word m) {
+			return (static_cast<boost::uint64_t> (x) + static_cast<boost::uint64_t> (y)) % static_cast<boost::uint64_t> (m);
+		}
+
+	};
+
 } }
 
 #endif /* DOUBLE_WORD_H */

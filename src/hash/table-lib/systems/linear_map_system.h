@@ -17,7 +17,7 @@
 #include <utils/rehash_observer.h>
 #include <stdexcept>
 
-namespace Hash {
+namespace Hash { namespace Systems {
 
 	/**
 	 * Linear maps.
@@ -29,9 +29,9 @@ namespace Hash {
 		const static T UNIVERSUM_MAX_VALUE = boost::integer_traits<T>::const_max;
 		const static size_t START_LENGTH = 10;
 
-		UniversalFunctionLinearMap():
+		explicit UniversalFunctionLinearMap(size_t startLength = START_LENGTH):
 		  tableBitSize(START_LENGTH),
-		  tableSize(1 << START_LENGTH),
+		  tableSize(1 << startLength),
 		  matrix(0) {
 			reset();
 		}
@@ -180,6 +180,6 @@ namespace Hash {
 		UT * matrix;
 	};
 
-}
+} }
 
 #endif /* LINEAR_MAP_SYSTEM_H */

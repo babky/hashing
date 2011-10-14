@@ -8,7 +8,7 @@
 #include "utils/rehash_observer.h"
 #include "utils/static_random_generator.h"
 
-namespace Hash {
+namespace Hash { namespace Systems {
 
 	/**
 	 * Carter - Wegman system of linear functions.
@@ -96,12 +96,12 @@ namespace Hash {
 		size_t length;
 	};
 
-}
+} }
 
 namespace std {
 
 	template <typename T>
-	void swap(Hash::UniversalFunctionCWLF<T> & a, Hash::UniversalFunctionCWLF<T> & b) {
+	void swap(Hash::Systems::UniversalFunctionCWLF<T> & a, Hash::Systems::UniversalFunctionCWLF<T> & b) {
 		a.swap(b);
 	}
 
