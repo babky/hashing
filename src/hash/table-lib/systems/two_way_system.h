@@ -110,7 +110,7 @@ namespace Hash { namespace Systems {
 	 * The possibility of two way linear hashing.
 	 */
 	template <typename T>
-	class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionLinearMap> {
+	class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::Systems::UniversalFunctionLinearMap> {
 	};
 
 	/**
@@ -124,7 +124,7 @@ namespace Hash { namespace Systems {
 	 * The possibility of two way CWLF.
 	 */	
 	template <typename T>
-	class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::UniversalFunctionCWLF> {
+	class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::Systems::UniversalFunctionCWLF> {
 	};
 
 
