@@ -37,7 +37,8 @@ struct SystemDescription {
 };
 
 int main(void) {
-	typedef size_t T;
+	// typedef size_t T;
+	typedef boost::uint64_t T;
 	typedef vector<SystemDescription<T> > FunctionVector;
 	const size_t TABLE_LENGTH = 1 << 20;
 
