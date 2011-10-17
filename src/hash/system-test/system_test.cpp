@@ -3,6 +3,7 @@
 #include <string>
 #include <boost/date_time.hpp>
 #include "systems/uniform/dietzfelbinger_woelfel.h"
+#include "systems/bit_string_system.h"
 #include "systems/polynomial_system.h"
 #include "systems/linear_map_system.h"
 #include "systems/cwlf_system.h"
@@ -46,6 +47,7 @@ int main(void) {
 	
 	functions.push_back(SystemDescription<T>(new Hash::Systems::UniversalFunctionLinearMap<T>(TABLE_LENGTH), "LinearMap"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::UniversalFunctionCWLF<T>(TABLE_LENGTH), "CWLF"));
+	functions.push_back(SystemDescription<T>(new Hash::Systems::BitStringFunction<T>(TABLE_LENGTH), "BitString"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::PolynomialSystem<T>(TABLE_LENGTH), "Polynomial - deg 2"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::Uniform::DietzfelbingerWoelfel<T, Hash::Systems::PolynomialSystem4>(TABLE_LENGTH), "DW - deg 4"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::PolynomialSystem<T>(TABLE_LENGTH, Hash::Math::Prime<T>::GREATEST_PRIME, 32), "Polynomial - deg 32"));
