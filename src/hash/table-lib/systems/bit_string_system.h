@@ -17,9 +17,16 @@
 
 namespace Hash { namespace Systems {
 
+	/**
+	 * The simplified bit string system. It is a universal system with the constant 1.
+	 */
 	template<typename T>
 	class BitStringFunction : public UniversalSystem<T> {
 	public:
+
+		/**
+		 * Initial table size.
+		 */
 		static const size_t START_LENGTH = 16;
 
 		~BitStringFunction(void) {
@@ -100,10 +107,24 @@ namespace Hash { namespace Systems {
 		}
 
 	private:
+		/**
+		 * The number of bits of the underlying type - the number of coefficients.
+		 */
 		static const size_t COEFFICIENT_NUMBER = boost::integer_traits<T>::digits;
 
+		/**
+		 * The array of coefficients.
+		 */
 		size_t * coefficients;
+
+		/**
+		 * Current table size.
+		 */
 		size_t tableSize;
+
+		/**
+		 * The mask - which bits apply to create a hash value.
+		 */
 		size_t mask;
 	};
 

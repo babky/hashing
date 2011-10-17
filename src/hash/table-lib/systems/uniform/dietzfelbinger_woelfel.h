@@ -9,9 +9,15 @@
 
 namespace Hash { namespace Systems { namespace Uniform {
 
+	/**
+	 * The universal system designed by Dietzfelbinger and Woelfel which is almost uniform.
+	 */
 	template<typename T, template <class> class HashFunction>
 	class DietzfelbingerWoelfel : public UniversalSystem<T> {
 	public:
+		/**
+		 * Initial table size.
+		 */
 		const static size_t START_LENGTH = 16;
 
 		// TODO: Figure this out.
@@ -100,15 +106,39 @@ namespace Hash { namespace Systems { namespace Uniform {
 		}
 
 	protected:
+		/**
+		 * Resets the random vector. This method does the possible resizing and initializes the vector to new random 
+		 * values.
+		 */
 		virtual void resetRandomVector(void) {
 			r = static_cast<size_t> (ceil(pow(length, rExponent)));
 			delete [] z;
 			z = new size_t[r];
 		}
 
-		size_t length, r;
+		/**
+		 * Length of the table.
+		 */
+		size_t length;
+
+		/**
+		 * Length of the z array.
+		 */
+		size_t r;
+
+		/**
+		 * Exponent - size of the z array w.r.t length.
+		 */
 		double rExponent;
+
+		/**
+		 * Random vector of length r.
+		 */
 		size_t * z;
+
+		/**
+		 * The required universal hash function.
+		 */
 		HashFunction<T> f, g;
 	};
 
