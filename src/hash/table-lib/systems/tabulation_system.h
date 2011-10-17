@@ -18,6 +18,8 @@ namespace Hash { namespace Systems {
 	template<typename T>
 	class TabulationFunction : public UniversalSystem<T> {
 	public:
+		static const size_t START_LENGTH = 16;
+
 		explicit TabulationFunction(size_t length = START_LENGTH, size_t c = 8):
 		  characterTableSize(1 << c),
 		  fullTableSize(characterTableSize * DIGIT_NUMBER / c),
@@ -40,7 +42,7 @@ namespace Hash { namespace Systems {
 		  hashTableSize(r.hashTableSize),
 		  characterNumber(r.characterNumber),
 		  characterDigits(r.characterDigits),
-		  table(new size_t[r.fullTableSize]),
+		  table(new size_t[r.fullTableSize])
 		{
 			for (size_t i = 0; i < fullTableSize; ++i) {
 				table[i] = r.table[i];

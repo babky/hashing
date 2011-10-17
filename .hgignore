@@ -21,6 +21,8 @@ vendor
 src/hash/cwlf-dynamic-test/cmake/CWLFTest
 src/hash/table-length-test/cmake/TableLengthTest
 src/hash/table-lib/cmake/libTable.a
+src/hash/table-lib/cscope.out
+src/hash/system-test/cmake/SystemTest
 src/hash/table-test/cmake/TableTest
 src/hash/table-two-way-test/cmake/TableTwoWayTest
 src/hash/test-suite/cmake/libTestSuite.a

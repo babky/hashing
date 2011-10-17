@@ -41,7 +41,7 @@ namespace Hash { namespace Systems {
 		BitStringFunction(const BitStringFunction & r):
 		  coefficients(new size_t[COEFFICIENT_NUMBER]),
 		  tableSize(r.tableSize),
-		  mark(r.mask)
+		  mask(r.mask)
 		{
 			for (size_t i = 0; i < COEFFICIENT_NUMBER; ++i) {
 				coefficients[i] = r.coefficients[i];
