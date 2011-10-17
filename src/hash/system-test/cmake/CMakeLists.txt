@@ -8,9 +8,10 @@ set(SOURCES
 
 include_directories(
   ../../table-lib
+   ${Boost_INCLUDE_DIRS} 
 )
 
-link_directories (../../table-lib/cmake)
+link_directories (../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
 
 add_executable ( SystemTest ${SOURCES} )
 
