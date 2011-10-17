@@ -293,6 +293,10 @@
 				Name="Systems"
 				>
 				<File
+					RelativePath="..\systems\bit_string_system.h"
+					>
+				</File>
+				<File
 					RelativePath="..\systems\cwlf_system.h"
 					>
 				</File>
