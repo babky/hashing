@@ -1,7 +1,6 @@
 #ifndef BIT_STRING_SYSTEM_H
 #define BIT_STRING_SYSTEM_H
 
-
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512 4127 4100)
@@ -11,7 +10,6 @@
 #ifdef BOOST_MSVC
 	#pragma warning(default: 4512 4127 4100)
 #endif
-
 #include "systems/universal_system.h"
 #include "utils/static_random_generator.h"
 
@@ -82,7 +80,9 @@ namespace Hash { namespace Systems {
 		void setUniversumMax(T universumMax) {
 		}
 
-		size_t hash(const T & x, size_t length) { 
+		size_t hash(const T & x, size_t length) {
+			simple_assert(length == this->tableSize, "Lengths must be the same.");
+
 			T coefficientMask = 1;
 			size_t result = 0;
 

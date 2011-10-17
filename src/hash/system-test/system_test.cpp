@@ -7,6 +7,7 @@
 #include "systems/polynomial_system.h"
 #include "systems/linear_map_system.h"
 #include "systems/cwlf_system.h"
+#include "systems/tabulation_system.h"
 #include "systems/polynomial_system.h"
 
 using namespace std;
@@ -38,18 +39,19 @@ struct SystemDescription {
 };
 
 int main(void) {
-	// typedef size_t T;
-	typedef boost::uint64_t T;
+	typedef size_t T;
+	// typedef boost::uint64_t T;
 	typedef vector<SystemDescription<T> > FunctionVector;
-	const size_t TABLE_LENGTH = 1 << 20;
+	const size_t TABLE_LENGTH = 1 << 16;
 
 	FunctionVector functions;
 	
 	functions.push_back(SystemDescription<T>(new Hash::Systems::UniversalFunctionLinearMap<T>(TABLE_LENGTH), "LinearMap"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::UniversalFunctionCWLF<T>(TABLE_LENGTH), "CWLF"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::BitStringFunction<T>(TABLE_LENGTH), "BitString"));
-	functions.push_back(SystemDescription<T>(new Hash::Systems::PolynomialSystem<T>(TABLE_LENGTH), "Polynomial - deg 2"));
+	functions.push_back(SystemDescription<T>(new Hash::Systems::TabulationFunction<T>(TABLE_LENGTH), "Tabulation"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::Uniform::DietzfelbingerWoelfel<T, Hash::Systems::PolynomialSystem4>(TABLE_LENGTH), "DW - deg 4"));
+	functions.push_back(SystemDescription<T>(new Hash::Systems::PolynomialSystem<T>(TABLE_LENGTH), "Polynomial - deg 2"));
 	functions.push_back(SystemDescription<T>(new Hash::Systems::PolynomialSystem<T>(TABLE_LENGTH, Hash::Math::Prime<T>::GREATEST_PRIME, 32), "Polynomial - deg 32"));
 	
 	for (FunctionVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
