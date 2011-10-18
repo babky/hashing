@@ -130,15 +130,15 @@ private:
 // typedef size_t T;
 typedef boost::uint64_t T;
 
-typedef Table<T, EqualityComparer<T>, UniversalFunctionCWLF, ChainedStorage> ChainingLinear;
-typedef Table<T, EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
-typedef Table<T, EqualityComparer<T>, BitStringFunction, ChainedStorage> ChainingBitString;
-typedef Table<T, EqualityComparer<T>, PolynomialSystem, ChainedStorage> ChainingPolynomial;
-typedef Table<T, EqualityComparer<T>, PolynomialSystem5, ChainedStorage> ChainingPolynomial5;
-typedef Table<T, EqualityComparer<T>, PolynomialSystem32, ChainedStorage> ChainingPolynomial32;
-typedef Table<T, EqualityComparer<T>, UniversalFunctionCWLF, LinearProbingStorage> LinearProbingLinear;
-typedef Table<T, EqualityComparer<T>, TabulationFunction, LinearProbingStorage> LinearProbingTabulation;
-typedef Table<T, EqualityComparer<T>, PolynomialSystem5, LinearProbingStorage> LinearProbingPolynomial5;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, ChainedStorage> ChainingLinear;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, BitStringFunction, ChainedStorage> ChainingBitString;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem, ChainedStorage> ChainingPolynomial;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, ChainedStorage> ChainingPolynomial5;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem32, ChainedStorage> ChainingPolynomial32;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, LinearProbingStorage> LinearProbingLinear;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, LinearProbingStorage> LinearProbingTabulation;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, LinearProbingStorage> LinearProbingPolynomial5;
 
 int main(void) {
 	typedef vector<double> LoadFactorVector;
