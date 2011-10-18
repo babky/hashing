@@ -74,7 +74,11 @@ namespace Hash {
 		 * Table's initializer.
 		 */
 		void init(void) {
+#ifdef HASH_DEBUG
 			this->rehashObserver = RehashObserverType(new Hash::Utils::PrintingRehashObserver());
+#else
+			this->rehashObserver = RehashObserverType(new Hash::Utils::DummyRehashObserver());
+#endif
 			this->getFunction().initialize(this->storage);
 		}
 
@@ -181,6 +185,7 @@ namespace Hash {
 		 */
 		void clear(void) {
 			storage.clear();
+			function.setTableSize(storage.getTableSize());
 			function.reset();
 		}
 
@@ -332,6 +337,33 @@ namespace Hash {
 		 */
 		const HashFunction & getFunction(void) const {
 			return const_cast<Table<T, Comparer, Function, Storage, RehashPolicy> *> (this)->getFunction();
+		}
+
+		/**
+		 * Rehash policy retrieval.
+		 *
+		 * @return Rehash policy.
+		 */
+		RehashPolicy & getRehashPolicy(void) {
+			return this->getRehashPolicy();
+		}
+
+		/**
+		 * Rehash policy retrieval.
+		 *
+		 * @return Rehash policy.
+		 */
+		const RehashPolicy & getRehashPolicy(void) const {
+			const_cast<Table<T, Comparer, Function, Storage, RehashPolicy> *> (this)->getRehashPolicy();
+		}
+
+		/**
+		 * Rehash policy setter.
+		 *
+		 * @param rehashPolicy New rehash policy.
+		 */
+		void setRehashPolicy(const RehashPolicy & rehashPolicy) {
+			this->rehashPolicy = rehashPolicy;
 		}
 
 	private:

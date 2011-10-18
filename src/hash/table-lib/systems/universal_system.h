@@ -73,6 +73,7 @@ namespace Hash { namespace Systems {
 		 * @param length Length of the table.
 		 */
 		virtual size_t operator()(const T & a, size_t length) = 0;
+
 	};
 
 } }

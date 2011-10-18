@@ -1,7 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <boost/config.hpp>
+#ifdef BOOST_MSVC
+	#pragma warning(disable: 4512 4127 4100)
+#endif
 #include <boost/date_time.hpp>
+#ifdef BOOST_MSVC
+	#pragma warning(default: 4512 4127 4100)
+#endif
 #include "systems/uniform/dietzfelbinger_woelfel.h"
 #include "systems/bit_string_system.h"
 #include "systems/polynomial_system.h"

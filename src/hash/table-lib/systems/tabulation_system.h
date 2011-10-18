@@ -1,5 +1,5 @@
 #ifndef TABULATION_SYSTEM_H
-#define TABULATION_SYSTME_H
+#define TABULATION_SYSTEM_H
 
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
@@ -11,6 +11,7 @@
 	#pragma warning(default: 4512 4127 4100)
 #endif
 #include "systems/universal_system.h"
+#include "utils/rehash_observer.h"
 #include <algorithm>
 
 namespace Hash { namespace Systems {
@@ -29,7 +30,6 @@ namespace Hash { namespace Systems {
 		  table(new size_t[characterTableSize * DIGIT_NUMBER / c])
 		{
 			setTableSize(length);
-			reset();
 		}
 
 		~TabulationFunction(void) {
@@ -52,7 +52,7 @@ namespace Hash { namespace Systems {
 		TabulationFunction & operator =(const TabulationFunction & r) {
 			TabulationFunction<T> tmp = r;
 			tmp.swap(*this);
-			return * this;
+			return *this;
 		}
 
 		void reset(void) {
@@ -67,9 +67,9 @@ namespace Hash { namespace Systems {
 		
 		void setTableSize(size_t size) {
 			hashTableSize = size;
-			outputMask = 0;
 
-			for (size_t i = 1; i < size; i <<= 1) {
+			outputMask = 0;
+			for (size_t i = 1; size > i; i <<= 1) {
 				outputMask |= i;
 			}
 		}
@@ -78,18 +78,14 @@ namespace Hash { namespace Systems {
 			return boost::integer_traits<T>::const_max;
 		}
 
-		void setUniversumMax(T universumMax) {
+		void setUniversumMax(T) {
 		}
 
 		size_t hash(const T & x, size_t length) {
 			simple_assert(length == this->hashTableSize, "Lengths must be the same.");
 
 			size_t result = 0;
-			size_t mask = 0;
-
-			for (size_t i = 0; i < characterDigits; ++i) {
-				mask |= 1 << i;
-			}
+			size_t mask = (1 << characterDigits) - 1;
 
 			for (size_t i = 0; i < characterNumber; ++i) {
 				result ^= table[i * characterTableSize + (((mask << (i * characterDigits)) & x) >> i * characterDigits)];
@@ -110,7 +106,13 @@ namespace Hash { namespace Systems {
 			swap(hashTableSize, r.hashTableSize);
 			swap(characterNumber, r.characterNumber);
 			swap(characterDigits, r.characterDigits);
+			swap(outputMask, r.outputMask);
 			swap(table, r.table);
+		}
+		
+		void initialize(Hash::StorageInfo & info) {
+			this->setTableSize(info.getTableSize());
+			this->reset();
 		}
 
 	private:

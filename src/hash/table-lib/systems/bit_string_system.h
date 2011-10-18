@@ -12,6 +12,7 @@
 #endif
 #include "systems/universal_system.h"
 #include "utils/static_random_generator.h"
+#include "utils/rehash_observer.h"
 
 namespace Hash { namespace Systems {
 
@@ -77,7 +78,7 @@ namespace Hash { namespace Systems {
 			return boost::integer_traits<T>::const_max;
 		}
 
-		void setUniversumMax(T universumMax) {
+		void setUniversumMax(T) {
 		}
 
 		size_t hash(const T & x, size_t length) {
@@ -96,6 +97,11 @@ namespace Hash { namespace Systems {
 
 		size_t operator()(const T & a, size_t length) {
 			return hash(a, length);
+		}
+
+		void initialize(Hash::StorageInfo & info) {
+			this->setTableSize(info.getTableSize());
+			this->reset();
 		}
 
 		void swap(BitStringFunction & r) {
