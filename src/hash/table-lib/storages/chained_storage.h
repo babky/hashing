@@ -42,11 +42,13 @@ namespace Hash { namespace Storages {
 
 		/**
 		 * Chained storage c-tor.
+		 *
+		 * @param tableLength Starting length of the table.
 		 */
-		ChainedStorage(void):
+		explicit ChainedStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  elementCount(0),
-		  storageLength(StorageParams::STARTING_STORAGE_SIZE),
-		  storage(new StorageItem[StorageParams::STARTING_STORAGE_SIZE]),
+		  storageLength(tableLength),
+		  storage(new StorageItem[tableLength]),
 		  comparer(EqualityComparer()) {
 		}
 
@@ -56,7 +58,8 @@ namespace Hash { namespace Storages {
 		 * @param comparer Used comparer.
 		 * @param tableLength Starting length of the table.
 		 */
-		explicit ChainedStorage(const EqualityComparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		explicit ChainedStorage(const EqualityComparer & comparer, 
+			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  elementCount(0),
 		  storageLength(tableLength),
 		  storage(new StorageItem[tableLength]),
