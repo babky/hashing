@@ -152,10 +152,14 @@ int main(void) {
 
 	SizeVector sizes;
 	sizes.push_back(1 << 10);
+	sizes.push_back(1 << 10);
+	sizes.push_back(1 << 10);
+
+	/*sizes.push_back(1 << 10);
 	sizes.push_back(1 << 16);
 	sizes.push_back(1 << 20);
 	sizes.push_back(1 << 24);
-	sizes.push_back(1 << 27);
+	sizes.push_back(1 << 27);*/
 
 	TableVector tables;
 	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>(new ChainingLinear, "ChainingLinear"));
@@ -163,10 +167,11 @@ int main(void) {
 	tables.push_back(new HashTableWrapperImpl<T, ChainingBitString>(new ChainingBitString, "ChainingBitString"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>(new ChainingPolynomial, "ChainingPolynomial"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>(new ChainingPolynomial5, "ChainingPolynomial5"));
+
 	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial32>(new ChainingPolynomial32, "ChainingPolynomial32"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>(new LinearProbingLinear, "LinearProbingLinear"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>(new LinearProbingTabulation, "LinearProbingTabulation"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>(new LinearProbingPolynomial5, "LinearProbingPolynomial5"));
+	//tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>(new LinearProbingLinear, "LinearProbingLinear"));
+	//tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>(new LinearProbingTabulation, "LinearProbingTabulation"));
+	//tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>(new LinearProbingPolynomial5, "LinearProbingPolynomial5"));
 	
 	ptime start, finish;
 
@@ -199,9 +204,11 @@ int main(void) {
 					cout << "Should not contain " << *bS + 1 << "." << endl;
 				}
 #endif
-				finish = microsec_clock::local_time();
 
+				finish = microsec_clock::local_time();
 				cout << " took " << (finish - start).total_milliseconds() << " ms." << endl;
+				
+				(*bT)->clear();
 			}
 		}
 	}
