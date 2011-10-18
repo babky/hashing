@@ -337,14 +337,14 @@ namespace Hash { namespace Storages {
 	class LinearProbingStorage : public ProbingStorage<T, Comparer, Hash, LinearProbingPolicy> {
 	public:
 		typedef LinearProbingStorage<T, Comparer, Hash> Storage;
-		typedef ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>::EqualityComparer EqualityComparer;
+		typedef typename ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>::EqualityComparer EqualityComparer;
 
 		LinearProbingStorage(void) {
 		}
 
 		explicit LinearProbingStorage(const EqualityComparer & comparer, 
 			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  ProbingStorage(comparer, tableLength)
+		  ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>(comparer, tableLength)
 		{
 		}
 	};
@@ -353,14 +353,14 @@ namespace Hash { namespace Storages {
 	class QuadraticProbingStorage : public ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy> {
 	public:
 		typedef QuadraticProbingStorage<T, Comparer, Hash> Storage;
-		typedef ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>::EqualityComparer EqualityComparer;
+		typedef typename ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>::EqualityComparer EqualityComparer;
 
 		QuadraticProbingStorage(void) {
 		}
 
 		explicit QuadraticProbingStorage(const EqualityComparer & comparer, 
 			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  ProbingStorage(comparer, tableLength)
+		  ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>(comparer, tableLength)
 		{
 		}
 	};
