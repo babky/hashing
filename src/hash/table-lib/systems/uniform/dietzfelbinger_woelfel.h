@@ -5,6 +5,7 @@
 #include "systems/universal_system.h"
 #include "systems/universal_system_factory.h"
 #include "utils/hash_assert.h"
+#include "utils/rehash_observer.h"
 #include "utils/static_random_generator.h"
 
 namespace Hash { namespace Systems { namespace Uniform {
@@ -57,7 +58,7 @@ namespace Hash { namespace Systems { namespace Uniform {
 
 		void reset(void) {
 			for (size_t i = 0; i < r; ++i) {
-				z[i] = Hash::Utils::StaticRandomGenerator<T>::getGenerator().generate();
+				z[i] = Hash::Utils::StaticRandomGenerator<size_t>::getGenerator().generate();
 			}
 
 			f = UniversalSystemFactory<T, HashFunction>::create(getTableSize());
@@ -92,6 +93,11 @@ namespace Hash { namespace Systems { namespace Uniform {
 
 		size_t operator()(const T & a, size_t length) {
 			return hash(a, length);
+		}
+
+		void initialize(Hash::StorageInfo & info) {
+			this->setTableSize(info.getTableSize());
+			this->reset();
 		}
 
 		void swap(DietzfelbingerWoelfel & r) {
