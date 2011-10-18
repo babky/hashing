@@ -13,6 +13,6 @@ include_directories(
 
 link_directories (../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
 
-add_executable ( SystemTest ${SOURCES} )
+add_executable ( TableTimeTest ${SOURCES} )
 
 target_link_libraries( TableTimeTest Table )
