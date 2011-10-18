@@ -7,7 +7,7 @@ namespace Hash { namespace Storages {
 
 	class InvalidProbingCoefficientException : public std::exception {
 	public:
-		const char * what(void) const {
+		const char * what(void) const throw() {
 			return "Invalid probing coefficients.";
 		}
 	};
