@@ -341,7 +341,7 @@ namespace Hash { namespace Storages {
 		LinearProbingStorage(void) {
 		}
 
-		explicit LinearProbingStorage(const EqualityComparer & comparer, 
+		explicit LinearProbingStorage(const Hash::Utils::EqualityComparer & comparer, 
 			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  ProbingStorage(comparer, tableLength)
 		{
@@ -356,7 +356,7 @@ namespace Hash { namespace Storages {
 		QuadraticProbingStorage(void) {
 		}
 
-		explicit QuadraticProbingStorage(const EqualityComparer & comparer, 
+		explicit QuadraticProbingStorage(const Hash::Utils::EqualityComparer & comparer, 
 			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  ProbingStorage(comparer, tableLength)
 		{
