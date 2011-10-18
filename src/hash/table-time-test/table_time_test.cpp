@@ -12,6 +12,7 @@
 #endif
 #include "table.h"
 #include "function.h"
+#include "utils/equality_comparer.h"
 #include "universal_systems.h"
 #include "storage.h"
 #include "policies/guaranteed_rehash_policy.h"
