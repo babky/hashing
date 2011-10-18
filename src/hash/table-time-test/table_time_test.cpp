@@ -127,8 +127,8 @@ private:
 	string name;
 };
 
-// typedef size_t T;
-typedef boost::uint64_t T;
+typedef size_t T;
+// typedef boost::uint64_t T;
 
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, ChainedStorage> ChainingLinear;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
@@ -136,9 +136,11 @@ typedef Table<T, Hash::Utils::EqualityComparer<T>, BitStringFunction, ChainedSto
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem, ChainedStorage> ChainingPolynomial;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, ChainedStorage> ChainingPolynomial5;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem32, ChainedStorage> ChainingPolynomial32;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, ChainedStorage> ChainingLinearMap;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, LinearProbingStorage> LinearProbingLinear;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, LinearProbingStorage> LinearProbingTabulation;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, LinearProbingStorage> LinearProbingPolynomial5;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, LinearProbingStorage> LinearProbingLinearMap;
 
 int main(void) {
 	typedef vector<double> LoadFactorVector;
@@ -152,29 +154,26 @@ int main(void) {
 
 	SizeVector sizes;
 	sizes.push_back(1 << 10);
-	sizes.push_back(1 << 10);
-	sizes.push_back(1 << 10);
-
-	/*sizes.push_back(1 << 10);
 	sizes.push_back(1 << 16);
-	sizes.push_back(1 << 20);
-	sizes.push_back(1 << 24);
-	sizes.push_back(1 << 27);*/
+	//sizes.push_back(1 << 20);
+	//sizes.push_back(1 << 24);
+	//sizes.push_back(1 << 27);
 
 	TableVector tables;
 	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>(new ChainingLinear, "ChainingLinear"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingTabulation>(new ChainingTabulation, "ChainingTabulation"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingBitString>(new ChainingBitString, "ChainingBitString"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>(new ChainingPolynomial, "ChainingPolynomial"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>(new ChainingPolynomial5, "ChainingPolynomial5"));
-
+	tables.push_back(new HashTableWrapperImpl<T, ChainingLinearMap>(new ChainingLinearMap, "ChainingLinearMap"));
+	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>(new ChainingPolynomial5, "ChainingPolynomial5"));
 	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial32>(new ChainingPolynomial32, "ChainingPolynomial32"));
-	//tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>(new LinearProbingLinear, "LinearProbingLinear"));
-	//tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>(new LinearProbingTabulation, "LinearProbingTabulation"));
-	//tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>(new LinearProbingPolynomial5, "LinearProbingPolynomial5"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>(new LinearProbingLinear, "LinearProbingLinear"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>(new LinearProbingTabulation, "LinearProbingTabulation"));
+	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>(new LinearProbingPolynomial5, "LinearProbingPolynomial5"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinearMap>(new LinearProbingLinearMap, "LinearProbingLinearMap"));
 	
 	ptime start, finish;
-
+	
 	for (LoadFactorVector::iterator bLF = loadFactors.begin(), eLF = loadFactors.end(); bLF != eLF; ++bLF) {
 		for (SizeVector::iterator bS = sizes.begin(), eS = sizes.end(); bS != eS; ++bS) {
 			for (TableVector::iterator bT = tables.begin(), eT = tables.end(); bT != eT; ++bT) {
@@ -213,16 +212,29 @@ int main(void) {
 		}
 	}
 
+	size_t ELEMENT_COUNT = 1 << 16;
+
 	start = microsec_clock::local_time();
-	set<size_t> mySet;
-	for (size_t i = 0, e = 65536; i < e; ++i) {
-		mySet.insert(i);
+	set<T> mySet;
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet.insert(i * i);
 	}
-	for (size_t i = 0, e = 65536; i < e; ++i) {
-		mySet.find(i);
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet.find(i * i);
 	}
 	finish = microsec_clock::local_time();
-	cout << "RBT for 65536 elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	cout << "RBT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+
+	start = microsec_clock::local_time();
+	LinearProbingTabulation lpt(ELEMENT_COUNT * 2);
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lpt.insert(i * i);
+	}
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lpt.contains(i * i);
+	}
+	finish = microsec_clock::local_time();
+	cout << "LPT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 
 	return 0;
 }
