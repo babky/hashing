@@ -46,12 +46,15 @@ namespace Hash { namespace Storages {
 		typedef ProbingStorageIterator Iterator;
 
 		/**
-		 * Proging storage c-tor.
+		 * Probing storage c-tor.
+		 *
+		 * @param comparer Used comparer.
+		 * @param tableLength Starting length of the table.
 		 */
-		ProbingStorage(void):
+		explicit ProbingStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
 		  elementCount(0),
-		  storageLength(StorageParams::STARTING_STORAGE_SIZE),
-		  storage(new StorageItem[StorageParams::STARTING_STORAGE_SIZE]),
+		  storageLength(tableLength),
+		  storage(new StorageItem[tableLength]),
 		  comparer(EqualityComparer())
 		{
 		}
@@ -339,7 +342,9 @@ namespace Hash { namespace Storages {
 		typedef LinearProbingStorage<T, Comparer, Hash> Storage;
 		typedef typename ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>::EqualityComparer EqualityComparer;
 
-		LinearProbingStorage(void) {
+		explicit LinearProbingStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		  ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>(tableLength)
+		{
 		}
 
 		explicit LinearProbingStorage(const EqualityComparer & comparer, 
@@ -355,7 +360,9 @@ namespace Hash { namespace Storages {
 		typedef QuadraticProbingStorage<T, Comparer, Hash> Storage;
 		typedef typename ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>::EqualityComparer EqualityComparer;
 
-		QuadraticProbingStorage(void) {
+		explicit QuadraticProbingStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		  ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>(tableLength)
+		{
 		}
 
 		explicit QuadraticProbingStorage(const EqualityComparer & comparer, 

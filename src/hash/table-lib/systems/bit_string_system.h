@@ -88,7 +88,7 @@ namespace Hash { namespace Systems {
 			size_t result = 0;
 
 			for (size_t i = 0; i < COEFFICIENT_NUMBER; ++i) {
-				result ^= (x & coefficientMask) * coefficients[i];
+				result ^= ((x & coefficientMask) >> i) * coefficients[i];
 				coefficientMask <<= 1;
 			}
 
