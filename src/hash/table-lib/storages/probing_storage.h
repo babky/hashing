@@ -337,7 +337,7 @@ namespace Hash { namespace Storages {
 	class LinearProbingStorage : public ProbingStorage<T, Comparer, Hash, LinearProbingPolicy> {
 	public:
 		typedef LinearProbingStorage<T, Comparer, Hash> Storage;
-		using ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>::EqualityComparer;
+		typedef ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>::EqualityComparer EqualityComparer;
 
 		LinearProbingStorage(void) {
 		}
@@ -353,7 +353,7 @@ namespace Hash { namespace Storages {
 	class QuadraticProbingStorage : public ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy> {
 	public:
 		typedef QuadraticProbingStorage<T, Comparer, Hash> Storage;
-		using ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>::EqualityComparer;
+		typedef ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>::EqualityComparer EqualityComparer;
 
 		QuadraticProbingStorage(void) {
 		}
