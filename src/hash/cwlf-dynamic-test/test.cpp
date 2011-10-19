@@ -11,7 +11,11 @@ void LengthTest::runTest(void) {
 	size_t maxChainLength = 0;
 
 	const size_t TEST_COUNT = 32;
+#ifdef HASH_DEBUG
+	const size_t TEST_LENGTH = 1 << 10;
+#else
 	const size_t TEST_LENGTH = 1 << 24;
+#endif
 
 	RandomGenerator<size_t> generator(0, 8 * TEST_LENGTH, true);
 	cout << "Running " << TEST_COUNT << " tests.\n";
@@ -19,6 +23,16 @@ void LengthTest::runTest(void) {
 	for (size_t t = 0; t < TEST_COUNT; ++t) {
 		LengthTestTable table;
 
+#ifdef HASH_DEBUG
+		for (size_t i = 0; i < TEST_LENGTH; ++i) {
+			try {
+				table.insert(i);				
+			} catch (const AssertException &) {
+				throw;
+			} catch(...) {
+			}
+		}
+#else
 		for (size_t i = 0; i < TEST_LENGTH; ++i) {
 			try {
 				table.insert(generator.generate());				
@@ -27,19 +41,22 @@ void LengthTest::runTest(void) {
 			} catch(...) {
 			}
 		}
+#endif
 
 		StorageStatistics stats;
 		table.computeStatistics(stats);
 
 		cout << stats << endl;
 
-		/* for (int i = 0; i < TEST_LENGTH; ++i) {
+#ifdef HASH_DEBUG
+		for (int i = 0; i < TEST_LENGTH; ++i) {
 			if (!table.contains(i)) {
 				cout << "Error.\n";
 			}
-		} */
+		}
+#endif
 
-		maxChainLength += stats.getMaximalChainLength();
+		maxChainLength += stats.getMaxChainLength();
 	}
 
 	cout << static_cast<double>(maxChainLength) / TEST_COUNT << "\n";
