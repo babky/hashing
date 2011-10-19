@@ -23,25 +23,18 @@ void LengthTest::runTest(void) {
 	for (size_t t = 0; t < TEST_COUNT; ++t) {
 		LengthTestTable table;
 
+		for (size_t i = 0; i < TEST_LENGTH; ++i) {
+			try {
 #ifdef HASH_DEBUG
-		for (size_t i = 0; i < TEST_LENGTH; ++i) {
-			try {
 				table.insert(i);				
-			} catch (const AssertException &) {
-				throw;
-			} catch(...) {
-			}
-		}
 #else
-		for (size_t i = 0; i < TEST_LENGTH; ++i) {
-			try {
 				table.insert(generator.generate());				
+#endif
 			} catch (const AssertException &) {
 				throw;
 			} catch(...) {
 			}
 		}
-#endif
 
 		StorageStatistics stats;
 		table.computeStatistics(stats);
