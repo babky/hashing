@@ -70,9 +70,9 @@ namespace Hash { namespace Storages {
 		 */
 		CollisionCountStorage(const CollisionCountStorage & aStorage):
 		  storageInfo(aStorage.storageInfo),
-		  storage(new StorageItem[aStorage.storageSize]),
+		  storage(new StorageItem[aStorage.storageInfo.getTableSize()]),
 		  comparer(aStorage.comparer) {
-			for (size_t i = 0; i < storageSize; ++i) {
+			for (size_t i = 0, tableSize = aStorage.storageInfo.getTableSize(); i < tableSize; ++i) {
 				this->storage[i] = aStorage.storage[i];
 			}
 

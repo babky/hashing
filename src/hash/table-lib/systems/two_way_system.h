@@ -133,7 +133,7 @@ namespace Hash { namespace Systems {
 
 namespace std {
 		
-	template <typename T, class Storage, template <typename> class System>
+	template <typename T, class Storage, template <typename, class> class System>
 	void swap(Hash::Systems::TwoWaySystem<T, Storage, System> & a, Hash::Systems::TwoWaySystem<T, Storage, System> & b) {
 		a.swap(b);
 	}	

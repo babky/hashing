@@ -41,6 +41,8 @@ namespace Hash {
 	 */
 	template <class BaseInfo>
 	class SettableStorageInfo : public BaseInfo {
+			using BaseInfo::elementCount;
+			using BaseInfo::tableSize;
 	public:
 		/**
 		 * Underlying storage info.

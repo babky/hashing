@@ -114,7 +114,7 @@ namespace Hash { namespace Systems {
 
 namespace std {
 		
-	template <typename T, class Storage, template <typename> class System1, template <typename> class System2>
+	template <typename T, class Storage, template <typename, class> class System1, template <typename, class> class System2>
 	void swap(Hash::Systems::TwoWaySystemRandomized<T, Storage, System1, System2> & a, Hash::Systems::TwoWaySystemRandomized<T, Storage, System1, System2> & b) {
 		a.swap(b);
 	}	
