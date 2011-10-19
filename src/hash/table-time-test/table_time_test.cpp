@@ -215,7 +215,11 @@ int main(void) {
 	mySet.clear();
 
 	start = microsec_clock::local_time();
+#ifdef BOOST_MSVC
+	std::tr1::unordered_set<T> mySet2;
+#else
 	unordered_set<T> mySet2;
+#endif
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
 		mySet2.insert(i * i * 64);
 	}
