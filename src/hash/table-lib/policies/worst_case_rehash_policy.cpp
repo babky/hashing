@@ -23,14 +23,12 @@ double WorstCaseRehashPolicy::getMaxLoadFactor(void) const {
 	return this->maxFactor;
 }
 
-bool WorstCaseRehashPolicy::needsRehashingAfterInsert(const StorageInfo & storageInfo) {
-	StorageStatistics stats;
-	storageInfo.computeStatistics(stats);
-	size_t maxLength = ELPSL_FACTOR * ELPSL_CONSTANT * stats.getTableLength();
+bool WorstCaseRehashPolicy::needsRehashingAfterInsert(const MaxChainLengthStorageInfo & storageInfo) {
+	size_t maxLength = ELPSL_FACTOR * ELPSL_CONSTANT * storageInfo.getTableSize();
 
-	return storageInfo.getLoadFactor() > this->getMaxLoadFactor() || stats.getMaximalChainLength() > maxLength;
+	return storageInfo.getLoadFactor() > this->getMaxLoadFactor() || storageInfo.getMaxChainLength() > maxLength;
 }
 
-bool WorstCaseRehashPolicy::needsRehashingAfterDelete(const StorageInfo & storageInfo) {
+bool WorstCaseRehashPolicy::needsRehashingAfterDelete(const MaxChainLengthStorageInfo & storageInfo) {
 	return storageInfo.getLoadFactor() < this->getMinLoadFactor();
 }

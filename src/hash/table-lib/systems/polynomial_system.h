@@ -2,31 +2,30 @@
 #define POLYNOMIAL_SYSTEM_H
 
 #include "universal_system.h"
-#include "utils/rehash_observer.h"
 #include "math/double_word.h"
+#include "storage.h"
 
 namespace Hash { namespace Systems {
 
-	template<typename T>
-	class PolynomialSystem : public UniversalSystem<T> {
+	template<typename T, class Storage>
+	class PolynomialSystem : public UniversalFunction<T, Storage> {
 	public:
-		const static size_t START_LENGTH = 16;
 		const static size_t START_DEGREE = 2;
 
-		explicit PolynomialSystem(size_t aLength = START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = START_DEGREE):
+		explicit PolynomialSystem(size_t aTableSize = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = START_DEGREE):
 		  universumMax(aUniversumMax),
 		  coefficients(0),
-		  length(aLength),
+		  tableSize(aTableSize),
 		  degree(aDegree + 1) {
 			this->reset();
 		}
 	
-		PolynomialSystem(const PolynomialSystem<T> & system):
+		PolynomialSystem(const PolynomialSystem & system):
 		  universumMax(system.universumMax),
 		  coefficients(0),
-		  length(system.length),
+		  tableSize(system.tableSize),
 		  degree(system.degree) {
-			coefficients = new T[length];
+			coefficients = new T[tableSize];
 
 			for (size_t i = 0; i < degree; ++i) {
 				coefficients[i] = system.coefficients[i];
@@ -38,14 +37,10 @@ namespace Hash { namespace Systems {
 			coefficients = 0;
 		}
 
-		PolynomialSystem & operator=(const PolynomialSystem<T> & system) {
-			PolynomialSystem<T> tmp = system;
+		PolynomialSystem & operator=(const PolynomialSystem & system) {
+			PolynomialSystem tmp = system;
 			tmp.swap(*this);
 			return *this;
-		}
-
-		Hash::Utils::RehashObserver * getRehashObserver(void) {
-			return new RehashObserver(this);
 		}
 
 		void setUniversumMax(T universumMax) {
@@ -57,11 +52,11 @@ namespace Hash { namespace Systems {
 		}
 
 		void setTableSize(size_t size) {
-			this->length = size;
+			this->tableSize = size;
 		}
 
 		size_t getTableSize(void) const {
-			return this->length;
+			return this->tableSize;
 		}
 
 		void reset(void) {
@@ -74,10 +69,9 @@ namespace Hash { namespace Systems {
 			}
 		}
 
-		size_t hash(const T & x, size_t length) {
+		size_t hash(const T & x) {
 			using namespace Hash::Math;
 
-			simple_assert(this->length == length, "Polynomial system table's size differs from the wanted size.");
 			simple_assert(x < this->getUniversumMax(), "Given element is greater than the universum max.");
 
 			T r = 0;
@@ -89,43 +83,24 @@ namespace Hash { namespace Systems {
 					);
 			}
 
-			return r % length;
+			return r % tableSize;
 		}
 
-		size_t operator()(const T & x, size_t length) {
-			return hash(x, length);
+		size_t operator()(const T & x) {
+			return hash(x);
 		}
 
-		void initialize(Hash::StorageInfo & info) {
-			this->setTableSize(info.getTableSize());
-			this->reset();
-		}
-
-		void swap(PolynomialSystem<T> & system) {
+		void swap(PolynomialSystem & system) {
 			std::swap(universumMax, system.universumMax);
 			std::swap(coefficients, system.coefficients);
 			std::swap(degree, system.degree);
-			std::swap(length, system.length);
+			std::swap(tableSize, system.tableSize);
 		}
 
 	private:
-		class RehashObserver : public Hash::Utils::RehashObserver {
-		public:
-			RehashObserver(PolynomialSystem<T> * function):
-			  f(function){
-			}
-
-			void rehash(Hash::StorageInfo & info) {
-				this->f->initialize(info);
-			}
-				
-		private:
-			PolynomialSystem<T> * f;
-		};
-
 		T universumMax;
 		T * coefficients;
-		size_t length;
+		size_t tableSize;
 		size_t degree;
 	};
 
@@ -133,8 +108,8 @@ namespace Hash { namespace Systems {
 
 namespace std {
 
-	template <typename T>
-	void swap(Hash::Systems::PolynomialSystem<T> & a, Hash::Systems::PolynomialSystem<T> & b) {
+	template <typename T, class Storage>
+	void swap(Hash::Systems::PolynomialSystem<T, Storage> & a, Hash::Systems::PolynomialSystem<T, Storage> & b) {
 		a.swap(b);
 	}
 

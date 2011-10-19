@@ -14,22 +14,23 @@ namespace Hash { namespace Storages {
 	 * @typeparam Hash Type of the hash.
 	 */
 	template <typename T, typename Comparer, typename Hash>
-	class BoundedChainedStorage : public ChainedStorage<T, Comparer, Hash> {
+	class BoundedChainedStorage : public ChainedStorageBase<T, Comparer, Hash, SettableMaxChainLengthStorageInfo> {
 	public:
 		typedef Comparer EqualityComparer;
 		
 		typedef T HashType;
-		
-		void init_stats(void) {
-			this->currentStats.setTableLength(this->getTableSize());
-		}
 
+	private:
+		typedef ChainedStorageBase<T, Comparer, Hash, SettableMaxChainLengthStorageInfo> BaseStorage;
+
+	public:
 		/**
 		 * Chained storage c-tor.
+		 *
+		 * @param tableSize Initial table size.
 		 */
-		BoundedChainedStorage(void):
-		  ChainedStorage<T, Comparer, Hash>() {
-			  this->init_stats();
+		explicit BoundedChainedStorage(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  BaseStorage(tableSize) {
 		}
 
 		/**
@@ -39,9 +40,8 @@ namespace Hash { namespace Storages {
 		 * @param tableLength Starting length of the table.
 		 */
 		explicit BoundedChainedStorage(const EqualityComparer & comparer, 
-				size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  ChainedStorage<T, Comparer, Hash>(comparer, tableLength) {
-			  this->init_stats();
+			size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
+		  BaseStorage(comparer, tableLength) {
 		}
 
 		/**
@@ -50,109 +50,29 @@ namespace Hash { namespace Storages {
 		 * @param storage Copied storage.
 		 */
 		BoundedChainedStorage(const BoundedChainedStorage<T, Comparer, Hash> & storage):
-		  ChainedStorage<T, Comparer, Hash>(storage){
-			this->currentStats = storage.currentStats;
+		  BaseStorage(storage){
 		}
 
 		/**
 		 * Assignment operator.
 		 */
 		BoundedChainedStorage & operator = (const BoundedChainedStorage<T, Comparer, Hash> & storage) {
-			this->ChainedStorage<T, Comparer, Hash>::operator =(storage);
-			this->currentStats = storage.currentStats;
+			this->BaseStorage::operator =(storage);
 			return *this;
 		}
 
 		void insert(const T & item, HashType hash) {
-			this->ChainedStorage<T, Comparer, Hash>::insert(item, hash);
-			this->currentStats.refineChain(this->getChainLength(hash));
+			this->BaseStorage::insert(item, hash);
+			this->storageInfo.refineMaxChainLength(this->getChainLength(hash));
 		}
 
-		bool remove(const T & item, HashType hash) {
-			bool retVal = this->ChainedStorage<T, Comparer, Hash>::remove(item, hash);
-
-			if (retVal) {
-				this->currentStats.removeElement();
-			}
-
-			return retVal;
-		}
-
-		/**
-		 * Maximal chain length retrieval.
-		 *
-		 * @return Maximal chain length.
-		 */
-		size_t getMaxChainLength(void) const {
-			return this->currentStats.getMaxChainLength();
-		}
-
-		void computeStatistics(Utils::StorageStatistics & stats) const {
-			stats = this->currentStats;
-		}
-
-		/**
-		 * Recomputes the whole statistics if wanted.
-		 *
-		 * @param stats Place where the computed statistics are stored.
-		 * @param recompute Flag indicating if the statistics should be fully recomputed.
-		 */
-		void computeStatistics(Utils::StorageStatistics & stats, bool recompute) {
-			if (recompute) {
-				this->ChainedStorage<T, Comparer, Hash>::computeStatistics(stats);
-			} else {
-				this->computeStatistics(stats);
-			}
-		}
-		
 		void swap(BoundedChainedStorage & b) {
-			ChainedStorage<T, Comparer, Hash>::swap(b);
-			std::swap(currentStats, b.currentStats);
+			BaseStorage::swap(b);
 		}
 		
 		friend void swap(BoundedChainedStorage & a, BoundedChainedStorage & b) {
 			a.swap(b);
 		}
-
-	private:
-		class StorageStatistics : public Utils::StorageStatistics {
-		public:
-
-			/**
-			 * Refines the maximal chain length.
-			 * 
-			 * @param chainLength length of the currently prolonged chain.
-			 */
-			void refineChain(size_t chainLength) {
-				++this->elementCount;
-				if (this->maxChainLength < chainLength) {
-					this->maxChainLength = chainLength;
-				}
-			}
-
-			/**
-			 * Length of the table setter.
-			 *
-			 * @param tableLength New table's length.
-			 */
-			void setTableLength(size_t tableLength) {
-				this->tableLength = tableLength;
-			}
-
-			/**
-			 * Element removed.
-			 */
-			void removeElement(void) {
-				--this->elementCount;
-			}
-
-		};
-
-		/**
-		 * Current storage statistics computed for the hash table.
-		 */
-		StorageStatistics currentStats;
-
 	};
 
 } }

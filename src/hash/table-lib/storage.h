@@ -16,7 +16,7 @@ namespace Hash {
 		/**
 		 * Default size for the storage table.
 		 */
-		static const size_t STARTING_STORAGE_SIZE;
+		static const size_t INITIAL_STORAGE_SIZE;
 
 	private:
 		/**
@@ -37,44 +37,158 @@ namespace Hash {
 	};
 
 	/**
-	 * Storage information retrieval. One part of the storage.
+	 * Provides the possibility of setting of the values for the storage info.
 	 */
-	class StorageInfo {
+	template <class BaseInfo>
+	class SettableStorageInfo : public BaseInfo {
 	public:
+		/**
+		 * Underlying storage info.
+		 */
+		typedef BaseInfo StorageInfo;
+
+		/**
+		 * C-tor.
+		 */
+		explicit SettableStorageInfo(size_t aTableSize):
+		  BaseInfo(aTableSize)
+		{
+		}
+
+		/**
+		 * Sets the number of stored elements inside the table.
+		 *
+		 * @param aElementCount The number of elements.
+		 */
+		void setElementCount(size_t aElementCount) {
+			elementCount = aElementCount;
+		}
+
+		/**
+		 * Increments the number of stored elements.
+		 */
+		void incElementCount(void) {
+			++elementCount;
+		}
+		
+		/**
+		 * Decrements the number of stored elements.
+		 */
+		void decElementCount(void) {
+			--elementCount;
+		}
+
+		/**
+		 * Sets the table size.
+		 *
+		 * @param aTableSize Size of the storage.
+		 */
+		void setTableSize(size_t aTableSize) {
+			tableSize = aTableSize;
+		}
+	};
+
+	/**
+	 * Provides the basic information about the hash table.
+	 */
+	class PlainStorageInfo {
+	public:
+		/**
+		 * C-tor.
+		 */
+		PlainStorageInfo(size_t aTableSize);
+
 		/**
 		 * Number of stored elements retrieval.
 		 *
 		 * @return Number of elements stored.
 		 */
-		virtual size_t getSize(void) const = 0;
+		size_t getElementCount(void) const;
 
 		/**
 		 * Length of the table retrieval.
 		 *
 		 * @return Length of the table retrieval.
 		 */
-		virtual size_t getTableSize(void) const = 0;
+		size_t getTableSize(void) const;
 
 		/**
 		 * Load factor retrieval.
 		 *
 		 * @return Load factor.
 		 */
-		virtual double getLoadFactor(void) const = 0;
+		double getLoadFactor(void) const;
+
+	protected:
+		size_t tableSize;
+		size_t elementCount;
+	};
+
+	/**
+	 * Provides the basic information about the hash table with the max chain length.
+	 */
+	class MaxChainLengthStorageInfo : public PlainStorageInfo {
+	public:
+		/**
+		 * C-tor.
+		 */
+		explicit MaxChainLengthStorageInfo(size_t aTableSize);
 
 		/**
-		 * Computes the statistics for this storage.
+		 * Load factor retrieval.
 		 *
-		 * @param stats Storage for statistics.
-		 */ 
-		virtual void computeStatistics(Utils::StorageStatistics & stats) const = 0;
+		 * @return Load factor.
+		 */
+		size_t getMaxChainLength(void) const;
+
+	protected:
+		size_t maxChainLength;
+	};
+
+	/**
+	 * Class allowing changing the PlainStorageInfo.
+	 */
+	class SettablePlainStorageInfo : public SettableStorageInfo<PlainStorageInfo> {
+	public:
+		/**
+		 * Underlying storage info.
+		 */
+		typedef PlainStorageInfo StorageInfo;
+
+		/**
+		 * C-tor.
+		 */
+		explicit SettablePlainStorageInfo(size_t aTableSize);
+	};
+
+	/**
+	 * Class allowing changing the MaxChainLengthStorageInfo.
+	 */
+	class SettableMaxChainLengthStorageInfo : public SettableStorageInfo<MaxChainLengthStorageInfo> {
+	public:
+		/**
+		 * Underlying storage info.
+		 */
+		typedef MaxChainLengthStorageInfo StorageInfo;
+
+		/**
+		 * C-tor.
+		 */
+		explicit SettableMaxChainLengthStorageInfo(size_t aTableSize);
+
+		/**
+		 * Updates the maximal chain length by the length of a new chain.
+		 *
+		 * @param refinement The length of the emerging chain.
+		 */
+		void refineMaxChainLength(size_t refinement);
 	};
 
 	/**
 	 * Interface for the storage.
 	 */
-	template <typename T, typename Comparer, typename Hash, class StorageInfoType = StorageInfo>
-	class Storage : public StorageInfoType {
+	template <typename T, typename Comparer, typename Hash, class StorageInfo>
+	class Storage {
 	public:
 		/**
 		 * Inserts the {@code element} into the table.
@@ -108,6 +222,13 @@ namespace Hash {
 		virtual void clear(void) = 0;
 
 		/**
+		 * Number of stored elements retrieval.
+		 *
+		 * @return Number of the stored elements.
+		 */
+		virtual size_t size(void) const = 0;
+
+		/**
 		 * Comparer retrieval.
 		 *
 		 * @return Comparer used.
@@ -121,6 +242,20 @@ namespace Hash {
 		 * @return Minimality status of the table.
 		 */
 		virtual bool isMinimal(void) const = 0;
+
+		/**
+		 * Current storage info.
+		 *
+		 * @return Storage information.
+		 */
+		virtual const StorageInfo & getStorageInfo(void) const = 0;
+
+		/**
+		 * Computes the statistics about the storage info. May take O(n) time.
+		 *
+		 * @param stats Place where the statistics are computed. The stats is cleared prior computation.
+		 */
+		virtual void computeStatistics(Utils::StorageStatistics & stats) const = 0;
 	};
 
 }

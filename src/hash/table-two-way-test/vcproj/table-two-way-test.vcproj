@@ -185,6 +185,14 @@
 				RelativePath="..\table_two_way_test.cpp"
 				>
 			</File>
+			<Filter
+				Name="Tests"
+				>
+				<File
+					RelativePath="..\tests\test.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -214,10 +222,6 @@
 			<Filter
 				Name="Tests"
 				>
-				<File
-					RelativePath="..\tests\test.cpp"
-					>
-				</File>
 				<File
 					RelativePath="..\tests\test.h"
 					>

@@ -8,6 +8,7 @@ namespace Hash { namespace Policies { namespace Rehash {
 	/**
 	 * Standard interface for the rehashing policy.
 	 */
+	template<typename StorageInfoType>
 	class RehashPolicy {
 	public:
 		/**
@@ -15,20 +16,20 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 *
 		 * @return Rehashing need.
 		 */
-		virtual bool needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo) = 0;
+		virtual bool needsRehashingAfterDelete(const StorageInfoType & storageInfo) = 0;
 
 		/**
 		 * Check for the rehashing need after insertion.
 		 *
 		 * @return Rehashing need.
 		 */
-		virtual bool needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo) = 0;
+		virtual bool needsRehashingAfterInsert(const StorageInfoType & storageInfo) = 0;
 	};
 
 	/**
 	 * Standard rehashing policy which keeps the table load factor inside given bounds.
 	 */
-	class LoadFactorBoundsRehashPolicy : public RehashPolicy {
+	class LoadFactorBoundsRehashPolicy : public RehashPolicy<PlainStorageInfo> {
 	public:
 		/**
 		 * Default minimal load factor.
@@ -62,8 +63,8 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 */
 		double getMaxLoadFactor(void) const;
 
-		bool needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo);
-		bool needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo);
+		bool needsRehashingAfterInsert(const PlainStorageInfo & storageInfo);
+		bool needsRehashingAfterDelete(const PlainStorageInfo & storageInfo);
 
 	private:
 		/**

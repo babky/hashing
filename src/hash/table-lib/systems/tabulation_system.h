@@ -11,17 +11,16 @@
 	#pragma warning(default: 4512 4127 4100)
 #endif
 #include "systems/universal_system.h"
-#include "utils/rehash_observer.h"
+#include "storage.h"
 #include <algorithm>
 
 namespace Hash { namespace Systems {
 
-	template<typename T>
-	class TabulationFunction : public UniversalSystem<T> {
+	// TODO: Doc.
+	template<typename T, class Storage>
+	class TabulationFunction : public UniversalFunction<T, Storage> {
 	public:
-		static const size_t START_LENGTH = 16;
-
-		explicit TabulationFunction(size_t length = START_LENGTH, size_t c = 8):
+		explicit TabulationFunction(size_t length = Hash::StorageParams::INITIAL_STORAGE_SIZE, size_t c = 8):
 		  characterTableSize(1 << c),
 		  fullTableSize(characterTableSize * DIGIT_NUMBER / c),
 		  hashTableSize(length),
@@ -81,9 +80,7 @@ namespace Hash { namespace Systems {
 		void setUniversumMax(T) {
 		}
 
-		size_t hash(const T & x, size_t length) {
-			simple_assert(length == this->hashTableSize, "Lengths must be the same.");
-
+		size_t hash(const T & x) {
 			size_t result = 0;
 			size_t mask = (1 << characterDigits) - 1;
 
@@ -94,8 +91,8 @@ namespace Hash { namespace Systems {
 			return result & outputMask;
 		}
 
-		size_t operator()(const T & a, size_t length) {
-			return hash(a, length);
+		size_t operator()(const T & a) {
+			return hash(a);
 		}
 
 		void swap(TabulationFunction & r) {
@@ -108,11 +105,6 @@ namespace Hash { namespace Systems {
 			swap(characterDigits, r.characterDigits);
 			swap(outputMask, r.outputMask);
 			swap(table, r.table);
-		}
-		
-		void initialize(Hash::StorageInfo & info) {
-			this->setTableSize(info.getTableSize());
-			this->reset();
 		}
 
 	private:

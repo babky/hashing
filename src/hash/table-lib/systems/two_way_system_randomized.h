@@ -13,11 +13,12 @@ namespace Hash { namespace Systems {
 	 * randomly selected two way groups.
 	 *
 	 * @typeparam T Type of the hashed values.
+	 * @typeparam Storage Storage type.
 	 * @typeparam System1 The two way system which will be used.
 	 * @typeparam System2 The two way system which will be used.
 	 */
-	template <typename T, template <typename> class System1, template <typename> class System2>
-	class TwoWaySystemRandomized : public UniversalSystem<T> {
+	template <typename T, class Storage, template <typename, class> class System1, template <typename, class> class System2>
+	class TwoWaySystemRandomized : public UniversalFunction<T, Storage> {
 	public:
 		TwoWaySystemRandomized(void):
 		  bitGenerator(new Hash::Utils::RandomGenerator<size_t>(0, boost::integer_traits<size_t>::const_max, true)),
@@ -25,11 +26,6 @@ namespace Hash { namespace Systems {
 		  p(REGENERATE_NOW) {
 		}
 		
-		void initialize(Hash::Utils::ChainLengthAwareStorageInfo & info) {
-			group1.initialize(info);
-			group2.initialize(info);
-		}
-
 		virtual void reset(void) {
 			group1.reset();
 			group2.reset();
@@ -45,6 +41,11 @@ namespace Hash { namespace Systems {
 			group2.setTableSize(size);
 		}
 
+		virtual void setStorage(Storage * aStorage) {
+			group1.setStorage(aStorage);
+			group2.setStorage(aStorage);
+		}
+
 		virtual T getUniversumMax(void) const {
 			simple_assert(group1.getUniversumMax() == group2.getUniversumMax(), "Universum maximums must be the same.");
 			return group1.getUniversumMax();
@@ -55,7 +56,7 @@ namespace Hash { namespace Systems {
 			group2.setUniversumMax(universumMax);
 		}
 
-		virtual size_t hash(const T & x, size_t length) {
+		virtual size_t hash(const T & x) {
 			size_t randomBit;
 			mutex->lock();
 			if (p == REGENERATE_NOW) {
@@ -70,14 +71,14 @@ namespace Hash { namespace Systems {
 			mutex->unlock();
 
 			if (randomBit) {
-				return group1.hash(x, length);
+				return group1.hash(x);
 			} else {
-				return group2.hash(x, length);
+				return group2.hash(x);
 			}
 		}
 
-		virtual size_t operator()(const T & a, size_t length) {
-			return hash(a, length);
+		virtual size_t operator()(const T & a) {
+			return hash(a);
 		}
 
 		void swap(TwoWaySystemRandomized & b) {
@@ -101,20 +102,20 @@ namespace Hash { namespace Systems {
 
 		static const size_t REGENERATE_NOW = ((size_t) 1) << (boost::integer_traits<size_t>::digits - 1);
 
-		System1<T> group1;
-		System2<T> group2;
+		System1<T, Storage> group1;
+		System2<T, Storage> group2;
 	};
 
-	template <typename T>
-	class TwoWaySystemRandomizedLinearMap : public TwoWaySystemRandomized<T, TwoWaySystemLinearMap, TwoWaySystemLinearMap> {
+	template <typename T, class Storage>
+	class TwoWaySystemRandomizedLinearMap : public TwoWaySystemRandomized<T, Storage, TwoWaySystemLinearMap, TwoWaySystemLinearMap> {
 	};
 
 } }
 
 namespace std {
 		
-	template <typename T, template <typename> class System1, template <typename> class System2>
-	void swap(Hash::Systems::TwoWaySystemRandomized<T, System1, System2> & a, Hash::Systems::TwoWaySystemRandomized<T, System1, System2> & b) {
+	template <typename T, class Storage, template <typename> class System1, template <typename> class System2>
+	void swap(Hash::Systems::TwoWaySystemRandomized<T, Storage, System1, System2> & a, Hash::Systems::TwoWaySystemRandomized<T, Storage, System1, System2> & b) {
 		a.swap(b);
 	}	
 	

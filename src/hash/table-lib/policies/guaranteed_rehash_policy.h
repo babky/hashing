@@ -6,7 +6,7 @@
 
 namespace Hash { namespace Policies { namespace Rehash {
 
-	class GuaranteedRehashPolicy : public RehashPolicy {
+	class GuaranteedRehashPolicy : public RehashPolicy<MaxChainLengthStorageInfo> {
 	public:
 		GuaranteedRehashPolicy(bool allowDelete = true);
 
@@ -14,8 +14,8 @@ namespace Hash { namespace Policies { namespace Rehash {
 		double getMaxLoadFactor(void) const;
 		size_t getMaxChainLength(size_t n) const;
 		
-		bool needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo);
-		bool needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo);
+		bool needsRehashingAfterDelete(const MaxChainLengthStorageInfo & storageInfo);
+		bool needsRehashingAfterInsert(const MaxChainLengthStorageInfo & storageInfo);
 
 	private:
 		bool allowDelete;

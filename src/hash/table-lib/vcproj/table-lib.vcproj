@@ -167,10 +167,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\utils\rehash_observer.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\utils\static_random_generator.cpp"
 					>
 				</File>
@@ -192,6 +188,14 @@
 				</File>
 				<File
 					RelativePath="..\policies\worst_case_rehash_policy.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Math"
+				>
+				<File
+					RelativePath="..\math\double_word.cpp"
 					>
 				</File>
 			</Filter>
@@ -221,10 +225,6 @@
 				Name="Utils"
 				>
 				<File
-					RelativePath="..\utils\chain_length_aware_storage_info.h"
-					>
-				</File>
-				<File
 					RelativePath="..\utils\constant_comparer.h"
 					>
 				</File>
@@ -246,10 +246,6 @@
 				</File>
 				<File
 					RelativePath="..\utils\random_generator.h"
-					>
-				</File>
-				<File
-					RelativePath="..\utils\rehash_observer.h"
 					>
 				</File>
 				<File
@@ -302,10 +298,6 @@
 				</File>
 				<File
 					RelativePath="..\systems\linear_map_system.h"
-					>
-				</File>
-				<File
-					RelativePath="..\systems\omega_system.h"
 					>
 				</File>
 				<File
@@ -376,10 +368,6 @@
 			<Filter
 				Name="Math"
 				>
-				<File
-					RelativePath="..\math\double_word.cpp"
-					>
-				</File>
 				<File
 					RelativePath="..\math\double_word.h"
 					>

@@ -2,41 +2,55 @@
 #define FUNCTION_H
 
 #include <storage.h>
+#include <algorithm>
 
 namespace Hash {
+
+	// TODO: Inherit from UniversalFunction
 
 	/**
 	 * Default hashing function.
 	 */
-	template<typename T>
+	template<typename T, class Storage>
 	class Function {
 	public:
-
 		typedef size_t HashType;
 
-		size_t hash(const T & a, size_t length) {
-			return a % length;
+		void setTableSize(size_t aTableSize) {
+			tableSize = aTableSize;
 		}
 
-		size_t operator()(const T & a, size_t length) {
-			return hash(a, length);
+		void reset(void) {
 		}
 
-		void initialize(Hash::StorageInfo &) {
+		size_t hash(const T & a) {
+			return a % tableSize;
 		}
 
-		void swap(Function &) {
+		size_t operator()(const T & a) {
+			return hash(a);
 		}
 
+		void swap(Function & b) {
+			using std::swap;
+
+			swap(tableSize, b.tableSize);
+		}
+
+		void setStorage(Storage *) {
+		}
+
+	private:
+		size_t tableSize;
 	};
 
 }
 
 namespace std {
 		
-	template <typename T>
-	void swap(Hash::Function<T> & a, Hash::Function<T> & b) {
-		Hash::Function<T> tmp = a;
+	template <typename T, class Storage>
+	void swap(Hash::Function<T, Storage> & a, Hash::Function<T, Storage> & b) {
+		Hash::Function<T, Storage> tmp = a;
 		a = b;
 		b = tmp;
 	}

@@ -9,14 +9,15 @@ namespace Hash { namespace Systems {
 	 * system.
 	 *
 	 * @typeparam T The type of the hashed values.
+	 * @typeparam Storage The type of the used storage.
 	 */
-	template<typename T>
-	class UniversalSystem {
+	template<typename T, class Storage>
+	class UniversalFunction {
 	public:
 		/**
 		 * D-tor.
 		 */
-		virtual ~UniversalSystem(void) {
+		virtual ~UniversalFunction(void) {
 		};
 
 		/**
@@ -62,9 +63,8 @@ namespace Hash { namespace Systems {
 		 * Hash value of the element x
 		 *
 		 * @param x The hashed element.
-		 * @param length Length of the table.
 		 */
-		virtual size_t hash(const T & x, size_t length) = 0;
+		virtual size_t hash(const T & x) = 0;
 
 		/**
 		 * Hash value of the element x
@@ -72,7 +72,16 @@ namespace Hash { namespace Systems {
 		 * @param x The hashed element.
 		 * @param length Length of the table.
 		 */
-		virtual size_t operator()(const T & a, size_t length) = 0;
+		virtual size_t operator()(const T & a) = 0;
+
+		/**
+		 * Sets the storage for the hash function.
+		 * 
+		 * @param aStorage Storage using this function.
+		 */
+		virtual void setStorage(Storage * aStorage) {
+			aStorage;
+		}
 
 	};
 

@@ -2,7 +2,6 @@
 #define PROBING_STORAGE_H
 
 #include <algorithm>
-#include "utils/chain_length_aware_storage_info.h"
 #include "exceptions/item_stored_exception.h"
 #include "storage.h"
 #include "probing/policies.h"
@@ -23,7 +22,7 @@ namespace Hash { namespace Storages {
 		typename Hash, 
 		template <class> class ProbingPolicy
 	>
-	class ProbingStorage : public Storage<T, Comparer, Hash> {
+	class ProbingStorage : public Storage<T, Comparer, Hash, PlainStorageInfo> {
 	public:
 		/**
 		 * Comparer used.
@@ -49,12 +48,11 @@ namespace Hash { namespace Storages {
 		 * Probing storage c-tor.
 		 *
 		 * @param comparer Used comparer.
-		 * @param tableLength Starting length of the table.
+		 * @param tableSize Starting length of the table.
 		 */
-		explicit ProbingStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  elementCount(0),
-		  storageLength(tableLength),
-		  storage(new StorageItem[tableLength]),
+		explicit ProbingStorage(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  storageInfo(tableSize),
+		  storage(new StorageItem[tableSize]),
 		  comparer(EqualityComparer())
 		{
 		}
@@ -63,13 +61,12 @@ namespace Hash { namespace Storages {
 		 * Probing storage c-tor.
 		 *
 		 * @param comparer Used comparer.
-		 * @param tableLength Starting length of the table.
+		 * @param tableSize Starting length of the table.
 		 */
 		explicit ProbingStorage(const EqualityComparer & comparer, 
-			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  elementCount(0),
-		  storageLength(tableLength),
-		  storage(new StorageItem[tableLength]),
+			size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  storageInfo(tableSize),
+		  storage(new StorageItem[tableSize]),
 		  comparer(comparer)
 		{
 		}
@@ -80,7 +77,6 @@ namespace Hash { namespace Storages {
 		~ProbingStorage(void) {
 			delete [] this->storage;
 			this->storage = 0;
-			this->storageLength = 0;
 		}
 
 		/**
@@ -88,11 +84,15 @@ namespace Hash { namespace Storages {
 		 *
 		 * @param storage Copied storage.
 		 */
-		ProbingStorage(const ProbingStorage & storage) {
-			this->storage = new StorageItem[storage.storageLength];
-			this->storageLength = storage.storageLength;
-			this->elementCount = storage.elementCount;
-			this->comparer = storage.comparer;
+		ProbingStorage(const ProbingStorage & aStorage):
+		  storageInfo(aStorage.storageInfo),
+		  comparer(aStorage.comparer),
+		  probingPolicy(aStorage.probingPolicy) {
+			size_t tableSize = storageInfo.getTableSize();
+			this->storage = new StorageItem[tableSize];
+			for (size_t i = 0; i < tableSize; ++i) {
+				this->storage[i] = aStorage.storage[i];
+			}
 		}
 
 		/**
@@ -107,11 +107,12 @@ namespace Hash { namespace Storages {
 		}
 
 		void insert(const T & item, HashType hash) {
-			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+			size_t tableSize = storageInfo.getTableSize();
+			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 			
 			HashType pos;
 			for (size_t i = 0; ; ++i) {
-				pos = probingPolicy.probe(hash, i) % storageLength;
+				pos = probingPolicy.probe(hash, i) % tableSize;
 
 				if (this->storage[pos].empty) {
 					break;
@@ -125,19 +126,20 @@ namespace Hash { namespace Storages {
 			this->storage[pos].empty = false;
 			this->storage[pos].bridge = true;
 			this->storage[pos].item = item;
-			++this->elementCount;
+			this->storageInfo.incElementCount();
 		}
 
 		bool remove(const T & item, HashType hash) {
-			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+			size_t tableSize = storageInfo.getTableSize();
+			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 
 			HashType pos;
 			for (size_t i = 0; ; ++i) {
-				pos = probingPolicy.probe(hash, i) % storageLength;
+				pos = probingPolicy.probe(hash, i) % tableSize;
 
 				if (this->comparer(item, this->storage[pos].item)) {
 					this->storage[pos].empty = true;
-					--this->elementCount;
+					this->storageInfo.decElementCount();
 					return true;
 				}
 
@@ -148,11 +150,12 @@ namespace Hash { namespace Storages {
 		}
 
 		bool contains(const T & item, HashType hash) const {
-			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+			size_t tableSize = storageInfo.getTableSize();
+			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 
 			HashType pos;
 			for (size_t i = 0; ; ++i) {
-				pos = probingPolicy.probe(hash, i) % storageLength;
+				pos = probingPolicy.probe(hash, i) % tableSize;
 
 				if (!this->storage[pos].empty && this->comparer(item, this->storage[pos].item)) {
 					return true;
@@ -164,20 +167,18 @@ namespace Hash { namespace Storages {
 			};
 		}
 
-		size_t getSize(void) const {
-			return this->elementCount;
+		size_t size(void) const {
+			return this->storageInfo.getElementCount();
 		}
 
 		size_t getTableSize(void) const {
-			return this->storageLength;
+			return this->storageInfo.getTableSize();
 		}
 
 		void clear(void) {
-			this->storageLength = 0;
-			this->elementCount = 0;
 			delete [] this->storage;
-			this->storage = new StorageItem[StorageParams::STARTING_STORAGE_SIZE];
-			this->storageLength = StorageParams::STARTING_STORAGE_SIZE;
+			this->storage = new StorageItem[StorageParams::INITIAL_STORAGE_SIZE];
+			this->storageInfo.setTableSize(StorageParams::INITIAL_STORAGE_SIZE);
 		}
 
 		double getLoadFactor(void) const {
@@ -186,14 +187,25 @@ namespace Hash { namespace Storages {
 		}
 
 		void computeStatistics(Utils::StorageStatistics & stats) const {
-			// TODO: Improve the StorageStatistics class so that it can handle probing storage properly.
 			stats.clear();
-			stats.addChain(this->getSize());
-			stats.setTableLength(this->getTableSize());
+			
+			size_t tableSize = storageInfo.getTableSize();
+			size_t psl = 0;
+			for (size_t i = 0; i < tableSize; ++i) {
+				if (storage[i].empty) {
+					stats.addChain(psl);
+					psl = 0;
+				} else {
+					++psl;
+				}
+			}
+			stats.addChain(psl);
+
+			stats.setTableLength(tableSize);
 		}
 
 		bool isMinimal(void) const {
-			return this->getTableSize() <= StorageParams::STARTING_STORAGE_SIZE;
+			return this->getTableSize() <= StorageParams::INITIAL_STORAGE_SIZE;
 		}
 
 		Comparer getComparer(void) const {
@@ -208,6 +220,10 @@ namespace Hash { namespace Storages {
 			return ProbingStorageIterator(this, getTableSize());
 		}
 
+		const PlainStorageInfo & getStorageInfo(void) const {
+			return storageInfo;
+		}
+
 	private:
 		/**
 		 * Single item for representing a stored element.
@@ -215,8 +231,7 @@ namespace Hash { namespace Storages {
 		struct StorageItem {
 			StorageItem(void):
 			  empty(true),
-			  bridge(false)
-			{
+			  bridge(false) {
 			}
 
 			/**
@@ -236,19 +251,14 @@ namespace Hash { namespace Storages {
 		};
 
 		/**
-		 * Number of items in the table.
+		 * Current info.
 		 */
-		size_t elementCount;
+		SettablePlainStorageInfo storageInfo;
 
 		/**
 		 * Table of chains.
 		 */
 		StorageItem * storage;
-
-		/**
-		 * Length of the table.
-		 */
-		size_t storageLength;
 
 		/**
 		 * Comparer.
@@ -285,9 +295,10 @@ namespace Hash { namespace Storages {
 			}
 
 			ProbingStorageIterator operator ++(void) {
+				size_t tableSize = storage->storageInfo.getTableSize();
 				for (; ;) {
 					// Out of bounds?
-					if (position >= storage->storageLength) {
+					if (position >= tableSize) {
 						break;
 					}
 
@@ -325,8 +336,7 @@ namespace Hash { namespace Storages {
 
 			swap(storage, b.storage);
 			swap(comparer, b.comparer);
-			swap(elementCount, b.elementCount);
-			swap(storageLength, b.storageLength);
+			swap(storageInfo, b.storageInfo);
 			swap(probingPolicy, b.probingPolicy);
 		}
 
@@ -342,13 +352,13 @@ namespace Hash { namespace Storages {
 		typedef LinearProbingStorage<T, Comparer, Hash> Storage;
 		typedef typename ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>::EqualityComparer EqualityComparer;
 
-		explicit LinearProbingStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		explicit LinearProbingStorage(size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 		  ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>(tableLength)
 		{
 		}
 
 		explicit LinearProbingStorage(const EqualityComparer & comparer, 
-			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+			size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 		  ProbingStorage<T, Comparer, Hash, LinearProbingPolicy>(comparer, tableLength)
 		{
 		}
@@ -360,13 +370,13 @@ namespace Hash { namespace Storages {
 		typedef QuadraticProbingStorage<T, Comparer, Hash> Storage;
 		typedef typename ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>::EqualityComparer EqualityComparer;
 
-		explicit QuadraticProbingStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+		explicit QuadraticProbingStorage(size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 		  ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>(tableLength)
 		{
 		}
 
 		explicit QuadraticProbingStorage(const EqualityComparer & comparer, 
-			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+			size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 		  ProbingStorage<T, Comparer, Hash, QuadraticProbingPolicy>(comparer, tableLength)
 		{
 		}

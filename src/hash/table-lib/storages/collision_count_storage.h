@@ -1,7 +1,6 @@
 #ifndef COLLISION_COUNT_STORAGE_H
 #define COLLISION_COUNT_STORAGE_H
 
-#include "utils/chain_length_aware_storage_info.h"
 #include "storage.h"
 #include "utils/constant_comparer.h"
 #include <boost/thread.hpp>
@@ -25,8 +24,8 @@ namespace Hash { namespace Storages {
 	 * @typeparam Hash Type of the hash value.
 	 * @typeparam ChainLengthType Length of the chain.
 	 */
-	template <typename T, typename Comparer, typename Hash> /* , typename ChainLengthType = size_t */
-	class CollisionCountStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
+	template <typename T, typename Comparer, typename Hash>
+	class CollisionCountStorage : public Storage<T, Comparer, Hash, PlainStorageInfo> {
 	public:
 		/**
 		 * A single item of storage -- length of the chain.
@@ -45,11 +44,11 @@ namespace Hash { namespace Storages {
 		 * C-tor.
 		 *
 		 * @param comparer Default comparer used.
+		 * @param tableSize Default table size.
 		 */
-		explicit CollisionCountStorage(const Comparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  size(0),
-		  storageSize(tableLength),
-		  storage(new StorageItem[tableLength]),
+		explicit CollisionCountStorage(const Comparer & comparer, size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  storageInfo(tableSize),
+		  storage(new StorageItem[tableSize]),
 		  comparer(comparer) {
 			  init();
 		}		
@@ -57,12 +56,11 @@ namespace Hash { namespace Storages {
 		/**
 		 * C-tor.
 		 *
-		 * @param tableLength Default size of the table.
+		 * @param tableSize Default size of the table.
 		 */
-		explicit CollisionCountStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  size(0),
-		  storageSize(tableLength),
-		  storage(new StorageItem[tableLength]),
+		explicit CollisionCountStorage(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  storageInfo(tableSize),
+		  storage(new StorageItem[tableSize]),
 		  comparer(comparer) {
 			init();
 		}
@@ -71,8 +69,7 @@ namespace Hash { namespace Storages {
 		 * Copy C-tor.
 		 */
 		CollisionCountStorage(const CollisionCountStorage & aStorage):
-		  size(aStorage.size),
-		  storageSize(aStorage.storageSize),
+		  storageInfo(aStorage.storageInfo),
 		  storage(new StorageItem[aStorage.storageSize]),
 		  comparer(aStorage.comparer) {
 			for (size_t i = 0; i < storageSize; ++i) {
@@ -85,7 +82,7 @@ namespace Hash { namespace Storages {
 		/**
 		 * D-tor.
 		 */
-		virtual ~CollisionCountStorage(void) {
+		~CollisionCountStorage(void) {
 			delete [] storage;
 			storage = 0;
 
@@ -102,56 +99,54 @@ namespace Hash { namespace Storages {
 			return *this;
 		}
 
-		virtual void insert(const T &, Hash hash) {
+		void insert(const T &, Hash hash) {
 			// get upgradable access
+			size_t storageSize = storageInfo.getTableSize();
 			boost::upgrade_lock<boost::shared_mutex> l(mutexes[hash * MUTEXES / storageSize]);
 
 			// get exclusive access
 			boost::upgrade_to_unique_lock<boost::shared_mutex> uL(l);
 
 			++storage[hash];
-			++size;
+			storageInfo.incElementCount();
 		}
 
-		virtual bool remove(const T &, Hash) {
+		bool remove(const T &, Hash) {
 			return false;
 		}
 
-		virtual bool contains(const T &, Hash) const {
+		bool contains(const T &, Hash) const {
 			return false;
 		}
 
-		virtual void clear(void) {
-			for (size_t i = 0; i < storageSize; ++i) {
+		void clear(void) {
+			storageInfo.setElementCount(0);
+			for (size_t i = 0, tableSize = storageInfo.getTableSize(); i < tableSize; ++i) {
 				storage[i] = 0;
 			}
 		}
 
-		virtual Utils::ConstantComparer<T> getComparer(void) const {
+		Utils::ConstantComparer<T> getComparer(void) const {
 			return comparer;
 		}
 
-		virtual bool isMinimal(void) const {
-			return storageSize <= StorageParams::STARTING_STORAGE_SIZE;
+		bool isMinimal(void) const {
+			return storageInfo.getTableSize() <= StorageParams::INITIAL_STORAGE_SIZE;
 		}
 
-		virtual size_t getSize(void) const {
-			return size;
+		size_t size(void) const {
+			return storageInfo.getElementCount();
 		}
 
-		virtual size_t getTableSize(void) const {
-			return storageSize;
-		}
-
-		virtual double getLoadFactor(void) const {
-			return 0;
-		}
-
-		virtual void computeStatistics(Utils::StorageStatistics & stats) const {
+		void computeStatistics(Utils::StorageStatistics & stats) const {
 			stats.clear();
-			for (size_t i = 0; i < storageSize; ++i) {
+			for (size_t i = 0, tableSize = storageInfo.getTableSize(); i < tableSize; ++i) {
 				stats.addChain(storage[i]);
 			}
+		}
+
+		const PlainStorageInfo & getStorageInfo(void) const {
+			return storageInfo;
 		}
 		
 		Iterator getBeginning(void) {
@@ -169,7 +164,7 @@ namespace Hash { namespace Storages {
 		public:
 			CollisionCountStorageIterator(CollisionCountStorage * s, bool beginning):
 			  storage(s),
-			  tableIndex(beginning ? 0 : s->storageSize),
+			  tableIndex(beginning ? 0 : s->storageInfo.getTableSize()),
 			  chainIndex(0) {
 				// After initialization we should point at the valid (first) element.
 				if (beginning && storage->storage[0] == 0) {
@@ -190,13 +185,14 @@ namespace Hash { namespace Storages {
 			}
 
 			CollisionCountStorageIterator operator ++(void) {
+				size_t tableSize = storage->storageInfo.getTableSize();
+
 				// Move.
 				++chainIndex;
 				if (chainIndex >= storage->storage[tableIndex]) {
 					// We are behind the last element, find the next chain.
 					chainIndex = 0;
-					while (tableIndex < storage->storageSize && storage->storage[tableIndex] == 0) {
-						++tableIndex;
+					for (++tableIndex; tableIndex < tableSize && storage->storage[tableIndex] == 0; ++tableIndex) {
 					}
 				}
 
@@ -227,9 +223,31 @@ namespace Hash { namespace Storages {
 		};
 
 		// ChainLengthAwareStorage
-		virtual size_t getChainLength(size_t address) const {
-			boost::shared_lock<boost::shared_mutex> l(mutexes[address * MUTEXES / storageSize]);
+		size_t getChainLength(size_t address) const {
+			boost::shared_lock<boost::shared_mutex> l(mutexes[address * MUTEXES / storageInfo.getTableSize()]);
 			return storage[address];
+		}		
+		
+		/**
+ 		 * Swapping of the two storages.
+		 *
+		 * @param b Storage to be swapped.
+		 */
+		void swap(CollisionCountStorage<T, Comparer, Hash> & b) {
+			std::swap(storage, b.storage);
+			std::swap(storageInfo, b.storageInfo);
+			std::swap(comparer, b.comparer);
+			std::swap(mutexes, b.mutexes);
+		}
+
+		/**
+		 * Swapping of the two storages.
+		 *
+		 * @param a Storage to be swapped.
+		 * @param b Storage to be swapped.
+		 */
+		friend void swap(CollisionCountStorage<T, Comparer, Hash> & a, CollisionCountStorage<T, Comparer, Hash> & b) {
+			a.swap(b);	
 		}
 
 	protected:
@@ -248,57 +266,28 @@ namespace Hash { namespace Storages {
 		 */
 		virtual void init(void) {
 			// TODO: memset!
-			for (size_t i = 0; i < storageSize; ++i) {
+			for (size_t i = 0, tableSize = storageInfo.getTableSize(); i < tableSize; ++i) {
 				storage[i] = 0;
 			}
 
 			mutexes = new boost::shared_mutex[MUTEXES];
 		}
 
+	private:
 		/**
 		 * Sizes of the chains.
 		 */
 		StorageItem * storage;
 
 		/**
-		 * Size of the table.
+		 * Current storage info.
 		 */
-		size_t storageSize;
-
-		/**
-         * The number of stored elements.
-		 */
-		size_t size;
+		SettablePlainStorageInfo storageInfo;
 
 		/**
 		 * Comparer used.
 		 */
 		Utils::ConstantComparer<T> comparer;
-
-	public:
-		/**
- 		 * Swapping of the two storages.
-		 *
-		 * @param b Storage to be swapped.
-		 */
-		void swap(CollisionCountStorage<T, Comparer, Hash> & b) {
-			std::swap(storage, b.storage);
-			std::swap(storageSize, b.storageSize);
-			std::swap(size, b.size);
-			std::swap(comparer, b.comparer);
-			std::swap(mutexes, b.mutexes);
-		}
-
-		/**
-		 * Swapping of the two storages.
-		 *
-		 * @param a Storage to be swapped.
-		 * @param b Storage to be swapped.
-		 */
-		friend void swap(CollisionCountStorage<T, Comparer, Hash> & a, CollisionCountStorage<T, Comparer, Hash> & b) {
-			a.swap(b);	
-		}
-
 	};
 
 } }

@@ -51,9 +51,9 @@ namespace Hash { namespace Tests {
 		typedef HashTable TableType;
 
 		virtual void fillData(TableType & t) {
-			this->assertEqual(0, t.getSize(), "Empty table must have just 0 items.");
+			this->assertEqual<size_t>(0, t.size(), "Empty table must have just 0 items.");
 			t.insert(3);
-			this->assertEqual(1, t.getSize(), "Table (after t.insert(3)) should contain only 1 element.");
+			this->assertEqual<size_t>(1, t.size(), "Table (after t.insert(3)) should contain only 1 element.");
 			this->assertException<std::exception>(InsertOperation<int, TableType>(3, t), "Inserting 3 causes exception.");
 			this->assertTrue(t.contains(3), "Table should contain item 3.");
 			this->assertFalse(t.contains(0), "Table should not contain item 0.");
@@ -86,7 +86,7 @@ namespace Hash { namespace Tests {
 			Hash::Utils::StorageStatistics stats;
 			t.computeStatistics(stats);
 			this->assertEqual<size_t>(stats.getTableLength(), 16, "Default size should be enough for 2 elements.");
-			this->assertEqual<size_t>(stats.getElementCount(), t.getSize(), "Stats and table size must be the same.");
+			this->assertEqual<size_t>(stats.getElementCount(), t.size(), "Stats and table size must be the same.");
 			this->assertEqual<size_t>(stats.getElementCount(), 2, "We only have 2 elements.");
 			this->assertEqual<bool>(t.contains(3), true, "The table must contain 3.");
 			this->assertEqual<bool>(t.contains(4), true, "The table must contain 4.");
@@ -100,14 +100,14 @@ namespace Hash { namespace Tests {
 		}
 
 		virtual void testMassiveFill(void) {
-			const int ELEMENT_COUNT = 5000;
+			const size_t ELEMENT_COUNT = 5000;
 
 			TableType t;
 			for (int i = 0; i < ELEMENT_COUNT; ++i) {
 				t.insert(5 * i);
 			}
 
-			this->assertEqual(ELEMENT_COUNT, t.getSize(), "After inserting n distinct elements we expect table length of n.");
+			this->assertEqual(ELEMENT_COUNT, t.size(), "After inserting n distinct elements we expect table length of n.");
 
 			for (int i = 0; i < ELEMENT_COUNT; ++i) {
 				this->assertTrue(t.contains(5 * i), "Table must contain the inserted element.");
