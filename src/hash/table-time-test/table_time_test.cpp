@@ -48,7 +48,7 @@ namespace Hash { namespace Systems {
 	template<typename T>
 	class PolynomialSystem5 : public Hash::Systems::PolynomialSystem<T> {
 	public:
-		explicit PolynomialSystem5(size_t aStartLength = Hash::Systems::PolynomialSystem<T>::START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 5):
+		explicit PolynomialSystem5(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 5):
 		  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
 		}
 	};
@@ -56,7 +56,7 @@ namespace Hash { namespace Systems {
 	template<typename T>
 	class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T> {
 	public:
-		explicit PolynomialSystem32(size_t aStartLength = Hash::Systems::PolynomialSystem<T>::START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
+		explicit PolynomialSystem32(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
 		  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
 		}
 	};
@@ -65,13 +65,13 @@ namespace Hash { namespace Systems {
 
 template<typename T>
 struct SystemDescription {
-	SystemDescription(Hash::Systems::UniversalSystem<T> * f, string n):
+	SystemDescription(Hash::Systems::UniversalFunction<T> * f, string n):
 	  function(f),
 	  name(n)
 	{
 	}
 
-	Hash::Systems::UniversalSystem<T> * function;
+	Hash::Systems::UniversalFunction<T> * function;
 	string name;
 	time_duration time;
 };
@@ -199,7 +199,7 @@ int main(void) {
 		}
 	}
 
-	size_t ELEMENT_COUNT = 1 << 27;
+	size_t ELEMENT_COUNT = 1 << 20;
 	ptime start, finish;
 
 	start = microsec_clock::local_time();
@@ -227,7 +227,7 @@ int main(void) {
 	mySet2.clear();
 
 	start = microsec_clock::local_time();
-	LinearProbingTabulation lpt(ELEMENT_COUNT * 2);
+	LinearProbingTabulation lpt;
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
 		lpt.insert(i);
 	}
