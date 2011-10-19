@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include <string>
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
@@ -155,9 +156,9 @@ int main(void) {
 	SizeVector sizes;
 	sizes.push_back(1 << 10);
 	sizes.push_back(1 << 16);
-	//sizes.push_back(1 << 20);
-	//sizes.push_back(1 << 24);
-	//sizes.push_back(1 << 27);
+	sizes.push_back(1 << 20);
+	sizes.push_back(1 << 24);
+	sizes.push_back(1 << 27);
 
 	TableVector tables;
 	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>(new ChainingLinear, "ChainingLinear"));
@@ -212,26 +213,39 @@ int main(void) {
 		}
 	}
 
-	size_t ELEMENT_COUNT = 1 << 16;
+	size_t ELEMENT_COUNT = 1 << 27;
 
 	start = microsec_clock::local_time();
 	set<T> mySet;
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet.insert(i * i);
+		mySet.insert(i);
 	}
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet.find(i * i);
+		mySet.find(i);
 	}
 	finish = microsec_clock::local_time();
 	cout << "RBT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	mySet.clear();
+
+	start = microsec_clock::local_time();
+	unordered_set<T> mySet2;
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet2.insert(i * i * 64);
+	}
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet2.find(i * i * 64);
+	}
+	finish = microsec_clock::local_time();
+	cout << "US for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	mySet2.clear();
 
 	start = microsec_clock::local_time();
 	LinearProbingTabulation lpt(ELEMENT_COUNT * 2);
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.insert(i * i);
+		lpt.insert(i);
 	}
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.contains(i * i);
+		lpt.contains(i);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
