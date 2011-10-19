@@ -9,10 +9,10 @@ set(SOURCES
 include_directories( 
   ../../table-lib
   ../../test-suite
+  ${Boost_INCLUDE_DIRS}
 )
 
-link_directories (../../test-suite/cmake  ${Boost_INCLUDE_DIRS} )
-link_directories (../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
+link_directories (../../test-suite/cmake ../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
 
 add_executable ( TableTest ${SOURCES} )
 
