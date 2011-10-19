@@ -548,13 +548,16 @@ namespace Hash { namespace Storages {
 	template<typename T, typename Comparer, typename HashType>
 	class ChainedStorage : public ChainedStorageBase<T, Comparer, HashType, SettablePlainStorageInfo> {
 	public:
+		typedef Comparer EqualityComparer;
+		typedef ChainedStorageBase<T, Comparer, HashType, SettablePlainStorageInfo> BaseStorage;
+
 		/**
 		 * Chained storage c-tor.
 		 *
 		 * @param tableSize Starting length of the table.
 		 */
 		explicit ChainedStorage(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
-		  ChainedStorageBase(tableSize)
+		  BaseStorage(tableSize)
 		{
 		}
 
@@ -566,7 +569,7 @@ namespace Hash { namespace Storages {
 		 */
 		explicit ChainedStorage(const EqualityComparer & comparer, 
 			size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
-		  ChainedStorageBase(comparer, tableSize)
+		  BaseStorage(comparer, tableSize)
 		{
 		}
 		  
@@ -576,7 +579,7 @@ namespace Hash { namespace Storages {
 		 * @param storage Copied storage.
 		 */
 		ChainedStorage(const ChainedStorage & storage): 
-		  ChainedStorageBase(storage)
+		  BaseStorage(storage)
 		{
 		}
 

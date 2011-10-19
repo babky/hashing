@@ -3,7 +3,6 @@ cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 find_package( Boost 1.34 COMPONENTS random system date_time REQUIRED )
 
 set(SOURCES 
-  ../table_test.cpp
   ../test.cpp
 )
 

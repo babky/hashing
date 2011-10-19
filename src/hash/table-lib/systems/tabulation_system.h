@@ -49,7 +49,7 @@ namespace Hash { namespace Systems {
 		}
 
 		TabulationFunction & operator =(const TabulationFunction & r) {
-			TabulationFunction<T> tmp = r;
+			TabulationFunction tmp = r;
 			tmp.swap(*this);
 			return *this;
 		}

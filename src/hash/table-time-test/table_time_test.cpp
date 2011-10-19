@@ -49,7 +49,7 @@ namespace Hash { namespace Systems {
 	class PolynomialSystem5 : public Hash::Systems::PolynomialSystem<T, Storage> {
 	public:
 		explicit PolynomialSystem5(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 5):
-		  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
+		  PolynomialSystem<T, Storage>(aStartLength, aUniversumMax, aDegree) {
 		}
 	};
 
@@ -57,7 +57,7 @@ namespace Hash { namespace Systems {
 	class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T, Storage> {
 	public:
 		explicit PolynomialSystem32(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
-		  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
+		  PolynomialSystem<T, Storage>(aStartLength, aUniversumMax, aDegree) {
 		}
 	};
 
