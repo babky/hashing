@@ -46,14 +46,14 @@ namespace Hash { namespace Utils {
 		 *
 		 * @return Length of the shortest chain.
 		 */
-		size_t getMinimalChainLength(void) const;
+		size_t getMinChainLength(void) const;
 
 		/**
 		 * Length of the longest chain.
 		 *
 		 * @return Length of the longest chain.
 		 */
-		size_t getMaximalChainLength(void) const;
+		size_t getMaxChainLength(void) const;
 
 		/**
 		 * Adds chain to the statistics.

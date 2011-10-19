@@ -2,7 +2,6 @@
 #define CHAINED_STORAGE_H
 
 #include <algorithm>
-#include "utils/chain_length_aware_storage_info.h"
 #include "storage.h"
 
 namespace Hash { namespace Storages {
@@ -13,15 +12,11 @@ namespace Hash { namespace Storages {
 	 * @typeparam T Type of the stored items.
 	 * @typeparam Comparer Comparer used.
 	 * @typeparam Hash Type of the hash.
+	 * @typeparam SettableStorageInfo Storage info - allows the setters.
 	 */
-	template <typename T, typename Comparer, typename Hash>
-	class ChainedStorage : public Storage<T, Comparer, Hash, Utils::ChainLengthAwareStorageInfo> {
+	template <typename T, typename Comparer, typename Hash, class SettableStorageInfo>
+	class ChainedStorageBase : public Storage<T, Comparer, Hash, typename SettableStorageInfo::StorageInfo> {
 	public:
-		/**
-		 * Storage type used.
-		 */
-		typedef ChainedStorage<T, Comparer, Hash> Storage;
-
 		/**
 		 * Comparer used.
 		 */
@@ -40,15 +35,16 @@ namespace Hash { namespace Storages {
 		 */
 		typedef ChainedStorageIterator Iterator;
 
+		typedef typename SettableStorageInfo::StorageInfo StorageInfo;
+
 		/**
 		 * Chained storage c-tor.
 		 *
-		 * @param tableLength Starting length of the table.
+		 * @param tableSize Starting length of the table.
 		 */
-		explicit ChainedStorage(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  elementCount(0),
-		  storageLength(tableLength),
-		  storage(new StorageItem[tableLength]),
+		explicit ChainedStorageBase(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  storageInfo(tableSize),
+		  storage(new ChainedList[tableSize]),
 		  comparer(EqualityComparer()) {
 		}
 
@@ -56,23 +52,21 @@ namespace Hash { namespace Storages {
 		 * Chained storage c-tor.
 		 *
 		 * @param comparer Used comparer.
-		 * @param tableLength Starting length of the table.
+		 * @param tableSize Starting length of the table.
 		 */
-		explicit ChainedStorage(const EqualityComparer & comparer, 
-			size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
-		  elementCount(0),
-		  storageLength(tableLength),
-		  storage(new StorageItem[tableLength]),
+		explicit ChainedStorageBase(const EqualityComparer & comparer, 
+			size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  storageInfo(tableSize),
+		  storage(new ChainedList[tableSize]),
 		  comparer(comparer) {
 		}
 
 		/**
 		 * Chained storage d-tor.
 		 */
-		~ChainedStorage(void) {
-			delete [] this->storage;
-			this->storage = 0;
-			this->storageLength = 0;
+		~ChainedStorageBase(void) {
+			delete [] storage;
+			storage = 0;
 		}
 
 		/**
@@ -80,11 +74,13 @@ namespace Hash { namespace Storages {
 		 *
 		 * @param storage Copied storage.
 		 */
-		ChainedStorage(const ChainedStorage & storage) {
-			this->storage = new StorageItem[storage.storageLength];
-			this->storageLength = storage.storageLength;
-			this->elementCount = storage.elementCount;
-			this->comparer = storage.comparer;
+		ChainedStorageBase(const ChainedStorageBase & aStorage):
+		  storageInfo(aStorage.storageInfo),
+		  storage(new ChainedList[aStorage.storageInfo.getTableSize()]),
+		  comparer(aStorage.comparer) {
+			for (size_t i = 0, e = storageInfo.getTableSize(); i < e; ++i) {
+				storage[i] = aStorage.storage[i];
+			}
 		}
 
 		/**
@@ -92,27 +88,27 @@ namespace Hash { namespace Storages {
 		 *
 		 * @param storage Copied storage.
 		 */
-		ChainedStorage & operator =(const ChainedStorage & storage) {
-			ChainedStorage tmp = storage;
+		virtual ChainedStorageBase & operator =(const ChainedStorageBase & storage) {
+			ChainedStorageBase tmp = storage;
 			swap(tmp);
 			return *this;
 		}
 
 		void insert(const T & item, HashType hash) {
-			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+			simple_assert(hash < storageInfo.getTableSize(), "Hash must be inside the storage!");
 
-			if (!this->storage[hash].insert(item, this->comparer)) {
+			if (!storage[hash].insert(item, comparer)) {
 				throw ItemStoredException<T>(item);
 			}
 
-			++this->elementCount;
+			storageInfo.incElementCount();
 		}
 
 		bool remove(const T & item, HashType hash) {
-			simple_assert(hash < storageLength, "Hash must be inside the storage!");
+			simple_assert(hash < storageInfo.getTableSize(), "Hash must be inside the storage!");
 
-			if (this->storage[hash].remove(item, this->comparer)) {
-				--this->elementCount;
+			if (storage[hash].remove(item, comparer)) {
+				storageInfo.decElementCount();
 				return true;
 			} else {
 				return false;
@@ -120,42 +116,36 @@ namespace Hash { namespace Storages {
 		}
 
 		bool contains(const T & item, HashType hash) const {
-			return this->storage[hash].contains(item, this->comparer);
+			return storage[hash].contains(item, comparer);
 		}
 
-		size_t getSize(void) const {
-			return this->elementCount;
-		}
-
-		size_t getTableSize(void) const {
-			return this->storageLength;
+		size_t size(void) const {
+			return storageInfo.getElementCount();
 		}
 
 		void clear(void) {
-			this->storageLength = 0;
-			this->elementCount = 0;
-			delete [] this->storage;
-			this->storage = new StorageItem[StorageParams::STARTING_STORAGE_SIZE];
-			this->storageLength = StorageParams::STARTING_STORAGE_SIZE;
+			delete [] storage;
+			storage = new ChainedList[StorageParams::INITIAL_STORAGE_SIZE];
+			storageInfo.setTableSize(StorageParams::INITIAL_STORAGE_SIZE);
+			storageInfo.setElementCount(0);
 		}
 
-		double getLoadFactor(void) const {
-			simple_assert(storageLength != 0, "Storage must contain at least one slot.");
-			return static_cast<double>(this->elementCount) / this->storageLength;
+		const StorageInfo & getStorageInfo(void) const {
+			return storageInfo;
 		}
 
 		void computeStatistics(Utils::StorageStatistics & stats) const {
-			for (size_t i = 0; i < this->storageLength; ++i) {
-				stats.addChain(this->storage[i].getSize());
+			for (size_t i = 0; i < storageInfo.getTableSize(); ++i) {
+				stats.addChain(storage[i].getSize());
 			}
 		}
 
 		bool isMinimal(void) const {
-			return this->getTableSize() <= StorageParams::STARTING_STORAGE_SIZE;
+			return storageInfo.getTableSize() <= StorageParams::INITIAL_STORAGE_SIZE;
 		}
 
 		Comparer getComparer(void) const {
-			return this->comparer;
+			return comparer;
 		}
 
 		Iterator getBeginning(void) {
@@ -168,6 +158,24 @@ namespace Hash { namespace Storages {
 
 		size_t getChainLength(HashType address) const {
 			return storage[address].getSize();
+		}
+
+		/**
+		 * Swapping of the two storages.
+		 *
+		 * @param a Storage to be swapped.
+		 * @param b Storage to be swapped.
+		 */
+		void swap(ChainedStorageBase & b) {
+			using std::swap;
+
+			swap(storage, b.storage);
+			swap(comparer, b.comparer);
+			swap(storageInfo, b.storageInfo);
+		}
+
+		friend void swap(ChainedStorageBase & a, ChainedStorageBase & b) {
+			a.swap(b);
 		}
 
 	private:
@@ -204,8 +212,8 @@ namespace Hash { namespace Storages {
 			 */
 			~ChainedNode(void) {
 				// TODO: Decide if this is the right behaviour.
-				delete this->next;
-				this->next = 0;
+				delete next;
+				next = 0;
 			}
 
 			/**
@@ -230,7 +238,9 @@ namespace Hash { namespace Storages {
 			ChainedNode & operator =(const ChainedNode &);
 		};
 
-		// TODO: doc
+		/**
+		 * Iterator responsible for iterating through a single chain.
+		 */
 		class ChainIterator {
 		public:
 			explicit ChainIterator(ChainedNode ** nodePtr) {
@@ -282,8 +292,7 @@ namespace Hash { namespace Storages {
 			 * @param b Swapped list.
 			 */
 			friend void swap(ChainedList & a, ChainedList & b) {
-				std::swap(a.first, b.first);
-				std::swap(a.elementCount, b.elementCount);
+				a.swap(b);
 			}
 
 		public:
@@ -328,10 +337,13 @@ namespace Hash { namespace Storages {
 			 *
 			 * @param list Copied list.
 			 */
-			ChainedList(const ChainedList & list) {
-				this->elementCount = list->elementCount;
-				for (ChainedNode * n = list->first; n->next; n = n->next) {
-					this->first = new ChainedNode(n->item, this->first);
+			ChainedList(const ChainedList & list):
+			  elementCount(list.elementCount),
+			  first(0) {
+				if (list.first) {
+					for (ChainedNode * n = list.first; n->next; n = n->next) {
+						first = new ChainedNode(n->item, first);
+					}
 				}
 			}
 
@@ -340,8 +352,8 @@ namespace Hash { namespace Storages {
 			 */
 			ChainedList & operator =(const ChainedList & list) {
 				ChainedList tmp = list;
-				swap(*this, tmp);
-				return this;
+				this->swap(tmp);
+				return *this;
 			}
 
 			/**
@@ -435,6 +447,16 @@ namespace Hash { namespace Storages {
 				return this->elementCount;
 			};
 
+			/**
+			 * Swaps the current list and the list b.
+			 *
+			 * @param b List to be switched with.
+			 */
+			void swap(ChainedList & b) {
+				std::swap(first, b.first);
+				std::swap(elementCount, b.elementCount);
+			}
+
 		private:
 			/**
 			 * Number of elements stored inside this chain.
@@ -450,9 +472,9 @@ namespace Hash { namespace Storages {
 	public:
 		class ChainedStorageIterator {
 		public:
-			ChainedStorageIterator(const Storage * storage, bool beginning):
+			ChainedStorageIterator(const ChainedStorageBase * storage, bool beginning):
 			  storage(storage),
-			  chainIndex(beginning ? 0 : storage->getTableSize()),
+			  chainIndex(beginning ? 0 : storage->storageInfo.getTableSize()),
 			  chainIterator(beginning ? storage->storage[chainIndex].getBeginning() : ChainIterator(0)) {
 
 				if (this->chainIterator == this->storage->storage[this->chainIndex].getEnd() && beginning) {
@@ -478,7 +500,7 @@ namespace Hash { namespace Storages {
 
 			ChainedStorageIterator & operator++(void) {
 				++this->chainIterator;
-				size_t tableSize = this->storage->getTableSize();
+				size_t tableSize = this->storage->storageInfo.getTableSize();
 				while (this->chainIterator == this->storage->storage[this->chainIndex].getEnd()) {
 					++this->chainIndex;
 					if (this->chainIndex == tableSize) {
@@ -499,57 +521,75 @@ namespace Hash { namespace Storages {
 			}
 
 		private:
-			const Storage * storage;
+			const ChainedStorageBase * storage;
 			size_t chainIndex;
 			ChainIterator chainIterator;
 		};
 
-	private:
+	protected:
+		/**
+		 * The storage info.
+		 */
+		SettableStorageInfo storageInfo;
+
+	private:		
 		/**
 		 * Table of chains.
 		 */
-		typedef ChainedList StorageItem;
-
-		/**
-		 * Number of items in the table.
-		 */
-		size_t elementCount;
-
-		/**
-		 * Table of chains.
-		 */
-		StorageItem * storage;
-
-		/**
-		 * Length of the table.
-		 */
-		size_t storageLength;
+		ChainedList * storage;
 
 		/**
 		 * Comparer.
 		 */
 		mutable EqualityComparer comparer;
 
+	};
+
+	template<typename T, typename Comparer, typename HashType>
+	class ChainedStorage : public ChainedStorageBase<T, Comparer, HashType, SettablePlainStorageInfo> {
 	public:
 		/**
-		 * Swapping of the two storages.
+		 * Chained storage c-tor.
 		 *
-		 * @param a Storage to be swapped.
-		 * @param b Storage to be swapped.
+		 * @param tableSize Starting length of the table.
 		 */
-		void swap(ChainedStorage<T, EqualityComparer, HashType> & b) {
-			using std::swap;
-
-			swap(storage, b.storage);
-			swap(comparer, b.comparer);
-			swap(elementCount, b.elementCount);
-			swap(storageLength, b.storageLength);
+		explicit ChainedStorage(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  ChainedStorageBase(tableSize)
+		{
 		}
 
-		friend void swap(ChainedStorage & a, ChainedStorage & b) {
-			a.swap(b);
+		/**
+		 * Chained storage c-tor.
+		 *
+		 * @param comparer Used comparer.
+		 * @param tableSize Starting length of the table.
+		 */
+		explicit ChainedStorage(const EqualityComparer & comparer, 
+			size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  ChainedStorageBase(comparer, tableSize)
+		{
+		}
+		  
+		/**
+		 * Chained storage copy c-tor.
+		 *
+		 * @param storage Copied storage.
+		 */
+		ChainedStorage(const ChainedStorage & storage): 
+		  ChainedStorageBase(storage)
+		{
 		}
 
+		/**
+		 * Chained storage assignment operator.
+		 *
+		 * @param storage Copied storage.
+		 */
+		virtual ChainedStorage & operator =(const ChainedStorage & storage) {
+			ChainedStorage tmp = storage;
+			swap(tmp);
+			return *this;
+		}
 	};
 
 } }

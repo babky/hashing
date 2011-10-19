@@ -1,7 +1,6 @@
 #ifndef TWO_WAY_SYSTEM_H
 #define TWO_WAY_SYSTEM_H
 
-#include "utils/chain_length_aware_storage_info.h"
 #include "systems/linear_map_system.h"
 #include "systems/polynomial_system.h"
 #include "systems/cwlf_system.h"
@@ -15,18 +14,19 @@ namespace Hash { namespace Systems {
 	 * System allowing two way universal hash function. The value is hashed to the shorter chain.
 	 *
 	 * @typeparam T Type of the hashed values.
+	 * @typeparam Storage Storage used.
 	 * @typeparam System The universal system which will be used.
 	 */
-	template <typename T, template <typename> class System>
-	class TwoWaySystem : public UniversalSystem<T> {
+	template <typename T, class Storage, template <typename, class> class System>
+	class TwoWaySystem : public UniversalFunction<T, Storage> {
 	public:
 		// Use the former HashType;
-		using UniversalSystem<T>::HashType;
+		using UniversalFunction<T, Storage>::HashType;
 	
 		/**
 		 * Single function type, it is chosen randomly from the given universal system.
 		 */
-		typedef System<T> Function;
+		typedef System<T, Storage> Function;
 
 		/**
 		 * C-tor.
@@ -34,12 +34,6 @@ namespace Hash { namespace Systems {
 		TwoWaySystem(void):
 		  storage(0) {
 			reset();
-		}
-
-		void initialize(Hash::Utils::ChainLengthAwareStorageInfo & info) {
-			f.initialize(info);
-			g.initialize(info);
-			storage = &info;
 		}
 
 		virtual void reset(void) {
@@ -57,6 +51,13 @@ namespace Hash { namespace Systems {
 			g.setTableSize(length);
 		}
 
+		virtual void setStorage(Storage * aStorage) {
+			storage = aStorage;
+
+			f.setStorage(aStorage);
+			g.setStorage(aStorage);
+		}
+
 		virtual T getUniversumMax(void) const {
 			simple_assert(f.getUniversumMax() == g.getUniversumMax(), "Universum sizes the two functions must be the same.");
 			return f.getUniversumMax();
@@ -67,15 +68,15 @@ namespace Hash { namespace Systems {
 			g.setUniversumMax(universumMax);
 		}
 
-		virtual size_t hash(const T & x, size_t length) {
-			size_t hf = f.hash(x, length);
-			size_t hg = g.hash(x, length);
+		virtual size_t hash(const T & x) {
+			size_t hf = f.hash(x);
+			size_t hg = g.hash(x);
 
 			return storage->getChainLength(hf) < storage->getChainLength(hg) ? hf : hg;
 		}
 
-		virtual size_t operator()(const T & a, size_t length) {
-			return hash(a, length);
+		virtual size_t operator()(const T & a) {
+			return hash(a);
 		}
 
 		void swap(TwoWaySystem & b) {
@@ -99,32 +100,32 @@ namespace Hash { namespace Systems {
 		 * Universal function.
 		 */
 		Function g;
-		
+
 		/**
-		 * Currently used storage.
+		 * Storage info.
 		 */
-		Utils::ChainLengthAwareStorageInfo * storage;
+		Storage * storage;
 	};
 
 	/**
 	 * The possibility of two way linear hashing.
 	 */
-	template <typename T>
-	class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Hash::Systems::UniversalFunctionLinearMap> {
+	template <typename T, class Storage>
+	class TwoWaySystemLinearMap : public Hash::Systems::TwoWaySystem<T, Storage, Hash::Systems::UniversalFunctionLinearMap> {
 	};
 
 	/**
 	 * The possibility of two way polynomial hashing.
 	 */
-	template <typename T>
-	class TwoWaySystemPolynomial : public Hash::Systems::TwoWaySystem<T, Hash::Systems::PolynomialSystem> {
+	template <typename T, class Storage>
+	class TwoWaySystemPolynomial : public Hash::Systems::TwoWaySystem<T, Storage, Hash::Systems::PolynomialSystem> {
 	};
 
 	/**
 	 * The possibility of two way CWLF.
 	 */	
-	template <typename T>
-	class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Hash::Systems::UniversalFunctionCWLF> {
+	template <typename T, class Storage>
+	class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Storage, Hash::Systems::UniversalFunctionCWLF> {
 	};
 
 
@@ -132,13 +133,13 @@ namespace Hash { namespace Systems {
 
 namespace std {
 		
-	template <typename T, template <typename> class System>
-	void swap(Hash::Systems::TwoWaySystem<T, System> & a, Hash::Systems::TwoWaySystem<T, System> & b) {
+	template <typename T, class Storage, template <typename> class System>
+	void swap(Hash::Systems::TwoWaySystem<T, Storage, System> & a, Hash::Systems::TwoWaySystem<T, Storage, System> & b) {
 		a.swap(b);
 	}	
 	
-	template <typename T>
-	void swap(Hash::Systems::TwoWaySystemLinearMap<T> & a, Hash::Systems::TwoWaySystemLinearMap<T> & b) {
+	template <typename T, class Storage>
+	void swap(Hash::Systems::TwoWaySystemLinearMap<T, Storage> & a, Hash::Systems::TwoWaySystemLinearMap<T, Storage> & b) {
 		a.swap(b);
 	}
 

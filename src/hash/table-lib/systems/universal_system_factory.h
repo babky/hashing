@@ -7,8 +7,8 @@ namespace Hash { namespace Systems {
 	 * Factory class for creating various Hash functions. Provide a partial specialization or full specialization in
 	 * case of the system does not provide a standard constructor interface,
 	 */
-	template<typename T, template <class> class HashFunction>
-	class UniversalSystemFactory {
+	template<typename T, class Storage, template <class, class> class HashFunction>
+	class UniversalFunctionFactory {
 	public:
 
 		/**
@@ -16,8 +16,8 @@ namespace Hash { namespace Systems {
 		 *
 		 * @return Created hash function.
 		 */
-		static HashFunction<T> create(size_t size) {
-			return HashFunction<T>(size);
+		static HashFunction<T, Storage> create(size_t size) {
+			return HashFunction<T, Storage>(size);
 		}
 
 	};

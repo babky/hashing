@@ -9,7 +9,7 @@ namespace Hash { namespace Policies { namespace Rehash {
 	/**
 	 * Standard rehashing policy which keeps the table load factor inside given bounds.
 	 */
-	class WorstCaseRehashPolicy : public RehashPolicy {
+	class WorstCaseRehashPolicy : public RehashPolicy<MaxChainLengthStorageInfo> {
 	public:
 		/**
 		 * Default minimal load factor.
@@ -53,8 +53,8 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 */
 		double getMaxLoadFactor(void) const;
 
-		bool needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo);
-		bool needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo);
+		bool needsRehashingAfterInsert(const MaxChainLengthStorageInfo & storageInfo);
+		bool needsRehashingAfterDelete(const MaxChainLengthStorageInfo & storageInfo);
 
 	private:
 		/**

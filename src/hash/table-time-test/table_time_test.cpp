@@ -45,36 +45,23 @@ using namespace Hash::Policies::Rehash;
 
 namespace Hash { namespace Systems {
 	
-	template<typename T>
-	class PolynomialSystem5 : public Hash::Systems::PolynomialSystem<T> {
+	template<typename T, class Storage>
+	class PolynomialSystem5 : public Hash::Systems::PolynomialSystem<T, Storage> {
 	public:
 		explicit PolynomialSystem5(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 5):
-		  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
+		  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
 		}
 	};
 
-	template<typename T>
-	class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T> {
+	template<typename T, class Storage>
+	class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T, Storage> {
 	public:
 		explicit PolynomialSystem32(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
-		  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
+		  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
 		}
 	};
 
 } }
-
-template<typename T>
-struct SystemDescription {
-	SystemDescription(Hash::Systems::UniversalFunction<T> * f, string n):
-	  function(f),
-	  name(n)
-	{
-	}
-
-	Hash::Systems::UniversalFunction<T> * function;
-	string name;
-	time_duration time;
-};
 
 template<typename T>
 class HashTableWrapper {

@@ -20,10 +20,10 @@ double LoadFactorBoundsRehashPolicy::getMaxLoadFactor(void) const {
 	return this->maxFactor;
 }
 
-bool LoadFactorBoundsRehashPolicy::needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo) {
+bool LoadFactorBoundsRehashPolicy::needsRehashingAfterInsert(const PlainStorageInfo & storageInfo) {
 	return storageInfo.getLoadFactor() > this->getMaxLoadFactor();
 }
 
-bool LoadFactorBoundsRehashPolicy::needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo) {
+bool LoadFactorBoundsRehashPolicy::needsRehashingAfterDelete(const PlainStorageInfo & storageInfo) {
 	return storageInfo.getLoadFactor() < this->getMinLoadFactor();
 }

@@ -36,7 +36,7 @@ size_t GuaranteedRehashPolicy::getMaxChainLength(size_t n) const {
 	}
 }
 
-inline bool GuaranteedRehashPolicy::needsRehashingAfterDelete(const Hash::StorageInfo & storageInfo) {
+inline bool GuaranteedRehashPolicy::needsRehashingAfterDelete(const MaxChainLengthStorageInfo & storageInfo) {
 	if (storageInfo.getLoadFactor() < this->getMinLoadFactor()) {
 		return true;
 	}
@@ -44,14 +44,12 @@ inline bool GuaranteedRehashPolicy::needsRehashingAfterDelete(const Hash::Storag
 	return false;
 }
 
-inline bool GuaranteedRehashPolicy::needsRehashingAfterInsert(const Hash::StorageInfo & storageInfo) {
+inline bool GuaranteedRehashPolicy::needsRehashingAfterInsert(const MaxChainLengthStorageInfo & storageInfo) {
 	if (storageInfo.getLoadFactor() > this->getMaxLoadFactor()) {
 		return true;
 	}
 
-	StorageStatistics stats;
-	storageInfo.computeStatistics(stats);
-	if (stats.getMaximalChainLength() > this->getMaxChainLength(stats.getElementCount())) {
+	if (storageInfo.getMaxChainLength() > this->getMaxChainLength(storageInfo.getElementCount())) {
 		return true;
 	}
 

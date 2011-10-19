@@ -11,31 +11,24 @@
 	#pragma warning(default: 4512 4127 4100)
 #endif
 #include "systems/universal_system.h"
+#include "storage.h"
 #include "utils/static_random_generator.h"
-#include "utils/rehash_observer.h"
 
 namespace Hash { namespace Systems {
 
 	/**
 	 * The simplified bit string system. It is a universal system with the constant 1.
 	 */
-	template<typename T>
-	class BitStringFunction : public UniversalSystem<T> {
+	template<typename T, class Storage>
+	class BitStringFunction : public UniversalFunction<T, Storage> {
 	public:
-
-		/**
-		 * Initial table size.
-		 */
-		static const size_t START_LENGTH = 16;
-
 		~BitStringFunction(void) {
 			delete [] coefficients;
 		}
 
-		explicit BitStringFunction(size_t length = START_LENGTH):
-		  coefficients(new size_t[COEFFICIENT_NUMBER])
-		{
-			setTableSize(length);
+		explicit BitStringFunction(size_t aTableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		  coefficients(new size_t[COEFFICIENT_NUMBER]) {
+			setTableSize(aTableSize);
 			reset();
 		}
 
@@ -81,9 +74,7 @@ namespace Hash { namespace Systems {
 		void setUniversumMax(T) {
 		}
 
-		size_t hash(const T & x, size_t length) {
-			simple_assert(length == this->tableSize, "Lengths must be the same.");
-
+		size_t hash(const T & x) {
 			T coefficientMask = 1;
 			size_t result = 0;
 
@@ -95,13 +86,8 @@ namespace Hash { namespace Systems {
 			return result & mask;
 		}
 
-		size_t operator()(const T & a, size_t length) {
-			return hash(a, length);
-		}
-
-		void initialize(Hash::StorageInfo & info) {
-			this->setTableSize(info.getTableSize());
-			this->reset();
+		size_t operator()(const T & a) {
+			return hash(a);
 		}
 
 		void swap(BitStringFunction & r) {

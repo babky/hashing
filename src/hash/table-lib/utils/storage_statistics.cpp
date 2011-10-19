@@ -30,11 +30,11 @@ double StorageStatistics::getLoadFactor(void) const {
 	}
 }
 
-size_t StorageStatistics::getMinimalChainLength(void) const {
+size_t StorageStatistics::getMinChainLength(void) const {
 	return this->minChainLength;
 }
 
-size_t StorageStatistics::getMaximalChainLength(void) const {
+size_t StorageStatistics::getMaxChainLength(void) const {
 	return this->maxChainLength;
 }
 
@@ -71,8 +71,8 @@ std::ostream & Hash::Utils::operator <<(std::ostream & out, const StorageStatist
 	out << "Element count: " << stats.getElementCount() << "\n";
 	out << "Table length:  " << stats.getTableLength() << "\n";
 	out << "Load factor:   " << stats.getLoadFactor() << "\n";
-	out << "Min chain:     " << stats.getMinimalChainLength() << "\n";
-	out << "Max chain:     " << stats.getMaximalChainLength() << "\n";
+	out << "Min chain:     " << stats.getMinChainLength() << "\n";
+	out << "Max chain:     " << stats.getMaxChainLength() << "\n";
 	out << "Rehash count:  " << stats.getRehashCount() << "\n";
 
 	return out;

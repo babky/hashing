@@ -41,35 +41,35 @@ using namespace std;
 using namespace boost;
 using namespace boost::program_options;
 
-template<typename T>
-class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T> {
+template<typename T, class Storage>
+class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T, Storage> {
 public:
-	explicit PolynomialSystem32(size_t aStartLength = Hash::Systems::PolynomialSystem<T>::START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
-	  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
+	explicit PolynomialSystem32(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
+	  PolynomialSystem(aStartLength, aUniversumMax, aDegree) {
 	}
 };
 
-template<typename T>
-class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, PolynomialSystem32> {
+template<typename T, class Storage>
+class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, Storage, PolynomialSystem32> {
 };
 
-template<typename T>
-class TwoWaySystemRandomizedCWLF : public Hash::Systems::TwoWaySystemRandomized<T, TwoWaySystemCWLF, TwoWaySystemCWLF> {
+template<typename T, class Storage>
+class TwoWaySystemRandomizedCWLF : public Hash::Systems::TwoWaySystemRandomized<T, Storage, TwoWaySystemCWLF, TwoWaySystemCWLF> {
 };
 
-template<typename T>
-class RandomizedUniversalFunctionCWLF : public Hash::Systems::TwoWaySystemRandomized<T, UniversalFunctionCWLF, UniversalFunctionCWLF> {
+template<typename T, class Storage>
+class RandomizedUniversalFunctionCWLF : public Hash::Systems::TwoWaySystemRandomized<T, Storage, UniversalFunctionCWLF, UniversalFunctionCWLF> {
 };
 
 /*
 template<typename T, typename Comparer, typename Hash>
 class CollisionCountStorage16b : public Hash::Storages::template CollisionCountStorage<T, Comparer, Hash, boost::uint16_t> {
 public:
-	explicit CollisionCountStorage16b(const Comparer & comparer, size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+	explicit CollisionCountStorage16b(const Comparer & comparer, size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(comparer, tableLength) {
 	}		
 	  
-	explicit CollisionCountStorage16b(size_t tableLength = StorageParams::STARTING_STORAGE_SIZE):
+	explicit CollisionCountStorage16b(size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(tableLength) {
 	}
 
@@ -182,8 +182,13 @@ Test * AssembleTest(string system, bool twoWay, string generator, size_t threads
 
 int main(int argc, char ** argv) {
 	// Parse the options.
+#ifdef HASH_DEBUG
+	const size_t DEFAULT_TEST_LENGTH = 32;
+	const size_t DEFAULT_THREADS = 1;
+#else
 	const size_t DEFAULT_TEST_LENGTH = 1 << 20;
 	const size_t DEFAULT_THREADS = 2;
+#endif
 	const size_t DEFAULT_REPEATS = 1 << 5;
 	const string DEFAULT_SYSTEM = "linear-map";
 	const bool DEFAULT_TWO_WAY = true;
