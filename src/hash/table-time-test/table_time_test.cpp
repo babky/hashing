@@ -83,9 +83,7 @@ public:
 	}
 
 	virtual const string & getName(void) const = 0;
-	virtual void clear(void) = 0;
-	virtual void insert(const T & x) = 0;
-	virtual bool contains(const T & x) = 0;
+	virtual time_duration runTest(size_t length, double maxAlpha) = 0;
 	virtual void setMaxLoadFactor(double alpha) = 0;
 };
 
@@ -93,8 +91,7 @@ public:
 template<typename T, class Table>
 class HashTableWrapperImpl : public HashTableWrapper<T> {
 public:
-	HashTableWrapperImpl(Table * aT, string aName):
-	  t(aT),
+	HashTableWrapperImpl(string aName):
 	  name(aName)
 	{
 	}
@@ -103,28 +100,46 @@ public:
 		return name;
 	}
 
-	virtual ~HashTableWrapperImpl(void) {
-		delete t;
+	virtual time_duration runTest(size_t length, double maxAlpha) {
+		ptime start, finish;
+		setMaxLoadFactor(maxAlpha);
+		clear();
+
+		start = microsec_clock::local_time();
+		for (size_t i = 0, e = length; i < e; ++i) {
+			t.insert(i);
+		}
+
+		for (size_t i = 0, e = length; i < e; ++i) {
+#ifdef HASH_DEBUG
+			if (!t.contains(i)) {
+				cout << "Should contain " << i << "." << endl;
+			}
+#else
+			t.contains(i);
+#endif
+		}
+
+#ifdef HASH_DEBUG
+		if (t.contains(length + 1)) {
+			cout << "Should not contain " << length + 1 << "." << endl;
+		}
+#endif
+		finish = microsec_clock::local_time();
+		clear();
+		return finish - start;
 	}
 
-	virtual void clear(void) {
-		t->clear();
+	void clear(void) {
+		t.clear();
 	}
 
-	virtual void insert(const T & x) {
-		t->insert(x);
-	}
-
-	virtual bool contains(const T & x) {
-		return t->contains(x);
-	}
-
-	virtual void setMaxLoadFactor(double alpha) {
-		t->setRehashPolicy(LoadFactorBoundsRehashPolicy(LoadFactorBoundsRehashPolicy::DEFAULT_MIN_LOAD_FACTOR, alpha));
+	void setMaxLoadFactor(double alpha) {
+		t.setRehashPolicy(LoadFactorBoundsRehashPolicy(LoadFactorBoundsRehashPolicy::DEFAULT_MIN_LOAD_FACTOR, alpha));
 	}
 
 private:
-	Table * t;
+	Table t;
 	string name;
 };
 
@@ -161,59 +176,31 @@ int main(void) {
 	sizes.push_back(1 << 27);
 
 	TableVector tables;
-	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>(new ChainingLinear, "ChainingLinear"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingTabulation>(new ChainingTabulation, "ChainingTabulation"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingBitString>(new ChainingBitString, "ChainingBitString"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>(new ChainingPolynomial, "ChainingPolynomial"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingLinearMap>(new ChainingLinearMap, "ChainingLinearMap"));
-	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>(new ChainingPolynomial5, "ChainingPolynomial5"));
-	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial32>(new ChainingPolynomial32, "ChainingPolynomial32"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>(new LinearProbingLinear, "LinearProbingLinear"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>(new LinearProbingTabulation, "LinearProbingTabulation"));
-	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>(new LinearProbingPolynomial5, "LinearProbingPolynomial5"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinearMap>(new LinearProbingLinearMap, "LinearProbingLinearMap"));
+	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>("ChainingLinear"));
+	tables.push_back(new HashTableWrapperImpl<T, ChainingTabulation>("ChainingTabulation"));
+	tables.push_back(new HashTableWrapperImpl<T, ChainingBitString>("ChainingBitString"));
+	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>("ChainingPolynomial"));
+	tables.push_back(new HashTableWrapperImpl<T, ChainingLinearMap>("ChainingLinearMap"));
+	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>("ChainingPolynomial5"));
+	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial32>("ChainingPolynomial32"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>("LinearProbingLinear"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>("LinearProbingTabulation"));
+	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>("LinearProbingPolynomial5"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinearMap>("LinearProbingLinearMap"));
 	
-	ptime start, finish;
-	
+	time_duration testTime;
 	for (LoadFactorVector::iterator bLF = loadFactors.begin(), eLF = loadFactors.end(); bLF != eLF; ++bLF) {
 		for (SizeVector::iterator bS = sizes.begin(), eS = sizes.end(); bS != eS; ++bS) {
 			for (TableVector::iterator bT = tables.begin(), eT = tables.end(); bT != eT; ++bT) {
+				testTime = (*bT)->runTest(*bS, *bLF);
 				cout << (*bT)->getName() << " for " << *bS << " elements and alpha=" << *bLF;
-
-				start = microsec_clock::local_time();
-				
-				(*bT)->setMaxLoadFactor(*bLF);
-				(*bT)->clear();
-
-				for (size_t i = 0, e = *bS; i < e; ++i) {
-					(*bT)->insert(i);
-				}
-
-				for (size_t i = 0, e = *bS; i < e; ++i) {
-#ifdef HASH_DEBUG
-					if (!(*bT)->contains(i)) {
-						cout << "Should contain " << i << "." << endl;
-					}
-#else
-					(*bT)->contains(i);
-#endif
-				}
-
-#ifdef HASH_DEBUG
-				if ((*bT)->contains(*bS + 1)) {
-					cout << "Should not contain " << *bS + 1 << "." << endl;
-				}
-#endif
-
-				finish = microsec_clock::local_time();
-				cout << " took " << (finish - start).total_milliseconds() << " ms." << endl;
-				
-				(*bT)->clear();
+				cout << " took " << testTime.total_milliseconds() << " ms." << endl;
 			}
 		}
 	}
 
 	size_t ELEMENT_COUNT = 1 << 27;
+	ptime start, finish;
 
 	start = microsec_clock::local_time();
 	set<T> mySet;
