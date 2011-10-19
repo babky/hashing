@@ -25,8 +25,9 @@ namespace Hash { namespace Systems {
 	template<typename T>
 	class PolynomialSystem4 : public Hash::Systems::PolynomialSystem<T> {
 	public:
-		explicit PolynomialSystem4(size_t aStartLength = Hash::Systems::PolynomialSystem<T>::START_LENGTH, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 4):
-		  PolynomialSystem<T>(aStartLength, aUniversumMax, aDegree) {
+		explicit PolynomialSystem4(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE,
+			T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 4):
+		  PolynomialSystem<T>(tableSize, aUniversumMax, aDegree) {
 		}
 	};
 
@@ -34,13 +35,12 @@ namespace Hash { namespace Systems {
 
 template<typename T>
 struct SystemDescription {
-	SystemDescription(Hash::Systems::UniversalSystem<T> * f, string n):
+	SystemDescription(Hash::Systems::UniversalFunction<T> * f, string n):
 	  function(f),
-	  name(n)
-	{
+	  name(n) {
 	}
 
-	Hash::Systems::UniversalSystem<T> * function;
+	Hash::Systems::UniversalFunction<T> * function;
 	string name;
 	time_duration time;
 };
@@ -65,7 +65,7 @@ int main(void) {
 
 		ptime start = microsec_clock::local_time();
 		for (size_t i = 0; i < 1 << 23; ++i) {
-			b->function->hash(i, TABLE_LENGTH);
+			b->function->hash(i);
 		}
 		ptime finish = microsec_clock::local_time();
 		b->time = finish - start;
