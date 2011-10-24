@@ -144,7 +144,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="table-lib.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\vcproj\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\vendor\boost\stage\lib&quot;;&quot;..\..\vcproj\Release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"

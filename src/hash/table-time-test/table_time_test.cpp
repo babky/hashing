@@ -21,6 +21,7 @@
 #include "storages/bounded_chained_storage.h"
 #include "systems/linear_map_system.h"
 #include "systems/two_way_system.h"
+#include "systems/tr1_function.h"
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include "systems/uniform/dietzfelbinger_woelfel.h"
@@ -142,6 +143,7 @@ typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem32, ChainedSt
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, ChainedStorage> ChainingLinearMap;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, LinearProbingStorage> LinearProbingLinear;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, LinearProbingStorage> LinearProbingTabulation;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, Tr1Function, LinearProbingStorage> LinearProbingTr1;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, LinearProbingStorage> LinearProbingPolynomial5;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, LinearProbingStorage> LinearProbingLinearMap;
 
@@ -151,16 +153,16 @@ int main(void) {
 	typedef vector<HashTableWrapper<T> * > TableVector;
 
 	LoadFactorVector loadFactors;
-	loadFactors.push_back(0.5);
-	loadFactors.push_back(0.75);
-	loadFactors.push_back(0.9);
+	//loadFactors.push_back(0.5);
+	//loadFactors.push_back(0.75);
+	//loadFactors.push_back(0.9);
 
 	SizeVector sizes;
-	sizes.push_back(1 << 10);
-	sizes.push_back(1 << 16);
-	sizes.push_back(1 << 20);
-	sizes.push_back(1 << 24);
-	sizes.push_back(1 << 27);
+	//sizes.push_back(1 << 10);
+	//sizes.push_back(1 << 16);
+	//sizes.push_back(1 << 20);
+	//sizes.push_back(1 << 24);
+	//sizes.push_back(1 << 27);
 
 	TableVector tables;
 	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>("ChainingLinear"));
@@ -208,13 +210,16 @@ int main(void) {
 	unordered_set<T> mySet2;
 #endif
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet2.insert(i * i * 64);
-	}
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet2.find(i * i * 64);
+		mySet2.insert(i);
 	}
 	finish = microsec_clock::local_time();
-	cout << "US for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	cout << "US insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	start = microsec_clock::local_time();
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet2.find(i);
+	}
+	finish = microsec_clock::local_time();
+	cout << "US find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	mySet2.clear();
 
 	start = microsec_clock::local_time();
@@ -222,11 +227,28 @@ int main(void) {
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
 		lpt.insert(i);
 	}
+	finish = microsec_clock::local_time();
+	cout << "LPT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	start = microsec_clock::local_time();
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
 		lpt.contains(i);
 	}
 	finish = microsec_clock::local_time();
-	cout << "LPT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	cout << "LPT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+
+	start = microsec_clock::local_time();
+	LinearProbingTr1 lptr;
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lptr.insert(i);
+	}
+	finish = microsec_clock::local_time();
+	cout << "LPT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	start = microsec_clock::local_time();
+	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lptr.contains(i);
+	}
+	finish = microsec_clock::local_time();
+	cout << "LPTR find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 
 	return 0;
 }

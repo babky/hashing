@@ -309,6 +309,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\systems\tr1_function.h"
+					>
+				</File>
+				<File
 					RelativePath="..\systems\two_way_system.h"
 					>
 				</File>
@@ -370,6 +374,14 @@
 				>
 				<File
 					RelativePath="..\math\double_word.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Miscellaneous"
+				>
+				<File
+					RelativePath="..\miscellaneous\linear_probing_table_implementation.h"
 					>
 				</File>
 			</Filter>

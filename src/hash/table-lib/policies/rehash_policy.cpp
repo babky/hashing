@@ -21,9 +21,9 @@ double LoadFactorBoundsRehashPolicy::getMaxLoadFactor(void) const {
 }
 
 bool LoadFactorBoundsRehashPolicy::needsRehashingAfterInsert(const PlainStorageInfo & storageInfo) {
-	return storageInfo.getLoadFactor() > this->getMaxLoadFactor();
+	return storageInfo.getElementCount() > this->getMaxLoadFactor() * storageInfo.getTableSize();
 }
 
 bool LoadFactorBoundsRehashPolicy::needsRehashingAfterDelete(const PlainStorageInfo & storageInfo) {
-	return storageInfo.getLoadFactor() < this->getMinLoadFactor();
+	return storageInfo.getElementCount() < this->getMinLoadFactor() * storageInfo.getTableSize();
 }
