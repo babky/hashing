@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "table-time-test", "..\table
 		{4519D5CC-CD95-4022-8B99-46F33A6F0F51} = {4519D5CC-CD95-4022-8B99-46F33A6F0F51}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stl-compare", "..\stl-compare\vcproj\stl-compare.vcproj", "{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,16 @@ Global
 		{B1509247-DC29-4692-A336-3B5EC0854A05}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{B1509247-DC29-4692-A336-3B5EC0854A05}.Release|Win32.ActiveCfg = Release|Win32
 		{B1509247-DC29-4692-A336-3B5EC0854A05}.Release|Win32.Build.0 = Release|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Debug|Win32.Build.0 = Debug|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Release|Win32.ActiveCfg = Release|Win32
+		{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

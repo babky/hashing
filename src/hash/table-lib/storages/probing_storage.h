@@ -290,8 +290,12 @@ namespace Hash { namespace Storages {
 				return !(a == b);
 			}
 
-			T operator *(void) const {
+			T & operator *(void) {
 				return storage->storage[position].item;
+			}
+
+			const T & operator *(void) const {
+				return const_cast<ProbingStorageIterator *> (this)->storage->storage[position].item;
 			}
 
 			ProbingStorageIterator operator ++(void) {
