@@ -242,7 +242,7 @@ int main(void) {
 		lptr.insert(i);
 	}
 	finish = microsec_clock::local_time();
-	cout << "LPT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	cout << "LPTR insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	start = microsec_clock::local_time();
 	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
 		lptr.contains(i);
