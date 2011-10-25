@@ -24,18 +24,19 @@ namespace Hash { namespace Miscellaneous {
 			return tableSize;
 		}
 
-		void insert(const T & e) {
+		void insert(const T & x) {
 			++elementCount;
 
 			if (2 * elementCount > tableSize) {
 				rehash(2 * tableSize);
 			}
 
-			for (size_t i = f(x); storage[i].empty == false; i = (i + 1) % tableSize) {
+			size_t i = f(x);
+			for (; storage[i].empty == false; i = (i + 1) % tableSize) {
 			}
 
 			storage[i].empty = false;
-			storage[i].item = e;
+			storage[i].item = x;
 		}
 
 		void rehash(size_t newTableSize) {
@@ -50,7 +51,7 @@ namespace Hash { namespace Miscellaneous {
 		}
 
 		void swap(Table & t) {
-			using namespace std;
+			using std::swap;
 
 			swap(storage, t.storage);
 			swap(tableSize, t.tableSize);
@@ -58,9 +59,9 @@ namespace Hash { namespace Miscellaneous {
 			swap(f, t.f);
 		}
 
-		bool find(const T & e) {
+		bool find(const T & x) {
 			for (size_t i = f(x); storage[i].empty; i = (i + 1) % tableSize) {
-				if (storage[i].item == e) {
+				if (storage[i].item == x) {
 					return true;
 				}
 			}
@@ -70,6 +71,11 @@ namespace Hash { namespace Miscellaneous {
 
 	private:
 		struct StorageItem {
+			StorageItem(void):
+			  empty(true)
+			{
+			}
+
 			bool empty;
 			T item;
 		};

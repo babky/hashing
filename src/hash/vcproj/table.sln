@@ -40,6 +40,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "table-time-test", "..\table
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stl-compare", "..\stl-compare\vcproj\stl-compare.vcproj", "{B6DB7559-BDC2-46BD-AB72-BE354B3441EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4519D5CC-CD95-4022-8B99-46F33A6F0F51} = {4519D5CC-CD95-4022-8B99-46F33A6F0F51}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

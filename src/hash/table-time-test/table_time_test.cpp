@@ -153,14 +153,14 @@ int main(void) {
 	typedef vector<HashTableWrapper<T> * > TableVector;
 
 	LoadFactorVector loadFactors;
-	//loadFactors.push_back(0.5);
-	//loadFactors.push_back(0.75);
+	loadFactors.push_back(0.5);
+	loadFactors.push_back(0.75);
 	//loadFactors.push_back(0.9);
 
 	SizeVector sizes;
-	//sizes.push_back(1 << 10);
-	//sizes.push_back(1 << 16);
-	//sizes.push_back(1 << 20);
+	sizes.push_back(1 << 10);
+	sizes.push_back(1 << 16);
+	sizes.push_back(1 << 20);
 	//sizes.push_back(1 << 24);
 	//sizes.push_back(1 << 27);
 
