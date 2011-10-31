@@ -12,6 +12,7 @@
 #endif
 
 #include "universal_system.h"
+#include <cstdlib>
 #include <algorithm>
 
 namespace Hash { namespace Systems {
@@ -42,7 +43,13 @@ namespace Hash { namespace Systems {
 		}
 
 		virtual size_t hash(const T & x) {
-			return x & mask;
+			// return x & mask;
+			std::ldiv_t _Qrem = std::ldiv((long)(size_t)x, 127773);
+
+			_Qrem.rem = 16807 * _Qrem.rem - 2836 * _Qrem.quot;
+			if (_Qrem.rem < 0)
+				_Qrem.rem += 2147483647;
+			return ((size_t)_Qrem.rem) & mask;
 		}
 
 		virtual size_t operator()(const T & a) {
