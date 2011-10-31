@@ -36,7 +36,19 @@ namespace Hash { namespace Miscellaneous {
 			}
 
 			storage[i].empty = false;
+			storage[i].bridge = true;
 			storage[i].item = x;
+		}
+
+		bool remove(const T & x) {
+			bool result;
+			StorageItem & item = findItem(x, result);
+
+			if (result) {
+				item.empty = true;
+			}
+
+			return result;
 		}
 
 		void rehash(size_t newTableSize) {
@@ -60,25 +72,35 @@ namespace Hash { namespace Miscellaneous {
 		}
 
 		bool find(const T & x) {
-			for (size_t i = f(x); storage[i].empty; i = (i + 1) % tableSize) {
-				if (storage[i].item == x) {
-					return true;
-				}
-			}
-
-			return false;
+			bool result;
+			findItem(x, result);
+			return result;
 		}
 
 	private:
 		struct StorageItem {
 			StorageItem(void):
-			  empty(true)
+			  empty(true),
+			  bridge(false)
 			{
 			}
 
 			bool empty;
+			bool bridge;
 			T item;
 		};
+
+		StorageItem & findItem(const T & x, bool & result) {
+			size_t i = f(x);
+			for (; storage[i].bridge; i = (i + 1) % tableSize) {
+				if (storage[i].empty == false && storage[i].item == x) {
+					result = true;
+				}
+			}
+
+			result = false;
+			return storage[i];
+		}
 
 		StorageItem * storage;
 		size_t tableSize;
