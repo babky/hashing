@@ -16,6 +16,7 @@
 #include "systems/cwlf_system.h"
 #include "systems/tabulation_system.h"
 #include "systems/polynomial_system.h"
+#include "systems/tr1_function.h"
 
 using namespace std;
 using namespace boost::posix_time;
@@ -66,6 +67,7 @@ int main(void) {
 	functions.push_back(TestSystemDescription(new Hash::Systems::Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>(TABLE_SIZE), "DW - deg 4"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::PolynomialSystem<T, TestStorage>(TABLE_SIZE), "Polynomial - deg 2"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::PolynomialSystem<T, TestStorage>(TABLE_SIZE, Hash::Math::Prime<T>::GREATEST_PRIME, 32), "Polynomial - deg 32"));
+	functions.push_back(TestSystemDescription(new Hash::Systems::Tr1Function<T, TestStorage>(TABLE_SIZE), "TR1"));
 	
 	for (FunctionVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
 		b->function->setTableSize(TABLE_SIZE);
