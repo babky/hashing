@@ -94,23 +94,23 @@ public:
 		clear();
 
 		start = microsec_clock::local_time();
-		for (size_t i = 0, e = length; i < e; ++i) {
-			t.insert(i);
+		for (T i = 0, e = length; i < e; ++i) {
+			t.insert(i * length);
 		}
 
-		for (size_t i = 0, e = length; i < e; ++i) {
+		for (T i = 0, e = length; i < e; ++i) {
 #ifdef HASH_DEBUG
-			if (!t.contains(i)) {
+			if (!t.contains(i * length)) {
 				cout << "Should contain " << i << "." << endl;
 			}
 #else
-			t.contains(i);
+			t.contains(i * length);
 #endif
 		}
 
 #ifdef HASH_DEBUG
-		if (t.contains(length + 1)) {
-			cout << "Should not contain " << length + 1 << "." << endl;
+		if (t.size() == length) {
+			cout << "Should contain all the elements." << endl;
 		}
 #endif
 		finish = microsec_clock::local_time();
@@ -131,8 +131,8 @@ private:
 	string name;
 };
 
-typedef size_t T;
-// typedef boost::uint64_t T;
+// typedef size_t T;
+typedef boost::uint64_t T;
 
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, ChainedStorage> ChainingLinear;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
@@ -193,11 +193,11 @@ int main(void) {
 
 	start = microsec_clock::local_time();
 	set<T> mySet;
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet.insert(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet.insert(i * ELEMENT_COUNT);
 	}
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet.find(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet.find(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "RBT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
@@ -209,14 +209,14 @@ int main(void) {
 #else
 	unordered_set<T> mySet2;
 #endif
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet2.insert(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet2.insert(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "US insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	start = microsec_clock::local_time();
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet2.find(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		mySet2.find(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "US find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
@@ -224,28 +224,28 @@ int main(void) {
 
 	start = microsec_clock::local_time();
 	LinearProbingTabulation lpt;
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.insert(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lpt.insert(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	start = microsec_clock::local_time();
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.contains(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lpt.contains(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 
 	start = microsec_clock::local_time();
 	LinearProbingTr1 lptr;
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lptr.insert(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lptr.insert(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPTR insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	start = microsec_clock::local_time();
-	for (size_t i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lptr.contains(i);
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		lptr.contains(i * ELEMENT_COUNT);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPTR find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;

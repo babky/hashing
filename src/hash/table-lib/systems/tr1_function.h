@@ -19,6 +19,10 @@ namespace Hash { namespace Systems {
 	template<typename T, class Storage>
 	class Tr1Function : public UniversalFunction<T, Storage> {
 	public:
+		explicit Tr1Function(size_t size = 32) {
+			setTableSize(size);
+		}
+
 		void reset(void) {
 		}
 
