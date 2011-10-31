@@ -60,14 +60,14 @@ int main(void) {
 
 	FunctionVector functions;
 	
-	functions.push_back(TestSystemDescription(new Hash::Systems::UniversalFunctionLinearMap<T, TestStorage>(TABLE_SIZE), "LinearMap"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::UniversalFunctionCWLF<T, TestStorage>(TABLE_SIZE), "CWLF"));
+	functions.push_back(TestSystemDescription(new Hash::Systems::Tr1Function<T, TestStorage>(TABLE_SIZE), "TR1"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::BitStringFunction<T, TestStorage>(TABLE_SIZE), "BitString"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::TabulationFunction<T, TestStorage>(TABLE_SIZE), "Tabulation"));
-	functions.push_back(TestSystemDescription(new Hash::Systems::Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>(TABLE_SIZE), "DW - deg 4"));
+	functions.push_back(TestSystemDescription(new Hash::Systems::UniversalFunctionLinearMap<T, TestStorage>(TABLE_SIZE), "LinearMap"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::PolynomialSystem<T, TestStorage>(TABLE_SIZE), "Polynomial - deg 2"));
+	functions.push_back(TestSystemDescription(new Hash::Systems::Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>(TABLE_SIZE), "DW - deg 4"));
 	functions.push_back(TestSystemDescription(new Hash::Systems::PolynomialSystem<T, TestStorage>(TABLE_SIZE, Hash::Math::Prime<T>::GREATEST_PRIME, 32), "Polynomial - deg 32"));
-	functions.push_back(TestSystemDescription(new Hash::Systems::Tr1Function<T, TestStorage>(TABLE_SIZE), "TR1"));
 	
 	for (FunctionVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
 		b->function->setTableSize(TABLE_SIZE);
