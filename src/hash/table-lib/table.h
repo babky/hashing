@@ -221,12 +221,18 @@ namespace Hash {
 					break;
 			}
 
-			// TODO: Better using iterators slows it down.
-			HashTable t(storage.getComparer(), newSize);
-			for (HashTable::Iterator it = getBeginning(), ite = getEnd(); it != ite; ++it) {
-				t.insert(*it);
+			if (HashStorage::HAS_REHASH) {
+				HashStorage tmp(storage.getComparer(), newSize);
+				function.setTableSize(newSize);
+				storage.rehash(tmp, function);
+				storage.swap(tmp);
+			} else {
+				HashTable t(storage.getComparer(), newSize);
+				for (HashTable::Iterator it = getBeginning(), ite = getEnd(); it != ite; ++it) {
+					t.insert(*it);
+				}
+				swap(t);
 			}
-			swap(t);
 		}
 
 		/**
