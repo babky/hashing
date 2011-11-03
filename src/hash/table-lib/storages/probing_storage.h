@@ -130,6 +130,19 @@ namespace Hash { namespace Storages {
 			this->storageInfo.incElementCount();
 		}
 
+		static const bool HAS_REHASH = true;
+
+		template<class Function>
+		void rehash(ProbingStorage & n, Function & f) {
+			for (size_t i = 0, e = getTableSize(); i < e; ++i) {
+				if (storage[i].empty) {
+					continue;
+				}
+
+				n.insert(storage[i].item, f.Function::hash(storage[i].item));
+			}
+		}
+
 		inline bool remove(const T & item, HashType hash) {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
