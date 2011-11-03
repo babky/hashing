@@ -49,7 +49,10 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 * @param minFactor Minimal load factor to be kept.
 		 * @param maxFactor Maximal load factor to be kept.
 		 */
-		explicit LoadFactorBoundsRehashPolicy(double minFactor = DEFAULT_MIN_LOAD_FACTOR, double maxFactor = DEFAULT_MAX_LOAD_FACTOR);
+		explicit LoadFactorBoundsRehashPolicy(double aMinFactor = DEFAULT_MIN_LOAD_FACTOR, double aMaxFactor = DEFAULT_MAX_LOAD_FACTOR):
+		  minFactor(aMinFactor),
+		  maxFactor(aMaxFactor) {
+		}
 
 		/**
 		 * Minimal load factor retrieval.
@@ -57,7 +60,7 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 * @return Minimal load factor.
 		 */
 		inline double getMinLoadFactor(void) const {
-        	return this->minFactor;
+			return this->minFactor;
 		}
 		
 		/**
@@ -66,15 +69,15 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 * @return Maximal load factor.
 		 */
 		inline double getMaxLoadFactor(void) const {
-        	return this->maxFactor;
+			return this->maxFactor;
 		}
 
 		inline bool needsRehashingAfterInsert(const PlainStorageInfo & storageInfo) {
-	        return storageInfo.getElementCount() > this->getMaxLoadFactor() * storageInfo.getTableSize();
+			return storageInfo.getElementCount() > this->getMaxLoadFactor() * storageInfo.getTableSize();
 		}
 
 		inline bool needsRehashingAfterDelete(const PlainStorageInfo & storageInfo) {
-        	return storageInfo.getElementCount() < this->getMinLoadFactor() * storageInfo.getTableSize();
+			return storageInfo.getElementCount() < this->getMinLoadFactor() * storageInfo.getTableSize();
 		}
 
 	private:

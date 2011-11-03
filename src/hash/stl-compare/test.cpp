@@ -31,8 +31,10 @@ int main(int, char **) {
 	typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
 
 	ptime start, finish;
-	size_t ELEMENT_COUNT = 1 << 20;
-	
+	size_t ELEMENT_COUNT = 1 << 10;
+	cout << ELEMENT_COUNT << endl;
+
+/*	
 	ChainingTabulation cht;
 	start = microsec_clock::local_time();
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
@@ -46,10 +48,11 @@ int main(int, char **) {
 	}
 	finish = microsec_clock::local_time();
 	cout << "CHT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-
+*/
 	LinearProbingTabulation lpt;
 	start = microsec_clock::local_time();
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		cout << i << endl;
 		lpt.insert(i * i);
 	}
 	finish = microsec_clock::local_time();
@@ -61,7 +64,7 @@ int main(int, char **) {
 	finish = microsec_clock::local_time();
 	cout << "LPT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 
-	LPTR1 lptr1;
+/*	LPTR1 lptr1;
 	start = microsec_clock::local_time();
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
 		lptr1.insert(i * i);
@@ -74,7 +77,9 @@ int main(int, char **) {
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPTR find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+*/
 
+/*
 	start = microsec_clock::local_time();
 #ifdef BOOST_MSVC
 	std::tr1::unordered_set<T> mySet2;
@@ -93,6 +98,7 @@ int main(int, char **) {
 	finish = microsec_clock::local_time();
 	cout << "US find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	mySet2.clear();
+*/
 
 	return 0;
 }
