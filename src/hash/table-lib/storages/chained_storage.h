@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "storage.h"
+#include "../utils/hash_assert.h"
 
 namespace Hash { namespace Storages {
 
@@ -158,6 +159,13 @@ namespace Hash { namespace Storages {
 
 		size_t getChainLength(HashType address) const {
 			return storage[address].getSize();
+		}
+
+		static const bool HAS_REHASH = false;
+
+		template<class Function>
+		void rehash(ChainedStorageBase &, Function & f) {
+			simple_assert(false, "Chained storage can not rehash.");
 		}
 
 		/**
