@@ -12,6 +12,7 @@
 #endif
 #include "systems/universal_system.h"
 #include "storage.h"
+#include "../utils/static_random_generator.h"
 #include <algorithm>
 
 namespace Hash { namespace Systems {
@@ -60,7 +61,7 @@ namespace Hash { namespace Systems {
 			}
 		}
 
-		size_t getTableSize(void) const {
+		inline size_t getTableSize(void) const {
 			return hashTableSize;
 		}
 		
@@ -80,7 +81,7 @@ namespace Hash { namespace Systems {
 		void setUniversumMax(T) {
 		}
 
-		size_t hash(const T & x) {
+		inline size_t hash(const T & x) {
 			size_t result = 0;
 			size_t mask = (1 << characterDigits) - 1;
 
@@ -91,7 +92,7 @@ namespace Hash { namespace Systems {
 			return result & outputMask;
 		}
 
-		size_t operator()(const T & a) {
+		inline size_t operator()(const T & a) {
 			return hash(a);
 		}
 

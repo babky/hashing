@@ -11,6 +11,7 @@ namespace Hash { namespace Policies { namespace Rehash {
 	template<typename StorageInfoType>
 	class RehashPolicy {
 	public:
+#ifdef HASH_DEBUG
 		/**
 		 * Check for the rehashing need after deletition.
 		 *
@@ -24,6 +25,7 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 * @return Rehashing need.
 		 */
 		virtual bool needsRehashingAfterInsert(const StorageInfoType & storageInfo) = 0;
+#endif
 	};
 
 	/**
@@ -54,17 +56,26 @@ namespace Hash { namespace Policies { namespace Rehash {
 		 *
 		 * @return Minimal load factor.
 		 */
-		double getMinLoadFactor(void) const;
+		inline double getMinLoadFactor(void) const {
+        	return this->minFactor;
+		}
 		
 		/**
 		 * Maximal load factor retrieval.
 		 *
 		 * @return Maximal load factor.
 		 */
-		double getMaxLoadFactor(void) const;
+		inline double getMaxLoadFactor(void) const {
+        	return this->maxFactor;
+		}
 
-		bool needsRehashingAfterInsert(const PlainStorageInfo & storageInfo);
-		bool needsRehashingAfterDelete(const PlainStorageInfo & storageInfo);
+		inline bool needsRehashingAfterInsert(const PlainStorageInfo & storageInfo) {
+	        return storageInfo.getElementCount() > this->getMaxLoadFactor() * storageInfo.getTableSize();
+		}
+
+		inline bool needsRehashingAfterDelete(const PlainStorageInfo & storageInfo) {
+        	return storageInfo.getElementCount() < this->getMinLoadFactor() * storageInfo.getTableSize();
+		}
 
 	private:
 		/**

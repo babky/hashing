@@ -25,6 +25,7 @@ namespace Hash { namespace Systems {
 		 */
 		typedef size_t HashType;
 
+#ifdef HASH_DEBUG
 		/**
 		 * Resets the function - chooses another from the universal system.
 		 */
@@ -73,6 +74,7 @@ namespace Hash { namespace Systems {
 		 * @param length Length of the table.
 		 */
 		virtual size_t operator()(const T & a) = 0;
+#endif
 
 		/**
 		 * Sets the storage for the hash function.

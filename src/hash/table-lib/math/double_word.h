@@ -23,7 +23,7 @@ namespace Hash { namespace Math {
 	public:
 		typedef UnsignedWord Word;
 
-		static Word multiply(const Word x, const Word y, const Word m) {
+		inline static Word multiply(const Word x, const Word y, const Word m) {
 			// Do it like (xu + xl) * (yu + yl) = xu * yu + (xl * yu + xu * yl) + xl * yl.
 
 			// Split x into xl and xu.
@@ -61,11 +61,11 @@ namespace Hash { namespace Math {
 			return UnsignedDoubleWord<UnsignedWord>::modulo(u, l, m);
 		}
 
-		static Word add(const Word x, const Word y, const Word m) {
+		inline static Word add(const Word x, const Word y, const Word m) {
 			return UnsignedDoubleWord<UnsignedWord>::modulo(carry(x, y) >> (WORD_BITS - 1), x + y, m);
 		}
 
-		static Word modulo(const Word u, const Word l, const Word m) {
+		inline static Word modulo(const Word u, const Word l, const Word m) {
 			// Do it like this.
 			// (x + y) % m = x % m + y % m
 
@@ -96,8 +96,12 @@ namespace Hash { namespace Math {
 			return um;
 		}
 
+		inline static Word linear(const Word a, const Word x, const Word b, const Word m) {
+			return add(multiply(a, x, m), b, m);
+		}
+
 	private:
-		static Word carry(const Word & x, const Word & y) {
+		inline static Word carry(const Word & x, const Word & y) {
 			return ((x >> 1) + (y >> 1) + ((x & 1) & (y & 1))) & ((Word) 1 << (WORD_BITS - 1));
 		}
 
@@ -106,16 +110,20 @@ namespace Hash { namespace Math {
 	};
 
 	template <>
-	class UnsignedDoubleWord<size_t> {
+	class UnsignedDoubleWord<boost::uint32_t> {
 	public:
 		typedef size_t Word;
 
-		static Word multiply(const Word x, const Word y, const Word m) {
+		inline static Word multiply(const Word x, const Word y, const Word m) {
 			return (static_cast<boost::uint64_t> (x) * static_cast<boost::uint64_t> (y)) % static_cast<boost::uint64_t> (m);
 		}
 
-		static Word add(const Word x, const Word y, const Word m) {
+		inline static Word add(const Word x, const Word y, const Word m) {
 			return (static_cast<boost::uint64_t> (x) + static_cast<boost::uint64_t> (y)) % static_cast<boost::uint64_t> (m);
+		}
+
+		inline static Word linear(const Word a, const Word x, const Word b, const Word m) {
+			return static_cast<Word> ((static_cast<boost::uint64_t> (a) * static_cast<boost::uint64_t> (x) + static_cast<boost::uint64_t> (b)) % static_cast<boost::uint64_t> (m));
 		}
 
 	};
