@@ -22,6 +22,7 @@
 #include "systems/linear_map_system.h"
 #include "systems/two_way_system.h"
 #include "systems/tr1_function.h"
+#include "systems/identity_function.h"
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include "systems/uniform/dietzfelbinger_woelfel.h"
@@ -95,16 +96,16 @@ public:
 
 		start = microsec_clock::local_time();
 		for (T i = 0, e = length; i < e; ++i) {
-			t.insert(i * length);
+			t.insert(i);
 		}
 
 		for (T i = 0, e = length; i < e; ++i) {
 #ifdef HASH_DEBUG
-			if (!t.contains(i * length)) {
+			if (!t.contains(i)) {
 				cout << "Should contain " << i << "." << endl;
 			}
 #else
-			t.contains(i * length);
+			t.contains(i);
 #endif
 		}
 
@@ -135,6 +136,7 @@ private:
 typedef boost::uint64_t T;
 
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, ChainedStorage> ChainingLinear;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, IdentityFunction, ChainedStorage> ChainingId;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, BitStringFunction, ChainedStorage> ChainingBitString;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem, ChainedStorage> ChainingPolynomial;
@@ -142,6 +144,7 @@ typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, ChainedSto
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem32, ChainedStorage> ChainingPolynomial32;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, ChainedStorage> ChainingLinearMap;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, LinearProbingStorage> LinearProbingLinear;
+typedef Table<T, Hash::Utils::EqualityComparer<T>, IdentityFunction, LinearProbingStorage> LinearProbingId;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, LinearProbingStorage> LinearProbingTabulation;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, Tr1Function, LinearProbingStorage> LinearProbingTr1;
 typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, LinearProbingStorage> LinearProbingPolynomial5;
@@ -153,29 +156,31 @@ int main(void) {
 	typedef vector<HashTableWrapper<T> * > TableVector;
 
 	LoadFactorVector loadFactors;
-	loadFactors.push_back(0.5);
-	loadFactors.push_back(0.75);
-	//loadFactors.push_back(0.9);
+	//loadFactors.push_back(0.5);
+	//loadFactors.push_back(0.75);
+	// loadFactors.push_back(0.9);
 
 	SizeVector sizes;
 	sizes.push_back(1 << 10);
 	sizes.push_back(1 << 16);
 	sizes.push_back(1 << 20);
-	//sizes.push_back(1 << 24);
-	//sizes.push_back(1 << 27);
+	// sizes.push_back(1 << 24);
+	// sizes.push_back(1 << 27);
 
 	TableVector tables;
+	tables.push_back(new HashTableWrapperImpl<T, ChainingId>("ChainingId"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>("ChainingLinear"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingTabulation>("ChainingTabulation"));
 	tables.push_back(new HashTableWrapperImpl<T, ChainingBitString>("ChainingBitString"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>("ChainingPolynomial"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingLinearMap>("ChainingLinearMap"));
+	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>("ChainingPolynomial"));
+	// tables.push_back(new HashTableWrapperImpl<T, ChainingLinearMap>("ChainingLinearMap"));
 	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>("ChainingPolynomial5"));
 	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial32>("ChainingPolynomial32"));
 	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>("LinearProbingLinear"));
+	tables.push_back(new HashTableWrapperImpl<T, LinearProbingId>("LinearProbingId"));
 	tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>("LinearProbingTabulation"));
 	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>("LinearProbingPolynomial5"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinearMap>("LinearProbingLinearMap"));
+	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinearMap>("LinearProbingLinearMap"));
 	
 	time_duration testTime;
 	for (LoadFactorVector::iterator bLF = loadFactors.begin(), eLF = loadFactors.end(); bLF != eLF; ++bLF) {
@@ -202,7 +207,7 @@ int main(void) {
 	finish = microsec_clock::local_time();
 	cout << "RBT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	mySet.clear();
-
+/*
 	start = microsec_clock::local_time();
 #ifdef BOOST_MSVC
 	std::tr1::unordered_set<T> mySet2;
@@ -221,17 +226,35 @@ int main(void) {
 	finish = microsec_clock::local_time();
 	cout << "US find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	mySet2.clear();
+*/
+
+	start = microsec_clock::local_time();
+	ChainingTabulation cht;
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		cht.insert(i);
+	}
+	finish = microsec_clock::local_time();
+	cout << "CHT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	start = microsec_clock::local_time();
+	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
+		cht.contains(i);
+	}
+	finish = microsec_clock::local_time();
+	cout << "CHT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	StorageStatistics stats;
+	cht.computeStatistics(stats);
+	cout << stats << endl;
 
 	start = microsec_clock::local_time();
 	LinearProbingTabulation lpt;
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.insert(i * ELEMENT_COUNT);
+		lpt.insert(i);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	start = microsec_clock::local_time();
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.contains(i * ELEMENT_COUNT);
+		lpt.contains(i);
 	}
 	finish = microsec_clock::local_time();
 	cout << "LPT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
