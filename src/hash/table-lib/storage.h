@@ -62,21 +62,21 @@ namespace Hash {
 		 *
 		 * @param aElementCount The number of elements.
 		 */
-		void setElementCount(size_t aElementCount) {
+		inline void setElementCount(size_t aElementCount) {
 			elementCount = aElementCount;
 		}
 
 		/**
 		 * Increments the number of stored elements.
 		 */
-		void incElementCount(void) {
+		inline void incElementCount(void) {
 			++elementCount;
 		}
 		
 		/**
 		 * Decrements the number of stored elements.
 		 */
-		void decElementCount(void) {
+		inline void decElementCount(void) {
 			--elementCount;
 		}
 
@@ -85,7 +85,7 @@ namespace Hash {
 		 *
 		 * @param aTableSize Size of the storage.
 		 */
-		void setTableSize(size_t aTableSize) {
+		inline void setTableSize(size_t aTableSize) {
 			tableSize = aTableSize;
 		}
 	};
@@ -105,21 +105,27 @@ namespace Hash {
 		 *
 		 * @return Number of elements stored.
 		 */
-		size_t getElementCount(void) const;
+		inline size_t getElementCount(void) const {
+			return elementCount;
+		}
 
 		/**
 		 * Length of the table retrieval.
 		 *
 		 * @return Length of the table retrieval.
 		 */
-		size_t getTableSize(void) const;
+		inline size_t getTableSize(void) const {
+			return tableSize;
+		}
 
 		/**
 		 * Load factor retrieval.
 		 *
 		 * @return Load factor.
 		 */
-		double getLoadFactor(void) const;
+		inline double getLoadFactor(void) const {
+			return (double) elementCount / (double) tableSize;
+		}
 
 	protected:
 		size_t tableSize;
@@ -141,7 +147,9 @@ namespace Hash {
 		 *
 		 * @return Load factor.
 		 */
-		size_t getMaxChainLength(void) const;
+		inline size_t getMaxChainLength(void) const {
+			return maxChainLength;
+		}
 
 	protected:
 		size_t maxChainLength;
@@ -183,7 +191,12 @@ namespace Hash {
 		 *
 		 * @param refinement The length of the emerging chain.
 		 */
-		void refineMaxChainLength(size_t refinement);
+		inline void refineMaxChainLength(size_t refinement) {
+			if (maxChainLength < refinement) {
+				maxChainLength = refinement;
+			}
+		}
+
 	};
 
 	/**
@@ -192,6 +205,7 @@ namespace Hash {
 	template <typename T, typename Comparer, typename Hash, class StorageInfo>
 	class Storage {
 	public:
+#ifdef HASH_DEBUG
 		/**
 		 * Inserts the {@code element} into the table.
 		 *
@@ -258,6 +272,7 @@ namespace Hash {
 		 * @param stats Place where the statistics are computed. The stats is cleared prior computation.
 		 */
 		virtual void computeStatistics(Utils::StorageStatistics & stats) const = 0;
+#endif
 	};
 
 }

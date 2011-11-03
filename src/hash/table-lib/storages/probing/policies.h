@@ -32,7 +32,7 @@ namespace Hash { namespace Storages {
 			}
 		}
 
-		Hash probe(Hash hash, size_t i) const {
+		inline Hash probe(Hash hash, size_t i) const {
 			return hash + i * coefficient;
 		}
 
@@ -67,7 +67,7 @@ namespace Hash { namespace Storages {
 			}
 		}
 
-		Hash probe(Hash hash, size_t i) const {
+		inline Hash probe(Hash hash, size_t i) const {
 			return hash + i * (i * quadCoef + linCoef);
 		}
 

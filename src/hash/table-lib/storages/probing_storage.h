@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "exceptions/item_stored_exception.h"
 #include "storage.h"
+#include "utils/hash_assert.h"
 #include "probing/policies.h"
 
 namespace Hash { namespace Storages {
@@ -106,7 +107,7 @@ namespace Hash { namespace Storages {
 			return *this;
 		}
 
-		void insert(const T & item, HashType hash) {
+		inline void insert(const T & item, HashType hash) {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 			
@@ -129,7 +130,7 @@ namespace Hash { namespace Storages {
 			this->storageInfo.incElementCount();
 		}
 
-		bool remove(const T & item, HashType hash) {
+		inline bool remove(const T & item, HashType hash) {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 
@@ -149,7 +150,7 @@ namespace Hash { namespace Storages {
 			};
 		}
 
-		bool contains(const T & item, HashType hash) const {
+		inline bool contains(const T & item, HashType hash) const {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 
@@ -171,7 +172,7 @@ namespace Hash { namespace Storages {
 			return this->storageInfo.getElementCount();
 		}
 
-		size_t getTableSize(void) const {
+		inline size_t getTableSize(void) const {
 			return this->storageInfo.getTableSize();
 		}
 
@@ -181,9 +182,9 @@ namespace Hash { namespace Storages {
 			this->storageInfo.setTableSize(StorageParams::INITIAL_STORAGE_SIZE);
 		}
 
-		double getLoadFactor(void) const {
-			simple_assert(storageLength != 0, "Storage must contain at least one slot.");
-			return static_cast<double>(this->elementCount) / this->storageLength;
+		inline double getLoadFactor(void) const {
+			simple_assert(this->storageInfo.getTableSize() != 0, "Storage must contain at least one slot.");
+			return static_cast<double>(this->elementCount) / this->storageInfo.getTableSize();
 		}
 
 		void computeStatistics(Utils::StorageStatistics & stats) const {
@@ -282,23 +283,23 @@ namespace Hash { namespace Storages {
 				}
 			}
 
-			friend bool operator ==(const ProbingStorageIterator & a, const ProbingStorageIterator & b) {
-				return a.position == b.position && a.storage == b.storage;
+			inline friend bool operator ==(const ProbingStorageIterator & a, const ProbingStorageIterator & b) {
+				return &(*a) == &(*b); 
 			}
 
-			friend bool operator !=(const ProbingStorageIterator & a, const ProbingStorageIterator & b) {
+			inline friend bool operator !=(const ProbingStorageIterator & a, const ProbingStorageIterator & b) {
 				return !(a == b);
 			}
 
-			T & operator *(void) {
+			inline T & operator *(void) {
 				return storage->storage[position].item;
 			}
 
-			const T & operator *(void) const {
+			inline const T & operator *(void) const {
 				return const_cast<ProbingStorageIterator *> (this)->storage->storage[position].item;
 			}
 
-			ProbingStorageIterator operator ++(void) {
+			inline ProbingStorageIterator operator ++(void) {
 				size_t tableSize = storage->storageInfo.getTableSize();
 				for (; ;) {
 					// Out of bounds?

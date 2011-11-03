@@ -1,5 +1,5 @@
-#ifndef TR1_FUNCTION
-#define TR1_FUNCTION
+#ifndef IDENTITY_FUNCTION
+#define IDENTITY_FUNCTION
 
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
@@ -18,9 +18,9 @@
 namespace Hash { namespace Systems {
 
 	template<typename T, class Storage>
-	class Tr1Function : public UniversalFunction<T, Storage> {
+	class IdentityFunction : public UniversalFunction<T, Storage> {
 	public:
-		explicit Tr1Function(size_t size = 32) {
+		explicit IdentityFunction(size_t size = 32) {
 			setTableSize(size);
 		}
 
@@ -43,19 +43,14 @@ namespace Hash { namespace Systems {
 		}
 
 		virtual size_t hash(const T & x) {
-			std::ldiv_t _Qrem = std::ldiv((long)(size_t)x, 127773);
-
-			_Qrem.rem = 16807 * _Qrem.rem - 2836 * _Qrem.quot;
-			if (_Qrem.rem < 0)
-				_Qrem.rem += 2147483647;
-			return ((size_t)_Qrem.rem) & mask;
+			return x & mask;
 		}
 
 		virtual size_t operator()(const T & a) {
 			return hash(a);
 		}
 
-		void swap(Tr1Function & a) {
+		void swap(IdentityFunction & a) {
 			using std::swap;
 			swap(mask, a.mask);
 		}
@@ -66,4 +61,4 @@ namespace Hash { namespace Systems {
 
 } }
 
-#endif /* TR1_FUNCTION */
+#endif /* IDENTITY_FUNCTION */

@@ -12,18 +12,3 @@ LoadFactorBoundsRehashPolicy::LoadFactorBoundsRehashPolicy(double minFactor, dou
   maxFactor(maxFactor) {
 }
 
-double LoadFactorBoundsRehashPolicy::getMinLoadFactor(void) const {
-	return this->minFactor;
-}
-
-double LoadFactorBoundsRehashPolicy::getMaxLoadFactor(void) const {
-	return this->maxFactor;
-}
-
-bool LoadFactorBoundsRehashPolicy::needsRehashingAfterInsert(const PlainStorageInfo & storageInfo) {
-	return storageInfo.getElementCount() > this->getMaxLoadFactor() * storageInfo.getTableSize();
-}
-
-bool LoadFactorBoundsRehashPolicy::needsRehashingAfterDelete(const PlainStorageInfo & storageInfo) {
-	return storageInfo.getElementCount() < this->getMinLoadFactor() * storageInfo.getTableSize();
-}
