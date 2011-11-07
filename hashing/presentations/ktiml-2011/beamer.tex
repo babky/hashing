@@ -1,0 +1,80 @@
+\section{Slovníky}
+\begin{frame}
+	\frametitle{Slovníky}
+	
+	\begin{block}{Statické}
+		\begin{itemize}
+			\item Napríklad perfektné hashovanie, typicky FKS schéma.
+			\item Garantovaný čas na vyhľadávanie.
+			\item Možná dynamizácia spolu so zachovaním $O(1)$ času na vyhľadanie prvku.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Dynamické}
+		\begin{itemize}
+			\item Napríklad stromy (binárne, vyvažované, van Emde Boasove stromy), ale zaoberáme sa ...
+			\item ... hashovaním -- veľa schém, hlavne univerzálne hashovanie.
+			\item Najlepšie metódy dávajú worst-case garanciu na vyhľadanie, problémom je update či zložitý univerzálny systém.
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\section{Hashovanie}
+\begin{frame}
+	\frametitle{Schémy}
+	
+	\begin{block}{Cuckoo hashing}
+		\begin{itemize}
+			\item Použijeme dve tabuľky a dve funkcie -- prvok $x$ je na pozícii $T_1[h_1(x)]$ alebo $T_2[h_2(x)]$.
+			\item Teda $O(1)$ vyhľadanie a mazanie. Vkladanie môže zlyhať, ale je to nepravdepodobné.
+			\item Vyžadujú veľmi kvalitný uniformný hashovací systém -- $O(1)$ teoreticky ale pri použití už spôsobuje mierny problém.
+		\end{itemize}
+	\end{block}
+	
+	\begin{block}{Two choices}
+		\begin{itemize}
+			\item S vysokou pravdepobodnosťou dosahuje $O(\log \log n)$ čas na vyhľadanie.
+			\item Používa aspoň dve hashovacie funkcie a dá sa kombinovať aj s jednoduchými univerzálnymi systémami.
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}	
+	\frametitle{Systémy funkcií}
+	
+	\begin{itemize}
+		\item \emph{Polynómy a ich modifikácie} -- jednoduché a rýchle, ale nefungujú s two-choices, otvoreným hashovaním (ak použijeme malý stupeň).
+		\item \emph{Lineárne funkcie} -- experimenty s two-choices sú ok, ale nemáme dôkaz.
+		\item \emph{Tabulačné hashovanie} -- klúč rozdelíme na podreťazce a tie hashujeme nezávisle, t.j. jednoduché a rýchle. Majú výhodné teoretické vlastnosti, fungujú s two-choices, s linear probing, ale poskytujú len insertion-only kukučkové hashovanie.
+		\item \emph{Uniformné systémy} -- výhodné teoretické vlastnosti, ale pomalé, použité s kukučkovým hashovaním.
+	\end{itemize}
+\end{frame}
+
+\section{Výsledky a pokračovanie}
+\begin{frame}
+	\frametitle{Limit function}
+
+	\begin{itemize}
+		\item \emph{Limit function} je maximálna dĺžka reťazca, ktorú povolíme. 
+		\item Ak po vložení prvku nie je dodržaná, tabuľku prehashujeme.
+		\item Dá sa použiť pri separovaných reťazcoch, ako aj s otvoreným hashovaním.
+		\item Extrakcia z rôznych univerzálnych systémov:
+		\begin{itemize}
+			\item uniformné systémy -- $\log n / \log \log n$, implementačne nevýhodné, 
+			\item lineárne funkcie -- $\log n \log \log n$, jednoduchý, ale nie úplne výhodný systém,
+			\item two choices -- $\log \log n$, funguje aj s otvoreným hashovaním.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Čo ďalej?}
+
+	\begin{itemize}
+		\item univerzálne hashovanie a nové limit funkcie pre linear probing
+		\item prakticky rýchle hashovanie založené na linear probing schéme alebo rýchle kukučkové hashovanie
+		\item tabulačné hashovanie + kukučka + updaty -- máme len statickú verziu
+		\item prečo sú lineárne zobrazenia kvalitné spolu s two-choices
+		\item ďalšie vlastnosti či vylepšenie už známych výsledkov o lineárnych funkciách
+	\end{itemize}
+\end{frame}
