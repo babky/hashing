@@ -3,15 +3,7 @@
 
 #include "storage.h"
 #include "utils/constant_comparer.h"
-#include <boost/thread.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(disable: 4512 4127 4100)
-#endif
-#include <boost/integer_traits.hpp>
-#include <boost/integer.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(default: 4512 4127 4100)
-#endif
+#include "utils/boost_include.h"
 
 namespace Hash { namespace Storages {
 

@@ -111,7 +111,7 @@ namespace Hash { namespace Storages {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 			
-			HashType pos;
+			HashType pos = hash;
 			for (size_t i = 0; ; ++i) {
 				pos = probingPolicy.probe(hash, i) % tableSize;
 
@@ -147,7 +147,7 @@ namespace Hash { namespace Storages {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 
-			HashType pos;
+			HashType pos = hash;
 			for (size_t i = 0; ; ++i) {
 				pos = probingPolicy.probe(hash, i) % tableSize;
 
@@ -167,7 +167,7 @@ namespace Hash { namespace Storages {
 			size_t tableSize = storageInfo.getTableSize();
 			simple_assert(hash < tableSize, "Hash must be inside the storage!");
 
-			HashType pos;
+			HashType pos = hash;
 			for (size_t i = 0; ; ++i) {
 				pos = probingPolicy.probe(hash, i) % tableSize;
 

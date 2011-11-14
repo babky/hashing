@@ -1,5 +1,6 @@
 #include "table_test.h"
 #include "storages/probing_storage.h"
+#include "storages/direct_chaining_storage.h"
 #include "systems/polynomial_system.h"
 #include "systems/two_way_system_randomized.h"
 #include "math/double_word.h"
@@ -47,7 +48,11 @@ int main(int, const char **) {
 	using namespace Hash::Policies::Rehash;
 	using namespace std;
 
-	TableTest<Table<size_t, EqualityComparer<boost::uint_fast64_t>, PolynomialSystem, ChainedStorage> > test_univ_pol_32b;
+	TableTest<Table<boost::uint_fast64_t, EqualityComparer<boost::uint_fast64_t>, PolynomialSystem, DirectChainingStorage> > test_direct_chain;
+	test_direct_chain.runTest();
+	cout << test_direct_chain.getAssertionResult();
+
+	TableTest<Table<boost::uint_fast64_t, EqualityComparer<boost::uint_fast64_t>, PolynomialSystem, ChainedStorage> > test_univ_pol_32b;
 	test_univ_pol_32b.runTest();
 	cout << test_univ_pol_32b.getAssertionResult();
 
@@ -75,6 +80,7 @@ int main(int, const char **) {
 	TableTest<Table<int, EqualityComparer<int>, TwoWaySystemRandomizedLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_2wr_bs;
 	test_univ_lin_map_2wr_bs.runTest();
 	cout << test_univ_lin_map_2wr_bs.getAssertionResult();
+	*/
 
 	/*
 	TableTest<Table<int, EqualityComparer<int>, TwoWaySystemLinearMap, BoundedChainedStorage, GuaranteedRehashPolicy> > test_univ_lin_map_2w_bs;
