@@ -3,7 +3,9 @@
 
 #include "storage.h"
 #include "utils/constant_comparer.h"
+#include "utils/hash_assert.h"
 #include "utils/boost_include.h"
+#include <boost/thread.hpp>
 
 namespace Hash { namespace Storages {
 
@@ -12,7 +14,7 @@ namespace Hash { namespace Storages {
 	 * stored inside the chain.
 	 *
 	 * @typeparam T Type of the stored items. It is ignored, this storage does not store the data.
-	 * @typeparam Comparer Comparer used do determine the key equality.  This parameters is ignored, too.
+	 * @typeparam Comparer Comparer used do determine the key equality. This parameter is ignored, too.
 	 * @typeparam Hash Type of the hash value.
 	 * @typeparam ChainLengthType Length of the chain.
 	 */
@@ -147,6 +149,13 @@ namespace Hash { namespace Storages {
 
 		Iterator getEnd(void) {
 			return CollisionCountStorageIterator(this, false);
+		}
+
+		const static bool HAS_REHASH = false;
+
+		template<class HashFunction>
+		void rehash(CollisionCountStorage &, HashFunction & f) {
+			simple_assert(false, "Collision count storage does not implement rehash.");
 		}
 
 		/**

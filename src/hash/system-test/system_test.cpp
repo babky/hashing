@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <boost/config.hpp>
@@ -23,85 +24,145 @@
 using namespace std;
 using namespace boost::posix_time;
 
-namespace Hash { namespace Systems {
-	
-	template<typename T, class Storage>
-	class PolynomialSystem4 : public Hash::Systems::PolynomialSystem<T, Storage> {
-	public:
-		explicit PolynomialSystem4(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE,
-			T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 4):
-		  PolynomialSystem<T, Storage>(tableSize, aUniversumMax, aDegree) {
-		}
-	};
-
-} }
-
 struct Test {
-	Test(string n):
-	  name(n) {
+	Test(string aName, size_t aLength, size_t aRepeats):
+		name(aName),
+		length(aLength),
+		repeats(aRepeats)
+	{
 	}
 
 	virtual void run(void) = 0;
 
+	time_duration getTotalTime(void) const {
+		time_duration time;
+
+		for (DurationVector::const_iterator b = durations.begin(), e = durations.end(); b != e; ++b) {
+			time += *b;
+		}
+
+		return time;
+	}
+
+	time_duration getAverageTime(void) const {
+		return getTotalTime() / repeats;
+	}
+
+	double getMillisVariance(void) const {
+		double avg = getTotalTime().total_milliseconds() / (double) repeats;
+		double sum = 0;
+		double dif;
+
+		for (DurationVector::const_iterator b = durations.begin(), e = durations.end(); b != e; ++b) {
+			dif = (b->total_milliseconds() - avg);
+			sum += dif * dif;
+		}
+
+		return sum / repeats;
+	}
+
+	const string & getName(void) const {
+		return name;
+	}
+
+	typedef vector<time_duration> DurationVector;
+
+	DurationVector & getDurations(void) {
+		return durations;
+	}
+
 protected:
 	string name;
-	time_duration time;
+	size_t length;
+	size_t repeats;
+	DurationVector durations;
 };
 
 template<class F, typename T>
 struct FunctionTest : public Test {
 
-	FunctionTest(size_t aLength, string name):
-	  Test(name),
-	  length(aLength) {
+	FunctionTest(string aName, size_t aLength, size_t aRepeats):
+		Test(aName, aLength, aRepeats)
+	{
 	}
 
 	virtual void run() {
 		function.setTableSize(length);
-		function.reset();
 
-		ptime start = microsec_clock::local_time();
+		ptime start, finish; 
 		size_t hash = 0xdead;
-		for (size_t i = 0; i < length; ++i) {
-			hash ^= function.hash(i);
-		}
-		ptime finish = microsec_clock::local_time();
-		time = finish - start;
+		for (size_t j = 0; j < repeats; ++j) {
+			start = microsec_clock::local_time();
+			function.reset();
+			hash = 0xdead;
 
-		if (hash == 0) {
-			cout << "Almost impossible :)!\n";
+			for (size_t i = 0; i < length; ++i) {
+				hash ^= function.hash(i);
+			}
+
+			if (hash == 0) {
+				cout << "Almost impossible :)!\n";
+			}
+
+			finish = microsec_clock::local_time();
+			durations.push_back(finish - start);
 		}
-		
-		cout << name << ": " << time.total_milliseconds() << " ms" << endl;
+
 	}
 
 private:
-	size_t length;
 	F function;
 };
 
-template<typename T>
-void runTest(size_t length) {
-	typedef size_t TestStorage;
-	typedef vector<Test *> FunctionVector;
-	using namespace Hash::Systems;
 
-	FunctionVector functions;
-	
-	functions.push_back(new FunctionTest<IdentityFunction<T, TestStorage>, T>(length, "ID"));
-	functions.push_back(new FunctionTest<Tr1Function<T, TestStorage>, T>(length, "TR1"));
-	functions.push_back(new FunctionTest<UniversalFunctionCWLF<T, TestStorage>, T>(length, "CWLF"));
-	functions.push_back(new FunctionTest<BitStringFunction<T, TestStorage>, T>(length, "BitString"));
-	functions.push_back(new FunctionTest<TabulationFunction<T, TestStorage>, T>(length, "Tabulation"));
-	functions.push_back(new FunctionTest<UniversalFunctionLinearMap<T, TestStorage>, T>(length, "LinearMap"));
-	functions.push_back(new FunctionTest<PolynomialSystem<T, TestStorage>, T>(length, "Polynomial - deg 2"));
-	functions.push_back(new FunctionTest<PolynomialSystem4<T, TestStorage>, T>(length, "Polynomial - deg 4"));
-	functions.push_back(new FunctionTest<Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>, T>(length, "DW - deg 4"));
+class CompleteTest {
+public:
+	typedef vector<Test *> FunctionTestVector;
 
-	for (FunctionVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
-		(*b)->run();
+	CompleteTest(size_t aLength, size_t aRepeats):
+		length(aLength),
+		repeats(aRepeats)
+	{
 	}
-}
+
+	template<typename T>
+	void runTest(void) {
+		typedef size_t TestStorage;
+		using namespace Hash::Systems;
+
+		functions.push_back(new FunctionTest<IdentityFunction<T, TestStorage>, T>("ID", length, repeats));
+		functions.push_back(new FunctionTest<Tr1Function<T, TestStorage>, T>("TR1", length, repeats));
+		functions.push_back(new FunctionTest<UniversalFunctionCWLF<T, TestStorage>, T>("CWLF", length, repeats));
+		functions.push_back(new FunctionTest<BitStringFunction<T, TestStorage>, T>("BitString", length, repeats));
+		functions.push_back(new FunctionTest<TabulationFunction<T, TestStorage>, T>("Tabulation", length, repeats));
+		functions.push_back(new FunctionTest<UniversalFunctionLinearMap<T, TestStorage>, T>("LinearMap", length, repeats));
+		functions.push_back(new FunctionTest<PolynomialSystem<T, TestStorage>, T>("Polynomial - deg 2", length, repeats));
+		functions.push_back(new FunctionTest<PolynomialSystem4<T, TestStorage>, T>("Polynomial - deg 4", length, repeats));
+		functions.push_back(new FunctionTest<Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>, T>("DW - deg 4", length, repeats));
+	
+		for (FunctionTestVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
+			(*b)->run();
+		}
+	}
+
+	size_t getLength(void) const {
+		return length;
+	}
+
+	size_t getRepeats(void) const {
+		return repeats;
+	}
+
+	FunctionTestVector & getFunctions(void) {
+		return functions;
+	}
+
+protected:
+	FunctionTestVector functions;
+
+	size_t length;
+	size_t repeats;
+};
 
 int main(int argc, char ** argv) {
 	using namespace boost::program_options;
@@ -116,21 +177,79 @@ int main(int argc, char ** argv) {
 	const size_t DEFAULT_LENGTH = 24;
 #endif
 
+	size_t repeats;
+	const size_t DEFAULT_REPEATS = 32;
+
+	size_t step;
+	const size_t DEFAULT_STEP = 1;
+
+	size_t steps;
+	const size_t DEFAULT_STEPS = 0;
+
+	string output;
+	string DEFAULT_OUTPUT = "";
+
 	options_description opts("Universal systems test options.");
 	opts.add_options()
 		("bits", value<size_t>(&bits)->default_value(DEFAULT_BITS), "the number of bits used 32 or 64")
-		("length", value<size_t>(&length)->default_value(DEFAULT_LENGTH), "the logarithm of number of times the function is called and the size of the table");
+		("length", value<size_t>(&length)->default_value(DEFAULT_LENGTH), "the logarithm of number of times the function is called and the size of the table")
+		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS), "the number of repetitions")
+		("step", value<size_t>(&step)->default_value(DEFAULT_STEP), "the iteration step")
+		("steps", value<size_t>(&steps)->default_value(DEFAULT_STEPS), "the number of steps")
+		("output", value<string>(&output)->default_value(DEFAULT_OUTPUT), "output");
 		
 	variables_map vm;
 	store(parse_command_line(argc, argv, opts), vm);
 	notify(vm);
-	
-	if (bits == 32) {
-		runTest<boost::uint32_t>(1 << length);
-	} else if (bits == 64) {
-		runTest<boost::uint64_t>(1 << length);
-	} else {
-		std::cerr << opts;
+
+	typedef vector<CompleteTest> TestVector;
+	TestVector v;
+
+	for (size_t s = 0; s < steps; ++s) {
+		CompleteTest t(1 << (length + s * step), repeats);
+
+		if (bits == 32) {
+			t.runTest<boost::uint32_t>();
+		} else if (bits == 64) {
+			t.runTest<boost::uint64_t>();
+		} else {
+			std::cerr << opts;
+			return 1;
+		}
+
+		v.push_back(t);
+	}
+
+	ofstream fout;
+	if (output != "") {
+		fout.open(output.c_str());
+	}
+
+	ostream & out = output != "" ? fout : cout;
+	for (TestVector::iterator b = v.begin(), e = v.end(); b != e; ++b) {
+		out << "TEST: length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << "\n";
+		for (CompleteTest::FunctionTestVector::iterator fb = b->getFunctions().begin(), fe = b->getFunctions().end(); fe != fb; ++fb) {
+			out << setw(20) << (*fb)->getName() << " " << setw(6) << right << (*fb)->getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*fb)->getMillisVariance() << "] ms\n";
+		}
+		out << "\n";
+	}
+
+	if (output != "") {
+		out << "\n\n---PRINTING WHOLE DATA SET---\n";
+		for (TestVector::iterator b = v.begin(), e = v.end(); b != e; ++b) {
+			for (CompleteTest::FunctionTestVector::iterator fb = b->getFunctions().begin(), fe = b->getFunctions().end(); fe != fb; ++fb) {
+				out << setw(20) << (*fb)->getName() << ", length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << ": ";
+
+				for (Test::DurationVector::const_iterator db = (*fb)->getDurations().begin(), de = (*fb)->getDurations().end(); db != de; ++db) {
+					out << setw(6) << db->total_milliseconds() << " ";
+				}
+
+				out << "\n";
+			}
+			
+		}
+
+		fout.close();
 	}
 
 	return 0;

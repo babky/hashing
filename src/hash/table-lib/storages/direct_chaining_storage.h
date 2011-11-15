@@ -157,15 +157,18 @@ namespace Hash { namespace Storages {
 
 			if (prev == EMPTY_ROW) {
 				// The first element in the chain.
-				storage[hash].start = EMPTY_ROW;
-				storage[hash].next = EMPTY_ROW;
+				storage[hash].start = storage[pos].next;
+
+				// If the element was last in the chain, then set the flags properly.
+				if (storage[hash].start == LAST_CHAIN_ELEMENT) {
+					storage[hash].start = EMPTY_ROW;
+				}
 			} else {
 				// Skip pos.
 				storage[prev].next = storage[pos].next;
-				// Tells that the position pos is empty.
-				storage[pos].next = EMPTY_ROW;
-				storage[pos].next = EMPTY_ROW;
 			}
+			// Mark the position pos as empty.
+			storage[pos].next = EMPTY_ROW;
 
 			// Success.
 			storageInfo.decElementCount();
@@ -237,11 +240,17 @@ public:
 			return ChainingStorageIterator(this, storageInfo.getTableSize());
 		}
 
-		static const bool HAS_REHASH = false;
+		static const bool HAS_REHASH = true;
 
 		template<class Function>
-		void rehash(DirectChainingStorage &, Function & f) {
-			simple_assert(false, "Chained storage can not rehash.");
+		void rehash(DirectChainingStorage & s, Function & f) {
+			for (size_t i = 0, e = storageInfo.getTableSize(); i < e; ++i) {
+				if (storage[i].next == EMPTY_ROW) {
+					continue;
+				}
+
+				s.insert(storage[i].item, f(storage[i].item));
+			}
 		}
 
 		/**
