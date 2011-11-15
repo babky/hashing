@@ -87,6 +87,8 @@ struct FunctionTest : public Test {
 	}
 
 	virtual void run() {
+		cout << "Running " << name << " of length " << length << ".\n";
+
 		function.setTableSize(length);
 
 		ptime start, finish; 
