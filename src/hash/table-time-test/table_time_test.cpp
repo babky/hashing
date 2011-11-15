@@ -45,26 +45,6 @@ using namespace Hash::Systems::Uniform;
 using namespace Hash::Storages;
 using namespace Hash::Policies::Rehash;
 
-namespace Hash { namespace Systems {
-	
-	template<typename T, class Storage>
-	class PolynomialSystem5 : public Hash::Systems::PolynomialSystem<T, Storage> {
-	public:
-		explicit PolynomialSystem5(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 5):
-		  PolynomialSystem<T, Storage>(aStartLength, aUniversumMax, aDegree) {
-		}
-	};
-
-	template<typename T, class Storage>
-	class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T, Storage> {
-	public:
-		explicit PolynomialSystem32(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
-		  PolynomialSystem<T, Storage>(aStartLength, aUniversumMax, aDegree) {
-		}
-	};
-
-} }
-
 template<typename T>
 class HashTableWrapper {
 public:

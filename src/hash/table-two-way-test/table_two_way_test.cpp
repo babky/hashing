@@ -42,14 +42,6 @@ using namespace boost;
 using namespace boost::program_options;
 
 template<typename T, class Storage>
-class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T, Storage> {
-public:
-	explicit PolynomialSystem32(size_t aStartLength = StorageParams::INITIAL_STORAGE_SIZE, T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
-	  PolynomialSystem<T, Storage>(aStartLength, aUniversumMax, aDegree) {
-	}
-};
-
-template<typename T, class Storage>
 class TwoWaySystemPolynomial32 : public Hash::Systems::TwoWaySystem<T, Storage, PolynomialSystem32> {
 };
 

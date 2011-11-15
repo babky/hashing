@@ -6,6 +6,7 @@
 #include "systems/tabulation_system.h"
 #include "storages/probing_storage.h"
 #include "storages/chained_storage.h"
+#include "storages/direct_chaining_storage.h"
 #include "utils/equality_comparer.h"
 #include "table.h"
 #include <boost/config.hpp>
@@ -30,24 +31,25 @@ int main(int, char **) {
 	typedef Miscellaneous::Table<T, Tr1Function<T, size_t> > LPTR1;
 	typedef Table<T, Hash::Utils::EqualityComparer<T>, IdentityFunction, LinearProbingStorage> LinearProbingTabulation;
 	typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
+	typedef Table<T, Hash::Utils::EqualityComparer<T>, IdentityFunction, DirectChainingStorage> DirectChainingTabulation;
 
 	ptime start, finish;
-	size_t ELEMENT_COUNT = 1 << 25;
+	size_t ELEMENT_COUNT = 1 << 24;
 
-	/*ChainingTabulation cht;
+	DirectChainingTabulation dcht;
 	start = microsec_clock::local_time();
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		cht.insert(i);
+		dcht.insert(i);
 	}
 	finish = microsec_clock::local_time();
-	cout << "CHT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	cout << "DCHT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
 	start = microsec_clock::local_time();
 	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		cht.contains(i);
+		dcht.contains(i);
 	}
 	finish = microsec_clock::local_time();
-	cout << "CHT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	cht.clear();*/
+	cout << "DCHT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	dcht.clear();
 
 	LinearProbingTabulation lpt;
 	start = microsec_clock::local_time();
