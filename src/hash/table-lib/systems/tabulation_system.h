@@ -1,15 +1,7 @@
 #ifndef TABULATION_SYSTEM_H
 #define TABULATION_SYSTEM_H
 
-#include <boost/config.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(disable: 4512 4127 4100)
-#endif
-#include <boost/integer.hpp>
-#include <boost/integer_traits.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(default: 4512 4127 4100)
-#endif
+#include "../utils/boost_include.h"
 #include "systems/universal_system.h"
 #include "storage.h"
 #include "../utils/static_random_generator.h"

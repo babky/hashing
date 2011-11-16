@@ -1,13 +1,5 @@
 #include "double_word.h"
-#include <boost/config.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(disable: 4512 4127 4100)
-#endif
-#include <boost/integer_traits.hpp>
-#include <boost/integer.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(default: 4512 4127 4100)
-#endif
+#include "utils/boost_include.h"
 
 using namespace Hash::Math;
 

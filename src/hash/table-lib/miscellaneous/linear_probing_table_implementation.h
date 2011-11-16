@@ -62,6 +62,14 @@ namespace Hash { namespace Miscellaneous {
 			swap(t);
 		}
 
+		void clear(void) {
+			delete [] storage;
+			storage = new StorageItem[16];
+			tableSize = 16;
+			elementCount = 0;
+			f.setTableSize(0);
+		}
+
 		void swap(Table & t) {
 			using std::swap;
 
