@@ -11,51 +11,6 @@ double log2(double n) {
 	return log(static_cast<double> (n)) / log(static_cast<double> (2));
 }
 
-GuaranteedRehashPolicy::GuaranteedRehashPolicy(bool allowDelete):
-  allowDelete(allowDelete),
-  maxLoadFactor(allowDelete ? MAX_LOAD_FACTOR_ALLOW_DELETE : MAX_LOAD_FACTOR_NO_DELETE), 
-  minLoadFactor(allowDelete ? MIN_LOAD_FACTOR_ALLOW_DELETE : MIN_LOAD_FACTOR_NO_DELETE),
-  multiplicativeConstant(allowDelete ? MULTIPLICATIVE_CONSTANT_ALLOW_DELETE : MULTIPLICATIVE_CONSTANT_NO_DELETE) {
-}
-
-double GuaranteedRehashPolicy::getMinLoadFactor(void) const {
-	return this->minLoadFactor;
-}
-
-double GuaranteedRehashPolicy::getMaxLoadFactor(void) const {
-	return this->maxLoadFactor;
-}
-
-size_t GuaranteedRehashPolicy::getMaxChainLength(size_t n) const {
-	double t = log2(n);
-    size_t maxLength = static_cast<size_t> (ceil(this->multiplicativeConstant * t * log2(t)));
-	if (maxLength < MINIMAL_ALLOWED_BOUND) {
-		return MINIMAL_ALLOWED_BOUND;
-	} else {
-		return maxLength;
-	}
-}
-
-inline bool GuaranteedRehashPolicy::needsRehashingAfterDelete(const MaxChainLengthStorageInfo & storageInfo) {
-	if (storageInfo.getLoadFactor() < this->getMinLoadFactor()) {
-		return true;
-	}
-
-	return false;
-}
-
-inline bool GuaranteedRehashPolicy::needsRehashingAfterInsert(const MaxChainLengthStorageInfo & storageInfo) {
-	if (storageInfo.getLoadFactor() > this->getMaxLoadFactor()) {
-		return true;
-	}
-
-	if (storageInfo.getMaxChainLength() > this->getMaxChainLength(storageInfo.getElementCount())) {
-		return true;
-	}
-
-	return false;
-}
-
 const double GuaranteedRehashPolicy::MIN_LOAD_FACTOR_NO_DELETE = 0.5;
 const double GuaranteedRehashPolicy::MAX_LOAD_FACTOR_NO_DELETE = 1;
 const double GuaranteedRehashPolicy::MULTIPLICATIVE_CONSTANT_NO_DELETE = 19.152;

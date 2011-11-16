@@ -1,16 +1,7 @@
 #ifndef TR1_FUNCTION
 #define TR1_FUNCTION
 
-#include <boost/config.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(disable: 4512 4127 4100)
-#endif
-#include <boost/integer.hpp>
-#include <boost/integer_traits.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(default: 4512 4127 4100)
-#endif
-
+#include "../utils/boost_include.h"
 #include "universal_system.h"
 #include <cstdlib>
 #include <algorithm>

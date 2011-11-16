@@ -104,6 +104,42 @@ namespace Hash { namespace Systems {
 		size_t degree;
 	};
 
+	template<typename T, class Storage>
+	class PolynomialSystem2 : public Hash::Systems::PolynomialSystem<T, Storage> {
+	public:
+		explicit PolynomialSystem2(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE,
+			T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 2):
+		  PolynomialSystem<T, Storage>(tableSize, aUniversumMax, aDegree) {
+		}
+	};
+
+	template<typename T, class Storage>
+	class PolynomialSystem4 : public Hash::Systems::PolynomialSystem<T, Storage> {
+	public:
+		explicit PolynomialSystem4(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE,
+			T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 4):
+		  PolynomialSystem<T, Storage>(tableSize, aUniversumMax, aDegree) {
+		}
+	};
+
+	template<typename T, class Storage>
+	class PolynomialSystem5 : public Hash::Systems::PolynomialSystem<T, Storage> {
+	public:
+		explicit PolynomialSystem5(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE,
+			T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 5):
+		  PolynomialSystem<T, Storage>(tableSize, aUniversumMax, aDegree) {
+		}
+	};
+
+	template<typename T, class Storage>
+	class PolynomialSystem32 : public Hash::Systems::PolynomialSystem<T, Storage> {
+	public:
+		explicit PolynomialSystem32(size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE,
+			T aUniversumMax = Hash::Math::Prime<T>::GREATEST_PRIME, size_t aDegree = 32):
+		  PolynomialSystem<T, Storage>(tableSize, aUniversumMax, aDegree) {
+		}
+	};
+
 } }
 
 namespace std {
