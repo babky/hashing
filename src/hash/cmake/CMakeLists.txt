@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required	(VERSION 2.8.1)
+cmake_policy			(VERSION 2.8.1)
 
 project (HashTable)
+
 
 add_subdirectory (../table-lib/cmake ../table-lib/cmake)
 add_subdirectory (../cwlf-dynamic-test/cmake ../cwlf-dynamic-test/cmake)
