@@ -1,4 +1,5 @@
-cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
+cmake_minimum_required	(VERSION 2.8.1)
+cmake_policy			(VERSION 2.8.1)
 
 find_package( Boost 1.34 COMPONENTS random system date_time REQUIRED )
 
