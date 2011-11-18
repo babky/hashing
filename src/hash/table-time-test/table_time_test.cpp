@@ -138,11 +138,7 @@ int main(void) {
 	LoadFactorVector loadFactors;
 	//loadFactors.push_back(0.5);
 	//loadFactors.push_back(0.75);
-<<<<<<< local
 	//loadFactors.push_back(0.9);
-=======
-	// loadFactors.push_back(0.9);
->>>>>>> other
 
 	SizeVector sizes;
 	sizes.push_back(1 << 10);
