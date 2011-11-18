@@ -138,7 +138,11 @@ int main(void) {
 	LoadFactorVector loadFactors;
 	//loadFactors.push_back(0.5);
 	//loadFactors.push_back(0.75);
+<<<<<<< local
+	//loadFactors.push_back(0.9);
+=======
 	// loadFactors.push_back(0.9);
+>>>>>>> other
 
 	SizeVector sizes;
 	sizes.push_back(1 << 10);
@@ -173,7 +177,7 @@ int main(void) {
 		}
 	}
 
-	size_t ELEMENT_COUNT = 1 << 20;
+	size_t ELEMENT_COUNT = 1 << 25;
 	ptime start, finish;
 
 	start = microsec_clock::local_time();
