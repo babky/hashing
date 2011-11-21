@@ -191,6 +191,8 @@ int main(int argc, char ** argv) {
 	string output;
 	string DEFAULT_OUTPUT = "";
 
+	bool help;
+
 	options_description opts("Universal systems test options.");
 	opts.add_options()
 		("bits", value<size_t>(&bits)->default_value(DEFAULT_BITS), "the number of bits used 32 or 64")
@@ -198,11 +200,17 @@ int main(int argc, char ** argv) {
 		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS), "the number of repetitions")
 		("step", value<size_t>(&step)->default_value(DEFAULT_STEP), "the iteration step")
 		("steps", value<size_t>(&steps)->default_value(DEFAULT_STEPS), "the number of steps")
-		("output", value<string>(&output)->default_value(DEFAULT_OUTPUT), "output");
-		
+		("output", value<string>(&output)->default_value(DEFAULT_OUTPUT), "output file")
+		("help", "prints this help.");
+
 	variables_map vm;
 	store(parse_command_line(argc, argv, opts), vm);
 	notify(vm);
+
+	if (vm.count("help")) {
+		cout << opts;
+		return 0;
+	}
 
 	typedef vector<CompleteTest> TestVector;
 	TestVector v;
@@ -214,6 +222,10 @@ int main(int argc, char ** argv) {
 			t.runTest<boost::uint32_t>();
 		} else if (bits == 64) {
 			t.runTest<boost::uint64_t>();
+#ifdef __GNUC__
+		} else if (bits == 128) {
+			t.runTest<__uint128_t>();
+#endif
 		} else {
 			std::cerr << opts;
 			return 1;
