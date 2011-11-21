@@ -15,7 +15,7 @@ include_directories(
   ../../test-suite
 )
 
-link_directories ( ../../test-suite/cmake ../../table-lib/cmake link_directories ${Boost_LIBRARY_DIRS} )
+link_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/../../test-suite/cmake ${CMAKE_CURRENT_SOURCE_DIR}/../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
 
 add_executable ( TableTwoWayTest ${SOURCES} )
 
