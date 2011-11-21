@@ -3,14 +3,7 @@
 #include <set>
 #include <unordered_set>
 #include <string>
-#include <boost/config.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(disable: 4512 4127 4100)
-#endif
-#include <boost/date_time.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(default: 4512 4127 4100)
-#endif
+#include "utils/boost_include.hpp"
 #include "table.h"
 #include "function.h"
 #include "utils/equality_comparer.h"
@@ -133,7 +126,7 @@ typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, L
 int main(void) {
 	typedef vector<double> LoadFactorVector;
 	typedef vector<size_t> SizeVector;
-	typedef vector<HashTableWrapper<T> * > TableVector;
+	typedef vector<HashTableWrapper<T> *> TableVector;
 
 	LoadFactorVector loadFactors;
 	//loadFactors.push_back(0.5);
