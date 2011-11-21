@@ -14,3 +14,7 @@ RandomGenerator<unsigned char> * StaticRandomGenerator<unsigned char>::generator
 template<>
 RandomGenerator<boost::uint64_t> * StaticRandomGenerator<boost::uint64_t>::generator = 0;
 
+#ifdef __GNUC__
+template<>
+RandomGenerator<__uint128_t> * StaticRandomGenerator<__uint128_t>::generator = 0;
+#endif
