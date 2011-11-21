@@ -23,6 +23,8 @@ src/hash/table-length-test/cmake/TableLengthTest
 src/hash/table-lib/cmake/libTable.a
 src/hash/cscope.out
 src/hash/system-test/cmake/SystemTest
+src/hash/stl-compare/cmake/StdTest
+src/hash/table-time-test/cmake/TableTimeTest
 src/hash/table-test/cmake/TableTest
 src/hash/table-two-way-test/cmake/TableTwoWayTest
 src/hash/test-suite/cmake/libTestSuite.a
