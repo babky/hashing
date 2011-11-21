@@ -3,7 +3,7 @@
 #include <set>
 #include <unordered_set>
 #include <string>
-#include "utils/boost_include.hpp"
+#include "utils/boost_include.h"
 #include "table.h"
 #include "function.h"
 #include "utils/equality_comparer.h"
