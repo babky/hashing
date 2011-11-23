@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "systems/universal_system.h"
 #include "systems/universal_system_factory.h"
+#include "systems/polynomial_system.h"
 #include "utils/hash_assert.h"
 #include "utils/static_random_generator.h"
 #include "storage.h"
@@ -93,15 +94,15 @@ namespace Hash { namespace Systems { namespace Uniform {
 			return hash(a);
 		}
 
-		void swap(DietzfelbingerWoelfel & r) {
+		void swap(DietzfelbingerWoelfel & dw) {
 			using std::swap;
 
-			swap(tableSize, r.tableSize);
-			swap(r, r.r);
-			swap(rExponent, r.rExponent);
-			swap(z, r.z);
-			swap(f, r.f);
-			swap(g, r.g);
+			swap(tableSize, dw.tableSize);
+			swap(r, dw.r);
+			swap(rExponent, dw.rExponent);
+			swap(z, dw.z);
+			swap(f, dw.f);
+			swap(g, dw.g);
 		}
 
 	protected:
@@ -141,6 +142,23 @@ namespace Hash { namespace Systems { namespace Uniform {
 		HashFunction<T, Storage> f, g;
 	};
 
+	/**
+	 * Common usage of the DW system.
+	 */
+	template<typename T, class Storage>
+	class DietzfelbingerWoelfelPol4 : public DietzfelbingerWoelfel<T, Storage, Hash::Systems::PolynomialSystem4> {
+	};
+
 } } }
+
+namespace std {
+
+	template <typename T, class Storage, template <class, class> class HashFunction>
+	void swap(Hash::Systems::Uniform::DietzfelbingerWoelfel<T, Storage, HashFunction> & a,
+			Hash::Systems::Uniform::DietzfelbingerWoelfel<T, Storage, HashFunction> & b) {
+		a.swap(b);
+	}
+
+}
 
 #endif /* DIETZFELBINGER_WOELFEL_H */
