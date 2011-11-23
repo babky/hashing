@@ -39,7 +39,18 @@ size_t TimeVector::size(void) const {
 	return durations.size();
 }
 
-
 TimeVector::DurationVector & TimeVector::getDurations(void) {
 	return durations;
+}
+
+const TimeVector::DurationVector & TimeVector::getDurations(void) const {
+	return durations;
+}
+
+ostream & Hash::Utils::operator <<(std::ostream & out, const TimeVector & vector) {
+	for (TimeVector::DurationVector::const_iterator db = vector.getDurations().begin(), de = vector.getDurations().end(); db != de; ++db) {
+		out << setw(6) << db->total_milliseconds() << " ";
+	}
+
+	return out;
 }

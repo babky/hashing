@@ -2,6 +2,7 @@
 #define TIME_VECTOR_H
 
 #include <vector>
+#include <ostream>
 #include "utils/boost_include.h"
 
 namespace Hash { namespace Utils {
@@ -19,10 +20,13 @@ namespace Hash { namespace Utils {
 		double getMillisVariance(void) const;
 		size_t size(void) const;
 		DurationVector & getDurations(void);
+		const DurationVector & getDurations(void) const;
 
 	protected:
 		DurationVector durations;
 	};
+
+	std::ostream & operator <<(std::ostream & out, const TimeVector & vector);
 
 } }
 

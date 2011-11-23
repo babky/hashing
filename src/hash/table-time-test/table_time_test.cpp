@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -42,6 +43,7 @@ public:
 	virtual const string & getName(void) const = 0;
 	virtual double getMaxLoadFactor(void) const = 0;
 	virtual size_t getSize(void) const = 0;
+	virtual size_t getRepeats(void) const = 0;
 	virtual void runTest(size_t repeats) = 0;
 
 	virtual const TimeVector & getInsertionTimes(void) const = 0;
@@ -77,6 +79,10 @@ public:
 
 	virtual const TimeVector & getSearchTimes(void) const {
 		return searchTimes;
+	}
+
+	virtual size_t getRepeats(void) const {
+		return searchTimes.size();
 	}
 
 protected:
@@ -394,9 +400,44 @@ int main(int argc, char ** argv) {
 				t->runTest(repeats);
 				cout << "\tinsertion=" << t->getInsertionTimes().getAverageTime() << "\n";
 				cout << "\t   search=" << t->getSearchTimes().getAverageTime() << "\n" << endl;
+				tests.push_back(t);
 			}
 		}
 	}
 
+	ofstream fout;
+	if (outputFile != "") {
+		fout.open(outputFile.c_str());
+	}
+
+	ostream & out = outputFile != "" ? fout : cout;
+	for (TestVector::const_iterator b = tests.begin(), e = tests.end(); b != e; ++b) {
+		out << "TEST: name = " << setw(20) << (*b)->getName()
+			<< ", size = " << setw(10) << (*b)->getSize()
+			<< ", repeats = " << setw(2) << (*b)->getRepeats()
+			<< ", alpha = " << setw(5) << (*b)->getMaxLoadFactor()
+			<< "\n";
+		out << "Insertion: " << setw(7) << (*b)->getSearchTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*b)->getSearchTimes().getMillisVariance() << "] ms\n";
+		out << "Search: " << setw(7) << (*b)->getInsertionTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*b)->getInsertionTimes().getMillisVariance() << "] ms\n";
+		out << "\n";
+	}
+
+	out << "\n\n---PRINTING WHOLE DATA SET---\n";
+	for (TestVector::const_iterator b = tests.begin(), e = tests.end(); b != e; ++b) {
+		out << setw(20) << (*b)->getName()
+			<< ", size = " << setw(10) << (*b)->getSize()
+			<< ", repeats = " << setw(2) << (*b)->getRepeats()
+			<< ", alpha = " << setw(5) << (*b)->getMaxLoadFactor()
+			<< "\n";
+		out << "Insertion: [" << (*b)->getSearchTimes() << "]\n";
+		out << "Search: [" << (*b)->getInsertionTimes() << "]\n";
+		out << "\n";
+	}
+
+	if (outputFile != "") {
+		fout.close();
+	}
+
 	return 0;
 }
+

@@ -219,12 +219,7 @@ int main(int argc, char ** argv) {
 		for (TestVector::iterator b = v.begin(), e = v.end(); b != e; ++b) {
 			for (CompleteTest::FunctionTestVector::iterator fb = b->getFunctions().begin(), fe = b->getFunctions().end(); fe != fb; ++fb) {
 				out << setw(20) << (*fb)->getName() << ", length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << ": ";
-
-				for (TimeVector::DurationVector::const_iterator db = (*fb)->getTimes().getDurations().begin(), de = (*fb)->getTimes().getDurations().end(); db != de; ++db) {
-					out << setw(6) << db->total_milliseconds() << " ";
-				}
-
-				out << "\n";
+				out << (*fb)->getTimes() << "\n";
 			}
 			
 		}
