@@ -418,7 +418,7 @@ int main(int argc, char ** argv) {
 			<< ", alpha = " << setw(5) << (*b)->getMaxLoadFactor()
 			<< "\n";
 		out << "Insertion: " << setw(7) << (*b)->getSearchTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*b)->getSearchTimes().getMillisVariance() << "] ms\n";
-		out << "Search: " << setw(7) << (*b)->getInsertionTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*b)->getInsertionTimes().getMillisVariance() << "] ms\n";
+		out << "   Search: " << setw(7) << (*b)->getInsertionTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*b)->getInsertionTimes().getMillisVariance() << "] ms\n";
 		out << "\n";
 	}
 
