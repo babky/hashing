@@ -2,15 +2,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <boost/config.hpp>
+#include "utils/boost_include.h"
 #include <boost/program_options.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(disable: 4512 4127 4100)
-#endif
-#include <boost/date_time.hpp>
-#ifdef BOOST_MSVC
-	#pragma warning(default: 4512 4127 4100)
-#endif
 #include "systems/uniform/dietzfelbinger_woelfel.h"
 #include "systems/bit_string_system.h"
 #include "systems/polynomial_system.h"
@@ -20,9 +13,11 @@
 #include "systems/polynomial_system.h"
 #include "systems/tr1_function.h"
 #include "systems/identity_function.h"
+#include "utils/time_vector.h"
 
 using namespace std;
 using namespace boost::posix_time;
+using namespace Hash::Utils;
 
 struct Test {
 	Test(string aName, size_t aLength, size_t aRepeats):
@@ -32,50 +27,21 @@ struct Test {
 	{
 	}
 
-	virtual void run(void) = 0;
-
-	time_duration getTotalTime(void) const {
-		time_duration time;
-
-		for (DurationVector::const_iterator b = durations.begin(), e = durations.end(); b != e; ++b) {
-			time += *b;
-		}
-
-		return time;
-	}
-
-	time_duration getAverageTime(void) const {
-		return getTotalTime() / repeats;
-	}
-
-	double getMillisVariance(void) const {
-		double avg = getTotalTime().total_milliseconds() / (double) repeats;
-		double sum = 0;
-		double dif;
-
-		for (DurationVector::const_iterator b = durations.begin(), e = durations.end(); b != e; ++b) {
-			dif = (b->total_milliseconds() - avg);
-			sum += dif * dif;
-		}
-
-		return sum / repeats;
-	}
-
 	const string & getName(void) const {
 		return name;
 	}
 
-	typedef vector<time_duration> DurationVector;
+	virtual void run(void) = 0;
 
-	DurationVector & getDurations(void) {
-		return durations;
+	TimeVector & getTimes(void) {
+		return times;
 	}
 
 protected:
 	string name;
 	size_t length;
 	size_t repeats;
-	DurationVector durations;
+	TimeVector times;
 };
 
 template<class F, typename T>
@@ -107,7 +73,7 @@ struct FunctionTest : public Test {
 			}
 
 			finish = microsec_clock::local_time();
-			durations.push_back(finish - start);
+			times.add(finish - start);
 		}
 
 	}
@@ -243,7 +209,7 @@ int main(int argc, char ** argv) {
 	for (TestVector::iterator b = v.begin(), e = v.end(); b != e; ++b) {
 		out << "TEST: length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << "\n";
 		for (CompleteTest::FunctionTestVector::iterator fb = b->getFunctions().begin(), fe = b->getFunctions().end(); fe != fb; ++fb) {
-			out << setw(20) << (*fb)->getName() << " " << setw(6) << right << (*fb)->getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*fb)->getMillisVariance() << "] ms\n";
+			out << setw(20) << (*fb)->getName() << " " << setw(6) << right << (*fb)->getTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*fb)->getTimes().getMillisVariance() << "] ms\n";
 		}
 		out << "\n";
 	}
@@ -254,7 +220,7 @@ int main(int argc, char ** argv) {
 			for (CompleteTest::FunctionTestVector::iterator fb = b->getFunctions().begin(), fe = b->getFunctions().end(); fe != fb; ++fb) {
 				out << setw(20) << (*fb)->getName() << ", length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << ": ";
 
-				for (Test::DurationVector::const_iterator db = (*fb)->getDurations().begin(), de = (*fb)->getDurations().end(); db != de; ++db) {
+				for (TimeVector::DurationVector::const_iterator db = (*fb)->getTimes().getDurations().begin(), de = (*fb)->getTimes().getDurations().end(); db != de; ++db) {
 					out << setw(6) << db->total_milliseconds() << " ";
 				}
 
