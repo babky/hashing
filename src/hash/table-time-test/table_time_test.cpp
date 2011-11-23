@@ -4,247 +4,405 @@
 #include <unordered_set>
 #include <string>
 #include "utils/boost_include.h"
+#include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 #include "table.h"
 #include "function.h"
 #include "utils/equality_comparer.h"
+#include "utils/equality_comparer.h"
+#include "utils/storage_statistics.h"
+#include "utils/generators/generators.h"
 #include "universal_systems.h"
 #include "storage.h"
 #include "policies/guaranteed_rehash_policy.h"
 #include "storages/chained_storage.h"
-#include "storages/bounded_chained_storage.h"
-#include "systems/linear_map_system.h"
-#include "systems/two_way_system.h"
-#include "systems/tr1_function.h"
-#include "systems/identity_function.h"
-#include "utils/equality_comparer.h"
-#include "utils/storage_statistics.h"
-#include "systems/uniform/dietzfelbinger_woelfel.h"
-#include "systems/bit_string_system.h"
-#include "systems/polynomial_system.h"
-#include "systems/linear_map_system.h"
-#include "systems/cwlf_system.h"
-#include "systems/tabulation_system.h"
-#include "systems/polynomial_system.h"
+#include "storages/direct_chaining_storage.h"
 #include "storages/probing_storage.h"
 #include "systems/two_way_system_randomized.h"
 #include "math/double_word.h"
+#include "utils/time_vector.h"
 
 using namespace std;
+using namespace boost;
 using namespace boost::posix_time;
+using namespace boost::program_options;
 using namespace Hash;
 using namespace Hash::Utils;
+using namespace Hash::Utils::Generators;
 using namespace Hash::Systems;
 using namespace Hash::Systems::Uniform;
 using namespace Hash::Storages;
 using namespace Hash::Policies::Rehash;
 
-template<typename T>
-class HashTableWrapper {
+class Test {
 public:
-	virtual ~HashTableWrapper(void) {
+	virtual ~Test(void) {
 	}
 
 	virtual const string & getName(void) const = 0;
-	virtual time_duration runTest(size_t length, double maxAlpha) = 0;
-	virtual void setMaxLoadFactor(double alpha) = 0;
+	virtual double getMaxLoadFactor(void) const = 0;
+	virtual size_t getSize(void) const = 0;
+	virtual void runTest(size_t repeats) = 0;
+
+	virtual const TimeVector & getInsertionTimes(void) const = 0;
+	virtual const TimeVector & getSearchTimes(void) const = 0;
 };
 
-
-template<typename T, class Table>
-class HashTableWrapperImpl : public HashTableWrapper<T> {
+/*
+template<typename T, class Generator, class DataStructure>
+class StlTestImpl : public Test {
 public:
-	HashTableWrapperImpl(string aName):
-	  name(aName)
+	StlTestImpl(size_t aBits, string aTableName, string aGeneratorName, double aMaxLoadFactor, size_t aSize):
+		bits(aBits),
+		tableName(aTableName),
+		generatorName(aGeneratorName),
+		maxLoadFactor(aMaxLoadFactor),
+		size(aSize)
 	{
 	}
 
+	virtual double getMaxLoadFactor(void) const {
+		return maxLoadFactor;
+	}
+
+	virtual size_t getSize(void) const {
+		return size;
+	}
+
 	virtual const string & getName(void) const {
-		return name;
+		return tableName;
 	}
 
-	virtual time_duration runTest(size_t length, double maxAlpha) {
-		ptime start, finish;
-		setMaxLoadFactor(maxAlpha);
-		clear();
+	virtual void runTest(size_t repeats) {
+		while (repeats != 0) {
+			ptime start, finish;
+			applyMaxLoadFactor(maxLoadFactor);
+			clear();
 
-		start = microsec_clock::local_time();
-		for (T i = 0, e = length; i < e; ++i) {
-			t.insert(i);
-		}
-
-		for (T i = 0, e = length; i < e; ++i) {
-#ifdef HASH_DEBUG
-			if (!t.contains(i)) {
-				cout << "Should contain " << i << "." << endl;
+			g.reset();
+			start = microsec_clock::local_time();
+			for (T i = 0, e = size; i < e; ++i) {
+				t.insert(g.next());
 			}
+			finish = microsec_clock::local_time();
+			insertionTimes.add(finish - start);
+
+			g.reset();
+			start = microsec_clock::local_time();
+			for (T i = 0, e = size; i < e; ++i) {
+#ifdef HASH_DEBUG
+				T value = g.next();
+				if (t.find(value) == t.end()) {
+					cout << "Should contain " << value << "." << endl;
+				}
 #else
-			t.contains(i);
+				t.find(g.next());
 #endif
-		}
+			}
 
 #ifdef HASH_DEBUG
-		if (t.size() == length) {
-			cout << "Should contain all the elements." << endl;
-		}
+			if (t.size() != size) {
+				cerr << "Table should contain all the elements." << endl;
+			}
 #endif
-		finish = microsec_clock::local_time();
-		clear();
-		return finish - start;
+			finish = microsec_clock::local_time();
+			clear();
+			searchTimes.add(finish - start);
+
+			--repeats;
+		}
 	}
 
+	virtual const TimeVector & getInsertionTimes(void) const {
+		return insertionTimes;
+	}
+
+	virtual const TimeVector & getSearchTimes(void) const {
+		return searchTimes;
+	}
+
+protected:
 	void clear(void) {
 		t.clear();
 	}
 
-	void setMaxLoadFactor(double alpha) {
-		t.setRehashPolicy(LoadFactorBoundsRehashPolicy(LoadFactorBoundsRehashPolicy::DEFAULT_MIN_LOAD_FACTOR, alpha));
+	void applyMaxLoadFactor(double alpha) {
+		// t.setRehashPolicy(LoadFactorBoundsRehashPolicy(LoadFactorBoundsRehashPolicy::DEFAULT_MIN_LOAD_FACTOR, alpha));
 	}
 
-private:
-	Table t;
-	string name;
-};
+	size_t bits;
+	string tableName;
+	string generatorName;
+	double maxLoadFactor;
+	size_t size;
 
-// typedef size_t T;
-typedef boost::uint64_t T;
+	Generator g;
+	DataStructure t;
 
-typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, ChainedStorage> ChainingLinear;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, IdentityFunction, ChainedStorage> ChainingId;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, ChainedStorage> ChainingTabulation;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, BitStringFunction, ChainedStorage> ChainingBitString;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem, ChainedStorage> ChainingPolynomial;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, ChainedStorage> ChainingPolynomial5;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem32, ChainedStorage> ChainingPolynomial32;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, ChainedStorage> ChainingLinearMap;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionCWLF, LinearProbingStorage> LinearProbingLinear;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, IdentityFunction, LinearProbingStorage> LinearProbingId;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, TabulationFunction, LinearProbingStorage> LinearProbingTabulation;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, Tr1Function, LinearProbingStorage> LinearProbingTr1;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, PolynomialSystem5, LinearProbingStorage> LinearProbingPolynomial5;
-typedef Table<T, Hash::Utils::EqualityComparer<T>, UniversalFunctionLinearMap, LinearProbingStorage> LinearProbingLinearMap;
+	TimeVector searchTimes;
+	TimeVector insertionTimes;
+};*/
 
-int main(void) {
-	typedef vector<double> LoadFactorVector;
-	typedef vector<size_t> SizeVector;
-	typedef vector<HashTableWrapper<T> *> TableVector;
+template<typename T, class Generator, class Table>
+class TestImpl : public Test {
+public:
+	TestImpl(size_t aBits, string aTableName, string aGeneratorName, double aMaxLoadFactor, size_t aSize):
+		bits(aBits),
+		tableName(aTableName),
+		generatorName(aGeneratorName),
+		maxLoadFactor(aMaxLoadFactor),
+		size(aSize)
+	{
+	}
 
-	LoadFactorVector loadFactors;
-	//loadFactors.push_back(0.5);
-	//loadFactors.push_back(0.75);
-	//loadFactors.push_back(0.9);
+	virtual double getMaxLoadFactor(void) const {
+		return maxLoadFactor;
+	}
 
-	SizeVector sizes;
-	sizes.push_back(1 << 10);
-	sizes.push_back(1 << 16);
-	sizes.push_back(1 << 20);
-	// sizes.push_back(1 << 24);
-	// sizes.push_back(1 << 27);
+	virtual size_t getSize(void) const {
+		return size;
+	}
 
-	TableVector tables;
-	tables.push_back(new HashTableWrapperImpl<T, ChainingId>("ChainingId"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingLinear>("ChainingLinear"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingTabulation>("ChainingTabulation"));
-	tables.push_back(new HashTableWrapperImpl<T, ChainingBitString>("ChainingBitString"));
-	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial>("ChainingPolynomial"));
-	// tables.push_back(new HashTableWrapperImpl<T, ChainingLinearMap>("ChainingLinearMap"));
-	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial5>("ChainingPolynomial5"));
-	// tables.push_back(new HashTableWrapperImpl<T, ChainingPolynomial32>("ChainingPolynomial32"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinear>("LinearProbingLinear"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingId>("LinearProbingId"));
-	tables.push_back(new HashTableWrapperImpl<T, LinearProbingTabulation>("LinearProbingTabulation"));
-	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingPolynomial5>("LinearProbingPolynomial5"));
-	// tables.push_back(new HashTableWrapperImpl<T, LinearProbingLinearMap>("LinearProbingLinearMap"));
-	
-	time_duration testTime;
-	for (LoadFactorVector::iterator bLF = loadFactors.begin(), eLF = loadFactors.end(); bLF != eLF; ++bLF) {
-		for (SizeVector::iterator bS = sizes.begin(), eS = sizes.end(); bS != eS; ++bS) {
-			for (TableVector::iterator bT = tables.begin(), eT = tables.end(); bT != eT; ++bT) {
-				testTime = (*bT)->runTest(*bS, *bLF);
-				cout << (*bT)->getName() << " for " << *bS << " elements and alpha=" << *bLF;
-				cout << " took " << testTime.total_milliseconds() << " ms." << endl;
+	virtual const string & getName(void) const {
+		return tableName;
+	}
+
+	virtual void runTest(size_t repeats) {
+		while (repeats != 0) {
+			ptime start, finish;
+			applyMaxLoadFactor(maxLoadFactor);
+			clear();
+
+			g.reset();
+			start = microsec_clock::local_time();
+			for (T i = 0, e = size; i < e; ++i) {
+				t.insert(g.next());
 			}
+			finish = microsec_clock::local_time();
+			insertionTimes.add(finish - start);
+
+			g.reset();
+			start = microsec_clock::local_time();
+			for (T i = 0, e = size; i < e; ++i) {
+#ifdef HASH_DEBUG
+				T value = g.next();
+				if (!t.contains(value)) {
+					cout << "Should contain " << value << "." << endl;
+				}
+#else
+				t.contains(g.next());
+#endif
+			}
+
+#ifdef HASH_DEBUG
+			if (t.size() != size) {
+				cerr << "Table should contain all the elements." << endl;
+			}
+#endif
+			finish = microsec_clock::local_time();
+			clear();
+			searchTimes.add(finish - start);
+
+			--repeats;
 		}
 	}
 
-	size_t ELEMENT_COUNT = 1 << 25;
-	ptime start, finish;
+	virtual const TimeVector & getInsertionTimes(void) const {
+		return insertionTimes;
+	}
 
-	start = microsec_clock::local_time();
-	set<T> mySet;
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet.insert(i * ELEMENT_COUNT);
+	virtual const TimeVector & getSearchTimes(void) const {
+		return searchTimes;
 	}
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet.find(i * ELEMENT_COUNT);
+
+protected:
+	void clear(void) {
+		t.clear();
 	}
-	finish = microsec_clock::local_time();
-	cout << "RBT for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	mySet.clear();
-/*
-	start = microsec_clock::local_time();
+
+	void applyMaxLoadFactor(double alpha) {
+		t.setRehashPolicy(LoadFactorBoundsRehashPolicy(LoadFactorBoundsRehashPolicy::DEFAULT_MIN_LOAD_FACTOR, alpha));
+	}
+
+	size_t bits;
+	string tableName;
+	string generatorName;
+	double maxLoadFactor;
+	size_t size;
+
+	Generator g;
+	Table t;
+
+	TimeVector searchTimes;
+	TimeVector insertionTimes;
+};
+
+template<typename T, class Generator, template <class, class, class> class Storage, template <class, class> class Function>
+Test * instantiateTest(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName) {
+	return new TestImpl<T, Generator, Table<T, EqualityComparer<T>, Function, Storage> >(bits, tableName, generatorName, maxLoadFactor, size);
+}
+
+template<typename T, class Generator, template <class, class, class> class Storage>
+Test * decideFunction(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName, string functionName) {
+	if (functionName == "Id") {
+		return instantiateTest<T, Generator, Storage, IdentityFunction>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "MSVC") {
+		return instantiateTest<T, Generator, Storage, Tr1Function>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "Tabulation") {
+		return instantiateTest<T, Generator, Storage, TabulationFunction>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "BitString") {
+		return instantiateTest<T, Generator, Storage, BitStringFunction>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "CWLF") {
+		return instantiateTest<T, Generator, Storage, UniversalFunctionCWLF>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "Pol2") {
+		return instantiateTest<T, Generator, Storage, PolynomialSystem2>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "Pol4") {
+		return instantiateTest<T, Generator, Storage, PolynomialSystem4>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "Pol5") {
+		return instantiateTest<T, Generator, Storage, PolynomialSystem5>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "Pol32") {
+		return instantiateTest<T, Generator, Storage, PolynomialSystem32>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "DW4") {
+		return instantiateTest<T, Generator, Storage, DietzfelbingerWoelfelPol4>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (functionName == "LinearMap") {
+		return instantiateTest<T, Generator, Storage, UniversalFunctionLinearMap>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else {
+		return 0;
+	}
+}
+
+template<typename T, class Generator>
+Test * decideStorage(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName, string storageName, string functionName) {
+	if (storageName == "Chaining") {
+		return decideFunction<T, Generator, ChainedStorage>(bits, maxLoadFactor, size, tableName, generatorName, functionName);
+	} else if (storageName == "DirectChaining") {
+		return decideFunction<T, Generator, ChainedStorage>(bits, maxLoadFactor, size, tableName, generatorName, functionName);
+	} else if (storageName == "LinearProbing") {
+		return decideFunction<T, Generator, ChainedStorage>(bits, maxLoadFactor, size, tableName, generatorName, functionName);
+	} else if (storageName == "RBT") {
+	} else if (storageName == "US") {
 #ifdef BOOST_MSVC
-	std::tr1::unordered_set<T> mySet2;
+		typedef std::tr1::unordered_set<T> UnorderedSet;
 #else
-	unordered_set<T> mySet2;
+		typedef unordered_set<T> UnorderedSet;
 #endif
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet2.insert(i * ELEMENT_COUNT);
+	} else {
+		return 0;
 	}
-	finish = microsec_clock::local_time();
-	cout << "US insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	start = microsec_clock::local_time();
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		mySet2.find(i * ELEMENT_COUNT);
-	}
-	finish = microsec_clock::local_time();
-	cout << "US find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	mySet2.clear();
-*/
+}
 
-	start = microsec_clock::local_time();
-	ChainingTabulation cht;
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		cht.insert(i);
-	}
-	finish = microsec_clock::local_time();
-	cout << "CHT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	start = microsec_clock::local_time();
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		cht.contains(i);
-	}
-	finish = microsec_clock::local_time();
-	cout << "CHT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	StorageStatistics stats;
-	cht.computeStatistics(stats);
-	cout << stats << endl;
+template<typename T, class Generator>
+Test * decideTable(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName) {
+	vector<string> tableDesc;
+	split(tableDesc, tableName, is_any_of(":"));
 
-	start = microsec_clock::local_time();
-	LinearProbingTabulation lpt;
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.insert(i);
-	}
-	finish = microsec_clock::local_time();
-	cout << "LPT insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	start = microsec_clock::local_time();
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lpt.contains(i);
-	}
-	finish = microsec_clock::local_time();
-	cout << "LPT find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+	const size_t STORAGE = 0;
+	const size_t FUNCTION = 1;
 
-	start = microsec_clock::local_time();
-	LinearProbingTr1 lptr;
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lptr.insert(i * ELEMENT_COUNT);
+	return decideStorage<T, Generator>(bits, maxLoadFactor, size, tableName, generatorName, tableDesc[STORAGE], tableDesc[FUNCTION]);
+}
+
+template<typename T>
+Test * decideGenerator(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName) {
+	if (generatorName == "Linear") {
+		return decideTable<T, LinearGenerator>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else {
+		return 0;
 	}
-	finish = microsec_clock::local_time();
-	cout << "LPTR insertion for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
-	start = microsec_clock::local_time();
-	for (T i = 0, e = ELEMENT_COUNT; i < e; ++i) {
-		lptr.contains(i * ELEMENT_COUNT);
+}
+
+Test * decideBits(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName) {
+	typedef boost::uint32_t T32;
+	typedef boost::uint64_t T64;
+#ifdef __GNUC__
+	typedef __uint128_t T128;
+#endif
+
+	if (bits == 32) {
+		return decideGenerator<T32>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (bits == 64) {
+		return decideGenerator<T64>(bits, maxLoadFactor, size, tableName, generatorName);
+#ifdef __GNUC__
+	} else if (bits == 128) {
+		return decideGenerator<T128>(bits, maxLoadFactor, size, tableName, generatorName);
+#endif
+	} else {
+		return 0;
 	}
-	finish = microsec_clock::local_time();
-	cout << "LPTR find for " << ELEMENT_COUNT << " elements took "<< (finish - start).total_milliseconds() << " ms." << endl;
+}
+
+Test * createTest(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName) {
+	return decideBits(bits, maxLoadFactor, size, tableName, generatorName);
+}
+
+int main(int argc, char ** argv) {
+	size_t bits;
+	size_t size;
+	size_t sizeStep;
+	size_t sizeSteps;
+	double loadFactor;
+	double loadFactorStep;
+	double loadFactorSteps;
+	size_t repeats;
+	string generator;
+	string outputFile;
+	vector<string> tableList;
+
+	options_description opts("Hash tables time test options.");
+	opts.add_options()
+		("bits", value<size_t>(&bits), "the number of bits used 32, 64 or 128")
+		("size", value<size_t>(&size), "the logarithm of size of the table")
+		("sizeStep", value<size_t>(&sizeStep)->default_value(1), "the multiplicative factor of size")
+		("sizeSteps", value<size_t>(&sizeSteps), "the number of steps for which the size is changed accordingly")
+		("repeats", value<size_t>(&repeats)->default_value(32), "the number of repetitions")
+		("loadFactor", value<double>(&loadFactor), "the initial max load factor")
+		("loadFactorStep", value<double>(&loadFactorStep)->default_value(0.125), "the step for load factor")
+		("loadFactorSteps", value<double>(&loadFactorSteps), "the number of steps for the load factor")
+		("generator", value<string>(&generator), "the values generator")
+		("output", value<string>(&outputFile), "output file")
+		("tableList", value<vector<string> >(&tableList), "tested tables")
+		("help", "prints this help.");
+
+	positional_options_description popts;
+	popts.add("tableList", -1);
+
+	variables_map vm;
+	store(command_line_parser(argc, argv).options(opts).positional(popts).run(), vm);
+	notify(vm);
+
+	if (vm.count("help")) {
+		cout << opts;
+		return 0;
+	}
+
+	typedef vector<double> LoadFactorVector;
+	typedef vector<size_t> SizeVector;
+	typedef vector<Test *> TestVector;
+
+	LoadFactorVector loadFactors;
+	SizeVector sizes;
+	TestVector tests;
+
+	for (size_t i = 0; i < loadFactorSteps; ++i) {
+		loadFactors.push_back(i * loadFactorStep + loadFactor);
+	}
+
+	for (size_t i = 0; i < sizeSteps; ++i) {
+		sizes.push_back(1 << (i * sizeStep + size));
+	}
+
+	Test * t;
+	for (SizeVector::iterator bS = sizes.begin(), eS = sizes.end(); bS != eS; ++bS) {
+		for (LoadFactorVector::iterator bLF = loadFactors.begin(), eLF = loadFactors.end(); bLF != eLF; ++bLF) {
+			for (vector<string>::const_iterator bT = tableList.begin(), eT = tableList.end(); bT != eT; ++bT) {
+				t = createTest(bits, *bLF, *bS, *bT, generator);
+				cout << "Testing " << t->getName() << " [size=" << *bS << ", alpha=" << *bLF << "]\n";
+				t->runTest(repeats);
+				cout << "\tinsertion=" << t->getInsertionTimes().getAverageTime() << "\n";
+				cout << "\tsearch=" << t->getSearchTimes().getAverageTime() << "\n" << endl;
+			}
+		}
+	}
 
 	return 0;
 }
