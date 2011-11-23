@@ -430,7 +430,7 @@ int main(int argc, char ** argv) {
 			<< ", alpha = " << setw(5) << (*b)->getMaxLoadFactor()
 			<< "\n";
 		out << "Insertion: [" << (*b)->getSearchTimes() << "]\n";
-		out << "Search: [" << (*b)->getInsertionTimes() << "]\n";
+		out << "   Search: [" << (*b)->getInsertionTimes() << "]\n";
 		out << "\n";
 	}
 
