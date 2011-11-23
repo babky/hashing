@@ -292,6 +292,10 @@ template<typename T>
 Test * decideGenerator(size_t bits, double maxLoadFactor, size_t size, string tableName, string generatorName) {
 	if (generatorName == "Linear") {
 		return decideTable<T, LinearGenerator>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (generatorName == "Quadratic") {
+		return decideTable<T, QuadraticGenerator>(bits, maxLoadFactor, size, tableName, generatorName);
+	} else if (generatorName == "Shift") {
+		return decideTable<T, ShiftGenerator>(bits, maxLoadFactor, size, tableName, generatorName);
 	} else {
 		return 0;
 	}
