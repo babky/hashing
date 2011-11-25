@@ -6,6 +6,7 @@
 #include <utils/hash_assert.h>
 #include <utils/static_random_generator.h>
 #include <utils/hash_math.h>
+#include "utils/bit_tricks.h"
 #include <stdexcept>
 
 namespace Hash { namespace Systems {
@@ -64,17 +65,14 @@ namespace Hash { namespace Systems {
 			UT c;
 
 			// Interpret the value in the form without a sign.
-			const UT & ux = reinterpret_cast<const UT &> (x);
+			const UT ux = x;
 
 			// Perform matrix and vector multiplication.
 			for (size_t i = 0; i != this->tableBitSize; ++i) {
 				c = this->matrix[i] & ux;
 
 				// Find the parity of c.
-				for (digits = bits / 2; digits != 0; digits /= 2) {
-					digits2 = bits - digits;
-					c = ((c << digits2) >> digits2) ^ (c >> digits);
-				}
+				c = Math::parity(c);
 
 				simple_assert(c == 1 || c == 0, "Parity must be a bit.");
 

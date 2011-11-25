@@ -1,5 +1,7 @@
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
+SET(CMAKE_CXX_FLAGS "-std=gnu++0x -O3 -ggdb -march=native")
+
 find_package( Boost 1.34 COMPONENTS random thread program_options system REQUIRED )
 
 link_directories ( ${Boost_LIBRARY_DIRS} )
