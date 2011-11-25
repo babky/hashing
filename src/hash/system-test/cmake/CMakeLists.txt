@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
-SET(CMAKE_CXX_FLAGS "-std=gnu++0x -O2 -gtoggle -ftree-vectorize -msse2")
+SET(CMAKE_CXX_FLAGS "-std=gnu++0x -O3 -ggdb -march=native")
 
 find_package( Boost 1.34 COMPONENTS random program_options system date_time REQUIRED )
 
