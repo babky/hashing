@@ -65,7 +65,8 @@ struct FunctionTest : public Test {
 			hash = 0xdead;
 
 			for (size_t i = 0; i < length; ++i) {
-				hash ^= function.hash(i);
+				// depend on the previous iteration to avoid interleaved evaluation
+				hash = function.hash(hash);
 			}
 
 			if (hash == 0) {
