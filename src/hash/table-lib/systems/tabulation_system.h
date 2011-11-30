@@ -10,46 +10,26 @@
 namespace Hash { namespace Systems {
 
 	// TODO: Doc.
-	template<typename T, class Storage>
-	class TabulationFunction : public UniversalFunction<T, Storage> {
+	template<typename T, class Storage, size_t CharBits>
+	class TabulationFuncGen: public UniversalFunction<T, Storage> {
 	public:
-		explicit TabulationFunction(size_t length = Hash::StorageParams::INITIAL_STORAGE_SIZE, size_t c = 8):
-		  characterTableSize(1 << c),
-		  fullTableSize(characterTableSize * DIGIT_NUMBER / c),
-		  hashTableSize(length),
-		  characterNumber(DIGIT_NUMBER / c),
-		  characterDigits(c),
-		  table(new size_t[characterTableSize * DIGIT_NUMBER / c])
+		static const size_t // computed compile-time parameters (template)
+			CharTableSize = 1<<CharBits,
+			CharCount = (boost::integer_traits<T>::digits-1) / CharBits + 1;
+				//^ ceiling of x/y by the (x-1)/y +1 trick
+	public:
+		explicit TabulationFuncGen(size_t length = Hash::StorageParams::INITIAL_STORAGE_SIZE)
 		{
 			setTableSize(length);
 		}
 
-		~TabulationFunction(void) {
-			delete [] table;
-		};
-
-		TabulationFunction(const TabulationFunction & r):
-		  characterTableSize(r.characterTableSize),
-		  fullTableSize(r.fullTableSize),
-		  hashTableSize(r.hashTableSize),
-		  characterNumber(r.characterNumber),
-		  characterDigits(r.characterDigits),
-		  table(new size_t[r.fullTableSize])
-		{
-			for (size_t i = 0; i < fullTableSize; ++i) {
-				table[i] = r.table[i];
-			}
-		}
-
-		TabulationFunction & operator =(const TabulationFunction & r) {
-			TabulationFunction tmp = r;
-			tmp.swap(*this);
-			return *this;
-		}
+		// implicit destructor, copy constructor and assignment
 
 		void reset(void) {
-			for (size_t i = 0; i < fullTableSize; ++i) {
-				table[i] = Hash::Utils::StaticRandomGenerator<size_t>::getGenerator().generate();
+			for (size_t iChar = 0; iChar < CharCount; ++iChar) {
+				for (size_t valChar = 0; valChar < CharTableSize; ++valChar) {
+					table[iChar][valChar] = Hash::Utils::StaticRandomGenerator<T>::getGenerator().generate();
+				}
 			}
 		}
 
@@ -59,11 +39,8 @@ namespace Hash { namespace Systems {
 		
 		void setTableSize(size_t size) {
 			hashTableSize = size;
-
-			outputMask = 0;
-			for (size_t i = 1; size > i; i <<= 1) {
-				outputMask |= i;
-			}
+			outputMask = size-1;
+			simple_assert((size^outputMask)==0, "Size needs to be a power of two");
 		}
 
 		T getUniversumMax(void) const {
@@ -75,10 +52,11 @@ namespace Hash { namespace Systems {
 
 		inline size_t hash(const T & x) {
 			size_t result = 0;
-			size_t mask = (1 << characterDigits) - 1;
+			size_t mask = (1 << CharBits) - 1;
 
-			for (size_t i = 0; i < characterNumber; ++i) {
-				result ^= table[i * characterTableSize + (((mask << (i * characterDigits)) & x) >> i * characterDigits)];
+			for (size_t i = 0; i < CharCount; ++i) {
+				size_t digit = (x >> (i*CharBits)) & mask;
+				result ^= table[i][digit];
 			}
 
 			return result & outputMask;
@@ -88,31 +66,19 @@ namespace Hash { namespace Systems {
 			return hash(a);
 		}
 
-		void swap(TabulationFunction & r) {
-			using std::swap;
-
-			swap(characterTableSize, r.characterTableSize);
-			swap(fullTableSize, r.fullTableSize);
-			swap(hashTableSize, r.hashTableSize);
-			swap(characterNumber, r.characterNumber);
-			swap(characterDigits, r.characterDigits);
-			swap(outputMask, r.outputMask);
-			swap(table, r.table);
+		void swap(TabulationFuncGen & r) {
+			std::swap(*this, r);
 		}
 
-	private:
-		/**
-		 * The number of bits per key.
-		 */
-		const static size_t DIGIT_NUMBER = boost::integer_traits<T>::digits;
-
-		size_t characterTableSize;
-		size_t fullTableSize;
-		size_t characterNumber;
-		size_t characterDigits;
+	protected:
+		T table[CharCount][CharTableSize];
 		size_t hashTableSize;
 		size_t outputMask;
-		size_t * table;
+	};
+
+	/**	Using 11 bits per character; for tests needing templates with two parameters */
+	template<typename T, class Storage>
+	class TabulationFunction: public TabulationFuncGen<T, Storage, 11> {
 	};
 
 } }
