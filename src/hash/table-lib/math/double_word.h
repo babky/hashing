@@ -104,7 +104,7 @@ namespace Hash { namespace Math {
 	template <>
 	class UnsignedDoubleWord<boost::uint32_t> {
 	public:
-		typedef size_t Word;
+		typedef boost::uint32_t Word;
 
 		inline static Word multiply(const Word x, const Word y, const Word m) {
 			return (static_cast<boost::uint64_t> (x) * static_cast<boost::uint64_t> (y)) % static_cast<boost::uint64_t> (m);
@@ -119,6 +119,27 @@ namespace Hash { namespace Math {
 		}
 
 	};
+
+#ifdef __GNUC__
+	template <>
+	class UnsignedDoubleWord<boost::uint64_t> {
+	public:
+		typedef boost::uint64_t Word;
+
+		inline static Word multiply(const Word x, const Word y, const Word m) {
+			return (static_cast<__uint128_t> (x) * static_cast<__uint128_t> (y)) % static_cast<__uint128_t> (m);
+		}
+
+		inline static Word add(const Word x, const Word y, const Word m) {
+			return (static_cast<__uint128_t> (x) + static_cast<__uint128_t> (y)) % static_cast<__uint128_t> (m);
+		}
+
+		inline static Word linear(const Word a, const Word x, const Word b, const Word m) {
+			return static_cast<Word> ((static_cast<__uint128_t> (a) * static_cast<__uint128_t> (x) + static_cast<__uint128_t> (b)) % static_cast<__uint128_t> (m));
+		}
+
+	};
+#endif
 
 } }
 

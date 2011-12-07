@@ -154,7 +154,7 @@ h(x) & Key & Next & Begin \\ \hline\hline
 \section*{EISCH, LISCH}
 If the inserted element is not first in its chain, then 
 \begin{itemize}
-\item EISCH inserts the key so that it is the second one in the chain.
+\item EISCH inserts the key so that it is the second one in the chain (if it is not the first one).
 \item VISCH inserts the key so that is is the last one in the chain.
 \end{itemize}
 
@@ -192,12 +192,50 @@ h(x) & Key & Next \\ \hline\hline
 \end{tabular}
 
 \section*{EICH, VICH, LICH}
-Space is first allocated in the auxiliary area which is never referenced by the hash function.
+Space is first allocated in the auxiliary area (called cellar) which is never referenced by the hash function. Do not forget that the EISCH/EICH and VICH methods check if the key is not stored twice.
 \begin{itemize}
-\item EICH: Inserts the element as the second one in the chain.
+\item EICH: Inserts the element as the second one in the chain, if the chain is not empty.
 \item LICH: Inserts the element so that it is the last one in the chain.
-\item VICH: If the chain contains an element in the auxiliary area, then we insert at the end of the chain. Otherwise the inserted element will be the second one.
+\item VICH: If the new row is from cellar, then we insert at the end of the chain. Otherwise the inserted element will be the one just after the last cellar element. If there is no cellar element it will be the second one in the chain. For details see the exact algorithm below.
 \end{itemize}
+
+\begin{algorithm}[H]
+\caption{Insert($x$) procedure for the VICH method}
+\begin{algorithmic}
+	\STATE $hash \leftarrow h(x)$ \COMMENT{Hash value of $x$.}
+	\STATE $i \leftarrow hash$ \COMMENT{Iterated element, after the loop it is the last element of the chain.}
+	\STATE $last \leftarrow \bot$ \COMMENT{The last element in the cellar or the first element of the chain.}
+
+	\IF{$T[i].next = \textbf{nil}$}
+		\STATE \COMMENT{The element $x$ is the first element in the chain.}
+		\STATE $T[i].key \leftarrow x$ 
+		\STATE \textbf{return}
+	\ENDIF
+
+	\WHILE{$T[i].next \neq \textbf{nil}$}
+		\IF{$x = T[i].key$}
+			\STATE \textbf{return}
+		\ENDIF
+
+		\IF{($T[i].next < m) \wedge (last = \bot)$}
+			\STATE $last \leftarrow i$
+		\ENDIF
+
+		\STATE $i \leftarrow T[i].next$
+	\ENDWHILE
+
+	\STATE $j \leftarrow$ an empty row primarily chosen from cellar.
+	\IF{$last = \bot$}
+		\STATE $T[i].next \leftarrow j$ \COMMENT{New row is placed just after $i$.}
+	\ELSE
+		\STATE \COMMENT{The new row is from the table and is placed behind the position $last$. If the chain contains an element from cellar, then $x$ is placed behind the last such element. Otherwise $x$ is placed behind the first element of the chain -- $hash$.}
+		\STATE $T[j].next \leftarrow T[last].next$
+		\STATE $T[last].next \leftarrow j$
+	\ENDIF
+
+	\STATE $T[j].key \leftarrow x$
+\end{algorithmic}
+\end{algorithm}
 
 \vspace{0.5cm}
 \begin{tabular}{|c|c|c|}
