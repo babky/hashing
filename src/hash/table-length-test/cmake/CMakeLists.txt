@@ -9,7 +9,7 @@ set(SOURCES
 
 include_directories ( .. ../../table-lib ${Boost_INCLUDE_DIRS} )
 
-link_directories ( ../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
+link_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/../../table-lib/cmake ${Boost_LIBRARY_DIRS} )
 
 add_executable ( TableLengthTest ${SOURCES} )
 

@@ -3,6 +3,8 @@
 
 #include "universal_system.h"
 #include "math/double_word.h"
+#include "utils/static_random_generator.h"
+#include "utils/hash_assert.h"
 #include "storage.h"
 
 namespace Hash { namespace Systems {
