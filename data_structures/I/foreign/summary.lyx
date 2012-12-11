@@ -1,57 +1,88 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
-\lyxformat 345
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
-\textclass report
+\textclass article
 \use_default_options true
 \begin_modules
 theorems-ams
 \end_modules
+\maintain_unincluded_children false
 \language english
+\language_package default
 \inputencoding auto
+\fontencoding global
 \font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
+\use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
 
 \graphics default
+\default_output_format default
+\output_sync 1
+\bibtex_command default
+\index_command default
 \paperfontsize default
 \spacing single
-\use_hyperref false
-\papersize a4paper
+\use_hyperref true
+\pdf_title "Data Structers I - lecture contents summary"
+\pdf_author "Vladimír Čunát"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref page
+\pdf_pdfusetitle true
+\papersize a5paper
 \use_geometry true
 \use_amsmath 1
 \use_esint 1
+\use_mhchem 1
+\use_mathdots 1
 \cite_engine basic
 \use_bibtopic false
+\use_indices false
 \paperorientation portrait
-\leftmargin 3cm
-\topmargin 3cm
-\rightmargin 3cm
-\bottommargin 3cm
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 2cm
+\columnsep 1cm
 \secnumdepth 2
 \tocdepth 3
 \paragraph_separation indent
-\defskip medskip
+\paragraph_indentation default
 \quotes_language english
 \papercolumns 1
-\papersides 1
+\papersides 2
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "" 
-\author "" 
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
 \end_header
 
 \begin_body
 
 \begin_layout Standard
 \begin_inset FormulaMacro
-\newcommand{\OO}{\mathcal{O}}
+\newcommand{\OO}{\mathcal{O\!}}
+{\mathcal{O}}
 \end_inset
 
 
@@ -81,33 +112,37 @@ theorems-ams
 
 \end_layout
 
-\begin_layout Chapter*
+\begin_layout Section*
 Prerequisites
 \end_layout
 
 \begin_layout Itemize
-\begin_inset Formula $\OO$
-\end_inset
-
--notation
+Asymptotic notation.
+ If not noted otherwise, all asymptotic bounds are worst-case.
 \end_layout
 
 \begin_layout Itemize
-basic data structures: pointers, singly and doubly linked lists, arrays
+Basic data structures: pointers, singly and doubly linked lists, arrays,
+ LIFO and FIFO queues\SpecialChar \ldots{}
+
 \end_layout
 
 \begin_layout Itemize
-basics of probability theory, combinatorics and graph theory
+Basics of probability theory, combinatorics and graph theory.
 \end_layout
 
-\begin_layout Chapter
+\begin_layout Part
 Hashing
+\end_layout
+
+\begin_layout Section
+The dictionary problem
 \end_layout
 
 \begin_layout Itemize
 We are solving the 
 \emph on
-dictionary problem
+(unordered) dictionary problem
 \emph default
 : we have some universe set 
 \begin_inset Formula $U=\{0,\dotsc,N-1\}$
@@ -269,6 +304,7 @@ The expected length of a chosen list equals
 .
 \end_layout
 
+\begin_deeper
 \begin_layout Proof
 Following from the uniformity assumptions, the length of a chain is distributed
  according to binomial distribution 
@@ -283,7 +319,8 @@ Following from the uniformity assumptions, the length of a chain is distributed
 .
 \end_layout
 
-\begin_layout Paragraph
+\end_deeper
+\begin_layout Subsection
 Periodic rebuilding
 \end_layout
 
@@ -362,11 +399,14 @@ We usually insert elements to the front of the list.
  It is also possible to insert at the end of the list or to maintain the
  list in sorted order.
  Maintaining sorted order allows us to reduce the time needed for unsuccessful
- searches in the list -- on average we save half of the time (the asymptotic
- times are unchanged).
+ searches in the list
+\begin_inset space ~
+\end_inset
+
+-- on average we save half of the time (the asymptotic times are unchanged).
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Storing chains in the array
 \end_layout
 
@@ -637,7 +677,7 @@ We show two methods that differ in the way of finding the next index of
  the element in the chain.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Hashing with linear probing
 \end_layout
 
@@ -674,7 +714,7 @@ When
  expected time per operation.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Double hashing
 \end_layout
 
@@ -855,9 +895,11 @@ Let
 \end_inset
 
  and it must hold
-\begin_inset Formula \begin{eqnarray*}
+\begin_inset Formula 
+\begin{eqnarray*}
 ax+b & \equiv & i+rm\pmod{p}\\
-ay+b & \equiv & i+sm\pmod{p}\end{eqnarray*}
+ay+b & \equiv & i+sm\pmod{p}
+\end{eqnarray*}
 
 \end_inset
 
@@ -867,14 +909,19 @@ for some
 
 .
  We can also write the congruence in a matrix form.
-\begin_inset Formula \[
+\begin_inset Formula 
+\[
 \left(\begin{array}{cc}
 x & 1\\
-y & 1\end{array}\right)\cdot\left(\begin{array}{c}
+y & 1
+\end{array}\right)\cdot\left(\begin{array}{c}
 a\\
-b\end{array}\right)\equiv\left(\begin{array}{c}
+b
+\end{array}\right)\equiv\left(\begin{array}{c}
 i+rm\\
-i+sm\end{array}\right)\pmod{p}\]
+i+sm
+\end{array}\right)\pmod{p}
+\]
 
 \end_inset
 
@@ -910,7 +957,7 @@ Since
 \end_layout
 
 \end_deeper
-\begin_layout Subsubsection
+\begin_layout Subsection
 Properties of 
 \begin_inset Formula $c$
 \end_inset
@@ -930,7 +977,8 @@ For
  we define 
 \begin_inset Formula $\delta_{i}(x,y):=\begin{cases}
 1 & \mbox{if }x\neq y\mbox{ and }h_{i}(x)=h_{i}(y)\\
-0 & \mbox{otherwise}\end{cases}$
+0 & \mbox{otherwise}
+\end{cases}$
 \end_inset
 
 .
@@ -956,8 +1004,10 @@ The expected number of elements colliding with
 \end_inset
 
  equals 
-\begin_inset Formula \[
-\frac{1}{|I|}\sum_{i\in I}\delta_{i}(x,S)=\frac{1}{|I|}\sum_{i\in I}\sum_{z\in S}\delta_{i}(x,z)=\frac{1}{|I|}\sum_{z\in S}\sum_{i\in I}\delta_{i}(x,z)\le\frac{1}{|I|}\sum_{z\in S\setminus\{x\}}\frac{c|I|}{m}=\frac{c\left|S\setminus\{x\}\right|}{m}\le\alpha c\]
+\begin_inset Formula 
+\[
+\frac{1}{|I|}\sum_{i\in I}\delta_{i}(x,S)=\frac{1}{|I|}\sum_{i\in I}\sum_{z\in S}\delta_{i}(x,z)=\frac{1}{|I|}\sum_{z\in S}\sum_{i\in I}\delta_{i}(x,z)\le\frac{1}{|I|}\sum_{z\in S\setminus\{x\}}\frac{c|I|}{m}=\frac{c\left|S\setminus\{x\}\right|}{m}\le\alpha c
+\]
 
 \end_inset
 
@@ -1093,7 +1143,7 @@ The description of
 \end_layout
 
 \end_deeper
-\begin_layout Subsubsection
+\begin_layout Subsection
 Perfect families
 \end_layout
 
@@ -1144,8 +1194,10 @@ There are lower bounds on the size of a
 
 -perfect system.
  
-\begin_inset Formula \[
-|H|\ge\max\left\{ \frac{\binom{N}{n}}{\binom{m}{k}\left(\frac{N}{m}\right)^{n}},\,\frac{\log N}{\log m}\right\} \]
+\begin_inset Formula 
+\[
+|H|\ge\max\left\{ \frac{\binom{N}{n}}{\binom{m}{k}\left(\frac{N}{m}\right)^{n}},\,\frac{\log N}{\log m}\right\} 
+\]
 
 \end_inset
 
@@ -1162,7 +1214,7 @@ It is possible to prove the existence of a
  the existence, not a way of finding the function.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Construction of a perfect function
 \end_layout
 
@@ -1304,8 +1356,10 @@ For
 
 \begin_layout Itemize
 The tables obviously need space 
-\begin_inset Formula \[
-\OO\left(m+\sum_{i}m_{i}\right)=\OO\left(n+\sum_{i}n_{i}^{2}\right)=\OO\left(n+R+n\right)=\OO(n)\]
+\begin_inset Formula 
+\[
+\OO\left(m+\sum_{i}m_{i}\right)=\OO\left(n+\sum_{i}n_{i}^{2}\right)=\OO\left(n+R+n\right)=\OO(n)
+\]
 
 \end_inset
 
@@ -1316,8 +1370,10 @@ where the middle equality is due to the fact that the number of collisions
 
  can be written as follows.
  
-\begin_inset Formula \[
-R=\sum_{i}n_{i}(n_{i}-1)=\sum_{i}n_{i}^{2}-\sum_{i}n_{i}=\sum_{i}n_{i}^{2}-n\]
+\begin_inset Formula 
+\[
+R=\sum_{i}n_{i}(n_{i}-1)=\sum_{i}n_{i}^{2}-\sum_{i}n_{i}=\sum_{i}n_{i}^{2}-n
+\]
 
 \end_inset
 
@@ -1347,7 +1403,7 @@ Note that this static construction can be modified to a dynamically maintained
 Exendible hashing
 \end_layout
 
-\begin_layout Paragraph
+\begin_layout Subsection
 The external memory model
 \end_layout
 
@@ -1375,7 +1431,7 @@ The accesses to discs are so slow compared to memory that we only count
  the number of disc operations for the time complexity.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 The hashing method
 \end_layout
 
@@ -1454,7 +1510,7 @@ critical word
 .
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 The operation algorithms
 \end_layout
 
@@ -1474,7 +1530,7 @@ If we wanted to store some additional data associated with the key, the
 \begin_layout Paragraph
 Operation 
 \noun on
-find
+member
 \noun default
 
 \begin_inset Formula $(x)$
@@ -1878,7 +1934,7 @@ To sum up, the worst case for needed disc block operations is when
  is merged and it consists of two readings, one writing and one deallocation.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Expected properties
 \end_layout
 
@@ -1908,7 +1964,14 @@ The expected size of the directory equals
  values where the size of the directory grows almost quadratically.
 \end_layout
 
-\begin_layout Chapter
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
 Trees
 \end_layout
 
@@ -1928,10 +1991,10 @@ g.
 \end_inset
 
 no arithmetics like in hashing).
- We again study data structures for holding a subset of the universe set.
+ Again, we study data structures for holding a subset of the universe set.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Supported operations
 \end_layout
 
@@ -1949,12 +2012,12 @@ insert
 delete
 \noun default
 
-\begin_inset Formula $(T,X)$
+\begin_inset Formula $(T,x)$
 \end_inset
 
  and 
 \noun on
-find
+member
 \noun default
 
 \begin_inset Formula $(T,x)$
@@ -2001,7 +2064,7 @@ split
 \begin_inset Formula $T_{1}$
 \end_inset
 
-and 
+ and 
 \begin_inset Formula $T_{2}$
 \end_inset
 
@@ -2152,7 +2215,7 @@ the number of child nodes of the root node is between 2 and
 \end_layout
 
 \begin_layout Itemize
-the number of child nodes of a nonleaf nonroot node is between 
+the number of child nodes of an inner node is between 
 \begin_inset Formula $a$
 \end_inset
 
@@ -2189,12 +2252,24 @@ The depth of any
 \end_layout
 
 \begin_layout Proof
-By induction we show that the number of a tree with depth 
+Obviously, the number of leaves of an 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+-tree of height 
 \begin_inset Formula $h$
 \end_inset
 
- is between X and Y.
- TODO
+ is between 
+\begin_inset Formula $2a^{h-1}$
+\end_inset
+
+ and 
+\begin_inset Formula $b^{h}$
+\end_inset
+
+.
+ By taking logarithms we get the claimed inequalities.
 \end_layout
 
 \begin_layout Standard
@@ -2213,29 +2288,60 @@ Every nonleaf node
 \begin_inset Formula $v$
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Itemize
 \begin_inset Formula $S_{v}\left[1\dots p(v)\right]$
 \end_inset
 
- is an array of pointers to child nodes
+ is an array of pointers to child nodes.
 \end_layout
 
 \begin_layout Itemize
 \begin_inset Formula $H_{v}\left[1\dots p(v)-1\right]$
 \end_inset
 
- is an array of keys such that 
-\begin_inset Formula $H_{v}[i]$
+ is an array of splitters.
+ They are keys such that 
+\noun on
+
+\begin_inset Formula $\forall i$
 \end_inset
 
- is the maximum key represented by 
-\begin_inset Formula $S_{v}[i]$
+ max
+\noun default
+
+\begin_inset Formula $\left(S_{v}[i]\right)\leq H_{v}[i]<$
 \end_inset
 
+
+\noun on
+min
+\begin_inset Formula $\left(S_{v}[i+1]\right)$
+\end_inset
+
+
+\noun default
 .
+ Note that the 
+\begin_inset Formula $H_{v}$
+\end_inset
+
+ values in the tree unambiguously split the whole universe set into intervals
+ that are 1-to-1 mapped on the leaves.
+\end_layout
+
+\begin_layout Standard
+Note that every node needs 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+ space and the number of nodes is 
+\begin_inset Formula $\Theta(n)$
+\end_inset
+
+, resulting into linear space consumption.
 \end_layout
 
 \begin_layout Standard
@@ -2252,38 +2358,4218 @@ In the usual variant of
 \end_inset
 
 .
+ However, it's recommended to have 
+\begin_inset Formula $b\geq2a$
+\end_inset
+
+, which significantly decreases the total number of needed modifications
+ in long operation sequences.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Standard algorithms
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Standard
+The algorithms for 
+\noun on
+member
+\noun default
+, 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+delete
+\noun default
+ always do at most constant amount of work on every level of the tree, bounding
+ the asymptotic complexities by 
+\begin_inset Formula $\OO\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph*
+
+\noun on
+Member
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We start in the root and repeatedly choose the correct child to go down
+ (by the values of 
+\begin_inset Formula $H_{v}$
+\end_inset
+
+ and 
+\begin_inset Formula $x$
+\end_inset
+
+).
+ In the leaf we compare the key with 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+Insert
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We find the correct leaf to insert after, also checking that 
+\begin_inset Formula $x$
+\end_inset
+
+ isn't represented by 
+\begin_inset Formula $T$
+\end_inset
+
+ yet.
+ Adding a new leaf can overfill the parent -- in that case we split it in
+ halves, which results into adding a new child of the grandparent, etc.
+ The splitting can cascade up to the root, whose splitting would increase
+ the depth of the tree.
+ Note that the conditions on 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ are chosen such that the split nodes always have just enough children.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+Delete
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We find the leaf to be deleted, removing reference from the parent node.
+ Whenever a nonroot node is only left with 
+\begin_inset Formula $a-1$
+\end_inset
+
+ children, we merge with its brother.
+ If the resulting node has more than 
+\begin_inset Formula $b$
+\end_inset
+
+ children, we re-split it in halves.
+ Then we correct the common parent of the nodes, possibly resulting into
+ a cascade of merges.
+ If the root node is only left with one child, we make the child the new
+ root (decreasing the depth of the tree).
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+Join2
+\begin_inset Formula $\left(T_{1},T_{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We take the lower of 
+\begin_inset Formula $T_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{2}$
+\end_inset
+
+, and merge its root with the adjacent border node in the correct depth
+ of the other tree (so the leaves are in the same depth).
+ That can result into a cascade on the path to the root.
+ If we know the depth difference 
+\begin_inset Formula $\left|h\left(T_{1}\right)-h\left(T_{2}\right)\right|$
+\end_inset
+
+, we only work on as many levels, resulting into 
+\begin_inset Formula $\OO\left(\left|h\left(T_{1}\right)-h\left(T_{2}\right)\right|+1\right)$
+\end_inset
+
+ complexity (work only cascades up).
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+Split
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We start with two empty stacks for left and right subtrees, 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+.
+ Then we proceed like in 
+\noun on
+member
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+ but we split every node according to the chosen child into the left and
+ right fragment, pushing them on the corresponding stacks.
+ We make sure that the fragments are correct 
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+-trees and we also note the heights of the fragments.
+ Finally we repeatedly 
+\noun on
+join2
+\noun default
+ the top trees on the left stack which creates the result 
+\begin_inset Formula $T_{1}$
+\end_inset
+
+; 
+\begin_inset Formula $T_{2}$
+\end_inset
+
+ is created from the right stack the same way.
+\end_layout
+
+\begin_layout Standard
+It remains to prove the complexity of joining a stack.
+ Note that 
+\noun on
+join2
+\begin_inset Formula $\left(T_{L},T_{R}\right)$
+\end_inset
+
+
+\noun default
+ can only create a tree of depth 
+\begin_inset Formula $\max\left\{ h\left(T_{L}\right),h\left(T_{R}\right)\right\} $
+\end_inset
+
+ or one level higher.
+ Let 
+\begin_inset Formula $h_{1}<h_{2}<\dotsb<h_{k}$
+\end_inset
+
+ denote the heights of trees on the stack and let 
+\begin_inset Formula $h'_{i}$
+\end_inset
+
+ denote the resulting height after merging together the first 
+\begin_inset Formula $i$
+\end_inset
+
+ trees.
+ Notice that 
+\begin_inset Formula $h'_{i}\leq h_{i}+1$
+\end_inset
+
+, by induction:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $h'_{1}=h_{1}$
+\end_inset
+
+ by definition
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $h'_{i}\leq\max\left\{ h'_{i-1},h_{i}\right\} +1\leq\max\left\{ h_{i-1}+1,h_{i}\right\} +1\leq h_{i}+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The total work of stack merging is bounded by 
+\begin_inset Formula $W\in\sum_{i=1}^{k-1}\OO\left(\left|h_{i+1}-h'_{i}\right|+1\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $h_{i+1}\ge h_{i}+1\ge h'_{i}$
+\end_inset
+
+, we can remove the absolute value and get 
+\begin_inset Formula 
+\[
+W\in\OO\left(\sum_{i=1}^{k-1}h_{i+1}-\sum_{i=1}^{k-1}h'_{i}+k-1\right)\subseteq\OO\left(\sum_{i=2}^{k-2}h_{i}+h_{k-1}+h_{k}-\sum_{i=2}^{k-2}h'_{i+1}+k\right)
+\]
+
+\end_inset
+
+It trivially holds 
+\begin_inset Formula $h_{i}\le h'_{i+1}$
+\end_inset
+
+, so the sums cancel out and we get 
+\begin_inset Formula $W\in\OO\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
 Parallel algorithms
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Standard
+In the previous insertion and deletion algorithms we might have to lock
+ the root during the whole operation because we don't know for sure if it
+ will be modified.
+ Note that this uncertainty only happens when the node is critical (max.
+\begin_inset space ~
+\end_inset
+
+children on insertion or min.
+\begin_inset space ~
+\end_inset
+
+children on deletion).
+ We can solve it by top-down preventive balancing: whenever we pass through
+ a critical node, we split/merge it just to be sure (before continuing down).
+ To maintain the invariant we need 
+\begin_inset Formula $b\ge2a$
+\end_inset
+
+; it is recommended to have 
+\begin_inset Formula $b\ge2a+2$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
 Order statistics
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Standard
+To suport the 
+\noun on
+ord
+\noun default
+ and 
+\noun on
+rank
+\noun default
+ operations we need to add a field 
+\begin_inset Formula $N_{v}\left[1\dots p(v)-1\right]$
+\end_inset
+
+ into every node where 
+\begin_inset Formula $N_{v}[i]=\mbox{the number of leaves under}S_{v}[i]$
+\end_inset
+
+.
+ It is quite clear how to change the mentioned operations to also maintain
+ the 
+\begin_inset Formula $N_{v}$
+\end_inset
+
+ values.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+rank
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We proceed like in 
+\noun on
+member
+\noun default
+
+\begin_inset Formula $(T,x)$
+\end_inset
+
+ but we also accumulate all the 
+\begin_inset Formula $N_{v}$
+\end_inset
+
+ values to the left of the chosen path.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(T,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the inverse to 
+\noun on
+rank
+\noun default
+ we find 
+\begin_inset Formula $\max\left\{ i\in\left\{ 1\dots p(root)\right\} \mid\sum_{j=1}^{i-1}N_{root}[j]<k\right\} $
+\end_inset
+
+ and we continue like in 
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(S[i],k-\sum_{j=1}^{i-1}N_{root}[j]\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Remark*
+We showed the ordered statistics for the case of accumulating 1-values assigned
+ to every leaf but it can be easily generalized.
+ Every leaf can have any value selected on insertion.
+ For meaningful 
+\noun on
+rank
+\noun default
+ we only need that the chosen operator is associative.
+ For unambiguous selection with 
+\noun on
+ord
+\noun default
+ according to a predicate we need that the predicate can't be turned from
+ true to false by accumulating more values by the operator.
+\end_layout
+
+\begin_layout Remark*
+We can also easily keep more independent order statistics at once.
+\end_layout
+
+\begin_layout Subsection
 Finger trees
+\end_layout
+
+\begin_layout Standard
+It is common for ordered-set data structures to support some efficient way
+ of accessing elements near to a known location.
+ Such structure variants are usually called finger trees.
+ Here we will modify the 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+-tree to support finger operations.
+\end_layout
+
+\begin_layout Standard
+For a tree 
+\begin_inset Formula $T$
+\end_inset
+
+ and finger 
+\begin_inset Formula $f$
+\end_inset
+
+ we are going to aim for operation complexities proportional to 
+\begin_inset Formula $\log(|$
+\end_inset
+
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(T,f\right)-$
+\end_inset
+
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(T,x\right)|+2)$
+\end_inset
+
+.
+ That is asymptotically at most the previous 
+\begin_inset Formula $\log n$
+\end_inset
+
+ but it can be much less if 
+\begin_inset Formula $f$
+\end_inset
+
+ points near 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Finger will be just a pointer to a selected leaf.
+ For easy access from there we need to add some pointers to every node of
+ the tree: parent pointer and pointers to the previous and following node
+ on the same level.
+ It is easy to see that all operations can again be adapted to maintain
+ these additional pointers and the asymptotic behaviour isn't affected.
+\end_layout
+
+\begin_layout Standard
+The operations 
+\noun on
+memFrom
+\noun default
+
+\begin_inset Formula $\left(f,x\right)$
+\end_inset
+
+, 
+\noun on
+delFrom
+\noun default
+
+\begin_inset Formula $\left(f,x\right)$
+\end_inset
+
+ and 
+\noun on
+insFrom
+\noun default
+
+\begin_inset Formula $\left(f,x\right)$
+\end_inset
+
+ work almost the same as their non-finger counterparts.
+ The only difference is in finding the correct leaf
+\begin_inset space ~
+\end_inset
+
+-- we start from the finger and always alternate one step on the same level
+ towards 
+\begin_inset Formula $x$
+\end_inset
+
+ with one step up (into the parent) until we skip over the value of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Then go down just like when searching for 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Observe that the 
+\begin_inset Formula $i$
+\end_inset
+
+-th level-step skips at least 
+\begin_inset Formula $a^{i-1}$
+\end_inset
+
+ leaves.
+ As a consequence the time to find the correct leaf is proportional to 
+\begin_inset Formula $\log_{a}(|$
+\end_inset
+
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(T,f\right)-$
+\end_inset
+
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(T,x\right)|+2)$
+\end_inset
+
+.
+ In the modification operations we also have to handle node spliting or
+ merging, which doesn't change the situation much (without proof here).
+\end_layout
+
+\begin_layout Theorem*
+Let 
+\begin_inset Formula $b\ge2a$
+\end_inset
+
+, 
+\begin_inset Formula $a\ge2$
+\end_inset
+
+ and 
+\begin_inset Formula $T$
+\end_inset
+
+ be a finger 
+\begin_inset Formula $(a,b)$
+\end_inset
+
+-tree representing a set of size at most 
+\begin_inset Formula $n$
+\end_inset
+
+ during a series of lookups, insertions and deletions.
+ Then the total time needed to apply the series on T is 
+\begin_inset Formula $\OO\left(\log n+\mbox{time needed for searching}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+A-sort
+\end_layout
+
+\begin_layout Standard
+A-sort is a sorting algorithm that is efficient for almost sorted sequences.
+ It uses an 
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+-tree with the same extended nodes as in finger trees (finger trees originated
+ as a generalization of A-sort).
+ We start with an empty tree and successively insert the elements, always
+ searching for the position from the leftmost leaf (we have a finger there).
+ Finally we walk through the leaves and output them in order.
+\end_layout
+
+\begin_layout Standard
+Note that the number leaves skipped on 
+\begin_inset Formula $i$
+\end_inset
+
+-th insertion is equal to the number of inversions of the 
+\begin_inset Formula $i$
+\end_inset
+
+-th element (defined as 
+\begin_inset Formula $f_{i}=\left|\left\{ j:\, j>i\,\wedge\, x_{j}<x_{i}\right\} \right|$
+\end_inset
+
+; we suppose 
+\emph on
+decreasing
+\emph default
+ order).
+ For the total number of inversions 
+\begin_inset Formula $F\equiv\sum_{i}f_{i}$
+\end_inset
+
+ we know 
+\begin_inset Formula $0\le F\le{n \choose 2}$
+\end_inset
+
+.
+ From the finger properties we have that the total time is 
+\begin_inset Formula $\OO\left(\mbox{searching}+\mbox{balancing}+\mbox{output}\right)=\OO\left(n+\sum_{i}\log f_{i}\right)=\OO\left(n+\log\prod_{i}f_{i}\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\left(\prod_{i}f_{i}\right)^{1/n}\leq\frac{1}{n}\sum_{i}f_{i}$
+\end_inset
+
+, we get time bound 
+\begin_inset Formula $\OO\left(n+n\log\left(F/n\right)\right)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
 Binary search trees
 \end_layout
 
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\key}{\mathsf{key}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\l}{\mathsf{l}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\r}{\mathsf{r}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\h}{\mathsf{height}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\b}{\mathsf{bal}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We define BSTs as rooted trees with the following properties:
+\end_layout
+
+\begin_layout Itemize
+Every nonleaf 
+\begin_inset Formula $v$
+\end_inset
+
+ has (exactly) two child nodes 
+\begin_inset Formula $\l(v)$
+\end_inset
+
+, 
+\begin_inset Formula $\r(v)$
+\end_inset
+
+ and it is uniquely assigned to an element of the set 
+\begin_inset Formula $\key(v)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Leaves don't carry any information.
+ In practice they wouldn't be present (
+\emph on
+null
+\emph default
+ pointers).
+\end_layout
+
+\begin_layout Itemize
+The keys are in infix ordering, i.
+\begin_inset space \thinspace{}
+\end_inset
+
+e.
+ all keys in subtree of 
+\begin_inset Formula $\l(v)$
+\end_inset
+
+ are less than 
+\begin_inset Formula $\key(v)$
+\end_inset
+
+ and all keys in 
+\begin_inset Formula $\r(v)$
+\end_inset
+
+ are greater.
+\end_layout
+
+\begin_layout Standard
+Note again that every vertex covers an open interval from the ordered universe
+ set
+\begin_inset space ~
+\end_inset
+
+-- the root starts with the whole universe, then the subtrees always split
+ the parent interval according to the key, and the leaves exactly correspond
+ to all intervals between the represented elements.
+\end_layout
+
+\begin_layout Corollary
+BST representing 
+\begin_inset Formula $n$
+\end_inset
+
+ keys contains one nonleaf vertex for every key and 
+\begin_inset Formula $n+1$
+\end_inset
+
+ leaves so it needs 
+\begin_inset Formula $\Theta(n)$
+\end_inset
+
+ space.
+\end_layout
+
 \begin_layout Subsection
 Basic BSTs
+\end_layout
+
+\begin_layout Description
+
+\noun on
+member
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+ proceeds from the root, always compares the key and either returns success
+ or continues down the correct child node.
+ We return 
+\emph on
+false
+\emph default
+ if we reach a leaf.
+\end_layout
+
+\begin_layout Description
+
+\noun on
+min
+\noun default
+
+\begin_inset Formula $(T)$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\series medium
+and
+\series default
+
+\begin_inset space ~
+\end_inset
+
+
+\noun on
+max
+\noun default
+
+\begin_inset Formula $(T)$
+\end_inset
+
+ just find the leftmost or rightmost inner node.
+\end_layout
+
+\begin_layout Description
+
+\noun on
+insert
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+ starts the same as 
+\noun on
+member
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+.
+ If we find 
+\begin_inset Formula $x$
+\end_inset
+
+ we exit, otherwise we replace the leaf that we ended in with a new node
+ (having key 
+\begin_inset Formula $x$
+\end_inset
+
+ and two leaf children).
+\end_layout
+
+\begin_layout Description
+
+\noun on
+delete
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+ first finds node 
+\begin_inset Formula $u$
+\end_inset
+
+ with 
+\begin_inset Formula $\key(u)=x$
+\end_inset
+
+ or it fails.
+ If both children of 
+\begin_inset Formula $u$
+\end_inset
+
+ are leaves we just replace 
+\begin_inset Formula $u$
+\end_inset
+
+ with a leaf node.
+ Similarly if only one child is nonleaf we replace 
+\begin_inset Formula $u$
+\end_inset
+
+ with it.
+ Otherwise we find 
+\begin_inset Formula $v$
+\end_inset
+
+ that contains the left neigbour key in the ordering.
+ That is the rightmost nonleaf node in the subtree of 
+\begin_inset Formula $\l\left(u\right)$
+\end_inset
+
+.
+ We move 
+\begin_inset Formula $\key(v)$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+ and remove 
+\begin_inset Formula $v$
+\end_inset
+
+ instead, which is simple because 
+\begin_inset Formula $\l(v)$
+\end_inset
+
+ or 
+\begin_inset Formula $\r(v)$
+\end_inset
+
+ is a leaf.
+\end_layout
+
+\begin_layout Description
+
+\noun on
+join3
+\noun default
+
+\begin_inset Formula $\left(T_{1},x,T_{2}\right)$
+\end_inset
+
+ is trivial.
+\end_layout
+
+\begin_layout Description
+
+\noun on
+split
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+ proceeds like 
+\noun on
+member
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+ building 
+\begin_inset Formula $T_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{R}$
+\end_inset
+
+ along the way (similarly to 
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+-trees).
+ We maintain pointers to the rigtmost leaf of 
+\begin_inset Formula $T_{L}$
+\end_inset
+
+ and leftmost leaf of 
+\begin_inset Formula $T_{R}$
+\end_inset
+
+.
+ We always replace these leaves by the left or right subtrees that we cut
+ along the way down in 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ When we reach leaf we have distributed all vertices in 
+\begin_inset Formula $T_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{R}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+
+\noun on
+rank
+\noun default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\series medium
+and
+\series default
+
+\begin_inset space ~
+\end_inset
+
+
+\noun on
+ord
+\noun default
+
+\begin_inset Formula $\left(T,k\right)$
+\end_inset
+
+ are the same as in 
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+-trees; we also need to add a counter of keys present in every subtree.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Greyedout
+status open
+
+\begin_layout Plain Layout
+TODO: building a perfectly balanced tree from a sorted array, inorder traversal
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that again the complexity of any operation is proportional to the depth
+ of the tree.
+ The depth is expected to be logarithmic (taken over all possible sequences
+ of modifying operations) but it doesn't have to be.
+ There are many modifications that strive to bound the complexities via
+ various ways:
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Balancing
+\emph default
+ the tree ensures 
+\begin_inset Formula $\OO\left(\log n\right)$
+\end_inset
+
+ depth.
+ We are going to cover AVL and Red-Black trees.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Randomizing
+\emph default
+ the modifying operations to make the expected complexities 
+\emph on
+independent
+\emph default
+ of the sequence of modifications performed on the tree (covered in DSII
+ course).
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Self-modify
+\emph default
+ the tree to optimize for some operation patterns (Splay trees, covered
+ in DSII).
+\end_layout
+
+\begin_layout Subsubsection
+Balancing
+\end_layout
+
+\begin_layout Standard
+BSTs are balanced via edge 
+\emph on
+rotations
+\emph default
+.
+ A
+\begin_inset space ~
+\end_inset
+
+single rotation reverses the direction of one edge.
+ There is only one way of doing it because we must not disturb the infix
+ order of the nodes.
+ Let WLOG rotate the edge 
+\begin_inset Formula $\l(v)=u$
+\end_inset
+
+.
+ After the rotation 
+\begin_inset Formula $u$
+\end_inset
+
+ takes the place of 
+\begin_inset Formula $v$
+\end_inset
+
+ (from the perspective of the parent) and we have 
+\begin_inset Formula $\r(u)=v$
+\end_inset
+
+, also the right subtree of 
+\begin_inset Formula $u$
+\end_inset
+
+ becomes the left subtree of 
+\begin_inset Formula $v$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
 AVL trees
 \end_layout
 
+\begin_layout Standard
+AVL trees are BSTs that maintain a simple balancing condition that in every
+ vertex the heights of its child subtrees differ by at most one.
+ We need to add a field 
+\begin_inset Formula $\b(v):=\h\left(\r(v)\right)-\h\left(\l(v)\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now we're going to show how this condition bounds the height of the tree.
+\end_layout
+
+\begin_layout Lemma
+Let 
+\begin_inset Formula $f(h)$
+\end_inset
+
+ be the minimal number of elements representable by an AVL of height 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $f(h)=F_{h+2}-1$
+\end_inset
+
+ where 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is the 
+\begin_inset Formula $i$
+\end_inset
+
+-th fibonacci number (
+\begin_inset Formula $F_{0}=0$
+\end_inset
+
+, 
+\begin_inset Formula $F_{1}=1$
+\end_inset
+
+, 
+\begin_inset Formula $F_{i+1}=F_{i}+F_{i-1}$
+\end_inset
+
+).
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By induction on 
+\begin_inset Formula $h$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Case
+\begin_inset Formula $h=0$
+\end_inset
+
+.
+ A single leaf represents the empty set, 
+\begin_inset Formula $f(0)=0=F_{2}-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $h=1.$
+\end_inset
+
+ Root with two leaves as children represents a set of size one, 
+\begin_inset Formula $f(1)=1=F_{3}-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $h\ge2$
+\end_inset
+
+.
+ Root with two subtrees of lower height.
+ The worst case is when we have children of height 
+\begin_inset Formula $h-1$
+\end_inset
+
+ and 
+\begin_inset Formula $h-2$
+\end_inset
+
+, thus 
+\begin_inset Formula 
+\[
+f(h)=1+f(h-1)+f(h-2)=1+F_{h+1}-1+F_{h}-1=F_{h+2}-1.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Fact
+\begin_inset Formula $F_{i}=\frac{1}{\sqrt{5}}\left[\varphi^{i}-\left(1-\varphi\right)^{i}\right]$
+\end_inset
+
+ where 
+\begin_inset Formula $\varphi=\frac{1+\sqrt{5}}{2}$
+\end_inset
+
+ is the golden ratio.
+\end_layout
+
+\begin_layout Proof
+By induction on 
+\begin_inset Formula $i$
+\end_inset
+
+, a straightforward exercise.
+\end_layout
+
+\begin_layout Corollary
+The height of AVL tree containing 
+\begin_inset Formula $n$
+\end_inset
+
+ elements is at most 
+\begin_inset Formula $\log_{\varphi}n+\OO\left(1\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $\varphi^{2}=\varphi+1$
+\end_inset
+
+ and 
+\begin_inset Formula $0<\left(1-\varphi\right)<1<\varphi$
+\end_inset
+
+ we have 
+\begin_inset Formula 
+\[
+F_{i}=\frac{1}{\sqrt{5}}\left[\varphi^{i}-\left(1-\varphi\right)^{i}\right]=\frac{1}{\sqrt{5}}\left[\varphi^{i-1}+\underbrace{\varphi^{i-2}}_{\ge1}-\underbrace{(1-\varphi)^{i}}_{\le1}\right]\ge\frac{1}{\sqrt{5}}\varphi^{i-1}
+\]
+
+\end_inset
+
+ We also know 
+\begin_inset Formula $n\ge F_{h+2}-1\ge\frac{1}{\sqrt{5}}\varphi^{h+1}-1$
+\end_inset
+
+ so 
+\begin_inset Formula $\log_{\varphi}\left(\sqrt{5}(n+1)\right)-1\ge h$
+\end_inset
+
+ and thus 
+\begin_inset Formula 
+\[
+h\le\log_{\varphi}\left(n+1\right)+\log_{\varphi}\frac{\sqrt{5}}{\varphi}\doteq1.44\log\left(n+1\right)+0.67
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Operations
+\end_layout
+
+\begin_layout Standard
+Simple operations like 
+\noun on
+member
+\noun default
+, 
+\noun on
+min
+\noun default
+ and 
+\noun on
+max
+\noun default
+ are the same as in general BSTs, in 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+delete
+\noun default
+ we just update the values of 
+\begin_inset Formula $\b$
+\end_inset
+
+ and perform some rebalancing at the end of the operation to restore that
+ 
+\begin_inset Formula $\left|\b\left(u\right)\right|\le1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The invariant can only break in the way that 
+\begin_inset Formula $\left|\b\left(u\right)\right|=2$
+\end_inset
+
+ in some vertices on the affected path.
+ We shall start with the lowest broken vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ and we will only discuss the case of 
+\begin_inset Formula $\b\left(u\right)=2$
+\end_inset
+
+ as the other one is symmetrical.
+ Let 
+\begin_inset Formula $v:=\r(u)$
+\end_inset
+
+, there are several cases:
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $\b\left(v\right)=1$
+\end_inset
+
+.
+ We rotate the 
+\begin_inset Formula $\left(u\rightarrow v\right)$
+\end_inset
+
+ edge.
+ That restores 
+\begin_inset Formula $\b(u)=\b(v)=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $\b\left(v\right)=0$
+\end_inset
+
+.
+ We also rotate the 
+\begin_inset Formula $\left(u\rightarrow v\right)$
+\end_inset
+
+ edge but this time we get 
+\begin_inset Formula $\b(u)=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\b(v)=-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $\b\left(v\right)=-1$
+\end_inset
+
+.
+ We double-rotate the 
+\begin_inset Formula $w:=\l(u)$
+\end_inset
+
+ vertex, that is, we first rotate 
+\begin_inset Formula $\left(v\rightarrow w\right)$
+\end_inset
+
+ and then 
+\begin_inset Formula $\left(u\rightarrow w\right)$
+\end_inset
+
+.
+ That again restores 
+\begin_inset Formula $\b(u)=\b(v)=\b(w)=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+After fixing the invariant locally we continue up the path fixing the 
+\begin_inset Formula $\b$
+\end_inset
+
+ values.
+ It can be shown that after 
+\noun on
+insert
+\noun default
+ it is enough to do just one (double-)rotation but after 
+\noun on
+delete
+\noun default
+ it may be needed to rotate the whole path.
+\end_layout
+
+\begin_layout Standard
+The 
+\noun on
+rank
+\noun default
+ and 
+\noun on
+ord
+\noun default
+ operations can be added the same way as in general BSTs.
+ It is obvious now that in any case we do at most some constant work on
+ every level.
+\end_layout
+
+\begin_layout Standard
+TODO: images for the cases
+\end_layout
+
+\begin_layout Corollary
+The complexities of all operations on AVL trees are 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Corollary
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+space for images
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Red-black trees
+\end_layout
+
+\begin_layout Standard
+RB-trees are BSTs where every vertex is either red or black and the following
+ conditions hold:
+\end_layout
+
+\begin_layout Enumerate
+leaves and the root are black,
+\end_layout
+
+\begin_layout Enumerate
+red vertex always has a black parent, and
+\end_layout
+
+\begin_layout Enumerate
+all paths from root to a leaf contain the same amount of black vertices.
+\end_layout
+
+\begin_layout Standard
+Now we're going to show how this condition bounds the height of the tree.
+ We consider the shortest and longest root-to-leaf paths possible in one
+ RB-tree.
+ They have the same number of black vertices, all start and end in a black
+ vertex and at most every other vertex can be red.
+ Thus the ratio of the longest to the shorterst path is at most 
+\begin_inset Formula $2$
+\end_inset
+
+.
+ If we combine it with the following fact we get that the 
+\emph on
+depth is bounded by 
+\begin_inset Formula $2\log\left(n+2\right)$
+\end_inset
+
+
+\emph default
+.
+\end_layout
+
+\begin_layout Fact
+\begin_inset CommandInset label
+LatexCommand label
+name "fact:bintree-shortpath-bound"
+
+\end_inset
+
+The shortest root-to-leaf path in a tree with 
+\begin_inset Formula $n$
+\end_inset
+
+ nonleaf vertices has less than 
+\begin_inset Formula $\log\left(n+2\right)$
+\end_inset
+
+ edges.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+For the sake of contradiction suppose that all have length at least 
+\begin_inset Formula $\log\left(n+2\right)$
+\end_inset
+
+.
+ Then there is no leaf up to the depth 
+\begin_inset Formula $\log\left(n+2\right)-1$
+\end_inset
+
+ (inclusive) so we have at least 
+\begin_inset Formula $\sum_{i=0}^{\log\left(n+2\right)-1}2^{i}=2^{\log\left(n+2\right)}-1=n+1>n$
+\end_inset
+
+ nonleaf vertices.
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Operations
+\end_layout
+
+\begin_layout Standard
+Simple operations like 
+\noun on
+member
+\noun default
+, 
+\noun on
+min
+\noun default
+ and 
+\noun on
+max
+\noun default
+ are the same as in general BSTs, in 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+delete
+\noun default
+ we just perform some rebalancing at the end of the operation to restore
+ the height invariant.
+\end_layout
+
+\begin_layout Paragraph
+Insertion
+\end_layout
+
+\begin_layout Standard
+The BST algorithm always replaces a leaf with a new vertex which we make
+ red.
+ This can create a 
+\series bold
+2-partial
+\series default
+ RB-tree, where one edge breaks the red-red condition.
+ Let us denote the edge 
+\begin_inset Formula $\left(u\rightarrow v\right)$
+\end_inset
+
+, 
+\begin_inset Formula $v=\r(u)$
+\end_inset
+
+ (the other case is symmetrical).
+ If 
+\begin_inset Formula $u$
+\end_inset
+
+ is the root we just color it black and we're done.
+ Otherwise let 
+\begin_inset Formula $t$
+\end_inset
+
+ be the parent of 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $w$
+\end_inset
+
+ the sibling of 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ We know that 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ are red; 
+\begin_inset Formula $t$
+\end_inset
+
+ is black because the 2-partial RB-tree only allows one broken edge.
+ There are several cases.
+ In every one of them we also should check that the algorithm never breaks
+ the condition on root-to-leaf paths.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $w$
+\end_inset
+
+ is red.
+ We recolour the siblings 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $w$
+\end_inset
+
+ to black, and their parent 
+\begin_inset Formula $t$
+\end_inset
+
+ to red.
+ This may break the edge between 
+\begin_inset Formula $t$
+\end_inset
+
+ and its parent so we may have to continue there (two levels higher).
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $w$
+\end_inset
+
+ is black and it's the left sibling of 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ We rotate the 
+\begin_inset Formula $\left(t\rightarrow u\right)$
+\end_inset
+
+ edge, recolour 
+\begin_inset Formula $t$
+\end_inset
+
+ to red and 
+\begin_inset Formula $u$
+\end_inset
+
+ to black.
+ We can stop here because the root of the rotation remains black.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $w$
+\end_inset
+
+ is black and it's the right sibling of 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ We double-rotate 
+\begin_inset Formula $v$
+\end_inset
+
+ up, recolour 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+ to red, 
+\begin_inset Formula $v$
+\end_inset
+
+ and 
+\begin_inset Formula $w$
+\end_inset
+
+ to black.
+ We can stop here because the root of the rotation remains black as in the
+ previous case.
+\end_layout
+
+\begin_layout Paragraph
+Deletion
+\end_layout
+
+\begin_layout Standard
+The BST algorithm always ends with removal of a node which has (at least)
+ one leaf child.
+ If the removed node was black then we are left with a 
+\series bold
+3-partial
+\series default
+ RB-tree, where all root-to-leaf paths through one vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ have one less black node than all the other root-to-leaf paths.
+ If 
+\begin_inset Formula $v$
+\end_inset
+
+ is the root, we're done.
+ Otherwise let 
+\begin_inset Formula $u$
+\end_inset
+
+ be the parent of 
+\begin_inset Formula $v$
+\end_inset
+
+, 
+\begin_inset Formula $w$
+\end_inset
+
+ being the other child of 
+\begin_inset Formula $u$
+\end_inset
+
+ and let 
+\begin_inset Formula $v=\r(u)$
+\end_inset
+
+ (the other case is symmetrical).
+ There are several cases.
+ In every one of them we also should check that the algorithm never creates
+ a red-red edge.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $v$
+\end_inset
+
+ is red.
+ We just change 
+\begin_inset Formula $v$
+\end_inset
+
+ to black, which fixes everything.
+\end_layout
+
+\begin_layout Case
+the sibling 
+\begin_inset Formula $w$
+\end_inset
+
+ is red.
+ We rotate the 
+\begin_inset Formula $uw$
+\end_inset
+
+-edge, recolor 
+\begin_inset Formula $u$
+\end_inset
+
+ to red and 
+\begin_inset Formula $w$
+\end_inset
+
+ to black.
+ The result is still 3-partial in 
+\begin_inset Formula $v$
+\end_inset
+
+ but now the sibling is black and we continue with some of the following
+ cases.
+\end_layout
+
+\begin_layout Case
+the sibling 
+\begin_inset Formula $w$
+\end_inset
+
+ is black and it's children 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+ are also black.
+ We recolor 
+\begin_inset Formula $w$
+\end_inset
+
+ to red and set the parent 
+\begin_inset Formula $u$
+\end_inset
+
+ to black.
+ If 
+\begin_inset Formula $u$
+\end_inset
+
+ was red, the problem is fixed; otherwise we now have a 3-partial tree in
+ 
+\begin_inset Formula $u$
+\end_inset
+
+ and continue one level higher.
+\end_layout
+
+\begin_layout Case
+the sibling 
+\begin_inset Formula $w$
+\end_inset
+
+ and it's right child 
+\begin_inset Formula $y$
+\end_inset
+
+ are black, 
+\begin_inset Formula $w$
+\end_inset
+
+'s left child 
+\begin_inset Formula $y$
+\end_inset
+
+ is red.
+ We rotate the 
+\begin_inset Formula $uw$
+\end_inset
+
+-edge, recolor 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $x$
+\end_inset
+
+ to black, and 
+\begin_inset Formula $w$
+\end_inset
+
+ retains the former color of 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ The tree is OK now.
+\end_layout
+
+\begin_layout Case
+the sibling 
+\begin_inset Formula $w$
+\end_inset
+
+ is black and it's right child 
+\begin_inset Formula $y$
+\end_inset
+
+ is red.
+ We double rotate 
+\begin_inset Formula $y$
+\end_inset
+
+ up which gets the former color of 
+\begin_inset Formula $u$
+\end_inset
+
+, and 
+\begin_inset Formula $u$
+\end_inset
+
+ gets black.
+ The tree is OK now.
+\end_layout
+
+\begin_layout Subsubsection
+Notes
+\end_layout
+
+\begin_layout Itemize
+The 
+\noun on
+rank
+\noun default
+ and 
+\noun on
+ord
+\noun default
+ operations can be added the same way as in general BSTs.
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+join
+\noun default
+ and 
+\noun on
+split3
+\noun default
+ work like in 
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+-trees, only the depth counts in black vertices.
+\end_layout
+
+\begin_layout Corollary
+The complexities of all operations on RB-trees are 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Comparison to AVL
+\end_layout
+
+\begin_layout Itemize
+The worst-case depth is 
+\begin_inset Formula $\doteq1.44\log n$
+\end_inset
+
+ in AVL and 
+\begin_inset Formula $2\log n$
+\end_inset
+
+ in RB, but on random data they are almost the same.
+\end_layout
+
+\begin_layout Itemize
+RB always do at most three rotations for any operation (double rotation
+ equals two regular ones), whereas AVL deletion can do 
+\begin_inset Formula $\Omega\!\left(\log n\right)$
+\end_inset
+
+ rotations.
+ This can be useful in applications where much data is associated with nodes
+ and needs to be recomputed on restructuring (so rotations are expensive).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Section
+Searching sorted arrays
+\end_layout
+
+\begin_layout Plain Layout
+A static version of the ordered dictionary problem.
+\end_layout
+
+\begin_layout Itemize
+generic algoritm
+\end_layout
+
+\begin_layout Itemize
+unary, binary and interpolation search (without analysis of interpolation)
+\end_layout
+
+\begin_layout Itemize
+generalized quadratic search, maybe proving the 
+\begin_inset Formula $\Theta\left(\log\log n\right)$
+\end_inset
+
+ expected and 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ worst-case behaviour
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Priority queues and sorting
+\end_layout
+
+\begin_layout Standard
+Priority queues (often called heaps) maintain a multiset of some data where
+ every element is assigned a 
+\emph on
+priority
+\emph default
+ (from an ordered universe).
+\end_layout
+
+\begin_layout Standard
+Basic operations we want to support:
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+insert
+\noun default
+
+\begin_inset Formula $\left(H,x\right)$
+\end_inset
+
+ adds an element with priority 
+\begin_inset Formula $x$
+\end_inset
+
+ to 
+\begin_inset Formula $H$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+min
+\noun default
+
+\begin_inset Formula $\left(H\right)$
+\end_inset
+
+ returns the minimum priority in 
+\begin_inset Formula $H$
+\end_inset
+
+, and
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+delMin
+\noun default
+
+\begin_inset Formula $\left(H\right)$
+\end_inset
+
+ removes from 
+\begin_inset Formula $H$
+\end_inset
+
+ an element with the minimum priority (we can access the removed element
+ and its priority afterwards).
+\end_layout
+
+\begin_layout Standard
+PQs often also support some of the following operations:
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+delete
+\noun default
+
+\begin_inset Formula $\left(H,p\right)$
+\end_inset
+
+ removes from 
+\begin_inset Formula $H$
+\end_inset
+
+ an element to which we have a pointer 
+\begin_inset Formula $p$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+incKey
+\noun default
+
+\begin_inset Formula $\left(H,p,d\right)$
+\end_inset
+
+ and 
+\noun on
+decKey
+\noun default
+
+\begin_inset Formula $\left(H,p,d\right)$
+\end_inset
+
+ change the priority of an element,
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+makeHeap
+\noun default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+ creates a heap from a (unordered) list of elements to be contained (often
+ faster than building by insertions), and
+\end_layout
+
+\begin_layout Itemize
+
+\noun on
+meld
+\noun default
+
+\begin_inset Formula $\left(H_{1},H_{2}\right)$
+\end_inset
+
+ merges two heaps into one that contains the disjoint union of the elements
+ (no restriction on priorities like in BSTs).
+\end_layout
+
+\begin_layout Standard
+The following sections describe increasingly complicated PQ data structures.
+ The later ones improve asympotic complexities of some operations but on
+ the other hand the constant factors increase and also the analyses get
+ more complicated.
+ In practice the multiplicative constants are very important so it's best
+ to choose the simplest data structure from those that satisfy the best
+ asymptotic behaviour on all the used operations.
+\end_layout
+
+\begin_layout Section
+Regular heaps
+\end_layout
+
+\begin_layout Itemize
+For a parameter 
+\begin_inset Formula $d\ge2$
+\end_inset
+
+, a 
+\emph on
+
+\begin_inset Formula $d$
+\end_inset
+
+-regular heap
+\emph default
+ is a 
+\begin_inset Formula $d$
+\end_inset
+
+-ary rooted tree with 1-1 mapping between vertices and the stored elements.
+ As a consequence the space is linear in the current number of elements
+ (denoted 
+\begin_inset Formula $n$
+\end_inset
+
+).
+ The classic variant is 
+\begin_inset Formula $d=2$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The heap condition: the key of any vertex isn't less than the key of its
+ parent.
+ As a consequence the root contains an element with the minimum key.
+\end_layout
+
+\begin_layout Itemize
+The shape of the tree: completely balanced, the last level is aligned to
+ the left.
+ Note that the shape is 
+\emph on
+exactly determined
+\emph default
+ by 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Array implementation (storing vertices in one big contiguous array):
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let the root have the index 
+\begin_inset Formula $0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+For a vertex of index 
+\begin_inset Formula $i$
+\end_inset
+
+ we give its 
+\begin_inset Formula $d$
+\end_inset
+
+ children the indices 
+\begin_inset Formula $di+1,\dotsc,di+d$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+We can verify by induction that the position of the first vertex in depth
+ 
+\begin_inset Formula $l$
+\end_inset
+
+ is 
+\begin_inset Formula $\left(d^{l}-1\right)/(d-1)$
+\end_inset
+
+ and that consequently the rule gives a 1-1 mapping to indices 
+\begin_inset Formula $0\dots(n-1)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+As a consequence we see that 
+\begin_inset Formula $n-1\ge\left(d^{\mathrm{\, height}}-1\right)/(d-1)\ge d^{\mathrm{\, height}-1}$
+\end_inset
+
+ and so 
+\begin_inset Formula $\mbox{height}\le1+\left\lfloor \log_{d}n\right\rfloor $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Algorithms and running time
+\end_layout
+
+\begin_layout Standard
+We use the array implementation.
+ First we define auxiliary 
+\noun on
+up
+\noun default
+ and 
+\noun on
+down
+\noun default
+ operations.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+up
+\noun default
+
+\begin_inset Formula $\left(H,p\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+We start at the position 
+\begin_inset Formula $p$
+\end_inset
+
+ and check heap property between 
+\begin_inset Formula $p$
+\end_inset
+
+ and its parent.
+ We end if it is OK, otherwise we switch them and continue one level higher.
+ Note that these switches can't break the heap property with the other children
+ of the parent.
+ The needed time is obviously proportional to the depth of 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+down
+\noun default
+
+\begin_inset Formula $\left(H,p\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+We start at the position 
+\begin_inset Formula $p$
+\end_inset
+
+, find a child 
+\begin_inset Formula $c$
+\end_inset
+
+ with the minimum key (among the children).
+ We end if the heap property is OK, otherwise we switch 
+\begin_inset Formula $p$
+\end_inset
+
+ with 
+\begin_inset Formula $c$
+\end_inset
+
+, and continue from the new 
+\begin_inset Formula $c$
+\end_inset
+
+.
+ Note that these switches restore the heap property in 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ The needed time is obviously proportional to 
+\begin_inset Formula $d$
+\end_inset
+
+ times the depth of 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+insert
+\noun default
+
+\begin_inset Formula $\left(H,x\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+The shape determines the place for the new element (the end of the array)
+ and we put it there.
+ Then we run 
+\noun on
+up
+\noun default
+ on it to restore the heap property.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+delete
+\noun default
+
+\begin_inset Formula $\left(H,p\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+The shape determines the element to be de-allocated so we first switch it
+ with 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ Then we run 
+\noun on
+up
+\noun default
+ or 
+\noun on
+down
+\noun default
+ on the element to restore the heap property (only one 
+\begin_inset Quotes eld
+\end_inset
+
+edge
+\begin_inset Quotes erd
+\end_inset
+
+ could be broken).
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+delMin
+\noun default
+
+\begin_inset Formula $\left(H\right)$
+\end_inset
+
+ and 
+\noun on
+min
+\noun default
+:
+\end_layout
+
+\begin_layout Standard
+The first element of the array is an element with minimal key.
+ We can delete it by the general algorithm.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+incKey
+\noun default
+
+\begin_inset Formula $\left(H,p,\delta\right)$
+\end_inset
+
+ and 
+\noun on
+decKey
+\noun default
+
+\begin_inset Formula $\left(H,p,\delta\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+We just change the key and then fix the heap property by 
+\noun on
+down
+\noun default
+
+\begin_inset Formula $\left(H,p\right)$
+\end_inset
+
+ or 
+\noun on
+up
+\noun default
+
+\begin_inset Formula $\left(H,p\right)$
+\end_inset
+
+, respectively.
+\end_layout
+
+\begin_layout Paragraph
+
+\noun on
+makeHeap
+\noun default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+We take the array as the heap.
+ Then we run the 
+\noun on
+down
+\noun default
+ operation on every nonleaf vertex, from the end of the array to the beginning
+ (bottom-up).
+ Let's denote 
+\begin_inset Formula $h$
+\end_inset
+
+ the height of the heap.
+ The 
+\noun on
+down
+\noun default
+ operations need less time in the lower part of the heap, so the total time
+ of 
+\noun on
+makeHeap
+\noun default
+ is bounded by 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{l=0}^{h-1}\left[d^{l}\Theta\left(d\left(h-l\right)\right)\right] & \le & \Theta\left[\sum_{l=0}^{h-1}d^{l+1+h-h}\left(h-l\right)\right]=\Theta\left[d^{h}\sum_{l=0}^{h-1}\frac{h-1-l+1}{d^{h-1-l}}\right]\le\\
+ & \le & \Theta\left(nd\sum_{i=0}^{h-1}\frac{i+1}{d^{i}}\right)=\Theta\left(dn\right)
+\end{eqnarray*}
+
+\end_inset
+
+because we have a bound 
+\begin_inset Formula $n>d^{h-1}$
+\end_inset
+
+ and the last sum is bounded by a constant independent on 
+\begin_inset Formula $d$
+\end_inset
+
+ (for 
+\begin_inset Formula $d\ge2$
+\end_inset
+
+, even if summed up to infinity).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Can be made 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ by a more careful analysis (counting one or two bottom levels separately).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+\begin_inset CommandInset label
+LatexCommand label
+name "complexity-heaps-regular"
+
+\end_inset
+
+ 
+\begin_inset Formula $d$
+\end_inset
+
+-regular heaps need 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ space, 
+\noun on
+makeHeap
+\noun default
+ needs 
+\begin_inset Formula $\Theta\left(dn\right)$
+\end_inset
+
+ time, 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+decKey
+\noun default
+ need 
+\begin_inset Formula $\Theta\left(\log_{d}n\right)$
+\end_inset
+
+ time.
+ Operations 
+\noun on
+delMin
+\noun default
+, 
+\noun on
+delete
+\noun default
+ and 
+\noun on
+incKey
+\noun default
+ need 
+\begin_inset Formula $\Theta\left(d\log_{d}n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Paragraph
+HeapSort
+\end_layout
+
+\begin_layout Standard
+Any priority queue can be used for sorting by first building it and then
+ deleting the minimal values one by one.
+ With 
+\begin_inset Formula $d$
+\end_inset
+
+-regular heaps we get time 
+\begin_inset Formula $\Theta\left(nd\log_{d}n\right)=\Theta\left(n\log n\right)$
+\end_inset
+
+ for 
+\begin_inset Formula $d\in\Theta\left(1\right)$
+\end_inset
+
+, which equals the asymptotical lower bound on comparison sorting (proven
+ later).
+ Note that if we use a min-heap for sorting into descending order, we can
+ do it in-place (without any additional memory than the array).
+ The algorithm is a fall-back case of some sorting algorithms used in practice
+ (e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+\begin_inset space ~
+\end_inset
+
+introSort).
+\end_layout
+
+\begin_layout Section
+Leftist heaps
+\end_layout
+
+\begin_layout Standard
+adding 
+\noun on
+meld
+\noun default
+ in 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO: definition, algorithms and properties
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Amortized complexity
+\end_layout
+
+\begin_layout Standard
+Up to now we have been concentrating on worst-case complexities except for
+ the part about hashing where we were mainly interested in expected compexities
+ taken over possible input data or random bits.
+ We have already encountered the notion of amortization but now we will
+ describe it properly.
+\end_layout
+
+\begin_layout Standard
+Often it is useful to let some work accumulate and process it in batches.
+ In some cases this can even bring an asymptotic improvement in time complexity.
+ Thus we may want to do a lot of work once upon a time knowing that it has
+ saved us even more work in the past.
+\end_layout
+
+\begin_layout Definition*
+
+\emph on
+Amortized complexity
+\emph default
+ bounds the total complexity needed to perform any sequence of operations,
+ usually counted from some starting state (for example an
+\begin_inset space ~
+\end_inset
+
+empty structure).
+\end_layout
+
+\begin_layout Standard
+This can resemble some kind of expected complexity for one operation but
+ note that there is 
+\emph on
+no probability
+\emph default
+ involved here.
+ Also note that the operations in the sequence do not need to have the same
+ amortized complexities.
+\end_layout
+
+\begin_layout Subsubsection
+Analysis via potentials
+\end_layout
+
+\begin_layout Standard
+Usually, amortized complexity bounds are not proved directly from the definition
+ but some kind of accounting or potential is used instead.
+ We assign a 
+\emph on
+nonnegative
+\emph default
+ 
+\emph on
+potential
+\emph default
+ to the whole structure which represents how much of the allowed work has
+ been saved for future.
+ The potential is often defined as the sum over potentials of all parts
+ of the structure (sometimes it's imagined as savings in coins and called
+ 
+\begin_inset Quotes eld
+\end_inset
+
+banker's method
+\begin_inset Quotes erd
+\end_inset
+
+).
+ Note that in most cases the potential doesn't need to be stored in the
+ structure and it is only used to analyze the complexity.
+\end_layout
+
+\begin_layout Standard
+Let us analyze some operation that transforms the structure from potential
+ 
+\begin_inset Formula $\Phi_{i-1}$
+\end_inset
+
+ to potential 
+\begin_inset Formula $\Phi_{i}$
+\end_inset
+
+ and needs at most 
+\begin_inset Formula $W_{i}$
+\end_inset
+
+ real work at the moment.
+ Then we want to have amortized complexity 
+\begin_inset Formula $W_{i}^{A}$
+\end_inset
+
+ of the operation such that 
+\begin_inset Formula $W_{i}+\Phi_{i}-\Phi_{i-1}\le W_{i}^{A}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Doing such analysis for every operation on every configuration gives us
+ the desired bound
+\begin_inset space ~
+\end_inset
+
+-- imagine any sequence of 
+\begin_inset Formula $k$
+\end_inset
+
+ operations where the potentials went from 
+\begin_inset Formula $\Phi_{0}$
+\end_inset
+
+ to 
+\begin_inset Formula $\Phi_{k}$
+\end_inset
+
+, 
+\begin_inset Formula $i$
+\end_inset
+
+-th operation needed 
+\begin_inset Formula $W_{i}$
+\end_inset
+
+ real work and had 
+\begin_inset Formula $W_{i}^{A}$
+\end_inset
+
+ amortized complexity.
+ Then the total work is: 
+\begin_inset Formula 
+\[
+\sum_{i=1}^{k}W_{i}\le\sum_{i=1}^{k}\left[W_{i}^{A}-\left(\Phi_{i}-\Phi_{i-1}\right)\right]=\sum_{i=1}^{k}W_{i}^{A}+\Phi_{0}-\Phi_{k}
+\]
+
+\end_inset
+
+Since 
+\begin_inset Formula $\Phi_{k}\ge0$
+\end_inset
+
+ and 
+\begin_inset Formula $\Phi_{0}$
+\end_inset
+
+ is a constant (usually zero), we get the desired bound on any sequence
+ of operations.
+\end_layout
+
+\begin_layout Standard
+ToDo: scaling, perhaps some examples?
+\end_layout
+
+\begin_layout Section
+Fibonacci heaps
+\end_layout
+
+\begin_layout Standard
+The final target of the section are Fibonacci heaps which will
+\end_layout
+
+\begin_layout Itemize
+add 
+\noun on
+decKey
+\noun default
+ in 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+! (amortized),
+\end_layout
+
+\begin_layout Itemize
+speed up insert and meld to 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ (both worst-case and amortized), and
+\end_layout
+
+\begin_layout Itemize
+otherwise keep the same amortized complexities.
+\end_layout
+
+\begin_layout Standard
+The basic ideas come from binomial heaps which are composed from binomial
+ trees.
+\end_layout
+
+\begin_layout Subsection
+Binomial heaps
+\end_layout
+
+\begin_layout Definition*
+
+\emph on
+Binomial tree
+\emph default
+ of rank 
+\begin_inset Formula $i$
+\end_inset
+
+, denoted 
+\begin_inset Formula $H_{i}$
+\end_inset
+
+, is a tree where every node corresponds to one key and it satisfies the
+ heap ordering on the keys (priorities).
+ 
+\begin_inset Formula $H_{0}$
+\end_inset
+
+ consists of a single node; 
+\begin_inset Formula $H{}_{i+1}$
+\end_inset
+
+ can be created by adding the root of one 
+\begin_inset Formula $H_{i}$
+\end_inset
+
+ as a new child under another 
+\begin_inset Formula $H_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note some properties of binomial trees (easily proven by induction):
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $H_{i}$
+\end_inset
+
+ contains 
+\begin_inset Formula $2^{i}$
+\end_inset
+
+ vertices, has height 
+\begin_inset Formula $i$
+\end_inset
+
+ and the root of 
+\begin_inset Formula $H_{i}$
+\end_inset
+
+ has 
+\begin_inset Formula $i$
+\end_inset
+
+ children.
+\end_layout
+
+\begin_layout Itemize
+The 
+\begin_inset Formula $i$
+\end_inset
+
+ child subtrees of an 
+\begin_inset Formula $H_{i}$
+\end_inset
+
+ are isomorphic to 
+\begin_inset Formula $H_{i-1},H_{i-2},\dotsc,H_{1},H_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+We have a simple way of merging two trees of the same rank
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $i$
+\end_inset
+
+, which creates a tree of rank 
+\begin_inset Formula $i+1$
+\end_inset
+
+ (in constant time).
+ We choose the order of merging by the priorities of the two roots to preserve
+ the heap ordering.
+\end_layout
+
+\begin_layout Definition*
+
+\emph on
+Binomial heap
+\emph default
+ is a collection of binomial trees of 
+\emph on
+different
+\emph default
+ ranks.
+\end_layout
+
+\begin_layout Standard
+The heap is usually implemented as an array of binomial trees that is indexed
+ by ranks.
+ Note the correspondence to binary numbers: as any binomial tree of rank
+ 
+\begin_inset Formula $i$
+\end_inset
+
+ can only represent a heap of size 
+\begin_inset Formula $2^{i}$
+\end_inset
+
+ and no two trees of the same rank can occur, the shape of a binomial heap
+ containing 
+\begin_inset Formula $n$
+\end_inset
+
+ elements is exactly given by the binary representation of the number 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For amortized analysis we choose as the potential 
+\emph on
+the number of binomial trees
+\emph default
+ in the heap, which is between 
+\begin_inset Formula $0$
+\end_inset
+
+ and 
+\begin_inset Formula $\left\lceil \log n\right\rceil $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\noun on
+Meld
+\series default
+\noun default
+ works as an analogy to binary addition.
+ We start from the lowest ranks and whenever we encounter two trees of the
+ same rank we merge them.
+ Together it obviously takes 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ time where 
+\begin_inset Formula $n=n_{1}+n_{2}$
+\end_inset
+
+ is the size of the resulting heap.
+ As the total potential can only change by 
+\begin_inset Formula $\OO\left(\log n\right)$
+\end_inset
+
+, we also have the amortized complexity 
+\begin_inset Formula $\OO\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\noun on
+Insert
+\series default
+\noun default
+ can be implemented as 
+\noun on
+meld
+\noun default
+ with a tree of rank zero.
+ Thus the worst-case complexity is 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+.
+ We can easily prove that the amortized complexity of 
+\noun on
+insert
+\noun default
+ is 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+: we 
+\begin_inset Quotes eld
+\end_inset
+
+flip some number of bits from one to zero and one bit from zero to one
+\begin_inset Quotes erd
+\end_inset
+
+, so the decrease in potential pays for longer insertions.
+ As a consequence we can asymptotically afford to build binomial heaps by
+ insertions as it only takes 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ time in the worst case.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\noun on
+DelMin
+\series default
+\noun default
+ starts by finding the tree that contains the minimum priority in the root
+ and we remove it.
+ Children of this root form a collection of binomial trees so we 
+\noun on
+meld
+\noun default
+ them with the rest of the heap just as if they were another binomial heap.
+ Minimum deletion takes 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ both worst-case or amortized time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\noun on
+DecKey
+\series default
+\noun default
+ and 
+\series bold
+\noun on
+incKey
+\series default
+\noun default
+ can be done like in regular heaps by 
+\noun on
+up
+\noun default
+ and 
+\noun on
+down
+\noun default
+ operations.
+ The length of any path is bounded by 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+.
+ When going up we only need constant work on every level, which gives us
+ 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ time.
+ When going down we need to choose the child with minimal priority on every
+ level so the bound is 
+\begin_inset Formula $\Theta\left(\log^{2}n\right)$
+\end_inset
+
+.
+ The potentials aren't touched so the amortized complexities are the same.
+\end_layout
+
+\begin_layout Standard
+General 
+\series bold
+\noun on
+delete
+\series default
+\noun default
+ can be done in many heaps like if we decreased the priority to minus infinity
+ and then removed the minimum.
+ Here it needs 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+As is usual in heaps, we can maintain a pointer to an element with the minimal
+ priority without increasing asymptotic complexities of the operations.
+\end_layout
+
+\begin_layout Corollary*
+Binomial heaps need 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ space.
+ In the worst case we have all operations in 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ except for 
+\noun on
+incKey
+\noun default
+ in 
+\begin_inset Formula $\Theta\left(\log^{2}n\right)$
+\end_inset
+
+, 
+\noun on
+min
+\noun default
+ in 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ and
+\noun on
+ makeHeap
+\noun default
+ in 
+\begin_inset Formula $\Theta(n)$
+\end_inset
+
+.
+ Amortized bounds are asymptotically the same but for 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ 
+\noun on
+insert
+\noun default
+.
+\end_layout
+
+\begin_layout Standard
+To sum up, the asymptotic comlexities are almost the same as for leftist
+ heaps.
+ The only difference is amortized 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ 
+\noun on
+insert
+\noun default
+ (better) and 
+\begin_inset Formula $\Theta\left(\log^{2}n\right)$
+\end_inset
+
+ 
+\noun on
+incKey
+\noun default
+ (worse).
+\end_layout
+
+\begin_layout Subsection
+Lazy binomial heaps
+\end_layout
+
+\begin_layout Standard
+Now we modify the operations to be lazy
+\begin_inset space ~
+\end_inset
+
+-- we postpone as much work as possible and hope we won't have to do most
+ of it :-) As a result the worst-case complexities will grow but amortized
+ complexities will decrease.
+ We will no longer need that the binomial trees have different ranks and
+ so we'll have no bound on their number and we'll store them in a list (often
+ a doubly-linked circular list held by a minimal root).
+\end_layout
+
+\begin_layout Definition*
+Lazy binomial heap is a doubly linked list of binomial trees.
+\end_layout
+
+\begin_layout Standard
+We leave the amortization potential as the number trees in the heap.
+ 
+\series bold
+\noun on
+Meld
+\series default
+\noun default
+ just concatenates two lists and 
+\series bold
+\noun on
+insert
+\series default
+\noun default
+ adds one leaf to it, so both operations need 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ both amortized or worst-case time.
+ 
+\series bold
+\noun on
+DecKey
+\series default
+\noun default
+ and 
+\series bold
+\noun on
+incKey
+\series default
+\noun default
+ operations are the same as in strict heaps.
+\end_layout
+
+\begin_layout Standard
+The problem is to find another minimum after we delete the old one
+\begin_inset space ~
+\end_inset
+
+-- we have to walk through the whole list that can have length up to
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $n$
+\end_inset
+
+.
+ When we do the work we also 
+\series bold
+reorganize
+\series default
+ the list.
+\end_layout
+
+\begin_layout Standard
+We create a temporary array indexed by tree ranks.
+ Then we push the whole list into it, merging as many trees as possible
+ and finally we convert the array back into a linked list.
+ When we merge a tree under another vertex we decrease the potential by
+ one, which is enough to pay for all the work done with that tree, including
+ that step in the linked list.
+ At the end we have at most 
+\begin_inset Formula $1+\log n$
+\end_inset
+
+ trees which were unpaid for, so the amortized cost of reorganization is
+ 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+If the implementation maintains pointer to a minimum root, 
+\series bold
+\noun on
+DelMin
+\series default
+\noun default
+ first cuts it, then melds its children into the list, reorganizes it and
+ finally finds the new minimum.
+ Otherwise 
+\series bold
+\noun on
+delMin
+\series default
+\noun default
+ first reorganizes, then finds the minimum, cuts it and melds the children.
+ In either case we do 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ work and a reorganization, which is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ in the worst case but 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ amortized.
+ General 
+\series bold
+\noun on
+delete
+\series default
+\noun default
+ again works like 
+\noun on
+decKey
+\noun default
+ and 
+\noun on
+delMin
+\noun default
+ combined and so needs the same amortized complexities.
+\end_layout
+
+\begin_layout Corollary*
+The complexities on lazy binomial heaps only differ in worst-case time complexit
+y of some operation: 
+\noun on
+delMin 
+\noun default
+and
+\noun on
+ delete
+\noun default
+ need 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ time, 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+meld
+\noun default
+ need 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Lazy binomial heaps aren't much of an improvement; they're rather an intermediat
+e step towards the final structure.
+ Our main long-term aim was to speed up the 
+\noun on
+decKey
+\noun default
+ operation, which comes in the following heap.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Fibonacci heaps
+\end_layout
+
+\begin_layout Standard
+Now we even drop the condition that the trees are binomial and so the shape
+ isn't explicitly defined.
+ We guarantee that any vertex can only lose one child since the last moment
+ it was in a root and we add an indicator into every vertex telling whether
+ it has already lost a child or not so we can satisfy the condition.
+\end_layout
+
+\begin_layout Lemma
+\begin_inset CommandInset label
+LatexCommand label
+name "fibonacci-lemma-old-child"
+
+\end_inset
+
+Let 
+\begin_inset Formula $v$
+\end_inset
+
+ be a vertex in a Fibonacci heap and let 
+\begin_inset Formula $u$
+\end_inset
+
+ be its 
+\begin_inset Formula $i$
+\end_inset
+
+-th oldest child (age counts from the moment a vertex is merged under its
+ parent).
+ Then 
+\begin_inset Formula $u$
+\end_inset
+
+ has at least 
+\begin_inset Formula $i-2$
+\end_inset
+
+ children.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Let's look at the 
+\begin_inset Formula $i-1$
+\end_inset
+
+ children of 
+\begin_inset Formula $v$
+\end_inset
+
+ older than 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ They were already children of 
+\begin_inset Formula $v$
+\end_inset
+
+ in the moment just before 
+\begin_inset Formula $u$
+\end_inset
+
+ was merged under 
+\begin_inset Formula $v$
+\end_inset
+
+ and both 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ had the same number of children.
+ 
+\begin_inset Formula $u$
+\end_inset
+
+ could only have lost one child since that moment because it isn't a root,
+ so it still has at least 
+\begin_inset Formula $i-1$
+\end_inset
+
+ children.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Lemma*
+Any subtree with root that has 
+\begin_inset Formula $i$
+\end_inset
+
+ children contains at least 
+\begin_inset Formula $F_{i+2}$
+\end_inset
+
+ vertices.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By induction on 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Case
+\begin_inset Formula $i=0$
+\end_inset
+
+.
+ Then it is just one leaf and 
+\begin_inset Formula $F_{0+2}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $i\ge1$
+\end_inset
+
+.
+ Let's look at the children from the oldest one.
+ By using Lemma
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fibonacci-lemma-old-child"
+
+\end_inset
+
+ on them we get lower bounds on sizes of their subtrees.
+ The total number of vertices including the root is then at least 
+\begin_inset Formula $1+\sum_{j=1}^{i}F_{j}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+It only remains to show that 
+\begin_inset Formula $1+\sum_{j=1}^{i}F_{j}=F_{i+2}$
+\end_inset
+
+ which is easy by induction:
+\end_layout
+
+\begin_deeper
+\begin_layout Case
+\begin_inset Formula $i=0$
+\end_inset
+
+.
+ 
+\begin_inset Formula $1=F_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Case
+\begin_inset Formula $i\ge1$
+\end_inset
+
+.
+ 
+\begin_inset Formula $1+\sum_{j=1}^{i}F_{j}=1+\sum_{j=1}^{i-1}F_{j}+F_{i}=F_{i+1}+F_{i}=F_{i+2}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Corollary
+\begin_inset CommandInset label
+LatexCommand label
+name "fibonacci-child-count"
+
+\end_inset
+
+The number of children of any vertex in a Fibonacci heap is 
+\begin_inset Formula $\OO\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+potential
+\series default
+ will be the the number of trees plus twice the number of vertices with
+ the indicator set to true.
+\end_layout
+
+\begin_layout Standard
+Again, 
+\series bold
+\noun on
+meld
+\series default
+\noun default
+ just concatenates two lists and 
+\series bold
+\noun on
+insert
+\series default
+\noun default
+ adds one leaf to it, so both operations are still 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ amortized and worst-case.
+ 
+\series bold
+\noun on
+DelMin
+\series default
+\noun default
+ also just removes a minimum root and reorganizes the list
+\begin_inset space ~
+\end_inset
+
+-- the number of marked vertices can only decrease so by using Corollary
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fibonacci-child-count"
+
+\end_inset
+
+ it is 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ amortized and 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ worst-case.
+\end_layout
+
+\begin_layout Standard
+All other problems are solved by 
+\series bold
+cutting
+\series default
+ vertices and reinserting them into the list of trees.
+ We can't afford 
+\noun on
+up
+\noun default
+ or 
+\noun on
+down
+\noun default
+ operations because the trees can even degenerate to paths of length up
+ to 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ We mark the parent and increase the number of trees, so the operation costs
+ us 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ work and potential increases by 
+\begin_inset Formula $3$
+\end_inset
+
+.
+ However, if the parent was already marked before, we would be in an inconsisten
+t state so we also cut this parent, reinsert it and mark the grandparent,
+ so the cutting can cascade.
+ Resolving one doubly-marked vertex decreases the potential by 
+\begin_inset Formula $1$
+\end_inset
+
+ because we remove two marks, add one mark and add one tree, so this operation
+ is paid just from the potential.
+ As a result the cutting is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ in the worst case but 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ amortized.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\series bold
+\noun on
+decKey
+\series default
+\noun default
+ breaks the heap condition with the parent, we cut the vertex, decrease
+ its priority and reinsert it, which is 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ amortized.
+ In 
+\series bold
+\noun on
+incKey
+\series default
+\noun default
+ we cut not only the vertex but also all its children so by using Corollary
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fibonacci-child-count"
+
+\end_inset
+
+ we prove 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ amortized time.
+\end_layout
+
+\begin_layout Corollary*
+Fibonacci heaps need 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ space.
+ In the worst case we have all operations in 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ except for 
+\noun on
+
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ min
+\noun default
+, 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+meld
+\noun default
+.
+ Amortized bounds are asymptotically the same except for 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ 
+\noun on
+decKey
+\noun default
+ and 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ for 
+\noun on
+incKey
+\noun default
+, 
+\noun on
+delMin
+\noun default
+ and 
+\noun on
+delete
+\noun default
+.
+\end_layout
+
+\begin_layout Standard
+That is, in comparison with lazy binomial heaps we increased the worst-case
+ comlexities of several operations to 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ but we improved the amortized bounds of 
+\noun on
+decKey
+\noun default
+ to 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+ and 
+\noun on
+incKey
+\noun default
+ to 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Application to Dijkstra's algorithm
+\end_layout
+
+\begin_layout Standard
+Dijkstra's algorithm is a classical application for heaps.
+ The input is an undirected combinatorial graph with 
+\begin_inset Formula $m$
+\end_inset
+
+ edges weighted by nonnegative numbers and 
+\begin_inset Formula $n$
+\end_inset
+
+ vertices.
+ The algorithm computes the lengths of all shortest paths from a given starting
+ vertex.
+ It uses a heap on the vertices (so it has size at most 
+\begin_inset Formula $n$
+\end_inset
+
+) and its asymptotical complexity can be bounded by 
+\begin_inset Formula $n\times$
+\end_inset
+
+using operations 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+delete
+\noun default
+, and 
+\begin_inset Formula $m\times$
+\end_inset
+
+using 
+\noun on
+decKey
+\noun default
+.
+\end_layout
+
+\begin_layout Standard
+When we use the Fibonacci heap (which is the most efficient in asymptotic
+ amortized sense), we get a time bound of 
+\begin_inset Formula $\OO\left(m+n\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Using 
+\begin_inset Formula $d$
+\end_inset
+
+-regular heaps
+\end_layout
+
+\begin_layout Standard
+The problem with Fibonacci heap is that it is quite complicated and thus
+ the multiplicative constants in time and space bounds are much higher than
+ for many simpler heaps.
+ We now show that for 
+\begin_inset Quotes eld
+\end_inset
+
+most
+\begin_inset Quotes erd
+\end_inset
+
+ graphs we can achieve the same asymptotic performance with 
+\begin_inset Formula $d$
+\end_inset
+
+-regular heaps if we set 
+\begin_inset Formula $d:=\min\left\{ 2,\,\Theta\left(m/n\right)\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Remember that 
+\noun on
+insert
+\noun default
+ and 
+\noun on
+decKey
+\noun default
+ need time 
+\begin_inset Formula $\Theta\left(\log_{d}n\right)$
+\end_inset
+
+, and 
+\noun on
+delete
+\noun default
+ needs 
+\begin_inset Formula $\Theta\left(d\log_{d}n\right)$
+\end_inset
+
+ in the worst case.
+\end_layout
+
+\begin_layout Case
+Sparse graphs,
+\begin_inset space ~
+\end_inset
+
+i.
+\begin_inset space \thinspace{}
+\end_inset
+
+e.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $m=\OO\left(n\right)$
+\end_inset
+
+.
+ In that case we have 
+\begin_inset Formula $d=\Theta\left(1\right)$
+\end_inset
+
+, so every operation only needs 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+ time and the total complexity is 
+\begin_inset Formula $\OO\left(n\log n\right)$
+\end_inset
+
+, which is the same as Fibonacci heaps for that case.
+\end_layout
+
+\begin_layout Case
+Dense graphs where 
+\begin_inset Formula $\exists\epsilon>0:\; m=\Theta\left(n^{\epsilon}\right)$
+\end_inset
+
+.
+ In that case we have 
+\begin_inset Formula $d=\Theta\left(n^{\epsilon}\right)$
+\end_inset
+
+, so the cheaper operations need 
+\begin_inset Formula $\Theta\left(\log n\,/\,\log\left(n^{\epsilon}\right)\right)=\Theta\left(1/\epsilon\right)$
+\end_inset
+
+ and 
+\noun on
+delete
+\noun default
+ needs 
+\begin_inset Formula $\Theta\left(d/\epsilon\right)=\Theta\left(n^{\epsilon}/\epsilon\right)$
+\end_inset
+
+.
+ That gives us compexity for Dijkstra bounded by 
+\begin_inset Formula $\OO\left(m\cdot1/\epsilon+n\cdot n^{\epsilon}/\epsilon\right)=\OO\left(m/\epsilon\right)$
+\end_inset
+
+, which is the same as Fibonacci heaps for that case (for a bounded 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Sorting	
+\end_layout
+
+\begin_layout Standard
+intro
+\end_layout
+
+\begin_layout Subsection
+Comparison-based
+\end_layout
+
+\begin_layout Subsubsection
+HeapSort
+\end_layout
+
+\begin_layout Subsubsection
+MergeSort
+\end_layout
+
+\begin_layout Subsubsection
+QuickSort
+\end_layout
+
+\begin_layout Itemize
+in-place algorithm
+\end_layout
+
+\begin_layout Itemize
+worst-case and modifications (+introsort)
+\end_layout
+
+\begin_layout Itemize
+expected time analysis
+\end_layout
+
+\begin_layout Standard
+Some comparison, etc.
+\end_layout
+
+\begin_layout Subsubsection
+Lower bound via decision trees
+\end_layout
+
+\begin_layout Standard
+comparison-based sorting is 
+\begin_inset Formula $\Theta\left(\log n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO: various algorithms, decision trees, finding 
+\begin_inset Formula $k$
+\end_inset
+
+-th element
+\end_layout
+
+\begin_layout Subsection
+Breaking the bound
+\end_layout
+
+\begin_layout Subsubsection
+BucketSort
+\end_layout
+
+\begin_layout Standard
++backward RadixSort?
+\end_layout
+
+\begin_layout Subsubsection
+HybridSort
+\end_layout
+
+\begin_layout Subsubsection
+WordSort
+\end_layout
+
+\begin_layout Subsection
+Finding the 
+\begin_inset Formula $k$
+\end_inset
+
+-th element
+\end_layout
+
+\begin_layout Standard
+intro, QuickSort-based solution
+\end_layout
+
+\begin_layout Subsubsection
+Median of medians
+\end_layout
+
+\begin_layout Standard
+with analysis, 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ time
+\end_layout
+
+\begin_layout Standard
++discussion of application to pivot selection in QuickSort
 \end_layout
 
 \end_body
