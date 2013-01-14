@@ -598,7 +598,7 @@ namespace Hash { namespace Storages {
 		 */
 		virtual ChainedStorage & operator =(const ChainedStorage & storage) {
 			ChainedStorage tmp = storage;
-			swap(tmp);
+			this->swap(tmp);
 			return *this;
 		}
 	};
