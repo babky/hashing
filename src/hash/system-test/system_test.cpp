@@ -188,10 +188,10 @@ int main(int argc, char ** argv) {
 			t.runTest<boost::uint32_t>();
 		} else if (bits == 64) {
 			t.runTest<boost::uint64_t>();
-#ifdef __GNUC__
+/*#ifdef __GNUC__ TODO: Not working in gcc 4.7.
 		} else if (bits == 128) {
 			t.runTest<__uint128_t>();
-#endif
+#endif*/
 		} else {
 			std::cerr << opts;
 			return 1;

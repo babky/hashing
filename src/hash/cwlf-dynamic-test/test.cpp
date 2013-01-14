@@ -26,9 +26,9 @@ void LengthTest::runTest(void) {
 		for (size_t i = 0; i < TEST_LENGTH; ++i) {
 			try {
 #ifdef HASH_DEBUG
-				table.insert(i);				
+				table.insert(i);
 #else
-				table.insert(generator.generate());				
+				table.insert(generator.generate());
 #endif
 			} catch (const AssertException &) {
 				throw;
