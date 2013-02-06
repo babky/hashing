@@ -39,3 +39,7 @@ vcproj/Release
 .*\.orig$
 .*\.ncb$
 .*\.suo$
+\.synctex$
+\.aux$
+\.wsp$
+\.ps$
