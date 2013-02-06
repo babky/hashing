@@ -206,7 +206,7 @@ Space is first allocated in the auxiliary area (called cellar) which is never re
 	\STATE $i \leftarrow hash$ \COMMENT{Iterated element, after the loop it is the last element of the chain.}
 	\STATE $last \leftarrow \bot$ \COMMENT{The last element in the cellar or the first element of the chain.}
 
-	\IF{$T[i].next = \textbf{nil}$}
+	\IF{$T[i].key = \textbf{nil}$}
 		\STATE \COMMENT{The element $x$ is the first element in the chain.}
 		\STATE $T[i].key \leftarrow x$ 
 		\STATE \textbf{return}
