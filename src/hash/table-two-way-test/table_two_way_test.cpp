@@ -59,8 +59,8 @@ class CollisionCountStorage16b : public Hash::Storages::template CollisionCountS
 public:
 	explicit CollisionCountStorage16b(const Comparer & comparer, size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(comparer, tableLength) {
-	}		
-	  
+	}
+
 	explicit CollisionCountStorage16b(size_t tableLength = StorageParams::INITIAL_STORAGE_SIZE):
 	  CollisionCountStorage<T, Comparer, Hash, boost::uint16_t>(tableLength) {
 	}
@@ -75,7 +75,7 @@ public:
 };
 */
 
-template<typename ValueType> 
+template<typename ValueType>
 Test * AssembleTest(string system, bool twoWay, string generator, size_t threads, size_t testLength, bool acceptSeed) {
 	if (system == "linear-map") {
 		if (twoWay) {
@@ -167,8 +167,26 @@ Test * AssembleTest(string system, bool twoWay, string generator, size_t threads
 				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, PolynomialSystem32, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
 			}
 		}
+	} else if (system == "cwlf-exponential") {
+		if (twoWay) {
+			if (generator == "random") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLFExponential, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "unit-input") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLFExponential, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "linear") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLFExponential, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			}
+		} else {
+			if (generator == "random") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLFExponential, CollisionCountStorage>, Hash::Generators::RandomGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "unit-input") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLFExponential, CollisionCountStorage>, Hash::Generators::UnitInputGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			} else if (generator == "linear") {
+				return new TestImpl<ValueType, Table<ValueType, ConstantComparer<ValueType>, TwoWaySystemCWLFExponential, CollisionCountStorage>, Hash::Generators::LinearGenerator<ValueType> >(threads, testLength, testLength, acceptSeed);
+			}
+		}
 	}
-	
+
 	return 0;
 }
 
@@ -207,7 +225,7 @@ int main(int argc, char ** argv) {
 		("test-length", value<size_t>(&testLength)->default_value(DEFAULT_TEST_LENGTH), "number of hashed elements")
 		("repeats", value<size_t>(&repeats)->default_value(DEFAULT_REPEATS), "number of repeats of the test")
 		("bits", value<size_t>(&bits), "base two logarithm of test-length")
-		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "system to be used [linear-map, polynomial, cwlf, randomized-cwlf]")
+		("system", value<string>(&system)->default_value(DEFAULT_SYSTEM), "system to be used [linear-map, polynomial, polynomial-32, cwlf, randomized-cwlf, cwlf-exponential]")
 		("two-way", value<bool>(&twoWay)->default_value(DEFAULT_TWO_WAY), "should we use the two hashing")
 		("generator", value<string>(&generator)->default_value(DEFAULT_GENERATOR), "should we use truly random set")
 		("seed", value<bool>(&seed)->default_value(DEFAULT_SEED), "should we use random seed")
@@ -224,8 +242,8 @@ int main(int argc, char ** argv) {
 
 	if (vm.count("bits")) {
 		testLength = 1 << bits;
-	} 
-	
+	}
+
 	if (outputFile.length() == 0) {
 		stringstream ss;
 		ss << "UHT-";
@@ -258,7 +276,7 @@ int main(int argc, char ** argv) {
 			return 2;
 		}
 	}
-	
+
 	// Use the output.
 	ostream & out = fout.good() ? fout : cout;
 

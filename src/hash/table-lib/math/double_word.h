@@ -11,6 +11,27 @@ namespace Hash { namespace Math {
 	};
 
 	template<typename UnsignedWord>
+	class UnsignedDoubleWord;
+
+	template<typename T>
+	T exponentiate(const T a, T e, const T m) {
+		T res = a;
+		e -= 1;
+
+		while (e > 0) {
+			res = UnsignedDoubleWord<T>::multiply(res, res, m);
+
+			if (e % 2 == 1) {
+				res = UnsignedDoubleWord<T>::multiply(res, a, m);
+			}
+
+			e /= 2;
+		}
+
+		return res;
+	}
+
+	template<typename UnsignedWord>
 	class UnsignedDoubleWord {
 	public:
 		typedef UnsignedWord Word;
@@ -21,7 +42,7 @@ namespace Hash { namespace Math {
 			// Split x into xl and xu.
 			Word xu = x >> WORD_BITS_HALF;
 			Word xl = ((Word) (x << WORD_BITS_HALF)) >> WORD_BITS_HALF;
-			
+
 			// Split y into yl and yu.
 			Word yu = y >> WORD_BITS_HALF;
 			Word yl = ((Word) (y << WORD_BITS_HALF)) >> WORD_BITS_HALF;
@@ -46,7 +67,7 @@ namespace Hash { namespace Math {
 			// Possible carry, placed at the right position also after sum with the previous value.
 			c += carry(m1, m2) >> (WORD_BITS_HALF - 1);
 			m1 += m2;
-			
+
 			u = ((((Word) (u >> WORD_BITS_HALF)) << WORD_BITS_HALF) | (m1 >> WORD_BITS_HALF)) + c;
 			l = (((Word) (l << WORD_BITS_HALF)) >> WORD_BITS_HALF) | (m1 << WORD_BITS_HALF);
 
@@ -63,7 +84,7 @@ namespace Hash { namespace Math {
 
 			// Compute moduli.
 			Word um = u % m;
-			Word lm = l % m; 
+			Word lm = l % m;
 			unsigned char addedBit;
 
 			// The division algorithm.
@@ -92,6 +113,10 @@ namespace Hash { namespace Math {
 			return add(multiply(a, x, m), b, m);
 		}
 
+		inline static Word exponentiate(const Word a, const Word e, const Word m) {
+			return Hash::Math::exponentiate(a, e, m);
+		}
+
 	private:
 		inline static Word carry(const Word & x, const Word & y) {
 			return ((x >> 1) + (y >> 1) + ((x & 1) & (y & 1))) & ((Word) 1 << (WORD_BITS - 1));
@@ -118,9 +143,14 @@ namespace Hash { namespace Math {
 			return static_cast<Word> ((static_cast<boost::uint64_t> (a) * static_cast<boost::uint64_t> (x) + static_cast<boost::uint64_t> (b)) % static_cast<boost::uint64_t> (m));
 		}
 
+		inline static Word exponentiate(const Word a, const Word e, const Word m) {
+			return Hash::Math::exponentiate(a, e, m);
+		}
+
 	};
 
 #ifdef __GNUC__
+#ifdef __LP64__
 	template <>
 	class UnsignedDoubleWord<boost::uint64_t> {
 	public:
@@ -138,7 +168,12 @@ namespace Hash { namespace Math {
 			return static_cast<Word> ((static_cast<__uint128_t> (a) * static_cast<__uint128_t> (x) + static_cast<__uint128_t> (b)) % static_cast<__uint128_t> (m));
 		}
 
+		inline static Word exponentiate(const Word a, const Word e, const Word m) {
+			return Hash::Math::exponentiate(a, e, m);
+		}
+
 	};
+#endif
 #endif
 
 } }

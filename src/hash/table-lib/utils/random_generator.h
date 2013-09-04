@@ -75,6 +75,7 @@ namespace Hash { namespace Utils {
 	};
 
 #ifdef __GNUC__
+#ifdef __LP64__
 	/**
 	 * Random generator for 128 bits.
 	 */
@@ -146,8 +147,9 @@ namespace Hash { namespace Utils {
 		Engine engine;
 	};
 
-} }
+#endif
 #endif
 
+} }
 
 #endif /* RANDOM_GENERATOR_H */

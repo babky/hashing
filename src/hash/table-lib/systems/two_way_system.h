@@ -4,12 +4,13 @@
 #include "systems/linear_map_system.h"
 #include "systems/polynomial_system.h"
 #include "systems/cwlf_system.h"
+#include "systems/cwlf_exponential_system.h"
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include <algorithm>
 
 namespace Hash { namespace Systems {
-	
+
 	/**
 	 * System allowing two way universal hash function. The value is hashed to the shorter chain.
 	 *
@@ -22,7 +23,7 @@ namespace Hash { namespace Systems {
 	public:
 		// Use the former HashType;
 		using UniversalFunction<T, Storage>::HashType;
-	
+
 		/**
 		 * Single function type, it is chosen randomly from the given universal system.
 		 */
@@ -89,13 +90,13 @@ namespace Hash { namespace Systems {
 		friend void swap(TwoWaySystem & a, TwoWaySystem & b) {
 			a.swap(b);
 		}
-		
+
 	private:
 		/**
 		 * Universal function.
 		 */
 		Function f;
-		
+
 		/**
 		 * Universal function.
 		 */
@@ -123,23 +124,35 @@ namespace Hash { namespace Systems {
 
 	/**
 	 * The possibility of two way CWLF.
-	 */	
+	 */
 	template <typename T, class Storage>
 	class TwoWaySystemCWLF : public Hash::Systems::TwoWaySystem<T, Storage, Hash::Systems::UniversalFunctionCWLF> {
+	};
+
+	/**
+	 * The possibility of two way CWLFExponential.
+	 */
+	template <typename T, class Storage>
+	class TwoWaySystemCWLFExponential : public Hash::Systems::TwoWaySystem<T, Storage, Hash::Systems::CWLFExponentialSystem> {
 	};
 
 
 } }
 
 namespace std {
-		
+
 	template <typename T, class Storage, template <typename, class> class System>
 	void swap(Hash::Systems::TwoWaySystem<T, Storage, System> & a, Hash::Systems::TwoWaySystem<T, Storage, System> & b) {
 		a.swap(b);
-	}	
-	
+	}
+
 	template <typename T, class Storage>
 	void swap(Hash::Systems::TwoWaySystemLinearMap<T, Storage> & a, Hash::Systems::TwoWaySystemLinearMap<T, Storage> & b) {
+		a.swap(b);
+	}
+
+	template <typename T, class Storage>
+	void swap(Hash::Systems::TwoWaySystemCWLFExponential<T, Storage> & a, Hash::Systems::TwoWaySystemCWLFExponential<T, Storage> & b) {
 		a.swap(b);
 	}
 
