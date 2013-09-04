@@ -95,4 +95,21 @@ The data structure $\operatorname{SkylineDS(d, X)}$ is a recursive structure. Th
 We are just designing the $\operatorname{Query}(x)$ operation. Search for the successor $s$ of $x_1$ in the $\operatorname{SearchTreeDS}$. The predecessor $p$ of $x$ is the maximal number such that $p \leq x_1$. Then observe that $x \in \operatorname{Skyline}(X \cup \{x\})$ iff. $x \in \operatorname{Skyline}(d - 1, X_p)$.
 
 The running time for query in $\operatorname{SkylineDS(d, X)}$ is $Q_d(n) = O(\sqrt{\log n}) + Q_{d - 1}(n) = O(d \sqrt{\log n}).$
+
+\chapter{Binary skylines}
+
+The elements of the vectors are just zeros or ones. We are interested in searching for minimal elements. To do so we compute the POSET graph (just like Hasse diagram also with the transitive edges).
+ 
+Let $N \leq kd$ be the number of ones in $k$ vectors of dimension $d$.
+The running time is $O\left(\frac{N^2 \log \log N}{\log ^2 N}\right)$.
+For arbitrary $N$ there are $k$ vectors of dimension $d$ such that they contain $N$ ones and the number of edges in the Hasse diagram is $\Theta\left(\frac{N^2}{\log ^2 N}\right)$.
+
+We are computing the minimal elements as follows.
+
+Let $X, Y, Y'$ be sets of 0-1 vectors and we put $L(X, Y, Y', d) = \{x \in X \mid (\neg \exists y \in Y \colon y >_d x) \wedge (\neg \exists y' \in Y' \colon y' \geq_d x) \}$ where $x >_d$ ($x \geq_d y$) denotes the fact that $x$ (strictly) dominates $y$ when restricted to the last $d$ coordinates.
+
+The computation uses the fact that 
+\[
+L(X, Y, Y', d) = L(X_1, Y_1, Y'_1, d - 1) \cup L(X_0, Y_0, Y_1 \cup Y'_0 \cup Y'_1, d - 1).
+\]
 \end{document}
