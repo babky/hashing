@@ -9,6 +9,7 @@
 #include "systems/polynomial_system.h"
 #include "systems/linear_map_system.h"
 #include "systems/cwlf_system.h"
+#include "systems/cwlf_exponential_system.h"
 #include "systems/tabulation_system.h"
 #include "systems/polynomial_system.h"
 #include "systems/tr1_function.h"
@@ -25,6 +26,9 @@ struct Test {
 		length(aLength),
 		repeats(aRepeats)
 	{
+	}
+
+	virtual ~Test(void) {
 	}
 
 	const string & getName(void) const {
@@ -57,7 +61,7 @@ struct FunctionTest : public Test {
 
 		function.setTableSize(length);
 
-		ptime start, finish; 
+		ptime start, finish;
 		size_t hash = 0xdead;
 		for (size_t j = 0; j < repeats; ++j) {
 			start = microsec_clock::local_time();
@@ -101,13 +105,14 @@ public:
 		functions.push_back(new FunctionTest<IdentityFunction<T, TestStorage>, T>("ID", length, repeats));
 		functions.push_back(new FunctionTest<Tr1Function<T, TestStorage>, T>("TR1", length, repeats));
 		functions.push_back(new FunctionTest<UniversalFunctionCWLF<T, TestStorage>, T>("CWLF", length, repeats));
+		functions.push_back(new FunctionTest<CWLFExponentialSystem<T, TestStorage>, T>("CWLFExp", length, repeats));
 		functions.push_back(new FunctionTest<BitStringFunction<T, TestStorage>, T>("BitString", length, repeats));
 		functions.push_back(new FunctionTest<TabulationFunction<T, TestStorage>, T>("Tabulation", length, repeats));
 		functions.push_back(new FunctionTest<UniversalFunctionLinearMap<T, TestStorage>, T>("LinearMap", length, repeats));
 		functions.push_back(new FunctionTest<PolynomialSystem<T, TestStorage>, T>("Polynomial - deg 2", length, repeats));
 		functions.push_back(new FunctionTest<PolynomialSystem4<T, TestStorage>, T>("Polynomial - deg 4", length, repeats));
 		functions.push_back(new FunctionTest<Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>, T>("DW - deg 4", length, repeats));
-	
+
 		for (FunctionTestVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
 			(*b)->run();
 		}
@@ -221,7 +226,7 @@ int main(int argc, char ** argv) {
 				out << setw(20) << (*fb)->getName() << ", length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << ": ";
 				out << (*fb)->getTimes() << "\n";
 			}
-			
+
 		}
 
 		fout.close();

@@ -43,3 +43,8 @@ vcproj/Release
 \.aux$
 \.wsp$
 \.ps$
+\.cproject
+\.project
+.*\.dvi
+.*\.log
+.*\.pdf

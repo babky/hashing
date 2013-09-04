@@ -1,9 +1,9 @@
 cmake_minimum_required	(VERSION 2.8.1)
 cmake_policy			(VERSION 2.8.1)
 
-SET(CMAKE_CXX_FLAGS "-O2 -std=gnu++0x -pg")
+SET(CMAKE_CXX_FLAGS "-O2 -std=gnu++0x")
 
-find_package( Boost 1.34 COMPONENTS random thread REQUIRED )
+find_package( Boost 1.34 COMPONENTS random thread system REQUIRED )
 
 link_directories ( ${Boost_LIBRARY_DIRS} )
 

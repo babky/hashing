@@ -12,6 +12,8 @@ template<>
 const boost::uint64_t Prime<boost::uint64_t>::GREATEST_PRIME = boost::integer_traits<boost::uint64_t>::const_max - 58;
 
 #ifdef __GNUC__
+#ifdef __LP64__
 template<>
 const __uint128_t Prime<__uint128_t>::GREATEST_PRIME = ((__uint128_t) 0) - 158;
+#endif
 #endif
