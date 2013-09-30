@@ -2,13 +2,14 @@
 #define LINEAR_GENERATOR_H
 
 #include "generator.h"
+#include <iostream>
 
 namespace Hash { namespace Generators {
 
 	template <typename T>
 	class LinearGenerator : public Generator<T> {
 	public:
-		LinearGenerator(T aMin, T aMax, bool aAcceptSeed): 
+		LinearGenerator(T aMin, T aMax, bool aAcceptSeed):
 		  min(aMin),
 		  max(aMax),
 		  i(0),
@@ -20,7 +21,7 @@ namespace Hash { namespace Generators {
 		virtual void setSeed(T aSeed) {
 			seed = aSeed;
 		}
-		
+
 		virtual void setFrom(T from) {
 			min = from;
 		}
@@ -33,17 +34,23 @@ namespace Hash { namespace Generators {
 		}
 
 		virtual void initialize(void) {
-			if (seed % 2) {
+			/*if (seed % 2) {
 				seed *= tableLength;
-			}
-			
+			}*/
+
 			if (!acceptSeed) {
-				seed = 1;
+				seed = tableLength;
 			}
 		}
-		
+
 		virtual T generate(void) {
-			return (seed * i++) % (max - min) + min;
+			using namespace std;
+
+			T g = (seed * i++) % (max - min) + min;
+
+			// cout << g << endl;
+
+			return g;
 		}
 
 	private:
