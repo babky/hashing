@@ -34,7 +34,7 @@ namespace Hash { namespace Systems {
 
 			a = g.generate();
 			b = g.generate();
-			i = g.generate() % 64; // TODO: Constant, logarithm, whatever.
+			i = g.generate() % 5 + 1; // TODO: Constant, logarithm, whatever.
 		}
 
 		size_t hash(const T & x) {
