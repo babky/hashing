@@ -10,6 +10,7 @@ namespace Hash { namespace Systems {
 				Hash::Math::Prime<T>::GREATEST_PRIME) :
 				universumMax(aUniversumMax), tableSize(aTableSize) {
 			reset();
+			this->maxDegree = 5;
 		}
 
 		void setUniversumMax(T aUniversumMax) {
@@ -28,13 +29,22 @@ namespace Hash { namespace Systems {
 			return this->tableSize;
 		}
 
+		size_t getMaxDegree(void) const {
+			return this->maxDegree;
+		}
+
+		void setMaxDegree(size_t maxDegree) {
+			this->maxDegree = maxDegree;
+		}
+
 		void reset(void) {
 			Hash::Utils::IntegralGeneratorWrapper<T> g = Hash::Utils::IntegralGeneratorWrapper<T>(0,
 					this->getUniversumMax());
 
 			a = g.generate();
 			b = g.generate();
-			i = g.generate() % 5 + 1; // TODO: Constant, logarithm, whatever.
+			i = g.generate() % this->maxDegree + 1; // TODO: Constant, logarithm, whatever.
+			// x ^ 0 equals one, so we can not use 0 :).
 		}
 
 		size_t hash(const T & x) {
@@ -58,6 +68,7 @@ namespace Hash { namespace Systems {
 		T universumMax;
 		T a, b, i;
 		size_t tableSize;
+		size_t maxDegree;
 	};
 
 } }
