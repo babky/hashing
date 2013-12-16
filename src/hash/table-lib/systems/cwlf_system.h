@@ -46,7 +46,8 @@ namespace Hash { namespace Systems {
 		}
 
 		size_t hash(const T & x) {
-			return Hash::Math::UnsignedDoubleWord<T>::linear(a, x, b, universumMax) % tableSize;
+			size_t hv = Hash::Math::UnsignedDoubleWord<T>::linear(a, x, b, universumMax) % tableSize;
+			return hv;
 		}
 
 		size_t operator()(const T & a) {

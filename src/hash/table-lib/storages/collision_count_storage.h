@@ -33,7 +33,7 @@ namespace Hash { namespace Storages {
 		 * Iterator type for iterating chains.
 		 */
 		typedef CollisionCountStorageIterator Iterator;
-	
+
 		/**
 		 * C-tor.
 		 *
@@ -45,8 +45,8 @@ namespace Hash { namespace Storages {
 		  storage(new StorageItem[tableSize]),
 		  comparer(comparer) {
 			  init();
-		}		
-		  
+		}
+
 		/**
 		 * C-tor.
 		 *
@@ -142,7 +142,7 @@ namespace Hash { namespace Storages {
 		const PlainStorageInfo & getStorageInfo(void) const {
 			return storageInfo;
 		}
-		
+
 		Iterator getBeginning(void) {
 			return CollisionCountStorageIterator(this, true);
 		}
@@ -225,10 +225,10 @@ namespace Hash { namespace Storages {
 
 		// ChainLengthAwareStorage
 		size_t getChainLength(size_t address) const {
-			boost::shared_lock<boost::shared_mutex> l(mutexes[address * MUTEXES / storageInfo.getTableSize()]);
+			boost::shared_lock<boost::shared_mutex> lock(mutexes[address * MUTEXES / storageInfo.getTableSize()]);
 			return storage[address];
-		}		
-		
+		}
+
 		/**
  		 * Swapping of the two storages.
 		 *
@@ -248,7 +248,7 @@ namespace Hash { namespace Storages {
 		 * @param b Storage to be swapped.
 		 */
 		friend void swap(CollisionCountStorage<T, Comparer, Hash> & a, CollisionCountStorage<T, Comparer, Hash> & b) {
-			a.swap(b);	
+			a.swap(b);
 		}
 
 	protected:
