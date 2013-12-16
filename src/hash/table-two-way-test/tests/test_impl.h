@@ -13,13 +13,13 @@
 	#pragma warning(default: 4512 4127 4100)
 #endif
 
-namespace Hash { namespace Tests { 
+namespace Hash { namespace Tests {
 
 	template<typename ValueType, class TableType, class GeneratorType>
 	class TestImpl : public Test {
 	public:
 		TestImpl(size_t aThreads, size_t aTestLength, size_t aTableLength, bool aAcceptSeed):
-		  threads(aThreads), 
+		  threads(aThreads),
 		  testLength(aTestLength),
 		  tableLength(aTableLength),
 		  table(aTableLength),
@@ -36,6 +36,7 @@ namespace Hash { namespace Tests {
 
 		virtual void run(void) {
 			table.clear();
+
 			size_t partLength = testLength / threads;
 
 			boost::thread ** testThreads = new boost::thread*[threads];
@@ -45,7 +46,7 @@ namespace Hash { namespace Tests {
 				testThreads[t] = new boost::thread(
 						TestPart(
 							from,
-							currentLength, 
+							currentLength,
 							Hash::Utils::StaticRandomGenerator<size_t>::getGenerator().generate(),
 							t,
 							this
@@ -74,7 +75,7 @@ namespace Hash { namespace Tests {
 		bool getAcceptSeed(void) const {
 			return acceptSeed;
 		}
-		
+
 	private:
 		class TestPart {
 		public:

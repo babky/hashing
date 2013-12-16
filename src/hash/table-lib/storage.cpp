@@ -17,12 +17,12 @@ MaxChainLengthStorageInfo::MaxChainLengthStorageInfo(size_t aTableSize):
 }
 
 SettablePlainStorageInfo::SettablePlainStorageInfo(size_t aTableSize):
-  SettableStorageInfo<PlainStorageInfo>(aTableSize) 
+  SettableStorageInfo<PlainStorageInfo>(aTableSize)
 {
 }
 
 SettableMaxChainLengthStorageInfo::SettableMaxChainLengthStorageInfo(size_t aTableSize):
-  SettableStorageInfo<MaxChainLengthStorageInfo>(aTableSize) 
+  SettableStorageInfo<MaxChainLengthStorageInfo>(aTableSize)
 {
 }
 
