@@ -14,7 +14,7 @@ namespace Hash {
 
 	/**
 	 * Rehashing operation to be done.
-	 */ 
+	 */
 	enum RehashingOperation {
 		Refresh,
 		Shrink,
@@ -30,9 +30,9 @@ namespace Hash {
 	 * @typeparam Storage Storage used for creating the table.
 	 */
 	template<
-		typename T, 
+		typename T,
 		typename Comparer,
-		template <class, class> class Function, 
+		template <class, class> class Function,
 		template <class, class, class> class Storage,
 		class RehashPolicy = Policies::Rehash::LoadFactorBoundsRehashPolicy
 	>
@@ -47,7 +47,7 @@ namespace Hash {
 		 * Type for the hash. This is the type of the value returned by the hash function.
 		 */
 		typedef size_t HashType;
-		
+
 		/**
 		 * Equality comparer.
 		 */
@@ -151,7 +151,7 @@ namespace Hash {
 		size_t size(void) const {
 			return storage.size();
 		}
-		
+
 		/**
 		 * The size of the table retrieval.
 		 *
@@ -170,7 +170,7 @@ namespace Hash {
 		bool contains(const T & element) const {
 			return storage.contains(element, function(element));
 		}
-		
+
 		/**
 		 * Clears the stored set.
 		 */
@@ -193,7 +193,7 @@ namespace Hash {
 		 * Computes the statistics for this storage.
 		 *
 		 * @param stats Storage for statistics.
-		 */ 
+		 */
 		void computeStatistics(Utils::StorageStatistics & stats) const {
 			storage.computeStatistics(stats);
 		}
@@ -258,8 +258,8 @@ namespace Hash {
 		 *
 		 * @return Iterator pointing to the first item.
 		 */
-		const Iterator getBegin(void) const {
-			return const_cast<HashTable *>(this)->getBegin();
+		const Iterator getBeginning(void) const {
+			return const_cast<HashTable *>(this)->getBeginning();
 		}
 
 		/**
