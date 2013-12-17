@@ -69,7 +69,7 @@ namespace TestSuite {
 			virtual void addOkCount(size_t count);
 			virtual void addFailedCount(size_t count);
 		};
-		
+
 	private:
 		typedef std::vector<Test *> TestsList;
 		TestsList tests;
