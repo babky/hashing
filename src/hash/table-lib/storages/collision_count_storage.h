@@ -2,7 +2,6 @@
 #define COLLISION_COUNT_STORAGE_H
 
 #include "storage.h"
-#include "utils/constant_comparer.h"
 #include "utils/hash_assert.h"
 #include "utils/boost_include.h"
 #include <boost/thread.hpp>
@@ -40,7 +39,7 @@ namespace Hash { namespace Storages {
 		 * @param comparer Default comparer used.
 		 * @param tableSize Default table size.
 		 */
-		explicit CollisionCountStorage(const Comparer & comparer, size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+		explicit CollisionCountStorage(Comparer comparer, size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
 		  storageInfo(tableSize),
 		  storage(new StorageItem[tableSize]),
 		  comparer(comparer) {
@@ -120,7 +119,7 @@ namespace Hash { namespace Storages {
 			}
 		}
 
-		Utils::ConstantComparer<T> getComparer(void) const {
+		Comparer getComparer(void) const {
 			return comparer;
 		}
 
@@ -288,7 +287,7 @@ namespace Hash { namespace Storages {
 		/**
 		 * Comparer used.
 		 */
-		Utils::ConstantComparer<T> comparer;
+		Comparer comparer;
 	};
 
 } }

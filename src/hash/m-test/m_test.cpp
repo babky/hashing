@@ -1,4 +1,4 @@
-#include "storages/chained_storage.h"
+#include "storages/collision_count_storage.h"
 #include "systems/cwlf_system.h"
 #include "systems/random_system.h"
 #include "table.h"
@@ -67,8 +67,8 @@ int main(int argc, const char ** argv) {
 	using namespace boost;
 	using namespace boost::program_options;
 
-	typedef Table<size_t, EqualityComparer<size_t>, RandomBin, ChainedStorage> HashTableRandom;
-	typedef Table<size_t, EqualityComparer<size_t>, UniversalFunctionCWLF, ChainedStorage> HashTableCWLF;
+	typedef Table<size_t, EqualityComparer<size_t>, RandomBin, CollisionCountStorage> HashTableRandom;
+	typedef Table<size_t, EqualityComparer<size_t>, UniversalFunctionCWLF, CollisionCountStorage> HashTableCWLF;
 
 	// Parse the command line.
 	const size_t DEFAULT_M = 65536;
