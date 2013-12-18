@@ -193,15 +193,14 @@ private:
 		}
 
 public:
-
 		size_t size(void) const {
 			return storageInfo.getElementCount();
 		}
-
+		
 		void clear(void) {
-			delete [] storage;
-			storage = new StorageItem[StorageParams::INITIAL_STORAGE_SIZE];
-			storageInfo.setTableSize(StorageParams::INITIAL_STORAGE_SIZE);
+			for (size_t i = 0; i < storageInfo.getTableSize(); ++i) {
+				storage[i] = StorageItem();
+			}
 			storageInfo.setElementCount(0);
 		}
 

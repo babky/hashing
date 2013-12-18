@@ -125,9 +125,9 @@ namespace Hash { namespace Storages {
 		}
 
 		void clear(void) {
-			delete [] storage;
-			storage = new ChainedList[StorageParams::INITIAL_STORAGE_SIZE];
-			storageInfo.setTableSize(StorageParams::INITIAL_STORAGE_SIZE);
+			for (size_t i = 0; i < storageInfo.getTableSize(); ++i) {
+				storage[i] = ChainedList();
+			}
 			storageInfo.setElementCount(0);
 		}
 
