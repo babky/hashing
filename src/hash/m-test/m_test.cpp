@@ -26,10 +26,11 @@ void performTest(size_t runs, size_t m) {
 	size_t max = 0, min = m, sum = 0;
 
 	Table t;
+	t.reserve(m);
 
 	// Run it.
 	for (size_t run = 0; run < runs; ++run) {
-		t = Table();
+		t.clear();
 		for (size_t i = 0; i < m; ++i) {
 			t.insert(i);
 		}

@@ -221,6 +221,11 @@ namespace Hash {
 					break;
 			}
 
+			rehash(newSize);
+		}
+
+	private:
+		void rehash(size_t newSize) {
 			if (HashStorage::HAS_REHASH) {
 				HashStorage tmp(storage.getComparer(), newSize);
 				function.setTableSize(newSize);
@@ -235,6 +240,7 @@ namespace Hash {
 			}
 		}
 
+	public:
 		/**
 		 * Beginning of the table - first item.
 		 *
@@ -335,6 +341,15 @@ namespace Hash {
 		 */
 		void setRehashPolicy(const RehashPolicy & rehashPolicy) {
 			this->rehashPolicy = rehashPolicy;
+		}
+
+		/**
+		 * Reserve the size.
+		 *
+		 * @param reservedSize New reserved size.
+		 */
+		void reserve(std::size_t reservedSize) {
+			rehash(reservedSize);
 		}
 
 	private:
