@@ -79,7 +79,7 @@ int main(int argc, const char ** argv) {
 	string functionType = DEFAULT_FUNCTION;
 	size_t runs = DEFAULT_RUNS;
 
-	options_description optsDesc("Table Two Way Test allowed options.");
+	options_description optsDesc("Table M Test allowed options.");
 	optsDesc.add_options()
 		("help", "prints this help message")
 		("m", value<size_t>(&m)->default_value(DEFAULT_M), "The m.")
