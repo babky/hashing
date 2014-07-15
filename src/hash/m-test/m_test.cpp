@@ -15,7 +15,7 @@
 #endif
 
 template <typename Table>
-void performTest(size_t runs, size_t m) {
+void performTest(size_t runs, size_t m, size_t cells) {
 	using namespace Hash;
 	using namespace Hash::Storages;
 	using namespace Hash::Systems;
@@ -31,8 +31,10 @@ void performTest(size_t runs, size_t m) {
 	// Run it.
 	for (size_t run = 0; run < runs; ++run) {
 		t.clear();
-		for (size_t i = 0; i < m; ++i) {
-			t.insert(i);
+		for (size_t j = 0; j < cells; ++j) {
+			for (size_t i = 0; i < m / cells; ++i) {
+				t.insert(i + m * j);
+			}
 		}
 
 		StorageStatistics stats;
@@ -73,9 +75,11 @@ int main(int argc, const char ** argv) {
 	// Parse the command line.
 	const size_t DEFAULT_M = 65536;
 	const size_t DEFAULT_RUNS = 64;
+	const size_t DEFAULT_CELLS = 1;
 	const string DEFAULT_FUNCTION = "cwlf";
 
 	size_t m = DEFAULT_M;
+	size_t cells = DEFAULT_CELLS;
 	string functionType = DEFAULT_FUNCTION;
 	size_t runs = DEFAULT_RUNS;
 
@@ -83,8 +87,9 @@ int main(int argc, const char ** argv) {
 	optsDesc.add_options()
 		("help", "prints this help message")
 		("m", value<size_t>(&m)->default_value(DEFAULT_M), "The m.")
+		("cells", value<size_t>(&cells)->default_value(DEFAULT_CELLS), "The number of cells into which the input elements are split.")
 		("runs", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.")
-		("function", value<string>(&functionType)->default_value(DEFAULT_FUNCTION), "Default function cwlf, random.");
+		("function", value<string>(&functionType)->default_value(DEFAULT_FUNCTION), "Default function is a randomly chosen function from CWLF. Possible values:\n\tcwlf: a CWLF function,\n\trandom: a random function.");
 
 	variables_map vm;
 	store(parse_command_line(argc, argv, optsDesc), vm);
@@ -96,9 +101,9 @@ int main(int argc, const char ** argv) {
 	}
 
 	if (functionType == "cwlf") {
-		performTest<HashTableCWLF>(runs, m);
+		performTest<HashTableCWLF>(runs, m, cells);
 	} else if (functionType == "random") {
-		performTest<HashTableRandom>(runs, m);
+		performTest<HashTableRandom>(runs, m, cells);
 	} else {
 		cerr << "What the function? Use random or cwlf." << endl;
 		return 1;
