@@ -24,6 +24,10 @@ base_t compute_s_m_i(base_t s, size_t m, size_t i) {
 }
 
 template <typename base_t, typename Table>
+/**
+ * @param f Multiplactive factor - number of children per one progression == length of the progression.
+ * @param s Offset.
+ */
 void generate_data(Table & t, size_t cell_height, size_t m, size_t f, size_t cell_count, base_t s) {
 	if (cell_height == 0) {
 		for (size_t i = 0; i < m / cell_count; ++i) {
@@ -74,7 +78,7 @@ void performTest(size_t runs, size_t m, size_t cell_height, bool print_set) {
 	t.reserve(m);
 
 	verify_set<base_t> s;
-	generate_data<base_t, verify_set<base_t>>(s, cell_height, m, (size_t) exp2(log2(m) / log(log2(m))) - 1, 1, 0);
+	generate_data<base_t, verify_set<base_t>>(s, cell_height, m, (size_t) exp2(log2(m) / log2(log2(m))) - 1, 1, 0);
 	if (print_set) {
 		s.print();
 	}
@@ -82,7 +86,7 @@ void performTest(size_t runs, size_t m, size_t cell_height, bool print_set) {
 	// Run it.
 	for (size_t run = 0; run < runs; ++run) {
 		t.clear();
-		generate_data<base_t, Table>(t, cell_height, m, (size_t) exp2(log2(m) / log(log2(m))) - 1, 1, 0);
+		generate_data<base_t, Table>(t, cell_height, m, (size_t) exp2(log2(m) / log2(log2(m))) - 1, 1, 0);
 
 		StorageStatistics stats;
 		t.computeStatistics(stats);
