@@ -5,6 +5,7 @@
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include <iostream>
+#include <boost/format.hpp>
 
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512)
@@ -28,15 +29,15 @@ template <typename base_t, typename Table>
  * @param f Multiplactive factor - number of children per one progression == length of the progression.
  * @param s Offset.
  */
-void generate_data(Table & t, size_t cell_height, size_t m, size_t f, size_t cell_count, base_t s) {
+void generate_data(Table & t, size_t cell_height, size_t n, size_t m, size_t f, size_t cell_count, base_t s) {
 	if (cell_height == 0) {
-		for (size_t i = 0; i < m / cell_count; ++i) {
+		for (size_t i = 0; i < n / cell_count; ++i) {
 			// std::cout << compute_s_m_i(s, m, i) << " ";
 			t.insert(compute_s_m_i<base_t>(s, m, i));
 		}
 	} else {
 		for (size_t i = 0; i < f;  ++i) {
-			generate_data(t, cell_height - 1, m, f, cell_count * f, compute_s_m_i<base_t>(s, m, i));
+			generate_data(t, cell_height - 1, n, m, f, cell_count * f, compute_s_m_i<base_t>(s, m, i));
 		}
 	}
 }
@@ -46,7 +47,7 @@ class verify_set {
 public:
 	void insert(base_t x) {
 		if (s.find(x) != s.end()) {
-			throw std::logic_error("Duplicate key.");
+			throw std::logic_error((boost::format("Duplicate key %1") % x).str());
 		}
 
 		s.insert(x);
@@ -63,8 +64,12 @@ private:
 	set_type s;
 };
 
+size_t compute_hierarchy_factor(size_t n) {
+	return exp2((size_t) (log2(n) / log2(log2(n))));
+}
+
 template <typename base_t, typename Table>
-void performTest(size_t runs, size_t m, size_t cell_height, bool print_set) {
+void performTest(size_t runs, size_t n, size_t m, size_t cell_height, bool print_set) {
 	using namespace Hash;
 	using namespace Hash::Storages;
 	using namespace Hash::Systems;
@@ -78,7 +83,7 @@ void performTest(size_t runs, size_t m, size_t cell_height, bool print_set) {
 	t.reserve(m);
 
 	verify_set<base_t> s;
-	generate_data<base_t, verify_set<base_t>>(s, cell_height, m, (size_t) exp2(log2(m) / log2(log2(m))) - 1, 1, 0);
+	generate_data<base_t, verify_set<base_t>>(s, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
 	if (print_set) {
 		s.print();
 	}
@@ -86,7 +91,7 @@ void performTest(size_t runs, size_t m, size_t cell_height, bool print_set) {
 	// Run it.
 	for (size_t run = 0; run < runs; ++run) {
 		t.clear();
-		generate_data<base_t, Table>(t, cell_height, m, (size_t) exp2(log2(m) / log2(log2(m))) - 1, 1, 0);
+		generate_data<base_t, Table>(t, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
 
 		StorageStatistics stats;
 		t.computeStatistics(stats);
@@ -122,12 +127,14 @@ int main(int argc, const char ** argv) {
 
 	// Parse the command line.
 	const size_t DEFAULT_M = 65536;
+	const size_t DEFAULT_N = 0;
 	const size_t DEFAULT_RUNS = 64;
 	const size_t DEFAULT_CELL_HEIGHT = 0;
 	const string DEFAULT_FUNCTION = "cwlf";
 	const bool DEFAULT_PRINT_SET = false;
 
 	size_t m = DEFAULT_M;
+	size_t n = DEFAULT_N;
 	size_t cell_height = DEFAULT_CELL_HEIGHT;
 	string functionType = DEFAULT_FUNCTION;
 	size_t runs = DEFAULT_RUNS;
@@ -136,7 +143,8 @@ int main(int argc, const char ** argv) {
 	options_description optsDesc("Table M Test allowed options.");
 	optsDesc.add_options()
 		("help", "prints this help message")
-		("m", value<size_t>(&m)->default_value(DEFAULT_M), "The m.")
+		("m", value<size_t>(&m)->default_value(DEFAULT_M), "The size of the table.")
+		("n", value<size_t>(&n)->default_value(DEFAULT_N), "The number of elements. When zero is given we choose n = m.")
 		("cell_height", value<size_t>(&cell_height)->default_value(DEFAULT_CELL_HEIGHT), "The height of the cell hierarchy into which the input elements are split.")
 		("runs", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.")
 		("print_set", value<bool>(&print_set)->default_value(DEFAULT_PRINT_SET), "If the hashed set should be printed out.")
@@ -161,13 +169,18 @@ int main(int argc, const char ** argv) {
 #else
 	typedef uint64_t base_t;
 #endif
+
+		if (n == 0) {
+			n = m;
+		}
+
 		typedef Table<base_t, EqualityComparer<base_t>, RandomBin, CollisionCountStorage> HashTableRandom;
 		typedef Table<base_t, EqualityComparer<base_t>, UniversalFunctionCWLF, CollisionCountStorage> HashTableCWLF;
 
 		if (functionType == "cwlf") {
-			performTest<base_t, HashTableCWLF>(runs, m, cell_height, print_set);
+			performTest<base_t, HashTableCWLF>(runs, n, m, cell_height, print_set);
 		} else if (functionType == "random") {
-			performTest<base_t, HashTableRandom>(runs, m, cell_height, print_set);
+			performTest<base_t, HashTableRandom>(runs, n, m, cell_height, print_set);
 		} else {
 			cerr << "What the function? Use random or cwlf." << endl;
 			return 1;
