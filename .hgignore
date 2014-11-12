@@ -39,6 +39,9 @@ vcproj/Release
 .*\.orig$
 .*\.ncb$
 .*\.suo$
+.*\.out$
+.*\.pyc$
+primes.*\.txt$
 \.synctex$
 \.aux$
 \.wsp$
