@@ -48,3 +48,7 @@ vcproj/Release
 .*\.dvi
 .*\.log
 .*\.pdf
+syntax:regexp
+cmake/.*\.exe$
+cmake/.*\.txt$
+cmake/.*out.*$
