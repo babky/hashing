@@ -1,0 +1,1246 @@
+\documentclass[11pt]{article}
+
+
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+
+\addtolength{\voffset}{-1cm}
+\addtolength{\hoffset}{-1.5cm}
+\addtolength{\textheight}{+2cm}
+\addtolength{\textwidth}{+3cm}
+
+
+% Packages because of tables.
+\usepackage{multirow}
+\usepackage{booktabs}
+%\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newtheorem{theorem}{Theorem} %***
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{theorem*}{Theorem}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\qed}{$\Box$}
+%\newcommand{\qed}{\rule{1em}{0in} \hspace*{\fill}$\square$\vspace{1ex}\par}%{\rule{7pt}{7pt}}
+\newenvironment{proof}{\noindent {\bf Proof:}}{\hfill \qed \smallskip}
+\newenvironment{proofof}[1]{\noindent{\it Proof of #1. }} {{\qed}}
+
+\usepackage{url}
+
+\newcommand{\Prob}[1]{\mathbf{Pr}\left(#1\right)}
+\newcommand{\E}[1]{\mathbf{E}\left[#1\right]}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\PTheta}[1]{\Theta\!\left(#1\right)}
+\newcommand{\natInt}[2]{ \left\{ #1, \dotsc, #2 \right\} }
+
+\newcommand{\thmA}{{C_0}}
+\newcommand{\thmB}{{C_1}}
+\newcommand{\thmC}{{C_2}}
+\newcommand{\buffer}{{\rm {\bf buffer}}}
+\newcommand{\pop}{{\rm {\bf pop}}}
+\newcommand{\weight}{{\rm {\bf weight}}}
+\newcommand{\midp}{{\rm {\bf midpoint}}}
+\newcommand{\depth}{{\rm {\bf depth}}}
+\newcommand{\densify}{{\rm {\bf densify}}}
+\newcommand{\starts}{{\rm {\bf start}}}
+\newcommand{\sends}{{\rm {\bf end}}}
+
+\begin{document}
+
+\title{On online labeling with large label set}
+
+\author{
+Martin Babka\thanks{The first three authors gratefully acknowledge a support by the Charles University Grant Agency (grant No. 265 111 and 344 711) and SVV project no. 265 314.}\\
+{Charles University, Prague}\\
+\tt{babkys@gmail.com}
+\and
+Jan Bul\'anek\\
+%%\thanks{Partially supported by student project GAUK 344711, grant P202/10/0854 of GA \v{C}R and RVO: 67985840.}\\
+{Charles University and }\\
+{Institute of Mathematics}\\
+{Academy of Sciences CR, Prague}\\
+\tt{honyai@seznam.cz}
+\and
+Vladim\'ir \v{C}un\'at\\
+{Charles University, Prague}\\
+\tt{vcunat@gmail.com}
+\and
+Michal Kouck\'{y}
+\thanks{Part of the work done while visiting Aarhus University, partially supported by the Sino-Danish Center CTIC (funded under the grant 61061130540). Supported in part by GA \v{C}R P202/10/0854, grant IAA100190902 of GA AV \v{C}R, Center of Excellence CE-ITI (P202/12/G061 of GA \v{C}R) and RVO: 67985840.}\\
+{Institute of Mathematics}\\
+{Academy of Sciences CR, Prague}\\
+\tt{koucky@math.cas.cz}
+\and
+Michael Saks\thanks{The work of this author was done while on sabbatical at Princeton University and
+was also supported in part by NSF under  grant CCF-0832787.}\\
+{Department of Mathematics}\\
+{Rutgers University}\\
+\tt{saks@math.rutgers.edu}
+}
+
+\maketitle
+
+
+
+\begin{abstract}
+
+In the online labeling problem with parameters $n$ and $m$
+we are presented with a sequence of $n$ {\em keys} from a totally ordered universe $U$
+and must assign each arriving key a label from the label set $\natInt{1}{m}$
+so that the order of labels respects the ordering on $U$.
+As new keys arrive it may be necessary to change the labels of some items; such changes may be done at any time at unit cost
+for each change.
+The goal is to minimize
+the total cost.
+An alternative formulation of this problem is
+the \emph{file maintenance problem}, in which the items, instead of being labeled,
+are maintained in sorted order in an  array of length $m$, and we pay unit cost for moving an item.
+
+%%MIKE 6-27-12
+For the case $m=cn$ for constant $c>1$,
+there are known algorithms that use at most $O(n (\log n)^2)$ relabelings in total \cite{Itaietal},
+and it was shown recently that this is asymptotically optimal \cite{BKS}. For the case of $m=\Theta(n^{C})$ for constant $C>1$,
+algorithms are known that use $O(n \log n)$ relabelings. A matching lower bound was provided in \cite{DSZ04}.  That
+proof involved two distinct steps: a lower bound for a problem they call {\em prefix bucketing}
+and a reduction from  prefix bucketing to online labeling. In this paper we present a simplified version of their reduction,
+together with a full proof (which was missing in the previous work).
+Furthermore we give a simplified and improved analysis of the prefix bucketing lower bound.
+This improvement allows us to extend the lower bounds for online labeling to the case where the number $m$ of labels is superpolynomial in $n$.
+In particular, for superpolynomial $m$ we get an asymptotically optimal lower  bound
+$\Omega((n \log n) / (\log \log m - \log\log n))$.
+\end{abstract}
+
+\section{Introduction}
+
+In the online labeling problem with parameters $n,m,r$,
+we are presented with a sequence of $n$ {\em keys} from a totally ordered universe $U$ of size $r$
+and must assign each arriving key a label from the label set $\natInt{1}{m}$ so that the order of labels respects the ordering on $U$.
+As new keys arrive it may be necessary to change the labels of some items; such changes may be done at any time at unit cost
+for each change.
+The goal is to minimize
+the total cost.
+An alternative formulation of this problem is
+the \emph{file maintenance problem}, in which the items, instead of being labeled,
+are maintained in sorted order in an  array of length $m$, and we pay unit cost for moving an item.
+In this formulation we allow cells of the array to contain a special value that marks unoccupied array cells, and we are
+concerned only about the total number of moves of actual items stored in the array.
+
+The problem, which was introduced by Itai, Konheim and Rodeh \cite{Itaietal},
+is natural and intuitively appealing, and has had applications to the design of data structures (see for example
+the discussion in \cite{DSZ04}, and the more recent work on cache-oblivious data structures
+\cite{BenderetalB-Tree,Brodaletal,BDIW}).  A connection between this problem and distributed resource allocation
+was recently shown by Emek and Korman \cite{EK11}.
+
+
+The parameter $m$, the {\em label space} must be at least the number of items $n$ or else no valid labeling is possible.
+There are two natural range of parameters that have received the most attention. In the case of {\em linearly many labels} we have
+$m=cn$ for some $c>1$, and in the case of {\em polynomially many labels} we have $m=\theta(n^{C})$ for some constant $C>1$.
+The problem is trivial if  $|U| \leq m$ , since then we can fix an order preserving
+bijection from $U$ to $\natInt{1}{m}$ in advance.   The known upper bounds for this problem, summarized in the next paragraph, put no restriction on the size of $U$.  For the lower bound proved in this paper we will assume that  $|U|$
+has size at least exponential in $n$.
+
+Itai et al. \cite{Itaietal} gave an algorithm for the case of linearly many labels having worst case total cost
+$O(n (\log n)^2)$.  This algorithm works in the file maintenance formulation, and the total cost includes even manipulation
+with unoccupied array cells.
+Improvements and simplifications were given by Willard \cite{Willard} and Bender et al. \cite{Benderetal}.
+In the special case that $m=n$, algorithms with cost $O((\log n)^3)$ per item were given
+\cite{Zhang,BirdSadnicki}.  It is also
+well known that the  algorithm of Itai et al. can be adapted to give total cost $O(n \log n)$ in the case
+of polynomially many labels.
+All of these algorithms make no restriction on the size of
+universe $U$ of keys.
+
+For lower bounds, a subset of the present authors
+recently proved \cite{BKS} a tight $\Omega(n (\log n)^2)$ lower bound for the case of linearly many labels and tight bound $\Omega(n (\log n)^3)$ for
+the case $m=n$. These bounds hold even when the size of the universe $U$ is only a constant multiple of $m$.  The bound remains
+non-trivial (superlinear in $n$) for
+%%MIKE 6-27-2012
+$m  = O(n (\log n)^{2-\varepsilon})$ but
+becomes trivial  for $m \in \Omega(n (\log n)^2)$.
+
+
+For the case of polynomially many labels, Dietz at al. \cite{DSZ04} (also in \cite{Zhang}) proved a matching lower bound for the $O(n \log n)$ upper bound.
+In this paper we extend the lower bound so that it applies to larger label spaces,
+and we also clarify some significant details that were missing or ambiguous in the original proof.
+
+Their result consists of two parts; a lower bound for a problem they call {\em prefix bucketing}
+and a reduction from prefix bucketing to online labeling.
+We provide a simpler and more precise lower bound for prefix bucketing,
+which allows us to extend the lower bounds for online labeling to the case where the label size is as large as $2^{n}$.
+Specifically we prove a lower bound of
+$\Omega((n \log n) / (1+\log \log m - \log \log n))$ that is valid
+for $m$ between $n$ and $2^{n}$.
+Note that for polynomially many labels this reduces to $\Omega(n \log n)$.
+
+Our initial study of their proof of the reduction from prefix bucketing to online
+labeling \cite{DSZ04} led us to think that there is a significant gap in the proof.
+We modified their proof and obtained a correct version of the reduction.
+In the conference version of the present paper,
+we claimed that we were correcting an apparently significant gap in the previous proof;
+we made this claim after checking with one of the authors who agreed with it.
+Having now done a more careful comparison of our proof to theirs,
+we see that while the proof in \cite{DSZ04} has some misleading statements and missing details,
+it is essentially correct.
+We present the details of our modification in order to clarify the ambiguities that were present in \cite{DSZ04}.
+
+
+We remark that, unlike the bounds of \cite{BKS} for the case of linearly many labels, our lower bound proof requires that the universe
+$U$ is at least exponential in $n$. It is an interesting question whether one could design
+a better online labeling algorithm for $U$ of size say $m \log n$. We summarize known results in Table \ref{tab-1}. All the results
+are for deterministic algorithms. (Subsequent to the work presented in this paper, 
+a subset of the authors \cite{BKS2} showed that  $\Omega(n \log(n))$
+lower bound 
+for the case $m=n^C$ also holds for randomized algorithms).
+
+\begin{table}
+\centering
+\caption{Summary of known lower and upper bounds for the online labeling problem.} \label{tab-1}
+\begin{tabular}{l l c c}
+	\toprule
+	Array size ($m$) &
+	Asymptotic bound &
+	Lower bound &
+	Upper bound
+	\\ \toprule
+
+	$m = n$ &
+	$\PTheta{n (\log n)^3}$ &
+	\cite{BKS} &
+	\cite{Zhang}
+	\\ \midrule
+
+	$m = cn$,\,constant $c>1$ &
+	$\PTheta{n (\log n)^2}$ &
+	\cite{BKS} &
+	\cite{Itaietal}
+	\\ \midrule
+
+% Michal: I have tentativelly commented this out as we do not talk about it in the intro.
+%	
+%	$m = n ^ {1 + o(1)}$ &
+%	$\PTheta{\frac{n (\log n)^2}{\log m - \log n}}$ &
+%	\cite{manuscript} &
+%	\cite{Itaietal}
+%	\\ \midrule
+	
+	$m = n ^ {C}$,\, constant $C>1$ &
+	$\PTheta{n \log n}$ &
+	\cite{DSZ04} &
+	\cite{Itaietal}
+	\\ \midrule
+	
+	$m = n ^ {\omega(1)}$ &
+	$\PTheta{\frac{n \log n}{1 + \log \log m - \log \log n}}$ &
+	[this paper] &
+	\cite{BKS}
+	\\ \bottomrule
+\end{tabular}
+\label{table:table_bounds}
+\end{table}
+
+Our proof follows the high level structure of the proof from \cite{DSZ04}.  In the remainder of the introduction we sketch the two
+parts, and relate our proof to the one in \cite{DSZ04}.
+
+\subsection{Reducing Prefix Bucketing to Online Labeling}
+\label{s-1.1}
+
+Dietz et al. \cite{DSZ04} sketched a reduction from prefix bucketing to online labeling.  In their reduction they describe an adversary
+for the labeling problem.  They show that given any algorithm for online labeling, the behavior of the algorithm
+against the adversary can be used to construct a strategy for prefix bucketing.   As mentioned above,
+while the idea of their adversary and the reduction from prefix bucketing to online labeling are essentially correct,
+the description is incomplete and ambiguous.  In Section \ref{s-olp} we will present a modification of their adversary, 
+and in Section \ref{ss-b to ol} we give a full proof of the
+connection to prefix bucketing.  We now sketch the adversary construction and the reduction.
+
+\iffalse
+ If one can show that the cost of the derived bucketing strategy is no more than a constant times  the cost paid by the algorithm for relabelings then a lower bound on bucketing
+will give a similar lower bound on the cost of any online labeling algorithm.  Unfortunately, their proof sketch does not show this.
+In particular, a single relabeling step may correspond to a bucketing step whose cost is $\Omega(\log n))$, and this
+undermines the reduction.
+This may happen when inserting $\Theta(\log n)$ items into an empty segment of size $n^\epsilon$ without triggering any relabelings.
+We construct a different adversary for which one gets the needed correspondence
+between relabeling cost and bucketing steps.
+\fi
+
+The goal in constructing an adversary is to force any online algorithm to perform many relabelings during insertion on $n$ keys.
+%The adversary is described
+%in detail in Section \ref{s-olp} here we provide a high level description.
+As the adversary proceeds we will refer to keys that have been inserted by the adversary as  
+{\em active}, and two active keys are {\em adjacent} if there is no active key between them. 
+The adversary starts by inserting the seven equally spaced keys including the minimum and maximum key.
+Each successive inserted key will be  the average (rounded down) of some pair of adjacent
+active keys.   The central issue in defining the adversary is to determine at each step which
+adjacent  pair of active keys to choose. 
+
+It is illuminating to think of this in terms of the file maintenance problem mentioned earlier.
+In this reformulation the label space $\natInt{1}{m}$ is associated to an array indexed by $\natInt{1}{m}$
+and a key labeled by $j$ is viewed as stored in location $j$.
+Intuitively, the adversary wants to choose each successive insertion to be the
+average of two adjacent keys that appear in a ``crowded'' region of this array.  The hope is that this will
+eventually force the algorithm to move many keys within the array (which corresponds to relabeling them).
+The problem is to make precise the notion of ``crowdedness''.
+Crowding within the array occurs at different scales (so a small crowded region may lie inside a large uncrowded region)
+and we need to find a pair of adjacent keys with the property that all regions containing the pair are somewhat crowded.
+
+With the array picture in mind,
+we  call an interval of labels a \emph{segment}, and say that a label is {\em occupied} if there is a key assigned to it.
+The \emph{density} of a segment is the fraction of occupied labels.
+
+As a guide to picking each successive key, the adversary maintains a sequence (\emph{hierarchy}) of nested segments.  Each successive segment in the hierarchy
+has size at most half the previous segment, and its density  is within a constant factor of the density of the previous segment.
+The hierarchy ends with a segment having between 2 and 7 keys.  The next key to be inserted is the average (rounded down)
+of the two middle keys in the lowest segment of the hierarchy.
+
+
+Initially, and during the first 8 insertions, the hierarchy consists of just the single segment $\natInt{1}{m}$.
+After each subsequent insertion,
+the algorithm $\A$ specifies the label of the next key and (possibly) relabels some keys. The adversary then updates
+its hierarchy.  For the hierarchy immediately prior to the insertion, the adversary specifies the {\em critical segment} to be the smallest segment
+of the hierarchy that contains the label assigned to the inserted key and the old and new labels
+of all keys that were relabeled.  The new hierarchy agrees with the previous hierarchy from the largest segment up to and including
+the critical segment.   Beginning from the critical segment the hierarchy is extended as follows.
+Having chosen segment $S$ from the hierarchy, define its
+{\em left buffer}
+to be the smallest subsegment of $S$ that starts at the minimum label of $S$ and
+includes at least 1/8 of the occupied labels of $S$, and its {\em right buffer} to be the smallest subsegment that ends at the maximum label of $S$
+and includes at least 1/8 of the occupied keys of $S$.
+Let $S'$ be the segment obtained from $S$ by
+deleting the left and right buffers. The successor segment of $S$ in the hierarchy is
+a shortest subsegment of $S'$ that contains exactly half (rounded down) of the occupied labels of $S'$.
+The hierarchy ends when we reach a segment with at most seven occupied labels; such a segment necessarily has at least two occupied
+labels.
+
+In \cite{DSZ04}, the authors show that there is always a \emph{dense point}, which is
+a point  with the property that every segment containing it
+has density at least half the overall density of the label space.  They use this as the basis for building the hierarchy.
+We build a hierarchy with similar properties using a simpler argument.
+
+It remains to prove that the algorithm will make lot of relabels on the sequence
+of keys produced by the adversary.  Following  Dietz et al. \cite{DSZ04}, we 
+do this by relating online labeling to the prefix bucketing game.
+(Our definition of the game differs slightly from that in \cite{DSZ04}.)
+
+%%MIKE 6-27-2012
+A \emph{prefix bucketing of $n$ items into $k$  buckets} (numbered 1 to $k$) is a one player game consisting of $n$ steps.
+At the beginning of the game
+all the buckets are empty. In each step a new item arrives and the player selects an index $p \in \natInt{1}{k}$.
+The new item as well as all items in buckets $p+1,\dotsc,k$ are moved into bucket $p$ at a cost equal to the
+total number of items in bucket $p$ after the move.   The run of the game is therefore completely specified by
+the sequence $p^1,\ldots,p^n$, where $p^t$ is the bin into which the player placed the new item at step $t$. 
+The goal is to minimize the total cost of $n$ steps
+of the game.
+
+The lower bound on online labeling is obtained by the following correspondence.
+Consider the run of an arbitrary online labeling algorithm $\A$
+against the given adversary.  At each step $t$, the adversary determines a particular
+level $p^t$ of the hierarchy to be the critical level (which is always at most $k=\lceil \log m \rceil$,
+where in this paper $\log x$ stands for the binary logarithm function.)
+ Consider the sequence $p^1,\ldots,p^n$ as a  sequence of placements defining a prefix bucketing
+of $n$ items into $k=\lceil \log m \rceil$ buckets. It turns out that
+the total cost of the prefix bucketing will be within a constant factor of  the total number of relabelings
+performed by the online labeling algorithm. Hence, a lower bound on the cost of a prefix bucketing of $n$ items into $k$
+buckets will imply a lower bound on the cost of the algorithm against our adversary.
+The connection between the cost of $\A$ against the adversary, and the cost of the associated
+prefix bucketing is obtained as follows.
+We  make the assumption (which can be shown to hold without loss of generality) that the algorithm is \emph{lazy}, which means
+that at each time step the set of keys that are relabeled is a contiguous block of keys that includes
+the newly inserted keys.    The cost of the bucketing merge step $p^t$ at step $t$ 
+is at most the number of keys in
+the critical segment, so to relate this to the cost incurred by the online labeling algorithm, it is enough
+to argue that at step $t$ a constant fraction of the keys in the critical segment were relabeled.  This is done
+by arguing that  for each successor (sub)segment of the critical segment, either all labels in its left buffer
+or all labels in its right buffer were reassigned, and the total number of such keys is a constant fraction of the keys
+in the critical segment.
+
+
+\subsection{An Improved Analysis of Bucketing}
+
+It then remains to give a lower bound
+for the cost of prefix bucketing.  This was previously given by Dietz et al. \cite{DSZ04} for $k\in \Theta(\log n)$.
+We give a different and simpler proof that gives asymptotically optimal bound for $k$ between $\log n$ and $O(n^\epsilon)$.
+We define a family of trees called $k$-admissible trees and show that the cost
+of bucketing  for $n$ and $k$, is between $dn/2$ and $dn$ where $d$ is the minimum depth of a $k$-admissible tree
+on $n$ vertices.  We further show that the minimum depth of a $k$-admissible tree on $n$ vertices
+is equal $g_k(n)$ which is defined to be the smallest $d$ such that $\binom{k+d-1}{k} \geq n$.
+This gives a  characterization of the optimal cost of prefix bucketing (within a factor of 2).  When we apply
+this characterization we need to use estimates of $g_k(n)$ in terms of more familiar functions (Lemma \ref{lm:lower_bound_d}),
+and there is some loss in these estimates.
+
+\section{The Online Labeling Problem}\label{s-olp}
+
+Here we provide the formal definition of the online labeling problem.
+Let $m$ and $r\ge 1$ be integers. We assume without loss of generality $U=\natInt{1}{r}$.
+An online labeling algorithm $\A$ with range $m$ is an algorithm that on input sequence $y^1,y^2,\dotsc,y^t$ of distinct elements
+from $U$ gives
+an \emph{allocation $f : \{y^1,y^2,\dotsc,y^t\} \rightarrow \natInt{1}{m}$} that respects the natural ordering of $y^1,\dotsc,y^t$, so that
+for $x,y\in \{y^1,y^2,\dotsc,y^t\}$, $f(x) < f(y)$ if and only if $x < y$. We refer to $y^1,y^2,\dotsc,y^t$
+as \emph{keys}. The trace of $\A$ on a sequence $y^1,y^2,\dotsc,y^n\in U$ is the sequence $f^0,f^1,f^2,\dotsc,f^n$ of functions
+such that $f^0$ is the empty mapping and for $i=1,\dotsc,n$, $f^i$ is the output of $\A$ on $y^1,y^2,\dotsc,y^i$.
+For the trace $f^0,f^1,f^2,\dotsc,f^n$ and $t=1,\dotsc,n$, we say that $\A$ \emph{relocates $y\in \{y^1,y^2,\dotsc,y^t\}$ at time $t$}
+if $f^{t-1}(y)\not=f^t(y)$. So each $y^t$ is relocated at time $t$.
+For the trace $f^0,f^1,f^2,\dotsc,f^n$ and $t=1,\dotsc,n$, $Rel^t$ denotes the set of relocated keys at step $t$.
+The cost of $\A$ incurred on $y^1,y^2,\dotsc,y^n\in U$ is $\chi_\A(y^1,\dotsc,y^n)=\sum_{i=1}^n |Rel^i|$ where $Rel$ is
+measured with respect to the trace of $\A$ on $y^1,y^2,\dotsc,y^n$. The maximum cost
+$\chi_\A(y^1,\dotsc,y^n)$ over all sequences $y^1,\dotsc,y^n$ is denoted $\chi_\A(n)$. We write $\chi_m(n)$ for the smallest cost $\chi_\A(n)$ that
+can be achieved by any algorithm $\A$ with range $m$.
+%% Michal: ``algorithm with range m'' is a technical term, so ``label set $\{1,\dots,m\}$.'' is not good.
+
+\subsection{The Main Theorem}
+\label{subsec:main theorem}
+In this section, we state our lower bound results for  $\chi_m(n)$.
+
+\begin{theorem}
+\label{thm:main}
+There are positive constants $\thmA$, and $\thmB$ so that the following holds. Let $m,n$ be integers satisfying
+$\thmA \leq n \le m \le 2^{n}$. Let the size of $U$ be more than $2^{n+4}$.
+Then $\chi_m(n) \geq \thmB \cdot \frac{n \log n}{1 + \log \log m - \log \log n}$.
+\end{theorem}
+
+To prove the theorem we fix a labeling algorithm $\A$ and describe an adversary who 
+builds a sequence $y^1,y^2,\dotsc,y^t$ of keys based on the behavior of $\A$  that will cause
+the algorithm to incur the desired cost. In the next subsection we will describe the adversary,
+and state Lemma \ref{l-main}, which proves a lower bound on the cost incurred
+by algorithm $\A$ on the the sequence produced by the adversary.  Theorem \ref{thm:main} follows
+immediately from this lemma.
+
+\subsection{Adversary Construction}
+
+Any interval $\natInt{a}{b} \subseteq \natInt{1}{m}$ of label values is called a \emph{segment}. Fix $n,m,r>1$ such that $m\ge n$ and $r>2^{n+4}$.
+Fix some online labeling algorithm $\A$ with range $m$.
+To pick the sequence of keys $y^1,\dotsc,y^n$, the adversary will maintain a sequence of
+nested segments $S^t_{\depth(t)} \subseteq \dotsb \subseteq S^t_2 \subseteq S^t_1 = \natInt{1}{m}$, updating them after each time step $t$.
+The adversary will choose the next element $y^{t}$ to fall between the keys in
+the smallest interval $S^t_{\depth(t)}$. In what follows, $f^t$ is the allocation of $y^1,\dotsc,y^t$ by the algorithm $\A$.
+
+The \emph{population of a segment $S$ at time $t$} is $\pop^t(S) = (f^t)^{-1}(S)$ and the
+\emph{weight of $S$ at time $t$} is $\weight^t(S) = |\pop^t(S)|$. (Here, we use $g^{-1}$ to stand for the preimage of a function $g$, i.e., $g^{-1}(A) = \{ x : g(x) \in A \}$.)
+For $t=0$, we extend the definition by $\pop^0(S) = \emptyset$ and $\weight^0(S) = 0$.
+The \emph{density of $S$ at time $t$} is $\rho^t(S) = \weight^t(S) / |S|$. For a positive
+integer $b$, let $\densify^t(S,b)$ be the minimum  subsegment $T$ of $S$ (with respect to the order that
+orders segments by size, and orders segments of the same size by their left endpoint) satisfying:
+
+\begin{itemize}
+\item $pop^t(T)$ does not contain any of the  $b$ largest or smallest elements of $\pop^t(S)$.
+\item  $\weight^t(T)=\lfloor (\weight^t(S)-2b)/2 \rfloor$.
+\end{itemize} 
+
+Hence, $\densify^t(S,b)$ is a densest subsegment $T$ of $S$ that contains 
+the appropriate number of items but which excludes at least $b$ items labeled within $S$ both above and below $T$.
+These $b$ items on either side of $T$ form the left and right buffers described in Section \ref{s-1.1}.
+
+If $\pop^t(S)=\{x_1<x_2 < \dotsb <x_\ell\}$ define $\midp^t(S)= \lceil (x_{\lceil (\ell-1)/2 \rceil} + x_{\lceil (\ell+1)/2 \rceil} )/ 2 \rceil$.
+
+Let $y^1,y^2,\dotsc,y^t$ be the first $t$ keys inserted  and let $Rel^t$ be the keys
+that are relabeled by
+$\A$ in response to the insertion of $y^t$. The \emph{busy segment $B^t\subseteq \natInt{1}{m}$ at time $t$} is
+the smallest segment that contains $f^t(Rel^t)\cup f^{t-1}(Rel^t \setminus \{y^t\})$.
+We say that the algorithm $\A$ is \emph{lazy} if
+all the keys that are mapped by $f^{t-1}$ to $B^t$ are relocated at step $t$, i.e., $\pop^{t-1}(B^t) = Rel^t \setminus \{y^t\}$.
+Proposition~4 in \cite{BKS} shows that any algorithm $\A$ can be modified to get a lazy algorithm $\A'$
+whose cost on any insertion sequence is no more than $\A$.  Therefore it suffices to prove our lower bound
+for lazy algorithms, and from now on we assume that  $\A$ is lazy.
+We record the following simple observation:
+
+\begin{proposition}
+\label{l-busy}
+Consider an execution of a lazy algorithm $\A$ on $y^1,\ldots,y^n$.  
+For any
+time $t\in \natInt{1}{n}$, $|Rel^t|=1+\weight^{t-1}(B^t)$.
+\end{proposition}
+
+We are now ready to present our adversary. In the adversary, $b^t_i$ denotes the number of items in the left and right buffers
+of $S^t_i$. This number changes only when $S^t_i$ is redefined. Also, $p^t$ denotes the critical level of the hierarchy
+after inserting item $y^t$, i.e., the level from which the hierarchy will be rebuilt in the next step.
+ 
+
+\medskip\noindent {\bf Adversary($\A,n,m,r$)}
+
+\smallskip\noindent Set $p^0=0$.
+
+\smallskip\noindent For $t=1,2,\dotsc,n$ do
+\begin{itemize}
+\item
+If $t < 8$, let $S^t_1 = \natInt{1}{m}$, $b^t_1=1$, $\depth(t)=1$, and $p^{t}=1$.
+Set $y^t = 1 + \lceil (t-1) \cdot (r-1)/6 \rceil$, and run $\A$ on $y^1,y^2,\dotsc,y^t$ to get $f^t$.
+Continue to next $t$.
+
+\item
+\emph{Preservation Rule:}
+For $i=1,\dotsc,p^{t-1}$, let $S^t_i=S^{t-1}_{i}$ and $b^t_i=b^{t-1}_i$ .
+(For $t\ge 8$, copy the corresponding segments from the previous time step.)
+
+\item
+\emph{Rebuilding Rule:}
+
+Set $i=p^{t-1}+1$.
+
+While $\weight^{t-1}(S^t_{i-1}) \ge 8$
+
+\begin{itemize}
+\item Set $S^t_i = \densify^{t-1}(S^t_{i-1},b^t_{i-1})$.
+\item Set $b^t_i = \lceil \weight^{t-1}(S^t_i)/8 \rceil$.
+\item Increase $i$ by one.
+\end{itemize}
+
+\item
+Set $\depth(t)=i-1$.
+
+\item
+Set $y^t = \midp^{t-1}(S^t_{\depth(t)})$.
+
+\item
+\emph{The critical level:}
+Run $\A$ on $y^1,y^2,\dotsc,y^t$ to get $f^t$. Calculate $Rel^t$ and $B^t$.
+Set the critical level $p^{t}$ to be the largest integer $j \in \natInt{1}{\depth(t)}$ such that $B^{t} \subseteq S^{t}_j$.
+
+\end{itemize}
+
+%\smallskip
+\noindent\emph{Output:} $y^1,y^2,\dotsc,y^n$.
+
+
+\medskip
+
+A crucial assumption for this adversary is that $y^1,\ldots,y^t$ are distinct.  At step $t \geq 8$, $y^t$ is defined
+to be the average of two adjacent keys, so it is enough to ensure that for $t \leq n-1$, 
+the difference between any two
+adjacent keys is always at least 2.  To do this, we will restrict the size $r$ of the universe to be at least
+$2^{n+4}$ so that for any $t \in \natInt{8}{n-1}$ the smallest pair-wise difference between integers 
+$y^1,y^2,\dotsc,y^t$ is
+at least $2^{n+1-t}$. This property is maintained inductively.
+
+We make the following claim about the adversary which implies Theorem \ref{thm:main}.
+
+\begin{lemma}\label{l-main}
+Let $m,n,r$ be positive integers such that $n \le m$ 
+and $2^{n+4}<r$. %ToDo: re-check we no longer need the removed requirements anywhere
+Let $\A$ be a lazy online labeling algorithm with the range $m$.
+Let $y^1,y^2,\dotsc,y^n$ be the output of {\bf Adversary($\A,n,m,r$)}.
+Then the cost $$\chi_\A(y^1,y^2,\dotsc,y^n) \ge \frac{1}{512} \cdot \frac{n \log n}{ 1 + \log \lceil \log m \rceil - \log \log n} - \frac{n}{6}.$$
+\end{lemma}
+
+ The constants are chosen for
+ease of exposition and can certainly be improved.
+%
+% MK: if one were to set the bucketing k = \lfloor log m \lfloor then we could
+%     drop the ceiling around log m provided that k = \lfloor log m \floor > log n.
+%     This comes from a requirement in Lemma 17 for the bucketing lower bound.
+%     This would be true for example in m > 10n.
+
+
+To prove the lemma we will design a so called \emph{prefix bucketing game} from the interaction between the
+adversary and the algorithm, we will relate the cost of the prefix bucketing to the cost $\chi_\A(y^1,y^2,\dotsc,y^n)$ (Lemma \ref{l-b2l})
+and we will lower bound the cost of the prefix bucketing (Lemma \ref{l-lbb}). The proof of Lemma \ref{l-main} is on page \pageref{pf-main}.
+
+In preparation for this, we prove several useful properties of the adversary.
+
+\begin{lemma}
+For any $t\in \natInt{1}{n}$, $\depth(t)\le \log m$.
+\end{lemma}
+
+\begin{proof}
+%%MIKE 6-27-2012
+The lemma is immediate for $t <8$.
+For $t\ge 8$, it suffices to show that the hierarchy $S^t_1,S^t_2,\dotsc$ satisfies that for each $i \in \natInt{1}{\depth(t)-1}$,
+$|S^t_{i+1}| \leq |S^t_{i}|/2$.   Let $S'$ be the largest subsegment of $S^t_{i}$ that excludes the
+smallest $b$  labels in $S^t_i$ that are used by $f^{t-1}$ 
+and the largest $b$ labels  in $S^t_i$ that are used by $f^{t-1}$ and let $w= \lfloor \weight^{t-1}(S')/2 \rfloor$.
+ Recall that $S^t_i$ is a subsegment of $S'$ of minimum size having weight $w$.
+Let $L'$ be the smallest segment having the same
+left endpoint as $S'$ such that $\weight(L')=w$ and $R'$ be the smallest
+segment having the same right endpoint as $S$ such that $\weight(R')=w$. Then
+$R'$ and $L'$ are disjoint subsegments of $S'$ and $|S^t_{i+1}| \leq |L'|$ and $|S^t_{i+1}| \leq |R'|$,
+and so
+ $|S^t_{i+1}| \leq (|L'|+|R'|)/2 \leq |S'|/2 < |S^t_i|/2$.
+\end{proof}
+
+
+The next lemma reflects a rather subtle point in the definition of the adversary.
+For any $t \in \natInt{1}{n}$ and $i \in \natInt{1}{\depth(t)-1}$, the
+difference $S^t_i \setminus S^t_{i+1}$ is a pair of segments denoted $L^t_i$ (to the left of $S^t_{i+1}$)
+and $R^t_i$.  
+
+\begin{lemma}
+\label{l-b}  For  any $t \in \natInt{1}{n}$ and any $i \in \natInt{1}{\depth(t)-1}$, $\weight^{t-1}(L^t_i) \geq b^t_i$
+and $\weight^{t-1}(R^t_i) \geq b^t_i$.
+\end{lemma}
+
+\begin{proof}
+We prove this by induction on $t$.  
+
+If $i \geq  p^{t-1}$, then $S^t_{i+1}$ is rebuilt at time $t$ and by the \emph{Rebuilding Rule},
+$L^t_i$ and $R^t_i$ will each have weight at least $b^t_i$.
+
+If $i < p^{t-1}$ then $S^t_i$ and $S^t_{i+1}$ are preserved at time $t$ and so $L^t_i=L^{t-1}_i$ and $R^t_i=R^{t-1}_i$
+are also unchanged, and since $i+1 \leq p^{t-1}$, we have $B^{t-1} \subseteq S^{t-1}_{i+1}=S^{t}_{i+1}$
+and consequently, applying the induction hypothesis
+we have $\weight^{t-1}(L^t_i)=\weight^{t-1}(L^{t-1}_i) \geq b^{t-1}_i=b^t_i$ 
+and $\weight^{t-1}(R^t_i)=\weight^{t-1}(R^{t-1}_i) \geq b^{t-1}_i=b^t_i$.  
+\end{proof}
+   
+This lemma reflects a subtle point in the adversary.  In the definition of $b^t_i$
+we set it to $\lceil \weight^{t-1}(S^t_i)/8 \rceil$ only in the case that $i >p^{t-1}$,
+while it might seem more natural to always define $b^t_i$ in this way.  However,
+our actual definition which sets $b^t_i=b^{t-1}_i$ for $i \leq p^{t-1}$ is
+needed for the induction step in the above proof.
+
+We now use this to relate the cost of relabelings at step $t$ to the quantities $b^t_i$:
+
+\begin{lemma}
+\label{l-rel}
+If $\A$ is lazy then for any $t \in \natInt{1}{n}$, $|Rel^t| \ge \sum_{i=p^t+1}^{\depth(t)} b^t_i$.
+\end{lemma}
+
+
+\begin{proof}
+If $p^t = \depth(t)$ then the sum on the right hand side of the inequality evaluates to zero so the lemma is true. 
+By the termination condition in the \emph{Rebuilding Rule}, $\weight^{t-1}(S^t_{\depth(t)}) \in \natInt{2}{7}$, so $b^t_{\depth(t)} = \lceil \weight^{t-1}(S^t_{\depth(t)})/8 \rceil = 1$.
+Thus, if $p^t = \depth(t)-1$ then the lemma is true as well
+since $|Rel^t|\ge 1$ and $b^t_{\depth(t)}=1$. 
+
+So let us assume that $p^t < \depth(t)-1$.
+Consider the set $S^t_{p^t+1} \setminus S^t_{\depth(t)}$ which
+is the union of two subsegments, the left one $S_L$ and the right one $S_R$ (Fig.~\ref{f-1}).  We claim that the
+busy segment $B^t$ contains one of the sets $S_L$ and $S_R$.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=1]{lab-fig1}
+    \caption{A typical position of $S_L,S_R$ and $B^t$.}
+    \label{f-1}
+  \end{center}
+\end{figure}
+
+Suppose for contradiction that $B^t$ misses some label $a_L \in S_L$ and some label $a_R \in S_R$.
+Recall that $y^t$ was chosen by the adversary to be between two keys
+$u,v$ that were stored  in $S^{t}_{\depth(t)}$ by $f^{t-1}$.
+If neither $u$ nor $v$ was relabeled by $f^t$ then (by the laziness of $\A$),
+$Rel^t=\{y^t\}$ and $B^t \subseteq S^t_{\depth(t)}$ which would imply $p^t=\depth(t)$,
+contradicting our assumption
+that $p^t < \depth(t)-1$.  So at least one of $u,v$ belongs to $Rel^t$. Thus
+$B^t$ is a segment having nonempty intersection with the segment $S^t_{\depth(t)}$ which is a subset
+of the segment $\natInt{a_L}{a_R}$. Since, by assumption $B^t$ is a segment containing neither  $a_L$ nor $a_R$
+it is a subset of $\natInt{a_L}{a_R}$ which contradicts the fact (from the definition of $p^t$) 
+that $B^t$ is not a subset of $S^t_{p^t+1}$.   
+
+So assume, without loss of generality, that $S_L \subseteq B^t$.
+Since $\A$ is lazy, $|Rel^t|=1+|\pop^{t-1}(B^t)| \geq 1+|\pop^{t-1}(S_L)|$.
+Now $S_L$ is the disjoint union of sets $L^t_i$ for $i \in \natInt{p^t+1}{\depth(t)-1}$  and so
+by Lemma \ref{l-b}, we have $|Rel^t| \geq 1+ \sum_{i=p^t+1}^{\depth(t)-1} b^t_i$.
+Since $b^t_{\depth(t)}=1$ we obtain the inequality
+of the lemma.
+\end{proof}
+\iffalse
+
+Let $r_{\mathrm{min}}=\min(Rel^t)$ and $r_{\mathrm{max}}=\max(Rel^t)$ be the minimal and maximal key relocated when going from $f^{t-1}$ to $f^t$.
+
+
+By the definition of $p^t$ we know that the busy segment $B^t$ is not a subset of $S^t_{p^t+1}$
+and so at least one of the following must happen: 
+\begin{enumerate}
+\item $f^{t-1}(r_{\mathrm{min}}) \in S^t_{p^t} \setminus S^t_{p^t+1}$, or
+\item $f^{t}(r_{\mathrm{min}}) \in S^t_{p^t} \setminus S^t_{p^t+1}$, or 
+\item $f^{t-1}(r_{\mathrm{max}}) \in S^t_{p^t} \setminus S^t_{p^t+1}$, or 
+\item $f^{t}(r_{\mathrm{max}}) \in S^t_{p^t} \setminus S^t_{p^t+1}$. 
+\end{enumerate}
+Assume that $f^{t-1}(r_{\mathrm{min}}) \in S^t_{p^t} \setminus S^t_{p^t+1}$ or $f^{t}(r_{\mathrm{min}}) \in S^t_{p^t} \setminus S^t_{p^t+1}$,
+the other case is symmetric. Let $Y = \{ y \in \{y^1,y^2,\dotsc,y^{t-1}\}:\; r_{\mathrm{min}} \le y < y^t\}$.
+Since $\A$ is lazy,  $Y \subset Rel^t$, i.e., all the keys between $r_{\mathrm{min}}$ and $y^t$ were relocated when inserting $y^t$.
+
+We claim that all of the keys mapped by $S_L$ belong to $Rel^t$, that is the keys mapped by $f^{t-1}$ to $S_L$ must all have been relocated
+when inserting $y^t$ since they are between $r_{\mathrm{min}}$ and $y^t$ and the algorithm $\A$ is lazy.
+For any $i \in \natInt{1}{\depth(t)-1}$, the population of the left subsegment of $S^t_i \setminus S^t_{i+1}$ at time $t-1$ is at least $b^t_i$, by the definition of $S^t_{i+1}$.
+These subsegments partition $S_L$.
+Hence, $\sum_{i=p^t+1}^{\depth(t)-1} b^t_i \le |\pop^{t-1}(S_L)| \le |Y| < |Rel^t|$. Since $b^t_{\depth(t)}=1$, the lemma follows.
+\end{proof}
+\fi
+
+The next step in deriving a lower bound on the cost is to derive a lower bound on $b^t_i$.
+For convenience we define the following quantities.
+For $t \in \natInt{1}{n}$ and $i \in \natInt{1}{\depth(t)}$, define $\starts(t,i)$ to be the largest $t' \le t$ 
+such that $p^{t'-1} < i$. Hence, $\starts(t,i)$ denotes the time when the segment $S^t_i$ that is current at time $t$ was created.
+Similarly, let $\sends(t,i)$ be the smallest $t'>t$ such that $p^{t'-1} < i$ if such a $t'$ exists and $n+1$ otherwise.
+Thus, $\sends(t,i)$ denotes the time when the segment $S^t_i$ was replaced or removed from the hierarchy. 
+
+
+% The next proposition follows from definitions.
+%
+% \begin{proposition}
+% For any $t\in\{1,\dots,n\}$, $i\in[\depth(t)-1]$, and any time $t'\in [\starts(t,i), \sends(t,i)-1]$,
+% $B^{t'} \subseteq S^t_i$. Furthermore, if $\sends(t,i)\le n$ then $B^{\sends(t,i)} \setminus S^t_i \not=\emptyset$.
+% \end{proposition}
+
+
+\begin{lemma}\label{l-p1}
+For any $t \in \natInt{1}{n}$ and $i \in \natInt{1}{\depth(t)-1}$, $64\cdot b^t_{i+1} \ge \weight^{t-1}(S^t_i) - \weight^{t-1}(S^t_{i+1})$.
+\end{lemma}
+
+\begin{proof} %% {Lemma \ref{l-p1}}
+For $t<8$, there is no $i\in \natInt{1}{\depth(t)-1}$ so the lemma is true trivially. Thus, assume that $t\ge 8$.
+During the time interval $\natInt{\starts(t,i)}{\sends(t,i)}$, $\weight(S^t_i)$ increases by exactly
+one for each step and so for any integers $s,s'$ such that $\starts(t,i)\le s < s' < \sends(t,i)$,
+\begin{align*}
+\weight^{s-1}(S^t_i) = \weight^{s'-1}(S^t_i) + (s'-s).
+\end{align*}
+Let $s=\starts(t,i+1)$. Then $\starts(t,i) \le s \le t <  \sends(t,i+1) \le \sends(t,i)$ so
+\begin{align*}
+\weight^{t-1}(S^t_i) - \weight^{t-1}(S^t_{i+1}) &= \weight^{s-1}(S^t_i) - \weight^{s-1}(S^t_{i+1}) \cr
+&= \weight^{s-1}(S^s_i) - \weight^{s-1}(S^s_{i+1}).
+\end{align*}
+Also
+\begin{align*}
+b^t_{i+1} = b^s_{i+1} = \lceil \weight^{s-1}(S^s_{i+1})/8\rceil \ge  \weight^{s-1}(S^s_{i+1})/8.
+\end{align*}
+Since $8 \le \weight^{s-1}(S^t_{i})$ and $\weight^{\starts(t,i)-1}(S^t_{i}) \le \weight^{s-1}(S^t_{i}) $
+\begin{align*}
+b^s_{i} = b^{\starts(t,i)}_{i} &= \lceil \weight^{\starts(t,i)-1}(S^t_{i})/8 \rceil \cr
+&\le \weight^{s-1}(S^s_{i})/4
+\end{align*}
+Hence,
+\begin{align*}
+\weight^{s-1}(S^s_{i+1}) = \lfloor  (\weight^{s-1}(S^s_{i}) - 2b^s_i )/ 2 \rfloor &\ge \lfloor \weight^{s-1}(S^s_{i})/4 \rfloor \cr &\ge \weight^{s-1}(S^s_{i})/8.
+\end{align*}
+Thus, $b^t_{i+1} \ge \weight^{s-1}(S^s_{i})/64 \ge (\weight^{s-1}(S^s_i) - \weight^{s-1}(S^s_{i+1}))/64$. The claim follows.
+\end{proof}
+
+
+
+\begin{corollary}\label{c-weight}
+For any $t \in \natInt{1}{n}$ and $j \in \natInt{1}{\depth(t)-1}$,$$\sum_{i=j+1}^{\depth(t)} b^t_{i} \ge 
+\frac{1}{64} \cdot \weight^{t-1}(S^t_j) - \frac{1}{8}.$$
+\end{corollary}
+
+\begin{proof}
+For fixed $t$, sum the inequality in Lemma \ref{l-p1} for $i$ from $j$ to $\depth(t)-1$, and note that
+$\weight^{t-1}(S^t_{\depth(t)}) \leq 8$.  Then divide through by 64.
+\end{proof}
+
+
+We now come to the main lower bound of this section.
+
+
+\begin{corollary}\label{c-main}
+Let $\A$ be a lazy algorithm. Then 
+$$ \chi_\A(y^1,y^2,\dotsc,y^n)  \ge \frac{1}{64} \sum_{t=1}^n \weight^{t-1}(S^t_{p^t}) - \frac{n}{8}.$$
+\end{corollary}
+
+\begin{proof}
+$\chi_\A(y^1,\ldots,y^n)$ is at least $\sum_{t=1}^n |Rel^t|$.  Now combine Lemmas \ref{l-rel} and Corollary 
+\ref{c-weight}. (For $t$ such that $p^t=\depth(t)$ use the fact that $|Rel^t|>0> \frac{1}{64} \cdot \weight^{t-1}(S^t_{p^t}) - \frac{1}{8}$.)
+\end{proof}
+
+
+\section{Prefix Bucketing}
+\label{s-pb}
+
+We start by a definition of the prefix bucketing.
+A {\em  bucket configuration} for $k$ buckets and $t$ items  is a sequence $a_1,\ldots,a_k$ of nonnegative integers
+summing to $t$.  One should think of $a_i$ as the number of items in bucket $i$.
+
+Given a bucket configuration
+$a_1,\ldots,a_k$, {\em placing a new item in bucket $p$} transforms  the configuration as follows:
+A new item is added to bucket $p$ and all items in buckets higher than $p$ are moved to bucket $p$.
+Buckets $i < p$ are unchanged.  Formally the configuration $b$ produced from $a$ by the placement $p$ satisfies:
+
+\begin{itemize}
+\item $b_i=a_i$ for $i < p$,
+\item $b_p=1+\sum_{i \geq p} a_i$, and
+\item $b_i=0$ for $i>p$.
+\end{itemize}
+
+
+A {\em prefix bucketing} of $n$ items into $k$ buckets is a sequence $a^0,a^1,\dotsc,a^n$ such that
+each $a^t$ is a bucket configuration of $t$ items into $k$ buckets, and there is a sequence
+$p^1,\dots p^n$ of integers in $\natInt{1}{k}$ such that for each $t \in \natInt{1}{n}$,
+$a^t$ is obtained from $a^{t-1}$ by placing a new item in bucket $p^t$ according to the transformation
+defined above.  The sequence $p^1,\ldots,p^n$ is called the {\em placement sequence} of the bucketing.
+
+\iffalse
+satisfying: $a^0 = (0,0,\dotsc,0)$ and for $t=1,2,\dotsc,n$, there exists $p^{t} \in \natInt{1}{k}$ such that
+\begin{enumerate}
+\item $a^t_i = a^{t-1}_i$, for all $i=1,2,\dotsc,p^{t}-1$,
+\item $a^t_{p^{t}} = 1+ \sum_{i\ge p^{t}} a^{t-1}_i$, and
+\item $a^t_i = 0$, for all $i=p^{t}+1,\dotsc,k$.
+\end{enumerate}
+\fi
+
+The \emph{cost of the bucketing $a^0,a^1,\dotsc,a^n$} is $c(a^0,a^1,\dotsc,a^n) = \sum_{t=1}^n a^t_{p^{t}}$. 
+
+\subsection{Connecting bucketing to online labeling}
+\label{ss-b to ol}
+
+In this subsection we show that given any lazy online labeling algorithm $\A$, we can use the adversary
+defined in the previous section to construct a prefix bucketing whose cost provides a lower bound
+on the cost of $\A$ in labeling the sequence $Y=\{y_1,\ldots,y_n\}$ produced by the adversary. 
+
+
+Fix a lazy online labeling algorithm $\A$ and for $1 \leq t \leq n$, let $f^t,S^t_i,B^t,p^{t},y^t$ and $f^0,p^0$ be as
+defined by the {\bf Adversary($\A,n,m,r$)}. Let $Y$ denote the set $\{y^1,y^2,\dotsc,y^n\}$.
+
+
+Set $k=\lceil \log m\rceil$.
+For $t=0,1,\dotsc,n$ we define a sequence $(A^t_i:1 \leq i \leq k)$ of subsets of $Y$
+as follows:
+For all $i=1,\dotsc,k$, $A^0_i = \emptyset$.  For $t>0$:
+\begin{itemize}
+\item $A^t_i = A^{t-1}_i$, for all $i=1,\dotsc,p^{t}-1$,
+\item $A^t_{p^{t}} = \{y^t\} \cup \bigcup_{i\ge p^{t}} A^{t-1}_i$, and
+\item $A^t_i = \emptyset$, for all $i=p^{t}+1,\dotsc, k$.
+\end{itemize}
+
+For each $t \in \natInt{1}{k}$, let $a^t=a^t_1,\ldots,a^t_k$ be the sequence defined
+by $a^t_i=|A^t_i|$.  It is easy to see (by induction on $t$) that $a^0,\ldots,a^n$ is a prefix bucketing
+of $n$ items into $k$ buckets with placement sequence $p^1,\ldots,p^n$. 
+The cost of this bucketing is $c(a^0,a^1,\dots,a^n)=\sum_{i=1}^n |A^t_{p^t}|$.  Our next step is to relate this cost
+to the cost of online labeling.
+
+We start by observing:
+
+
+\begin{lemma}\label{l-p2}
+For any $t \in \natInt{1}{n}$ and $i \in \natInt{1}{\depth(t)}$,  $f^{t-1}(A^t_i \setminus \{y^t\}) \subseteq S^t_i$.
+\end{lemma}
+
+\iffalse
+\begin{proof}
+We prove this by induction on $t$.  For $t=1$ the result is trivial since  each of the sets $A^1_i \setminus \{y^t\}$ is
+empty.
+
+Assume $t>1$.    If $A^t_i\setminus \{y^t\}= \emptyset$  then the conclusion is trivial.  So assume
+$A^t_i\setminus \{y^t\} \neq \emptyset$.  In particular, $i \leq p^t$.  We also claim that $i \leq p^{t-1}$.
+If not then by definition $A^{t-1}_j = \emptyset$.  If $j< $
+For $i=p^t$, by the definition of $p^t$ and  $A^t_{p^t}$ and the induction hypothesis we have:
+
+$$
+f^{t-1}(A^t_{p^t}\setminus \{y^t\}) = f^{t-2}(A^t_{p^t}\setminus \{y^t\}) =  \bigcup_{i \geq p^t}f^{t-2}( A^{t-1}_i) \subseteq \bigcup_{i \geq p^t} S^{t-1}_i = S^{t-1}_{p^t}=S^t_{p^t}.
+$$
+
+Finally consider the case $i<p^t$.  Then $A^t_i=A^{t-1}_i$.  If $i > p^{t-1}$ then this set is empty, and we're done.
+So assume $i \leq p^{t-1}$.    
+Recall from the definition of the adversary that $i \leq p^{t-1}$ implies $S^t_i=S^t_{i-1}$, and $i \leq p^t$ implies  
+that  the busy segment $B^t$ is a subset of $S^t_i$,  which implies
+that $\pop^t(S^t_i) =  \pop^{t-1}(S^t_i)\cup \{y^t\}$.  Let $i \in \natInt{1}{k}$.
+If $i<p^t$ then by the definition of $A^t_i$ and the induction hypothesis
+we have:
+$$A^t_i = A^{t-1}_i \subseteq (f^{t-2})^{-1}(S^{t-1}_i) =  (f^{t-2})^{-1}(S^t_i) \subseteq (f^{t-1})^{-1}(S^t_i),$$
+as required.
+
+
+\end{proof}
+\fi
+
+\begin{proof}  %% {Lemma \ref{l-p2}}
+We prove the claim by induction on $t$. For $t=1$, the only non-empty set is $A^1_1=\{y^1\}$ so the claim is true.
+Let assume that it is true for $t-1$ and we prove it for $t$.
+The {\bf Adversary($\A,n,m,r$)} produces the sets $S^t_i$ and the key $y^t$, and then the algorithm $\A$ outputs $f^t$.
+Based on it the adversary defines $B^t, Rel^t$ and $p^t$.
+We distinguish two cases.
+
+\emph{Case $p^{t-1} < p^t$:} For all $i\le p^{t-1}$, $A^{t}_i = A^{t-1}_i$, and for all $i> p^{t-1}$, if $i\not=p^t$ then $A^t_i=\emptyset$;
+otherwise, $A^t_i = \{y^t\}$. For all $i\le p^{t-1}$, $B^{t-1} \subseteq S^{t-1}_{p^{t-1}} \subseteq S^{t-1}_i = S^t_i$, where
+the first containment follows from the definition of $p^{t-1}$ and the last equality follows from the definition of $S^t_i$.
+For all $i<p^{t-1}$, $y^{t-1} \not\in A^{t-1}_i = A^t_i$ so using the induction hypothesis
+$f^{t-1}(A^t_i) \subseteq f^{t-2}(A^t_i) \cup B^{t-1} \subseteq S^{t-1}_i = S^t_i$.
+Similarly for $i=p^{t-1}$, $f^{t-1}(A^t_i) \subseteq f^{t-2}(A^t_i \setminus \{y^{t-1}\}) \cup B^{t-1} \subseteq S^{t-1}_i = S^t_i$.
+For each $i>p^{t-1}$, either $A^t_i = \emptyset$ or $i=p^t$ and $A^t_i=\{y^t\}$. In either case the lemma follows trivially.
+
+\emph{Case $p^{t-1} \ge p^t$} is similar: For all $i < p^{t}$, $A^{t}_i = A^{t-1}_i$, for $i=p^t$, $A^t_i = \{y^t\} \cup \bigcup_{j\ge p^t} A^{t-1}_j$,
+and for $i>p^t$, $A^t_i=\emptyset$. Again, for all $i\le p^{t}$, $B^{t-1} \subseteq S^{t-1}_{p^{t-1}} \subseteq S^{t-1}_i = S^t_i$.
+For all $i<p^{t}$, $y^{t-1} \not\in A^{t-1}_i = A^t_i$ so using the induction hypothesis
+$f^{t-1}(A^t_i) \subseteq f^{t-2}(A^t_i) \cup B^{t-1} \subseteq S^{t-1}_i = S^t_i$.
+It only remains to consider the case of $i=p^t$ as the claim is trivial for $i>p^t$.
+Since $p^{t-1} \ge p^t$, for $i>p^t$, $S^{t-1}_i \subseteq S^t_{p^t}$.
+Using the induction hypothesis, $f^{t-1}(A^t_{p^t} \setminus \{y^t\}) \subseteq f^{t-1}(\bigcup_{j\ge p^t} A^{t-1}_j)
+\subseteq \bigcup_{j\ge p^t} f^{t-2}( A^{t-1}_j \setminus \{y^{t-1}\}) \cup B^{t-1} \subseteq S^t_{p^t}$. The lemma follows.
+\end{proof}
+
+This lemma implies that for each $t \in \natInt{1}{n}$, $\weight^{t-1}(S^t_{p^t}) \ge |A^t_{p^t}| - 1$.
+Combining this with  Corollary \ref{c-main} we obtain the following connection between
+the cost of online labeling and prefix bucketing.
+
+\begin{lemma}\label{l-b2l}
+Let the prefix bucketing $a^0,a^1,\dotsc,a^n$ be defined by $a^t_i = |A^t_i|$, for all $t=0,\dotsc,n$ and $i=1,\dotsc,k$.
+The cost $c(a^0,a^1,\dotsc,a^n)$ of the bucketing satisfies:
+$$\chi_\A(y^1,y^2,\dotsc,y^n) \ge \frac{1}{64} \cdot c(a^0,a^1,\dotsc,a^n) - \frac{9}{64} n.$$
+\end{lemma}
+
+
+\subsection{Lower Bound for Bucketing}\label{s-lbb}
+
+In this subsection we derive a lower bound (Lemma \ref{l-lbb}) on the cost of any prefix bucketing.
+To do so we map any prefix bucketing to a $k$-tuple of ordered rooted trees.
+We prove a lower bound on the sum of the depths of the nodes of the trees,
+and this will imply a lower bound for the cost of the bucketing.
+
+\paragraph{Ordered trees}
+An {\em ordered rooted tree} is a rooted tree where the children of each node are ordered from left to right.
+Since these are the only trees we consider, we refer to them simply as trees.
+The \emph{$i$-th subtree of $T$} is the tree rooted in the $i$-th child of the root from the left.
+If the root has less than $i$ children, we consider the $i$-th subtree to be empty.
+The number of nodes of $T$ is called its {\em size} and is denoted $|T|$.
+The {\em depth} of a node is  one more than its distance to the root, e.g., the root has depth 1.
+The depth of a tree is the maximum depth of its nodes.
+The \emph{cost} of $T$, denoted $\kappa(T)$, is the sum of the depths of its nodes.
+The cost and size of an empty tree is defined to be zero.
+
+
+To each prefix bucketing $\bar{a} = a^0,a^1,\dotsc,a^n$ into $k$ buckets, we associate
+a $k$-tuple of trees $T(\bar{a})_1,T(\bar{a})_2,\dotsc,T(\bar{a})_k$ inductively 
+as follows:
+The trivial bucketing $\bar{a} = a^0$ is mapped to the $k$-tuple of empty trees.
+For bucketing $\bar{a} = a^0,a^1,\dotsc,a^n$ with placement sequence $p^1,\ldots,p^n$
+let $\bar{a}'$ be the bucketing $a^0,a^1,\dotsc,a^{n-1}$, and assume $T(\bar{a}')$ has been defined.
+We define $T(\bar{a})$ by:
+\begin{itemize}
+\item For $1 \le i < p^n$,  $T(\bar{a})_i = T(\bar{a}')_i$.
+\item $T(\bar{a})_{p^n}$ consists of
+a root node whose children are the non-empty trees among \\
+$T(\bar{a}')_{p^n},T(\bar{a}')_{p^n+1},\dotsc,T(\bar{a}')_k$ 
+ordered left to right by  increasing index.
+\item $T(\bar{a})_i$ is an empty tree for $p^n < i \le k$.
+\end{itemize}
+
+We make several simple observations about the trees assigned to a bucketing.
+
+\begin{proposition}\label{p-ts}
+For any positive integer $k$, if $\bar{a} = a^0,a^1,\dotsc,a^n$ is a prefix bucketing into $k$ buckets
+then for each $i \in \natInt{1}{k}$, $|T(\bar{a})_i| = a^n_i$.
+\end{proposition}
+\begin{proof}
+The proof is straightforward by induction on $n$.
+\end{proof}
+
+The next lemma relates the cost of bucketing to the cost of its associated trees.
+\begin{lemma}\label{l-tc}
+For any positive integer $k$, if $\bar{a} = a^0,a^1,\dotsc,a^n$ is a prefix bucketing into $k$ buckets then
+ $c(\bar{a})=\sum_{i=1}^k \kappa(T(\bar{a})_i)$.
+\end{lemma}
+
+\iffalse
+\begin{proof}
+By induction it suffices to show that
+$\kappa(T(\bar{a}))-\kappa(T(\bar{a}'))=c(\bar{a})-c(\bar{a}')$, where $\kappa(T(\bar{a})) = \sum_{i=1}^k \kappa(T(\bar{a})_i)$. By definition of $c(\cdot)$ and Proposition \ref{p-ts},
+$c(\bar{a})-c(\bar{a}')=a^n_{p^n}=|T(\bar{a})_{p^n}|$.
+So it suffices to show $\kappa(T(\bar{a}))-\kappa(T(\bar{a}'))=|T(\bar{a})_{p^n}|$.
+By the definition of $\kappa(\cdot)$ and the inductive definition of 
+$T(\bar{a})$, 
+$$\kappa(T(\bar{a}))-\kappa(T(\bar{a}'))= \kappa(T(\bar{a}_{p^n}))-\sum_{i \geq p^n} \kappa(T(\bar{a}'_{i})).$$ 
+This equals $|T(\bar{a})|_{p^n}$, as required, since each node
+of $\bigcup_{i \geq p^n} T(\bar{a}')_i$ corresponds (bijectively) to a 
+non-root of  $T(\bar{a})_{p^n}$ of depth one greater.
+\end{proof}
+\fi
+
+\begin{proof}
+By induction on $n$. For $n=0$, both sides of the equality are 0.  Suppose $n \geq 1$
+and assume that the claim is true for $n-1$.  Let $\bar{a}'=a^0,a^1,\dotsc,a^{n-1}$ and $p^n$ be as in the definition of prefix bucketing.
+\begin{align*}
+c(\bar{a}) = c(\bar{a}') + 1 + \sum_{i=p^n}^k a^{n-1}_i
+%%%% b/c space: %%% &= \sum_{i=1}^k \kappa(T(\bar{a}')_i) + 1 + \sum_{i=p^n}^k a^{t-1}_i \cr
+&= \sum_{i=1}^k \kappa(T(\bar{a}')_i) + 1 + \sum_{i=p^n}^k |T(\bar{a}')_i| \cr
+&= \sum_{i=1}^{p^n-1} \kappa(T(\bar{a})_i) + 1 + \sum_{i=p^n}^k \left(\kappa(T(\bar{a}')_i) + |T(\bar{a}')_i|\right)
+\end{align*}
+where the second equality uses the induction hypothesis with Proposition~\ref{p-ts},
+and the last equality follows from the definition of $T(\bar{a})_i$ for $i=1,\dotsc,p^n-1$.
+For $i\ge p^n$ the depth of each node in $T(\bar{a}')_i$ increases by one when it becomes a child of $T(\bar{a})_{p^n}$, hence
+\begin{align*}
+\kappa(T(\bar{a})_{p^n}) =  1 + \sum_{i=p^n}^k \left(\kappa(T(\bar{a}')_i) + |T(\bar{a}')_i|\right).
+\end{align*}
+For $i > p^n$, $\kappa(T(\bar{a})_i) = 0$ so the lemma follows.
+\end{proof}
+
+Thus to get a lower bound on the cost of a prefix bucketing 
+it suffices to prove a lower bound on the sum of the costs of
+the trees that occur in the associated $k$-tuple. 
+The following definition will help describe the structure of
+trees that occur in such a $k$-tuple.
+ 
+\begin{definition}[$k$-admissible]
+\label{def:k-admissibility}
+Let $k$ be a positive integer. 
+The empty tree is $k$-admissible. A non-empty tree $T$ is $k$-admissible if its root has at most $k$ children
+and the $i$-th non-empty subtree of $T$ is $(k+1-i)$-admissible. 
+\end{definition}
+
+For example, $T$ is 1-admissible if and only if $T$ is empty or a rooted path.
+We collect some basic properties of $k$-admissibility.
+
+\begin{proposition}
+\label{lm:k-admissibility}
+Let $T$ be a (rooted ordered) tree and $k \geq 1$, and suppose $T$ is $k$-admissible. Let $v$ be a leaf of $T$.
+\begin{enumerate}
+\item If  $k' > k$ then $T$ is $k'$-admissible.
+\item If $v$ is deleted from $T$ then the resulting tree  is  $k$-admissible. 
+\item If a new node is added as a child of $v$  then the resulting tree is $k$-admissible.
+\item  If $T$ has at least two nodes and $k \geq 2$, 
+then the tree obtained from $T$ by removing its first subtree is $(k-1)$-admissible.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The first and last parts are essentially immediate from the definition of $k$-admissibility.
+We prove the other two parts by induction on $|T|$. 
+ Let $T'$ be the tree resulting from deleting $v$
+and $T''$ be the tree resulting from adding a child to $v$.  If $|T|=1$ then  $T$, $T'$ and $T''$
+are $k$-admissible for all $k \geq 1$.
+Suppose $|T| > 1$.  Let $v$ belong to the $i$-th subtree $T_i$ of $T$.
+By definition of $k$-admissible, $T_i$ is $(k-i+1)$-admissible, and by induction the corresponding
+subtree $T''_i$ is also $(k-i+1)$-admissible.  It follows immediately that $T''$ is $k$-admissible.
+If $T_i$ consists of a single vertex, namely $v$, then by removing it, the $j$-th subtree
+of $T$ (which must be $(k-j+1)$-admissible) becomes the $(j-1)$-st subtree of $T'$ (and is $(k-(j-1)+1)$-admissible 
+by the first part) so $T'$ is $k$-admissible. Otherwise, the subtree $T'_i$ that corresponds to $T_i$ is non-empty and 
+by induction it is $(k-i+1)$-admissible. Since all other subtrees of $T'$ are the same as in $T$, $T'$ is $k$-admissible.
+\end{proof}
+
+The connection of admissibility to prefix bucketing is given by the following proposition, which is obtained by 
+an easy induction on $n$ (using the first observation in Lemma \ref{lm:k-admissibility}):
+
+
+\begin{proposition}\label{p-ta}
+For any positive integer $k$, if $\bar{a} = a^0,a^1,\dotsc,a^n$ is a prefix bucketing into $k$ buckets then
+for each $i \in \natInt{1}{k}$, $T(\bar{a})_i$ is $(k+1-i)$-admissible.
+\end{proposition}
+
+Let us define $\mu(n,k)$ to be the minimum cost of a $k$-admissible tree of $n$ vertices.
+
+\begin{proposition}
+\label{prop:mu}
+For any bucketing $\bar{a}$ of $n$ items into $k$ buckets, we have $c(\bar{a}) \geq \mu(n,k) - n+1$.
+\end{proposition}
+
+\begin{proof}
+Modify $\bar{a}$ to the bucketing $\bar{b}=b^0,\ldots,b^n$ where $b^i=a^i$
+for $i<n$ and $b^n=(n,0,\ldots,0)$.  This corresponds to placing the final item in bucket 1.
+This can increase the cost by at most $n-1$ so
+ $c(\bar{a}) \geq c(\bar{b}) - n+1$.  The first tree $U$ in the  $k$-tuple  $T(\bar{b})$ has  size $n$ and is $k$-admissible
+by Proposition \ref{p-ta}.  By  Lemma \ref{l-tc}, $c(\bar{b}) \geq \kappa(U)$ which
+is at least $\mu(n,k)$.  
+\end{proof}
+
+It remains to give a  lower bound on $\mu(n,k)$.  
+
+\begin{lemma}
+\label{lm:k-d-cost}
+Let $d$ be a positive integer and $T$ be an arbitrary rooted tree with all leaves of depth at least $d$. Then 
+$\kappa(T) \geq \frac{(d + 1)}{2} \cdot |T|$.
+\end{lemma}
+\begin{proof} %% {Lemma \ref{lm:k-d-cost}}
+Let $n_i$ denote the number of nodes of $T$ at the depth $i = 1, \dotsc, d - 1$, and let $n_d$ denote the number of all nodes at depth at least $d$. $|T|=n_1+n_2 + \dotsb + n_d$.
+Since each node of $T$ at depth $i<d$ has at least one child at depth $i+1$, we have $0\leq n_1 \leq n_2 \leq \dotsb \leq n_d$.
+Clearly, $c(T) \geq \sum_{i=1}^d in_i$.
+Given the constraints, this sum is minimized (over reals) when $n_1=n_2=\dotsb =n_d = |T| / d $. Thus $c(T) \geq \frac{d(d + 1)}{2} \cdot \frac{|T|}{d}$.
+\end{proof}
+
+A $k$-admissible tree may have some leaves at low depth, so the above bound is not immediately useful, so we need
+the following:
+
+\begin{definition}[Balanced tree]
+A tree of depth $d$ is balanced if all its leaves are of depth $d$ or $d - 1$.
+\end{definition}
+
+
+\begin{lemma}
+\label{lm:balanced}
+Let $T$ be a $k$-admissible tree of size $n$ having the minimum cost $\mu(n,k)$. Then $T$ is balanced.
+\end{lemma}
+
+\begin{proof}  %% {Lemma \ref{lm:balanced}}
+Let $d$ be the depth of $T$.  Suppose $T$ is unbalanced.
+Let $u$ be a leaf  of depth at most $d-2$ and let $v$ be a leaf of depth $d$.
+Let $T'$ be the tree obtained by  
+removing $v$ and reattaching $v$ as a child of  $u$. Then $\kappa(T') <\kappa(T)$, and  
+by the second and third parts of Proposition \ref{lm:k-admissibility}, $T'$ is $k$-admissible which contradicts the minimality of $\kappa(T)$.
+Thus $T$ is balanced.
+\end{proof}
+
+
+\begin{lemma}
+\label{lm:k-d-size}
+Let $k,d \geq 1$. If $T$ is a $k$-admissible tree of depth $d$,
+then $|T| \leq \binom{k + d - 1}{k}$.
+\end{lemma}
+\begin{proof}
+If $k=1$ then $T$ must be a rooted path of depth $d$ and clearly $|T|=d\le \binom{d}{1}$. 
+For $k\ge 2$, we prove the result by induction on $|T|$.  If $|T|=1$ the result is trivial so
+assume $|T| \geq 2$.  Let $L$ be the first subtree of $T$ and let $R$ be the tree created by removing $L$ from $T$. By the definition of $k$-admissibility
+$L$ is a $k$-admissible tree of depth at most $d-1$, and by the last part of
+Proposition \ref{lm:k-admissibility}, $R$ is a $(k-1)$-admissible tree of depth at most $d$.
+By the induction hypothesis, $|T| = |L| + |R| \leq \binom{k + d - 2}{k} + \binom{k + d - 2}{k - 1} = \binom{k + d - 1}{k}$.
+\end{proof}
+
+\begin{corollary}
+\label{cor:mu}
+For any $n \geq k \geq 1$, $\mu(n,k)$ is at least $n(w+1)/2$ 
+where $w$ is the smallest integer such that $\binom{k+w}{k} \geq n$.
+\end{corollary}
+
+\begin{proof}
+Let $T$ be a $k$-admissible tree of size $n$ having minimum cost.  Let $d$ be the depth of $T$.
+By Lemma \ref{lm:k-d-size} we have
+$\binom{k+d-1}{k} \geq n$ and so $d-1 \geq w$.
+By Lemma \ref{lm:balanced}, $T$ is balanced so all leaves are at depth at least $d-1\geq w$ and so
+by Lemma \ref{lm:k-d-cost}, $\kappa(T) \geq (w+1)n/2$.  
+\end{proof}
+
+\begin{lemma} \label{lm:lower_bound_d}
+Let $n,k,w$ be integers such that $n\ge 2$ and $k \ge \log n$.  If $\binom{k+w}{k} \geq n$,
+then $w \ge \frac{\log n}{ 4 (\log 8k - \log\log n)}$.
+\end{lemma}
+\begin{proof}
+If $w \geq k$ then the conclusion holds, so assume $w \leq k$.
+Recall that $\log\binom{r}{s} \leq {H(s/r) r}$
+where $H$ stands for the binary entropy function
+defined on $[0,1]$ by $H(x) = x \log\frac{1}{x} + (1-x) \log\frac{1}{1-x}$, where the base of the logarithm is 2.
+For $x \in (0,1/2]$, $H(x) \le 2x \log\frac{1}{x}$. Therefore:
+	
+	\begin{align*}
+	\log(n) \leq \log{k+w \choose k} = \log {k+w \choose w} \leq (k+w)H\left(\frac{w}{k + w}\right)  \leq 
+2w\log\left(\frac{k + w}{w}\right) \leq 2w\log\left(\frac{2k}{w}\right).
+	\end{align*}
+Defining $a=\log(n)/w$, we get $a \leq 2\log(2ak/\log(n))=2(\log(8k)+\log(a/4)-\log\log(n))$
+and using $\log(x)<x$ we get $a \leq 2(\log(8k)+a/4 -\log\log(n))$ and so $a/2 \leq 2(\log(8k)-\log\log(n))$, which
+implies the claimed bound on $w$.
+\end{proof}
+
+
+We  now deduce the following lower bound on the cost of prefix bucketing:
+\begin{lemma}\label{l-lbb}
+Let $k,n$ be positive integers such that $k \ge \log n$.
+The cost of any prefix bucketing of $n$ items into $k$ buckets is at least $\frac{n \log n}{8 (\log 8k - \log \log n)} - n$.
+\end{lemma}
+
+\begin{proof}
+By Proposition \ref{prop:mu}, the cost of any such bucketing is at least $\mu(n,k)-n$, and by Corollary \ref{cor:mu},
+this is at least $\frac{nw}{2}-n$ where $w$ is the smallest integer such that $\binom{k+w}{k} \geq n$, which is at
+least $\log n/4(\log 8k -\log\log n)$ by Lemma \ref{lm:lower_bound_d}.
+\end{proof}
+
+\iffalse
+\begin{proof}
+For $n=1$ the lemma is straightforward so let us assume $n \ge 2$.
+Consider a prefix bucketing $\bar{a} = a^0,a^1,\dotsc,a^n$ of $n$ items into $k$ buckets.
+Let $b = (n,0,0,\dotsc,0)$ be a $k$-tuple of integers,
+and let  $\bar{b} = a^0,a^1,\dotsc,a^{n-1},b$.
+Clearly, $\bar{b}$ is also a prefix bucketing and $c(\bar{b}) \le c(\bar{a}) + n-1$. 
+Hence, it suffices to show that $c(\bar{b}) > \frac{n \log n}{8 (\log 8k - \log \log n)}$.
+
+Let $T$ be $T(\bar{b})_1$.
+By Proposition~\ref{p-ts}, $|T|=n$, and by Proposition~\ref{p-ta}, $T$ is $k$-admissible.
+Furthermore, by Lemma~\ref{l-tc}, $c(\bar{b}) = \sum_{i=1}^k c(T(\bar{b})_i) = c(T)$,
+so we only need to bound $c(T)$ from below.
+From Lemma~\ref{lm:balanced} it follows that
+there is a balanced $k$-admissible tree $T'$ of size $n$ such that $c(T) \geq c(T')$.
+
+Let the depth of $T'$ be $d$.
+By Lemma~\ref{lm:k-d-size}, $T'$ has at most $\binom{k + d-1}{k}$ nodes.
+Using Lemma~\ref{lm:lower_bound_d}, we see that
+$d > \frac{\log n}{4 (\log 8k - \log \log n)}$; otherwise, $T'$ could not contain $n$ nodes.
+Since $T'$ is balanced, by Lemma \ref{lm:k-d-cost}, $c(T') \ge \frac{(d-1)+1}{2} \cdot n = \frac{dn}{2}$.
+Thus, $c(T) \ge c(T') > \frac{n \log n}{8 (\log 8k - \log \log n)}$. The lemma follows.
+\end{proof}
+\fi
+
+\begin{proofof}{Lemma \ref{l-main}}\label{pf-main}
+By Lemma \ref{l-b2l}, the cost incurred by a lazy algorithm on the adversary sequence $y^1,y^2,\dotsc,y^n$
+is lower-bounded by
+$$\chi_\A(y^1,y^2,\dotsc,y^n) \ge \frac{1}{64} \cdot c(a^0,a^1,\dotsc,a^n) - \frac{9}{64} n$$
+where  $a^0,a^1,\dotsc,a^n$ is a certain  prefix bucketing of $n$ items into $k=\lceil \log m \rceil$ buckets.
+The previous lemma provides a lower bound on the cost of any such bucketing. Using that lower bound we get:
+$$\chi_\A(y^1,y^2,\dotsc,y^n) \ge \frac{1}{512} \cdot \frac{n \log n}{ 3 + \log \lceil \log m \rceil - \log \log n} - \frac{n}{6}.$$
+\end{proofof}
+
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{32}
+
+\bibitem{manuscript}
+{Martin Babka, Jan Bul\'{a}nek, Vladim\'{i}r \v{C}un\'{a}t, Michal Kouck\'{y}, and Michael Saks}.
+\newblock On Online Labeling with Superlinearly Many Labels.
+\newblock Manuscript 2012.
+
+\bibitem{BKS}
+Jan Bul{\'a}nek, Michal Kouck{\'y}, and Michael Saks.
+\newblock Tight lower bounds for the online labeling problem.
+\newblock In  \emph{Proc. of 66th Symp. of Theory of Computation}, {\em (STOC'12)}, Howard~J. Karloff and Toniann Pitassi, editors, pages 1185--1198. ACM, 2012.
+
+\bibitem{BKS2}
+Jan Bul{\'a}nek, Michal Kouck{\'y}, and Michael Saks.
+\newblock  On Randomized Online Labeling with Polynomially Many Labels.
+\newblock In \emph{Proc. of 4oth  ICALP}, Lecture Notes in Computer Science 7965,
+pages 291-302, Springer, 2013.
+
+
+\bibitem{Benderetal}
+Michael~A. Bender, Richard Cole, Erik~D. Demaine, Martin Farach-Colton, and Jack Zito.
+\newblock Two simplified algorithms for maintaining order in a list.
+\newblock In \emph{Proc. of 10th Annual European Symposium on Algorithms}, {\em (ESA)}, Rolf~H. M{\"o}hring and Rajeev Raman, editors, volume 2461 of {\em LNCS}, pages 152--164. Springer, 2002.
+
+\bibitem{BenderetalB-Tree}
+Michael~A. Bender, Erik~D. Demaine, and Martin Farach-Colton.
+\newblock Cache-oblivious {B}-trees.
+\newblock {\em Journal on Computing}, 35(2):341--358, 2005.
+
+\bibitem{BDIW}
+Michael~A. Bender, Ziyang Duan, John Iacono, and Jing Wu.
+\newblock A locality-preserving cache-oblivious dynamic dictionary.
+\newblock {\em Journal of Algorithms}, 53(2):115--136, 2004.
+
+\bibitem{Brodaletal}
+Gerth~St{\o}lting Brodal, Rolf Fagerberg, and Riko Jacob.
+\newblock Cache oblivious search trees via binary trees of small height.
+\newblock In \emph{Proc. of 13th ACM-SIAM Symp. on Discrete Algorithms}, {\em (SODA)}, D. Eppstein, editor, pages 39--48. ACM/SIAM, 2002.
+
+\bibitem{BirdSadnicki}
+Richard~S. Bird and Stefan Sadnicki.
+\newblock Minimal on-line labelling.
+\newblock {\em Information Processing Letters}, 101(1):41--45, 2007.
+
+\bibitem{entropy}
+Thomas M. Cover, Joy A. Thomas. 
+\newblock {\em Elements of Information Theory.}
+\newblock  New York: Wiley, 1991.
+
+\bibitem{DSZ04}
+Paul~F. Dietz, Joel~I. Seiferas, and Ju~Zhang.
+\newblock A tight lower bound for online monotonic list labeling.
+\newblock {\em SIAM J. Discrete Mathematics}, 18(3):626--637, 2004.
+
+% \bibitem{DZ-SWAT}
+% Paul~F. Dietz and Ju~Zhang.
+% \newblock Lower bounds for monotonic list labeling.
+% \newblock In {\em SWAT}, pages 173--180, 1990.
+
+\bibitem{EK11}
+Yuval Emek and Amos Korman.
+\newblock New bounds for the controller problem.
+\newblock {\em Distributed Computing}, 24(3-4):177--186, 2011.
+
+\bibitem{Itaietal}
+Alon Itai, Alan~G. Konheim, and Michael Rodeh.
+\newblock A sparse table implementation of priority queues.
+\newblock In \emph{Proc. of 8th International Colloquium on Automata, Languages and Programming}, {\em (ICALP'81)} Shimon Even and Oded Kariv, editors, volume 115 of {\em LNCS}, pages 417--431. Springer, 1981.
+
+\bibitem{Willard}
+Dan~E. Willard.
+\newblock A density control algorithm for doing insertions and deletions in a sequentially ordered file in good worst-case time.
+\newblock {\em Information and Computation}, 97(2):150--204, 1992.
+
+\bibitem{Zhang}
+Ju~Zhang.
+\newblock Density Control and On-Line Labeling Problems.
+\newblock {\em PhD thesis}, University of Rochester, 1993.
+\end{thebibliography}
+\end{document}
+
+
+
+
+
+
+
+

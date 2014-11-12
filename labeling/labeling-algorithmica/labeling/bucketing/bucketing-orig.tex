@@ -1,0 +1,160 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{epsfig}
+\sloppy
+%\usepackage{fullpage}
+%\usepackage{a4wide}
+
+%\usepackage{showlabels}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbold}
+   
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage{xcolor}
+
+\usepackage{latexsym}
+\usepackage{graphics}
+%\usepackage[dvips]{graphics}
+%\usepackage{epic}
+%\usepackage{eepic}
+%\usepackage{color}
+
+\newtheorem{theorem}{Theorem} %***
+\newtheorem{corollary}[theorem]{Corollary} 
+\newtheorem{claim}[theorem]{Claim} 
+\newtheorem{lemma}[theorem]{Lemma} 
+\newtheorem{theorem*}{Theorem} 
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+\newtheorem{proposition}[theorem]{Proposition} 
+\newcommand{\qed}{$\Box$}
+%\newcommand{\qed}{\rule{1em}{0in} \hspace*{\fill}$\square$\vspace{1ex}\par}%{\rule{7pt}{7pt}}
+\newenvironment{proof}{\noindent {\bf Proof:}}{\hfill \qed \smallskip}
+\newenvironment{proofof}[1]{\noindent{\it Proof of #1. }} {{\qed}}
+
+\newcommand\bel[1]{\begin{equation}\label{#1}}
+\newcommand\ee{\end{equation}} 
+
+\newcommand\rest{\restriction}
+
+
+\date{\today} 
+
+\begin{document}
+
+
+%\def\R{\mathbb{R}}
+\def\1{\mathbb{1}}
+\def\R{\mathbb{R}}
+%\def\1{1}
+\def\<{\left<}
+\def\>{\right>}
+\newcommand{\RL}{\mbox{{\sf RL}}}
+\newcommand{\BPL}{\mbox{{\sf BPL}}}
+\newcommand{\Log}{\mbox{{\sf L}}}
+\newcommand{\NCo}{\mbox{{\sf NC$^1$}}}
+\newcommand{\RNC}{\mbox{{\sf RNC$^1$}}}
+\newcommand{\SC}{\mbox{{\sf SC}}}
+
+% \def\D{\widetilde{D}}
+% \def\hD{\widehat{D}}
+% \def\hR{\widehat{R}}
+
+\def\D{\tilde{D}}
+\def\hD{\hat{D}}
+\def\hR{\hat{R}}
+
+%\def\supp{{\mathrm{supp}}}
+%\def\rank{{\mathrm{rank}}}
+\def\supp{{\rm{supp}}}
+\def\rank{{\rm{rank}}}
+ \newcommand{\todo}[1]{\marginpar{#1}}
+ 
+\def\prl{\|} \begin{claim} \label{cl:lower_bound_d} Let $k\ge \log n$ and let $d$ be the smallest such that 
+${k+d-1 \choose d-1}\ge n$. Then it holds that $d\ge \frac{\log n}{6 (\log 4k - \log \log n)} + 1$. 
+\end{claim}
+
+Before we prove this claim, we state the following claim.
+\begin{claim}
+\label{cl:d_value}
+
+Let $k\ge \log n$ and $d = \frac{\log n}{6 (\log 4k - \log \log n)} + 1$ and $n$. Then ${k+d-1 \choose d-1} 
+\leq n$.
+
+\end{claim}
+
+\todo{omezit n}
+\begin{proof}
+
+First notice that $d\leq k$. Recall that ${a \choose b}\leq 2^{h(a/b)b}$ where $h$ stands for the entropy. 
+In addition for $x<0.5$ it holds that $h(x)<- 2x \log x$. If we combine all these we obtain the following 
+inequality $$\log {k + d - 1 \choose d - 1} \leq 2(d - 1) \log\frac{d + k - 1}{d - 1}.$$ Now we continue 
+with straightforward calculations.
+
+\[
+\begin{split}
+\log {k + d - 1 \choose d - 1}
+	& \leq 2(d - 1) \log\frac{d + k - 1}{d - 1} \\
+	& \leq 2(d - 1) \log\frac{2k}{d - 1} \\
+	& = \frac{\log n}{3} \cdot \frac{1}{\log 4k - \log \log n} \cdot \log \frac{12k \log (4k - \log \log n)}{\log n} \\
+	& = \frac{\log n}{3} \cdot \frac{\log 3 + \log 4k - \log \log n + \log (\log 4k - \log \log n)}{\log 4k - \log \log n} \\
+	& \leq \frac{\log n}{3} \cdot (1 + 1 + 0.5) \\
+	& \leq \log n.\\
+\end{split}
+\]
+    
+We used the fact, that for $x>...$ it holds that $\frac{\log x}{x}$ is decreasing.     
+                
+\end{proof}
+
+\begin{proofof}{Claim \ref{cl:lower_bound_d}}
+
+Since the expression ${k + d - 1 \choose d - 1}$ is increasing in $d$, the proof immediately follows from 
+the Claim~\ref{cl:d_value}.
+
+\end{proofof}
+
+A tady pak bude text kterym to vsechno zakoncime.
+%\begin{claim}
+%Let $d>k$ and $k\ge \log n$. Then ${k+d-1 \choose d-1}\ge n$.
+%\end{claim}
+%\begin{proof}
+%Clearly, ${k+d-1 \choose d-1}$ is increasing in both $k$ and $d$. Therefore we can use the following estimation 
+%${k+d-1 \choose d-1}\ge {2k \choose k}\ge \left(\frac{2\cdot \log n}{\log n }\right)^{\log n} = n$.
+%\end{proof}
+
+% For our application to labeling it is sufficient to only solve the case when $d \leq k$.
+% The inequality can be assumed since we use $k \geq \log n$ buckets.
+% And it also true that if $k \geq \log n$, then $d \leq k$.
+% Assume that $d > k \geq \log n$. 
+% Then ${k + d - 1 \choose d - 1} \geq \left(\frac{2\log n}{\log n}\right)^{\log n} = n$.
+% 
+% We would like to find a lower bound on $d$ such that $n \leq {k + d - 1 \choose d - 1}$.
+% Since the expression ${k + d - 1 \choose d - 1}$ is increasing in $d$ it is sufficient to find arbitrary $d$ such that $n \geq {k + d - 1 \choose d - 1}$.
+% We are going to show that for $d = \frac{\log n}{6 (\log 4k - \log \log n)} + 1$ the inequality $n \geq {k + d - 1 \choose d - 1}$ holds.
+% Hence $d \geq \frac{\log n}{6 (\log 4k - \log \log n)} + 1$.
+% 
+% From the fact ${{b} \choose {a}} \leq 2^{h(a/b)b}$ and former Mikes estimate we can conclude that
+% \[
+% 	\log {k + d - 1 \choose d - 1} \leq 2(d - 1) \log\frac{d + k - 1}{d - 1}.
+% \]
+% 
+% Let us compute for our choice of $d$ for $n$ large enough and $k \geq \log n$.
+% \[
+% \begin{split}
+% \log {k + d - 1 \choose d - 1}
+% 	& \leq 2(d - 1) \log\frac{d + k - 1}{d - 1} \\
+% 	& \leq 2(d - 1) \log\frac{2k}{d - 1} \\
+% 	& = \frac{\log n}{3} \cdot \frac{1}{\log 4k - \log \log n} \cdot \log \frac{12k \log (4k - \log \log n)}{\log n} \\
+% 	& = \frac{\log n}{3} \cdot \frac{\log 3 + \log 4k - \log \log n + \log (\log 4k - \log \log n)}{\log 4k - \log \log n} \\
+% 	& \leq \frac{\log n}{3} \cdot (1 + 1 + 0.5) \\
+% 	& \leq \log n.\\
+% \end{split}
+% \]
+% 
+% The last inequality follows from the assumption $k \leq \log n$ and the fact that the function $\log x / x$ is decreasing for $x \geq 4$.
+\end{document}
+
