@@ -12,7 +12,6 @@ public class TwoWayFunction<Function1 extends Function, Function2 extends Functi
 		this.storageInfo = storageInfo;
 	}
 
-	@Override
 	public int hash(BigInteger value) {
 		int h1 = f1.hash(value);
 		int h2 = f2.hash(value);
@@ -24,12 +23,10 @@ public class TwoWayFunction<Function1 extends Function, Function2 extends Functi
 		}
 	}
 
-	@Override
 	public int getRange() {
 		return f1.getRange();
 	}
 
-	@Override
 	public void setRange(int range) {
 		f1.setRange(range);
 		f2.setRange(range);
