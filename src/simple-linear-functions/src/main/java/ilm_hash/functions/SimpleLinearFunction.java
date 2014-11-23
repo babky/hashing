@@ -30,17 +30,14 @@ public class SimpleLinearFunction implements Function {
 		t.setFunction(this);
 	}
 
-	@Override
 	public int hash(BigInteger value) {
 		return value.multiply(a).add(b).mod(p).mod(BigInteger.valueOf(r)).intValue();
 	}
 
-	@Override
 	public int getRange() {
 		return r;
 	}
 
-	@Override
 	public void setRange(int range) {
 		this.r = range;
 	}
