@@ -67,7 +67,13 @@ public class BadSet {
 
 		ThreeElementsCollisionProbabilityComputer c = new ThreeElementsCollisionProbabilityComputer(p.intValue(), m, 0);
 		Element e = new Element();
+		int percent = -1;
 		for (int d = 2; d < p.intValue(); ++d) {
+			if (d * 100 / p.intValue() > percent) {
+				percent = d * 100 / p.intValue();
+				System.err.println(String.format("Preparing bad set %2d %%", percent));
+			}
+			
 			c.setMaxElement(d);
 			if (q.size() < m) {
 				q.add(new Element(d, c.estimate()));
@@ -82,9 +88,13 @@ public class BadSet {
 				}
 			}
 		}
+		
+		System.err.println("Bad set prepared.");
 
 		int sum = 0;
 		for (int i = 0; i < runs; ++i) {
+			System.err.println(String.format("Hashing - run %d.", i));
+			
 			LinearChainingStorage s = new LinearChainingStorage(m);
 			HashTable ht = new HashTableDefaultImpl(null, s);
 			Function f = new SimpleLinearFunction(p, ht);
