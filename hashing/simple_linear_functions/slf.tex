@@ -4,6 +4,13 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{geometry}
+\geometry{
+	b5paper,
+	margin=0.5cm,
+	top=1.5cm,
+	bottom=1.5cm
+}
 
 \newcommand{\llinnm}[2]{\operatorname{L}_{\operatorname{lin}}({#1}, {#2})}
 \newcommand{\llinn}[1]{\llinnm{#1}{#1}}
@@ -29,6 +36,7 @@
 \newtheorem{corollary}{Corollary}
 
 \title{Expected load of a fullest bin with simple linear functions}
+\author{Martin Babka}
 
 \begin{document}
 
@@ -82,49 +90,110 @@ So the fact that the set $[m]$ has small longest chains but the chains which are
 \subsection{Collision probability for three elements}
 
 First of all, assume that we have three different elements $x, y, z$ and we count the number of pairs $(a, b)$ such that $|h_{a, b}(\{x, y, z\})| = 1$.
-Without loss of generality we may assume that $x = 0, y = 1$ and the third element $z = d$.
+As stated in the following lemma we may assume that $x = 0, y = 1$ and the third element $z = d$.
 
-There is a single pair $(a, b) \in [p] ^ 2$, also determining a function $h \in \hlin$, such that this pair is transforming the elements $0$ and $1$ to $x$ and $y$ (inside $[p]$ without taking modulo $m$); $b = x$ and $a = y - x$.
+\begin{lemma}[Transformation lemma]
+Let $x, y, z \in [p]$ be arbitrary different elements. Then there exist an element $d \in [p]$ such that
+\[
+\prob{h(x) = h(y) = h(z)} = \prob{h(0) = h(1) = h(d)}.
+\]
+\end{lemma}
+\begin{proof}
+There is a single pair $(a, b) \in [p] ^ 2$ determining the linear function transforming the elements $0$ and $1$ to $x$ and $y$ (in the field $[p]$ without taking modulo $m$); $b = x$ and $a = y - x$.
 There is also a single element $d$ such that $ad + b = z$, i.e. $d = a ^ {-1}(z - b)$.
 Fix the chosen pair $(a, b)$.
 
-Observe that the mapping $(a', b') \mapsto (aa', b' + a'b)$ is a one-to-one map on $[p]^2$.
-A function determined by a pair $(a', b') \in [p^2]$ behaves on $\{x, y, z\}$ in the same way as the function $(aa', b' + ab')$ on $\{0, 1, d\}$.
+Observe that the mapping $(a', b') \mapsto (aa', b' + ab')$ is a one-to-one map on $[p]^2$.
+A function determined by the pair $(a', b') \in [p]^2$ behaves on $\{x, y, z\}$ in the same way as the function $(aa', b' + ab')$ on $\{0, 1, d\}$.
 So each function mapping $\{0, 1, d\}$ to a single element corresponds to a function mapping $\{x, y, z\}$ to a single element and vice versa.
+\end{proof}
 
-With this restriction, the pair $(a, b)$ is no longer fixed, our goal is to count the number of functions $h \in \hlin$ such that $h(\{0, 1, d\}) = \{y\}$ for some $y \in [m]$.
+\begin{corollary}
+The probability properties, e.g. collision, mapping to the prescribed elements, for the elements $x, y, z$ are the same as for the elements $\{0, 1, d\}$ where $d$ comes from the previous lemma with the appropriate transformations.
+\end{corollary}
+
+\begin{lemma}[Probability of collision of three elements]
+Let $d \in [p]$ be arbitrary element. Then
+\[
+\prob{\mbox{elements }\{0, 1, d\}\mbox{ collide}} = 
+\frac{1 + \max\left(1, \frac{p}{dm}\right)\left(1 + \frac{d}{m}\right)}{p}.
+\]
+\end{lemma}
+
+We count the number of functions $h \in \hlin$ such that $h(\{0, 1, d\}) = \{y\}$ for some $y \in [m]$.
 For an element $x$ we define the value $l(x, a, b) = \left\lfloor\frac{ax + b}{p}\right\rfloor$; that is how many ``leaps'' are created by applying the function $h_{a, b}$ on the element $x$ in the field $\mathbb{Z}_p$.
 For each $x \in [p]$ it holds that $l(x, a, b) \in [x]$ and $h(x) = (ax + b - l(x, a, b)p) \bmod m$.
 
-Whenever the elements $0, 1$ and $d$ are mapped to the same element $y$ it must hold that $m \mid a - l(1, a, b)p$ and $m \mid da - l(d, a, b)p$.
-Therefore it holds that $m \mid da - dl(1, a, b)p$ and hence $m \mid (dl(1, a, b) - l(d, a, b))p$.
-Since $p$ is a prime we have that $m \mid dl(1, a, b) - l(d, a, b)$.
+Whenever the elements $0, 1$ and $d$ are mapped to the same element $y$ it must hold that 
+\begin{align*}
+	b \bmod p \bmod m & = (a + b) \bmod p \bmod m \\
+	b \bmod p \bmod m & = (da + b) \bmod p \bmod m. \\
+\end{align*}
+From that we conclude that
+\begin{align*}
+	m & \mid a + b - l(1, a, b)p - b \\
+	m & \mid da + b - l(d, a, b)p - b. \\
+\end{align*}
+Hence
+\begin{align*}
+	m & \mid a - l(1, a, b)p \\
+	m & \mid da - l(d, a, b)p. \\
+\end{align*}
+Therefore it holds that 
+\begin{align*}
+	m & \mid da - dl(1, a, b)p \\
+	m & \mid (dl(1, a, b) - l(d, a, b))p. \\
+\end{align*}
+Since $p$ is a prime we have that \[m \mid dl(1, a, b) - l(d, a, b).\]
+We estimate the collision probabilities from the two statements following from the previous formulas:
+\begin{align}
+	m & \mid a - l(1, a, b)p \label{3-prob-1-statement} \\
+	m & \mid (dl(1, a, b) - l(d, a, b))p. \label{3-prob-2-statement}
+\end{align}
 
-This roughly means that out of $d$ possible values for $l(d, a, b)$ only the $1 / m$ fraction may generate the collision of the three elements.
+From (\ref{3-prob-1-statement}) we can observe that only the $1 / m$ fraction from the possible values of $a$ lying in the appropriate intervals allowed by valid values of $l(d, a, b)$ are causing collisions.
 
-Fix the value of $b$ and observe that the following statements hold.
+The statement (\ref{3-prob-2-statement}) roughly means that out of $d$ possible values for $l(d, a, b)$ only the $1 / m$ fraction may generate the collision of the three elements.
 
-\begin{itemize}
-  \item Values of $a$ such that $l(d, a, b) = l \in [d]$ form disjoint intervals in $[p]$ each of size at most $\lfloor p/d \rfloor$.
-  \item Values of $a$ such that $h(0) = h(1)$ form two arithmetic progressions with the difference $m$. The transition occurs when $l(1, a, b)$ becomes $1$.
-\end{itemize}
+For the rest of the proof fix the value of $b$. 
+First, we show that the values of $a$ such that $l(d, a, b) = l \in [d]$ form disjoint intervals in $[p]$ each of size at most $\lceil p/d \rceil$.
+Then we count the number of values $a$ in an interval causing collisions -- using (\ref{3-prob-1-statement}).
+And finally we count the number of the valid intervals.
 
-For each choice of $(l(1, a, b), l(d, a, b))$ such that $m \mid dl(1, a, b) - l(d, a, b)$ at most $1 + \max\left(1, \lfloor p/dm \rfloor\right)$ choices of $a$ may collide the three elements (and the first one is added only once per $b$ because of the leap in $l(1, a, b)$).
-Moreover there are most $\lceil d / m \rceil$ pairs $(l(1, a, b), l(d, a, b))$ satisfying $m \mid dl(1, a, b) - l(d, a, b)$.
+Let $l(d, a, b) = l$, then it holds that $l \leq \frac{da + b}{p} < l + 1$. Immediately we get that $a \in \left[\frac{pl - b}{d}, \frac{p(l + 1) - b}{d}\right) \cap \mathcal{Z}$. The ceiling must be applied assume a interval length of 1.5 starting at point 1 -- it contains the two points 1 and 2. So the total number of values of $a$ in each valid interval is at most $\lceil p / d \rceil$. This happens whenever $\frac{pl - b}{d}$ is an integer.
 
-When $l(d, a, b)$ is fixed then we also have $l(1, a, b)$ fixed (except for the one leap for which we have to add one -- hence the ceiling) and each $m$-th value of $l(d, a, b)$ corresponds to a permitted pair.
+Now fix the value $l \in [d]$ such that $l(d, a, b) = l$.
+In order to estimate the number of values of $a$ causing the collisions we split into two cases according to the value of $l(1, a, b)$.
 
-Thus for each $b$ we the probability of a collision is at most
+\subparagraph{The first case, $l(1, a, b) = 0$.} 
+From the two previous statements we conclude that
+\begin{align*}
+	m & \mid a \\
+	m & \mid l. \\
+\end{align*}
+
+\subparagraph{The second case, $l(1, a, b) = 1$.}
+As in the first case it must hold that
+\begin{align*}
+	m & \mid a - p \\
+	m & \mid d - l. \\
+\end{align*}
+
+In both cases, there are at most $\lceil d/m \rceil$ values of $l$ satisfying the second condition.
+Also for each satisfying value of $l$ there are at most $\lceil \lceil\frac{p}{d}\rceil / m \rceil$ values of $a$ causing the collision.
+
+In both cases and for each $b$ it holds that the probability of collision of the three elements is bounded by
 \[
-\frac{1 + \max\left(1, \frac{p}{dm}\right)\left(1 + \frac{d}{m}\right)}{p} = \begin{cases}
+\frac{\left(1 + \frac{1 + \frac{p}{d}}{m}\right)\left(1 + \frac{d}{m}\right)}{p} =
+\begin{cases}
 	\frac{1}{m^2} + \frac{1}{dm} + O\left(p^{-1}\right) & \mbox{if } p/dm \geq 1 \\
-	O\left(p^{-1}\right) + \frac{d}{pm} & \mbox{otherwise, i.e. } \frac{p}{m} \leq d < p.
+	\frac{1}{m^2} + \frac{d}{pm} + O\left(p^{-1}\right) & \mbox{otherwise, i.e. } \frac{p}{m} \leq d < p.
 \end{cases}
 \]
 
 The worst possible case is when $d = 2$ and the probability is roughly $1/2m$.
 
-In the case when $d \geq p/m$ another proof is possible showing the bound $\frac{1}{2m(p - d)}$.
+In the case when $d \geq p/m$ another proof is possible showing the bound $\frac{1}{2m(p - d)}$. The proof is based on a completely different idea.
 
 \begin{lemma}
 \label{lm:three-elements}

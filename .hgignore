@@ -55,3 +55,14 @@ syntax:regexp
 cmake/.*\.exe$
 cmake/.*\.txt$
 cmake/.*out.*$
+
+syntax: regexp
+\.png$
+syntax: regexp
+^src/simple-linear-functions/\.settings$
+^src/simple-linear-functions/target
+^src/simple-linear-functions/bin
+syntax: regexp
+^src/simple-linear-functions/\.classpath$
+syntax: regexp
+^src/simple-linear-functions/\.pydevproject$
