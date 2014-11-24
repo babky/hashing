@@ -162,7 +162,8 @@ int main(int argc, const char ** argv) {
 	try {
 #ifdef __GNUC__
 	#ifdef __LP64__
-		typedef __uint128_t base_t;
+		// typedef __uint128_t base_t;
+		typedef uint64_t base_t;
 	#else
 		typedef uint64_t base_t;
 	#endif
