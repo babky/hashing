@@ -4,6 +4,11 @@ import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
+
 import ilm_hash.experiments.utils.ThreeElementsCollisionProbabilityComputer;
 import ilm_hash.functions.Function;
 import ilm_hash.functions.SimpleLinearFunction;
@@ -14,11 +19,11 @@ import ilm_hash.tables.TableInfo;
 
 public class BadSet {
 
-	static final int P = 9851;
+	static final int DEFAULT_PRIME = 9851;
 
-	static final int M = 256;
+	static final int DEFAULT_TABLE_SIZE = 256;
 
-	static final int RUNS = 128;
+	static final int DEFAULT_RUNS = 128;
 
 	static class Element {
 
@@ -37,7 +42,21 @@ public class BadSet {
 	}
 
 	public static void main(String[] args) throws Exception {
-		PriorityQueue<Element> q = new PriorityQueue<>(M, new Comparator<Element>() {
+		BigInteger p;
+		int runs;
+		int m;
+		
+		CommandLineParser parser = new BasicParser();
+		Options options = new Options();
+		options.addOption("r", "runs", true, "The number of runs.");
+		options.addOption("m", "table-size", true, "The table size.");
+		options.addOption("p", "prime", true, "Prime.");
+		CommandLine cmd = parser.parse(options, args);
+		runs = Integer.parseInt(cmd.getOptionValue("r", Integer.toString(DEFAULT_RUNS)));
+		p = new BigInteger(cmd.getOptionValue("p", Integer.toString(DEFAULT_PRIME)));
+		m = Integer.parseInt(cmd.getOptionValue("m", Integer.toString(DEFAULT_TABLE_SIZE)));
+		
+		PriorityQueue<Element> q = new PriorityQueue<>(m, new Comparator<Element>() {
 
 			@Override
 			public int compare(Element o1, Element o2) {
@@ -46,11 +65,11 @@ public class BadSet {
 
 		});
 
-		ThreeElementsCollisionProbabilityComputer c = new ThreeElementsCollisionProbabilityComputer(P, M, 0);
+		ThreeElementsCollisionProbabilityComputer c = new ThreeElementsCollisionProbabilityComputer(p.intValue(), m, 0);
 		Element e = new Element();
-		for (int d = 2; d < P; ++d) {
+		for (int d = 2; d < p.intValue(); ++d) {
 			c.setMaxElement(d);
-			if (q.size() < M) {
+			if (q.size() < m) {
 				q.add(new Element(d, c.estimate()));
 			} else {
 				e.functionCount = c.estimate();
@@ -65,10 +84,10 @@ public class BadSet {
 		}
 
 		int sum = 0;
-		for (int i = 0; i < RUNS; ++i) {
-			LinearChainingStorage s = new LinearChainingStorage(M);
+		for (int i = 0; i < runs; ++i) {
+			LinearChainingStorage s = new LinearChainingStorage(m);
 			HashTable ht = new HashTableDefaultImpl(null, s);
-			Function f = new SimpleLinearFunction(new BigInteger(Long.toString(P)), ht);
+			Function f = new SimpleLinearFunction(p, ht);
 			ht.setFunction(f);
 
 			for (Element el : q) {
@@ -81,7 +100,7 @@ public class BadSet {
 			sum += info.getLongestChain();
 		}
 
-		System.out.println(String.format("Average longest chain: %f.\n", sum / (double) RUNS));
+		System.out.println(String.format("Average longest chain: %f.\n", sum / (double) runs));
 	}
 
 }
