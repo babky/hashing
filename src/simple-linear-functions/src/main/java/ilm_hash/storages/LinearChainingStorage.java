@@ -2,6 +2,7 @@ package ilm_hash.storages;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.List;
 
 import ilm_hash.tables.ChainingTableInfo;
 import ilm_hash.tables.TableInfo;
@@ -29,6 +30,10 @@ public class LinearChainingStorage implements Storage, StorageInfo {
 	@Override
 	public int getStorageLength() {
 		return storage.length;
+	}
+
+	public List<BigInteger> getChain(int idx) {
+		return storage[idx];
 	}
 
 	@Override

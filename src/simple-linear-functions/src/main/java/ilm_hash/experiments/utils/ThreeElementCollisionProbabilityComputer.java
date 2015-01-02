@@ -1,8 +1,8 @@
 package ilm_hash.experiments.utils;
 
-public class ThreeElementsCollisionProbabilityComputer {
+public class ThreeElementCollisionProbabilityComputer {
 
-	public ThreeElementsCollisionProbabilityComputer(int p, int m, int d) {
+	public ThreeElementCollisionProbabilityComputer(int p, int m, int d) {
 		this.m = m;
 		this.p = p;
 		this.d = d;

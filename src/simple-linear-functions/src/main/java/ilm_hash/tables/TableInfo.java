@@ -8,6 +8,8 @@ public interface TableInfo {
 
 	public int getLongestChain();
 
+	public int getShortestChain();
+
 	public double getLoadFactor();
 
 }
