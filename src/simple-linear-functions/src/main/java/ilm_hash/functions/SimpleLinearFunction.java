@@ -42,6 +42,14 @@ public class SimpleLinearFunction implements Function {
 		this.r = range;
 	}
 
+	public BigInteger getMultiplier() {
+		return a;
+	}
+
+	public BigInteger getShift() {
+		return b;
+	}
+
 	final BigInteger a;
 	final BigInteger b;
 	final BigInteger p;

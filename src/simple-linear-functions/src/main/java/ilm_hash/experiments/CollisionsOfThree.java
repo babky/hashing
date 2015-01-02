@@ -1,7 +1,8 @@
 package ilm_hash.experiments;
 
-import ilm_hash.experiments.utils.ThreeElementsCollisionProbabilityComputer;
+import ilm_hash.experiments.utils.ThreeElementCollisionProbabilityComputer;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,9 +20,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class CollisionsOfThree {
 
-	static final int DEFAULT_PRIME = 9851;
+	static final int DEFAULT_PRIME = 153;
 
-	static final int DEFAULT_TABLE_SIZE = 64;
+	static final int DEFAULT_TABLE_SIZE = 16;
 
 	public static void main(String[] args) throws IOException, ParseException {
 		int p;
@@ -35,7 +36,7 @@ public class CollisionsOfThree {
 		p = Integer.parseInt(cmd.getOptionValue("p", Integer.toString(DEFAULT_PRIME)));
 		m = Integer.parseInt(cmd.getOptionValue("m", Integer.toString(DEFAULT_TABLE_SIZE)));
 
-		ThreeElementsCollisionProbabilityComputer t = new ThreeElementsCollisionProbabilityComputer(p, m, 0);
+		ThreeElementCollisionProbabilityComputer t = new ThreeElementCollisionProbabilityComputer(p, m, 0);
 		String fname_full = String.format("coll-3-%d-%d.png", t.getPrime(), t.getTableSize());
 		String fname_scaled = String.format("coll-3-%d-%d-scaled.png", t.getPrime(), t.getTableSize());
 		String fname_small = String.format("coll-3-%d-%d-%d.png", t.getPrime(), t.getTableSize(),
@@ -68,6 +69,8 @@ public class CollisionsOfThree {
 				new XYSeriesCollection(dataset), PlotOrientation.VERTICAL, true, true, false);
 
 		ChartUtilities.saveChartAsPNG(new File(fname_full), chart, t.getPrime() + 100, 768);
-		ChartUtilities.saveChartAsPNG(new File(fname_scaled), chart, 1024, 768);
+		chart.setBackgroundPaint(Color.white);
+		chart.getXYPlot().setBackgroundPaint(Color.white);
+		ChartUtilities.saveChartAsPNG(new File(fname_scaled), chart, 512, 450);
 	}
 }

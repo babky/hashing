@@ -9,7 +9,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 
-import ilm_hash.experiments.utils.ThreeElementsCollisionProbabilityComputer;
+import ilm_hash.experiments.utils.ThreeElementCollisionProbabilityComputer;
 import ilm_hash.functions.Function;
 import ilm_hash.functions.SimpleLinearFunction;
 import ilm_hash.storages.LinearChainingStorage;
@@ -65,7 +65,7 @@ public class BadSet {
 
 		});
 
-		ThreeElementsCollisionProbabilityComputer c = new ThreeElementsCollisionProbabilityComputer(p.intValue(), m, 0);
+		ThreeElementCollisionProbabilityComputer c = new ThreeElementCollisionProbabilityComputer(p.intValue(), m, 0);
 		Element e = new Element();
 		int percent = -1;
 		for (int d = 2; d < p.intValue(); ++d) {

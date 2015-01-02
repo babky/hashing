@@ -22,6 +22,11 @@ public class ChainingTableInfo implements TableInfo {
 	}
 
 	@Override
+	public int getShortestChain() {
+		return minChain;
+	}
+
+	@Override
 	public double getLoadFactor() {
 		return (double) size / (double) tableLength;
 	}
@@ -32,11 +37,16 @@ public class ChainingTableInfo implements TableInfo {
 		if (maxChain < chainLength) {
 			maxChain = chainLength;
 		}
+
+		if (chainLength > 0 && minChain > chainLength) {
+			minChain = chainLength;
+		}
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Table length: %d\nElement no: %d\nLongest chain: %d", tableLength, size, maxChain);
+		return String.format("Table length: %d\nElement no: %d\nLongest chain: %d\nShortest chain: %d", tableLength,
+				size, maxChain, minChain);
 	}
 
 	int size;
@@ -44,5 +54,7 @@ public class ChainingTableInfo implements TableInfo {
 	int tableLength;
 
 	int maxChain = -1;
+
+	int minChain = Integer.MAX_VALUE;
 
 }
