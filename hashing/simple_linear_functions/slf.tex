@@ -99,13 +99,17 @@ Let $x, y, z \in [p]$ be arbitrary different elements. Then there exist an eleme
 \]
 \end{lemma}
 \begin{proof}
-There is a single pair $(a, b) \in [p] ^ 2$ determining the linear function transforming the elements $0$ and $1$ to $x$ and $y$ (in the field $[p]$ without taking modulo $m$); $b = x$ and $a = y - x$.
-There is also a single element $d$ such that $ad + b = z$, i.e. $d = a ^ {-1}(z - b)$.
-Fix the chosen pair $(a, b)$.
+Choose $\alpha, \beta \in [p]$ so that $\alpha \neq 0$.
+Observe that the mapping $(\gamma, \delta) \mapsto (\alpha \gamma, \beta \gamma + \delta)$ is a one-to-one map on $[p]^2$.
+If there is another pair $(\epsilon, \phi)$ such that $(\alpha \epsilon, \beta \epsilon + \phi) = (\alpha \gamma, \beta \gamma + \delta)$, then $\gamma = \epsilon$ and $\delta = \phi$. Thus the mapping is injective.
+Also for arbitrary $(r, s) \in [p]^2$ the element $(\alpha^{-1}r, s - \beta\alpha^{-1}r)$ is mapped to $(\alpha \alpha^{-1}r, \beta r + s - \beta\alpha^{-1}r) = (r, s)$.
 
-Observe that the mapping $(a', b') \mapsto (aa', b' + ab')$ is a one-to-one map on $[p]^2$.
-A function determined by the pair $(a', b') \in [p]^2$ behaves on $\{x, y, z\}$ in the same way as the function $(aa', b' + ab')$ on $\{0, 1, d\}$.
-So each function mapping $\{0, 1, d\}$ to a single element corresponds to a function mapping $\{x, y, z\}$ to a single element and vice versa.
+Define the function $h'_{a, b}$ as $h'_{a, b}(x) = ax + b$ where the operations are taken in $\mathbb{Z}_p$. Then the compound function $h'_{a, b} \circ h'_{\alpha, \beta}$ is exactly equal to the function $h_{\alpha a, \beta a + b}$.
+
+Since the mapping from the beginning of the proof is bijective the composition of the function can not change the probability (count of the functions) mapping arbitrary three elements to a single point.
+
+Notice that there is a single pair $(\alpha, \beta) \in [p] ^ 2$, i.e. a single function $h'_{\alpha, \beta}$, transforming the elements $0$ and $1$ to $x$ and $y$ in the field $[p]$ without taking modulo $m$. It is the function $\beta = x$ and $\alpha = y - x$.
+It is enough to choose a unique $d \in [p]$ such that $h'_{\alpha, \beta}(d) = z$, i.e. $d = \alpha ^ {-1}(z - \beta)$.
 \end{proof}
 
 \begin{corollary}
@@ -191,18 +195,23 @@ In both cases and for each $b$ it holds that the probability of collision of the
 \end{cases}
 \]
 
-The worst possible case is when $d = 2$ and the probability is roughly $1/2m$.
-
-In the case when $d \geq p/m$ another proof is possible showing the bound $\frac{1}{2m(p - d)}$. The proof is based on a completely different idea.
+The worst possible case is when $d = 2$ and the probability is roughly $1/2m$ and when $d$ is large.
+In the case when $d \geq p/m$ we do not have a better probability estimate. The function of probability w.r.t. $d$ is a very interesting function with a symmetric character as pointed out by the next lemma.
 
 \begin{lemma}
 \label{lm:three-elements}
 For arbitrary three elements the probability of their collision is at most $1/2m + 2/m^2$.
 \end{lemma}
+\begin{proof}
+The elements when $d > p / 2$ can be transformed to a set $0, 1, d'$ where $d' < p / 2$.
+
+% TODO
+To be done - the idea is the two elements which are the closest are $1$ and $d$.
+\end{proof}
 
 \begin{corollary}
 \label{co:d-elements}
-For arbitrary $d$ elements the probability of their collision is at most $\frac{2}{(d - 1) m} + 2/m^2$.
+For the set $[d]$, the probability of its collision to a single element is at most $\frac{2}{(d - 1) m} + 2/m^2$.
 \end{corollary}
 \begin{proof}
 These $d$ elements are normalized to a set of size $d$ and we assume that $e$ is its maximal element.
