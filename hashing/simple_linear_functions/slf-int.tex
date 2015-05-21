@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 
+\usepackage{color}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -20,6 +21,7 @@
 \newcommand{\llinn}[1]{\llinnm{#1}{#1}}
 \newcommand{\hlinr}[1]{\operatorname{H}_{\operatorname{lin}}^{#1}}
 \newcommand{\hlin}{\operatorname{H}_{\operatorname{lin}}}
+\newcommand{\leap}[3]{\operatorname{\mathbf{leap}}({#1}, {#2}, {#3})}
 \newcommand{\hfact}[2]{\operatorname{H}_{\operatorname{factor}}({#1}, {#2})}
 \newcommand{\rot}[2]{\operatorname{H}_{\operatorname{rot}}^{{#1}, {#2}}}
 
@@ -49,31 +51,29 @@
 \maketitle
 
 \begin{abstract}
-We estimate the size of a most loaded bin in the setting when the balls are placed into the bins using a random linear function in a finite field.
-The balls are chosen from a transformed interval. 
-We show that in this setting the expected load of the most loaded bins is constant.
+We estimate the size of a most loaded bin when the balls, which are chosen from a transformed interval, are placed into the bins using a random linear function where the operations are taken in a finite field.
+We show that in such a setting the expected load of the most loaded bins is constant.
 
 This is an interesting fact because using fully random hash functions with the same class of input sets leads to an expectation of $\Theta\left(\frac{\log m}{\log \log m}\right)$ balls in most loaded bins where $m$ is the number of balls and bins.
 
-Although the family of the functions is quite common the size of largest bins was not known even in this simple case.
+Although the family of the functions is quite common both in theory and practice, the size of largest bins was not known even in this simple case.
 \end{abstract}
 
 \section{Introduction}
 
-Our basic task is to estimate estimate the size of a largest bin in a special case of the balls and bins model. This models simply means that the balls are randomly thrown into bins. The process of their placement is of a various study -- its randomness, independence and other properties lead to various bin sizes.
-The most simple model is to use fully random functions or some kind of their approximation to place the balls. There is a plenty of results, i.e. estimates of bin sizes, for various placement processes.
+We estimate the size of a largest bin in a special case of the balls and bins model. The balls and bins model simply means placement of each ball into a bin in some random fashion. The process of the placement is of a various study -- choice of balls, randomness of placement, independence of the placement and especially the study how these properties affect the bin sizes.
 
-When the balls are thrown independently at random to the bins the expected size of the largest bin is $\Theta\left(\frac{\log m}{\log \log m}\right)$.
+The most common model to place the balls is to use the system of completely random functions or their approximation. There many results regarding estimates of bin sizes, for various placement processes.
 
-One of the first results were shown by Carter and Wegman \cite{cw} and this model was used to design universal and perfect hashing. They showed that the expected size of a bin is a constant when the placement is done by the functions which we will refer to as simple linear functions. These functions are two-wise independent and thus achieve $O(\sqrt{m})$ expected size of a largest bin.
+For example it is well-known that if $m$ balls are thrown completely at random to $m$ bins, then the expected size of the largest bin is $\Theta\left(\frac{\log m}{\log \log m}\right)$.
 
-It is also possible to use functions with higher degrees of independence and obtain better bounds. There are lower bounds for on the speed of such functions, size needed to represent and the size of the largest bin and independence they achieve given by Siegel \cite{siegel}.
+One of the first results were shown by Carter and Wegman \cite{cw}. They used their model to design universal and perfect hashing. They showed that the expected size of a bin is constant when they assumed the placement by the functions which we will refer to as simple linear functions. These functions are two-wise independent and thus they trivially achieve $O(\sqrt{m})$ expected size of a largest bin. We improve this result to $O(1)$ when the input set is a linearly transformed interval.
 
-The need to improve the size of the largest bins lead to two-choice paradigm. Out of two bins, hence we use two functions, the balls is placed into the smaller one. In this model the size of the largest bin is $O(\log \log m)$ where $m$ is the number of balls and bins shown by Azar et al \cite{azar} and improved by V\"{o}cking \cite{vocking}.
+It is also possible to use functions of higher degree of independence and thus obtain better bounds. There are also lower bounds shown by Siegel \cite{siegel} for various trade-offs between the speed of such functions, size needed to represent them on one side and independence they achieve on the other side.
 
-Nowadays more complicated family of functions are studied in \cite{wieder}. The functions no longer rely on high degree of independence but are designed so that they achieve small largest bins even with high probability.
+The need to improve the size of the largest bins leads to the two-choice paradigm. For the placement we use two functions and the ball is placed into the smaller bin out of the two chosen bins. In this model the size of the largest bin is $O(\log \log m)$ where $m$ is the number of balls and bins. This was first shown shown by Azar et al \cite{azar} and later improved by V\"{o}cking \cite{vocking}.
 
-Our model exhibits the use of simple linear functions and the balls are chosen from an interval in $\mathbb{Z}_p$. Such model has a constant size of largest bins.
+Nowadays more complicated family of functions are studied in \cite{wieder}. The functions no longer rely on high degree of independence but are designed so that they achieve small largest bins with high probability.
 
 \section{Notation and definitions}
 \label{sec:notation}
@@ -90,7 +90,9 @@ For a function $h \in \hlin$ we define the size of $i$-th bin as $\bin{h}{S}{i} 
 In the following text we fix the probability space to be formed by a uniform choice of $h \in \hlin$.
 The notation $\vbin{S}{i}$ and $\vlbin{S}$ then refers to the random variables formed by the mentioned random uniform choice.
 
-For an element $x$ we define the value $l(x, a, b) = \left\lfloor\frac{ax + b}{p}\right\rfloor$; that is how many ``leaps'' are created by applying the function $h_{a, b}$ on the element $x$ in the field $\mathbb{Z}_p$.
+For an element $x$ we put the value $\leap{x}{a}{b} = \left\lfloor\frac{ax + b}{p}\right\rfloor$; that is how many \emph{leaps}, overflows over $p$, are caused by applying the function $h_{a, b}$ on the element $x$ in the field $\mathbb{Z}_p$. Notice that $(ax + b) \bmod  p = ax + b - \leap{x}{a}{b}p$.
+
+Our model relies on the above random choice of the hash function $h_{a, b} \in \hlin$ and the fact that $S$ is a linear transformation of $[m]$ in $\mathbb{Z}_p$. In Theorem~\ref{thm:interval-constant} we show that the expected size of largest bin is $O(1)$.
 
 \section{Collision probability for three elements}
 
@@ -99,7 +101,7 @@ By collision of the elements we understand the event when all of the elements ar
 
 We fix three different elements $x, y, z \in [p]$ and we count the number of pairs $(a, b) \in [p]^2$ such that $|h_{a, b}(\{x, y, z\})| = 1$.
 
-We start by simplifying to the case when $x = 0, y = 1$ and the third element $z = d$ for a suitable $d \in [p]$ such that $d > 1$ depending on the choice of $x, y, z$.
+We start by simplifying to the case when $x = 0, y = 1$ and the third element $z = d$ for a suitable $d \in [p]$ such that $d > 1$ depends on the choice of $x, y, z$.
 
 \begin{lemma}[Transformation lemma]
 \label{lemma:transformation}
@@ -140,77 +142,78 @@ Next we estimate the collision probability for the elements $0, 1, d$.
 \label{lemma:probability-3-elements}
 Let $d \in [p]$ be arbitrary element.
 \[
-\prob{|h(\{0, 1, d\})| = 1 } = \frac{1 + \max\left(1, \frac{p}{dm}\right)\left(1 + \frac{d}{m}\right)}{p}.
+\prob{|h(\{0, 1, d\})| = 1 } = \frac{\lceil \lceil\frac{p}{d}\rceil / m \rceil\left\lceil\frac{d}{m}\right\rceil}{p}.
 \]
 \end{lemma}
 \begin{proof}
 We count the number of functions $h \in \hlin$ such that $h(\{0, 1, d\}) = \{y\}$ for some $y \in [m]$.
-For each $x \in [p]$ it holds that $l(x, a, b) \in [x]$ and $h(x) = (ax + b - l(x, a, b)p) \bmod m$.
+For each $x \in [p]$ it holds that $\leap{x}{a}{b} \in [x]$ and $h(x) = (ax + b - \leap{x}{a}{b}p) \bmod m$.
 
 Whenever the elements $0, 1$ and $d$ are mapped to the same element $y$ it must hold that $h(0) = h(1)$ and $h(0) = h(d)$. Hence
 \begin{align*}
 	b \bmod p \bmod m & = (a + b) \bmod p \bmod m \\
 	b \bmod p \bmod m & = (da + b) \bmod p \bmod m. \\
 \end{align*}
-From which we obtain the following sequence of equations
+From which we obtain the following sequence of equivalent equations
 \begin{align*}
-	m & \mid a + b - l(1, a, b)p - b \\
-	m & \mid da + b - l(d, a, b)p - b, \\
+	m & \mid a + b - \leap{1}{a}{b}p - b \\
+	m & \mid da + b - \leap{d}{a}{b}p - b, \\
 \end{align*}
 \begin{align*}
-	m & \mid a - l(1, a, b)p \\
-	m & \mid da - l(d, a, b)p, \\
+	m & \mid a - \leap{1}{a}{b}p \\
+	m & \mid da - \leap{d}{a}{b}p, \\
 \end{align*}
 \begin{align*}
-	m & \mid da - dl(1, a, b)p \\
-	m & \mid (dl(1, a, b) - l(d, a, b))p. \\
+	m & \mid da - d\leap{1}{a}{b}p \\
+	m & \mid (d\leap{1}{a}{b} - \leap{d}{a}{b})p. \\
 \end{align*}
-Since $p$ is a prime we conclude the fact that $m \mid dl(1, a, b) - l(d, a, b)$.
-We estimate the collision probabilities from the two statements following from the previous formulas:
+Since $p$ is a prime from the last equation we can conclude that $m \mid d\leap{1}{a}{b} - \leap{d}{a}{b}$.
+We estimate the collision probabilities from the first equation in the second step and from the last observation:
 \begin{align}
-	m & \mid a - l(1, a, b)p \label{3-prob-1-statement} \\
-	m & \mid (dl(1, a, b) - l(d, a, b))p. \label{3-prob-2-statement}
+	m & \mid a - \leap{1}{a}{b}p \label{3-prob-1-statement} \\
+	m & \mid d\leap{1}{a}{b} - \leap{d}{a}{b}. \label{3-prob-2-statement}
 \end{align}
 
-The statement (\ref{3-prob-2-statement}) roughly means that out of $d$ possible values for $l(d, a, b)$ only the $1 / m$ fraction may generate the collision of the three elements. Notice that for a fixed $l \in [d]$ it holds that $\{a \in [p] \mid l(d, a, b) = l\}$ equals is a subinterval of $[p]$.
-From (\ref{3-prob-1-statement}) we can observe that only the $1 / m$ fraction from the possible values of $a$ lying in the appropriate intervals allowed by valid values of $l(d, a, b)$ are causing collisions.
+The statement (\ref{3-prob-2-statement}) roughly means that out of $d$ possible values for $\leap{d}{a}{b}$ only the $1 / m$ fraction may generate the collision of the three elements. Notice that for a fixed $l \in [d]$ it holds that $\{a \in [p] \mid \leap{d}{a}{b} = l\}$ equals is a subinterval of $[p]$.
+From (\ref{3-prob-1-statement}) we can observe that only the $1 / m$ fraction from the possible values of $a$ lying in the appropriate intervals allowed by valid values of $\leap{d}{a}{b}$ are causing collisions.
 
 For the rest of the proof fix the value of $b$. 
-First, we show that the values of $a$ such that $l(d, a, b) = l \in [d]$ form disjoint intervals in $[p]$ each of size at most $\lceil p/d \rceil$.
+First, we show that the values of $a$ such that $\leap{d}{a}{b} = l \in [d]$ form disjoint intervals in $[p]$ each of size at most $\lceil p/d \rceil$.
 Then we count the number of values $a$ in an interval causing collisions -- using (\ref{3-prob-1-statement}).
-And finally we count the number of the valid intervals.
+And finally we count the number of the valid intervals, i.e. the intervals satisfying equation (\ref{3-prob-2-statement}).
 
-Let $l(d, a, b) = l$, then it holds that $l \leq \frac{da + b}{p} < l + 1$. Immediately we get that $a \in \left[\frac{pl - b}{d}, \frac{p(l + 1) - b}{d}\right) \cap \mathcal{Z}$. The total number of values of $a$, i.e. integers, in each valid interval is at most $\lceil p / d \rceil$. The ceiling must be applied. For example assume an interval of length of 1.5 starting at point 0.8 -- it contains two integer points 1 and 2. This happens whenever $\frac{pl - b}{d}$ is an integer.
+Let $\leap{d}{a}{b} = l$, then it holds that $l \leq \frac{da + b}{p} < l + 1$. Immediately we get that $a \in \left[\frac{pl - b}{d}, \frac{p(l + 1) - b}{d}\right) \cap \mathbb{Z}$. The total number of values of $a$, i.e. integers, in each valid interval is at most $\lceil p / d \rceil$. The ceiling must be applied. For example assume an interval of length of 1.5 starting at point 0.8 -- it contains two integer points 1 and 2. This happens whenever $\frac{pl - b}{d}$ is an integer.
 
-Now fix the value $l \in [d]$ such that $l(d, a, b) = l$.
-In order to estimate the number of values of $a$ causing the collisions we split into two cases according to the value of $l(1, a, b)$.
+Now fix the value $l \in [d]$ such that $\leap{d}{a}{b} = l$.
+In order to estimate the number of values of $a$ causing the collisions we split into two cases according to the value of $\leap{1}{a}{b}$.
 
-\subparagraph{The first case, $l(1, a, b) = 0$.} 
+\subparagraph{The first case, $\leap{1}{a}{b} = 0$.} 
 From the two previous statements we conclude that
 \begin{align*}
 	m & \mid a \\
 	m & \mid l. \\
 \end{align*}
 
-\subparagraph{The second case, $l(1, a, b) = 1$.}
+\subparagraph{The second case, $\leap{1}{a}{b} = 1$.}
 As in the first case it must hold that
 \begin{align*}
 	m & \mid a - p \\
 	m & \mid d - l. \\
 \end{align*}
 
-In both cases, there are at most $\lceil d/m \rceil$ values of $l$ satisfying the second condition.
+In both cases, there are at most $\lceil d/m \rceil$ values of $l$ satisfying the  condition (\ref{3-prob-2-statement}).
 Also for each satisfying value of $l$ there are at most $\lceil \lceil\frac{p}{d}\rceil / m \rceil$ values of $a$ causing the collision.
 
-In both cases and for each $b$ it holds that the probability of collision of the three elements is bounded by
+\end{proof}
+
+The probability of collision of the three elements can be bounded as
 \[
 \frac{\left(1 + \frac{1 + \frac{p}{d}}{m}\right)\left(1 + \frac{d}{m}\right)}{p} =
 \begin{cases}
-	\frac{1}{m^2} + \frac{1}{dm} + O\left(p^{-1}\right) & \mbox{if } p/dm \geq 1 \\
-	\frac{1}{m^2} + \frac{d}{pm} + O\left(p^{-1}\right) & \mbox{otherwise, i.e. } \frac{p}{m} \leq d < p.
+	\frac{O(1)}{m^2} + \frac{1}{dm} + O\left(p^{-1}\right) & \mbox{if } d \leq p/m \\
+	\frac{O(1)}{m^2} + \frac{d}{pm} + O\left(p^{-1}\right) & \mbox{otherwise, i.e. } \frac{p}{m} \leq d < p.
 \end{cases}
 \]
-\end{proof}
 
 The worst possible case is for $d = 2$ and the probability is roughly $1/2m$. 
 When $d \geq p/m$, the formula is a great overestimate as shown in Figure~1.
@@ -225,10 +228,10 @@ When $d \geq p/m$, the formula is a great overestimate as shown in Figure~1.
 
 \begin{corollary}
 \label{co:d-elements}
-Let $d < p / m$. Then $\prob{|h([d])| = 1} \leq \frac{1}{(d - 1) m} + 1/m^2 + O(p^{-1})$.
+Let $d \leq p / m$. Then $\prob{|h([d])| = 1} \leq \frac{1}{(d - 1) m} + O(1)/m^2 + O(p^{-1})$.
 \end{corollary}
 \begin{proof}
-When all the elements from $[d]$ collide, then the elements $\{0, 1, d\}$ must collide as well. The probability of the collision of $\{0, 1, d\}$ is hence a valid upper bound on the probability of the collision of the whole interval. The statement is then a direct application of Lemma~\ref{lemma:probability-3-elements}.
+When all the elements from $[d]$ collide, then the elements $\{0, 1, d - 1\}$ must collide as well. The probability of the collision of $\{0, 1, d - 1\}$ is hence a valid upper bound on the probability of the collision of the whole interval. The statement is then a direct application of Lemma~\ref{lemma:probability-3-elements}.
 \end{proof}
 
 For completeness we just show a simple fact that our probability estimate is tight when we have a stronger assumption, namely we assume $p > 3m^2$.
@@ -238,15 +241,36 @@ For completeness we just show a simple fact that our probability estimate is tig
 If $d \leq m$ and $p > 3m^2$, then $\prob{|h(\{0, 1, \ldots, d - 1\})| = 1} = \Omega\left(\frac{1}{dm}\right).$
 \end{lemma}
 \begin{proof}
-For a fixed $b$, if $a < (p - b)/d$ and $m \mid a$, then the elements $\{0, 1, \ldots, d - 1\}$ collide.
+For a fixed $b$, if $a < (p - b)/d$ and $m \mid a$, then the elements $\{0, 1, \ldots, d - 1\}$ must collide.
 For each $b$ there are at least $\lfloor (p - b)/dm \rfloor$ such values of $a$.
 
 We conclude that the number of pairs $(a, b)$ making the elements collide is at least
 \[
-\sum_{b \in [p]} \frac{p - b}{dm} - 1 = \frac{(p + 1)p}{2dm} - p \geq \frac{p ^ 2 - 2pdm}{2dm} \geq \frac{p^2}{6dm}.
+\sum_{b \in [p]} \left(\frac{p - b}{dm} - 1\right) = \frac{(p + 1)p}{2dm} - p \geq \frac{p ^ 2 - 2pdm}{2dm} \geq \frac{p^2}{6dm}.
 \]
 
 Thus the resulting probability is at least $\frac{1}{6dm}$.
+\end{proof}
+
+\section{The structure of elements in a single bin}
+
+First realize that for each $i \in [m]$ it holds that $h^{-1}(i) = \{a^{-1} (i + j m - b) \mid j \in [p / m]\}$ where the operations are taken in $\mathbb{Z}_p$.
+Thus for $\alpha = a^{-1}m$ and $\beta = i-a^{-1}b$ we see that $h^{-1}(i)$ is the linearly transformed interval $[p / m]$, i.e. $h^{-1}(i) = \alpha [p/m] + \beta$ where the operations are taken in $\mathbb{Z}_p$.
+
+Notice that for a fixed $0 < m < p$, there is a one-to-one map among the pairs $(a, b)$ and $(\alpha, \beta)$.
+
+From the almost two-wise independence of $\hlin$ we can derive the following property. 
+\begin{lemma}
+Let $(a, b), (a', b') \in [p]^2$ such that $a, a' \neq 0$ and let $i \in [m]$. It holds that $|h_{a, b}^{-1}(i) \cap h_{a', b'}^{-1}(i)| = const.$
+\end{lemma}
+\begin{proof}
+Each $x$ from the pre-image of $i$ for both of the functions comes from the intersection of $\left( \alpha [p/m] + \beta \right)$ and $\left(\alpha' [p/m] + \beta' \right)$ for the suitable constants $\alpha, \beta, \alpha', \beta'$ as described above.
+
+This can be rewritten as $x = \alpha j + \beta$ and $x = \alpha' j' + \beta'$, where $0\leq j,j' < p/m$.
+\begin{align*}
+\alpha j + \beta & = \alpha' j' + \beta'\\
+\alpha j - \alpha' j' & = \beta' - \beta
+\end{align*}
 \end{proof}
 
 \section{The expected size of most loaded bins}
@@ -286,7 +310,7 @@ Assume that  $a \in [p]$ and $S \subseteq [p]$ such that $0 \not\in S$. Then \[ 
 \begin{proof}
 Similarly as in the proof of the previous lemma. Let $L \subseteq S$ be elements of bin $y$, i.e. $h_{a, 0}(L) = y$.
 Let $x \in L$, then $h_{p - a, 0}(x) = (p - a)x \bmod p \bmod m = (p - ((ax) \bmod p))\bmod m = (p - y) \bmod m$.
-Observe that $(p - a)x \bmod p = p - ((ax) \bmod p)$ holds only when $x \neq 0$.
+When $x \neq 0$, then $(p - a)x \bmod p = p - ((ax) \bmod p)$.
 The bin $y$ is thus moved to the bin $(p - y) \bmod m$ and the lemma holds.
 \end{proof}
 
@@ -297,6 +321,52 @@ Let $S \subseteq [p]$, then
 \lbin{h_{a, 0}}{S} -1 \leq \lbin{h_{p - a, 0}}{S} \leq \lbin{h_{a, 0}}{S} + 1.
 \]
 \end{corollary}
+
+\section{The equation $ax \bmod p \bmod m = 0$}
+
+We show the required properties of the set of solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$.
+
+Let $G$ be a group and $a \in G$. By $\langle a \rangle_{G}$ we denote the subgroup of $G$ generated by $a$, i.e. $\langle a \rangle_{G} = \{0, a, 2a, \dots \}$ where the multiplication operation is taken in $G$.
+
+\begin{lemma}
+Let $a \in [p]$ such that $a (|\langle a \rangle_{[m]}| + 1) < p$. Let $d$ be the minimal positive integer such that $ad \bmod p \bmod m = 0$.
+Then all the solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ form the arithmetic progression starting in $0$ with the difference $d$.
+\end{lemma}
+\begin{proof}
+Let us notice that $-p$ (and also $p$) is a generator of $[m]$ since $p$ is a prime.
+Let $k \in [m]$ be the minimal integer such that $k(-p) \bmod m \in \langle a \rangle_{[m]}$.
+Notice that $j(-p) \bmod m \in \langle a \rangle_{[m]}$ iff $(j - k)(-p) \bmod m \in \langle a \rangle_{[m]}$ and hence $|\langle a \rangle_{[m]}| k = m$.
+
+Observe that after each leap there is a shift by $-p$ ($\bmod m$), i.e. after $l$ leaps we are generating the elements from the affine subgroup $l(-p) + \langle a \rangle_{[m]}$.
+
+Assume that there is a value $e$ such that $(ae - \leap{e}{a}{0}p) \bmod m = 0$.
+From the first assumption of the lemma we have that $e \geq |\langle a \rangle_{[m]}| \leap{e}{a}{0}$.
+Also it must be true that $\leap{e}{a}{0} \geq k$.
+Now we conclude that $e \geq |\langle a \rangle_{[m]}| k = m$ which proves the lemma.
+\end{proof}
+
+{\color{red}
+\begin{lemma}
+Let $d_{\operatorname{min}}$ be the minimal solution of the equation $ax \bmod p \bmod m = 0$.
+The set of solutions from $[p / ({a d_{\operatorname{min}}} \bmod p)]$ forms the arithmetic progression starting at $0$ with the difference $d_{\operatorname{min}}$.
+\end{lemma}
+\begin{proof}
+If $k d_{\operatorname{min}} \in [p / (a d_{\operatorname{min}}  bmod p)]$, then $a k d_{\operatorname{min}} \bmod p = akd_{\operatorname{min}}$ and hence $k d_{\operatorname{min}}$ is a solution of the equation.
+
+Let $d \in [p / (a d_{\operatorname{min}} \bmod p)]$ be a solution such that $d > d_{\operatorname{min}}$. Let $k d_{\operatorname{min}}$ be the maximal solution smaller than $d$. Then $(a(d - kd_{\operatorname{min}})) \bmod p = a(d - kd_{\operatorname{min}})$ and $d - kd_{\operatorname{min}}$ is thus a solution. 
+If $d$ is not from the above arithmetic progression, then $d - 
+kd_{\operatorname{min}} < d_{\operatorname{min}}$ which is in the direct 
+contradiction with the fact that $d_{\operatorname{min}}$ is the minimal 
+solution.
+\end{proof}
+
+\begin{lemma}
+Let $d_{\operatorname{min}}$ be the minimal solution of the equation $ax \bmod p \bmod m = 0$.
+The set of solutions from $[m]$ forms the arithmetic progression starting at $0$ with the difference $d_{\operatorname{min}}$.
+\end{lemma}
+}
+
+\section{Main theorem}
 
 For the choice of $S = [m]$ we show that the expected size of a most loaded bin is within $O(1)$. 
 This can be compactly formulated as follows.
@@ -312,12 +382,12 @@ By Lemma~\ref{lm:b-zero} we may assume that the chosen function has $b = 0$ with
 
 Observe that each bin is formed by a single arithmetic progression. Notice that since $p$ is a prime it holds that $(-p) \bmod m$ is co-prime with $m$.
 The reason can be stated as follows.
-Let $x_1 < x_2$ be two elements in a single bin, then for $d = x_2 - x_1$ it holds that $m \divides ad \bmod p$ or $m \divides p - (ad \bmod p)$.
+Let $x_1 < x_2$ be two elements in a single bin, then for $d = x_2 - x_1$ it holds that either $m \divides ad \bmod p$ or $m \divides p - (ad \bmod p)$.
 
 All the solutions of the equation $ax \bmod p \bmod m = 0$ where $x \in [m]$ form a finite arithmetic progression.
-For the proof of the previous statement notice that since $p$ is a prime it holds that $(-p) \bmod m$ is co-prime with $m$. 
+For the proof of the previous statement notice that since $p$ is a prime it holds that $(-p) \bmod m$ is co-prime with $m$ and thus to return back to the bin $y$ we need at least $m$ leaps. 
 
-In addition a difference $d$ and a given length $l$, $l \geq 3$, there is a canonical value $x \in [m]$ such that if there is a bin of size at least $l$, then there is another bin formed by an arithmetic progression of length at least $l$ with the same difference $d$ having $x$ as the minimal element. If $ad \bmod p < p/2$, we choose $x = \operatorname{argmin}_{x \in [m - ld]} ax \bmod p$. Otherwise we put $x = \operatorname{argmax}_{x \in [m - ld]} ax \bmod p$.
+In addition for each difference $d$ and each length $l$, $l \geq 3$, there is a canonical value $x \in [m]$ such that if there is a bin of size at least $l$, then there is another bin formed by an arithmetic progression of length at least $l$ with the same difference $d$ having $x$ as the minimal element. If $ad \bmod p < p/2$, we choose $x = \operatorname{argmin}_{x \in [m - ld]} ax \bmod p$. Otherwise we put $x = \operatorname{argmax}_{x \in [m - ld]} ax \bmod p$.
 
 After establishing the previous facts we simply compute the expected value of $\vlbin{[m]}$ using the following idea. Now we allow $b$ to have arbitrary value.
 
