@@ -255,23 +255,48 @@ Thus the resulting probability is at least $\frac{1}{6dm}$.
 \section{The structure of elements in a single bin}
 
 First realize that for each $i \in [m]$ it holds that $h^{-1}(i) = \{a^{-1} (i + j m - b) \mid j \in [p / m]\}$ where the operations are taken in $\mathbb{Z}_p$.
-Thus for $\alpha = a^{-1}m$ and $\beta = i-a^{-1}b$ we see that $h^{-1}(i)$ is the linearly transformed interval $[p / m]$, i.e. $h^{-1}(i) = \alpha [p/m] + \beta$ where the operations are taken in $\mathbb{Z}_p$.
+Thus for $\alpha = a^{-1}m$ and $\beta = i-a^{-1}b$ we see that $h^{-1}(i)$ is the image of a linear transformation of the interval $[p / m]$. Precisely $h^{-1}(i) = \alpha [p/m] + \beta$ where the operations are taken in $\mathbb{Z}_p$.
 
 Notice that for a fixed $0 < m < p$, there is a one-to-one map among the pairs $(a, b)$ and $(\alpha, \beta)$.
 
-From the almost two-wise independence of $\hlin$ we can derive the following property. 
+From the almost two-wise independence of $\hlin$ we can derive the following property. {\color{red} Is it really from the two-wise independence? How does this property relates to the two-wise independence?}
+
 \begin{lemma}
-Let $(a, b), (a', b') \in [p]^2$ such that $a, a' \neq 0$ and let $i \in [m]$. It holds that $|h_{a, b}^{-1}(i) \cap h_{a', b'}^{-1}(i)| = const.$
+Assume that $g, f \in [p] \setminus \{0\}$ and $I = \left[\frac{p}{m}\right]$. Then \[\left\lfloor \frac{f^{-1}g}{m} \right\rfloor \left\lfloor \frac{1}{f^{-1}g} \left\lfloor\frac{p}{m}\right\rfloor \right\rfloor \leq |gI \cap fI| \leq \left\lfloor \frac{f^{-1}g}{m} \right\rfloor \left\lceil \frac{p}{f^{-1}gm} \right\rceil.\]
 \end{lemma}
 \begin{proof}
-Each $x$ from the pre-image of $i$ for both of the functions comes from the intersection of $\left( \alpha [p/m] + \beta \right)$ and $\left(\alpha' [p/m] + \beta' \right)$ for the suitable constants $\alpha, \beta, \alpha', \beta'$ as described above.
+We begin the proof by simplifying the statement using the fact that $|gI \cap fI| = |f^{-1}gI \cap I|$. Hence without loss of generality we may assume that $f = 1$.
 
-This can be rewritten as $x = \alpha j + \beta$ and $x = \alpha' j' + \beta'$, where $0\leq j,j' < p/m$.
-\begin{align*}
-\alpha j + \beta & = \alpha' j' + \beta'\\
-\alpha j - \alpha' j' & = \beta' - \beta
-\end{align*}
+From now on we are estimating $|gI \cap I|$.
+We count the number of $x \in I$ such that $gx \in I$.
+First, trivially, for each $0 \leq x < \frac{p}{gm}$ we know that $gx \in I$.
+Observe that no $x \in I \setminus \left\{ 0, \dots, \left\lfloor {p}/{(gm)} \right\rfloor \right\}$ such that $\leap{x}{g}{0} = 1$ satisfies the condition $gx \in I$.
+
+Realize that the similar observations hold for each possible leap and there are $g$ leaps. More precisely -- each leap adds at least $\left\lfloor \frac{\lfloor p/m \rfloor}{m} \right\rfloor$ and at most $\left\lceil \frac{p}{gm} \right\rceil$ elements to the final intersection.
+
+Since there are $\lfloor\frac{gp}{mp}\rfloor$\footnote{This may be less by 1 since the $\lfloor p/m \rfloor$ element is the last and the expression thus can be by one smaller.} leaps we get that $\left(\lfloor\frac{g}{m}\rfloor - 1\right) \left\lfloor \frac{p}{gm} \right\rfloor \leq |gI \cap I| \leq \lfloor \frac{g}{m}\rfloor\left\lceil \frac{p}{gm} \right\rceil$.
 \end{proof}
+
+In order to continue we have to perform a more detailed analysis of the leaps and possible overflows so that we get tighter bounds.
+The previous lemma yields good results only for $1 < g \leq p/m$ which is just a $1/m$ fraction of the possible values of $g$.
+
+\begin{lemma}
+Assume that $g, f \in [p] \setminus \{0\}$ and $I = \left[\frac{p}{m}\right]$. Then $|gI \cap fI| \leq O(p/m^2)$.
+\end{lemma}
+\begin{proof}
+First, assume that $f = 1$. And let us denote $\lfloor p/m \rfloor$ as $\phi$.
+Now realize that there are two types of leaps long and short. The long leaps add $\lceil \phi / g \rceil$ to the result and the short ones add only $\lfloor \phi / g \rfloor$.
+
+So we know that $|gI \cap I| = \#\operatorname{leaps} \cdot \lfloor \phi / g \rfloor + \#\operatorname{long-leaps} \leq (g/m) \left\lceil p/gm  \right\rceil.$ The number of leaps from the previous proof is at most $g/m$. If $g \leq p/m$, then we get that $|I \cap gI| \leq O(p/m^2)$ and we are finished. From now on assume that $g > p/m$. Also notice that the contribution of short leaps to the intersection is zero.
+
+The number of long leaps can be estimated similarly as $|g'[g/m] \cap I|$ for $g' = (-p) \bmod g$ where the operations are taken in $\mathbb{Z}_g$.
+Similarly $|g'[g/m] \cap I| \leq \lfloor g'/m \rfloor \lfloor p/mg' \rfloor + \#\operatorname{long-leaps}$. If $g' \leq p/m$, then we are finished otherwise we have to go down one level in the similar way.
+\end{proof}
+
+The following is a straightforward application of the previous lemma.
+\begin{corollary}
+Let $a, a' \in [p] \setminus {0}$ and let $i \in [m]$. Then it holds that $|h_{a, 0}^{-1}(i) \cap h_{a', 0}^{-1}(i)| = 1/m^2$.
+\end{corollary}
 
 \section{The expected size of most loaded bins}
 
@@ -324,18 +349,21 @@ Let $S \subseteq [p]$, then
 
 \section{The equation $ax \bmod p \bmod m = 0$}
 
-We show the required properties of the set of solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$.
+Finding the structure of the solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ enables us to find a structure in the chains in the following manner. 
+After showing proving that the solutions form an arithmetic progression starting by $0$, we can simply show that the chains which are formed when $S=[m]$ are arithmetic progressions. Such a structure of the chains allows us to proceed further and is vital in order to show our main result.
 
 Let $G$ be a group and $a \in G$. By $\langle a \rangle_{G}$ we denote the subgroup of $G$ generated by $a$, i.e. $\langle a \rangle_{G} = \{0, a, 2a, \dots \}$ where the multiplication operation is taken in $G$.
+
+The next lemma says that whenever the sequence $0, a \bmod p \bmod m, 2a \bmod p \bmod m, \cdots$ forms the whole subgroup $\langle a \rangle_{[m]}$ in the first leap, i.e. $a (|\langle a \rangle_{[m]}| < p$, then the solutions of the equation in $[m]$ form an arithmetic progression. In the lemma we use a slightly stronger assumption since the size of a leap can be by one shorter then the size of the first leap. It is easy to observe that each leap we just shift the $\langle a \rangle_{[m]}$ by $-p$ compared to the previous leap. In the leaps we obtain disjoint affine subgroups which generate at most $m$ elements. Hence the zero solutions thus may only occur in the first leap.
 
 \begin{lemma}
 Let $a \in [p]$ such that $a (|\langle a \rangle_{[m]}| + 1) < p$. Let $d$ be the minimal positive integer such that $ad \bmod p \bmod m = 0$.
 Then all the solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ form the arithmetic progression starting in $0$ with the difference $d$.
 \end{lemma}
 \begin{proof}
-Let us notice that $-p$ (and also $p$) is a generator of $[m]$ since $p$ is a prime.
+Since $p$ is a prime, $-p$ (and also $p$) are generators of $\mathbb{Z}_{m}$.
 Let $k \in [m]$ be the minimal integer such that $k(-p) \bmod m \in \langle a \rangle_{[m]}$.
-Notice that $j(-p) \bmod m \in \langle a \rangle_{[m]}$ iff $(j - k)(-p) \bmod m \in \langle a \rangle_{[m]}$ and hence $|\langle a \rangle_{[m]}| k = m$.
+Notice that $j(-p) \bmod m \in \langle a \rangle_{[m]}$ $(j - k)(-p) \bmod m \in \langle a \rangle_{[m]}$ and hence $|\langle a \rangle_{[m]}| k = m$.
 
 Observe that after each leap there is a shift by $-p$ ($\bmod m$), i.e. after $l$ leaps we are generating the elements from the affine subgroup $l(-p) + \langle a \rangle_{[m]}$.
 
@@ -345,10 +373,10 @@ Also it must be true that $\leap{e}{a}{0} \geq k$.
 Now we conclude that $e \geq |\langle a \rangle_{[m]}| k = m$ which proves the lemma.
 \end{proof}
 
-{\color{red}
+The following lemma shows an interesting property of the set of solutions which we only mention and do not use further.
 \begin{lemma}
 Let $d_{\operatorname{min}}$ be the minimal solution of the equation $ax \bmod p \bmod m = 0$.
-The set of solutions from $[p / ({a d_{\operatorname{min}}} \bmod p)]$ forms the arithmetic progression starting at $0$ with the difference $d_{\operatorname{min}}$.
+The set of all solutions of the above equations from $[p / ({a d_{\operatorname{min}}} \bmod p)]$ forms a finite arithmetic progression starting at $0$ with the difference $d_{\operatorname{min}}$.
 \end{lemma}
 \begin{proof}
 If $k d_{\operatorname{min}} \in [p / (a d_{\operatorname{min}}  bmod p)]$, then $a k d_{\operatorname{min}} \bmod p = akd_{\operatorname{min}}$ and hence $k d_{\operatorname{min}}$ is a solution of the equation.
@@ -361,10 +389,36 @@ solution.
 \end{proof}
 
 \begin{lemma}
-Let $d_{\operatorname{min}}$ be the minimal solution of the equation $ax \bmod p \bmod m = 0$.
-The set of solutions from $[m]$ forms the arithmetic progression starting at $0$ with the difference $d_{\operatorname{min}}$.
+Let $a \in [p]$. The solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ form an arithmetic progression starting in $0$.
 \end{lemma}
-}
+\begin{proof}
+First realize that the statement can be rewritten as $[m] \cap a^{-1}m [p/m]$ is an arithmetic progression.
+
+In the following claim the notation $x \cdot_G y$ means that the operation is taken in $\mathbb{Z}_{G}$, i.e. $x \cdot_G y = xy \bmod G$. 
+\begin{claim}
+\label{claim:arithmetic-progression}
+Let $G$ be a positive integer and $g \in [G]$. We prove that $[m] \cap g \cdot_{G} [G/m]$ is an arithmetic progression.
+\end{claim}
+\begin{proof}
+We proceed by induction on $G + g$.
+
+Assume that $G < m$, then $[G/m] = \{0\}$ and the statement trivially holds for each $g \in G$.
+
+Let $G \geq m$ be arbitrary and assume that $g \leq m$, then we obtain the wanted statement with the arithmetic progression with the difference exactly $g$.
+
+Assume that $g > m$.
+Observe that each leap over $G$ may intersect with $[m]$ only in the first element of the leap because the difference between the elements is $g > m$.
+Notice that there are at most $\lfloor g/m \rfloor$ leaps and hence the elements of the leaps are of the form $(-G)k \bmod g$ where $k \in [g/m]$.
+Thus our statement holds only and only if $((-G) \bmod g) \cdot_g [g/m] \cap [m]$ forms an arithmetic progression. Since $((-G) \bmod g) + g < g + G$ from the induction we get the wanted statement.
+\end{proof}
+The lemma follows from a simple application of the previous claim by using $G := p$ and $g := a^{-1}m \bmod p$.
+\end{proof}
+
+\begin{corollary}
+For all $y \in [m]$ it holds that $|h_{a, 0}^{-1}(y) \cap [m]|$ forms an arithmetic progression.
+\end{corollary}
+\begin{proof}
+\end{proof}
 
 \section{Main theorem}
 
