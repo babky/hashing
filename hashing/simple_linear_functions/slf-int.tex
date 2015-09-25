@@ -63,11 +63,11 @@ Although the family of the functions is quite common both in theory and practice
 
 We estimate the size of a largest bin in a special case of the balls and bins model. The balls and bins model simply means placement of each ball into a bin in some random fashion. The process of the placement is of a various study -- choice of balls, randomness of placement, independence of the placement and especially the study how these properties affect the bin sizes.
 
-The most common model to place the balls is to use the system of completely random functions or their approximation. There many results regarding estimates of bin sizes, for various placement processes.
+The simplest model of the placement of the balls into bins is formed by using complete randomness and independence of the elements.
+It is a well-known fact that if $m$ balls are thrown completely at random to $m$ bins, then the expected size of the largest bin is $\Theta\left(\frac{\log m}{\log \log m}\right)$.
 
-For example it is well-known that if $m$ balls are thrown completely at random to $m$ bins, then the expected size of the largest bin is $\Theta\left(\frac{\log m}{\log \log m}\right)$.
-
-One of the first results were shown by Carter and Wegman \cite{cw}. They used their model to design universal and perfect hashing. They showed that the expected size of a bin is constant when they assumed the placement by the functions which we will refer to as simple linear functions. These functions are two-wise independent and thus they trivially achieve $O(\sqrt{m})$ expected size of a largest bin. We improve this result to $O(1)$ when the input set is a linearly transformed interval.
+There are various similar statements dealing with the estimates of bin sizes for various placement processes.
+For example Carter and Wegman \cite{cw} showed that the expected size of a bin is constant when they assumed the placement by the functions which we will refer to as simple linear functions. These functions are two-wise independent and thus they trivially achieve $O(\sqrt{m})$ expected size of a largest bin. We tighten this result to $O(1)$ when the input set is a linearly transformed interval.
 
 It is also possible to use functions of higher degree of independence and thus obtain better bounds. There are also lower bounds shown by Siegel \cite{siegel} for various trade-offs between the speed of such functions, size needed to represent them on one side and independence they achieve on the other side.
 
@@ -88,7 +88,7 @@ The multiset of simple linear functions mapping $[p]$ to the range $[m]$ is deno
 For a function $h \in \hlin$ we define the size of $i$-th bin as $\bin{h}{S}{i} = |S \cap h^{-1}(i)|$ and the maximal size of the bin as $\lbin{h}{S} = \max_{i \in [m]} \bin{h}{S}{i}$.
 
 In the following text we fix the probability space to be formed by a uniform choice of $h \in \hlin$.
-The notation $\vbin{S}{i}$ and $\vlbin{S}$ then refers to the random variables formed by the mentioned random uniform choice.
+The symbols $\vbin{S}{i}$ and $\vlbin{S}$ then refer to the random variables formed by the mentioned random uniform choice.
 
 For an element $x$ we put the value $\leap{x}{a}{b} = \left\lfloor\frac{ax + b}{p}\right\rfloor$; that is how many \emph{leaps}, overflows over $p$, are caused by applying the function $h_{a, b}$ on the element $x$ in the field $\mathbb{Z}_p$. Notice that $(ax + b) \bmod  p = ax + b - \leap{x}{a}{b}p$.
 
@@ -105,7 +105,7 @@ We start by simplifying to the case when $x = 0, y = 1$ and the third element $z
 
 \begin{lemma}[Transformation lemma]
 \label{lemma:transformation}
-Let $x, y, z \in [p]$ be arbitrary different elements. Moreover assume that $i_x, i_y, i_z \in [m]$. Then there exist an element $d \in [p]$ such that
+Let $x, y, z \in [p]$ be arbitrary different elements. Moreover, assume that $i_x, i_y, i_z \in [m]$. Then there exist an element $d \in [p]$ such that
 \[
 \prob{h(x) = i_x, h(y) = i_y,  h(z) = i_z} = \prob{h(0) = i_x, h(1) = i_y, h(d) = i_z}.
 \]
@@ -113,7 +113,7 @@ Let $x, y, z \in [p]$ be arbitrary different elements. Moreover assume that $i_x
 \begin{proof}
 The idea of the proof is simple. We show that there is a one-to-one map between simple linear functions mapping $x, y, z$ to $i_x, i_y, i_z$ and simple linear functions transforming $0, 1, d$ to the same elements.
 
-In the first part of the proof we observe that combining simple linear functions with a linear function in $\mathbb{Z}_p$ does not change the the probability space.
+In the first part of the proof we observe that combining simple linear functions with a linear function in $\mathbb{Z}_p$ does not change the probability space.
 There is a single linear function transforming $0, 1$ to $x, y$ in $\mathcal{Z}_p$ which we refer to as $h'_{\alpha,\beta}$.
 Finally we choose $d$ so that $h'_{\alpha, \beta}(d) = z$ and the proof is finished.
 
@@ -122,7 +122,7 @@ We show that the elements $x, y, z$ can be transformed to the elements $0, 1, d$
 Choose $\alpha, \beta \in [p]$ so that $\alpha \neq 0$.
 Observe that the mapping $(\gamma, \delta) \mapsto (\alpha \gamma, \beta \gamma + \delta)$ is a one-to-one map on $[p]^2$.
 If there is another pair $(\epsilon, \phi)$ such that $(\alpha \epsilon, \beta \epsilon + \phi) = (\alpha \gamma, \beta \gamma + \delta)$, then $\gamma = \epsilon$ and $\delta = \phi$. Thus the mapping is injective.
-Also for arbitrary $(r, s) \in [p]^2$ the element $(\alpha^{-1}r, s - \beta\alpha^{-1}r)$ is mapped to $(\alpha \alpha^{-1}r, \beta r + s - \beta\alpha^{-1}r) = (r, s)$.
+Also for arbitrary $(r, s) \in [p]^2$ the element $(\alpha^{-1}r, s - \beta\alpha^{-1}r)$ is mapped to $(\alpha \alpha^{-1}r, \beta \alpha^{-1} r + s - \beta\alpha^{-1}r) = (r, s)$.
 
 The compound function $h'_{a, b} \circ h'_{\alpha, \beta}$ is exactly equal to the function $h'_{\alpha a, \beta a + b}$; this also follows from the fact that the set of all linear functions in $\mathbb{Z}_p$ forms a group with the operation of compounding functions. 
 
@@ -389,6 +389,7 @@ solution.
 \end{proof}
 
 \begin{lemma}
+\label{lemma-equation}
 Let $a \in [p]$. The solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ form an arithmetic progression starting in $0$.
 \end{lemma}
 \begin{proof}
@@ -414,10 +415,16 @@ Thus our statement holds only and only if $((-G) \bmod g) \cdot_g [g/m] \cap [m]
 The lemma follows from a simple application of the previous claim by using $G := p$ and $g := a^{-1}m \bmod p$.
 \end{proof}
 
+Lemma~\ref{lemma-equation} implies that all the chains are arithmetic progressions as precisely stated in its following corollary.
 \begin{corollary}
 For all $y \in [m]$ it holds that $|h_{a, 0}^{-1}(y) \cap [m]|$ forms an arithmetic progression.
 \end{corollary}
 \begin{proof}
+Let $\{x_1 < \dots < x_l\} = h_{a, 0}^{-1}(y)$.
+For each $i \in \{1, \dots, l\}$ it holds that \[0 = a x_i \bmod p \bmod m - a x_1 \bmod p \bmod m = a (x_i \bmod p - a x_1 \bmod p) \bmod m.\]
+
+From the previous observation it follows that for each $i = 1, \dots, l$ the elements $x_i - x_1$ are solutions of the equation $ax \bmod p \bmod m$.
+By Lemma~\ref{lemma-equation} they form an arithmetic progression.
 \end{proof}
 
 \section{Main theorem}

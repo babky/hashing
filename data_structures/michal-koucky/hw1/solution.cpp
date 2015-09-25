@@ -16,6 +16,58 @@
 #include <cstdio>
 #include <cstdlib>
 
+class Log {
+#ifdef LOG_SUPPORT
+	bool output;
+#endif
+
+public:
+	bool is_outputting() {
+#ifdef LOG_SUPPORT
+		return output;
+#else
+		return false;
+#endif
+
+	}
+
+public:
+	Log(bool show) {
+#ifdef LOG_SUPPORT
+		output = show;
+#endif
+	}
+};
+
+#ifdef LOG_SUPPORT
+
+template<typename T>
+Log & operator <<(Log & log, const T & x) {
+	if (log.output) {
+		std::cerr << x;
+	}
+
+	return log;
+}
+
+#else
+
+template<typename T>
+Log & operator <<(Log & log, const T & x) {
+}
+
+#endif
+
+Log logger(false);
+
+struct Stats {
+
+	std::size_t output_size = 0;
+	std::size_t input_size = 0;
+	std::size_t inner_reductions = 0;
+
+};
+
 // Perform the inner sort of large blocks.
 // Perform the merge until the output is sorted.
 
@@ -25,6 +77,7 @@ class MinReducer {
 	Key prevKey;
 	Value prevValue;
 	Push push;
+	std::size_t reduction_count = 0;
 
 public:
 	MinReducer(Push pusher):
@@ -49,12 +102,21 @@ public:
 			// Push the previous key/value pair to the output.
 			push(prevKey, prevValue);
 			prevValue = value;
-		} else if (prevValue > value) {
-			// In the case of the same key, just remember the minimum.
-			prevValue = value;
+		} else {
+			if (prevValue > value) {
+				// In the case of the same key, just remember the minimum.
+				prevValue = value;
+			}
+
+			++reduction_count;
+			logger << "Reduction\n";
 		}
 
 		prevKey = key;
+	}
+
+	std::size_t get_reduction_count() {
+		return reduction_count;
 	}
 
 	void stop() {
@@ -86,6 +148,11 @@ public:
 	Push & get_pusher() {
 		return push;
 	}
+
+	std::size_t get_reduction_count() {
+		return 0;
+	}
+
 };
 
 template<typename Key, typename Value>
@@ -111,6 +178,7 @@ class BinaryOutputPusher {
 	std::ostream& out;
 	std::ostream::pos_type block_size_pos;
 	std::size_t length = 0;
+	std::size_t push_count = 0;
 
 public:
 	BinaryOutputPusher(std::ostream & out_stream):
@@ -123,15 +191,16 @@ public:
 		out.seekp(block_size_pos);
 		out.write((char *) &size, sizeof(size));
 		out.seekp(current_pos);
-		std::cerr << "Writing length of the run " << size << ".\n";
+		logger << "Writing length of the run " << size << ".\n";
 	}
 
 	void operator()(Key key, Value value) {
 		++length;
+		++push_count;
 		out.write((char *) &key, sizeof(key));
 		out.write((char *) &value, sizeof(value));
 
-		std::cerr << "Pushing " << key << " " << value << ", having length " << length << ".\n";
+		logger << "Pushing " << key << " " << value << ", having length " << length << ".\n";
 	}
 
 	void finish_run() {
@@ -142,7 +211,11 @@ public:
 		block_size_pos = out.tellp();
 		length = 0;
 		out.write((char *) &length, sizeof(length));
-		std::cerr << "Starting a new run.\n";
+		logger << "Starting a new run.\n";
+	}
+
+	std::size_t get_push_count() const {
+		return push_count;
 	}
 };
 
@@ -160,29 +233,49 @@ void read_binary(std::istream & in, Key & key, Value & value) {
 template<typename Key, typename Value>
 class TextOutputPusher {
 	std::ostream& out;
+	std::size_t push_count = 0;
 
 public:
 	TextOutputPusher(std::ostream & out_stream):
 		out(out_stream) {
 	}
 
+	void finish_run() {
+		out << "-\n";
+	}
+
+	void start_run() {
+	}
+
 	void operator()(Key key, Value value) {
-		std::cerr << "Outputting " << key << " " << value << ".\n";
+		++push_count;
+		logger << "Outputting " << key << " " << value << ".\n";
 		out << key << " " << value << "\n";
 	}
+
+	std::size_t get_push_count() const {
+		return push_count;
+	}
+
 };
 
 template<typename Key, typename Value>
-class Run {
+class BinaryRun {
 	std::pair<Key, Value> current_pair;
 	std::fstream * in;
 	std::size_t length;
 
 public:
-	Run(std::fstream & input_file):
+	typedef BinaryOutputPusher<Key, Value> Pusher;
+
+	const static std::ios::openmode READ_MODE = std::ios::binary | std::ios::in;
+	const static std::ios::openmode WRITE_MODE = std::ios::binary | std::ios::out | std::ios::trunc;
+
+public:
+	BinaryRun(std::fstream & input_file):
 		in(&input_file) {
 		in->read((char *) &length, sizeof(length));
-		std::cerr << "Having run of length " << length << ".\n";
+		logger << "Having run of length " << length << ".\n";
 	}
 
 	std::pair<Key, Value> & current() {
@@ -201,6 +294,63 @@ public:
 };
 
 template<typename Key, typename Value>
+class TextRun {
+	std::pair<Key, Value> current_pair;
+	std::fstream * in;
+	bool next_flag_current = false;
+	bool next_flag = true;
+
+public:
+	typedef TextOutputPusher<Key, Value> Pusher;
+
+	const static std::ios::openmode READ_MODE = std::ios::in;
+	const static std::ios::openmode WRITE_MODE = std::ios::out | std::ios::trunc;
+
+public:
+	TextRun(std::fstream & input_file):
+		in(&input_file) {
+	}
+
+	std::pair<Key, Value> & current() {
+		return current_pair;
+	}
+
+	void next() {
+		assert(next_flag == true);
+		has_next();
+		next_flag_current = false;
+	}
+
+	bool has_next() {
+		if (!next_flag_current) {
+			next_flag_current = true;
+
+			std::string str;
+			(*in) >> str;
+
+			if (str == "-") {
+				next_flag = false;
+
+				while (std::isspace(in->peek())) {
+					in->get();
+				}
+			} else {
+				std::stringstream ss;
+				ss << str;
+				ss >> current_pair.first;
+				(*in) >> current_pair.second;
+				next_flag = true;
+			}
+
+			logger << "Having key/value: " << current_pair.first << " " << current_pair.second << "\n";
+			logger << (next_flag ? "We have a next element." : "No next element.") << "\n";
+		}
+
+		return next_flag;
+	}
+};
+
+template<typename Key, typename Value, template <class, class> class Run>
 class RunSource {
 	std::fstream & in;
 
@@ -220,27 +370,29 @@ public:
 	}
 };
 
-template<typename Key, typename Value, template<class, class, class> class Reducer, class Pusher>
+template<typename Key, typename Value, template<class, class, class> class Reducer, class Pusher, template <class, class> class RunType>
 class Merger {
 private:
-	std::vector<RunSource<Key, Value>> sources;
+	std::vector<RunSource<Key, Value, RunType>> sources;
 	Pusher push;
+	Stats & stats;
 
 public:
-	Merger(std::vector<RunSource<Key, Value>> run_sources, Pusher pusher):
+	Merger(std::vector<RunSource<Key, Value, RunType>> run_sources, Pusher pusher, Stats & statsa):
 		sources(run_sources),
-		push(pusher) {
+		push(pusher),
+		stats(statsa) {
 	}
 
 	std::size_t merge() {
 		std::size_t run = 0;
-		std::vector<std::pair<Run<Key, Value>, bool>> runs;
+		std::vector<std::pair<RunType<Key, Value>, bool>> runs;
 		for (std::size_t i = 0; i < sources.size(); ++i) {
-			runs.push_back(std::pair<Run<Key, Value>, bool>(sources[i].next(), true));
+			runs.push_back(std::pair<RunType<Key, Value>, bool>(sources[i].next(), true));
 			runs[i].first.next();
 		}
 
-		std::cerr << "Runs created.\n";
+		logger << "Runs created.\n";
 
 		for (bool found_new_run = true; found_new_run;) {
 			++run;
@@ -249,26 +401,26 @@ public:
 			found_new_run = false;
 			for (std::size_t i = 0; i < sources.size(); ++i) {
 				if (sources[i].has_next()) {
-					std::cerr << "Run in the file " << i << ".\n";
-					runs[i] = std::pair<Run<Key, Value>, bool>(sources[i].next(), true);
-					std::cerr << "Reading the first key-value-pair in the run of file " << i << ".\n";
+					logger << "Run in the file " << i << ".\n";
+					runs[i] = std::pair<RunType<Key, Value>, bool>(sources[i].next(), true);
+					logger << "Reading the first key-value-pair in the run of file " << i << ".\n";
 					runs[i].first.next();
 					found_new_run = true;
-					std::cerr << "Found a new run in the input file " << i << ". We will start a next round.\n";
+					logger << "Found a new run in the input file " << i << ". We will start a next round.\n";
 				}
 			}
 
-			std::cerr << "Finished creating a run.\n";
+			logger << "Finished creating a run.\n";
 		}
 
-		std::cerr << "Created " << run << " new runs.\n";
+		logger << "Created " << run << " new runs.\n";
 
 		return run;
 	}
 
 private:
-	void create_new_run(std::vector<std::pair<Run<Key, Value>, bool>> & runs) {
-		std::cerr << "Starting a new merge run.\n";
+	void create_new_run(std::vector<std::pair<RunType<Key, Value>, bool>> & runs) {
+		logger << "Starting a new merge run.\n";
 		Reducer<Key, Value, Pusher> reducer(push);
 		reducer.start();
 		reducer.get_pusher().start_run();
@@ -288,20 +440,22 @@ private:
 				break;
 			}
 
-			std::cerr << "Adding key " << minKey->first << " " << minKey->second << ".\n";
+			logger << "Adding key/value " << minKey->first << " " << minKey->second << ".\n";
 			reducer.add(minKey->first, minKey->second);
 
 			if (runs[minIndex].first.has_next()) {
 				runs[minIndex].first.next();
-				std::cerr << "Advancing in " << minIndex << ".\n";
+				logger << "Advancing in " << minIndex << ".\n";
 			} else {
-				std::cerr << "Disabling " << minIndex << ".\n";
+				logger << "Disabling " << minIndex << ".\n";
 				runs[minIndex].second = false;
 			}
 		}
 
 		reducer.stop();
 		reducer.get_pusher().finish_run();
+
+		stats.inner_reductions += reducer.get_reduction_count();
 	}
 };
 
@@ -322,12 +476,15 @@ namespace std {
 	}
 }
 
-template<typename Key, typename Value, template<class, class, class> class Reducer>
+template<typename Key, typename Value, template<class, class, class> class Reducer, template <class, class> class RunType>
 class Sorter {
+	typedef typename RunType<Key, Value>::Pusher Pusher;
+
 	std::size_t max_elements_in_memory;
 	std::size_t max_files;
 	std::string temp_directory;
 	std::vector<std::fstream *> streams;
+	Stats stats;
 
 public:
 	Sorter(std::size_t temp_file_limit, std::string temporary_directory,
@@ -336,6 +493,10 @@ public:
 		max_files(temp_file_limit),
 		temp_directory(temporary_directory),
 		streams(max_files) {
+	}
+
+	const Stats & get_stats() const {
+		return stats;
 	}
 
 	void sort(std::ifstream & in, std::ostream & out) {
@@ -348,7 +509,7 @@ public:
 			write_to_out(0, out);
 		} else {
 			// merge the runs
-			std::cerr << "Merging " << runs << " runs.\n";
+			logger << "Merging " << runs << " runs.\n";
 			for (; runs != 1;) {
 				runs = merge_runs();
 				if (runs > 1) {
@@ -365,23 +526,23 @@ public:
 
 private:
 	void distribute_runs(std::size_t runs) {
-		RunSource<Key, Value> run_sources(get_temp_file(max_files - 1, true, std::ios::binary | std::ios::in));
+		RunSource<Key, Value, RunType> run_sources(get_temp_file(max_files - 1, true, RunType<Key, Value>::READ_MODE));
 
 		std::size_t i = 0;
 		std::size_t runs_per_file = runs / (max_files - 1);
 		std::size_t last_file = 0;
 		std::size_t current_file = 0;
-		BinaryOutputPusher<Key, Value> * pusher = new BinaryOutputPusher<Key, Value>(get_temp_file(current_file, true, std::ios::binary | std::ios::out | std::ios::trunc));
+		Pusher * pusher = new Pusher(get_temp_file(current_file, true, RunType<Key, Value>::WRITE_MODE));
 
 		while (run_sources.has_next()) {
 			current_file = i / runs_per_file;
 			if (last_file != current_file && current_file < max_files - 1) {
 				delete pusher;
-				pusher = new BinaryOutputPusher<Key, Value>(get_temp_file(current_file, true, std::ios::binary | std::ios::out | std::ios::trunc));
+				pusher = new Pusher(get_temp_file(current_file, true, RunType<Key, Value>::WRITE_MODE));
 				last_file = current_file;
 			}
 
-			Run<Key, Value> run = run_sources.next();
+			RunType<Key, Value> run = run_sources.next();
 			pusher->start_run();
 			while (run.has_next()) {
 				run.next();
@@ -406,11 +567,12 @@ private:
 		std::size_t run = 0;
 
 		for (;;) {
-			in >> key >> value;
+			read_text(in, key, value);
 			if (in.eof()) {
 				break;
 			}
 
+			++stats.input_size;
 			reducer.add(key, value);
 
 			if (data.size() == max_elements_in_memory) {
@@ -423,53 +585,60 @@ private:
 		sort_and_output_vector(data, run % (max_files - 1));
 		run += 1;
 
+		stats.inner_reductions += reducer.get_reduction_count();
+
 		return run;
 	}
 
+	/**
+	 * Runs the merger.
+	 */
 	std::size_t merge_runs() {
-		std::vector<RunSource<Key, Value>> run_sources;
+		// Create the run sources.
+		std::vector<RunSource<Key, Value, RunType>> run_sources;
 		for (int i = 0; i < max_files - 1; ++i) {
-			std::fstream & fs = get_temp_file(i, true, std::ios::binary | std::ios::in);
-			run_sources.push_back(RunSource<Key, Value>(fs));
+			std::fstream & fs = get_temp_file(i, true, RunType<Key, Value>::READ_MODE);
+			run_sources.push_back(RunSource<Key, Value, RunType>(fs));
 		}
 
-		Merger<Key, Value, Reducer, BinaryOutputPusher<Key, Value>> merger(run_sources, BinaryOutputPusher<Key, Value>(get_temp_file(max_files - 1, true, std::ios::binary | std::ios::out | std::ios::trunc)));
+		// Initialize the merger.
+		Merger<Key, Value, Reducer, Pusher, RunType> merger(
+			run_sources,
+			Pusher(get_temp_file(max_files - 1, true, RunType<Key, Value>::WRITE_MODE)),
+			stats
+		);
+
+		// Merge it.
 		return merger.merge();
 	}
 
 	void write_to_out(std::size_t idx, std::ostream & out) {
-		Key key;
-		Value value;
-
-		std::fstream & in = get_temp_file(idx, true, std::ios::binary | std::ios::in);
+		std::pair<Key, Value> * element;
+		std::fstream & in = get_temp_file(idx, true, RunType<Key, Value>::READ_MODE);
 		in.seekg(std::ios_base::beg);
 		TextOutputPusher<Key, Value> text_pusher(out);
 		MinReducer<Key, Value, TextOutputPusher<Key, Value>> reducer(text_pusher);
 
-		std::size_t size;
-		in.read((char*) &size, sizeof(size));
-
+		RunType<Key, Value> run(in);
 		reducer.start();
-		for (;;--size) {
-			read_binary(in, key, value);
-			reducer.add(key, value);
-			if (in.eof()) {
-				assert(size == 0);
-				break;
-			}
+		while (run.has_next()) {
+			run.next();
+			element = &run.current();
+			reducer.add(element->first, element->second);
 		}
 		reducer.stop();
+		stats.output_size = reducer.get_pusher().get_push_count();
 	}
 
 	void sort_and_output_vector(std::vector<std::pair<Key, Value>> & data, std::size_t temp_file_idx) {
 		// Sort internally.
 		std::sort(data.begin(), data.end(), PairKeyComparer<Key, Value>());
-		std::ostream & out = get_temp_file(temp_file_idx, false, std::ios::binary | std::ios::out | std::ios::trunc);
+		std::ostream & out = get_temp_file(temp_file_idx, false, RunType<Key, Value>::WRITE_MODE);
 
 		// Write the block.
-		BinaryOutputPusher<Key, Value> pusher(out);
+		Pusher pusher(out);
 
-		Reducer<Key, Value, BinaryOutputPusher<Key, Value>> reducer(pusher);
+		Reducer<Key, Value, Pusher> reducer(pusher);
 		reducer.get_pusher().start_run();
 		reducer.start();
 		for (int i = 0; i < data.size(); ++i) {
@@ -477,7 +646,7 @@ private:
 		}
 		reducer.stop();
 		reducer.get_pusher().finish_run();
-		std::cerr << "Internally sorted into file " << temp_file_idx << ".\n";
+		logger << "Internally sorted into file " << temp_file_idx << ".\n";
 	}
 
 
@@ -513,19 +682,88 @@ private:
 
 		if (streams[i] == 0) {
 			std::string filename = get_temp_filename(i);
-			std::cerr << "Opening " << i << "-th file " << filename << ".\n";
-			streams[i] = new std::fstream(filename.c_str(), std::ios::binary | mode);
+			logger << "Opening " << i << "-th file " << filename << ".\n";
+			streams[i] = new std::fstream(filename.c_str(), mode);
 		}
 
 		return *streams[i];
 	}
 };
 
-int main(int argc, char ** argv) {
-	std::ifstream fin("data.txt");
-	std::ofstream fout("output.txt");
-
-	Sorter<std::size_t, std::size_t, MinReducer> sorter(3, ".", 1 << 2);
+template <template<class, class, class> class Reducer, template <class, class> class RunType>
+Stats sort(std::ifstream & fin, std::ofstream & fout, std::string temp_directory) {
+	Sorter<std::size_t, std::size_t, MinReducer, TextRun> sorter(4, temp_directory, 1 << 2);
 	sorter.sort(fin, fout);
+	return sorter.get_stats();
+}
+
+int main(int argc, char ** argv) {
+	const std::string DEFAULT_INPUT_FILENAME = "data.txt";
+	const std::string DEFAULT_OUTPUT_FILENAME = "data.out";
+	const std::string DEFAULT_TEMPORARY_DIRECTORY = "/tmp";
+
+	std::string in_filename = DEFAULT_INPUT_FILENAME;
+	std::string out_filename = DEFAULT_OUTPUT_FILENAME;
+	std::string temp_directory = DEFAULT_TEMPORARY_DIRECTORY;
+
+	bool binary = true;
+	bool inner_reductions = true;
+
+	for (int i = 1; i < argc; ++i) {
+		if (std::string(argv[i]) == "-i") {
+			in_filename = std::string(argv[i + 1]);
+			++i;
+		}
+
+		if (std::string(argv[i]) == "-o") {
+			out_filename = std::string(argv[i + 1]);
+			++i;
+		}
+
+		if (std::string(argv[i]) == "--tmp" || std::string(argv[i]) == "-t") {
+			temp_directory = std::string(argv[i + 1]);
+			++i;
+		}
+
+		if (std::string(argv[i]) == "--text") {
+			binary = false;
+		}
+
+		if (std::string(argv[i]) == "-v") {
+			logger = Log(true);
+		}
+
+		if (std::string(argv[i]) == "--binary") {
+			binary = true;
+		}
+
+		if (std::string(argv[i]) == "--no-reductions") {
+			inner_reductions = false;
+		}
+	}
+
+
+	std::ifstream fin(in_filename);
+	std::ofstream fout(out_filename);
+
+	Stats stats;
+	if (binary) {
+		if (inner_reductions) {
+			stats = sort<MinReducer, BinaryRun>(fin, fout, temp_directory);
+		} else {
+			stats = sort<NoReducer, BinaryRun>(fin, fout, temp_directory);
+		}
+	} else {
+		if (inner_reductions) {
+			stats = sort<MinReducer, TextRun>(fin, fout, temp_directory);
+		} else {
+			stats = sort<NoReducer, TextRun>(fin, fout, temp_directory);
+		}
+	}
+
+	std::cout << "Input size: " << stats.input_size << "\n";
+	std::cout << "Output size: " << stats.output_size << "\n";
+	std::cout << "Inner reductions: " << stats.inner_reductions << "\n";
+
 	return 0;
 }
