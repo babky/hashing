@@ -6,13 +6,12 @@
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
-// #include <types.h>
 
-#define T uint64_t
+#define T unsigned long
 
 // int BASELEN=75000000;  // 30GB
 // int BASELEN=115000000;  // 45GB
-int BASELEN=20000;  // 45MB
+int BASELEN=2000000;  // 45MB
 
 T nextrandom()
 {
@@ -51,8 +50,8 @@ void randominterval(T A, T B, int length)
 
 int main(int argc, char* argv[])
 {
-    uint32_t total=0;
-    uint32_t length;
+    unsigned int total=0;
+    unsigned int length;
 
     int seed;
     if(argc<=1){ printf("Zadej seed jako argument. Zopakuj seed dvakrat pro 1/10 dat.\n");return 1;}
@@ -71,26 +70,39 @@ int main(int argc, char* argv[])
     total+=(length=BASELEN+nextrandom(1,BASELEN));
 
 	T start1 = rand();
-    progression(start1,17,length);
-
-    progression(start1 + rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 4), length);
-
-    progression(start1- rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 4), length);
+    progression(start1, 17, length * 10);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length * (1 + rand() % 3));
+    progression(start1 - rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length * 2);
+    progression(start1, 17, length * 10);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 3), length * (1 + rand() % 5));
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 3), length * (1 + rand() % 5));
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 3), length * (1 + rand() % 5));
+    progression(start1, 17, length * 10);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length);
+    progression(start1 - rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 2), length);
+    progression(start1, 17, length * 10);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length * 2);
+    progression(start1 - rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 6), length);
+    progression(start1, 17, length * 10);
+    progression(start1 + rand() % (length / 16 * 17) * 17, 17 * (1 + rand() % 4), length);
 
 	T start2 = rand();
-    progression(start2, 25,length);
-
+    progression(start2, 25, length * 7);
     progression(start2 + rand() % (length / 8 * 25) * 25, 25 * (1 + rand() % 4), length);
-
     progression(start2 - rand() % (length / 8 * 25) * 25, 25 * (1 + rand() % 4), length);
 
 	
 	T start3 = rand();
-    progression(start3,17,length);
-
-    progression(start3 + rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 4), length);
-
+    progression(start3, 17, length * 19);
+    progression(start3 + rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 3), length);
+    progression(start3 - rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 3), length);
+    progression(start3 - rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 3), length);
+    progression(start3 - rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 3), length);
     progression(start3 - rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 4), length);
+    progression(start3 - rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 3), length);
+    progression(start3 - rand() % (length / 8 * 17) * 17, 17 * (1 + rand() % 2), length);
 
 	
     total+=(length=BASELEN+nextrandom(1,BASELEN));
