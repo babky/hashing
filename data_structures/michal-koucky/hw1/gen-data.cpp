@@ -9,9 +9,8 @@
 
 #define T unsigned long
 
-// int BASELEN=75000000;  // 30GB
-// int BASELEN=115000000;  // 45GB
-int BASELEN=2000000;  // 45MB
+// int BASELEN=2000000;  // 12G
+int BASELEN=8000000;  // 48G
 
 T nextrandom()
 {
