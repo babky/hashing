@@ -1,0 +1,98 @@
+\documentclass[12pt,notitlepage]{report}
+\pagestyle{plain}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{example}[definition]{Example}
+\newtheorem{claim}[definition]{Claim}
+\newtheorem{statement}[definition]{Statement}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{definition}}
+
+\newcommand{\setdelim}{\mid}
+\newcommand{\Prob}[1]{\mathbf{Pr}\left(#1\right)}
+\newcommand{\Expect}[1]{\mathbf{E}\left(#1\right)}
+\newcommand{\Variance}[1]{\mathbf{Var}\left(#1\right)}
+\newcommand{\maxlength}{\mathbf{max\mbox{-}length}}
+\newcommand{\length}{\mathbf{length}}
+\newcommand{\Indicator}{\mathbf{I}}
+\newcommand{\rank}[1]{\mathrm{rank}\left({#1}\right)}
+\newcommand{\dimension}[1]{\mathrm{dim}\left({#1}\right)}
+\newcommand{\nullspace}[1]{\mathcal{N}\left({#1}\right)}
+\newcommand{\matrixkernel}[1]{\mathrm{Ker}\left({#1}\right)}
+\newcommand{\vecspan}[1]{\mathrm{span}\left({#1}\right)}
+\newcommand{\vecspace}[1]{\mathbb{Z}_{2}^{#1}}
+
+\title{Linear Hash Functions}
+\author{Martin Babka}
+
+\begin{document}
+
+\chapter{Definitions and notation}
+\begin{definition}[Set of all linear functions]
+Let $V$ and $U$ be vector spaces. By $\mathcal{L}(V, U)$ we understand the \emph{set of all linear functions} mapping $V$ to $U$.
+\end{definition}
+
+\begin{definition}
+Let $h$ be a linear mapping. Then we denote the longest chain (or fullest bin) as $\maxlength$, i.e. $\maxlength(h, S) = \operatorname{max}_{i \in \mathcal{Z}_{2}^b} |S \cap h^{-1}(i)|$.
+\end{definition}
+
+Since in our setting the choice of $h$ and $S$ is clear and we will write just $\maxlength$ instead of $\maxlength(h, S)$.
+
+\chapter{Upper bound for throwing $n$ balls into $n$ bins}
+
+\begin{lemma}[Distribution of $\maxlength$]
+\label{lemma-distrib-maxlength-linear}
+For each $r \geq 4$ and $\epsilon \in (0, 1)$ it holds that
+\[
+\Prob{\maxlength > 2c_\epsilon r} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log b - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}.
+\]
+\end{lemma}
+
+\begin{theorem}[Linear mappings for linear number of elements -- upper bound]
+Let $S \subseteq \mathcal{Z}_{2}^u$ be a set of size $n$, $b = \left\lceil \log n \right\rceil$ and $h \in_{U} \mathcal{L}(\mathcal{Z}_{2}^u, \mathcal{Z}_{2}^b)$ be a randomly chosen linear function. Then $\Expect{\maxlength} = O(\log n)$.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+We show when the value of $r = 2^{\kappa} \cdot b \geq 4$ where $\kappa \geq 1$ is a suitable constant, then the probability from Lemma \ref{lemma-distrib-maxlength-linear} is lower than one.
+From that value to infinity we may estimate the integral of the probability by a convergent series and hence get the wanted result.
+
+Assume that $r = 2^{\kappa} \cdot b$. Then we may bound the exponent as follows
+\[
+\begin{split}
+& \log b - \log (r / \log r) - \log \log (r / \log r) = \\
+& \qquad = -\kappa + \log \log r - \log (\log r - \log \log r) = \\
+& \qquad = -\kappa + \log \left(\frac{\log r}{\log r - \log \log r}\right) \leq -\kappa + \log (2 / 1) = \\
+& \qquad = -\kappa + 1.
+\end{split}
+\]
+
+We bound $\int_{1}^{\infty} \Prob{\maxlength > 2^{\kappa + 1} \cdot c_\epsilon bl} \operatorname{dl}$ from above by a constant as follows.
+First notice that for our choice of $r$ we have that $r/\log r \geq \sqrt{r}$. From the previous computation for a choice of $\kappa > 4$ it follows that 
+$\Prob{\maxlength > 2^{\kappa + 1} \cdot c_\epsilon bl} \leq l^{-2}$ and hence the whole integral is $O(1)$.
+
+The expected value of $\maxlength$ can be computed as
+\[
+\begin{split}
+& \Expect{\maxlength} = \displaystyle\int_{0}^{\infty} \Prob{\maxlength > l} \operatorname{dl} \\
+	& \qquad \leq (1 - \epsilon)^{-1} \cdot \left[2^{\kappa + 1} \cdot c_\epsilon b + \displaystyle\int_{2^{\kappa + 1} \cdot c_\epsilon b}^{\infty} \Prob{\maxlength > l} \operatorname{dl}\right] \\
+	& \qquad \leq (1 - \epsilon)^{-1} \cdot 2^{\kappa + 1} \cdot c_\epsilon b \cdot \left[1 + \displaystyle\int_{1}^{\infty} \Prob{\maxlength > 2^{\kappa + 1} \cdot c_\epsilon bl} \operatorname{dl}\right] \\
+	& \qquad = (1 - \epsilon)^{-1} 2^{\kappa + 1} \cdot c_\epsilon b \cdot (1 + O(1)) = O(\log n).
+\end{split}
+\]
+
+\end{document}

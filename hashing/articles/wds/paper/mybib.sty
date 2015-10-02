@@ -1,0 +1,10 @@
+\def\thebibliography#1{\@startsection{section}{1}{\z@}
+{13pt plus 4pt minus 2pt}{6pt plus 3pt}{\large\bf}*{References}
+\bgroup\small% <== nov 14, '95
+\list{[\arabic{enumi}]}{\leftmargin 1.8em\itemsep\z@\parsep\z@\usecounter{enumi}}
+\def\refpar{\relax}
+\def\newblock{\hskip .11em plus .33em minus .07em}
+\sloppy\clubpenalty4000\widowpenalty4000
+\sfcode`\.=1000\relax}
+\def\endthebibliography{\endlist\egroup{\small\@sluginfo}\normalsize}
+\def\@biblabel#1{\relax}
