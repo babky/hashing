@@ -899,8 +899,8 @@ int main(int argc, char ** argv) {
 	bool binary = true;
 	bool inner_reductions = true;
 
-	std::size_t max_files = 16;
-	std::size_t max_elements = 1 << 24;
+	std::size_t max_files = 256;
+	std::size_t max_elements = 1 << 28;
 
 	for (int i = 1; i < argc; ++i) {
 		if (std::string(argv[i]) == "-i") {
