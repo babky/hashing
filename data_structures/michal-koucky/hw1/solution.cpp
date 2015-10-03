@@ -16,7 +16,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-// #define LOG_SUPPORT
+#define LOG_SUPPORT
 
 class Log {
 #ifdef LOG_SUPPORT
@@ -60,7 +60,7 @@ Log & operator <<(Log & log, const T & x) {
 
 #endif
 
-Log logger(true);
+Log logger(false);
 Log logger_trace(false);
 
 struct Stats {
@@ -260,6 +260,64 @@ public:
 		return push_count;
 	}
 
+};
+
+template<typename Key, typename Value>
+class BufferedBinaryRun {
+public:
+	static const size_t BUFFER_SIZE = 128;
+
+	std::size_t current_pair;
+	std::size_t buffer_size;
+	std::pair<Key, Value> buffer[BUFFER_SIZE];
+	std::fstream * in;
+	std::size_t length;
+
+public:
+	typedef BinaryOutputPusher<Key, Value> Pusher;
+
+	const static std::ios::openmode READ_MODE = std::ios::binary | std::ios::in;
+	const static std::ios::openmode WRITE_MODE = std::ios::binary | std::ios::out | std::ios::trunc;
+
+public:
+	BufferedBinaryRun(std::fstream & input_file):
+		in(&input_file), 
+		current_pair(0), 
+		buffer_size(0) {
+		in->read((char *) &length, sizeof(length));
+		logger_trace << "Having run of length " << length << ".\n";
+	}
+
+	BufferedBinaryRun():
+		current_pair(0),
+		buffer_size(0),
+		length(0),
+		in(0) {
+	}
+
+	std::pair<Key, Value> & current() {
+		logger_trace << "Current pair.\n";
+		return buffer[current_pair];
+	}
+
+	void next() {
+		logger_trace << "Next pair.\n";
+		++current_pair;	
+		if (current_pair < buffer_size) {
+			return;
+		}
+
+		buffer_size = length < BUFFER_SIZE ? length : BUFFER_SIZE;
+		current_pair = 0;
+		assert(!in->eof());
+		in->read((char*) buffer, sizeof(std::pair<Key, Value>) * buffer_size);
+		length -= buffer_size;
+	}
+
+	bool has_next() {
+		logger_trace << "Has next: " << (buffer_size != current_pair || length != 0) << ".\n";
+		return current_pair + 1 < buffer_size || length != 0;
+	}
 };
 
 template<typename Key, typename Value>
@@ -842,7 +900,7 @@ int main(int argc, char ** argv) {
 	bool inner_reductions = true;
 
 	std::size_t max_files = 16;
-	std::size_t max_elements = 28; // 1 << 28;
+	std::size_t max_elements = 1 << 24;
 
 	for (int i = 1; i < argc; ++i) {
 		if (std::string(argv[i]) == "-i") {
@@ -868,6 +926,11 @@ int main(int argc, char ** argv) {
 			logger = Log(true);
 		}
 
+		if (std::string(argv[i]) == "-vv") {
+			logger = Log(true);
+			logger_trace = Log(true);
+		}
+
 		if (std::string(argv[i]) == "--binary") {
 			binary = true;
 		}
@@ -881,15 +944,15 @@ int main(int argc, char ** argv) {
 	std::ifstream fin(in_filename);
 	std::ofstream fout(out_filename);
 
-	std::cout << "Binary mode:	" << binary << "\n";
+	std::cout << "Binary mode:    " << binary << "\n";
 	std::cout << "Reduction mode: " << inner_reductions << "\n";
 
 	Stats stats;
 	if (binary) {
 		if (inner_reductions) {
-			stats = sort<MinReducer, BinaryRun>(fin, fout, temp_directory, max_files, max_elements);
+			stats = sort<MinReducer, BufferedBinaryRun>(fin, fout, temp_directory, max_files, max_elements);
 		} else {
-			stats = sort<NoReducer, BinaryRun>(fin, fout, temp_directory, max_files, max_elements);
+			stats = sort<NoReducer, BufferedBinaryRun>(fin, fout, temp_directory, max_files, max_elements);
 		}
 	} else {
 		if (inner_reductions) {
@@ -899,8 +962,8 @@ int main(int argc, char ** argv) {
 		}
 	}
 
-	std::cout << "Input size: " << stats.input_size << "\n";
-	std::cout << "Output size: " << stats.output_size << "\n";
+	std::cout << "Input size:       " << stats.input_size << "\n";
+	std::cout << "Output size:      " << stats.output_size << "\n";
 	std::cout << "Inner reductions: " << stats.inner_reductions << "\n";
 
 	return 0;

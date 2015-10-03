@@ -17,7 +17,7 @@ using namespace std;
 #if __GNUC__
 #if __x86_64__ || __ppc64__
 #define ENVIRONMENT64
-typedef uint128_t TT;
+typedef unsigned __int128 TT;
 #else
 #define ENVIRONMENT32
 typedef uint64_t TT;
@@ -34,9 +34,9 @@ const TT PRIME = std::numeric_limits<T>::max() - 58;
 
 // Default lengths.
 #ifdef ENVIRONMENT32
-const size_t BASELEN = 2uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // 2 G of data.
+const size_t BASELEN = 1024 * 1024 * 1024 / 64 / (sizeof(T) * 2); // 2 G of data.
 #else
-const size_t BASELEN = 64uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // 64 G of data.
+const size_t BASELEN = 1uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 64 G of data.
 #endif
 const size_t TESTLEN = 128;
 
@@ -130,8 +130,9 @@ int main(int argc, char** argv) {
 	// The number of keys.
 	T length = BASELEN;
 
+	printf("%lu", sizeof(TT));
 	if (sizeof(TT) < 2 * sizeof(T)) {
-		printf("Need the double arithmetics type to generate the data.");
+		printf("Need the double arithmetics type to generate the data.\n");
 		return 1;
 	}
 
