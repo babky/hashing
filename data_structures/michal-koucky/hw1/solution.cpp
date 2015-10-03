@@ -842,7 +842,7 @@ int main(int argc, char ** argv) {
 	bool inner_reductions = true;
 
 	std::size_t max_files = 16;
-	std::size_t max_elements = 1 << 28; 
+	std::size_t max_elements = 28; // 1 << 28;
 
 	for (int i = 1; i < argc; ++i) {
 		if (std::string(argv[i]) == "-i") {
