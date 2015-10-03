@@ -36,7 +36,7 @@ const TT PRIME = std::numeric_limits<T>::max() - 58;
 #ifdef ENVIRONMENT32
 const size_t BASELEN = 1uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // 2 G of data.
 #else
-const size_t BASELEN = 32uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 64 G of data.
+const size_t BASELEN = 24uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 64 G of data.
 #endif
 const size_t TESTLEN = 128;
 
