@@ -8,10 +8,10 @@
 
 <h2>Podmínky</h2>
 <dl>
-	<dt>Termín odevzdání</dt><dd>23. října 2014</dd>
-	<dt>Způsob odevzdání</dt><dd>odevzdaním na <a href="http://google.it/">stránce pre odevzdání prvního úkolu</a> <strong>nebo</strong> odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong></dd>
-	<dt>Vstup a výstup</dt><dd>Řešení musí vstup přečíst ze souboru <strong>data.txt</strong> a zapsat je setříděná do <strong>data.out</strong></dd>
-	<dt>Paměť</dt><dd>Řešení bude spuštěno na počítači s <strong>8 GB paměti</strong>.</dd>
+	<dt>Termín odevzdání</dt><dd>27. října 2014</dd>
+	<dt>Způsob odevzdání</dt><dd>Odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong></dd>
+	<dt>Vstup a výstup</dt><dd>Řešení musí vstup přečíst ze souboru <strong>data.txt</strong> a zapsat je setříděná do <strong>data.out</strong>. Předpokládejte, že zmíněné soubory se nacházejí v aktuálním adresáři.</dd> 
+	<dt>Paměť</dt><dd>Fyzická pamět testovacího počítače je <strong>8 GB</strong>.</dd>
 	<dt>Čas</dt><dd>Řešení musí vyprodukovat korektní řešení do <strong>60 minut</strong>.</dd>
 </dl>
 
@@ -31,8 +31,8 @@ který na každém řádku obsahuje dvě 64-bitová čísla bez znaménka, <i>kl
 </p>
 
 <h3>Generování dat a testování</h3>
-Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/k/koucky/ds1/pbl1-gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební soubor <tt>data.txt</tt>
-a změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl0</tt> až <tt>u-pl15</tt>. Vygenerovaný soubor má cca 45GB a časový
+Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební vstup (je nutné přesměrovat do <tt>data.txt</tt>, generátor vypisuje na standardní výstup).
+a změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl0</tt> až <tt>u-pl15</tt>. Vygenerovaný soubor má cca 48GB a časový
 limit na jeho setřídění je 60 minut. Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
 Při měření ukládejte soubor <tt>data.txt</tt> a jakékoliv pomocné soubory do adresáře <tt>/tmp</tt>. Po ukončení měření po sobě
 soubory smažte, aby ostatní mohli provést svoje měření (jinak dojde místo na disku a ostatní po vás nemohou soubory smazat). 
@@ -63,11 +63,17 @@ Rychlost a správnost řešení bude následně ověřena na jiných ale podobn�
 </tt>
 
 <h2>Generování zkušebních dat</h2>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/pbl1-gen-data XX >/tmp/data.txt</tt>
-<p>vygeneruje data pro měření a
-<p><tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/pbl1-gen-data - XX >/tmp/data.txt</tt>
-<p>vygeneruje desetinovou verzi dat pro účely ladění. Zde XX jsou poslední
-dvě číslice z vašeho studentského čísla.
+<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX >/tmp/data.txt</tt>
+<p>vygeneruje data pro měření a</p>
+<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --test >/tmp/data.txt</tt>
+<p>vygeneruje verzi dat pro tvorbu programu (vstup velikosti 128 záznamů).</p>
+<p>Na účely ladění a testování používajte</p>
+<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --short >/tmp/data.txt</tt><br />
+<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --super-short >/tmp/data.txt</tt>
+
+<p>
+Zde XX jsou poslední dvě číslice z vašeho studentského čísla. Testování proběhne na stejném, ale dopredu neznámém seedu, pro všechny.
+</p>
 
 <h2>Doprovodný email</h2>
 Při odeslání emailu se změřeným časem uveďte detaily měření dle následujícího vzoru<p>
@@ -82,17 +88,6 @@ XX (for the gen-data program): 37<br>
 A short description: Pouzil jsem Huge-sort kombinovany se Super-sortem aplikovanym na inverzni prvky.<br>
 Pseudonym pro zverejneni na webu: nechci byt uveden.<br>
 </tt>
-
-<h2>Parametre stroja</h2>
-CPU: AMD Phenom(tm) II X4 955 Processor<br />
-Paměť: 8 GB
-<pre>
-$ free -m
-             total       used       free     shared    buffers     cached
-Mem:          7477       7266        210          3         18        905
--/+ buffers/cache:       6341       1135
-Swap:         7985          6       7979
-</pre>
 
 </body>
 </html>
