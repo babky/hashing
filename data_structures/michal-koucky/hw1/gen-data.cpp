@@ -58,7 +58,7 @@ void print_help() {
 
 const T MASK = (((T) 1) << (sizeof(T) * 8 - 1)) - 1;
 void output_key_value(T key, T value) {
-	printf("%lu %lu\n", key & MASK, value);
+	printf("%lu %lu\n", key & MASK, value & MASK);
 }
 
 class Generator {
