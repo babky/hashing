@@ -8,7 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define BLOCK_SIZE 500000000		// Block size for presorting
+#define BLOCK_SIZE 440000000		// Block size for presorting
 #define IO_BUFFER_SIZE 1048576		// Buffer size for file I/O
 #define MULTIWAY_MERGE 8		// Enables multi-way merging
 #define FAST_READ			// Replace fscanf() by inline code
