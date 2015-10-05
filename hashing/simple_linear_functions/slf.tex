@@ -1,0 +1,384 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{
+	b5paper,
+	margin=0.5cm,
+	top=1.5cm,
+	bottom=1.5cm
+}
+
+\newcommand{\llinnm}[2]{\operatorname{L}_{\operatorname{lin}}({#1}, {#2})}
+\newcommand{\llinn}[1]{\llinnm{#1}{#1}}
+\newcommand{\hlinr}[1]{\operatorname{H}_{\operatorname{lin}}^{#1}}
+\newcommand{\hlin}{\operatorname{H}_{\operatorname{lin}}}
+\newcommand{\hfact}[2]{\operatorname{H}_{\operatorname{factor}}({#1}, {#2})}
+\newcommand{\rot}[2]{\operatorname{H}_{\operatorname{rot}}^{{#1}, {#2}}}
+
+\newcommand{\bin}[3]{\operatorname{\mathbf{bin}}({#1}, {#2}, {#3})}
+\newcommand{\lbin}[2]{\operatorname{\mathbf{lbin}}({#1}, {#2})}
+\newcommand{\vbin}[2]{\operatorname{\mathbf{bin}}({#1}, {#2})}
+\newcommand{\vlbin}[1]{\operatorname{\mathbf{lbin}}({#1})}
+
+
+\newcommand{\probs}[2]{\operatorname{\mathbf{Pr}}_{{#1}}\left[{#2}\right]}
+\newcommand{\prob}[1]{\probs{}{#1}}
+\newcommand{\expects}[2]{\operatorname{\mathbf{E}}_{{#1}}\left[{#2}\right]}
+\newcommand{\expect}[1]{\expects{}{#1}}
+\newcommand{\inu}{\in_U}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+
+\title{Expected load of a fullest bin with simple linear functions}
+\author{Martin Babka}
+
+\begin{document}
+
+\maketitle
+
+This is just a compilation of ideas which can possibly lead to some bounds on the quantity $\llinn{m}$ which is defined in Section~\ref{sec:notation}.
+
+\section{Notation and definitions}
+\label{sec:notation}
+We refer to the set $\{0, \dots, k - 1\}$ as to $[k]$.
+Let $A, B$ be sets of integers and $q$ be an integer, then $A + B = \{a + b \mid a \in A,\ b \in B\}$ and $qA = \{qa \mid a \in A \}$ and $A + q = A + \{q\}$.
+
+We assume that $p$ is a fixed prime such that $n = m \ll p$.
+Then the universe from which the balls are chosen is the set $[p]$.
+All the operations are then taken in the field $\mathbb{Z}_p$.
+
+In the following the number of bins is a positive integer $m$.
+We further assume that $m$ is a power of two.
+The number of balls is $n \leq m$, in this text we further assume that $n = m$.
+The set of chosen balls is denoted by $S \subset [p]$ such that $|S| = m$.
+
+For each pair $(a, b) \in [p]^2$ and an integer $r$, $0 < r < p$, we define the function $h_{a, b}^r$ as $h_{a, b}^r(x) = (ax + b) \bmod p \bmod r$.
+In the following text we use simplify the notation by putting $h_{a, b} = h_{a, b}^m$.
+
+The multiset of simple linear functions mapping $[p]$ to the range [r] is denoted by $\hlinr{r}$ and is defined as $\hlinr{r} = \{h_{a, b}^r \mid a, b \in [p] \}$.
+As in the case of a single function we simplify the notation so that $\hlin = \hlinr{r}$.
+We also define the rotation functions $\rot{f}{m} = \{h_f \mid h_f(x) = (x + b_f) \bmod m \text{ where } b_f \in [m] \}$.
+
+By $\hfact{h}{f}$ we understand the factorization of $h \in \hlin$ through the factor space $[f]$.
+Let $h_{a, b} \in \hlin, h_{a_u, b_u} \in \hlinr{f}, h_f \in \rot{f}{m}$.
+We define that $h_{a, b} = h_u \odot h_f$ iff $a_u = a$.
+The factorization of $h$ through the factor space $[f]$ is the set $\hfact{h}{f} = \{ (h_u, h_f) \mid h_u \in \hlinr{f}, h_f \in \rot{f}{m}, h = h_f \odot h_u \}.$
+
+For a function $h \in \hlin$ we define $\bin{h}{S}{i} = |S \cap h^{-1}(i)|$ and $\lbin{h}{S} = \max_{i \in [m]} \bin{h}{S}{i}$.
+
+In the following when speaking about probabilities we implicitly use the probability space of the uniform choice of $h \in \hlin$, referred to as $h \inu \hlin$.
+The notation $\vbin{S}{i}$ and $\vlbin{S}$ then refer to the random variables formed over the mentioned uniform choice.
+
+\section{Properties of the set $[m]$}
+
+The set $[m]$ is a set for which it is natural to study its behaviour.
+We are going to conclude two results about the set which are in contrast.
+
+First the set $[m]$ (or its arbitrary linear transformation) has the maximal probability of being collided into a single element.
+On the other hand this is the set with the exepected longest chain lenght $O(1)$.
+
+What is remarkable is the fact that the chains of the colliding elements somehow correspond to a transformation of a subset of the set $[\frac{p}{m}]$.
+We think that the subset with the highest probability of being collided is just a transformation of the set $[l]$ for some $l \leq m$.
+So the fact that the set $[m]$ has small longest chains but the chains which are the longest should be some transformations of this set is just a remarkable fact.
+
+\subsection{Collision probability for three elements}
+
+First of all, assume that we have three different elements $x, y, z$ and we count the number of pairs $(a, b)$ such that $|h_{a, b}(\{x, y, z\})| = 1$.
+As stated in the following lemma we may assume that $x = 0, y = 1$ and the third element $z = d$.
+
+\begin{lemma}[Transformation lemma]
+Let $x, y, z \in [p]$ be arbitrary different elements. Then there exist an element $d \in [p]$ such that
+\[
+\prob{h(x) = h(y) = h(z)} = \prob{h(0) = h(1) = h(d)}.
+\]
+\end{lemma}
+\begin{proof}
+Choose $\alpha, \beta \in [p]$ so that $\alpha \neq 0$.
+Observe that the mapping $(\gamma, \delta) \mapsto (\alpha \gamma, \beta \gamma + \delta)$ is a one-to-one map on $[p]^2$.
+If there is another pair $(\epsilon, \phi)$ such that $(\alpha \epsilon, \beta \epsilon + \phi) = (\alpha \gamma, \beta \gamma + \delta)$, then $\gamma = \epsilon$ and $\delta = \phi$. Thus the mapping is injective.
+Also for arbitrary $(r, s) \in [p]^2$ the element $(\alpha^{-1}r, s - \beta\alpha^{-1}r)$ is mapped to $(\alpha \alpha^{-1}r, \beta r + s - \beta\alpha^{-1}r) = (r, s)$.
+
+Define the function $h'_{a, b}$ as $h'_{a, b}(x) = ax + b$ where the operations are taken in $\mathbb{Z}_p$. Then the compound function $h'_{a, b} \circ h'_{\alpha, \beta}$ is exactly equal to the function $h_{\alpha a, \beta a + b}$.
+
+Since the mapping from the beginning of the proof is bijective the composition of the function can not change the probability (count of the functions) mapping arbitrary three elements to a single point.
+
+Notice that there is a single pair $(\alpha, \beta) \in [p] ^ 2$, i.e. a single function $h'_{\alpha, \beta}$, transforming the elements $0$ and $1$ to $x$ and $y$ in the field $[p]$ without taking modulo $m$. It is the function $\beta = x$ and $\alpha = y - x$.
+It is enough to choose a unique $d \in [p]$ such that $h'_{\alpha, \beta}(d) = z$, i.e. $d = \alpha ^ {-1}(z - \beta)$.
+\end{proof}
+
+\begin{corollary}
+The probability properties, e.g. collision, mapping to the prescribed elements, for the elements $x, y, z$ are the same as for the elements $\{0, 1, d\}$ where $d$ comes from the previous lemma with the appropriate transformations.
+\end{corollary}
+
+\begin{lemma}[Probability of collision of three elements]
+Let $d \in [p]$ be arbitrary element. Then
+\[
+\prob{\mbox{elements }\{0, 1, d\}\mbox{ collide}} = 
+\frac{1 + \max\left(1, \frac{p}{dm}\right)\left(1 + \frac{d}{m}\right)}{p}.
+\]
+\end{lemma}
+
+We count the number of functions $h \in \hlin$ such that $h(\{0, 1, d\}) = \{y\}$ for some $y \in [m]$.
+For an element $x$ we define the value $l(x, a, b) = \left\lfloor\frac{ax + b}{p}\right\rfloor$; that is how many ``leaps'' are created by applying the function $h_{a, b}$ on the element $x$ in the field $\mathbb{Z}_p$.
+For each $x \in [p]$ it holds that $l(x, a, b) \in [x]$ and $h(x) = (ax + b - l(x, a, b)p) \bmod m$.
+
+Whenever the elements $0, 1$ and $d$ are mapped to the same element $y$ it must hold that 
+\begin{align*}
+	b \bmod p \bmod m & = (a + b) \bmod p \bmod m \\
+	b \bmod p \bmod m & = (da + b) \bmod p \bmod m. \\
+\end{align*}
+From that we conclude that
+\begin{align*}
+	m & \mid a + b - l(1, a, b)p - b \\
+	m & \mid da + b - l(d, a, b)p - b. \\
+\end{align*}
+Hence
+\begin{align*}
+	m & \mid a - l(1, a, b)p \\
+	m & \mid da - l(d, a, b)p. \\
+\end{align*}
+Therefore it holds that 
+\begin{align*}
+	m & \mid da - dl(1, a, b)p \\
+	m & \mid (dl(1, a, b) - l(d, a, b))p. \\
+\end{align*}
+Since $p$ is a prime we have that \[m \mid dl(1, a, b) - l(d, a, b).\]
+We estimate the collision probabilities from the two statements following from the previous formulas:
+\begin{align}
+	m & \mid a - l(1, a, b)p \label{3-prob-1-statement} \\
+	m & \mid (dl(1, a, b) - l(d, a, b))p. \label{3-prob-2-statement}
+\end{align}
+
+From (\ref{3-prob-1-statement}) we can observe that only the $1 / m$ fraction from the possible values of $a$ lying in the appropriate intervals allowed by valid values of $l(d, a, b)$ are causing collisions.
+
+The statement (\ref{3-prob-2-statement}) roughly means that out of $d$ possible values for $l(d, a, b)$ only the $1 / m$ fraction may generate the collision of the three elements.
+
+For the rest of the proof fix the value of $b$. 
+First, we show that the values of $a$ such that $l(d, a, b) = l \in [d]$ form disjoint intervals in $[p]$ each of size at most $\lceil p/d \rceil$.
+Then we count the number of values $a$ in an interval causing collisions -- using (\ref{3-prob-1-statement}).
+And finally we count the number of the valid intervals.
+
+Let $l(d, a, b) = l$, then it holds that $l \leq \frac{da + b}{p} < l + 1$. Immediately we get that $a \in \left[\frac{pl - b}{d}, \frac{p(l + 1) - b}{d}\right) \cap \mathcal{Z}$. The ceiling must be applied assume a interval length of 1.5 starting at point 1 -- it contains the two points 1 and 2. So the total number of values of $a$ in each valid interval is at most $\lceil p / d \rceil$. This happens whenever $\frac{pl - b}{d}$ is an integer.
+
+Now fix the value $l \in [d]$ such that $l(d, a, b) = l$.
+In order to estimate the number of values of $a$ causing the collisions we split into two cases according to the value of $l(1, a, b)$.
+
+\subparagraph{The first case, $l(1, a, b) = 0$.} 
+From the two previous statements we conclude that
+\begin{align*}
+	m & \mid a \\
+	m & \mid l. \\
+\end{align*}
+
+\subparagraph{The second case, $l(1, a, b) = 1$.}
+As in the first case it must hold that
+\begin{align*}
+	m & \mid a - p \\
+	m & \mid d - l. \\
+\end{align*}
+
+In both cases, there are at most $\lceil d/m \rceil$ values of $l$ satisfying the second condition.
+Also for each satisfying value of $l$ there are at most $\lceil \lceil\frac{p}{d}\rceil / m \rceil$ values of $a$ causing the collision.
+
+In both cases and for each $b$ it holds that the probability of collision of the three elements is bounded by
+\[
+\frac{\left(1 + \frac{1 + \frac{p}{d}}{m}\right)\left(1 + \frac{d}{m}\right)}{p} =
+\begin{cases}
+	\frac{1}{m^2} + \frac{1}{dm} + O\left(p^{-1}\right) & \mbox{if } p/dm \geq 1 \\
+	\frac{1}{m^2} + \frac{d}{pm} + O\left(p^{-1}\right) & \mbox{otherwise, i.e. } \frac{p}{m} \leq d < p.
+\end{cases}
+\]
+
+The worst possible case is when $d = 2$ and the probability is roughly $1/2m$ and when $d$ is large.
+In the case when $d \geq p/m$ we do not have a better probability estimate. The function of probability w.r.t. $d$ is a very interesting function with a symmetric character as pointed out by the next lemma.
+
+\begin{lemma}
+\label{lm:three-elements}
+For arbitrary three elements the probability of their collision is at most $1/2m + 2/m^2$.
+\end{lemma}
+\begin{proof}
+The elements when $d > p / 2$ can be transformed to a set $0, 1, d'$ where $d' < p / 2$.
+
+% TODO
+To be done - the idea is the two elements which are the closest are $1$ and $d$.
+\end{proof}
+
+\begin{corollary}
+\label{co:d-elements}
+For the set $[d]$, the probability of its collision to a single element is at most $\frac{2}{(d - 1) m} + 2/m^2$.
+\end{corollary}
+\begin{proof}
+These $d$ elements are normalized to a set of size $d$ and we assume that $e$ is its maximal element.
+Assume that $e < p / m$. Then if all $d$ elements of this set collide, then the elements $\{0, 1, e\}$ must collide as well.
+Since $e \geq d - 1$ the following $\frac{1}{e} \leq \frac{1}{d - 1}$ holds and from this we can conclude that the corollary holds as well.
+The worst case is if the elements are distributed uniformly at the beginning and at the end of $\mathbb{Z}_p$.
+Then we can get just the mentioned probability using the same technique as in the first case.
+\end{proof}
+
+The above statement is tight for the set $\{0, 1, \ldots, d - 1\}$.
+For this set we have $\frac{p}{(d - 1)m}$ functions making it collide.
+
+\subsection{Collision probability for the set $\{0, 1, \ldots, d\}$}
+
+The goal is to prove for $d \ll m \ll p$ that this probability is more or less the same as the probability of colliding the elements $\{0, 1, d\}$.
+
+Now assume that the three elements $\{0, 1, d\}$ collide.
+Then it holds
+\begin{align*}
+m & \mid a - l(1, a, b)p \\
+m & \mid 2a - l(2, a, b)p \\
+\vdots & \\
+m & \mid da - l(d, a, b)p.
+\end{align*}
+
+From which it follows that
+\begin{align*}
+m & \mid 2l(1, a, b) - l(2, a, b) \\
+m & \mid 3l(1, a, b) - l(3, a, b) \\
+\vdots & \\
+m & \mid dl(1, a, b) - l(d, a, b).
+\end{align*}
+
+But I do not know what to do next :(.
+The experiments indicate that something like this should hold (at least up to a constant factor, of course).
+
+\begin{lemma}
+\label{lm:0-d-prob-lower-bound}
+For $d < m << p$ the following statement is true;
+\[
+\prob{|h(\{0, 1, \ldots, d\})| = 1} = \Omega\left(\frac{1}{dm}\right).
+\]
+\end{lemma}
+\begin{proof}
+For a fixed $b$, if $a < (p - b)/d$ and $m \mid a$, then the elements $\{0, 1, \ldots, d\}$ collide.
+For each $b$ there are at least $\lfloor (p - b)/dm \rfloor$ such values of $a$.
+
+We conclude that the number of pairs $(a, b)$ making the elements collide is at least
+\[
+\sum_{b \in [p]} \frac{p - b}{dm} - 1 = \frac{2p ^ 2 - (p - 1)p}{2dm} - p \geq \frac{p ^ 2}{2dm} - p.
+\]
+
+Thus the resulting probability is at least $\frac{1}{3dm}$.
+\end{proof}
+
+\subsection{Bounds on $\vlbin{[m]}$}
+
+The effect of $b$ on $\vlbin{S}$ is not asymptotic as stated in the following lemma.
+\begin{lemma}
+\label{lm:b-zero}
+Assume that  $a, b \in [p]$ and $S \subseteq [p]$. Then \[ \frac{1}{2} \lbin{h_{a, b}}{S} \leq \lbin{h_{a, 0}}{S} \leq 2\lbin{h_{a, b}}{S} . \]
+\end{lemma}
+\begin{proof}
+% TODO.
+To be done.
+\end{proof}
+
+\begin{lemma}
+Assume that  $a \in [p]$ and $S \subseteq [p]$ such that $0 \not\in S$. Then \[ \lbin{h_{a, 0}}{S} = \lbin{h_{p - a, 0}}{S} . \]
+\end{lemma}
+\begin{proof}
+% TODO.
+To be done.
+\end{proof}
+
+\begin{corollary}
+If $0 \in S$, then we have the inequality
+\[
+\lbin{h_{p - a, 0}}{S} -1 \leq  \lbin{h_{a, 0}}{S} \leq \lbin{h_{p - a, 0}}{S} + 1.
+\]
+\end{corollary}
+
+\begin{theorem}
+\[
+\expect{\vlbin{[m]}} = O(1).
+\]
+\end{theorem}
+\begin{proof}
+Notice that by Lemma~\ref{lm:b-zero} we may assume that the chosen function has $b = 0$ and $a \neq 0$.
+
+We now observe that for each chain $L$ it holds that the set is an arithmetic progression chosen from the set $[m]$.
+And the set $aL$ also forms an arithmetic progression.
+
+Depending on the choice of $a$ we either have
+\begin{itemize}
+  \item $1$ belongs to a chain which is by one element shorter than the longest chain and not containing zero or
+  \item $1$ belongs to a chain which is the longest one and containing zero.
+\end{itemize}
+
+The reason for the previous observation is simple. If we hash the set $[m]$ then we are subsequently adding $a$ to the previous result.
+Since $p$ is a prime it is true that $(-p) \bmod m$ is coprime with $m$.
+Fix the smallest element $x$ in a chain $L$ and let $y = x + d$ be the second smallest one.
+Then each element $x + id$ must be in the same chain unless $x + id > p$.
+The first time the sequence $x + id$ goes back to the same chain has $i > m$ which is not possible for the set $[m]$.
+
+If the chain has the longest chain of $l$ elements, then the difference of the arithmetic progression ranges from $1$ to $\lfloor \frac{m}{l} \rfloor$.
+After this observation we use the statement of Lemma~\ref{co:d-elements} and the union bound.
+\[
+\prob{\vlbin{[m]} \geq l} \leq 2 \frac{m}{l} \frac{O(1)}{(l - 1)m} = O\left(\frac{1}{(l - 1)l}\right).
+\]
+
+Then we simply conclude that
+\[
+\expect{\vlbin{[m]}} \leq \sum_{l = 1}^m O\left(\frac{1}{l^2}\right) = O(1).
+\]
+
+\end{proof}
+
+
+\section{Lemmas about factorization}
+\begin{lemma}
+Let $f \geq m$ be an integer such that $m \mid f$.
+
+If $h \in \hlin$, then $|\hfact{h}{f}| = m p$.
+
+Conversely; if $(h_u, h_f) \in \hlinr{f} \times \rot{f}{m}$, then $|\{h \in \hlinr{m} \mid h = h_u \odot h_f \}| = p$.
+\end{lemma}
+
+\begin{corollary}
+\[
+    \prob{\vlbin{S} = x} = \probs{\substack{h_u \inu \hlinr{f} \\ h_f \inu \rot{f}{m}}}{\lbin{h_u \circ h_f}{S} = x}
+\]
+\end{corollary}
+\begin{proof}
+Fix $h \in \hlin$ and $(h_u, h_f) \in \hfact{h}{f}$.
+It is clear that there exists a unique rotation $r \in \rot{m}{m}$ such that $r \circ h = h_f \circ h_u$ and thus $\lbin{h}{S} = \lbin{r \circ h}{S} = \lbin{h_f \circ h_u}{S}$.
+\begin{align*}
+    \prob{\vlbin{S} = x} & = \probs{\substack{h \inu \hlin \\ r \inu \rot{m}{m}}}{\lbin{r \circ h}{S} = x} \\
+        & = \probs{\substack{h_u \inu \hlinr{f} \\ h_f \inu \rot{f}{m}}}{\lbin{h_u \circ h_f}{S} = x}.
+\end{align*}
+\end{proof}
+
+\section{Other ideas}
+\subsection{A failed lower bound}
+Let us split the interval $[m]$ into $m/d - 1$ subintervals of the same length $d$; omit the last possibly incomplete one.
+
+If one of these subintervals collides into a single element, we have that $\vlbin{[m]} \geq d$.
+By Bonferroni inequalities we may conclude that
+\[
+\begin{split}
+\prob{\vlbin{[m]} \geq d} & \geq \left(\frac{m}{d} - 1\right) \cdot \prob{|h([d])| = 1} \\
+	& \qquad - \left(\frac{m}{d} - 1\right)^2\prob{|h([d])| = 1 \wedge |h(i + [d])| = 1} \\
+	& \geq \frac{m}{2d} \cdot \frac{1}{3dm} - \frac{m^2}{d^2} \cdot \frac{1}{dm} \\
+	& \geq \frac{1}{6d^2} - \frac{m}{d^3}.
+\end{split}
+\]
+
+When $\frac{1}{6d^2} \geq \frac{m}{d^3}$, i.e. $d \geq \frac{m}{6}$ we can take an integral only with an uninteresting result.
+
+This is not the right way, obviously.
+The number of events in the minus part is quadratic wrt. the number of events in the positive part.
+The asymptotic nature of the estimates is the same, too.
+Even if the upper bound was even zero, the summing $\sum_{x \in \mathbb{N}}\frac{1}{x^2}$ would be $\Theta(1)$.
+
+With these asymptotically tight bounds finding a lower or upper bound is the same task as finding the upper bound (more or less).
+
+
+\end{document}
+
+

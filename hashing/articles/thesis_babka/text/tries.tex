@@ -1,0 +1,188 @@
+\chapter{Pokusy}
+\paragraph{Pokles pravdepodobnosti kolízie pre reťazcový systém}
+
+Postupnosť bitov, ktoré reprezentujú dvojkový zápis čísla $x$ môžeme chápať ako vektor, prvok vektorového priestoru. Tento predpoklad môžeme spraviť, lebo univerzum $U$ volíme ako množinu $\{0, \dots, N - 1 \}$, kde $N = 2^k$. Chceme odhadnúť pravdepodobnosť, že $n$ zadaných prvkov $x^1, \dots, x^n$ koliduje. Zostavíme $n$ rovníc tvaru:
+\begin{displaymath}
+\left(\displaystyle \sum_{i=0}^{k-1} c_i x_i^j\right) \bmod p = t \qquad j \in \{1, \dots, n\}
+\end{displaymath}
+
+Parameter $t \in \{0, \dots p-1\}$ môže byť ľubovoľný. Zostavíme maticu $M$ tejto sústavy, pričom budeme počítať nad poľom $Z_p$. 
+\begin{displaymath}
+M = \begin{pmatrix}
+  x_{k-1}^1 & x_{k-2}^1 & \cdots & x_0^1  \\
+  x_{k-1}^2 & x_{k-2}^2 & \cdots & x_0^2  \\
+  \vdots  	& \vdots  	& \ddots & \vdots \\
+  x_{k-1}^n & x_{k-2}^n & \cdots & x_0^n  \\
+ \end{pmatrix}
+\end{displaymath}
+
+Pokiaľ matica $M$ má dostatočne veľkú hodnosť, tak počet riešení a teda aj počet vyhovujúcich funkcií je malý. Ak $\rank{M} = r$, potom počet zadaných vzorov je najviac $2^r$. Z toho ďalej plynie, že $r \geq \lceil \log n \rceil$. Počet riešení pri hodnosti $r$ je rovný veľkosti jadra matice. Počet vektorov v jadre je $l^{k-r}$. Pretože máme $p$ volieb parametra $t$, máme:
+\begin{displaymath}
+|\{ h \in H | h(x_1) = h(x_2) = \dots = h(x_n) \}| \leq p l^{k-r} \leq p l^{k - \lceil \log n \rceil}
+\end{displaymath}
+
+Z toho vidíme pravdepodobnosť kolízie ako:
+\begin{displaymath}
+P(h(x_1) = h(x_2) = \dots = h(x_n)) \leq \frac{p}{l^{\lceil \log n \rceil}} \leq \frac{p}{l^{\log n}} = \frac{p}{n^{\log l}}
+\end{displaymath}
+
+Posledná rovnosť plynie z nasledujúceho faktu:
+\begin{displaymath}
+l^{\log n} = 2^{(\log l)(\log n)} = 2^{(\log n)(\log l)} = n^{\log l}
+\end{displaymath}
+
+\begin{displaymath}
+\begin{split}
+\displaystyle \sum_{j=0}^{\infty} \dbinom{|S|}{j}\frac{p}{j^{\log l}} 
+	& = p \displaystyle \sum_{j=0}^{\infty} \dbinom{|S|}{j}\frac{1}{j^{\log l}}
+\end{split}
+\end{displaymath}
+
+Pre kombinačné čísla platí:
+\begin{displaymath}
+\dbinom{n}{j} = \dbinom{n}{n-j}
+\end{displaymath}
+\begin{displaymath}
+\dbinom{n}{j} \in O(n^{\min(j, n-j)})
+\end{displaymath}
+
+Vidíme, že člen $j^{\log l}$ prerastie $\dbinom{n}{j}$ až pri $j \doteq n - \log l$. V ostatných prípadoch sa nám oplatí odhad pravdepodobnosti nahradiť $1$ a súčet vyššie uvedenej rady je $O(n)$. Takýto pokles pravdepodobnosti je nedostačujúci a odhad je pre "vhodne" zvolené vzory ($dim(span(x_1, \dots, x_n)) \leq \lceil \log n \rceil$) pomerne tesný.
+
+\paragraph{Pokles pravdepodobnosti kolízie pre lineárny systém}
+
+Ak počítame pokles priamo, pre niektoré prvky sa k výrazným zníženiam pravdepodobnosti kolízie nedostaneme, čo dokumentuje nasledujúci experimentálny výsledok. Ako vstupné hodnoty, pre ktoré počítame kolízne funkcie, postupne volíme hodnoty 1, 2, 3, 9, 15, 16, 18, 20, 22. Tieto hodnoty necháme zobraziť na $0$.
+
+Z rovnice (nad poľom $Z_N$):
+\begin{displaymath}
+ax + b = 0 + rm \qquad r \in \{0, \dots, \left\lceil \frac{N}{m} \right\rceil \}
+\end{displaymath}
+Vidíme, že pre každé fixované $b$ a $r$ dostávame jednoznačné $a$. Počet dvojíc $(a, b)$, ktoré spĺňajú rovnicu je teda rovný $N \left\lceil \frac{N}{m} \right\rceil$. Z dôkazu univerzality lineárneho systému máme, že počet kolíznych funkcií pre dve hodnoty je ${\left\lceil \frac{N}{m} \right\rceil}^2$.
+
+\begin{table}
+	\begin{center}
+		\begin{tabular}{r r r r}
+			\toprule[1pt]
+			\emph{Vstup} & \emph{Počet funkcií} & \emph{Optimálny pokles} & \emph{Odp. pravdepodobnosť} \\
+			\midrule[0.7pt]
+			- &		4 405 801 &	4 405 801 &	1 \\
+			\hline
+			1 &		69 267 & 	69 267 &	$1,57.10^{-2}$ \\
+			\hline
+			2 &		1 089 & 	1 089 & 	$2,47.10^{-4}$ \\
+			\hline
+			3 &		545 & 		33 & 		$1,23.10^{-4}$ \\
+			\hline
+			9 &		137 & 		1 & 		$3,11.10^{-5}$ \\
+			\hline
+			15 &	81 & 		0 & 		$1,84.10^{-5}$ \\
+			\hline
+			16 &	75 & 		0 & 		$1,70.10^{-5}$ \\
+			\hline
+			18 &	65 & 		0 & 		$1,48.10^{-5}$ \\
+			\hline
+			20 &	61 & 		0 & 		$1,38.10^{-5}$ \\
+			\hline
+			22 &	57 & 		0 & 		$1,29.10^{-5}$ \\
+			\bottomrule[1pt]
+		\end{tabular}
+	\end{center}
+
+	\caption{Počet kolíznych funkcií pre lineárny systém; N = 2 099, m = 64. Rovnaké počty vstupov vyjdú pre dva a viac aj pri N = 2 087, 2 089, 2 111.}
+	\label{tries:cwlf-experimental-probability-2099-64}
+\end{table}
+
+\begin{table}
+	\begin{center}
+		\begin{tabular}{r r r}
+			\toprule[1pt]
+			\emph{Vstup} & \emph{Počet funkcií} & \emph{Optimálny pokles} \\
+			\midrule[0.7pt]
+			- &		4 405 801 &	4 405 801 \\
+			\hline
+			1 &		7 073 & 	7 073 \\
+			\hline
+			2 &		121 & 		121 \\
+			\hline
+			3 &		61 & 		11 \\
+			\hline
+			9 &		17 & 		1 \\
+			\hline
+			15 &	11 & 		0 \\
+			\hline
+			16 &	11 & 		0 \\
+			\hline
+			18 &	11 & 		0 \\
+			\hline
+			20 &	11 & 		0 \\
+			\hline
+			22 &	11 & 		0 \\
+			\bottomrule[1pt]
+		\end{tabular}
+	\end{center}
+
+	\caption{Počet kolíznych funkcií pre lineárny systém; N = 643, m = 64.}
+	\label{tries:cwlf-experimental-probability-643-64}
+\end{table}
+
+Pokles pre prvé dva vstupy je pomerne rýchly, až na horné celé časti exponenciálny. Pokles pre väčší počet vstupov je už pomalší. V poslednom prípade dokonca ostal dlhší čas konštantný, čo je spôsobené tým, že za parameter $a$ volíme 0 a $b$ tak, aby $b \bmod N \bmod m = 0$, teda ako jeden z 11 násobkov 64 v $Z_{643}$. Takže došlo k akejsi degradácii.
+
+Otázky a možnosti:
+\begin{itemize}
+\item Pokles pre nasledujúce hodnoty je spôsobený tým, že máme povolené $a = 0$?
+\item Pokiaľ zakážeme $a = 0$, tak po istom čase určite klesneme na nulový počet riešení!
+\item Je pomalý pokles spôsobený degradáciou, teda aký je pre väčšie systémy ($N$)?
+\item Nasledujúci prístup vychádza z toho, že pri odhade očakávanej dĺžky sme sa dostali k odhadu:
+\begin{displaymath}
+P(l^{\tilde{x}} \geq k) \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|}
+\end{displaymath}
+Pokúsime sa odhadnúť namiesto každého sčítanca celú sumu.
+\item Alebo môžeme ísť ďalej a pozrieť sa, ako funkcie delia množinu vstupov:
+\begin{displaymath}
+\begin{split}
+P(l^{\tilde{x}} \geq k)
+	& \leq \frac{\sum\displaylimits_{Y \subseteq S, |Y| = k} | \{ h \in H | h(Y) = \{\tilde{x}\} \}|}{|H|} \\
+	& = \frac{\left|\{ (Y, a, b) | h_{a, b}(Y) = {\tilde{x}}, Y \subseteq S, |Y| = k\}\right|}{|H|} \\
+	& = \frac{\sum\displaylimits_{a, b} |\{Y \subseteq S | |Y| = k, h_{a, b}(Y) = \{\tilde{x}\} \}|}{|H|}
+\end{split}
+\end{displaymath}
+\item Z ďalšej ukážky budeme vidieť, že predchádzajúce dva postupy je možné skombinovať.
+\end{itemize}
+
+Ako je uvedené v jednom z predchádzajúcich bodov, odhad môžeme urobiť nielen pre jednotlivé sčítance, ale rovno pre celú sumu. Chceme určiť počet takých funkcií $h$ a $k$-prvkových podmnožín $Y$ množiny $S$, pre ktoré platí $h(Y) = \{i\}$. Zapíšeme prvé dve rovnice:
+\begin{displaymath}
+\begin{split}
+ax_1 + b & = i + r_{x_1} m \\
+ax_2 + b & = i + r_{x_2} m \\
+\end{split}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+i & \in \{0, \dots, m-1\} \\
+r_{x_j} & \in \{ 0, \dots, \left\lceil \frac{N}{m} \right\rceil - 1\} \\
+\end{split}
+\end{displaymath}
+Prvé dve hodnoty $r_{x_1}$ a $r_{x_2}$ určíme ľubovoľne, máme ${\left\lceil \frac{N}{m} \right\rceil}^2$ možností. Pre fixované $i$ a rôzne $x_1$, $x_2$ môžeme jednoznačne dopočítať parametre funkcie $a$ a $b$. Mali sme $m \dbinom{n}{2}$ spôsobov výberu. 
+
+Ďalej je nutné doplniť množinu $Y$ na $k$ prvkov. Najjednoduchším možným prí\-stu\-pom je rozšíriť prvé dve zvolené hodnoty o $k-2$ rôznych čísel, $\dbinom{n-2}{k-2}$ možností. Pre každú ďalšiu hodnotu $x_j$ už máme jednoznačne určené 
+\begin{displaymath}
+r_{x_j} = m^{-1}(a x_j + b - i)
+\end{displaymath}
+
+Celý súčet odhadneme ako:
+\begin{displaymath}
+m\dbinom{n}{2}{\left\lceil \frac{N}{m} \right\rceil}^2 \dbinom{n-2}{k-2}
+\end{displaymath}
+
+Celý odhad $E lpsl$ dopočítame:
+\begin{displaymath}
+\sum_{k=0}^{\infty} \min(1, \frac{m\dbinom{n}{2}{\left\lceil \frac{N}{m} \right\rceil}^2 \dbinom{n-2}{k-2}}{N^2}) \in O(n)
+\end{displaymath}
+
+\paragraph{Nutný počet prehashovaní}
+
+Celý systém pracuje tak, že pokiaľ reťazec dosiahne nejakú predom danú dĺžku (napríklad násobok logaritmu počtu prvkov), celú tabuľku prehashujeme. Po akomkoľvek prehashovaní dôjde k zväčšeniu tabuľky (parameter $m$) a teda aj k poklesu pravdepodobnosti, že nastane potreba ďalšieho prehashovania. Túto závislosť (na argumentoch $m$, $n$ a $N$) musíme explicitne vyjadriť. Ak by sme použili len horný odhad na túto pravdepodobnosť $p$, dostávame:
+
+Nech pravdepodobnosť prehashovania v kroku $s$ je $p_s$, očakávaný počet prehashovaní v tomto kroku bude $\frac{1}{1-p_s}$. Celkový počet operácií počas prehashovaní je:
+\begin{displaymath}
+\displaystyle\sum_{s = 0}^{n} \frac{p_s s}{1-p_s} \leq \displaystyle\sum_{s = 0}^{n} \frac{p s}{1-p} = \dbinom{n+1}{2} \frac{p}{1-p} \in O(\frac{p}{1-p} n^2)
+\end{displaymath}
