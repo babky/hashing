@@ -16,7 +16,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#define LOG_SUPPORT
+// #define LOG_SUPPORT
 
 class Log {
 #ifdef LOG_SUPPORT
@@ -684,20 +684,31 @@ public:
 		// parse the data and sort them into the files as runs
 		std::size_t runs = parse(in);
 		if (runs == 1) {
-			// write the output
+			// write the output directly
 			write_to_out(0, out);
 		} else {
 			// merge the runs
 			logger << "Merging " << runs << " runs.\n";
-			for (; runs != 1;) {
-				runs = merge_runs();
+			for (;;) {
+				if (runs < this->max_files) {
+					runs = merge_runs(out);
+					assert(runs == 0);
+				} else {
+					runs = merge_runs();
+				}
+
 				if (runs > 1) {
 					distribute_runs(runs);
+				} else {
+					break;
 				}
 			}
 
-			// write the output
-			write_to_out(max_files - 1, out);
+			// write the output, if necessary
+			if (runs == 1) {
+				assert(false); // however this should not happen.
+				write_to_out(max_files - 1, out);
+			}
 		}
 
 		clear_temp_files();
@@ -804,6 +815,32 @@ private:
 		return merger.merge();
 	}
 
+	/**
+	 * Runs the merger.
+	 */
+	std::size_t merge_runs(std::ostream & out) {
+		logger << "Outputting directly after merge.\n";
+
+		// Create the run sources.
+		std::vector<RunSource<Key, Value, RunType>> run_sources;
+		for (int i = 0; i < max_files - 1; ++i) {
+			std::fstream & fs = get_temp_file(i, true, RunType<Key, Value>::READ_MODE);
+			run_sources.push_back(RunSource<Key, Value, RunType>(fs));
+		}
+
+		// Initialize the merger.
+		Merger<Key, Value, Reducer, TextOutputPusher<Key, Value>, RunType> merger(
+			run_sources,
+			TextOutputPusher<Key, Value>(out),
+			stats
+		);
+
+		std::size_t runs = merger.merge();
+		assert(runs == 1);
+
+		return 0;
+	}
+
 	void write_to_out(std::size_t idx, std::ostream & out) {
 		std::pair<Key, Value> * element;
 		std::fstream & in = get_temp_file(idx, true, RunType<Key, Value>::READ_MODE);
@@ -905,6 +942,16 @@ int main(int argc, char ** argv) {
 	std::size_t max_elements = 1 << 28;
 
 	for (int i = 1; i < argc; ++i) {
+		if (std::string(argv[i]) == "-m") {
+			max_elements = 1 << atoi(argv[i + 1]);
+			++i;
+		}
+
+		if (std::string(argv[i]) == "-f") {
+			max_files = atoi(argv[i + 1]);
+			++i;
+		}
+
 		if (std::string(argv[i]) == "-i") {
 			in_filename = std::string(argv[i + 1]);
 			++i;
