@@ -1,12 +1,15 @@
 if __name__ == "__main__":
-	f = file('data.out', 'r')
+	f = file('/tmp/data.out', 'r')
 	
 	last_key = -1;
+	verified = 0;
 	while True:
 		line = f.readline()
 		if line == '':
+			print verified
 			print 'OK'
 			break
+		verified += 1
 		key = int(line.split(' ')[0])
 		
 		if last_key >= key:
