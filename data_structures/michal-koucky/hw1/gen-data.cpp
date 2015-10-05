@@ -155,7 +155,7 @@ void generate_chunk_run(T chunk_run_lengh, T chunk_length, T overall_chunk_lengt
 			if (hg_index < hgs.size()) {
 				hg = hgs[hg_index];
 			} else {
-				hg = new HashedSequenceGenerator(overall_chunk_length);
+				hg = new HashedSequenceGenerator(overall_chunk_length / 2);
 				hgs.push_back(hg);
 			}
 			++hg_index;
