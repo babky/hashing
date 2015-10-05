@@ -53,7 +53,7 @@ T nextrandom(T A, T B) {
  * Just shows the help screen.
  */
 void print_help() {
-	printf("Usage: ./gen-data [-s|--seed <seed>] [--test] [--short] [--super-short]\n");
+	printf("Usage: ./gen-data [-s|--seed <seed>] [--short] \n");
 }
 
 const T MASK = (1 << (sizeof(T) * 8 - 1)) - 1;
@@ -260,13 +260,13 @@ int main(int argc, char** argv) {
 	generate_chunk_run(first_chunk_run_length, first_chunk_length, chunk_length, hgs);
 
 	// Progression.
-	ProgressionGenerator pg_asc(nextrandom(), 1431);
+	ProgressionGenerator pg_asc(nextrandom(), nextrandom() % (1 << 30));
 	for (T i = 0; i < length / 32; ++i) {
 		pg_asc.next();
 	}
 
 	// Progression.
-	ProgressionGenerator pg_desc(nextrandom() | (1 << (sizeof(T) * 8 - 2)), -5437);
+	ProgressionGenerator pg_desc(nextrandom() | (1 << (sizeof(T) * 8 - 2)), -nextrandom() % (1 << 30));
 	for (T i = 0; i < length / 32; ++i) {
 		pg_desc.next();
 	}
