@@ -56,7 +56,7 @@ void print_help() {
 	printf("Usage: ./gen-data [-s|--seed <seed>] [--short] \n");
 }
 
-const T MASK = (1 << (sizeof(T) * 8 - 1)) - 1;
+const T MASK = (((T) 1) << (sizeof(T) * 8 - 1)) - 1;
 void output_key_value(T key, T value) {
 	printf("%lu %lu\n", key & MASK, value);
 }
@@ -266,7 +266,11 @@ int main(int argc, char** argv) {
 	}
 
 	// Progression.
+<<<<<<< local
 	ProgressionGenerator pg_desc(nextrandom() | (1 << (sizeof(T) * 8 - 2)), -nextrandom() % (1 << 30));
+=======
+	ProgressionGenerator pg_desc(nextrandom() | (((T) 1) << (sizeof(T) * 8 - 2)), -5437);
+>>>>>>> other
 	for (T i = 0; i < length / 32; ++i) {
 		pg_desc.next();
 	}
