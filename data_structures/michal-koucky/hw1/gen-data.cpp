@@ -12,8 +12,7 @@
 
 using namespace std;
 
-// Check bits
-
+// Check bits.
 #if __GNUC__
 #if __x86_64__ || __ppc64__
 #define ENVIRONMENT64
@@ -24,7 +23,7 @@ typedef uint64_t TT;
 #endif
 #endif
 
-// Primes and types;
+// Primes and types.
 typedef size_t T;
 #ifdef ENVIRONMENT32
 const TT PRIME = std::numeric_limits<T>::max() - 4;
@@ -36,9 +35,9 @@ const TT PRIME = std::numeric_limits<T>::max() - 58;
 #ifdef ENVIRONMENT32
 const size_t BASELEN = 1uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // 2 G of data.
 #else
-const size_t BASELEN = 24uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 64 G of data.
+const size_t BASELEN = 24uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 48 G of data.
 #endif
-const size_t TESTLEN = 128;
+const size_t TESTLEN = 4096;
 
 T nextrandom() {
 	return (((T) rand()) * ((T) rand()) + (T) rand() + ((T) rand() << sizeof(T) * 8 / 2)) ^ rand();
@@ -50,8 +49,16 @@ T nextrandom(T A, T B) {
 	return A + (nextrandom() % (1 + B - A));
 }
 
+/**
+ * Just shows the help screen.
+ */
 void print_help() {
 	printf("Usage: ./gen-data [-s|--seed <seed>] [--test] [--short] [--super-short]\n");
+}
+
+const T MASK = (1 << (sizeof(T) * 8 - 1)) - 1;
+void output_key_value(T key, T value) {
+	printf("%lu %lu\n", key & MASK, value);
 }
 
 class Generator {
@@ -72,7 +79,7 @@ public:
 	}
 
 	virtual void next() {
-		printf("%lu %lu\n", nextrandom(start, start + variance), nextrandom());
+		output_key_value(nextrandom(start, start + variance), nextrandom());
 		start += increment;
 	}
 };
@@ -91,7 +98,7 @@ public:
 	}
 
 	virtual void next() {
-		printf("%lu %lu\n", nextrandom(A, B), nextrandom());
+		output_key_value(nextrandom(A, B), nextrandom());
 	}
 };
 
@@ -104,7 +111,7 @@ public:
 	}
 
 	virtual void next() {
-		printf("%lu %lu\n", start, increment);
+		output_key_value(start, nextrandom());
 		start += increment;
 	}
 };
@@ -122,15 +129,65 @@ public:
 	}
 
 	virtual void next() {
-		printf("%lu %lu\n", (T) ((a * (TT) nextrandom(0, universeMax) + b) % PRIME % universeMax), nextrandom());
+		output_key_value((T) ((a * (TT) nextrandom(0, universeMax) + b) % PRIME), nextrandom());
 	}
 };
+
+void generate_chunk_run(T chunk_run_lengh, T chunk_length, T overall_chunk_length, std::vector<HashedSequenceGenerator *> & hgs) {
+	std::vector<Generator *> generators;
+
+	size_t hg_index = 0;
+	for (T i = 0; i < chunk_run_lengh; ++i) {
+		if (i % chunk_length == 0) {
+			// Delete the old generators.
+			for (size_t j = 0; j < generators.size(); ++j) {
+				// Do not delete the hg generators.
+				if (generators[j] == hgs[hg_index - 1]) {
+					continue;
+				}
+
+				delete generators[j];
+			}
+			generators.clear();
+
+			// Get the chunk generator.
+			HashedSequenceGenerator * hg;
+			if (hg_index < hgs.size()) {
+				hg = hgs[hg_index];
+			} else {
+				hg = new HashedSequenceGenerator(overall_chunk_length);
+				hgs.push_back(hg);
+			}
+			++hg_index;
+
+			// Init the generators.
+			generators.push_back(hg);
+			generators.push_back(hg);
+			generators.push_back(new ProgressionGenerator(nextrandom(), nextrandom()));
+			generators.push_back(hg);
+			generators.push_back(hg);
+			generators.push_back(new RandomProgressionGenerator(nextrandom(), 170, 10000));
+			generators.push_back(hg);
+			generators.push_back(hg);
+			generators.push_back(new IntervalGenerator(170, 10000));
+			generators.push_back(hg);
+			generators.push_back(hg);
+			generators.push_back(new IntervalGenerator(0, overall_chunk_length));
+			generators.push_back(hg);
+			generators.push_back(hg);
+			generators.push_back(new ProgressionGenerator(nextrandom(), nextrandom()));
+			generators.push_back(hg);
+		}
+
+		// Generate the data.
+		generators[i % generators.size()]->next();
+	}
+}
 
 int main(int argc, char** argv) {
 	// The number of keys.
 	T length = BASELEN;
 
-	printf("%lu", sizeof(TT));
 	if (sizeof(TT) < 2 * sizeof(T)) {
 		printf("Need the double arithmetics type to generate the data.\n");
 		return 1;
@@ -147,19 +204,17 @@ int main(int argc, char** argv) {
 
 		if (!strcmp("--short", argv[i])) {
 			length = BASELEN / 16;
-		}
-
-		if (!strcmp("--super-short", argv[i])) {
+		} else if (!strcmp("--super-short", argv[i])) {
 			length = BASELEN / 256;
-		}
-
-		if (!strcmp("--test", argv[i])) {
+		} else if (!strcmp("--test", argv[i])) {
 			length = TESTLEN;
-		}
-
-		if (!strcmp("-s", argv[i]) || !strcmp("--seed", argv[i])) {
+		} else if (!strcmp("-s", argv[i]) || !strcmp("--seed", argv[i])) {
 			++i;
 			seed = atoi(argv[i]);
+		} else {
+			printf("Unknown argument %s \n.", argv[i]);
+			print_help();
+			return 1;
 		}
 	}
 
@@ -173,30 +228,51 @@ int main(int argc, char** argv) {
 	// Initialize the PRG.
 	srand(seed);
 
-	// Set up the generated set.
-	vector<Generator *> generators;
-	HashedSequenceGenerator * hg = new HashedSequenceGenerator(length / 16);
-	generators.push_back(hg);
-	generators.push_back(hg);
-	generators.push_back(new ProgressionGenerator(nextrandom(), nextrandom()));
-	generators.push_back(hg);
-	generators.push_back(hg);
-	generators.push_back(new RandomProgressionGenerator(nextrandom(), 170, 10000));
-	generators.push_back(hg);
-	generators.push_back(hg);
-	generators.push_back(new IntervalGenerator(170, 10000));
-	generators.push_back(hg);
-	generators.push_back(hg);
-	generators.push_back(new IntervalGenerator(0, length));
-	generators.push_back(hg);
-	generators.push_back(hg);
-	generators.push_back(new ProgressionGenerator(nextrandom(), nextrandom()));
-	generators.push_back(hg);
+	// For full size data we choose.
+	// 2 GB of memory = 134 217 728 of elements
+	// The size of the chunk is thus - 1/24 of overall data size.
+	size_t chunk_length = length / 24;
+	size_t first_chunk_length = 3 * length / 24 / 4;
+	size_t second_chunk_length = 1 * length / 24 / 4;
+
+	// For shorter size data we choose the sizes of chunks proportionally.
+
+	// We chunk the data by 134 217 728 of elements.
+	// In each chunk we have the universe of size ~ 134 217 728 / 2.
+	size_t universe_max = chunk_length / 2;
+
+	// In such a universe we choose the elements and hash them (HashedSequenceGenerator).
+	// Then we also add some elements into these chunks - progressions.
+
+	// The overall created data looks like:
+	//  - chunks
+	//  - length / 32 -> ascending progression
+	//  - length / 32 -> descending progression
+	//  - chunks
+
+	T first_chunk_run_length = 3 * (length - 2 * length / 32) / 4;
+	T second_chunk_run_length = 1 * (length - 2 * length / 32) / 4;
+	std::vector<HashedSequenceGenerator *> hgs;
 
 	// Generate the data.
-	for (T i = 0; i < length; ++i) {
-		generators[i % generators.size()]->next();
+
+	// First chunks.
+	generate_chunk_run(first_chunk_run_length, first_chunk_length, chunk_length, hgs);
+
+	// Progression.
+	ProgressionGenerator pg_asc(nextrandom(), 1431);
+	for (T i = 0; i < length / 32; ++i) {
+		pg_asc.next();
 	}
+
+	// Progression.
+	ProgressionGenerator pg_desc(nextrandom() | (1 << (sizeof(T) * 8 - 2)), -5437);
+	for (T i = 0; i < length / 32; ++i) {
+		pg_desc.next();
+	}
+
+	// Finish the chunks.
+	generate_chunk_run(second_chunk_run_length, second_chunk_length, chunk_length, hgs);
 
 	return 0;
 }
