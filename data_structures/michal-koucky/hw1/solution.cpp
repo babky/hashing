@@ -339,7 +339,8 @@ public:
 		logger_trace << "Having run of length " << length << ".\n";
 	}
 
-	BinaryRun() {
+	BinaryRun():
+		in(0) {
 		length = 0;
 	}
 
@@ -376,7 +377,8 @@ public:
 		in(&input_file) {
 	}
 
-	TextRun() {
+	TextRun():
+		in(0) {
 		next_flag = false;
 		next_flag_current = true;
 	}
