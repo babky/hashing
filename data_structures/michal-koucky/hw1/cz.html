@@ -2,46 +2,61 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<title>Datové struktury I - 2015/2016</title>
+	
+	<style type="text/css">
+		h1 {
+			font-size: 14px;
+		}
+	</style>
 </head>
 <body>
 <h1>Datové struktury I - NTIN066 - ZS 2015/2016 - 1. úkol</h1>
 
 <h2>Podmínky</h2>
 <dl>
-	<dt>Termín odevzdání</dt><dd>27. října 2014</dd>
-	<dt>Způsob odevzdání</dt><dd>Odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong></dd>
-	<dt>Vstup a výstup</dt><dd>Řešení musí vstup přečíst ze souboru <strong>data.txt</strong> a zapsat je setříděná do <strong>data.out</strong>. Předpokládejte, že zmíněné soubory se nacházejí v aktuálním adresáři.</dd> 
-	<dt>Paměť</dt><dd>Fyzická pamět testovacího počítače je <strong>8 GB</strong>.</dd>
+	<dt>Termín odevzdání</dt><dd>27. října 2015. Samotné měření je možné dodělat do 3. listopadu 2015.</dd>
+	<dt>Způsob odevzdání</dt><dd>Odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong>.</dd>
+	<dt>Vstup a výstup</dt><dd>Řešení musí přečíst vstupní textová data ze souboru <strong>data.txt</strong> a zapsat je setříděná do souboru <strong>data.out</strong>. Předpokládejte, že zmíněné soubory se nacházejí v aktuálním adresáři.</dd> 
+	<dt>Systém</dt><dd>Fyzická pamět testovacího počítače je <strong>8 GB</strong>, OS Linux.</dd>
 	<dt>Čas</dt><dd>Řešení musí vyprodukovat korektní řešení do <strong>60 minut</strong>.</dd>
 </dl>
 
 <h2>Pravidla</h2>
 <ul>
-	<li>Veškerý odevzdaný kód musí být originální tedy vytvořen vámi bez jakékoliv vedlejší "inspirace".</li>
+	<li>Veškerý odevzdaný kód musí být originální tedy vytvořen vámi bez jakékoliv vedlejší "inspirace". Povolené jsou řešení v jazycích C/C++ (doporučený jazyk), Java a C#.</li>
 	<li>Svůj kód s nikým nesdílejte, aby se váš kód nestal něčí "inspirací". Výjimku tvoří odevzdání kódu.</li>
 	<li>Úkol a možné postupy řešení můžete probírat s ostatními, avšak respektuje výše uvedené o nesdílení kódu. To znamená - společná diskuse je povolena, ale programujte sami.</li>
+	<li>Používajte standardní konstrukty vašeho programovacího jazyka, ale už ne speciální knihovní funkce. Veškerý třídící kód musíte naprogramovat samostatně, t.j. nepoužívajte std::sort a podobné funkce vašeho jazyka.</li>
+	<li>Vaše řešení musí být odevzdáno jako jediný soubor.</li>
 	<li>Řešení, která nejsou ve shodě s těmito pravidly, nebudou hodnocená.</li>
 </ul>
 
 <h2>Popis problému</h2>
 <p>
 Napište program, který setřídí soubor na disku <tt>data.txt</tt>. Soubor <tt>data.txt</tt> je textový soubor,
-který na každém řádku obsahuje dvě 64-bitová čísla bez znaménka, <i>klíč</i> a <i>hodnotu</i>. V setříděném souboru
+který na každém řádku obsahuje dvě kladná nanejvýš 63-bitová čísla bez znaménka, <i>klíč</i> a <i>hodnotu</i>. V setříděném souboru
 <tt>data.out</tt> musí jít klíče vzestupně. Pro každý klíč vypište minimální hodnotu, s kterou byl asociován.
 </p>
 
 <h3>Generování dat a testování</h3>
-Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební vstup (je nutné přesměrovat do <tt>data.txt</tt>, generátor vypisuje na standardní výstup).
-a změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl0</tt> až <tt>u-pl15</tt>. Vygenerovaný soubor má cca 48GB a časový
-limit na jeho setřídění je 60 minut. Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
-Při měření ukládejte soubor <tt>data.txt</tt> a jakékoliv pomocné soubory do adresáře <tt>/tmp</tt>. Po ukončení měření po sobě
-soubory smažte, aby ostatní mohli provést svoje měření (jinak dojde místo na disku a ostatní po vás nemohou soubory smazat). 
-Chovejte se k ostatním ohleduplně, pokud uvidíte, že někdo daný počítač zrovna používá (příkazy <tt>who</tt> a <tt>top</tt> nebo <tt>htop</tt>), 
-použijte jiný počítač, nebo počkejte, až měření dokončí. Nekolegiální jednání mi hlaste emailem. 
+<p>
+Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební vstup (je nutné přesměrovat do <tt>data.txt</tt>, protože generátor vypisuje na standardní výstup). 
+Následně změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl0</tt> až <tt>u-pl15</tt>. Vygenerovaný soubor má cca 58 GB a časový limit na jeho setřídění je 60 minut. Rychlost a správnost řešení bude následně ověřena na jiných ale podobných datech. Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
+</p>
+<p>
+Při měření ukládejte soubor <tt>data.txt</tt> a jakékoliv pomocné soubory do adresáře <tt>/tmp</tt>. 
+Po ukončení měření po sobě soubory smažte, aby ostatní mohli provést svoje měření.
+Jinak dojde místo na disku a ostatní po vás nemohou soubory smazat, čím bude počítač zablokován.
+Nezapomínejte smazat nejen pomocní soubory ale i vstup a výstup.
+</p>
+<p> 
+Chovejte se k ostatním ohleduplně, pokud uvidíte, že někdo daný počítač zrovna používá na výpočty (příkazy <tt>who</tt> a <tt>top</tt> nebo <tt>htop</tt>), použijte jiný počítač, nebo počkejte, až měření dokončí. 
+Nekolegiální jednání anebo zablokovaný počítač mi hlaste emailem na <tt>ds1@kam.mff.cuni.cz</tt>. 
+</p>
+<p>
 Naměřenou dobu vašeho programu pošlete přes formulář nebo emailem na <tt>ds1@kam.mff.cuni.cz</tt> s detaily uvedenými níže. 
 Řešení je nutné odevzdat ve výše uvedeném termínu.
-Rychlost a správnost řešení bude následně ověřena na jiných ale podobných datech.
-
+</p>
 
 <h2>Příklad vstupu</h2>
 <tt>
@@ -63,31 +78,42 @@ Rychlost a správnost řešení bude následně ověřena na jiných ale podobn�
 </tt>
 
 <h2>Generování zkušebních dat</h2>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX >/tmp/data.txt</tt>
-<p>vygeneruje data pro měření a</p>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --test >/tmp/data.txt</tt>
-<p>vygeneruje verzi dat pro tvorbu programu (vstup velikosti 128 záznamů).</p>
-<p>Na účely ladění a testování používajte</p>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --short >/tmp/data.txt</tt><br />
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --super-short >/tmp/data.txt</tt>
+<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX >/tmp/data.txt</tt>
+<p>vygeneruje data pro měření cca 58 GB a</p>
+<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short >/tmp/data.txt</tt>
+<p>vygeneruje verzi dat pro ladění programu cca 3-4 GB.</p>
 
 <p>
-Zde XX jsou poslední dvě číslice z vašeho studentského čísla. Testování proběhne na stejném, ale dopredu neznámém seedu, pro všechny.
+Zde XX jsou poslední dvě číslice z vašeho studentského čísla.
 </p>
 
 <h2>Doprovodný email</h2>
-Při odeslání emailu se změřeným časem uveďte detaily měření dle následujícího vzoru<p>
+Při odeslání emailu se změřeným časem uveďte detaily měření dle následujícího vzoru.<p>
+
+<p>
+Předmět uveďte ako 'HW1-55973318'. (t.j. HW1-&lt;studentské číslo&gt;).
+Do přílohy vložte zdrojový kód vašeho řešení, pojmenujte jej napríklad <tt>sorter-55973318.cpp</tt>.
+</p>
+
 <tt>
-Name: Michal Koucky<br>
-Computer: u-pl7<br>
+Jméno: Michal Koucky<br>
+Počítač: u-pl7<br>
 CPU: Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz<br>
-RAM: 6GB<br>
-Time (according to the time utility): real 43m41.704s, user 20m30.975s sys 1m26.892s<br>
-Date and time when the measurement took place: 08-09-14 15:28:50<br>
-XX (for the gen-data program): 37<br>
-A short description: Pouzil jsem Huge-sort kombinovany se Super-sortem aplikovanym na inverzni prvky.<br>
-Pseudonym pro zverejneni na webu: nechci byt uveden.<br>
+RAM: 6 GB<br>
+Čas: real 43m41.704s, user 20m30.975s sys 1m26.892s<br>
+Datum spuštění: 08-09-14 15:28:50<br>
+XX: 37<br>
+Popis: Pouzil jsem Huge-sort kombinovany se Super-sortem aplikovanym na inverzni prvky.<br>
+Pseudonym: nechci byt uveden.<br>
+Cvičení: pondeli-12:20-lichy.<br>
+Kompilace: javac sorter-55973318.java nebo gcc -O3 sorter-55973318.cpp<br>
 </tt>
+
+<h3>Odevzdání</h3>
+<p>
+V případě, že budete měřit po 27. 10., pošlete stejný email s doplněnými naměřenými hodnotami, ale už bez zdrojového kódu.
+V případě, že se nemůžete vejít do časového limitu, zkuste seed 333.
+</p>
 
 </body>
 </html>
