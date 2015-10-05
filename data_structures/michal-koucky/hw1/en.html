@@ -1,103 +1,131 @@
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>Data Structures I - 2015/2016</title>
-</head>
-<body>
-<h1>Data Structures I - NTIN066 - Winter Semester 2015/2016 - 1st homework</h1>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<style type="text/css">
+			h1 {
+				font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Data Structures I - NTIN066 - Winter Semester 2015/2016 - 1st homework</h1>
 
-<h2>Requirements</h2>
-<dl>
-	<dt>Deadline</dt><dd>27th October 2014</dd>
-	<dt>How to submit</dt><dd>Submit by email to <strong>ds1@kam.mff.cuni.cz</strong></dd>
-	<dt>Input and output</dt><dd>Your solution has to read the data from the file <strong>data.txt</strong> and write the sorted data into the file <strong>data.out</strong>. Assume that the files are in the current directory.</dd>
-	<dt>Memory limit</dt><dd>The memory of the test computer is <strong>8 GB</strong></dd>
-	<dt>Time limit</dt><dd>Your solution must present the correct result within <strong>60 minutes</strong>.</dd>
-</dl>
+		
+		<b>Deadline:</b> 27th October 2014. You can submit your running time measurement until 3rd November 2015.<br>
+		<b>How to submit:</b> By sending an email to <strong>ds1@kam.mff.cuni.cz</strong> with the source code in the attachment.<br>
+		<b>Input and output:</b> Your solution has to read the data from the file <strong>data.txt</strong> and write the sorted data into the file <strong>data.out</strong>. Assume that the files are in the current directory.<br>
+		<b>System:</b> The memory of the test computer is <strong>8 GB</strong>, OS Linux.<br>
+		<b>Time limit:</b> Your solution must present the correct result within <strong>60 minutes</strong>..<br>
+		
+		<h2>The rules</h2>
+		<ul>
+			<li>The whole code which you submit must be originally created by you without any "insipiration".</li>
+			<li>Do not share your solution so that your code can not become an "inspiration". The only exception is submitting the code.</li>
+			<li>The homework and the algorithms may be a subject of conversation. But respect the above rules about non-sharing. That means - dicussing is correct but write the code yourself!</li>
+			<li>Code in C/C++ (recommended), Java or C#.</li>
+			<li>Use standard constructs of your programming  language. Do not use special library functions. The  code dealing with sorting has to be written solely by  you. That is do not use std::sort or similar functions of your language.</li>
+			<li>Please submit your solution in a single source code file.</li>
+			<li>The solutions which violate the above rules shall be considered as wrong.</li>
+		</ul>
 
-<h2>The rules</h2>
-<ul>
-	<li>The whole code which you submit must be originally created by you without any "insipiration".</li>
-	<li>Do not share your solution so that your code can not become an "inspiration". The only exception is submitting the code.</li>
-	<li>The homework and the algorithms may be a subject of conversation. But respect the above rules about non-sharing. That means - dicussing is correct but write the code yourself!</li>
-	<li>The solutions which violate the above rules shall be considered as wrong.</li>
-</ul>
+		<h2>The description of the problem</h2>
+		<p>
+			Create a program which will sort a file stored on a computer's hard drive. 
+			Assume that the input file is stored in the current directory and named <tt>data.txt</tt>
+			The file <tt>data.txt</tt> is a text file. Each row consists of the 63-bit unsigned values - a <i>key</i> and a <i>value</i>.
+			In the sorted output file <tt>data.out</tt> the keys are ascending and for each key the minimum value associated with the key is outputted.
+		</p>
 
-<h2>The description of the problem</h2>
-<p>
-Create a program which will sort a file stored on a computer's hard drive. 
-Assume that the input file is stored in the current directory and named <tt>data.txt</tt>
-The file <tt>data.txt</tt> is a text file. Each row consists of the 64-bit unsigned values - a <i>key</i> and a <i>value</i>.
-In the sorted output file <tt>data.out</tt> the keys are ascending and for each key the minimum value associated with the key is outputted.
-</p>
+		<h3>Testing and generating the data</h3>
+		<p>
+			Use the unix program <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt> available at Rotunda laboratory to generate the input file <tt>data.txt</tt>. Just redirect the standard output to the file <tt>data.txt</tt> since the generator outputs the data to the standard output.
+			Then measure the running time of your solution using one of the computers from <tt>u-pl0</tt> to <tt>u-pl15</tt>.
+			For measuring use the <tt>time</tt> utility.
+		</p>
+		
+		<p>
+			The generated input file <tt>data.txt</tt> is about 46 GB large and the time limit for sorting it is 60 minutes. 
+			The solution which does not finish withing the time limit is considered as incorrect.
+			We will run your program on different but similar data.
+		</p>
 
-<h3>Testing and generating the data</h3>
-Use the unix program <tt>/afs/ms.mff.cuni.cz/u/k/koucky/ds1/2015/hw1/gen-data</tt> available at Rotunda laboratory to generate the input file <tt>data.txt</tt>. Just redirect the standard output to the file <tt>data.txt</tt> since the generator outputs the data to the standard output.
-Then measure the running time of your solution using one of the computers from <tt>u-pl0</tt> to <tt>u-pl15</tt>. 
+		<p>
+			When running your program, save the input file <tt>data.txt</tt>, the outputfile <tt>data.out</tt> and the temporary files into <tt>/tmp</tt>. 
+			After finishing your work delete your files in <tt>/tmp</tt> so that the others can run their programs. 
+			If you do not delete your files you may consume the whole disk space.
+			Especially, do not forget about the input and output files.
+			And remember the others can not delete your files and  thus the computer will be blocked.
+		</p>
 
-The generated input file <tt>data.txt</tt> is about 48GB large and the time limit for sorting it is 60 minutes. 
-The solution which does not finish withing the time limit is considered as incorrect.
+		<p>
+			Also be careful when you see that some else uses the computer. Use commands <tt>who</tt> and <tt>top</tt> or <tt>htop</tt>.
+			If you see that someone else is performing computations use another computer or wait when he or she is finished. 
+			Please report any intolerant behaviour or a blocked computer to <strong>ds1@kam.mff.cuni.cz</strong>.
+			The lab administrator can clear <tt>/tmp</tt> directory, if necessary.
+		</p>
 
-When running your program, save the input file <tt>data.txt</tt>, the outputfile <tt>data.out</tt> and the temporary files into <tt>/tmp</tt>. 
-After finishing your work delete your files in <tt>/tmp</tt> so that the others can run their programs. 
-If you do not delete your files you may consume the whole disk space.
-And remember the others can not delete your files and the computer will be blocked.
+		<p>
+			Submit your solution before the deadline.
+			The speed and correctness of your solution will be verified on similar data.
+			Report us the measured running time of your solution along with your solution using the submit for or by email <tt>ds1@kam.mff.cuni.cz</tt> with the following details.
+		</p>
 
-Also be careful when you see that some else uses the computer. Use commands <tt>who</tt> and <tt>top</tt> or <tt>htop</tt>.
-If you see that someone else is performing computations use another computer or wait when he or she is finished. 
-Please report any intolerant behaviour to <strong>ds1@kam.mff.cuni.cz</strong>.
-The lab administrator can clear <tt>/tmp</tt> directory if necessary.
+		<h2>Input example</h2>
+		<tt>
+		96313 3992064775605989878<br>
+		6024613951808161023 4071849752967919252<br>
+		11417427497858712892 9671181978208670736<br>
+		3894 2867422479361385327<br>
+		96313 3992064775605758114<br>
+		6437842131676518652 6510455770151352973<br>
+		</tt>
 
-Submit your solution before the deadline.
-The speed and correctness of your solution will be verified on similar data.
-Report us the measured running time of your solution along with your solution using the submit for or by email <tt>ds1@kam.mff.cuni.cz</tt> with the following details.
+		<h2>The output</h2>
+		<tt>
+		3894 2867422479361385327<br>
+		96313 3992064775605758114<br>
+		6024613951808161023 4071849752967919252<br>
+		6437842131676518652 6510455770151352973<br>
+		11417427497858712892 9671181978208670736<br>
+		</tt>
 
-<h2>Input example</h2>
-<tt>
-96313 3992064775605989878<br>
-6024613951808161023 4071849752967919252<br>
-11417427497858712892 9671181978208670736<br>
-3894 2867422479361385327<br>
-96313 3992064775605758114<br>
-6437842131676518652 6510455770151352973<br>
-</tt>
+		<h2>Generating the test data</h2>
+		<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX &gt;/tmp/data.txt</tt>
+		<p>generates the whole input data, roughly 46 GB.</p>
+		<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short &gt;/tmp/data.txt</tt>
+		<p>generates the data for debugging your program, roughly 3 GB.</p>
+		
+		<p>The XX are the two last digits of your student number.</p>
 
-<h2>The output</h2>
-<tt>
-3894 2867422479361385327<br>
-96313 3992064775605758114<br>
-6024613951808161023 4071849752967919252<br>
-6437842131676518652 6510455770151352973<br>
-11417427497858712892 9671181978208670736<br>
-</tt>
-
-<h2>Generating the test data</h2>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/2015/hw1/gen-data -s XX >/tmp/data.txt</tt>
-<p>generates the whole input data.</p>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --test >/tmp/data.txt</tt>
-<p>generates the data for creating your program - only 128 records.</p>
-<p>
-For generating shorter inputs for testing and debugging you can also use
-</p>
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --short >/tmp/data.txt</tt><br />
-<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/hw1/gen-data -s XX --super-short >/tmp/data.txt</tt>
-
-<p>The XX are the two last digits of your student number.</p>
-
-<h2>The email format</h2>
-When submitting using the email report us the measured time in the following format<p>
-<tt>
-Name: Michal Koucky<br>
-Computer: u-pl7<br>
-CPU: Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz<br>
-RAM: 6GB<br>
-Running time (according to the time utility): real 43m41.704s, user 20m30.975s sys 1m26.892s<br>
-Date and time when the measuring was conducted: 08-09-14 15:28:50<br>
-XX (for gen-data program): 37<br>
-Description of the algorithm: I used Huge-sort combined with Super-sort applied on the inverted elements.<br>
-Pseudonym (when the results are posted on the web): The Top Coder.<br>
-</tt>
-
-</body>
+		<h2>The email format</h2>
+		<p>
+			When submitting using the email report us the measured time in the following format. The date must be in the format <tt>D. M. YYYY H:M:S</tt>.
+		</p>
+		<p>
+			Subject should be 'HW1-55973318'. (i.e. HW1-&lt;student number&gt;).
+		</p>
+		<p>
+			Attach the source code file named<tt>sorter-55973318.cpp</tt>.
+		</p>
+		<tt>
+		Name: Michal Koucky<br>
+		Computer: u-pl7<br>
+		CPU: Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz<br>
+		RAM: 6GB<br>
+		Running time: real 43m41.704s, user 20m30.975s sys 1m26.892s<br>
+		Date: 08-09-14 15:28:50<br>
+		XX: 37<br>
+		Description of the algorithm: I used Huge-sort combined with Super-sort applied on the inverted elements.<br>
+		Pseudonym: The Top Coder.<br>
+		Practical: monday-12:20-odd<br>
+		Compile with: gcc -O3 sorter-55973318.cpp -o sorter-55973318<br>
+		</tt>
+		
+		<h3>Submitting</h3>
+		<p>
+		If you measure after 27th October, just submit a second similar email with the measured values and without the source code.
+		If you can not beat the time limit, try using XX = 333.
+		</p>
+	</body>
 </html>
 
