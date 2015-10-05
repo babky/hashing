@@ -456,6 +456,10 @@ public:
 		stats(statsa) {
 	}
 
+	Pusher & get_pusher() {
+		return push;
+	}
+
 	std::size_t merge() {
 		std::size_t run = 0;
 		std::vector<std::pair<RunType<Key, Value>, bool>> runs;
@@ -837,6 +841,7 @@ private:
 
 		std::size_t runs = merger.merge();
 		assert(runs == 1);
+		stats.output_size = merger.get_pusher().get_push_count();
 
 		return 0;
 	}
