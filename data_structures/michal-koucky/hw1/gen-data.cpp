@@ -35,7 +35,7 @@ const TT PRIME = std::numeric_limits<T>::max() - 58;
 #ifdef ENVIRONMENT32
 const size_t BASELEN = 1uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // 2 G of data.
 #else
-const size_t BASELEN = 19uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 48 G of data.
+const size_t BASELEN = 18uL * 1024 * 1024 * 1024 / (sizeof(T) * 2); // cca 48 G of data.
 #endif
 const size_t TESTLEN = 4096;
 
@@ -155,7 +155,7 @@ void generate_chunk_run(T chunk_run_lengh, T chunk_length, T overall_chunk_lengt
 			if (hg_index < hgs.size()) {
 				hg = hgs[hg_index];
 			} else {
-				hg = new HashedSequenceGenerator(overall_chunk_length / 2);
+				hg = new HashedSequenceGenerator(3 * overall_chunk_length / 8);
 				hgs.push_back(hg);
 			}
 			++hg_index;
@@ -239,7 +239,6 @@ int main(int argc, char** argv) {
 
 	// We chunk the data by 134 217 728 of elements.
 	// In each chunk we have the universe of size ~ 134 217 728 / 2.
-	size_t universe_max = chunk_length / 2;
 
 	// In such a universe we choose the elements and hash them (HashedSequenceGenerator).
 	// Then we also add some elements into these chunks - progressions.
