@@ -447,6 +447,7 @@ class Merger {
 private:
 	std::vector<RunSource<Key, Value, RunType>> sources;
 	Pusher push;
+	std::size_t push_count = 0;
 	Stats & stats;
 
 public:
@@ -456,8 +457,8 @@ public:
 		stats(statsa) {
 	}
 
-	Pusher & get_pusher() {
-		return push;
+	std::size_t get_push_count() {
+		return push_count;
 	}
 
 	std::size_t merge() {
@@ -638,6 +639,7 @@ private:
 		reducer.stop();
 		reducer.get_pusher().finish_run();
 
+		push_count += reducer.get_pusher().get_push_count();
 		stats.inner_reductions += reducer.get_reduction_count();
 	}
 };
@@ -833,7 +835,7 @@ private:
 		}
 
 		// Initialize the merger.
-		Merger<Key, Value, Reducer, TextOutputPusher<Key, Value>, RunType> merger(
+		Merger<Key, Value, MinReducer, TextOutputPusher<Key, Value>, RunType> merger(
 			run_sources,
 			TextOutputPusher<Key, Value>(out),
 			stats
@@ -841,7 +843,7 @@ private:
 
 		std::size_t runs = merger.merge();
 		assert(runs == 1);
-		stats.output_size = merger.get_pusher().get_push_count();
+		stats.output_size = merger.get_push_count();
 
 		return 0;
 	}
