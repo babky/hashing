@@ -448,17 +448,20 @@ private:
 	std::vector<RunSource<Key, Value, RunType>> sources;
 	Pusher push;
 	std::size_t push_count = 0;
-	Stats & stats;
+	std::size_t inner_reductions = 0;
 
 public:
-	Merger(std::vector<RunSource<Key, Value, RunType>> run_sources, Pusher pusher, Stats & statsa):
+	Merger(std::vector<RunSource<Key, Value, RunType>> run_sources, Pusher pusher):
 		sources(run_sources),
-		push(pusher),
-		stats(statsa) {
+		push(pusher) {
 	}
 
 	std::size_t get_push_count() {
 		return push_count;
+	}
+
+	std::size_t get_reduction_count() {
+		return inner_reductions;
 	}
 
 	std::size_t merge() {
@@ -640,7 +643,7 @@ private:
 		reducer.get_pusher().finish_run();
 
 		push_count += reducer.get_pusher().get_push_count();
-		stats.inner_reductions += reducer.get_reduction_count();
+		inner_reductions += reducer.get_reduction_count();
 	}
 };
 
@@ -813,9 +816,10 @@ private:
 		// Initialize the merger.
 		Merger<Key, Value, Reducer, Pusher, RunType> merger(
 			run_sources,
-			Pusher(get_temp_file(max_files - 1, true, RunType<Key, Value>::WRITE_MODE)),
-			stats
+			Pusher(get_temp_file(max_files - 1, true, RunType<Key, Value>::WRITE_MODE))
 		);
+
+		stats.inner_reductions += merger.get_reduction_count();
 
 		// Merge it.
 		return merger.merge();
@@ -837,8 +841,7 @@ private:
 		// Initialize the merger.
 		Merger<Key, Value, MinReducer, TextOutputPusher<Key, Value>, RunType> merger(
 			run_sources,
-			TextOutputPusher<Key, Value>(out),
-			stats
+			TextOutputPusher<Key, Value>(out)
 		);
 
 		std::size_t runs = merger.merge();
