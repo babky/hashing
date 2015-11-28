@@ -332,6 +332,7 @@ namespace Hash {
 		 */
 		const RehashPolicy & getRehashPolicy(void) const {
 			const_cast<Table<T, Comparer, Function, Storage, RehashPolicy> *> (this)->getRehashPolicy();
+			return *this;
 		}
 
 		/**

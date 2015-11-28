@@ -91,7 +91,7 @@ namespace Hash { namespace Storages {
 		 *
 		 * @param storage Copied storage.
 		 */
-		virtual DirectChainingStorage & operator =(const DirectChainingStorage & storage) {
+		DirectChainingStorage & operator =(const DirectChainingStorage & storage) {
 			DirectChainingStorage tmp = storage;
 			swap(tmp);
 			return *this;
