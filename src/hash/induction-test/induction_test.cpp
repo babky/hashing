@@ -136,6 +136,74 @@ int main(int argc, const char ** argv) {
 	typedef uint64_t base_t;
 #endif
 
+	// Verify the induction now.
+
+	// For each G in [p] we have:
+	//  1. [m] \cap g[G/m] an AP.
+	//  2. if G > m, then [m] \cap g[G/m] comes from the first elements of the leaps.
+
+	// Generate a random g, G.
+
+	base_t p = 101483;
+	Hash::Utils::IntegralGeneratorWrapper<base_t> gen = Hash::Utils::IntegralGeneratorWrapper<base_t>(0, p);
+
+	for (base_t r = 0; r < p * p; ++r) {
+		base_t g = gen.generate();
+		base_t G = gen.generate();
+		base_t m = 0;
+		while (m == 0) {
+			m = gen.generate();
+		}
+
+		set<base_t> intersection;
+
+		bool comesFromFirst = true;
+		for (base_t i = 0; i < G/m; ++i) {
+			base_t res = Hash::Math::UnsignedDoubleWord<base_t>::linear(g, i, 0, p);
+			if (res < m && intersection.find(res) == intersection.end()) {
+				intersection.insert(res);
+			}
+
+			if (i == 0 || g < m) {
+				continue;
+			}
+
+			// Verification of Assertion 2.
+			bool leap = res < Hash::Math::UnsignedDoubleWord<base_t>::linear(g, i - 1, 0, p);
+			if (!leap && res < m) {
+				comesFromFirst = false;
+			}
+		}
+
+		// Verification of Assertion 1.
+		bool isArithmeticProgression = true;
+		base_t lastElement = 0;
+		base_t diff = 0;
+		for (set<base_t>::iterator it = intersection.begin(), end = intersection.end(); it != end; ++it) {
+			if ((*it) == 0) {
+				continue;
+			}
+
+			if (lastElement == 0) {
+				diff = *it;
+			} else if (((*it) - lastElement) != diff) {
+				isArithmeticProgression = false;
+			}
+
+			lastElement = *it;
+		}
+
+		if (!isArithmeticProgression) {
+			cout << "Assertion 1 failed for g: " << g << ", G: " << G << ", m: " << m << endl;
+		}
+
+		if (!comesFromFirst) {
+			cout << "Assertion 2 failed for g: " << g << ", G: " << G << ", m: " << m << endl;
+		}
+	}
+
+	return 0;/*
+
 	// Parse the command line.
 	const size_t DEFAULT_M = 65536;
 	const size_t DEFAULT_N = 0;
@@ -189,7 +257,7 @@ int main(int argc, const char ** argv) {
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 		throw e;
-	}
+	}*/
 
 	return 0;
 }
