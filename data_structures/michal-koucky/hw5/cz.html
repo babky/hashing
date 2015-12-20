@@ -1,0 +1,161 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<style type="text/css">
+			h1 {
+				font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Datové struktury I - NTIN066 - ZS 2015/2016 - 5. úkol</h1>
+
+		<b>Termín odevzdání:</b> XX. leden 2016.<br>
+		<b>Způsob odevzdání:</b> Odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong>.<br>
+
+		</dl><h2>Pravidla</h2>
+		<ul>
+			<li>Veškerý odevzdaný kód musí být originální tedy vytvořen vámi bez jakékoliv vedlejší &quot;inspirace&quot;.</li>
+			<li>Svůj kód s nikým nesdílejte, aby se váš kód nestal něčí &quot;inspirací&quot;. Výjimku tvoří odevzdání kódu.</li>
+			<li>Úkol a možné postupy řešení můžete probírat s ostatními, avšak respektuje výše uvedené o nesdílení kódu. To znamená - společná diskuse je povolena, ale programujte sami.</li>
+			<li>Povolené jsou řešení v jazycích C/C++ (doporučený jazyk), Java a C#.</li>
+			<li>Používejte standardní konstrukce vašeho programovacího jazyka, ale už ne speciální knihovní funkce. Veškerý třídící kód musíte naprogramovat samostatně, t.j. nepoužívejte std::sort a podobné funkce vašeho jazyka.</li>
+			<li>Vaše řešení musí být odevzdáno jako jediný soubor.</li>
+			<li>Řešení, která nejsou ve shodě s těmito pravidly, nebudou hodnocená.</li>
+		</ul>
+		
+		<h2>Popis problému</h2>
+<p>
+	Naprogramujte tri hashovacie tabulky, 2 hashovacie funkcie a porovnajte ich na dvoch variantoch dat.
+	Hashovacie tabulky budu podporovat len Insert a Find.
+	Ukladajte mnozinu, t.j. Insert nesmie vytvarat duplicity a takove Insert operace ignorujte, ale zapocitavejte do statistik.
+</p>
+<p>
+	Hashovacie funkcie:
+	<ul>
+		<li>Tabulacia</li>
+		<li>Multiplikativna funkcia</li>
+	</ul>
+
+	Schemy:
+	<ul>
+		<li>Linear probing</li>
+		<li>Cuckoo hashing</li>
+		<li>Two-choices</li>
+	</ul>
+
+	Data:
+	<ul>
+		<li>Insert - prevladaju Inserty</li>
+		<li>Find - prevladaju Findy</li>
+	</ul>
+</p>
+
+<h3>Grafy</h3>
+<p>
+	Pre kazdu variantu dat vyrobte nasledovne grafy. Na kazdom z nich budu nasledovne veliciny v zavislosti na faktore naplnenia.
+</p>
+
+<h4>Graf Operacie</h4>
+<p>Pre kazdu schemu a typ funkcie vyrobte zavislost priemerneho poctu operacii na jednu operaciu.</p>
+
+<dl>
+  <dt>Linear Probing, Insert i Find</dt>
+  <dd>Delka sekvence, kteru ju nutno projit k vyhledani nebo vlozeni prvku.</dd>
+
+  <dt>Two Choices, Insert i Find</dt>
+  <dd>Delka retezce, ktera byla projdena k vyhledani nebo vlozeni prvku. Pozor, k vlozeni prvku je nutne prohledat
+  
+  <dt>Cuckoo hashing, Find</dt>
+  <dd>Find potrebuje 1 nebo 2 operace (prvek nabyl nalezen na prvni pozici) k zjisteni pritomnosti prvku v tabulce</dd>
+
+  <dt>Cuckoo hashing, Insert</dt>
+  <dd>Insert zkusi vyhladat prvek (1 nebo 2 operace) a pak udela mnoho "swap" operaci. Zapocitavejte i operace z pripadnych rehashu. Maximalni pocet rehashu v jedne operaci Insert nastavte na 15. V pripade, ze Insert tento limit prekroci dany load factor eliminujte z vysledku.</dd>
+</dl>
+
+Sepište zprávu, v níž bude:
+<ul>
+	<li>graf s naměřenými výsledky (čas na transpozici jednoho prvku versus velikost matice)</li>
+	<li>komentář shrnující chování algoritmu</li>
+</ul>
+		</p>
+
+		<h3>Generování dat a testování</h3>
+		<p>
+			Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební vstup (je nutné přesměrovat do <tt>data.txt</tt>, protože generátor vypisuje na standardní výstup). 
+			Následně změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl0</tt> až <tt>u-pl15</tt>. Na měření použijte utilitu <tt>time</tt>. Vygenerovaný soubor má cca 46 GB a časový limit na jeho setřídění je 35 minut. Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
+			Rychlost a správnost řešení bude následně ověřena na jiných ale podobných datech.
+		</p>
+		<p>
+			Při měření ukládejte soubor <tt>data.txt</tt> a jakékoliv pomocné soubory do adresáře <tt>/tmp</tt>. 
+			Po ukončení měření po sobě soubory smažte, aby ostatní mohli provést svoje měření.
+			Jinak dojde místo na disku a jelikož ostatní po vás nemohou soubory smazat, počítač tím bude pro měření zablokován.
+			Nezapomínejte smazat nejen pomocné soubory ale i vstup a výstup.
+		</p>
+		<p> 
+			Chovejte se k ostatním ohleduplně, pokud uvidíte, že někdo daný počítač zrovna používá na výpočty (příkazy <tt>who</tt> a <tt>top</tt> nebo <tt>htop</tt>), použijte jiný počítač, nebo počkejte, až měření dokončí. 
+			Nekolegiální jednání anebo zablokovaný počítač nám hlaste emailem na <tt>ds1@kam.mff.cuni.cz</tt>. 
+		</p>
+		<p>
+			Naměřenou dobu vašeho programu pošlete emailem na <tt>ds1@kam.mff.cuni.cz</tt> s detaily uvedenými níže. 
+			Řešení je nutné odevzdat ve výše uvedeném termínu.
+		</p>
+
+		<h2>Příklad vstupu</h2>
+		<tt>
+		96313 3992064775605989878<br />
+		6024613951808161023 4071849752967919252<br />
+		11417427497858712892 9671181978208670736<br />
+		3894 2867422479361385327<br />
+		96313 3992064775605758114<br />
+		6437842131676518652 6510455770151352973<br /></tt>
+
+		<h2>Výstup</h2>
+		<tt>
+		3894 2867422479361385327<br />
+		96313 3992064775605758114<br />
+		6024613951808161023 4071849752967919252<br />
+		6437842131676518652 6510455770151352973<br />
+		11417427497858712892 9671181978208670736<br /></tt>
+
+		<h2>Generování zkušebních dat</h2>
+		<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX &gt;/tmp/data.txt</tt>
+		<p>vygeneruje data pro měření, zhruba 46 GB, a</p>
+		<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short &gt;/tmp/data.txt</tt>
+		<p>vygeneruje verzi dat pro ladění programu cca 2 GB.</p>
+
+		<p>
+		Zde XX jsou poslední dvě číslice z vašeho studentského čísla.
+		</p>
+
+		<h2>Doprovodný email</h2>
+		<p>
+			Při odeslání emailu se změřeným časem uveďte detaily měření dle následujícího vzoru. Datum uvádějte ve tvaru <tt>D. M. YYYY H:M:S</tt>.
+		</p>
+		<p>
+			Předmět uveďte ako 'HW1-55973318'. (t.j. HW1-&lt;studentské číslo&gt;).
+		</p>
+		<p>
+			Do přílohy vložte zdrojový kód vašeho řešení, pojmenujte jej napríklad <tt>sorter-55973318.cpp</tt>.
+		</p>
+
+		<tt>
+		Jméno: Martin Babka<br />
+		Počítač: u-pl7<br />
+		CPU: Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz<br />
+		RAM: 6GB<br />
+		Čas: real 43m41.704s, user 20m30.975s sys 1m26.892s<br />
+		Datum spuštění: 1. 11. 2015 15:28:50<br />
+		XX: 37<br />
+		Popis: Pouzil jsem Huge-sort kombinovany se Super-sortem aplikovanym na inverzni prvky.<br />
+		Pseudonym: nechci byt uveden.<br />
+		Cvičení: pondeli-12:20-lichy.<br />
+		Kompilace: gcc -O3 sorter-55973318.cpp -o sorter-55973318<br /></tt>
+		
+		<h3>Odevzdání</h3>
+		<p>
+		V případě, že budete měřit po 27. 10., pošlete stejný email s doplněnými naměřenými hodnotami, ale už bez zdrojového kódu.
+		V případě, že se těsně nemůžete vejít do časového limitu, zkuste při generování dat jako XX zadat 333.
+		</p>
+	</body>
+</html>
