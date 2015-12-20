@@ -18,8 +18,8 @@ using namespace std;
 #if __GNUC__
 #if __x86_64__ || __ppc64__
 #define ENVIRONMENT64
-typedef unsigned __int64 TT;
-typedef unsigned __int32 T;
+typedef size_t TT;
+typedef uint32_t T;
 #else
 #define ENVIRONMENT32
 typedef uint64_t TT;
@@ -28,7 +28,6 @@ typedef size_t T;
 #endif
 
 // Primes and types.
-typedef size_t T;
 const T PRIME = std::numeric_limits<T>::max() - 4;
 
 // Default lengths.
@@ -49,12 +48,12 @@ T nextrandom(T A, T B) {
  * Just shows the help screen.
  */
 void print_help() {
-	printf("Usage: ./gen-data -s|--seed <seed> [--short] <I|F> \n");
+	printf("Usage: ./gen-data -s|--seed <seed> [--short] <I|F> [C]\n");
 }
 
 const T MASK = (((T) 1) << (sizeof(T) * 8 - 1)) - 1;
 void output_operation(char operation, T value) {
-	printf("%c %lu\n", operation, value);
+	printf("%c %u\n", operation, value);
 }
 
 class Generator {
@@ -238,7 +237,7 @@ int main(int argc, char** argv) {
 	}
 
 	if (insertion_prob == 0) {
-		printf("The test type I or F must be given!\n");
+		printf("The data variant I or F must be given!\n");
 		print_help();
 		return 1;
 	}
@@ -274,7 +273,7 @@ int main(int argc, char** argv) {
 			size_t find_count = ((1 - insertion_prob) / insertion_prob) * data_size;
 
 			// Table size.
-			printf("# %d %d\n", data_size, length);
+			printf("# %lu %lu\n", data_size, length);
 
 			// Generate the insertion set.
 			TestInsert ti;
