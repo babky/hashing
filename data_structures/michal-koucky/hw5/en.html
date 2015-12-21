@@ -35,7 +35,7 @@
 		</p>
 		
 		<h3>The families of hash functions</h3>
-		Let U = {0, ..., 2<sup>u</sup> - 1} be the universe and m=2<sup>l</sup> be the size of the hash table.
+		Let U = {0, ..., 2<sup>u</sup> - 1} be the universe and m=2<sup>k</sup> be the size of the hash table.
 		Both of the systems map the universe to the space {0, ..., m - 1}.
 		In this homework choose the universe U = {0, ..., 2<sup>32</sup> - 1}.
 		However, the data generator generetates the values from the set {0, ..., 2<sup>31</sup> - 1}.
@@ -44,7 +44,7 @@
 			<strong>Tabulation</strong>.
 			Let x be an element of the universe U. 
 			If we treat x as a bitstring then we can split it into c parts having the same length, i.e. x = x<sub>1</sub>x<sub>2</sub>...x<sub>c</sub>.
-			For each part we randomly initialize a tabulation table. The table contains exactly 2<sup>u/c</sup> bit strings of length l.
+			For each part we randomly initialize a tabulation table. The table contains exactly 2<sup>u/c</sup> bit strings of length k.
 			Then <strong>h(x) = T<sub>1</sub>(x<sub>1</sub>) &oplus; T<sub>2</sub>(x<sub>2</sub>) &oplus; ... &oplus; T<sub>c</sub>(x<sub>c</sub>).</strong>
 			
 			In other words, each part of the bit string x determines an index in its tabulation table. The tables at the indices contain values from the set {0, ..., m - 1}. 
@@ -55,7 +55,7 @@
 		<p>
 			<strong>Multiplicative function</strong>.
 			Let x &isin; U and a &isin; U - {1} be a random number chosen uniformly from the universe.
-			Then <strong>h(x) = ((a x) mod |U|) / (|U| / m).</strong>.
+			Then <strong>h(x) = ((a x) mod |U|) / (|U| / m).</strong>
 			For a 32-bit universe we can implement this function effectively by ignoring the overflow of the multiplication and using the bit shifts.
 		</p>
 
@@ -63,7 +63,7 @@
 		<p>
 			For each dataset create two graphs, i.e. the results are four graphs.
 			In the first graph plot the average number of operations caused by Insert or Find with respect to the load factor of the table.
-			The second one contains the average running time of Insert or Find with respect to the load factor of the table. 
+			The second one contains the average running time (scale to miliseconds or microseconds according to your needs) of Insert or Find with respect to the load factor of the table. 
 			The operation count should determined as follows.
 		</p>
 		<dl>
@@ -112,7 +112,7 @@
 		</ul>
 
 		<p>
-			A single invocation of the generator creates a sequence of runs ranging having load factor from 30 to 80&nbsp;%,. (the maximal load factor is 55&nbsp;%, if you you used the parameter C). For each load factor there are 4 runs generated. The results shown in the graph should be averaged over these runs.
+			A single invocation of the generator creates a sequence of runs ranging having load factor from 30 to 90&nbsp;%,. (the maximal load factor is 55&nbsp;%, if you you used the parameter C). For each load factor there are 4 runs generated. The results shown in the graph should be averaged over these runs.
 		</p>
 
 		<h3>A sample of the input</h3>

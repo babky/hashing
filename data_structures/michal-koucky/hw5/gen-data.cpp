@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
 
 	int seed = -1;
 	double insertion_prob = 0;
-	size_t MAX_LOAD_FACTOR = 80;
+	size_t MAX_LOAD_FACTOR = 90;
 
 	// Parse the args, somehow.
 	for (int i = 1; i < argc; ++i) {
