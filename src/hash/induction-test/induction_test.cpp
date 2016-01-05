@@ -32,7 +32,6 @@ template <typename base_t, typename Table>
 void generate_data(Table & t, size_t cell_height, size_t n, size_t m, size_t f, size_t cell_count, base_t s) {
 	if (cell_height == 0) {
 		for (size_t i = 0; i < n / cell_count; ++i) {
-			// std::cout << compute_s_m_i(s, m, i) << " ";
 			t.insert(compute_s_m_i<base_t>(s, m, i));
 		}
 	} else {
@@ -68,52 +67,67 @@ size_t compute_hierarchy_factor(size_t n) {
 	return exp2((size_t) (log2(n) / log2(log2(n))));
 }
 
-template <typename base_t, typename Table>
-void performTest(size_t runs, size_t n, size_t m, size_t cell_height, bool print_set) {
-	using namespace Hash;
-	using namespace Hash::Storages;
-	using namespace Hash::Systems;
-	using namespace Hash::Utils;
+template<typename base_t>
+bool verifyAP(std::set<base_t> intersection) {
+	typedef std::set<base_t> base_set;
 
-	using namespace std;
-
-	size_t max = 0, min = m, sum = 0;
-
-	Table t;
-	t.reserve(m);
-
-	verify_set<base_t> s;
-	generate_data<base_t, verify_set<base_t>>(s, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
-	if (print_set) {
-		s.print();
-	}
-
-	// Run it.
-	for (size_t run = 0; run < runs; ++run) {
-		t.clear();
-		generate_data<base_t, Table>(t, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
-
-		StorageStatistics stats;
-		t.computeStatistics(stats);
-		cout << stats << endl;
-
-		if (max < stats.getMaxChainLength()) {
-			max = stats.getMaxChainLength();
+	bool isArithmeticProgression = true;
+	base_t lastElement = 0;
+	base_t diff = 0;
+	size_t i = 0;
+	for (typename base_set::iterator it = intersection.begin(), end = intersection.end(); it != end; ++it) {
+		if (i == 0) {
+			lastElement = *it;
+		} else if (i == 1) {
+			diff = (*it) - lastElement;
+		} else if (((*it) - lastElement) != diff) {
+			isArithmeticProgression = false;
 		}
 
-		if (min > stats.getMaxChainLength()) {
-			min = stats.getMaxChainLength();
-		}
-
-		sum += stats.getMaxChainLength();
+		++i;
+		lastElement = *it;
 	}
 
-	cout << "MIN:\t" << min << "\n";
-	cout << "AVG:\t" << ((double) sum) / runs << "\n";
-	cout << "MAX:\t" << max << endl;
+	return isArithmeticProgression;
 }
 
-int main(int argc, const char ** argv) {
+template<typename base_t>
+bool verifyTwoAPs(std::set<base_t> intersection) {
+	typedef std::set<base_t> base_set;
+	typedef std::map<base_t, size_t> difference_map;
+
+	base_t lastElement = 0;
+	difference_map difference_counts;
+	size_t i = 0;
+	for (typename base_set::iterator it = intersection.begin(), end = intersection.end(); it != end; ++it) {
+		if (i == 0) {
+			lastElement = *it;
+		} else {
+			base_t diff = (*it) - lastElement;
+			if (difference_counts.find(diff) != difference_counts.end()) {
+				++difference_counts.at(diff);
+			} else {
+				difference_counts.insert(std::pair<base_t, size_t>(diff, 1));
+			}
+		}
+
+		++i;
+		lastElement = *it;
+	}
+
+	if (difference_counts.size() > 2) {
+		return false;
+	}
+
+	typename difference_map::iterator it = difference_counts.begin();
+	if (it->second > 1 && (++it)->second > 1) {
+		return false;
+	}
+
+	return true;
+}
+
+void performTest() {
 	// Definitions.
 	using namespace Hash;
 	using namespace Hash::Storages;
@@ -139,29 +153,47 @@ int main(int argc, const char ** argv) {
 	// Verify the induction now.
 
 	// For each G in [p] we have:
-	//  1. [m] \cap g[G/m] an AP.
-	//  2. if G > m, then [m] \cap g[G/m] comes from the first elements of the leaps.
+	//  1. [m] \cap h + g[G/m] is union of two APs.
+	//  2. if G > m, then [m] \cap h + g[G/m] comes from the first elements of the leaps.
 
-	// Generate a random g, G.
+	// Generate a random g, G, h.
 
 	base_t p = 101483;
 	Hash::Utils::IntegralGeneratorWrapper<base_t> gen = Hash::Utils::IntegralGeneratorWrapper<base_t>(0, p);
 
 	for (base_t r = 0; r < p * p; ++r) {
-		base_t g = gen.generate();
-		base_t G = gen.generate();
+		base_t G = 0;
+		while (G == 0) {
+			G = gen.generate();
+		}
+		base_t g = gen.generate() % G;
 		base_t m = 0;
 		while (m == 0) {
 			m = gen.generate();
 		}
+		base_t h = gen.generate();
 
-		set<base_t> intersection;
+		// The list of elements coming from the APs.
+		set<base_t> intersection1, intersection2;
+		bool leapt = false;
 
 		bool comesFromFirst = true;
-		for (base_t i = 0; i < G/m; ++i) {
-			base_t res = Hash::Math::UnsignedDoubleWord<base_t>::linear(g, i, 0, p);
-			if (res < m && intersection.find(res) == intersection.end()) {
-				intersection.insert(res);
+		for (base_t i = 0; i < G / m; ++i) {
+			base_t prev = Hash::Math::UnsignedDoubleWord<base_t>::linear(g, i - 1, h, G);
+			base_t res = Hash::Math::UnsignedDoubleWord<base_t>::linear(g, i, h, G);
+			bool leap = (res < prev);
+			leapt |= leap;
+
+			if (res < m) {
+				if (leapt) {
+					if (intersection1.find(res) == intersection1.end()) {
+						intersection1.insert(res);
+					}
+				} else {
+					if (intersection2.find(res) == intersection2.end()) {
+						intersection2.insert(res);
+					}
+				}
 			}
 
 			if (i == 0 || g < m) {
@@ -169,38 +201,36 @@ int main(int argc, const char ** argv) {
 			}
 
 			// Verification of Assertion 2.
-			bool leap = res < Hash::Math::UnsignedDoubleWord<base_t>::linear(g, i - 1, 0, p);
 			if (!leap && res < m) {
 				comesFromFirst = false;
 			}
 		}
 
-		// Verification of Assertion 1.
-		bool isArithmeticProgression = true;
-		base_t lastElement = 0;
-		base_t diff = 0;
-		for (set<base_t>::iterator it = intersection.begin(), end = intersection.end(); it != end; ++it) {
-			if ((*it) == 0) {
-				continue;
-			}
-
-			if (lastElement == 0) {
-				diff = *it;
-			} else if (((*it) - lastElement) != diff) {
-				isArithmeticProgression = false;
-			}
-
-			lastElement = *it;
+		// Verification of Lemma.
+		set<base_t> intersection;
+		if (!verifyTwoAPs(intersection)) {
+			cout << "Lemma does not hold! g: " << g << ", G: " << G << ", m: " << m << ", h: " << h << endl;
+			return;
 		}
 
-		if (!isArithmeticProgression) {
-			cout << "Assertion 1 failed for g: " << g << ", G: " << G << ", m: " << m << endl;
+		// Verification of Induction base case for g < m.
+		if (g < m) {
+			if (!verifyAP(intersection1)) {
+				cout << "Assertion 1 failed for intersection 1, g: " << g << ", G: " << G << ", m: " << m << ", h: " << h << endl;
+			}
+
+			if (!verifyAP(intersection2)) {
+				cout << "Assertion 1 failed for intersection 2, g: " << g << ", G: " << G << ", m: " << m << ", h: " << h << endl;
+			}
 		}
 
 		if (!comesFromFirst) {
-			cout << "Assertion 2 failed for g: " << g << ", G: " << G << ", m: " << m << endl;
+			cout << "Assertion 2 failed for g: " << g << ", G: " << G << ", m: " << m << ", h: " << h << endl;
 		}
 	}
+}
 
+int main(int argc, const char ** argv) {
+	performTest();
 	return 0;
 }
