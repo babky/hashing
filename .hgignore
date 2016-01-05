@@ -66,3 +66,5 @@ syntax: regexp
 ^src/simple-linear-functions/\.classpath$
 syntax: regexp
 ^src/simple-linear-functions/\.pydevproject$
+data_structures/michal-koucky/hw5/cmake/...\.csv$
+data_structures/michal-koucky/hw5/cmake/...\.raw
