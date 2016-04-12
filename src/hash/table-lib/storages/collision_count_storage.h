@@ -8,6 +8,13 @@
 
 namespace Hash { namespace Storages {
 
+	class ContainsMethodNotSupportedException : public std::exception {
+	public:
+		virtual const char * what() const throw() {
+			return "Contains is not implemented for the CollisionCountStorage.";
+		}
+	};
+
 	/**
 	 * Test storage which actually does not store the elements, it only counts the number of elements that would be
 	 * stored inside the chain.
@@ -75,7 +82,7 @@ namespace Hash { namespace Storages {
 		/**
 		 * D-tor.
 		 */
-		~CollisionCountStorage(void) {
+		virtual ~CollisionCountStorage(void) {
 			delete [] storage;
 			storage = 0;
 
@@ -109,6 +116,7 @@ namespace Hash { namespace Storages {
 		}
 
 		bool contains(const T &, Hash) const {
+			throw ContainsMethodNotSupportedException();
 			return false;
 		}
 

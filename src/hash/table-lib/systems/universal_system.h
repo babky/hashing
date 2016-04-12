@@ -81,8 +81,7 @@ namespace Hash { namespace Systems {
 		 * 
 		 * @param aStorage Storage using this function.
 		 */
-		virtual void setStorage(Storage * aStorage) {
-			aStorage;
+		virtual void setStorage(Storage *) {
 		}
 
 	};

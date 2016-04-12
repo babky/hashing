@@ -142,7 +142,7 @@ Next we estimate the collision probability for the elements $0, 1, d$.
 \label{lemma:probability-3-elements}
 Let $d \in [p]$ be arbitrary element.
 \[
-\prob{|h(\{0, 1, d\})| = 1 } = \frac{\lceil \lceil\frac{p}{d}\rceil / m \rceil\left\lceil\frac{d}{m}\right\rceil}{p}.
+\prob{|h(\{0, 1, d\})| = 1 } \leq \frac{\lceil \lceil\frac{p}{d}\rceil / m \rceil\left\lceil\frac{d}{m}\right\rceil}{p}.
 \]
 \end{lemma}
 \begin{proof}
@@ -167,14 +167,14 @@ From which we obtain the following sequence of equivalent equations
 	m & \mid da - d\leap{1}{a}{b}p \\
 	m & \mid (d\leap{1}{a}{b} - \leap{d}{a}{b})p. \\
 \end{align*}
-Since $p$ is a prime from the last equation we can conclude that $m \mid d\leap{1}{a}{b} - \leap{d}{a}{b}$.
+Since $p$ is a prime the subtraction of the two last equations yields $m \mid d\leap{1}{a}{b} - \leap{d}{a}{b}$.
 We estimate the collision probabilities from the first equation in the second step and from the last observation:
 \begin{align}
 	m & \mid a - \leap{1}{a}{b}p \label{3-prob-1-statement} \\
 	m & \mid d\leap{1}{a}{b} - \leap{d}{a}{b}. \label{3-prob-2-statement}
 \end{align}
 
-The statement (\ref{3-prob-2-statement}) roughly means that out of $d$ possible values for $\leap{d}{a}{b}$ only the $1 / m$ fraction may generate the collision of the three elements. Notice that for a fixed $l \in [d]$ it holds that $\{a \in [p] \mid \leap{d}{a}{b} = l\}$ equals is a subinterval of $[p]$.
+The statement (\ref{3-prob-2-statement}) roughly means that out of $d$ possible values for $\leap{d}{a}{b}$ only the $1 / m$ fraction may generate the collision of the three elements. Notice that for a fixed $l \in [d]$ it holds that $\{a \in [p] \mid \leap{d}{a}{b} = l\}$ is a subinterval of $[p]$.
 From (\ref{3-prob-1-statement}) we can observe that only the $1 / m$ fraction from the possible values of $a$ lying in the appropriate intervals allowed by valid values of $\leap{d}{a}{b}$ are causing collisions.
 
 For the rest of the proof fix the value of $b$. 
@@ -182,7 +182,7 @@ First, we show that the values of $a$ such that $\leap{d}{a}{b} = l \in [d]$ for
 Then we count the number of values $a$ in an interval causing collisions -- using (\ref{3-prob-1-statement}).
 And finally we count the number of the valid intervals, i.e. the intervals satisfying equation (\ref{3-prob-2-statement}).
 
-Let $\leap{d}{a}{b} = l$, then it holds that $l \leq \frac{da + b}{p} < l + 1$. Immediately we get that $a \in \left[\frac{pl - b}{d}, \frac{p(l + 1) - b}{d}\right) \cap \mathbb{Z}$. The total number of values of $a$, i.e. integers, in each valid interval is at most $\lceil p / d \rceil$. The ceiling must be applied. For example assume an interval of length of 1.5 starting at point 0.8 -- it contains two integer points 1 and 2. This happens whenever $\frac{pl - b}{d}$ is an integer.
+Let $\leap{d}{a}{b} = l$, i.e. $l \leq \frac{da + b}{p} < l + 1$. Immediately we get that $a \in \left[\frac{pl - b}{d}, \frac{p(l + 1) - b}{d}\right) \cap \mathbb{Z}$. The total number of values of $a$, i.e. integers, in each valid interval is at most $\lceil p / d \rceil$. The ceiling must be applied. For example assume an interval of length of 1.5 starting at point 0.8 -- it contains two integer points 1 and 2. This happens whenever $\frac{pl - b}{d}$ is an integer.
 
 Now fix the value $l \in [d]$ such that $\leap{d}{a}{b} = l$.
 In order to estimate the number of values of $a$ causing the collisions we split into two cases according to the value of $\leap{1}{a}{b}$.
@@ -419,7 +419,7 @@ If $ad \bmod p > p/2$, by Lemma~\ref{lemma:sign-a} it holds that the size of the
 Note that $(p - a)d \bmod p < p/2$.
 This correspondence allows us to choose the beginning of arithmetic progressions to be $0$ without asymptotically worsening the result.
 If $ad \bmod p > p / 2$, then for $h_{p - a, 0}$ we have the arithmetic progression size $l - 1$ with the sequence starting at $0$ and difference $d$.
-Hence the probability of existence of a colliding arithmetic progression length $l$ and difference $d$ may be bound as $2\Prob{|h(\{0, d, \dots, d(l-2)\})| = 1}$.
+Hence the probability of existence of a colliding arithmetic progression length $l$ and difference $d$ may be bound as $2\prob{|h(\{0, d, \dots, d(l-2)\})| = 1}$.
 
 Since for a fixed difference $d$ and length $l \geq 2$ there are at most $\frac{m}{l}$ possible arithmetic progressions starting at $0$ from which we may choose from. By Corollary~\ref{co:d-elements} we upper bound the probability of the collapse of an arithmetic progression using the union bound as 
 \[

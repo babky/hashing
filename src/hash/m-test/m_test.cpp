@@ -29,7 +29,7 @@ template <typename base_t, typename Table>
  * @param f Multiplactive factor - number of children per one progression == length of the progression.
  * @param s Offset.
  */
-void generate_data(Table & t, size_t cell_height, size_t n, size_t m, size_t f, size_t cell_count, base_t s) {
+void generate_data_cells(Table & t, size_t cell_height, size_t n, size_t m, size_t f, size_t cell_count, base_t s) {
 	if (cell_height == 0) {
 		for (size_t i = 0; i < n / cell_count; ++i) {
 			// std::cout << compute_s_m_i(s, m, i) << " ";
@@ -42,12 +42,91 @@ void generate_data(Table & t, size_t cell_height, size_t n, size_t m, size_t f, 
 	}
 }
 
+template <typename base_t, typename double_t, typename Table>
+/**
+ * @param f Multiplactive factor - number of children per one progression == length of the progression.
+ * @param s Offset.
+ */
+void generate_data_many_collisions(Table & t, size_t cell_height, size_t n, size_t m, size_t f) {
+	base_t p = Hash::Math::Prime<base_t>::GREATEST_PRIME;
+	base_t r = 2;
+
+	for (double_t j = 0; j < r; ++j) {
+		for (double_t i = 0; i < n / r; ++i) {
+			base_t el = (j * Hash::Math::Prime<base_t>::GREATEST_PRIME / 2 + i) % Hash::Math::Prime<base_t>::GREATEST_PRIME;
+			if (t.contains(el)) {
+				continue;
+			}
+			t.insert(el);
+		}
+	}
+
+	/*
+	f = 65536;
+	base_t x1 = Hash::Math::Prime<base_t>::GREATEST_PRIME;
+	// Divide the generated into the factors.
+	// p/f, 2p/f, 3p/f, ...
+	for (size_t i = 1; i < f; ++i) {
+		base_t x = i * x1;
+
+		for (size_t j = 0; j < n / f; ++j) {
+			// Generate n / f elements.
+			// For the first factor it is in the form:
+			// factor = 0, fp/n, 2fp/n, ..., p
+			// factor * p/f
+			double_t factor = ((double_t) j * f * (Hash::Math::Prime<base_t>::GREATEST_PRIME / n));
+			base_t el = (base_t) ((factor * x) % Hash::Math::Prime<base_t>::GREATEST_PRIME);
+			if (t.contains(el)) {
+				continue;
+			}
+			t.insert(el);
+		}
+	}
+	/* */
+
+	/*
+	size_t r = 2 * exp2(log2(m) / 4);
+	double_t p3 = Hash::Math::Prime<base_t>::GREATEST_PRIME / 3 ;
+	for (size_t i = 0; i < r; ++i) {
+		for (size_t j = 0; j < r; ++j) {
+			for (size_t k = 0; k < r; ++k) {
+				for (size_t l = 0; l < r; ++l) {
+					size_t x = (((i) * (p3 + j) * (p3 + k) * (p3 + l)) % Hash::Math::Prime<base_t>::GREATEST_PRIME);
+					if (t.contains(x)) {
+						continue;
+					}
+
+					t.insert(x);
+				}
+			}
+		}
+	}
+	*/
+
+	/*
+	for (size_t i = 1; i <= f; ++i) {
+		for (size_t j = 0; j < n / f; ++j) {
+			base_t el = (base_t) ((((double_t) i) * j) % Hash::Math::Prime<base_t>::GREATEST_PRIME);
+			if (t.contains(el)) {
+				continue;
+			}
+
+			t.insert(el);
+		}
+	}
+	*/
+}
+
 template <typename base_t>
 class verify_set {
 public:
+	bool contains(base_t x) {
+		return s.find(x) != s.end();
+	}
+
 	void insert(base_t x) {
-		if (s.find(x) != s.end()) {
-			throw std::logic_error((boost::format("Duplicate key %1") % x).str());
+		if (contains(x)) {
+			throw std::logic_error((boost::format("Duplicate key %1%") % x).str());
 		}
 
 		s.insert(x);
@@ -64,11 +143,37 @@ private:
 	set_type s;
 };
 
+template<typename base_t, class Table>
+class insert_to_counting_table {
+public:
+	insert_to_counting_table(Table & table):
+		t(table) {
+	}
+
+	bool contains(base_t x) {
+		return verifier.contains(x);
+	}
+
+	void insert(base_t x) {
+		verifier.insert(x);
+		t.insert(x);
+	}
+
+	void print() const {
+		verifier.print();
+	}
+
+private:
+	verify_set<base_t> verifier;
+	Table & t;
+};
+
+
 size_t compute_hierarchy_factor(size_t n) {
 	return exp2((size_t) (log2(n) / log2(log2(n))));
 }
 
-template <typename base_t, typename Table>
+template <typename base_t, typename double_t, typename Table>
 void performTest(size_t runs, size_t n, size_t m, size_t cell_height, bool print_set) {
 	using namespace Hash;
 	using namespace Hash::Storages;
@@ -83,7 +188,8 @@ void performTest(size_t runs, size_t n, size_t m, size_t cell_height, bool print
 	t.reserve(m);
 
 	verify_set<base_t> s;
-	generate_data<base_t, verify_set<base_t>>(s, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
+	// generate_data_many_collisions<base_t, double_t, Table>(t, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
+	generate_data_many_collisions<base_t, double_t, verify_set<base_t>>(s, cell_height, n, m, 32);
 	if (print_set) {
 		s.print();
 	}
@@ -91,7 +197,8 @@ void performTest(size_t runs, size_t n, size_t m, size_t cell_height, bool print
 	// Run it.
 	for (size_t run = 0; run < runs; ++run) {
 		t.clear();
-		generate_data<base_t, Table>(t, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
+		insert_to_counting_table<base_t, Table> ins(t);
+		generate_data_many_collisions<base_t, double_t, insert_to_counting_table<base_t, Table>>(ins, cell_height, n, m, 32);
 
 		StorageStatistics stats;
 		t.computeStatistics(stats);
@@ -127,17 +234,19 @@ int main(int argc, const char ** argv) {
 
 #ifdef __GNUC__
 	#ifdef __LP64__
-		// typedef __uint128_t base_t;
 		typedef uint64_t base_t;
+		typedef __uint128_t double_t;
 	#else
-		typedef uint64_t base_t;
+		typedef uint32_t base_t;
+		typedef uint64_t double_t;
 	#endif
 #else
 	typedef uint64_t base_t;
+	typedef uint128_t double_t;
 #endif
 
 	// Parse the command line.
-	const size_t DEFAULT_M = 65536;
+	const size_t DEFAULT_M = 4096;
 	const size_t DEFAULT_N = 0;
 	const size_t DEFAULT_RUNS = 64;
 	const size_t DEFAULT_CELL_HEIGHT = 0;
@@ -151,6 +260,7 @@ int main(int argc, const char ** argv) {
 	size_t runs = DEFAULT_RUNS;
 	bool print_set = DEFAULT_PRINT_SET;
 
+	/*
 	options_description optsDesc("Table M Test allowed options.");
 	optsDesc.add_options()
 		("help", "prints this help message")
@@ -162,14 +272,19 @@ int main(int argc, const char ** argv) {
 		("function", value<string>(&functionType)->default_value(DEFAULT_FUNCTION), "Default function is a randomly chosen function from CWLF. Possible values:\n\tcwlf: a CWLF function,\n\trandom: a random function.");
 
 	variables_map vm;
-	store(parse_command_line(argc, argv, optsDesc), vm);
-	notify(vm);
+	try {
+		store(parse_command_line(argc, argv, optsDesc), vm);
+		notify(vm);
+	} catch (std::exception & e) {
+		std::cerr << e.what() << std::endl;
+		throw e;
+	}
 
 	if (vm.count("help")) {
 		cout << optsDesc;
 		return 0;
 	}
-
+*/
 	try {
 		if (n == 0) {
 			n = m;
@@ -179,9 +294,9 @@ int main(int argc, const char ** argv) {
 		typedef Table<base_t, EqualityComparer<base_t>, UniversalFunctionCWLF, CollisionCountStorage> HashTableCWLF;
 
 		if (functionType == "cwlf") {
-			performTest<base_t, HashTableCWLF>(runs, n, m, cell_height, print_set);
+			performTest<base_t, double_t, HashTableCWLF>(runs, n, m, cell_height, print_set);
 		} else if (functionType == "random") {
-			performTest<base_t, HashTableRandom>(runs, n, m, cell_height, print_set);
+			performTest<base_t, double_t, HashTableRandom>(runs, n, m, cell_height, print_set);
 		} else {
 			cerr << "What the function? Use random or CWLF." << endl;
 			return 1;
