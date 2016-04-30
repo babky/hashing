@@ -71,18 +71,18 @@ In the setting for $n$ balls this improves the best known result by  $\log \log 
 Let $S \subset \binvecspace{u}$ and let $n = |S|$. It holds that $\expects{h \in_U \linearmaps{u}{\log n}}{\lbin{h}{S}} = O(\log n)$.
 \end{theorem}
 We proceeded in the same way as in \cite{alonetal} we just switch to a different parametrization.
-Now we just cite several results from \cite{alonetal} which are reused in the proof.
+Let us cite several results from \cite{alonetal} which are reused in our proof and are not proven here.
 \begin{theorem}
 \label{theorem-prob-bound}
 Let $t, u \in \mathbb{N}$, $t < u$.
-Let $A \subseteq \binvecspace{u}$ such that $\alpha = 1 - \frac{|A|}{2^u}$, $\alpha < 1$.
+Let $S \subseteq \binvecspace{u}$ such that $\alpha = 1 - \frac{|S|}{2^u}$, $\alpha < 1$.
 Then 
 \[
-\probs{T \in_U \surjectivelinearmaps{u}{t}}{T(A) \neq \binvecspace{t}} \leq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}}.
+\probs{T \in_U \surjectivelinearmaps{u}{t}}{T(S) \neq \binvecspace{t}} \leq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}}.
 \]
 \end{theorem}
 \begin{proof}
-Theorem~{XY} from \cite{alonetal}.
+Theorem~{7b} from \cite{alonetal}.
 \end{proof}
 
 \begin{theorem}
@@ -91,15 +91,20 @@ Let $t \in \mathbb{N}$.
 Then for each $\epsilon > 0$ exists $c_\epsilon > 0$ such that for each $S \subset \binvecspace{u}$, $|S| \geq c_\epsilon t 2^t$ it holds  $\probs{T \in_U \linearmaps{u}{t}}{T(S) = \binvecspace{t}} \geq 1 - \epsilon$.
 \end{theorem}
 \begin{proof}
-Theorem~{XY} from \cite{alonetal}.
+Theorem~{7a} from \cite{alonetal}.
 \end{proof}
 
 We now define the same two events as in \cite{alonetal}.
+The first one, $E_1$, occurs if there is a chain of length at least $l$.
+The second one, $E_2$ is used to bound the probability of occurrence of  $E_1$.
 \begin{definition}
-The event $E_1$ occurs if there is a chain of length at least $l$ for a linear map $T \in \linearmaps{u}{b}$. Thus $E_1(S, T, l): \exists \vec{y} \in \binvecspace{b} \colon |T^{-1}(y) \cap S| \geq l$.
+Let $l \in \mathbb{N}$, $T \in \linearmaps{u}{b}$. We define $E_1(S, T, l)$ as $\exists \vec{y} \in \binvecspace{b} \colon |T^{-1}(y) \cap S| \geq l$.
 \end{definition}
 
-We defined another event $E_2$. This event occurs quite often with $E_1$, which is analyzed later. Using this fact we bound the probability of $E_1$ by bounding the probability of occurrence of $E_2$. To define $E_2$ we factor a linear map $T \in \linearmaps{u}{b}$ through a factor vector space $\binvecspace{f}$ into two linear maps $T_0 \in \linearmaps{u}{f}$ and $T_1 \in \surjectivelinearmaps{f}{b}$.
+We redefine event $E_2$ from \cite{alonetal}. 
+This event occurs along with $E_1$ with a constant probability as is analyzed later in the text. 
+Using this fact we may bound the probability of $E_1$ by bounding the probability of occurrence of $E_2$. 
+To define $E_2$ we factor the linear map $T \in \linearmaps{u}{b}$ through a factor vector space $\binvecspace{f}$ into two linear maps $T_0 \in \linearmaps{u}{f}$ and $T_1 \in \surjectivelinearmaps{f}{b}$ satisfying that $T = T_0 \circ T_1$.
 \begin{definition}
 Let $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \in \linearmaps{u}{f}$ and $T_1 \in \surjectivelinearmaps{f}{b}$.
 The event $E_2(S, T_0, T_1)$ occurs when $\exists \vec{y} \in \binvecspace{b} \colon T_1^{-1}(y) \subseteq T_0(S)$.
@@ -110,7 +115,7 @@ For the main linear map $T \in_U \linearmaps{u}{b}$ it holds that $T = T_0 \circ
 
 \begin{lemma}
 \label{lemma-e1-e2}
-Assume that $T$ and $T_1$ are fixed and $T_0$ is fixed except the mapping $T_k$ between the kernel of $T_0$ and $T_1$.
+Assume that $T$ and $T_1$ are fixed and $T_0$ is fixed except for the mapping $T_k$ between the kernel of $T_0$ and $T_1$.
 For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $l \geq c_\epsilon (f - b)2^{f-b}$, then
 \[
 \probs{T_k \in_u \linearmaps{\operatorname{dim}(\operatorname{Ker}(T))}{f-b}}{E_2(S, T_0, T_1) | E_1(S, T, l)} \geq 1 - \epsilon.
@@ -122,19 +127,23 @@ Then there is $\vec{y} \in \binvecspace{b}$ such that $|T^{-1}(y) \cap S| \geq l
 Put $U_A = T^{-1}(\vec{y})$, $S_A = U_A \cap S$ and $F_A = T_1^{-1}(\vec{y})$.
 Notice that $|F_A| = 2^{f-b}$ and $|S_A| = l$.
 Moreover $U_A$ and $F_A$ are affine subspaces of $\binvecspace{u}$ and $\binvecspace{f}$.
-Using Theorem~\ref{theorem-epsilon} for $U_A$, $S_A$, $F_A$ and $T_k$ yields the wanted statement.
+Using Theorem~\ref{theorem-epsilon} for $U_A$, $S_A$, $F_A$ and $T_k$ yields the wanted statement since if $T_k^A(S_A) = F_A$\footnote{$T_k^A$ is the affine linear map between $U_A$ and $F_A$ completely defined by $T_k$.}, then $E_2$  occurs.
 \end{proof}
 
 \begin{corollary}
+\label{corollary-e1-e2}
+For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $l \geq c_\epsilon (f - b)2^{f-b}$, then
 \[
-\probs{}{E_1} \leq \frac{1}{1 - \epsilon}\probs{}{E_2 | E_1}
+\probs{T \in_U \linearmaps{u}{b}}{E_1} \leq \frac{1}{1 - \epsilon}\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}\colon T = T_0 \circ T_1}{E_2}
 \]
 \end{corollary}
 \begin{proof}
 $1- \epsilon \leq \prob{E_2 | E_1} \leq \frac{\prob{E_2}}{\prob{E_1}}$.
+Moreover notice that $E_2$ depends only on $T_k$ for each pair of $T_0$, $T_1$ and thus the result may be extended to the full choice of $T_0$, $T_1$ without changing the probability. 
 \end{proof}
 
 \begin{lemma}
+\label{lemma-bound}
 If $S \subseteq \binvecspace{u}$, $|S| = 2^b$ and $\mu = \frac{|S|}{|\binvecspace{f}|} = 2^{b - f}$, then
 \[
 \probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)} \leq \mu ^ {-\log b - \log \mu + \log \log \mu^{-1}}.
@@ -142,13 +151,14 @@ If $S \subseteq \binvecspace{u}$, $|S| = 2^b$ and $\mu = \frac{|S|}{|\binvecspac
 \end{lemma}
 \begin{proof}
 It is possible to restate the occurrence of $E_2(S, T_0, T_1)$ as $T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}$.
-We use Theorem~\ref{theorem-prob-bound} for $T_1$, $\binvecspace{f} - T_0(S)$ and target vector space $\binvecspace{b}$.
-In this case $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} \leq \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} \leq \mu$.
+We use Theorem~\ref{theorem-prob-bound} for $T_1$, $\binvecspace{f} - T_0(S)$, source space $\binvecspace{f}$ and target space $\binvecspace{b}$.
+In our case we have $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} \leq \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} \leq \mu$.
 Hence
-\[
-\prob{E_2(S, T_0, T_1)} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}} = 2^{(b - f)(f - b - \log b + \log (f - b))}
-\]
-\end{proof}
+$
+\prob{E_2(S, T_0, T_1)} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}} = 2^{(b - f)(f - b - \log b + \log (f - b))}.
+$
+The function $\alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ is increasing w.r.t. $\alpha$ in $(0, 1)$.
+\end{proof} 
 
 \begin{theorem}
 \label{theorem-prob-distribution-bound}
@@ -162,16 +172,29 @@ From definition of $E_1$ we have that $\lbin{T}{S} \geq 2 c_\epsilon r$ occurs w
 To bound the probability of $E_1(S, T, 2 c_\epsilon r)$ we bound $\prob{E_2(S, T_0, T_1)}$ for a suitable chosen factor space $\binvecspace{f}$.
 We put $f = \lfloor b + \log r - \log \log r + 1 \rfloor$ and $l = 2c_\epsilon r$.
 
-The choice of $f$ meets the requirement $f \geq b$ of Corollary~\ref{} and Theorem~\ref{}, i.e. $\surjectivelinearmaps{f}{br}$ is nonempty.
+The choice of $f$ meets the requirement $f \geq b$ of Corollary~\ref{corollary-e1-e2} and Lemma~\ref{lemma-bound}, i.e. $\surjectivelinearmaps{f}{b}$ is nonempty.
 
-In Corollary~\ref{} we also assume that $l \geq c_\epsilon (f - b)2^{f - b}$.
-For $r \geq 4$ we have $(f - b)2^{f - b} \leq (\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2r(\log r - \log \log r + 1)}{\log r} \leq 2r$.
+In Corollary~\ref{corollary-e1-e2} we also assume that $l \geq c_\epsilon (f - b)2^{f - b}$.
+For $r \geq 4$ we have $(f - b)2^{f - b} \leq (\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2r(\log r - \log \log r + 1)}{\log r} \leq 2r$ and thus this assumption is met.
 
-Use Theorem~\ref{} with $\mu = 2^{b - f} \leq \frac{\log r}{r}$.
+Use Lemma~\ref{lemma-bound} with $\mu = 2^{b - f} \leq \frac{\log r}{r}$.
 The function $f(\mu) := \mu ^ {- \log b + \log \mu^{-1} + \log \log \mu^{-1}}$ is increasing in $(0, 1)$.
 Hence $\prob{E_2(S, T_0, T_1)} \leq f(\mu) \leq f(\log r/r)$.
 
-Using Theorem~\ref{} and Corollary~\ref{} thus yields the statement.
+Using Lemma~\ref{lemma-bound} and Corollary~\ref{corollary-e1-e2} thus yields the statement.
+\end{proof}
+
+\begin{theorem}
+% TODO: Theorem 1
+Let $S \subset \binvecspace{u}$ and let $n = |S|$ be sufficiently large. Then $\expects{h \in_U \linearmaps{u}{\log n}}{\lbin{h}{S}} = O(\log n)$.
+\end{theorem}
+\begin{proof}
+We prove that whenever $r \geq 4b = 4\log n$, then the probability of having a chain longer then $2 c_\epsilon r$ is bounded from above by $r^{-1.5}$.
+The exponent in the bound from Theorem~\ref{theorem-prob-distribution-bound} may be bounded as
+\[
+-\log b - \log \log r + \log r + \log (\log r - \log \log r) \geq -\log \log r + 2 + \log \left(\frac{3\log r}{4}\right) \geq \log(3).
+\]
+Finally we may conclude that $\left(\frac{\log r}{r}\right)^{\log 3} \leq r^{-1.5}$.
 \end{proof}
 
 \section{A special case when $S$ is a vector subspace}
