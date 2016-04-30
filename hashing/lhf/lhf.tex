@@ -1,98 +1,229 @@
-\documentclass[12pt,notitlepage]{report}
-\pagestyle{plain}
+\documentclass{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
 
+\usepackage{color}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{mathabx}
+\usepackage{geometry}
+\usepackage{graphicx}
+\geometry{
+	b5paper,
+	margin=1.5cm,
+	top=1.75cm,
+	bottom=1.75cm
+}
 
-\theoremstyle{definition}
+\newcommand{\llinnm}[2]{\operatorname{L}_{\operatorname{lin}}({#1}, {#2})}
+\newcommand{\llinn}[1]{\llinnm{#1}{#1}}
+\newcommand{\hlinr}[1]{\operatorname{H}_{\operatorname{lin}}^{#1}}
+\newcommand{\hlin}{\operatorname{H}_{\operatorname{lin}}}
+\newcommand{\leap}[3]{\operatorname{\mathbf{leap}}({#1}, {#2}, {#3})}
+\newcommand{\hfact}[2]{\operatorname{H}_{\operatorname{factor}}({#1}, {#2})}
+\newcommand{\rot}[2]{\operatorname{H}_{\operatorname{rot}}^{{#1}, {#2}}}
+
+\newcommand{\bin}[3]{\operatorname{\mathbf{bin}}({#1}, {#2}, {#3})}
+\newcommand{\lbin}[2]{\operatorname{\mathbf{lbin}}({#1}, {#2})}
+\newcommand{\vbin}[2]{\operatorname{\mathbf{bin}}({#1}, {#2})}
+\newcommand{\vlbin}[1]{\operatorname{\mathbf{lbin}}({#1})}
+
+\newcommand{\vecspace}[2]{\mathbb{Z}_{#1}^{#2}}
+\newcommand{\binvecspace}[1]{\vecspace{2}{#1}}
+\newcommand{\linearmaps}[2]{\mathcal{L}_{#1}^{#2}}
+\newcommand{\surjectivelinearmaps}[2]{\mathcal{LS}_{#1}^{#2}}
+
+\newcommand{\probs}[2]{\operatorname{\mathbf{Pr}}_{{#1}}\left[{#2}\right]}
+\newcommand{\prob}[1]{\probs{}{#1}}
+\newcommand{\expects}[2]{\operatorname{\mathbf{E}}_{{#1}}\left[{#2}\right]}
+\newcommand{\expect}[1]{\expects{}{#1}}
+\newcommand{\inu}{\in_U}
+
+\newtheorem{lemma}{Lemma}
 \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{corollary}{Corollary}
 
-\theoremstyle{plain}
-\newtheorem{theorem}[definition]{Theorem}
-\newtheorem{lemma}[definition]{Lemma}
-\newtheorem{remark}[definition]{Remark}
-\newtheorem{corollary}[definition]{Corollary}
-\newtheorem{example}[definition]{Example}
-\newtheorem{claim}[definition]{Claim}
-\newtheorem{statement}[definition]{Statement}
-\renewcommand{\theequation}{\arabic{chapter}.\arabic{definition}}
+\title{An upper bound on the size of the largest bin using linear transformations over vector spaces}
 
-\newcommand{\setdelim}{\mid}
-\newcommand{\Prob}[1]{\mathbf{Pr}\left(#1\right)}
-\newcommand{\Expect}[1]{\mathbf{E}\left(#1\right)}
-\newcommand{\Variance}[1]{\mathbf{Var}\left(#1\right)}
-\newcommand{\maxlength}{\mathbf{max\mbox{-}length}}
-\newcommand{\length}{\mathbf{length}}
-\newcommand{\Indicator}{\mathbf{I}}
-\newcommand{\rank}[1]{\mathrm{rank}\left({#1}\right)}
-\newcommand{\dimension}[1]{\mathrm{dim}\left({#1}\right)}
-\newcommand{\nullspace}[1]{\mathcal{N}\left({#1}\right)}
-\newcommand{\matrixkernel}[1]{\mathrm{Ker}\left({#1}\right)}
-\newcommand{\vecspan}[1]{\mathrm{span}\left({#1}\right)}
-\newcommand{\vecspace}[1]{\mathbb{Z}_{2}^{#1}}
-
-\title{Linear Hash Functions}
 \author{Martin Babka}
 
 \begin{document}
 
-\chapter{Definitions and notation}
-\begin{definition}[Set of all linear functions]
-Let $V$ and $U$ be vector spaces. By $\mathcal{L}(V, U)$ we understand the \emph{set of all linear functions} mapping $V$ to $U$.
-\end{definition}
+\maketitle
 
-\begin{definition}
-Let $h$ be a linear mapping. Then we denote the longest chain (or fullest bin) as $\maxlength$, i.e. $\maxlength(h, S) = \operatorname{max}_{i \in \mathcal{Z}_{2}^b} |S \cap h^{-1}(i)|$.
-\end{definition}
+\begin{abstract}
+We improve the proof of Alon et al. to show that the size of the largest bin when hashing $n$ balls into $n$ bins is $O(\log n)$. This improves the currently known upper bound which is $O(\log n \log \log n)$ for hashing $n \log n$ balls into $n$ bins.
+\end{abstract}
 
-Since in our setting the choice of $h$ and $S$ is clear and we will write just $\maxlength$ instead of $\maxlength(h, S)$.
+\section{Setting and notation}
 
-\chapter{Upper bound for throwing $n$ balls into $n$ bins}
+\section{The size of the largest bin with the linear transformations}
 
-\begin{lemma}[Distribution of $\maxlength$]
-\label{lemma-distrib-maxlength-linear}
-For each $r \geq 4$ and $\epsilon \in (0, 1)$ it holds that
+We are dealing with the situation of placing $n$ balls, i.e. $n$ vectors, into $n$ bins.
+We prove that in such case the size of the largest bin is $O(\log n)$. 
+This improves the current best result which holds for placing $n \log n$ balls into $n$ bins and bounds the size of the largest bins by $O(\log n \log \log n)$.
+In the setting for $n$ balls this improves the best known result by  $\log \log n$.
+\begin{theorem}
+Let $S \subset \binvecspace{u}$ and let $n = |S|$. It holds that $\expects{h \in_U \linearmaps{u}{\log n}}{\lbin{h}{S}} = O(\log n)$.
+\end{theorem}
+We proceeded in the same way as in \cite{alonetal} we just switch to a different parametrization.
+Now we just cite several results from \cite{alonetal} which are reused in the proof.
+\begin{theorem}
+\label{theorem-prob-bound}
+Let $t, u \in \mathbb{N}$, $t < u$.
+Let $A \subseteq \binvecspace{u}$ such that $\alpha = 1 - \frac{|A|}{2^u}$, $\alpha < 1$.
+Then 
 \[
-\Prob{\maxlength > 2c_\epsilon r} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{\log b - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}.
+\probs{T \in_U \surjectivelinearmaps{u}{t}}{T(A) \neq \binvecspace{t}} \leq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}}.
 \]
-\end{lemma}
-
-\begin{theorem}[Linear mappings for linear number of elements -- upper bound]
-Let $S \subseteq \mathcal{Z}_{2}^u$ be a set of size $n$, $b = \left\lceil \log n \right\rceil$ and $h \in_{U} \mathcal{L}(\mathcal{Z}_{2}^u, \mathcal{Z}_{2}^b)$ be a randomly chosen linear function. Then $\Expect{\maxlength} = O(\log n)$.
 \end{theorem}
 \begin{proof}
+Theorem~{XY} from \cite{alonetal}.
 \end{proof}
 
-We show when the value of $r = 2^{\kappa} \cdot b \geq 4$ where $\kappa \geq 1$ is a suitable constant, then the probability from Lemma \ref{lemma-distrib-maxlength-linear} is lower than one.
-From that value to infinity we may estimate the integral of the probability by a convergent series and hence get the wanted result.
+\begin{theorem}
+\label{theorem-epsilon}
+Let $t \in \mathbb{N}$.
+Then for each $\epsilon > 0$ exists $c_\epsilon > 0$ such that for each $S \subset \binvecspace{u}$, $|S| \geq c_\epsilon t 2^t$ it holds  $\probs{T \in_U \linearmaps{u}{t}}{T(S) = \binvecspace{t}} \geq 1 - \epsilon$.
+\end{theorem}
+\begin{proof}
+Theorem~{XY} from \cite{alonetal}.
+\end{proof}
 
-Assume that $r = 2^{\kappa} \cdot b$. Then we may bound the exponent as follows
+We now define the same two events as in \cite{alonetal}.
+\begin{definition}
+The event $E_1$ occurs if there is a chain of length at least $l$ for a linear map $T \in \linearmaps{u}{b}$. Thus $E_1(S, T, l): \exists \vec{y} \in \binvecspace{b} \colon |T^{-1}(y) \cap S| \geq l$.
+\end{definition}
+
+We defined another event $E_2$. This event occurs quite often with $E_1$, which is analyzed later. Using this fact we bound the probability of $E_1$ by bounding the probability of occurrence of $E_2$. To define $E_2$ we factor a linear map $T \in \linearmaps{u}{b}$ through a factor vector space $\binvecspace{f}$ into two linear maps $T_0 \in \linearmaps{u}{f}$ and $T_1 \in \surjectivelinearmaps{f}{b}$.
+\begin{definition}
+Let $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \in \linearmaps{u}{f}$ and $T_1 \in \surjectivelinearmaps{f}{b}$.
+The event $E_2(S, T_0, T_1)$ occurs when $\exists \vec{y} \in \binvecspace{b} \colon T_1^{-1}(y) \subseteq T_0(S)$.
+\end{definition}
+
+From now on we assume that $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \in_U \linearmaps{u}{f}$ and $T_1 \in_U \surjectivelinearmaps{f}{b}$. 
+For the main linear map $T \in_U \linearmaps{u}{b}$ it holds that $T = T_0 \circ T_1$.
+
+\begin{lemma}
+\label{lemma-e1-e2}
+Assume that $T$ and $T_1$ are fixed and $T_0$ is fixed except the mapping $T_k$ between the kernel of $T_0$ and $T_1$.
+For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $l \geq c_\epsilon (f - b)2^{f-b}$, then
 \[
-\begin{split}
-& \log b - \log (r / \log r) - \log \log (r / \log r) = \\
-& \qquad = -\kappa + \log \log r - \log (\log r - \log \log r) = \\
-& \qquad = -\kappa + \log \left(\frac{\log r}{\log r - \log \log r}\right) \leq -\kappa + \log (2 / 1) = \\
-& \qquad = -\kappa + 1.
-\end{split}
+\probs{T_k \in_u \linearmaps{\operatorname{dim}(\operatorname{Ker}(T))}{f-b}}{E_2(S, T_0, T_1) | E_1(S, T, l)} \geq 1 - \epsilon.
 \]
+\end{lemma}
+\begin{proof}
+Assume that $E_1(S, T, l)$ occurs. 
+Then there is $\vec{y} \in \binvecspace{b}$ such that $|T^{-1}(y) \cap S| \geq l$.
+Put $U_A = T^{-1}(\vec{y})$, $S_A = U_A \cap S$ and $F_A = T_1^{-1}(\vec{y})$.
+Notice that $|F_A| = 2^{f-b}$ and $|S_A| = l$.
+Moreover $U_A$ and $F_A$ are affine subspaces of $\binvecspace{u}$ and $\binvecspace{f}$.
+Using Theorem~\ref{theorem-epsilon} for $U_A$, $S_A$, $F_A$ and $T_k$ yields the wanted statement.
+\end{proof}
 
-We bound $\int_{1}^{\infty} \Prob{\maxlength > 2^{\kappa + 1} \cdot c_\epsilon bl} \operatorname{dl}$ from above by a constant as follows.
-First notice that for our choice of $r$ we have that $r/\log r \geq \sqrt{r}$. From the previous computation for a choice of $\kappa > 4$ it follows that 
-$\Prob{\maxlength > 2^{\kappa + 1} \cdot c_\epsilon bl} \leq l^{-2}$ and hence the whole integral is $O(1)$.
-
-The expected value of $\maxlength$ can be computed as
+\begin{corollary}
 \[
-\begin{split}
-& \Expect{\maxlength} = \displaystyle\int_{0}^{\infty} \Prob{\maxlength > l} \operatorname{dl} \\
-	& \qquad \leq (1 - \epsilon)^{-1} \cdot \left[2^{\kappa + 1} \cdot c_\epsilon b + \displaystyle\int_{2^{\kappa + 1} \cdot c_\epsilon b}^{\infty} \Prob{\maxlength > l} \operatorname{dl}\right] \\
-	& \qquad \leq (1 - \epsilon)^{-1} \cdot 2^{\kappa + 1} \cdot c_\epsilon b \cdot \left[1 + \displaystyle\int_{1}^{\infty} \Prob{\maxlength > 2^{\kappa + 1} \cdot c_\epsilon bl} \operatorname{dl}\right] \\
-	& \qquad = (1 - \epsilon)^{-1} 2^{\kappa + 1} \cdot c_\epsilon b \cdot (1 + O(1)) = O(\log n).
-\end{split}
+\probs{}{E_1} \leq \frac{1}{1 - \epsilon}\probs{}{E_2 | E_1}
 \]
+\end{corollary}
+\begin{proof}
+$1- \epsilon \leq \prob{E_2 | E_1} \leq \frac{\prob{E_2}}{\prob{E_1}}$.
+\end{proof}
+
+\begin{lemma}
+If $S \subseteq \binvecspace{u}$, $|S| = 2^b$ and $\mu = \frac{|S|}{|\binvecspace{f}|} = 2^{b - f}$, then
+\[
+\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)} \leq \mu ^ {-\log b - \log \mu + \log \log \mu^{-1}}.
+\]
+\end{lemma}
+\begin{proof}
+It is possible to restate the occurrence of $E_2(S, T_0, T_1)$ as $T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}$.
+We use Theorem~\ref{theorem-prob-bound} for $T_1$, $\binvecspace{f} - T_0(S)$ and target vector space $\binvecspace{b}$.
+In this case $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} \leq \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} \leq \mu$.
+Hence
+\[
+\prob{E_2(S, T_0, T_1)} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}} = 2^{(b - f)(f - b - \log b + \log (f - b))}
+\]
+\end{proof}
+
+\begin{theorem}
+\label{theorem-prob-distribution-bound}
+Let $r > 4$. Then
+\[
+\probs{T \in_U \linearmaps{u}{b}}{\lbin{T}{S} \geq 2 c_\epsilon r} \leq \frac{1}{1 - \epsilon}\left(\frac{\log r}{r}\right)^{-\log b - \log \frac{\log r}{r} + \log \log \frac{r}{\log r}}.
+\]
+\end{theorem}
+\begin{proof}
+From definition of $E_1$ we have that $\lbin{T}{S} \geq 2 c_\epsilon r$ occurs whenever $E_1(S, T, 2 c_\epsilon r)$ occurs.
+To bound the probability of $E_1(S, T, 2 c_\epsilon r)$ we bound $\prob{E_2(S, T_0, T_1)}$ for a suitable chosen factor space $\binvecspace{f}$.
+We put $f = \lfloor b + \log r - \log \log r + 1 \rfloor$ and $l = 2c_\epsilon r$.
+
+The choice of $f$ meets the requirement $f \geq b$ of Corollary~\ref{} and Theorem~\ref{}, i.e. $\surjectivelinearmaps{f}{br}$ is nonempty.
+
+In Corollary~\ref{} we also assume that $l \geq c_\epsilon (f - b)2^{f - b}$.
+For $r \geq 4$ we have $(f - b)2^{f - b} \leq (\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2r(\log r - \log \log r + 1)}{\log r} \leq 2r$.
+
+Use Theorem~\ref{} with $\mu = 2^{b - f} \leq \frac{\log r}{r}$.
+The function $f(\mu) := \mu ^ {- \log b + \log \mu^{-1} + \log \log \mu^{-1}}$ is increasing in $(0, 1)$.
+Hence $\prob{E_2(S, T_0, T_1)} \leq f(\mu) \leq f(\log r/r)$.
+
+Using Theorem~\ref{} and Corollary~\ref{} thus yields the statement.
+\end{proof}
+
+\section{A special case when $S$ is a vector subspace}
+
+\begin{theorem}
+Let $b, u \in \mathbb{N}$ and $v_1, \dots, v_b \in \mathbb{Z}_2^u$ be linearly independent. Then \[ \expects{h \in_U \linearmaps{u}{b}}{\lbin{h}{\operatorname{Span}(v_1, \dots, v_b)}} = O(1) .\]
+\end{theorem}
+\begin{proof}
+For convenience put $S = \operatorname{Span}(v_1, \dots, v_b)$. 
+We show that each non-empty bin created by a transformation $h$ is formed by balls from an affine subspace of $S$ and has the size of the kernel of $h$.
+From this it follows that $\expect{\lbin{h}{S}} = \expect{\bin{h}{S}{0}} = O(1)$.
+
+Without loss of generality assume that $v_1, \dots, v_k$ are the vectors forming the kernel of $h$, i.e. $h(v_i) = 0$ where $i \in \{1, \dots, k\}$.
+If $h(v) = y$ for some $v \in S$, then $h^{-1}(y) \cap S = v + \operatorname{Span}(v_1, \dots, v_k)$.
+Hence for each $y \in \mathbb{Z}_2^b$ it holds hat $|h^{-1}(y) \cap S| = 0 \vee |h^{-1}(y) \cap S| = 2^k$.
+Thus the sizes of all the non-empty bins are the same and are equal to $\bin{h}{S}{0}$.
+\end{proof}
+
+\begin{thebibliography}{32}
+\bibitem{alonetal}
+N. Alon, M. Dietzfelbinger, ...
+\newblock Linear hash functions....
+\newblock ...
+
+
+\bibitem{cw}
+J.L. Carter, and M.N. Wegman. 
+\newblock Universal Classes of Hash Functions.
+\newblock Journal of Computer and System Sciences, 18. pages 143--154, 1979.
+
+\bibitem{siegel}
+A. Siegel. 
+\newblock On universal classes of extremely random constant-time hash functions.
+\newblock SIAM Journal on Computing, 33(3). pages 505--543 (electronic), 2004
+
+\bibitem{wieder}
+L.E. Celis, O. Reingold, G. Segen, and U. Wieder
+\newblock Balls and Bins: Smaller Hash Families and Faster Evaluation
+\newblock Foundations of Computer Science (FOCS), 2011 IEEE 52nd Annual Symposium, pages 599 -- 608, 2011
+
+\bibitem{azar}
+Y. Azar, A. Broder, A. Karlin, and E. Upfal
+\newblock Balanced allocations.
+\newblock SIAM Journal on Computing, 29(1). pages 180--200, 1999.
+
+\bibitem{vocking}
+B. V\"{o}cking
+\newblock How asymmetry helps load balancing.
+\newblock In Proceedings of the Fortieth Annual Symposium on Foundations of Computer Science. pages 131--140, 1999.
+\end{thebibliography}
 
 \end{document}
+
+
+ 
