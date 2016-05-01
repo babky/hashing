@@ -10,6 +10,9 @@
 \usepackage{mathabx}
 \usepackage{geometry}
 \usepackage{graphicx}
+\usepackage{pgf}
+\usepackage{tikz}
+
 \geometry{
 	b5paper,
 	margin=1.5cm,
@@ -60,18 +63,22 @@ We improve the proof of Alon et al. to show that the size of the largest bin whe
 \end{abstract}
 
 \section{Setting and notation}
+By $\linearmaps{u}{b}$ we denote all linear transformations from $\binvecspace{u}$ to $\binvecspace{b}$.
+By $\surjectivelinearmaps{u}{b}$ we denote all surjective linear transformations from $\binvecspace{u}$ onto $\binvecspace{b}$.
+Let $S \subseteq \binvecspace{u}$ and $T \in \linearmaps{u}{b}$. By $\lbin{T}{S}$ we denote $\operatorname{argmax}_{y \in \binvecspace{b}} |T^{-1}(y) \cap S|$.
 
 \section{The size of the largest bin with the linear transformations}
 
 We are dealing with the situation of placing $n$ balls, i.e. $n$ vectors, into $n$ bins.
 We prove that in such case the size of the largest bin is $O(\log n)$. 
 This improves the current best result which holds for placing $n \log n$ balls into $n$ bins and bounds the size of the largest bins by $O(\log n \log \log n)$.
-In the setting for $n$ balls this improves the best known result by  $\log \log n$.
+In the setting for $n$ balls this improves the best known result by  $\log \log n$ factor.
 \begin{theorem}
-Let $S \subset \binvecspace{u}$ and let $n = |S|$. It holds that $\expects{h \in_U \linearmaps{u}{\log n}}{\lbin{h}{S}} = O(\log n)$.
+\label{theorem-n-to-n}
+Let $S \subset \binvecspace{u}$ and let $n = |S|$. It holds that $\expects{T \in_U \linearmaps{u}{\log n}}{\lbin{T}{S}} = O(\log n)$.
 \end{theorem}
 We proceeded in the same way as in \cite{alonetal} we just switch to a different parametrization.
-Let us cite several results from \cite{alonetal} which are reused in our proof and are not proven here.
+Let us cite several results from \cite{alonetal} which are reused in our proof and thus are not proven here.
 \begin{theorem}
 \label{theorem-prob-bound}
 Let $t, u \in \mathbb{N}$, $t < u$.
@@ -130,6 +137,60 @@ Moreover $U_A$ and $F_A$ are affine subspaces of $\binvecspace{u}$ and $\binvecs
 Using Theorem~\ref{theorem-epsilon} for $U_A$, $S_A$, $F_A$ and $T_k$ yields the wanted statement since if $T_k^A(S_A) = F_A$\footnote{$T_k^A$ is the affine linear map between $U_A$ and $F_A$ completely defined by $T_k$.}, then $E_2$  occurs.
 \end{proof}
 
+\begin{figure}[h]
+	\caption{The general case of the factorization of $T$.}
+
+	\begin{tikzpicture}
+		\draw[->] (4,2) -- (5,2) node[left=0.5cm,below] {$T_0$};
+		\draw[green] (2,2) circle (2cm) node[left=1cm,below=1cm] {$\binvecspace{u}$};
+		\draw[green] (6.75,2) circle (1.75cm) node[left=0.75cm,below=0.75cm] {$\binvecspace{f}$};
+		\draw[->] (8.5,2) -- (9.5,2) node[left=0.5cm,below] {$T_1$};
+		\draw[green] (11,2) circle (1.5cm) node[left=0.6cm,below=0.6cm] {$\binvecspace{b}$};
+		
+		\draw[blue] (10.5,2.75) circle (0.05cm) [fill=black] node[anchor=west] {$\vec{y}$};
+		\draw[->,red] (10.5,2.75) -- (7.5,2.75) node[left=-1.7cm,above] {$T_1^{-1}$};
+		\draw[dashed,red] (6.75,2.75) circle (0.75cm)  node[] {$F_A$};
+		\draw[dotted,blue] (6.2,1.95) circle (0.75cm)  node[left=0cm,below=0.1cm] {$T_0(S)$};
+
+		\draw[dashed,red] (2.2,2.75) circle (1cm)  node[left=-0.35cm,below=-0.5cm] {$U_A$};
+		\draw[dotted,blue] (1.4,2.1) circle (1.2cm)  node[left=0.35cm,below=0.1cm] {$S$};
+		
+		\draw[magenta] (1.7,2.5) node[] {$S_A$};
+		
+
+		\draw[->] (10.5,2.75) arc (0:152:4.2cm and 2cm) node[below=-1.5cm,left=-5cm] {$T_1^{-1}$};
+		
+		
+		\draw[->,red] (3.2,2.75) -- (6,2.75) node[left=1.4cm,above] {$T_k^A$};
+	\end{tikzpicture}
+\end{figure}
+
+\begin{figure}
+	\caption{Event $E_2(S, T_0, T_1)$ occurs, i.e. $F_A \subseteq T_0(S)$. Notice that $T_1(T_0(S) - F_A)$ does not contain $\vec{y}$ as observed in proof of Lemma~\ref{lemma-bound}.}
+
+	\begin{tikzpicture}
+		\draw[->] (4,2) -- (5,2) node[left=0.5cm,below] {$T_0$};
+		\draw[green] (2,2) circle (2cm) node[left=1cm,below=1cm] {$\binvecspace{u}$};
+		\draw[green] (6.75,2) circle (1.75cm) node[left=0.75cm,below=0.75cm] {$\binvecspace{f}$};
+		\draw[->] (8.5,2) -- (9.5,2) node[left=0.5cm,below] {$T_1$};
+		\draw[green] (11,2) circle (1.5cm) node[left=0.6cm,below=0.6cm] {$\binvecspace{b}$};
+		
+		\draw[blue] (10.5,2.75) circle (0.05cm) [fill=black] node[anchor=west] {$\vec{y}$};
+		\draw[->,red] (10.5,2.75) -- (7.5,2.75) node[left=-1.7cm,above] {$T_1^{-1}$};
+		\draw[dashed,red] (6.75,2.75) circle (0.75cm) node[] {$F_A$};
+		\draw[dotted,blue] (6.8,2.35) circle (1.2cm)  node[left=0cm,below=0.5cm] {$T_0(S)$};
+
+		\draw[dashed,red] (2.2,2.75) circle (1cm)  node[left=-0.35cm,below=-0.5cm] {$U_A$};
+		\draw[dotted,blue] (1.4,2.1) circle (1.2cm)  node[left=0.35cm,below=0.1cm] {$S$};
+
+		\draw[->] (10.5,2.75) arc (0:152:4.2cm and 2cm) node[below=-1.5cm,left=-5cm] {$T_1^{-1}$};
+		
+		\draw[magenta] (1.7,2.5) node[] {$S_A$};
+				
+		\draw[->,red] (3.2,2.75) -- (6,2.75) node[left=1.4cm,above] {$T_k^A$};
+	\end{tikzpicture}
+\end{figure}
+
 \begin{corollary}
 \label{corollary-e1-e2}
 For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $l \geq c_\epsilon (f - b)2^{f-b}$, then
@@ -139,7 +200,7 @@ For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $l \geq c_\epsilo
 \end{corollary}
 \begin{proof}
 $1- \epsilon \leq \prob{E_2 | E_1} \leq \frac{\prob{E_2}}{\prob{E_1}}$.
-Moreover notice that $E_2$ depends only on $T_k$ for each pair of $T_0$, $T_1$ and thus the result may be extended to the full choice of $T_0$, $T_1$ without changing the probability. 
+This bound holds for each choice of $T_0$, $T_1$ with the uniform choice of $T_k$. Hence it must hold for the complete uniform choice of $T_0$, $T_1$ because it gives the uniform choice of $T_k$.
 \end{proof}
 
 \begin{lemma}
@@ -150,14 +211,14 @@ If $S \subseteq \binvecspace{u}$, $|S| = 2^b$ and $\mu = \frac{|S|}{|\binvecspac
 \]
 \end{lemma}
 \begin{proof}
-It is possible to restate the occurrence of $E_2(S, T_0, T_1)$ as $T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}$.
+It is possible to restate the occurrence of $E_2(S, T_0, T_1)$ as $T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}$ since $E_2(S, T_0, T_1)$ occurs iff $\exists \vec{y} \colon \vec{y} \not\in T_1(\binvecspace{f} - T_0(S))$.
 We use Theorem~\ref{theorem-prob-bound} for $T_1$, $\binvecspace{f} - T_0(S)$, source space $\binvecspace{f}$ and target space $\binvecspace{b}$.
 In our case we have $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} \leq \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} \leq \mu$.
 Hence
 $
-\prob{E_2(S, T_0, T_1)} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}} = 2^{(b - f)(f - b - \log b + \log (f - b))}.
+\prob{E_2(S, T_0, T_1)} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}}.
 $
-The function $\alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ is increasing w.r.t. $\alpha$ in $(0, 1)$.
+For the last inequality observe that the function $\alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ is increasing w.r.t. $\alpha$ in $(0, 1)$.
 \end{proof} 
 
 \begin{theorem}
@@ -177,24 +238,20 @@ The choice of $f$ meets the requirement $f \geq b$ of Corollary~\ref{corollary-e
 In Corollary~\ref{corollary-e1-e2} we also assume that $l \geq c_\epsilon (f - b)2^{f - b}$.
 For $r \geq 4$ we have $(f - b)2^{f - b} \leq (\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2r(\log r - \log \log r + 1)}{\log r} \leq 2r$ and thus this assumption is met.
 
-Use Lemma~\ref{lemma-bound} with $\mu = 2^{b - f} \leq \frac{\log r}{r}$.
-The function $f(\mu) := \mu ^ {- \log b + \log \mu^{-1} + \log \log \mu^{-1}}$ is increasing in $(0, 1)$.
+Use Lemma~\ref{lemma-bound} with $\mu = 2^{b - f} \leq \frac{\log r}{r}$ and the fact that $f(\mu) := \mu ^ {- \log b + \log \mu^{-1} + \log \log \mu^{-1}}$ is increasing in $(0, 1)$.
 Hence $\prob{E_2(S, T_0, T_1)} \leq f(\mu) \leq f(\log r/r)$.
-
-Using Lemma~\ref{lemma-bound} and Corollary~\ref{corollary-e1-e2} thus yields the statement.
+Bounding $\prob{E_1}$ using Corollary~\ref{corollary-e1-e2} yields the statement.
 \end{proof}
 
-\begin{theorem}
-% TODO: Theorem 1
-Let $S \subset \binvecspace{u}$ and let $n = |S|$ be sufficiently large. Then $\expects{h \in_U \linearmaps{u}{\log n}}{\lbin{h}{S}} = O(\log n)$.
-\end{theorem}
-\begin{proof}
-We prove that whenever $r \geq 4b = 4\log n$, then the probability of having a chain longer then $2 c_\epsilon r$ is bounded from above by $r^{-1.5}$.
+We prove Theorem~\ref{theorem-n-to-n}.
+\begin{proof}[Proof of Theorem~\ref{theorem-n-to-n}]
+The idea is simple, we bound $\sum_{l = 4\log n}^{b} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq l}$ by a constant.
+We show that if $r \geq 4b = 4\log n$, then the probability of having a chain longer then $2 c_\epsilon r$ is bounded from above by $r^{-1.5}$.
 The exponent in the bound from Theorem~\ref{theorem-prob-distribution-bound} may be bounded as
 \[
 -\log b - \log \log r + \log r + \log (\log r - \log \log r) \geq -\log \log r + 2 + \log \left(\frac{3\log r}{4}\right) \geq \log(3).
 \]
-Finally we may conclude that $\left(\frac{\log r}{r}\right)^{\log 3} \leq r^{-1.5}$.
+Finally for $r \geq 4\log n$ we may conclude that $\prob{\lbin{T}{S} \geq 2c_\epsilon r} \leq \left(\frac{\log r}{r}\right)^{\log 3} \leq r^{-1.5}$ and hence $\int_{r = 4\log n}^{n} \prob{\lbin{T}{S} \geq 2c_\epsilon r} \operatorname{d}r = O(1)$ and hence the above sum is convergent.
 \end{proof}
 
 \section{A special case when $S$ is a vector subspace}
@@ -213,37 +270,117 @@ Hence for each $y \in \mathbb{Z}_2^b$ it holds hat $|h^{-1}(y) \cap S| = 0 \vee 
 Thus the sizes of all the non-empty bins are the same and are equal to $\bin{h}{S}{0}$.
 \end{proof}
 
+Another idea how to estimate long chains comes from the following facts.
+\begin{theorem}
+\label{theorem-bound-general}
+If $S \subseteq \binvecspace{b}$, $\alpha_0 = 1 - |S|/2^b$, then \[\probs{f_1, \dots, f_b \in_U \binvecspace{b}}{1 - |S \cup (S + \operatorname{Span}(f_1, \dots, f_b)|/2^b \geq \mu} \leq \alpha_0^{b - \log \log \mu^{-1} + \log \log \alpha_0^{-1}}.\]
+\end{theorem}
+\begin{proof}
+In~\cite{alonetal}.
+\end{proof}
+
+There is a chain of length $2^l$ iff $\operatorname{dim}(\operatorname{Ker}(T)) \geq l$, i.e. $\operatorname{rank}(T) < b - l$.
+Let $e_1, \dots, e_b$ be the canonical basis of $\binvecspace{b}$. For each $e_i$ mapping  $T$ choses its image $f_i \in_U \binvecspace{b}$.
+Mapping $T$ has rank less than $b - l$ iff $|\operatorname{Span}(f_1, \dots, f_b)| < 2^{b - l}$, i.e. $1 - |\operatorname{Span}(f_1, \dots, f_b)|/2^b > 1 - 2^{-l}$.
+Moreover since in this case $T(S) = \operatorname{Span}(f_1, \dots, f_b)$ we get that $\lbin{T}{S} \geq 2^l$ iff $|T(S)| \leq 2^{b - l}$.
+
+We apply the theorem for $S = \{\vec{0}\}$ and the vectors $f_1, \dots, f_b$ chosen by $T$ and get the following.
+\[
+\probs{}{\lbin{T}{S} \geq 2^l} \leq (1 - 2^{-b})^{b - \log (-\log (1 - 2^{-l})) + \log (-\log (1 - 2^{-b}))} \approx (1 - 2^{-b})^{b + l - b} \leq (1-2^{-b})^{l}.
+\]
+
+This is not sufficient to get $O(1)$ bound and discovers a non-tightness in the bound provided by Theorem~\ref{theorem-bound-general} for $\alpha_0$ close to $1$.
+For example consider case when $S = \{\vec{0}\}$, $\alpha_0 = 1 - 2^{-b}$ and we add a single random vector $\vec{v}$ to $S$, i.e. $\alpha_1 = 1 - |S \cup S + \vec{v}|/2^b$.
+Then $\probs{v\in_U\binvecspace{b}}{\alpha_1 \geq 1 - 2^{-b}} = 2^{-b}$ since this is equivalent to $v = \vec{0}$.
+However from Theorem~\ref{theorem-bound-general} we get only
+\[
+\probs{v\in_U\binvecspace{b}}{\alpha_1 \geq 1 - 2^{-b}} \leq \alpha_0^{1 - \log \log \alpha_0^{-1} + \log \log \alpha_0^{-1}} = 1 - 2^{-b}.
+\]
+
+Therefore factorization as in the proof of Theorem~7a in~\cite{alonetal} is necessary to ensure that $\alpha_0$ is large enough.
+
+First we bound the probability of having many collisions under a universal function $T$ following from using CSB and Markov inequalities.
+This is a generalization of the well-known property of universal functions saying that $\probs{T \in_U \linearmaps{u}{b}}{\mbox{number of collisions created by }T \geq \frac{k}{2^b} {|S| \choose 2}} \leq \frac{1}{k}$.
+\begin{lemma}
+\label{lemma-collisions-general}
+\[
+\probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq \frac{|S|}{k}} \leq \frac{|S| - 1}{(k - 1)2^b} \leq \frac{|S|}{k2^b}.
+\]
+\end{lemma}
+\begin{proof}
+Use CSB to bound the number of collisions from below and then use Markov inequality to obtain the probability bound.
+\end{proof}
+
+Now we switch back to bounding the probability of having a long chain.
+We factor through a vector space $F$ of dimension $b$, i.e. the dimension of both source and target space.
+The factorization is as usual, $T = T_0 \circ T_1$ where $T_1$ is surjective.
+
+\begin{align*}
+& \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l}} \\
+& \quad \leq \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \wedge |T_0(S)| \leq 2^{b - \sqrt{l}}} + \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \wedge |T_0(S)| > 2^{b - \sqrt{l}}} \\
+& \quad \leq \probs{T \in_U \linearmaps{u}{b}}{|T_0(S)| \leq 2^{b - \sqrt{l}}} + \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \mid |T_0(S)| > 2^{b - \sqrt{l}}}.
+\end{align*}
+
+Now by Lemma~\ref{lemma-collisions-general} we get
+\[
+\probs{T \in_U \linearmaps{u}{b}}{|T_0(S)| \leq 2^{b - \sqrt{l}}} \leq 2^{-\sqrt{l}}.
+\]
+
+Let us fix $T_0$ and denote $S_1 = T_0(S)$. From Theorem~\ref{theorem-bound-general} it follows that 
+\[
+\probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \mid |T_0(S)| > 2^{b - \sqrt{l}}} = 
+\probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{|T_1(S_1)| \leq 2^{b - l} \mid |S_1| > 2^{b - \sqrt{l}}}.
+\]
+
+Directly use the following fact used in the proof of Theorem~7b in \cite{alonetal}.
+Let $S \subseteq \binvecspace{u}$, $\alpha = 1 - |S|/2^u$
+\[
+\probs{T \in_U \surjectivelinearmaps{u}{b}}{1 - |T(S)|/2^b \geq 1 - 2^{-l}} \leq \alpha^{u - b - \log \log \left(1 - 2^{-l}\right) + \log \log \alpha^{-1}}.
+\]
+
+Since $-y \geq \log (1 - y)$ we get that 
+\[
+\probs{T \in_U \surjectivelinearmaps{u}{b}}{1 - |T(S)|/2^b \geq 1 - 2^{-l}} \leq \alpha^{u - b + l + \log \log \alpha^{-1}}.
+\]
+
+
+In our case this translates to using $u := b$, $b := b$, $T := T_1$ and $\alpha \leq 1-2^{-\sqrt{l}}$.
+\begin{align*}
+& \probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{|T_1(S_1)| \leq 2^{b - l} \mid |S_1| > 2^{b - \sqrt{l}}} \\
+& \quad = \probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{1 - |T_1(S_1)| \geq 1 - 2^{- l}} \\
+& \quad \leq \left(1 - 2^{-\sqrt{l}}\right)^{l - l/2} \leq e^{-\frac{l}{2\sqrt{l}}} \leq e^{-\sqrt{l}/2}.
+\end{align*}
+
 \begin{thebibliography}{32}
 \bibitem{alonetal}
-N. Alon, M. Dietzfelbinger, ...
-\newblock Linear hash functions....
-\newblock ...
+N. Alon, M. Dietzfelbinger, P. B. Miltersen, E. Petrank and G. Tardos
+\newblock Linear Hash Functions
+\newblock J. {ACM}, 46. pages 667--683, 1999
 
+% \bibitem{cw}
+% J.L. Carter, and M.N. Wegman. 
+% \newblock Universal Classes of Hash Functions.
+% \newblock Journal of Computer and System Sciences, 18. pages 143--154, 1979.
 
-\bibitem{cw}
-J.L. Carter, and M.N. Wegman. 
-\newblock Universal Classes of Hash Functions.
-\newblock Journal of Computer and System Sciences, 18. pages 143--154, 1979.
+% \bibitem{siegel}
+% A. Siegel. 
+% \newblock On universal classes of extremely random constant-time hash functions
+% \newblock SIAM Journal on Computing, 33(3). pages 505--543 (electronic), 2004
 
-\bibitem{siegel}
-A. Siegel. 
-\newblock On universal classes of extremely random constant-time hash functions.
-\newblock SIAM Journal on Computing, 33(3). pages 505--543 (electronic), 2004
+% \bibitem{wieder}
+% L.E. Celis, O. Reingold, G. Segen, and U. Wieder
+% \newblock Balls and Bins: Smaller Hash Families and Faster Evaluation
+% \newblock Foundations of Computer Science (FOCS), 2011 IEEE 52nd Annual Symposium, pages 599 -- 608, 2011
 
-\bibitem{wieder}
-L.E. Celis, O. Reingold, G. Segen, and U. Wieder
-\newblock Balls and Bins: Smaller Hash Families and Faster Evaluation
-\newblock Foundations of Computer Science (FOCS), 2011 IEEE 52nd Annual Symposium, pages 599 -- 608, 2011
+% \bibitem{azar}
+% Y. Azar, A. Broder, A. Karlin, and E. Upfal
+% \newblock Balanced allocations.
+% \newblock SIAM Journal on Computing, 29(1). pages 180--200, 1999.
 
-\bibitem{azar}
-Y. Azar, A. Broder, A. Karlin, and E. Upfal
-\newblock Balanced allocations.
-\newblock SIAM Journal on Computing, 29(1). pages 180--200, 1999.
-
-\bibitem{vocking}
-B. V\"{o}cking
-\newblock How asymmetry helps load balancing.
-\newblock In Proceedings of the Fortieth Annual Symposium on Foundations of Computer Science. pages 131--140, 1999.
+% \bibitem{vocking}
+% B. V\"{o}cking
+% \newblock How asymmetry helps load balancing.
+% \newblock In Proceedings of the Fortieth Annual Symposium on Foundations of Computer Science. pages 131--140, 1999.
 \end{thebibliography}
 
 \end{document}
