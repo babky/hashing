@@ -347,10 +347,11 @@ Let $S \subseteq [p]$, then
 \]
 \end{corollary}
 
-\section{The equation $ax \bmod p \bmod m = 0$}
+\section{The equation $ax \bmod p \bmod m = y$}
 
-Finding the structure of the solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ enables us to find a structure of elements of a chain. 
-First we show that the solutions of the above equation form a finite arithmetic progression starting from $0$. We will extend the proof to show that the general chains are unions of at most two different arithmetic progressions. Such a structure of the chains allows us to proceed further and is vital in order to show our main result.
+Finding the structure of the solutions of the equation $ax \bmod p \bmod m = y$ for $x \in [m]$ enables us to find a structure of elements of a chain. 
+Precisely we show that the chains are unions of at most two different arithmetic progressions. 
+We also show that the solutions of the above equation for $y = 0$ form a finite arithmetic progression starting at $0$. 
 
 \begin{lemma}
 \label{lemma-equation}
@@ -393,7 +394,7 @@ From the proof of Lemma~\ref{lemma-equation} one can observe a special version o
 Let $a \in [p]$. The solutions of the equation $ax \bmod p \bmod m = 0$ for $x \in [m]$ form an arithmetic progressions starting at $0$.
 \end{corollary}
 \begin{proof}
-Put $h = 0$ and observe that in this case the second progression can not occur.
+Put $h = 0$ and observe that in this case the second progression does not occur.
 \end{proof}
 
 \section{Main theorem}
@@ -408,37 +409,49 @@ Assume that $p \geq m^2$, then
 \]
 \end{theorem}
 \begin{proof}
-By Lemma~\ref{lm:b-zero} we may assume that the chosen function has $b = 0$ without asymptotically increasing the expected size of the largest bin. Moreover we may assume that $a \neq 0$. Notice that this assumption adds $m/p$ to the computed expected value which is $O(1)$.
+By Lemma~\ref{lm:b-zero} we may assume that the chosen function has $b = 0$ without asymptotically increasing the expected size of the largest bin. 
+Moreover we may assume that $a \neq 0$. 
+Notice that this assumption adds at most $m/p$ to the computed expected value which is $O(1)$.
 
 By Lemma~\ref{lemma-equation} each bin is formed by at most two arithmetic progressions. Both arithmetic progressions have the same difference $d$.
+If there is a bin of size $l$, then there is an arithmetic progression chosen from $[m]$ of size at least $\lceil \vlbin{[m]}/2 \rceil \geq l/2$ collapsing into a single bin.
+It is the longer arithmetic progression from the two progressions forming the bin.
 
-Now assume that there is an arithmetic progression chosen from $[m]$ of length $l$ and difference $d$ colliding into a single bin.
-We estimate the probability of having such a progression.
-If $ad \bmod p < p/2$, then the arithmetic progression starting at $0$ of length $l$ and difference $d$ collides. 
-If $ad \bmod p > p/2$, by Lemma~\ref{lemma:sign-a} it holds that the size of the largest bins can vary by at most one from the size of the largest bins under function $h_{p - a, 0}$. 
-Note that $(p - a)d \bmod p < p/2$.
-This correspondence allows us to choose the beginning of arithmetic progressions to be $0$ without asymptotically worsening the result.
-If $ad \bmod p > p / 2$, then for $h_{p - a, 0}$ we have the arithmetic progression size $l - 1$ with the sequence starting at $0$ and difference $d$.
-Hence the probability of existence of a colliding arithmetic progression length $l$ and difference $d$ may be bound as $2\prob{|h(\{0, d, \dots, d(l-2)\})| = 1}$.
+We want to estimate the probability of having such a progression.
+We start by showing that whenever there is a progression colliding into a single bin, then the progression starting at $0$ having the same difference and length also collides to a single bin with probability $1/2$.
+The proof of the statement follows in Claim~\ref{claim-normalize-progression}. From the claim and the definition of the conditional probability we conclude that 
+\begin{align*}
+\prob{\vlbin{[m]} \geq l} & \leq \prob{\exists d, s \in [m] \colon s+d\lfloor l/2 \rfloor < m \wedge |h(s + d[l/2])| = 1} \\
+	& \leq 2 \prob{\exists d \colon h(d([l/2])) = \{0\}}.
+\end{align*}
 
-Since for a fixed difference $d$ and length $l \geq 2$ there are at most $\frac{m}{l}$ possible arithmetic progressions starting at $0$ from which we may choose from. By Corollary~\ref{co:d-elements} we upper bound the probability of the collapse of an arithmetic progression using the union bound as 
+\begin{claim}
+\label{claim-normalize-progression}
+For every $d, l \in [m]$ such that $l \geq 3$, $dl \leq m$ it holds 
+\[\probs{a\in[p]}{h_{a,0}(d[l]) = \{0\} \mid \exists s \in [m - dl]\colon |h_{a,0}(s + d[l])| = 1} = \frac{1}{2}.\]
+\end{claim}
+\begin{proof}
+If $ad \bmod p < p/2$, then the arithmetic progression starting at $0$ of length $l$ and difference $d$ collides into bin $0$. 
+Consider elements $s$, $s + d$ and $s + 2d$.
+There are at least two of them colliding without having a leap in $\mathbb{Z}_p$ and thus $m \mid ad$.
+Since the whole progression $s + d[l]$ collides into a single bin under $h_{a,0}$ we conclude that there are no leaps in the sequence $(as) \bmod p + ((ad) \bmod p)[l]$, i.e. $(as) \bmod p + ((ad) \bmod p)[l] < p$.
+Otherwise the leap would cause that $s + d[l]$ would be split into two bins since $m \mid ad$ but certainly $m \nmid (ad - p)$.
+Since exactly one half of the values of $a$ satisfy $ad < p/2$ the claim holds.
+
+Let us note that whenever $ad \bmod p > p/2$, then $(p - a)d \bmod p = p - (ad \bmod p) < p/2$ and thus from Lemma~\ref{lemma:sign-a} it follows that the progression $d[l-1]$ collides under $h_{p - a, 0}$ into a single bin.
+\end{proof}
+
+Since for a fixed difference $d$ and length $l \geq 3$ there are at most $\frac{m}{l}$ possible arithmetic progressions starting at $0$ from which we may choose from. By Corollary~\ref{co:d-elements} we upper bound the probability of the collapse of an arithmetic progression using the union bound as 
 \[
-\frac{m}{l} \left(\frac{1}{(l - 1)m} + 1/m^2 + O(p^{-1})\right) \leq O(l^{-2}).
+\frac{m}{l} \left(\frac{1}{lm} + 1/m^2 + O(p^{-1})\right) \leq O(l^{-2}).
 \]
 
-Assume that $\vlbin{[m]} \geq 5$, then there is an arithmetic progression chosen from $[m]$ of size at least $\lceil \vlbin{[m]}/2 \rceil \geq 3$ collapsing into a single bin.
-It is the longer arithmetic progression from the two progressions forming the bin. 
-
-Hence for $\vlbin{[m]} \geq 5$ we have
+For $l \geq 5$ we get $\prob{\vlbin{[m]} \geq l} = O(2(l / 2)^{-2}) = O(l^{-2})$ and hence
 \[
-\prob{\vlbin{[m]} \geq l} = O(2(l / 2 - 1)^{-2}) = O(l^{-2}).
+\expect{\vlbin{[m]}} \leq 4 + \sum_{l = 5}^m O\left(l^{-2}\right) = O(1).
 \]
 
-Then we simply conclude that
-\[
-\expect{\vlbin{[m]}} \leq O(1) + \sum_{l = 5}^m O\left(\frac{1}{l^2}\right) = O(1).
-\]
-
+An alternative finish of the proof could use the fact that the longest bin contains $0$ with conditional probability $1/2$ and thus $\expect{\vlbin{[m]}} \leq 3 + O(\expect{\vbin{[m]}{0}})$.
 \end{proof}
 
 We can conclude the main result, i.e. each set transformable to $[m]$ in $\mathbb{Z}_p$ has constant sized largest bins.
