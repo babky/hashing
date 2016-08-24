@@ -31,6 +31,7 @@ set(HEADERS
 	../systems/bit_string_system.h
 	../systems/cwlf_exponential_system.h
 	../systems/cwlf_system.h
+	../systems/multiply_shift_system.h
 	../systems/identity_function.h
 	../systems/linear_map_system.h
 	../systems/polynomial_system.h
@@ -64,7 +65,6 @@ set(HEADERS
 set(SOURCES
 	${HEADERS}
 	../utils/storage_statistics.cpp
-	../utils/hash_math.cpp
 	../utils/static_random_generator.cpp
 	../utils/hash_assert.cpp
 	../utils/time_vector.cpp

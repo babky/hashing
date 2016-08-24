@@ -20,7 +20,7 @@ namespace Hash { namespace Systems { namespace Uniform {
 		// TODO: Figure this out.
 		// const static double DEFAULT_R_EXPONENT = 0.75;
 
-		~DietzfelbingerWoelfel(void) {
+		virtual ~DietzfelbingerWoelfel(void) {
 			delete [] z;
 		}
 

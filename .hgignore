@@ -55,7 +55,6 @@ syntax:regexp
 cmake/.*\.exe$
 cmake/.*\.txt$
 cmake/.*out.*$
-
 syntax: regexp
 \.png$
 syntax: regexp
@@ -68,3 +67,7 @@ syntax: regexp
 ^src/simple-linear-functions/\.pydevproject$
 data_structures/michal-koucky/hw5/cmake/...\.csv$
 data_structures/michal-koucky/hw5/cmake/...\.raw
+syntax:glob
+hashing\articles\thesis_babka\text\text.bbl
+hashing\articles\thesis_babka\text\text.blg
+hashing\articles\thesis_babka\text\text.toc

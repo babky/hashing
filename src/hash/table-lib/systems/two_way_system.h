@@ -37,6 +37,9 @@ namespace Hash { namespace Systems {
 			reset();
 		}
 
+		virtual ~TwoWaySystem(void) {
+		}
+
 		virtual void reset(void) {
 			f.reset();
 			g.reset();
