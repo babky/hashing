@@ -9,7 +9,7 @@ namespace Hash { namespace Math {
 	unsigned int log2ceil(T i) {
 		unsigned int l = 0;
 
-		for (T x = 1; x < i; x *= 2) {
+		for (T x = 1; x && (x < i); x *= 2) {
 			++l;
 		}
 
@@ -22,7 +22,7 @@ namespace Hash { namespace Math {
 		if (i == (static_cast<T> (1)) << l) {
 			return l;
 		} else {
-			return l / 2;
+			return l - 1;
 		}
 	}
 

@@ -1,5 +1,5 @@
-#ifndef CWLF_SYSTEM_H
-#define CWLF_SYSTEM_H
+#ifndef MULTIPLY_SHIFT_SYSTEM_H
+#define MULTIPLY_SHIFT_SYSTEM_H
 
 #include <algorithm>
 #include "systems/universal_system.h"
@@ -11,25 +11,26 @@
 namespace Hash { namespace Systems {
 
 	/**
-	 * Carter - Wegman system of linear functions.
+	 * Dietzfelbinger's multiply shift system.
 	 */
 	template <typename T, class Storage>
 	class MultiplyShiftSystem : public Hash::Systems::UniversalFunction<T, Storage> {
 	public:
 		explicit MultiplyShiftSystem(size_t aTableSize = StorageParams::INITIAL_STORAGE_SIZE, size_t aUniversumMax = 0):
-		  universumMax(aUniversumMax),
 		  tableSize(aTableSize) {
+			setUniversumMax(aUniversumMax);
 			reset();
 		}
 
 		void setUniversumMax(T aUniversumMax) {
-			universumMax = aUniversumMax;
-
-			if (universumMax == 0) {
-				universumMax = std::numeric_limits<T>::max;
+			if (aUniversumMax == 0) {
+				universumMax = std::numeric_limits<T>::max();
+			} else {
+				universumMax = aUniversumMax;
 			}
 
-			lshift = sizeof(T) * 8 - Hash::Math::log2ceil(aUniversumMax);
+			// Remove the bits overflowing the universum max.
+			lshift = sizeof(T) * 8 - Hash::Math::log2ceil(universumMax);
 		}
 
 		T getUniversumMax(void) const {
@@ -38,7 +39,8 @@ namespace Hash { namespace Systems {
 
 		void setTableSize(size_t size) {
 			this->tableSize = size;
-			this->rshift = lshift + Hash::Math::log2ceil(universumMax) - Hash::Math::log2exact(size);
+			// Shift the bits so that the log2(size) bits are the rightmost ones.
+			this->rshift =  sizeof(T) * 8 - Hash::Math::log2exact(size);
 		}
 
 		size_t getTableSize(void) const {
@@ -54,7 +56,7 @@ namespace Hash { namespace Systems {
 		}
 
 		size_t hash(const T & x) {
-			size_t hv = ((a * x) << rshift) >> lshift;
+			size_t hv = ((a * x) << lshift) >> rshift;
 			return hv;
 		}
 
@@ -82,10 +84,10 @@ namespace Hash { namespace Systems {
 namespace std {
 
 	template <typename T, class Storage>
-	void swap(Hash::Systems::UniversalFunctionCWLF<T, Storage> & a, Hash::Systems::UniversalFunctionCWLF<T, Storage> & b) {
+	void swap(Hash::Systems::MultiplyShiftSystem<T, Storage> & a, Hash::Systems::MultiplyShiftSystem<T, Storage> & b) {
 		a.swap(b);
 	}
 
 }
 
-#endif /* CWLF_SYSTEM */
+#endif /* MULTIPLY_SHIFT_SYSTEM_H */

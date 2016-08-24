@@ -6,11 +6,14 @@ namespace Hash { namespace Systems {
 	template<typename T, class Storage>
 	class CWLFExponentialSystem: public Hash::Systems::UniversalFunction<T, Storage> {
 	public:
+		static const size_t DEFAULT_MAX_DEGREE = 5;
+
 		explicit CWLFExponentialSystem(size_t aTableSize = StorageParams::INITIAL_STORAGE_SIZE, size_t aUniversumMax =
 				Hash::Math::Prime<T>::GREATEST_PRIME) :
-				universumMax(aUniversumMax), tableSize(aTableSize) {
+				universumMax(aUniversumMax),
+				tableSize(aTableSize),
+				maxDegree(DEFAULT_MAX_DEGREE) {
 			reset();
-			this->maxDegree = 5;
 		}
 
 		void setUniversumMax(T aUniversumMax) {
@@ -43,7 +46,7 @@ namespace Hash { namespace Systems {
 
 			a = g.generate();
 			b = g.generate();
-			i = g.generate() % this->maxDegree + 1; // TODO: Constant, logarithm, whatever.
+			i = (g.generate() % this->maxDegree) + 1; // TODO: Constant, logarithm, whatever.
 			// x ^ 0 equals one, so we can not use 0 :).
 		}
 
