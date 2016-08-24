@@ -30,6 +30,10 @@
 \newcommand{\vbin}[2]{\operatorname{\mathbf{bin}}({#1}, {#2})}
 \newcommand{\vlbin}[1]{\operatorname{\mathbf{lbin}}({#1})}
 
+\newcommand{\vecspace}[2]{\mathbb{Z}_{#1}^{#2}}
+\newcommand{\binvecspace}[1]{\vecspace{2}{#1}}
+\newcommand{\linearmaps}[2]{\mathcal{L}_{#1}^{#2}}
+\newcommand{\surjectivelinearmaps}[2]{\mathcal{LS}_{#1}^{#2}}
 
 \newcommand{\probs}[2]{\operatorname{\mathbf{Pr}}_{{#1}}\left[{#2}\right]}
 \newcommand{\prob}[1]{\probs{}{#1}}
@@ -41,6 +45,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
 
 
 \title{Expected number of uniformly distributed balls in a most loaded bin using placement with simple linear functions}
@@ -462,6 +467,149 @@ Then $\expect{\vlbin{a[m] + b}} = O(1)$.
 \begin{proof}
 Direct corollary of Theorem~\ref{thm:interval-constant} since by Lemma~\ref{lemma:transformation} the probabilistic properties of $[m]$ do not change under the transformation $x \mapsto (ax + b) \bmod p$.
 \end{proof}
+
+
+\section{A Special Case for $S$ Being a Vector Subspace}
+
+Let us note that when $S$ is a subspace of the universe, then all the non-empty bins are of the same size.
+First notice that the bins have a simple structure -- all of them are formed by elements which are affine subspaces of the universe.
+This means that bins have the same size and in addition the bin of vector $0$ in $\binvecspace{2}$ always exists and is a largest bin of expected constant size.
+
+\begin{theorem}
+Let $b, u \in \mathbb{N}$ and $v_1, \dots, v_b \in \mathbb{Z}_2^u$ be linearly independent. Then \[ \expects{h \in_U \linearmaps{u}{b}}{\lbin{h}{\operatorname{Span}(v_1, \dots, v_b)}} = O(1) .\]
+\end{theorem}
+\begin{proof}
+For convenience put $S = \operatorname{Span}(v_1, \dots, v_b)$. 
+We show that each non-empty bin created by a transformation $h$ is formed by balls from an affine subspace of $S$ and has the size of the kernel of $h$.
+From this it follows that $\expect{\lbin{h}{S}} = \expect{\bin{h}{S}{0}} = O(1)$.
+
+Without loss of generality assume that $v_1, \dots, v_k$ are the vectors forming the kernel of $h$, i.e. $h(v_i) = 0$ where $i \in \{1, \dots, k\}$.
+If $h(v) = y$ for some $v \in S$, then $h^{-1}(y) \cap S = v + \operatorname{Span}(v_1, \dots, v_k)$.
+Hence for each $y \in \mathbb{Z}_2^b$ it holds hat $|h^{-1}(y) \cap S| = 0 \vee |h^{-1}(y) \cap S| = 2^k$.
+Thus the sizes of all the non-empty bins are the same and are equal to $\bin{h}{S}{0}$.
+\end{proof}
+
+
+
+We present a different proof of this property coming from the following ideas.
+Notice that the structure of the bins can give an upper bound of having $l$ colliding elements.
+The fact that we can find a bin which is always present avoids using the union bound.
+
+\begin{theorem}
+\label{theorem-bound-general}
+If $A \subseteq \binvecspace{b}$, $\alpha_0 = 1 - |A|/2^b$, then \[\probs{f_1, \dots, f_b \in_U \binvecspace{b}}{1 - |A \cup (A + \operatorname{Span}(f_1, \dots, f_b)|/2^b \geq \mu} \leq \alpha_0^{b - \log \log \mu^{-1} + \log \log \alpha_0^{-1}}.\]
+\end{theorem}
+\begin{proof}
+In~\cite{alonetal}.
+\end{proof}
+
+There is a chain of length at least $2^l$ iff $\operatorname{dim}(\operatorname{Ker}(T)) \geq l$, i.e. $\operatorname{rank}(T) < b - l$.
+Let $e_1, \dots, e_b$ be the canonical basis of $\binvecspace{b}$. For each $e_i$ mapping  $T$ choses its image $f_i \in_U \binvecspace{b}$.
+Mapping $T$ has rank less than $b - l$ iff $|\operatorname{Span}(f_1, \dots, f_b)| < 2^{b - l}$, i.e. $1 - |\operatorname{Span}(f_1, \dots, f_b)|/2^b > 1 - 2^{-l}$.
+In our setting it holds $T(S) = \operatorname{Span}(f_1, \dots, f_b)$.
+Hence $\lbin{T}{S} \geq 2^l$ iff $1 - |\operatorname{Span}(f_1, \dots, f_b)|/2^b > 1 - 2^{-l}$.
+
+If we directly apply Theorem~\ref{theorem-bound-general} for $A = \{\vec{0}\}$ and the vectors $f_1, \dots, f_b$ chosen by $T$ we get the following estimate:
+\[
+\probs{}{\lbin{T}{S} \geq 2^l} \leq (1 - 2^{-b})^{b - \log (-\log (1 - 2^{-l})) + \log (-\log (1 - 2^{-b}))} \approx (1 - 2^{-b})^{b + l - b} \leq (1-2^{-b})^{l}.
+\]
+This is not sufficient to get $O(1)$ bound since the bound provided by Theorem~\ref{theorem-bound-general} for $\alpha_0$ close to $1$ is not tight.
+Consider $A = \{\vec{0}\}$, i.e. $\alpha_0 = 1 - 2^{-b}$ and we add a single random vector $\vec{v}$ to $A$, i.e. $\alpha_1 = 1 - |A \cup (A + \vec{v})|/2^b$, then $\probs{v\in_U\binvecspace{b}}{\alpha_1 \geq 1 - 2^{-b}} = 2^{-b}$ since this is equivalent to $v = \vec{0}$.
+From Theorem~\ref{theorem-bound-general} we get only
+\[
+\probs{v\in_U\binvecspace{b}}{\alpha_1 \geq 1 - 2^{-b}} \leq \alpha_0^{1 - \log \log \alpha_0^{-1} + \log \log \alpha_0^{-1}} = 1 - 2^{-b}.
+\]
+Compare $2^{-b}$ to the bound $1-2^{-b}$ obtained from the direct application of Theorem~\ref{theorem-bound-general}.
+
+To get a sufficient result we use factorization similar to the one used in the proof of Theorem~7a in~\cite{alonetal}. It ensures that $\alpha_0$ is large enough.
+First we bound the probability of having many collisions under a universal function $T$ following from using CSB and Markov inequalities.
+This is a generalization of the well-known property of universal functions saying that $\probs{T \in_U \linearmaps{u}{b}}{\mbox{number of collisions created by }T \geq \frac{k}{2^b} \binom{|S|}{2}} \leq \frac{1}{k}$.
+\begin{lemma}
+\label{lemma-collisions-general}
+\[
+\probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq \frac{|S|}{k}} \leq \frac{|S| - 1}{(k - 1)2^b} \leq \frac{|S|}{k2^b}.
+\]
+\end{lemma}
+\begin{proof}
+Use CSB to bound the number of collisions from below and then use Markov inequality to obtain the probability bound.
+\end{proof}
+
+Now we switch back to bounding the probability of having a long chain.
+We factor through a vector space $F$ of dimension $b$, i.e. the dimension of both source and target space.
+The factorization is as usual, $T = T_0 \circ T_1$ where $T_1$ is surjective.
+
+\begin{align*}
+& \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l}} \\
+& \quad \leq \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \wedge |T_0(S)| \leq 2^{b - \sqrt{l}}} + \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \wedge |T_0(S)| > 2^{b - \sqrt{l}}} \\
+& \quad \leq \probs{T \in_U \linearmaps{u}{b}}{|T_0(S)| \leq 2^{b - \sqrt{l}}} + \probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \mid |T_0(S)| > 2^{b - \sqrt{l}}}.
+\end{align*}
+Now by Lemma~\ref{lemma-collisions-general} we get
+$
+\probs{T \in_U \linearmaps{u}{b}}{|T_0(S)| \leq 2^{b - \sqrt{l}}} \leq 2^{-\sqrt{l}}.
+$
+Let us fix $T_0$ and denote $S_1 = T_0(S)$. From Theorem~\ref{theorem-bound-general} it follows that 
+\[
+\probs{T \in_U \linearmaps{u}{b}}{|T(S)| \leq 2^{b - l} \mid |T_0(S)| > 2^{b - \sqrt{l}}} = 
+\probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{|T_1(S_1)| \leq 2^{b - l} \mid |S_1| > 2^{b - \sqrt{l}}}.
+\]
+Directly use the following fact used in the proof of Theorem~7b in \cite{alonetal}.
+Let $A \subseteq \binvecspace{u}$, $\alpha = 1 - |A|/2^u$
+\[
+\probs{T \in_U \surjectivelinearmaps{u}{b}}{1 - |T(A)|/2^b \geq 1 - 2^{-l}} \leq \alpha^{u - b - \log \log \left(1 - 2^{-l}\right)^{-1} + \log \log \alpha^{-1}}.
+\]
+Since $-2^{-l} \geq \log(1 - 2^{-l})$ we get
+$
+\probs{T \in_U \surjectivelinearmaps{u}{b}}{1 - |T(S)|/2^b \geq 1 - 2^{-l}} \leq \alpha^{u - b + l + \log \log \alpha^{-1}}.
+$
+In our case we have $u := b$, $b := b$, $T := T_1$, $A := S_1$ and $\alpha \leq 1-2^{-\sqrt{l}}$.
+Moreover whenever $l \geq 2$, we have that $-2^{-l/2 + 1} \leq \log (1 - 2^{-l/2})$ and $1-2^{-\sqrt{l}} \leq e^{-\log(2)\sqrt{l}} \leq 2^{-\sqrt{l}}$.
+Finally
+\begin{align*}
+& \probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{|T_1(S_1)| \leq 2^{b - l} \mid |S_1| > 2^{b - 2\log l}} \\
+& \quad = \probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{1 - |T_1(S_1)|/2^b \geq 1 - 2^{-l} \mid |S_1| > 2^{b - 2\log l}} \\
+& \quad \leq \left(1 - 2^{-2\log l}\right)^{l + 1 - l/2} \leq e^{-2^{-\sqrt{l}}(l/2 + 1)} \leq e^{-\sqrt{l}/2}.
+\end{align*}
+
+\section{Natural set for the multiply-shift system}
+
+\begin{definition}[Mutliply-shift system]
+Let $k, b \in \mathbb{N}$, $k \geq b$ and $a \in [2^k]$, $2 \nmid a$.
+Let the function $h_a$, $h_a \colon [2^k] \to [2^b]$, map $x$ to $h_a(x) =(ax \bmod 2^k) \div 2^{k - b}$.
+The system $\mathcal{MS}_{k}^{b} = \{h_a \mid a \in [2^k], 2 \nmid a\}$ is called \emph{multiply-shift system}.
+\end{definition}
+
+Let $m = 2^b$.
+The best possible case is when $S = [m] + 2^{k} - m$. Then there is no function which creates a collision on such a set.
+The elements of $S$ are numbers with the $k-b$ least significant bits equal to zero.
+
+Let $x, y \in S$, $x \neq y$. Observe that for any $a \in [2^k]$, $2 \nmid a$, we have $ax \bmod 2^k \neq ay \bmod 2^k$ and the $k - b$ least significant bits of both values are zeros.
+Hence $h_a(x) \neq h_a(y)$.
+
+We can prove $\expects{T}{\lbin{T}{S}} = O(1)$ for $S = [m]$.
+Let us note that for an odd $a$ the sets $[m]$ and $a[m]$ have the same behavior with respect to $\mathcal{MS}_{k}^{b}$ since multiplication by an odd number just permutes the functions.
+From this it follows that for any $a \in [2^k]$, $2 \nmid a$ and $S = a[m]$ we get the same expectation as for $S = [m]$. 
+\begin{lemma}
+When $k \geq 2b$ and $S = [2^b]$, then $\expects{T}{\lbin{T}{S}} = O(1)$.
+\end{lemma}
+\begin{proof}
+Let $y \in [2^b]$, then $h_a^{-1}(y) = (a^{-1} (y + [2^{k - b}])) \bmod 2^k$ where the inverse of $a$ is taken in $[2^k]$.
+\begin{claim}
+Let $\operatorname{GCD}(g, 2^k) = 1$, then $g(y + [2^{k - b}]) \bmod 2^{k} \cap [2^b]$ is a union of at most two arithmetic progressions.
+\end{claim}
+\begin{proof}
+If $g < 2^b$, then the claim holds since $g2^{k - b} < 2^k$. The shift by $yg$ can split the arithmetic progression with the difference $g$ intersecting with $[2^{b}]$ into at most two progressions.
+
+If $g > 2^b$, then from the assumption that $k \geq 2b$  we get that the elements in the intersection are the first elements from the leaps over $2^k$. We use an inductive argument on the first elements of leaps intersecting the input set, i.e. $((-2^k) \bmod a) [ma/2^k] \cap [2^b]$.
+\end{proof}
+
+\begin{itemize}
+ \item The longest chain is always formed with $0$ as its smallest element.
+ \item Probability of collision of an arithmetic progression of length $l$ into a single element
+\end{itemize}
+\end{proof}
+
+\section{Natural set for linear functions modulo prime}
+
 
 
 \begin{thebibliography}{32}
