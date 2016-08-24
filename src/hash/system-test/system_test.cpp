@@ -9,6 +9,7 @@
 #include "systems/polynomial_system.h"
 #include "systems/linear_map_system.h"
 #include "systems/cwlf_system.h"
+#include "systems/multiply_shift_system.h"
 #include "systems/cwlf_exponential_system.h"
 #include "systems/tabulation_system.h"
 #include "systems/polynomial_system.h"
@@ -93,8 +94,7 @@ public:
 
 	CompleteTest(size_t aLength, size_t aRepeats):
 		length(aLength),
-		repeats(aRepeats)
-	{
+		repeats(aRepeats) {
 	}
 
 	template<typename T>
@@ -112,6 +112,7 @@ public:
 		functions.push_back(new FunctionTest<PolynomialSystem<T, TestStorage>, T>("Polynomial - deg 2", length, repeats));
 		functions.push_back(new FunctionTest<PolynomialSystem4<T, TestStorage>, T>("Polynomial - deg 4", length, repeats));
 		functions.push_back(new FunctionTest<Uniform::DietzfelbingerWoelfel<T, TestStorage, Hash::Systems::PolynomialSystem4>, T>("DW - deg 4", length, repeats));
+		functions.push_back(new FunctionTest<MultiplyShiftSystem<T, TestStorage>, T>("MultiplyShift", length, repeats));
 
 		for (FunctionTestVector::iterator b = functions.begin(), e = functions.end(); b != e; ++b) {
 			(*b)->run();

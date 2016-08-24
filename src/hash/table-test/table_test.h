@@ -100,7 +100,7 @@ namespace Hash { namespace Tests {
 		}
 
 		virtual void testMassiveFill(void) {
-			const size_t ELEMENT_COUNT = 5000;
+			const size_t ELEMENT_COUNT = 5;
 
 			TableType t;
 			for (int i = 0; i < ELEMENT_COUNT; ++i) {
