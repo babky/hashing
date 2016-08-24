@@ -19,7 +19,7 @@ cmake/.*\.cmake
 vendor
 .hgignore
 src/hash/cwlf-dynamic-test/cmake/CWLFTest
-src/hash/table-length-test/cmake/TableLengthTest
+src/hash/table-simple-length-test/cmake/TableSimpleLengthTest
 src/hash/table-lib/cmake/libTable.a
 src/hash/cscope.out
 src/hash/system-test/cmake/SystemTest
