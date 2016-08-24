@@ -5,6 +5,7 @@
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include "math/double_word.h"
+#include "utils/hash_math.h"
 #include "storage.h"
 #include "utils/static_random_generator.h"
 
@@ -60,8 +61,8 @@ namespace Hash { namespace Systems {
 			return hv;
 		}
 
-		size_t operator()(const T & a) {
-			return hash(a);
+		size_t operator()(const T & x) {
+			return hash(x);
 		}
 
 		void swap(MultiplyShiftSystem & function) {
