@@ -7,6 +7,10 @@
 #include <iostream>
 #include <boost/format.hpp>
 
+/**
+ * This test is used to compute the size of the largest bin for various hash systems.
+ */
+
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512)
 #endif
@@ -260,7 +264,6 @@ int main(int argc, const char ** argv) {
 	size_t runs = DEFAULT_RUNS;
 	bool print_set = DEFAULT_PRINT_SET;
 
-	/*
 	options_description optsDesc("Table M Test allowed options.");
 	optsDesc.add_options()
 		("help", "prints this help message")
@@ -284,7 +287,7 @@ int main(int argc, const char ** argv) {
 		cout << optsDesc;
 		return 0;
 	}
-*/
+
 	try {
 		if (n == 0) {
 			n = m;

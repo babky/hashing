@@ -21,6 +21,10 @@ using namespace std;
 using namespace boost::posix_time;
 using namespace Hash::Utils;
 
+/**
+ * Testing of the (time) peformance of various hash systems.
+ */
+
 struct Test {
 	Test(string aName, size_t aLength, size_t aRepeats):
 		name(aName),
@@ -215,7 +219,7 @@ int main(int argc, char ** argv) {
 	for (TestVector::iterator b = v.begin(), e = v.end(); b != e; ++b) {
 		out << "TEST: length = " << setw(10) << b->getLength() << ", repeats = " << setw(2) << b->getRepeats() << "\n";
 		for (CompleteTest::FunctionTestVector::iterator fb = b->getFunctions().begin(), fe = b->getFunctions().end(); fe != fb; ++fb) {
-			out << setw(20) << (*fb)->getName() << " " << setw(6) << right << (*fb)->getTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(10) << fixed << setprecision(3) << (*fb)->getTimes().getMillisVariance() << "] ms\n";
+			out << setw(20) << (*fb)->getName() << " " << setw(6) << right << (*fb)->getTimes().getAverageTime().total_milliseconds() << " [(+/-) " << setw(12) << fixed << setprecision(3) << (*fb)->getTimes().getMillisVariance() << "] ms\n";
 		}
 		out << "\n";
 	}

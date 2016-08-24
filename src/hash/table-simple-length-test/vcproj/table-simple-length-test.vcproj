@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="table-length-test"
+	Name="table-simple-length-test"
 	ProjectGUID="{8B5A3427-A4E9-4CD1-A388-4EBD04968BE2}"
-	RootNamespace="tablelengthtest"
+	RootNamespace="tablesimplelengthtest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>

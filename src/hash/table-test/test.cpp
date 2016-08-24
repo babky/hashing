@@ -7,6 +7,16 @@
 #include "math/double_word.h"
 #include <iostream>
 
+/**
+ *  File contains the basic unit tests of
+ *   - the hash tables and functions,
+ *   - the modular arithmetics.
+ */
+
+/**
+ * Testing of the mathematic utilities from this project.
+ * Double word operations such as modular arithmetics, addition and multiplication.
+ */
 class MathTest : public TestSuite::DefaultTest {
 public:
 	virtual void runTest(void) {
