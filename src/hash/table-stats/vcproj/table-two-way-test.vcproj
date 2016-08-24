@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="table-two-way-test"
+	Name="table-stats"
 	ProjectGUID="{3B07E08A-0F61-4BC6-AD66-0718C25FB97F}"
-	RootNamespace="tabletwowaytest"
+	RootNamespace="tabletstats"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
