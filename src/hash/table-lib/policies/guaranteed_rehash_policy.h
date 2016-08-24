@@ -15,6 +15,9 @@ namespace Hash { namespace Policies { namespace Rehash {
 		  multiplicativeConstant(allowDelete ? MULTIPLICATIVE_CONSTANT_ALLOW_DELETE : MULTIPLICATIVE_CONSTANT_NO_DELETE) {
 		}
 
+		virtual ~GuaranteedRehashPolicy(void) {
+		}
+
 		inline double getMinLoadFactor(void) const{
 			return this->minLoadFactor;
 		}

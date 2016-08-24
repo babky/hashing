@@ -12,6 +12,9 @@ namespace Hash { namespace Policies { namespace Rehash {
 	class RehashPolicy {
 	public:
 #ifdef HASH_DEBUG
+		virtual ~RehashPolicy() {
+		}
+
 		/**
 		 * Check for the rehashing need after deletition.
 		 *
