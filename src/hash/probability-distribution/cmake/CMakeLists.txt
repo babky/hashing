@@ -1,7 +1,7 @@
 cmake_minimum_required	(VERSION 2.8.1)
 cmake_policy			(VERSION 2.8.1)
 
-find_package( Boost 1.59 COMPONENTS random program_options system thread date_time REQUIRED )
+find_package( Boost 1.34 COMPONENTS random program_options system thread date_time REQUIRED )
 
 SET(CMAKE_CXX_FLAGS "-std=gnu++0x -ggdb -O3")
 

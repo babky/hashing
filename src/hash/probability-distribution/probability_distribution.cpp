@@ -35,7 +35,7 @@ bool collide(Function & f, const ElementVector & elements) {
 }
 
 template<class Function>
-double collision_probability(const ElementVector & elements, size_t tableSize, size_t runs) {
+size_t collision_count(const ElementVector & elements, size_t tableSize, size_t runs) {
 	size_t collisions = 0;
 	Function f;
 	f.setTableSize(tableSize);
@@ -45,8 +45,7 @@ double collision_probability(const ElementVector & elements, size_t tableSize, s
 		collisions += collide(f, elements) ? 1 : 0;
 	}
 
-	return static_cast<double>(collisions) / runs;
-
+	return collisions;
 }
 
 int main(int argc, char ** argv) {
@@ -54,9 +53,9 @@ int main(int argc, char ** argv) {
 	typedef MultiplyShiftSystem<T, CollisionCountStorage<T, EqualityComparer<T>, size_t> > MultiplyShiftFunction;
 	typedef UniversalFunctionLinearMap<T, CollisionCountStorage<T, EqualityComparer<T>, size_t> > LinearMapFunction;
 
-	size_t tableSize = 256;
-	size_t universumMax = 1 << 24;
-	size_t runs = universumMax / 1024;
+	size_t tableSize = 32;
+	size_t universumMax = 1 << 10;
+	size_t runs = universumMax;
 
 	ElementVector v;
 	for (size_t i = 2; i < universumMax; ++i) {
@@ -65,11 +64,11 @@ int main(int argc, char ** argv) {
 		v.push_back(1);
 		v.push_back(i);
 
-		double cwlfProb = collision_probability<CWLFFunction>(v, tableSize, runs);
-		double msProb = collision_probability<MultiplyShiftFunction>(v, tableSize, runs);
-		double lmProb = collision_probability<LinearMapFunction>(v, tableSize, runs);
+		size_t cwlfColls = collision_count<CWLFFunction>(v, tableSize, runs);
+		size_t msColls = collision_count<MultiplyShiftFunction>(v, tableSize, runs);
+		size_t lmColls = collision_count<LinearMapFunction>(v, tableSize, runs);
 
-		std::cout << cwlfProb << "," << msProb << "," << lmProb << "\n";
+		std::cout << i << "," << cwlfColls << "," << msColls << "," << lmColls << "\n";
 	}
 
 
