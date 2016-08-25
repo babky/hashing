@@ -5,6 +5,7 @@ project (HashTable)
 
 
 add_subdirectory (../table-lib/cmake ../table-lib/cmake)
+add_subdirectory (../probability-distribution/cmake ../probability-distribution/cmake)
 add_subdirectory (../cwlf-dynamic-test/cmake ../cwlf-dynamic-test/cmake)
 add_subdirectory (../test-suite/cmake ../test-suite/cmake)
 add_subdirectory (../table-simple-length-test/cmake ../table-simple-length-test/cmake)
@@ -14,4 +15,3 @@ add_subdirectory (../table-time-test/cmake ../table-time-test/cmake)
 add_subdirectory (../m-test/cmake ../m-test/cmake)
 add_subdirectory (../induction-test/cmake ../induction-test/cmake)
 add_subdirectory (../table-two-way-test/cmake ../table-two-way-test/cmake)
-add_subdirectory (../probability-distribution/cmake ../probability-distribution/cmake)

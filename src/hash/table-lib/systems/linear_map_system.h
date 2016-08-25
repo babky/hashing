@@ -21,9 +21,9 @@ namespace Hash { namespace Systems {
 		const static size_t START_LENGTH = 10;
 
 		explicit UniversalFunctionLinearMap(size_t startLength = START_LENGTH):
-		  tableBitSize(START_LENGTH),
-		  tableSize(1 << startLength),
-		  matrix(0) {
+			tableBitSize(START_LENGTH),
+			tableSize(1 << startLength),
+			matrix(0) {
 			reset();
 		}
 
@@ -94,7 +94,7 @@ namespace Hash { namespace Systems {
 		}
 
 		void setUniversumMax(T) {
-			// TODO: Better exception to implement.
+			// TODO: Implement it.
 			throw new std::invalid_argument("Can not change the universum max for the linear maps system.");
 		}
 
@@ -123,6 +123,51 @@ namespace Hash { namespace Systems {
 		friend void swap(UniversalFunctionLinearMap & a, UniversalFunctionLinearMap & b) {
 			a.swap(b);
 		}
+
+		class Generator {
+		public:
+			explicit Generator(T aUniversumMax, size_t tableSize):
+				universumMax(aUniversumMax),
+				first(true) {
+				f.setTableSize(tableSize);
+				for (size_t i = 0; i != f.tableBitSize; ++i) {
+					f.matrix[i] = 0;
+				}
+			}
+
+			bool hasNext(void) const {
+				for (size_t i = 0; i != f.tableBitSize; ++i) {
+					if (f.matrix[i] < universumMax) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+
+			UniversalFunctionLinearMap<T, Storage> next() {
+				if (first) {
+					first = false;
+					return f;
+				}
+
+				for (size_t i = 0; i != f.tableBitSize; ++i) {
+					if (f.matrix[i] == universumMax) {
+						f.matrix[i] = 0;
+					} else {
+						++f.matrix[i];
+						break;
+					}
+				}
+
+				return f;
+			}
+
+		private:
+			UniversalFunctionLinearMap<T, Storage> f;
+			T universumMax;
+			bool first;
+		};
 
 	private:
 		/**

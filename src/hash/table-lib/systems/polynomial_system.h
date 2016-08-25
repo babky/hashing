@@ -9,6 +9,8 @@
 
 namespace Hash { namespace Systems {
 
+	// TODO: Remake universumMax
+
 	template<typename T, class Storage>
 	class PolynomialSystem : public UniversalFunction<T, Storage> {
 	public:

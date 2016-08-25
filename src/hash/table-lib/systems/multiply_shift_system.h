@@ -73,6 +73,33 @@ namespace Hash { namespace Systems {
 			std::swap(tableSize, function.tableSize);
 		}
 
+		class Generator {
+		public:
+			explicit Generator(T aUniversumMax, size_t tableSize) {
+				f.setUniversumMax(aUniversumMax);
+				f.setTableSize(tableSize);
+				f.a = 0;
+			}
+
+			bool hasNext(void) const {
+				return f.a < f.universumMax;
+			}
+
+			MultiplyShiftSystem<T, Storage> next() {
+				// First call.
+				if (f.a == 0) {
+					f.a = 1;
+					return f;
+				}
+
+				f.a += 2;
+				return f;
+			}
+
+		private:
+			MultiplyShiftSystem<T, Storage> f;
+		};
+
 	private:
 		T universumMax;
 		T a;
