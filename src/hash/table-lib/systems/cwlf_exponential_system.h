@@ -3,6 +3,8 @@
 
 namespace Hash { namespace Systems {
 
+	// TODO: Remake universumMax!
+
 	template<typename T, class Storage>
 	class CWLFExponentialSystem: public Hash::Systems::UniversalFunction<T, Storage> {
 	public:

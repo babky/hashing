@@ -18,6 +18,9 @@ namespace Hash { namespace Systems {
 		void reset(void) {
 		}
 
+		virtual ~Tr1Function(void) {
+		}
+
 		virtual size_t getTableSize(void) const {
 			return mask + 1;
 		}
