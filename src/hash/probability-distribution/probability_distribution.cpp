@@ -209,15 +209,15 @@ int main(int argc, char ** argv) {
 	};
 
 	ElementVector v;
-	for (size_t i = 2; i != universumSize; ++i) {
+	for (size_t i = 3; i != universumSize; ++i) {
 		v.clear();
-		v.push_back(0);
 		v.push_back(1);
+		v.push_back(2);
 		v.push_back(i);
 
 		size_t cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
 		size_t msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
-		size_t lmColls = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(universumMax * universumMax * universumMax, tableSize));
+		size_t lmColls = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(universumMax * tableSize, tableSize));
 
 		std::cout << i << "," << cwlfColls << "," << msColls << "," << lmColls << "\n";
 	}
