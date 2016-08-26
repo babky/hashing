@@ -1,0 +1,424 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+% Labeling density
+\newcommand{\density}[2]{\rho(#1, #2)}
+\newcommand{\zdensity}[2]{\bar\rho(#1, #2)}
+\newcommand{\rdensity}[2]{\delta(#1, #2)}
+\newcommand{\length}[1]{\ell(#1)}
+\newcommand{\charge}[2]{c(#1, #2)}
+\newcommand{\new}[2]{\operatorname{new}(#1, #2)}
+\newcommand{\scount}[2]{n(#1, #2)}
+\newcommand{\segment}[2]{S(#1, #2)}
+\newcommand{\segmentt}[2]{S^+(#1, #2)}
+\newcommand{\segments}[1]{L(#1)}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\newtheorem{definition}{Definition} % [chapter]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{example}[definition]{Example}
+\newtheorem{claim}[definition]{Claim}
+\newtheorem{statement}[definition]{Statement}
+%%% END Article customizations
+
+\begin{document}
+
+\section{Labeling}
+
+We prove a lower bound for the non-smooth case of Labeling problem with super-linear and sub-polynomial array sizes.
+The size of the label space, denoted $m$, is therefore between $2n$ and $n^{1 + o(1)}$.
+The number of elements is denoted by $n$.
+We prove the lower bound stated in the following theorem.
+\begin{theorem}
+\label{thm:lower-bound}
+The cost of the labeling for $n$ elements into a labeling space with size $m$, $m \geq 2n$, and $m \in n^{1 + o(1)}$ is in
+\[
+\Omega\left(\frac{n\log^2 n}{\log m - \log n}\right).
+\]
+\end{theorem}
+
+\subsection{Adversary and Algorithm}
+Our adversary builds a segment hierarchy after each insertion. 
+The time $t$ refers to the situation after insertion of the $t$-th element.
+Our adversary always inserts an element into the last segment of the segment hierarchy so that the inserted element is its median.
+
+\subsection{Definitions and Notation}
+Each segment is a subinterval of the interval $[1, m]$ with the integral bounds.
+The length of a segment $S = [i, j]$ is denoted by $\length{S}$ and equals $j - i + 1$, the number of elements inside $S$ at the time $t$ is denoted by $\scount{S}{t}$.
+We define the density of a segment $S$ at the time $t$ as $\density{S}{t} := \scount{S}{t}/\length{S}$.\footnote{We also use the same notation for disjunction of two disjoint segments. We extend it in the way that $\length{S_1 \cup S_2} = \length{S_1} + \length{S_2}$ and $\scount{S_1 \cup S_2}{t} = \scount{S_1}{t} + \scount{S_2}{t}$.}
+
+The number of segments at the time $t$ is denoted by $\segments{t}$.
+The hierarchy at each time is a sequence of nested intervals $\segment{1}{t}, \dots, \segment{\segments{t}}{t}$, i.e. $S_{i + 1} \subset S_{i}$.
+The topmost interval equals $[1, m]$ at each time $t$ and is denoted by $\segment{1}{t}$.
+The segment at the $i$-th level is denoted by $\segment{i}{t}$.
+
+\subsection{Rebuilding of the Hierarchy}
+We distinguish between two types of segments -- bad segments and good segments.
+According to the segment type we choose the subsegment on the next level.
+Before we proceed we show a technical lemma stating certain facts about the density of the segments.
+
+\begin{lemma}
+\label{lm:density-estimate}
+Let $S' \subset S$ be a subsegment of the segment $S$ such that $\frac{n(S, t)}{2} \leq n(S', t)$. 
+Assume that $\density{S - S'}{t} \leq c \cdot \density{S}{t}$ where $c \geq 1$, then $\density{S'}{t} \geq \frac{\density{S}{t}}{c}$.
+\end{lemma}
+\begin{proof}
+We compute the density of the segment $S'$.
+\[
+\begin{split}
+\density{S'}{t}
+	& = \frac{\scount{S'}{t}}{\length{S'}} = \frac{\scount{S}{t} - \scount{S - S'}{t}}{\length{S'}} = \frac{\density{S}{t}\length{S} - \density{S-S'}{t}(\length{S} - \length{S'})}{\length{S'}} \\
+	& \geq \frac{\length{S}\density{S}{t}(1 - c) + c\density{S}{t}\length{S'}}{\length{S'}} = \frac{-(c - 1)\scount{S}{t}}{\length{S'}} + c\density{S}{t} \\
+	& \geq -2(c - 1)\density{S'}{t} + c\density{S}{t}.
+\end{split}
+\]
+
+Now use the fact that $\frac{c}{(2c - 1)} \geq \frac{1}{c}$ since $c^2 \geq 2c -1$.
+We get that
+\[
+\density{S'}{t} \geq \frac{c\density{S}{t}}{2c - 1} \geq \frac{\density{S}{t}}{c}.
+\]
+\end{proof}
+
+From now on we fix a constant $c$ which is in the interval $[1, 2]$ for $n$ large enough.
+Our choice of $c$ is $c := 2^{\frac{8\log \frac{m}{n}}{\log n}}$.
+Remember that from now on we use this $c$ throughout the proof. 
+
+Let $B_L(S, t)$ and $B^2_L(S, t)$ be the densest possible subsegments of $S$ consisting of the leftmost $\lceil\scount{S}{t}/8\rceil$ and respectively $\lceil\scount{S}{t}/4\rceil$ elements of $S$. Similarly we define the subsegments $B_R(S, t)$ and $B^2_R(S, t)$.
+
+\begin{definition}[Good and bad segments]
+Segment $S$ is \emph{bad} if there is a segment $S'$ such that $B_L(S, t) \subseteq S' \subseteq B^2_L(S, t)$ or $B_R(S, t) \subseteq S' \subseteq B^2_L(R, t)$ and $\density{S'}{t} \geq c \cdot \density{S}{t}$
+Otherwise we say that the segment $S$ is \emph{good}.
+\end{definition}
+
+We also need the following notation. The last creation time of the segment at the level $i$ before $t$ is denoted by $b(i, t)$. Similarly the time of the closest dismiss of $\segment{i}{t}$ from the hierarchy at the time $t$ is denoted by $d(i, t)$.
+
+\begin{definition}[Touched subsegment]
+For each good segment $\segment{i}{t}$ we keep a subsegment $\segmentt{i}{t} \subset \segment{i}{t}$ which we refer to as the touched subsegment.
+\end{definition}
+Remember that the touched subsegment changes in time. And we also build the hierarchy so that $\segment_{i + 1}{t} \subset \segmentt{i}{t}$ for a good segment $\segment{i}{t}$.
+
+\begin{definition}[Critical level]
+Assume that there is a rearrange at the time $t$. We define the \emph{critical level} of the mentioned rearrange to be the maximal number $i$ such that 
+\begin{itemize}
+	\item the $\segment{i}{t}$ is be good at $b(i, t)$ and
+	\item the rearrange is strictly in contained in $\segmentt{i}{t}$ and
+	\item the rearrange touches $B_L(\segment{j}{t}, b(j, t)) \cup B_R(\segment{j}{t}, b(j, t))$ for the minimal $j > i$ such that $\segment{j}{t}$ was good at $b(j, t)$.
+\end{itemize}
+\end{definition}
+
+Now we are ready to show the reconstruction of the hierarchy. 
+The hierarchy is built for the first time at the time $\frac{n}{2}$ with the critical level $1$ and $\segment{1}{\frac{n}{2}$} is put to be $[1, m]$.
+
+Now we may assume that there is a rearrange at the time $t$ with the critical level $i$. We show a procedure creating the hierarchy at $t + 1$.
+\begin{itemize}
+	\item The segment at the critical level is preserved, i.e. $\segment{i}{t + 1} := \segment{i}{t}$.
+	\item The touched subsegment of the segment is changed so that $\segmentt{i}{t + 1} := \segmentt{i}{i} \cup R$ where $R$  is the segment of the rearrange.
+\end{itemize}
+
+Now we rebuild the hierarchy recursively in the following way.
+Assume that the segment $\segment{i}{t + 1}$ is already built.
+\begin{itemize}
+	\item If $\scount{\segment{i}{t + 1}}{t} \leq 16$, then we stop.
+	\item We build the segment on the next level according to the segment type of the segment on the previous level.
+		\begin{itemize}
+			\item[\emph{The segment $\segment{i}{t + 1}$ is good at $b(i, t + 1)$.}] The segment $\segment{i + 1}{t + 1}$ will be the densest subsegment of $\segmentt{i}{t}$ containing $\lfloor\scount{\segmentt{i}{t}}{t}/2\rfloor$ elements.
+			\item[\emph{The segment $\segment{i}{t + 1}$ is bad at $b(i, t + 1)$.}] The segment $\segment{i + 1}{t + 1}$ will be the subsegment of $S'$ of $\segment{i}{t + 1}$ showing that $\segment{i}{t + 1}$ is bad.
+		\end{itemize}
+		If the created segment $\segment{i + 1}{t + 1}$ is good we define the touched subsegment $\segmentt{i + 1}{t + 1} := \segment{i + 1}{t + 1} - (B^2_L(i, t) \cup B^2_R(i, t))$.
+\end{itemize}
+
+\begin{lemma}
+\label{lm:pigeonhole-density}
+If $\segment{i}{t}$ is good, then $\density{\segment{i + 1}{t}}{t} \geq \density{\segmentt{i}{t}}{t}$.
+\end{lemma}
+\begin{proof}
+Split $\segmentt{i}{t}$ into two halves according to the number of elements.
+If $\scount{\segmentt{i}{t}}{t}$ is even the denser part contains the wanted number of elements and has the desired density.
+If $\scount{\segmentt{i}{t}}{t}$ is odd and the denser part contains $\lceil\scount{\segmentt{i}{t}}{t}/2\rceil$ elements move the border element to the other part and thus obtain the wanted subsegment.
+\end{proof}
+
+\begin{lemma}
+If $\segment{i}{t}$ is good, then $\density{\segment{i + 1}{t}}{t} \geq \frac{\density{\segment{i}{t}}{t}}{\delta}$.
+\end{lemma}
+\begin{proof}
+Realize that $\density{\segment{i}{t} - \segmentt{i}{t}}{t} = \density{\segment{i}{t} - \segmentt{i}{t}}{b(i, t)} \leq c \density{\segment{i}{t}}{b(i, t)} \leq \density{\segment{i}{t}}{t}$.
+Lemmas~\ref{lm:pigeonhole-density}~and~\ref{lm:density-estimate} used for $S' = \segmentt{i}{t}$ imply that $\density{\segmentt{i + 1}{t}}{t} \geq \frac{\density{\segment{i}{t}}{t}}{\delta}$.
+\end{proof}
+
+\begin{lemma}
+From the construction it holds that $\length{\segment{i + 1}{t}} \leq \length{\segment{i}{t}}/2$.
+\end{lemma}
+\begin{proof}
+We choose the densest subsegment for a good segment $\segment{i}{t}$ and therefore the length is at least halved.
+In a bad segment we choose a subsegment denser than the whole segment containing less than half of the elements nested in the segment.
+\end{proof}
+
+\begin{lemma}
+\label{lm:L-bounds}
+It holds that $\log_8 (n/2) - 2 \leq L(t) \leq \log_4 n$.
+\end{lemma}
+\begin{proof}
+On each level $i$ we distribute at least $\lceil \scount{\segment{i}{i}}{b(i, t)}/8 \rceil$ elements to the next level.
+Since we stop when $\scount{\segment{i}{i}}{b(i, t)} \leq 16$ and the hierarchy is built when $t \geq n/2$ we get the wanted lower bound.
+The same distribution argument used with the fact that at most one quarter of elements is distributed to the next level implies the upper bound.
+\end{proof}
+
+\begin{corollary}
+\label{cor:L-bound}
+For $n$ large enough it holds that $L(t) \geq \log(n) / 4$.
+\end{corollary}
+\begin{proof}
+Follows from Lemma~\ref{lm:L-bounds}.
+\end{proof}
+
+\subsection{Charging Scheme} 
+Now we are ready to describe the charging scheme which distributes the cost of each rearrange among the inserted items.
+For each inserted element $x$ and level $i$ we have the function $\charge{x}{i}$ which returns the \emph{charge} of the element $x$ on the level $i$.
+First we have to show that cost of the labeling sequence is bounded from below by $\sum_{x, i} \charge{x}{i}$.
+Then we also bound $\charge{x}{i}$.
+
+\begin{definition}[New element]
+An element $x$ is \emph{new} in the segment $\segment{i}{t}$ if it was inserted at the time $t$ such that $b(i, t) \leq t \leq d(i, t)$.
+The number of new elements in $\segment{i}{t}$ at the time $t$ is denoted by $\new{\segment{i}{t}}{t}$.
+\end{definition}
+
+\begin{definition}[Charge]
+Let $x$ be an element inserted at the time $t$.
+Assume that the segment $\segment{i}{t}$ was good at $b(i, t)$ and  $t \in \left[\left\lceil \frac{b(i, t) + d(i, t)}{2}\right\rceil, d(i, t) \right]$.
+Then we define the \emph{charge} of the element $x$ on the level $i$ as 
+\[
+	\charge{x}{i} := \frac{\scount{\segment{i}{t}}{b(i, t)}}{4 \cdot \new{\segment{i}{t}}{d(i, t)}}.
+\]
+Otherwise we put $\charge{x}{i} := 0$.
+\end{definition}
+
+Notice that $\new{\segment{i}{t}}{t} = t - b(i, t) + 1$ and the new elements in the segment are contained in $\segment{i + 1}{t} \subset \segmentt{i}{t}$.
+
+\begin{lemma}
+\label{lm:charges-disjoint}
+Let $\operatorname{cost}$ be the cost of the generated labeling sequence. Then $\operatorname{cost} \geq \sum_{x, i} \charge{x}{i}$.
+\end{lemma}
+\begin{proof}
+Assume that there is a rearrange at the time $t$ with the critical level $i$. Then for every level $j$, such that $j > i$ and $\segment{j}{t}$ is good, the rearrange came out of $B^2_L(\segment{j}{t}, b(j, t))$ (or $B^2_R(\segment{j}{t}, b(j, t))$).
+Therefore we are allowed to charge the cost of $\frac{\scount{\segment{i}{t}}{b(i, t)}}{8}$ on the level $j$.
+We distribute the cost of only among the last half of the new elements on each level $j$.
+Hence we get that the work on the level $j$ is distributed properly on the new elements for the rearrange.
+The lemma follows from the fact that the charged work is ``disjoint'' for the different levels.
+\end{proof}
+
+\subsection{Estimating a Single Charge}
+
+In this subsection we are going to estimate $\charge{x}{i}$ for a single element $x$ inserted at the time $t$ using the quantities depending only on $t$ and $i$.
+\begin{lemma}
+\label{lm:charge-estimate}
+Assume that the element $x$ is inserted at the time $t$ and is charged on the level $i$.
+Then $\charge{x}{i} \geq -\frac{c}{7} + \frac{c \density{\segmentt{i}{t}}{t}}{56 \cdot \left(c\density{\segmentt{i}{t}}{t} - \density{\segment{i}{t}}{t}\right)}$.
+\end{lemma}
+\begin{proof}
+For simplicity in this proof we denote $\segment{i}{t}$ by $S$, $\segmentt{i}{t}$ by $S^+$, $b(i, t)$ by $b$ and $d(i, t)$ by $d$.
+\begin{claim}
+For the element $x$ it holds that $\new{S}{t} \geq \new{S}{d} / 2$.
+\end{claim}
+\begin{proof}
+Follows from the fact that only the last half of the new elements is charged.
+\end{proof}
+
+\begin{claim}
+It holds that $\new{S}{t} \leq \length{S^+}(\density{S^+}{t} - \density{S}{b}/c)$.
+\end{claim}
+\begin{proof}
+We can compute the number of new elements as 
+\[
+	\new{S}{t} = \density{S^+}{t}\length{S^+} - \density{S^+}{b}\length{S^+}.
+\]
+Since $S$ is good at the time of its birth from Lemma~\ref{lm:density-estimate} we get that $\density{S^+}{b} \geq \density{S}{b}/c$. 
+When we plug the inequality in we get the wanted claim.
+\end{proof}
+
+Now we can derive that
+\[
+\begin{split}
+\charge{x}{i} 
+	& = \frac{\scount{S}{b}}{4 \cdot \new{S}{d}}
+	\geq \frac{\scount{S}{b}}{8 \cdot \new{S}{t}}
+	\geq \frac{\scount{S}{b}}{8 \cdot \length{S^+}(\density{S^+}{t} - \density{S}{b}/c)}.
+\end{split}
+\]
+
+\begin{claim}
+It holds that
+\[\density{S}{b} \geq \frac{\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t}}{\length{S} - \length{S^+}/c}.\]
+\end{claim}
+\begin{proof}
+It is clear that $\scount{S}{t} = \scount{S}{b} + \new{S}{t}$.
+Thus we have that $\density{S}{t}\length{S} \leq \density{S}{b}\length{S} + \length{S^+}\left(\density{S^+}{t} - \frac{\density{S}{b}}{c}\right)$.
+Hence $\density{S}{b} \geq \frac{\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t}}{\length{S} - \length{S^+}/c}$.
+\end{proof}
+
+\begin{claim}
+For $n$ large enough it holds that $c \leq 2$.
+\end{claim}
+\begin{proof}
+Since for $n$ large enough it holds that $m \leq n^{1 + 1/8}$ we get that
+\[
+c = 2^{\frac{8\log \frac{m}{n}}{\log n}} \leq 2^{\frac{8\log n^{\frac{1}{8}}}{\log n}} = 2.
+\]
+\end{proof}
+
+\begin{claim}
+For $n$ large enough it holds that
+\[
+\length{S^+} \leq \frac{7}{8} \cdot \length{S}.
+\]
+\end{claim}
+\begin{proof}
+Since $S$ is good we get that $\density{S - S^+}{b} \leq c\density{S}{b} \leq 2\density{S}{b}$.
+Now $l(S - S^+) = \frac{\scount{S - S^+}{b}}{\density{S - S^+}{b}} \geq \frac{\scount{S}{b}}{8\density{S}{b}} = \frac{\length{S}}{8}$.
+\end{proof}
+
+With there claims we are able to derive the final expression.
+\[
+\begin{split}
+\charge{x}{i} 
+	& \geq \frac{\scount{S}{b}}{8 \cdot \length{S^+}(\density{S^+}{t} - \density{S}{b}/c)} \\
+	& \geq \frac{c\density{S}{b}\length{S}}{7 \cdot \length{S}(c\density{S^+}{t} - \density{S}{b})} \\
+	& \geq \frac{c \cdot \frac{\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t}}{\length{S} - \length{S^+}/c} \cdot \length{S}}{7 \cdot \length{S}\left(c\density{S^+}{t} - \frac{\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t}}{\length{S} - \length{S^+}/c}\right)} \\
+	& = \frac{c \length{S} \cdot (\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t})}{7 \cdot \length{S}\left(c\density{S^+}{t}(\length{S} - \length{S^+}/c) - (\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t})\right)} \\
+	& = \frac{c \cdot (\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t})}{7 \cdot \left(\density{S^+}{t}(c\length{S} - \length{S^+}) - (\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t})\right)} \\
+	& = \frac{c \cdot (\density{S}{t}\length{S} - \length{S^+}\density{S^+}{t})}{7 \cdot \left(c\density{S^+}{t}\length{S} - \density{S}{t}\length{S}\right)} \\
+	& \geq \frac{c \cdot (\density{S}{t}\length{S} - \frac{7}{8}\length{S}\density{S^+}{t})}{7 \cdot \left(c\density{S^+}{t}\length{S} - \density{S}{t}\length{S}\right)} = \frac{c \cdot (8\density{S}{t} - 7\density{S^+}{t})}{56 \cdot \left(c\density{S^+}{t} - \density{S}{t}\right)} \\
+	& = \frac{c \cdot (8(\density{S}{t} - c\density{S^+}{t}) + 8c\density{S^+}{t} - 7\density{S^+}{t})}{56 \cdot \left(c\density{S^+}{t} - \density{S}{t}\right)} \\
+	& = -\frac{c}{7} + \frac{c \cdot (8c - 7)\density{S^+}{t}}{56 \cdot \left(c\density{S^+}{t} - \density{S}{t}\right)} \\
+	& \geq -\frac{c}{7} + \frac{c \density{S^+}{t}}{56 \cdot \left(c\density{S^+}{t} - \density{S}{t}\right)}. \\
+\end{split}
+\]
+\end{proof}
+
+Now we show an estimate on the sum of the charges for a single element $x$.
+\begin{lemma}
+\label{lm:element-charge}
+If $x$ is the element inserted at the time $t$, then
+\[
+\sum_{i} \charge{x}{i} \geq -\frac{L}{4} + \frac{L^2}{2^{17} (\log m - \log n)}.
+\]
+If $\density{i - 1}{t} = \density{i}{t}$, then $\frac{\density{i}{t}}{\density{i - 1}{t} - \density{i}{t}} = \infty$.
+\end{lemma}
+\begin{proof}
+Define $\mathcal{L} = \{i \mid \charge{x}{i} > 0\}$ and $|\mathcal{L}| = L$.
+We also put $W := \sum_{i \in \mathcal{L}} \frac{\density{\segmentt{i}{t}}{t}}{c\density{\segmentt{i}{t}}{t} - \density{\segment{i}{t}}{t}}$.
+Then by Lemma~\ref{lm:charge-estimate} it is clear that $\sum_{i \in \mathcal{L}} \charge{x}{i} \geq -\frac{cL}{7} + \frac{cW}{56}$.
+
+For the sake of the proof we define $r_i := \frac{\density{\segmentt{i}{t}}{t}}{\density{\segment{i}{t}}{t}}$ for every $i \in \mathcal{L}$.
+Since we charge only for good levels it is clear that $r_i \geq 1/c$.
+
+Let $R = \prod_{i\in\mathcal{L}} r_i$, $M = \max{\mathcal{L}}$ and $m = \min{\mathcal{L}}$.
+It is clear that $\rho_M \leq 1$ and $\rho_{m} \geq \frac{m}{2nc^{L(t)}}$.
+From the definition of $c$ and Lemma~\ref{lm:L-bounds} it follows that $c^{L(t)} \leq \frac{m^4}{n^4}$.
+We can bound $R$ as follows since each good segment in the hierarchy may multiply the estimate by $c$.
+\[
+R = \prod_{i\in\mathcal{L}} \frac{\density{\segmentt{i}{t}}{t}}{\density{\segment{i}{t}}{t}} \leq \frac{c^{L(t)}\rho_M}{\rho_m} \leq \left(\frac{m}{n}\right)^8 \cdot \frac{2m}{n} \leq \frac{2m^9}{n^9}.
+\]
+
+The following computation gives the wanted result.
+\[
+\begin{split}
+	W & = \sum_{i \in \mathcal{L}} \frac{\density{\segmentt{i}{t}}{t}}{c\density{\segmentt{i}{t}}{t} - \density{\segment{i}{t}}{t}} \\ 
+	& = \sum_{i \in \mathcal{L}} \frac{r_i}{cr_i - 1} \geq \frac{1}{c} \cdot \sum_{i \in \mathcal{L}} \frac{1}{cr_i - 1}. \\
+\end{split}
+\]
+The sum is minimal when $r_1 = \dots = r_L = R^{1 / L}$.
+Now we plug this fact in and get
+\[
+\sum_{i \in \mathcal{L}} \frac{1}{cr_i - 1} \geq \frac{L}{cR^{1 / L} - 1} \geq \frac{L}{2^{\log c + (\log R)/L} - 1}.
+\]
+
+Finally we use the fact that $2^x - 1 \leq 64 x$ for $x$ small enough.
+By Lemma~\ref{lm:L-bounds} we have that $\log c + \frac{\log R}{L} \leq \frac{8\log \frac{m}{n}}{\log n} + \frac{72 \log \frac{m}{n}}{\log n} = o(1)$ and therefore smaller than any prescribed constant for $n$ large enough.
+
+Now we may estimate 
+\[
+\sum_{i \in \mathcal{L}} \frac{1}{cr_i - 1} \geq \frac{L^2}{64(L\log c + \log R)} \geq \frac{L^2}{64 \cdot 32 (\log m - \log n)}.
+\]
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:lower-bound}]
+To prove the theorem we count only with the cost of relabelings when $t \geq n/2$ and $t \leq n$ and in the levels from $\frac{L}{32}$ to $\frac{31L}{32}$.
+
+First we compute the lower bound on the number of good segments at each time $t \geq n/2$.
+
+\begin{claim}
+There are at most $\frac{7}{8} L(t)$ bad segments at each time $t$, $t \geq n/2$.
+\end{claim}
+\begin{proof}
+Since $\density{\segment{i}{t}}{t} \geq n/2m$, $\density{\segment{L(t)}{t}}{t} \leq 1$.
+Recall that each bad segment multiplies the density by at least $c$ and a good segment lowers the density by at most $1/c$.
+For the sake of contradiction assume that there are more than $\frac{7}{8} L(t)$ bad segments.
+Then we would get
+\[
+\density{\segment{L(t)}{t}}{t} \geq \frac{n}{2m} \cdot c^{(7L(t) - L(t))/8} = \frac{n}{2m} \cdot c^{3L(t)/4} = \frac{n}{2m} \cdot 2^{\frac{3\log\frac{m}{n} \log n}{2\log n}} = \frac{n}{2m} \cdot \left(\frac{m}{n}\right)^{3/2} > 1. 
+\]
+\end{proof}
+
+So we can conclude that at least $L(t)/16$ segments are in the charged levels.
+
+The size of the on the first considered level from the top of the hierarchy is at most $n / 128$ for $n$ large enough.
+So the overall number of charges on the considered levels is at least
+\[
+\frac{1}{2 \cdot 16} \cdot \sum_{i = \frac{L}{32}}^{\frac{31 L}{32}} \left(\frac{n}{2} - \frac{n}{128}\right) \geq \frac{nL}{128}.
+\]
+
+So each element is charged on at most $\frac{15 L}{16}$ levels.
+We state that at least $n/1024$ elements must be charged on at least $L/1024$ levels.
+If not, then there would be at most $n/1024 \cdot 15L/16 + 1023nL/1024^2$ relabelings which is contradictory.
+
+These elements add at least $\Omega\left(\frac{n\log^2 n}{\log m - \log n}\right)$ to the overall cost by Lemma~\ref{lm:element-charge}.
+\end{proof}
+\end{document}
