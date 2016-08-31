@@ -223,7 +223,7 @@ int main(int argc, char ** argv) {
 
 		size_t cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
 		size_t msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
-		size_t lmColls = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(universumMax * universumMax * universumMax, tableSize));
+		size_t lmColls = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(universumMax * tableSize, tableSize));
 
 		std::cout << i << "," << cwlfColls << "," << msColls << "," << lmColls << "\n";
 	}
