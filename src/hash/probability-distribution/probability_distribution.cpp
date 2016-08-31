@@ -151,15 +151,21 @@ int main(int argc, char ** argv) {
 	size_t DEFAULT_TABLE_SIZE = 32;
 	size_t DEFAULT_BITS = 10;
 	size_t DEFAULT_RUNS = 1;
+	size_t DEFAULT_X = 0;
+	size_t DEFAULT_Y = 1;
 	size_t tableSize;
 	size_t bits;
 	size_t runs;
+	size_t x = DEFAULT_X;
+	size_t y = DEFAULT_Y;
 
 	options_description optsDesc("Probability distribution computation.");
 	optsDesc.add_options()
 		("help", "prints this help message")
 		("m", value<size_t>(&tableSize)->default_value(DEFAULT_TABLE_SIZE), "The size of the table.")
 		("u", value<size_t>(&bits)->default_value(DEFAULT_BITS), "The number of bits.")
+		("x", value<size_t>(&x)->default_value(DEFAULT_X), "The first fixed element.")
+		("y", value<size_t>(&y)->default_value(DEFAULT_Y), "The second fixed element.")
 		("runs", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.");
 
 	variables_map vm;
@@ -209,11 +215,11 @@ int main(int argc, char ** argv) {
 	};
 
 	ElementVector v;
+	v.push_back(x);
+	v.push_back(y);
+	v.push_back(0);
 	for (size_t i = 2; i != universumSize; ++i) {
-		v.clear();
-		v.push_back(0);
-		v.push_back(1);
-		v.push_back(i);
+		v[v.size() - 1] = i;
 
 		size_t cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
 		size_t msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
