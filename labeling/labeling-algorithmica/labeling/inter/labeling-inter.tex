@@ -1,0 +1,254 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+% Labeling density
+\newcommand{\density}[2]{\rho(#1, #2)}
+\newcommand{\rdensity}[2]{\delta(#1, #2)}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\newtheorem{definition}{Definition} % [chapter]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{example}[definition]{Example}
+\newtheorem{claim}[definition]{Claim}
+\newtheorem{statement}[definition]{Statement}
+%%% END Article customizations
+
+\begin{document}
+
+\section{Labeling}
+
+Label space is between $\Omega(n)$ and $n^{1 + o(1)}$.
+We prove only a lower bound for \emph{smooth algorithms}.
+The size of the label space is denoted by $m$ and the number of elements is $n$.
+We later prove the following lower bound.
+\begin{theorem}
+\label{thm:lower-bound}
+The cost of the labeling for $n$ elements into a labeling space with size $m$, $m \geq 2n$, and $m \in o\left(n^{1 + c}\right)$ for each $c > 0$ is in
+\[
+\Omega\left(\frac{n(\log m)(\log n)}{\log m - \log n}\right).
+\]
+\end{theorem}
+
+\subsection{Adversary and algorithm}
+Our adversary always inserts an element to be the leftmost one of the already inserted elements.
+\begin{definition}[Smoothness]
+The algorithm is considered to be \emph{smooth} if it is normalized and after a rearrange of the label space $[a, b]$ the elements of this space are distributed uniformly (the rounding is performed so that the elements are placed more to the left).
+\end{definition}
+
+\subsection{Definitions and notation}
+The segment $S_i$ is the interval $[1, 2^i]$.
+We define the density of a set $S$ at the time $t$, $\density{S}{t}$, as the number of elements with labels in $S$ at the time $t$ divided by $|S|$.
+We define the density of the segment $S_i$ as $\density{i}{t}$.
+We define $L = \log m$.
+
+\begin{lemma}
+\label{lm:descreasing-density}
+At each time $t$ it holds that $\density{1}{t} \geq \density{2}{t} \geq \dots \geq \density{L}{t}$.
+\end{lemma}
+\begin{proof}
+Trivial.
+\end{proof}
+
+\begin{lemma}
+Whenever there is a rearrange, which touches the segment $S_i$, we may assume that the whole segment $S_i$ was rearranged.
+\end{lemma}
+\begin{proof}
+From Lemma~\ref{lm:descreasing-density} it follows that this assumption may only multiply the complexity of the original algorirhtm by at most $2$.
+\end{proof}
+
+We define the \emph{critical level} of the mentioned rearrange to be $i$.
+
+\begin{lemma}
+After a rearrange with the crtical level $i$ it holds that $\density{1}{t} = \dots = \density{i}{t}$.\footnote{We do not consider possible roundings.}
+\end{lemma}
+\begin{proof}
+Follows from the smoothness property.
+\end{proof}
+
+Now we are ready to describe the charging scheme.
+Each element is assigned a level $i$. 
+A newly inserted element is assigned the level $1$.
+All the elements in $S_i$ on the levels less or equal $i$ are reassigned the level $i$ when a rearrange with the crtical level $i$ occured.
+Element may be charged only when its level is increased.
+
+\begin{lemma}
+Consider a rearrange at the time $t$ with the critical level $i$.
+Let $t'$ be the last time when a rearrange with the critical level $i$ occured such that $t' \leq t$.
+Then the elements in $S_i$ which are newly inserted (between $t'$ and $t$) are in $S_{i - 1}$.
+\end{lemma}
+\begin{proof}
+Trivial.
+\end{proof}
+
+When a rearrange with the critical level $i$ occured at the time $t$ we charge only the most recently inserted half of the elements in $S_{i}$ which resides in $S_{i - 1}$.
+These elements are charged the overall work done in the right part of the segment, i.e. $S_{i} - S_{i - 1}$.
+The density of the right half of the segment $S_i$ is denoted by $\rdensity{i}{t} = \density{S_i - S_{i - 1}}{t}$.
+The work of the charged element $x_t$ for a rearrange with the critical level $i$, denoted by $p(x_t, i)$, is as follows.
+\[
+p(x_t, i) = \frac{\rdensity{i}{t} l_{i - 1}}{(\density{i - 1}{t} - \rdensity{i}{t})l_{i - 1}} = \frac{\rdensity{i}{t}}{\density{i - 1}{t} - \rdensity{i}{t}}.
+\]
+The charge is called -- charge of the element at the level $i$.
+
+Because the newly inserted elements in $S_{i - 1}$ pay for the elements in $S_i - S_{i - 1}$ each element adds work to the charged price at most once.
+Therefore we are able to charge the whole rearrange cost when summing over all the touched levels.
+
+\begin{lemma}
+\label{lm:rdensity-density}
+Let $x_t$ be an element inserted at the time $t$.
+Let $t' \geq t$ be the first time when a rearrange with the critical level $i$ occured.
+Assume that the rearrange charged the element $x_t$.
+It holds that $\density{i - 1}{t} - \rdensity{i}{t} \geq \frac{\density{i - 1}{t'} - \rdensity{i}{t'}}{2}$ and $\rdensity{i}{t} = 2\density{i}{t'} - \density{i - 1}{t'}$.
+\end{lemma}
+\begin{proof}
+Since we charge only the last half of the inserted elements and thus the first part follows.
+We also have that $\rdensity{i}{t} = \frac{2\density{i}{t} - \density{i - 1}{t}}{l_{i - 1}} = \frac{2\density{i}{t'} - \density{i - 1}{t'}}{l_{i - 1}}$.
+\end{proof}
+
+\begin{corollary}
+The work of the charged element $x_t$ during a rearrange with the critical level $i$ at the time $t'$ equals
+\[
+p = \frac{\density{i}{t}}{4(\density{i - 1}{t} - \density{i}{t})} - \frac{1}{4}.
+\]
+\end{corollary}
+\begin{proof}
+From Lemma~\ref{lm:rdensity-density} it follows that
+\[
+\begin{split}
+p 	
+	& = \frac{\rdensity{i}{t'}}{\density{i - 1}{t'} - \rdensity{i}{t'}} \\
+	& = \frac{2(\density{i}{t} - \density{i - 1}{t})}{2(\density{i - 1}{t} - 2\density{i}{t} + \density{i - 1}{t})} \\
+	& = \frac{\density{i}{t}}{4(\density{i - 1}{t} - \density{i}{t})} - \frac{\density{i - 1}{t} - \density{i}{t}}{4(\density{i - 1}{t} - \density{i}{t})}.
+\end{split}
+\]
+\end{proof}
+
+\begin{lemma}
+For an element $x_t$ it holds that
+\[
+\sum_{ i =1}^{L} \frac{\density{i}{t}}{\density{i - 1}{t} - \density{i}{t}} \geq \frac{L^2}{\ln m - \ln n} - L. \footnote{We put $\density{0}{t} := 1$.}
+\]
+If $\density{i - 1}{t} = \density{i}{t}$, then $\frac{\density{i}{t}}{\density{i - 1}{t} - \density{i}{t}} = \infty$.
+\end{lemma}
+\begin{proof}
+For the sake of the proof we define $r_i := \frac{\density{i}{t}}{\density{i - 1}{t}}$.
+Now realize the fact that $\density{L}{t} = \density{0}{t} \cdot \prod_{i = 1}^{L} r_i$.
+
+The following computation gives the wanted result.
+\[
+\begin{split}
+\sum_{i =1}^{L} \frac{\density{i}{t}}{\density{i - 1}{t} - \density{i}{t}} 
+	& = \sum_{i = 1}^L \frac{\density{i - 1}{t}r_i}{\density{i - 1}{t} - \density{i - 1}{t}r_i} \\
+	& = \sum_{i = 1}^L \frac{r_i}{1 - r_i} = \left(\sum_{i = 1}^L \frac{1}{1 - r_i}\right) - L. \\
+\end{split}
+\]
+
+Now we have the constraints $r_i > 0$ and $\prod_{i = 1}^L r_i = \density{L}{t}$.
+The previous sum is minimal when $r_1 = \dots = r_L = \density{L}{t}^{1 / L}$.
+
+Now we compute
+\[
+\sum_{i = 1}^L \frac{1}{1 - r_i} \geq \frac{L}{1 - \density{L}{t}^{1 / L}} = \frac{L}{1 - e^{\ln(\density{L}{t})/L}} = \frac{L^2}{-\ln \density{L}{t}} = \frac{L^2}{\ln m - \ln n}.
+\]
+
+The last inequalit follows from the fact that $\density{L}{t} \leq \frac{n}{2^L}$.
+\end{proof}
+
+\begin{corollary}
+For $n$ large enough it holds that
+\[
+\frac{L^2}{L - \ln n} - 2L \in \Omega\left(\frac{L \cdot \log n}{L - \log n}\right).
+\]
+\end{corollary}
+\begin{proof}
+For the asymptotic result we use the upper bound on $m \in n^{1 + o(1)}$, i.e. $L \in \log n + o(\log n)$.
+\[
+\frac{L^2}{\ln m - \ln n} - 2L = \frac{L^2 - 2L(\ln m - \ln n)}{\ln m - \ln n} = \frac{L(L - 2\ln m + 2\ln n)}{\ln m - \ln n}.
+\]
+The corollary holds for $n$ large enough because $\log m - 2\ln m + 2 \ln n \geq 3\ln n - 2\ln m = 3\ln n - 2(1 + o(1)) \ln n \in \Omega(\log n)$.
+\end{proof}
+
+\begin{corollary}
+\label{cor:element-charge}
+Let $x_t$ be an element and $\mathcal{L}$, $\mathcal{L} \subseteq \{1, \dots, L\}$, be the set of levels where $x_t$ was charged.
+If $|\mathcal{L}| \geq L/32$, then the price charged to $x_t$ is at least $\Omega\left(\frac{|\mathcal{L}| \log n}{|\mathcal{L}| - \log n}\right)$.
+\end{corollary}
+\begin{proof}
+The approach is to redefine the levels so that we can reuse the lemma.
+We omit the gaps and instead of using $\density{i - 1}{t} - \density{i}{t}$ we use $\density{i'}{t} - \density{i}{t}$ where $i'$ is the greatest integer from $\mathcal{L}$ such that $i' < i$.
+The result now follows from the fact that $\density{i'}{t} - \density{i}{t} \geq \density{i - 1}{t} - \density{i}{t}$.
+Also the asymptotics is fine -- review the proof of the previous corollary.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:lower-bound}]
+To prove the theorem we compute onle the cost of relabelings when $t \geq n/2$ and $t \leq n$ and in the levels from $L/8$ to $L/4$.
+
+Because $m \leq n^2$ for $n$ large enough it is true that $l_{L/4} \leq 2^{\log m / 4} \leq \sqrt{n} \leq \frac{n}{16}$.
+
+Now we compute a lower bound on the number of all charges during the run of the labeling algorithm from the time $n/2$ to $n$.
+From now on we count only with the last $n/2$ elements.
+It is clear that in the end there are at most $l_i$ elements with the level $i$.
+So there are at least $n/2 - l_i$ elements with the level at least $i$.
+When an rearrange on the level $i$ occured there are charges on the levels $1, \dots, i$.
+But at least half of the elements which crossed the level $i'$, $1 \leq i' \leq i$ was charged at the level $i'$.
+Therefore we can conclude that at least half of the elements which were moved outside $S_i$ were charged at the level $i$.
+From the previous it follows that from time $n/2$ to $n$ there must be at least $\frac{1}{2} \cdot \sum_{i = L/8}^{L/4}(n/2 - l_i)$ charges of the elements $x_{n/2}, \dots, x_n$ at the levels from $L/8$ to $L/4$.
+Now we compute that
+\[
+\frac{1}{2} \cdot \sum_{i = L/8}^{L/4}(n/2 - l_i) = \frac{Ln}{32} (n - o(n)) \geq \frac{Ln}{64}.
+\]
+So there are at least $Ln/64$ charges during the run of the algorithm.
+
+Each element can be charged on at most $L/8$ levels.
+At least $n/64$ elements must be charged on $L/32$ levels.
+If not, then there would be at most $n/64 \cdot L/8 + 63/64nL/64$ relabelings which is contradictory.
+
+These elements add at least $\Omega\left(\frac{n(\log m)(\log n)}{\log m - \log n}\right)$ to the overall cost by Corollary~\ref{cor:element-charge}.
+\end{proof}
+\end{document}
