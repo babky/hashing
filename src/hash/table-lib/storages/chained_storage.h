@@ -65,7 +65,7 @@ namespace Hash { namespace Storages {
 		/**
 		 * Chained storage d-tor.
 		 */
-		~ChainedStorageBase(void) {
+		virtual ~ChainedStorageBase(void) {
 			delete [] storage;
 			storage = 0;
 		}

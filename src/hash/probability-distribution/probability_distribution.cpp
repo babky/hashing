@@ -1,4 +1,8 @@
+#define HASH_DEBUG
+
 #include <iostream>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <algorithm>
 #include "storages/collision_count_storage.h"
 #include "systems/cwlf_system.h"
 #include "systems/multiply_shift_system.h"
@@ -11,7 +15,6 @@
 #ifdef BOOST_MSVC
 	#pragma warning(default: 4512)
 #endif
-
 
 /**
  * Computes the PDF for linear functions
@@ -133,11 +136,188 @@ template<class Function, template <class> class FunctionIterator>
 size_t collision_count(const ElementVector & elements, FunctionIterator<Function> iterator) {
 	size_t collisions = 0;
 
-	for (Function f; iterator.hasNext(); f = iterator.next()) {
+	size_t iterations = 0;
+
+	Function f;
+	while (iterator.hasNext()) {
+		f = iterator.next();
 		collisions += collide(f, elements) ? 1 : 0;
+		++iterations;
 	}
 
 	return collisions;
+}
+
+void print_out_matrix(const boost::numeric::ublas::matrix<size_t> & m, std::ostream & out) {
+	for (size_t i = 0; i < m.size1(); ++i) {
+		for (size_t j = 0; j < m.size2(); ++j) {
+			out << m(i, j) << " ";
+		}
+		out << "\n";
+	}
+}
+
+template<typename T>
+struct BinaryOperations {
+
+	static size_t divide(size_t dividee, size_t divisor) {
+		simple_assert(divisor != 0, "Divisor can not be null.");
+		return dividee;
+	}
+
+	static size_t multiply(size_t x, size_t y) {
+		return x & y;
+	}
+
+	static size_t subtract(size_t x, size_t y) {
+		return x ^ y;
+	}
+
+};
+
+template<typename T, template<typename T> class operations>
+void gauss_elimination_desctructive(boost::numeric::ublas::matrix<T> & m) {
+	// Compute the Gauss elimination of the matrix.
+	size_t col = 0;
+	for (size_t i = 0; i < m.size1(); ++i) {
+		for (; col < m.size2() && m(i, col) == 0; ++col) {
+			// Find the row where m[j, col] != 0.
+			size_t j = i + 1;
+			for (; j < m.size1(); ++j) {
+				if (m(j, col) != 0) {
+					break;
+				}
+			}
+
+			if (j != m.size1()) {
+				// Swap rows i and j.
+				for (size_t k = col; k < m.size2(); ++k) {
+					std::swap(m(i, k), m(j, k));
+				}
+
+				break;
+			}
+		}
+
+		if (col == m.size2()) {
+			break;
+		}
+
+		for (size_t j = i + 1; j < m.size1(); ++j) {
+			if (m(j, col) != 0) {
+				// Add row i to row j.
+				size_t factor = operations<T>::divide(m(j, col), m(i, col));
+
+				for (size_t k = col; k < m.size2(); ++k) {
+					m(j, k) = operations<T>::subtract(m(j, k), operations<T>::multiply(factor, m(i, k)));
+				}
+			}
+		}
+	}
+}
+
+template<typename T, template<typename T> class operations>
+boost::numeric::ublas::matrix<T> gauss_elimination(const boost::numeric::ublas::matrix<T> & m) {
+	boost::numeric::ublas::matrix<T> result = m;
+	gauss_elimination_desctructive(result);
+	return result;
+}
+
+template<typename T>
+size_t compute_rank_destructive(boost::numeric::ublas::matrix<T> & m) {
+	gauss_elimination_desctructive<size_t, BinaryOperations>(m);
+	size_t rank = 0;
+	for (size_t j = 0, i = 0; i < m.size1(); ++i) {
+		for (j = 0; j < m.size2(); ++j) {
+			if (m(i, j) != 0) {
+				++rank;
+				break;
+			}
+		}
+
+		if (j == m.size2()) {
+			break;
+		}
+	}
+
+	return rank;
+}
+
+template<typename T>
+size_t compute_rank(const boost::numeric::ublas::matrix<T> & m) {
+	boost::numeric::ublas::matrix<T> copy = m;
+	return compute_rank_destructive(copy);
+}
+
+void write_vector_as_rows_in_matrix(boost::numeric::ublas::matrix<size_t> & m, size_t vectorNo, size_t vector,
+		size_t universeBitSize, size_t tableBitSize) {
+	for (size_t row = 0; row < tableBitSize; ++row) {
+		size_t mask = 1;
+		for (size_t i = 1; i <= universeBitSize; ++i) {
+			m(vectorNo * tableBitSize + row, row * universeBitSize + universeBitSize - i) = (vector & mask) >> (i - 1);
+			mask <<= 1;
+		}
+	}
+}
+
+void write_vector_as_col_in_matrix(boost::numeric::ublas::matrix<size_t> & m, size_t vector, size_t column,
+		size_t vectorBitSize, size_t repeats) {
+	for (size_t repeat = 0; repeat < repeats; ++repeat) {
+		size_t mask = 1;
+		for (size_t i = 0; i < vectorBitSize ; ++i) {
+			m(repeat * vectorBitSize + i, column) = (vector & mask) >> i;
+			mask <<= 1;
+		}
+	}
+
+}
+
+/*
+A is a matrix. The vectors r, s, t are supposed to collide into y.
+
+Ar = y
+As = y
+At = y
+
+a11r1 + a12r2 + a13r3 + a14r4                                                             = y1
+                              a21r1 + a22r2 + a23r3 + a24r4                               = y2
+                                                            a31r1 + a32r2 + a33r3 + a34r4 = y3
+a11s1 + a12s2 + a13s3 + a14s4                                                             = y1
+                              a21s1 + a22s2 + a23s3 + a24s4                               = y2
+                                                            a31s1 + a32s2 + a33s3 + a34s4 = y3
+
+*/
+
+size_t collision_count_linear_map(const ElementVector & elements, size_t universeBitSize, size_t tableSize) {
+	size_t tableBitSize = Hash::Math::log2exact(tableSize);
+	size_t matrixCols = universeBitSize * tableBitSize;
+	size_t matrixRows = tableBitSize * elements.size();
+
+	boost::numeric::ublas::matrix<size_t> matrix(matrixRows, matrixCols, 0);
+	boost::numeric::ublas::matrix<size_t> extendedMatrix(matrixRows, matrixCols + 1, 0);
+
+	size_t collisionCount = 0;
+
+	size_t vectorNo = 0;
+	// Create the matrix and the extended matrix.
+	for (ElementVector::const_iterator i = elements.begin(); i != elements.end(); ++i) {
+		write_vector_as_rows_in_matrix(matrix, vectorNo, *i, universeBitSize, tableBitSize);
+		write_vector_as_rows_in_matrix(extendedMatrix, vectorNo++, *i, universeBitSize, tableBitSize);
+	}
+
+	size_t rank = compute_rank_destructive(matrix);
+	size_t kernelSize = 1 << (matrixCols - rank);
+
+	for (size_t y = 0; y < tableSize; ++y){
+		write_vector_as_col_in_matrix(extendedMatrix, y, matrixCols, tableBitSize, elements.size());
+		size_t extendedRank = compute_rank(extendedMatrix);
+		if (rank == extendedRank) {
+			collisionCount += kernelSize;
+		}
+	}
+
+
+	return collisionCount;
 }
 
 int main(int argc, char ** argv) {
@@ -151,8 +331,8 @@ int main(int argc, char ** argv) {
 	size_t DEFAULT_TABLE_SIZE = 32;
 	size_t DEFAULT_BITS = 10;
 	size_t DEFAULT_RUNS = 1;
-	size_t DEFAULT_X = 0;
-	size_t DEFAULT_Y = 1;
+	size_t DEFAULT_X = 1;
+	size_t DEFAULT_Y = 2;
 	size_t tableSize;
 	size_t bits;
 	size_t runs;
@@ -217,17 +397,26 @@ int main(int argc, char ** argv) {
 	ElementVector v;
 	v.push_back(x);
 	v.push_back(y);
-	v.push_back(0);
-	for (size_t i = 2; i != universumSize; ++i) {
+	v.push_back(x);
+	for (size_t i = 0; i != universumSize; ++i) {
+		if (std::find(v.begin(), v.end(), i) != v.end()) {
+			continue;
+		}
+
 		v[v.size() - 1] = i;
 
 		size_t cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
 		size_t msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
-		size_t lmColls = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(universumMax * tableSize, tableSize));
+		size_t lmColls = collision_count_linear_map(v, bits, tableSize);
 
-		std::cout << i << "," << cwlfColls << "," << msColls << "," << lmColls << "\n";
+		std::cout
+			<< i << ","
+			<< cwlfColls << "," << cwlfColls / (static_cast<double>(primes[bits]) * primes[bits]) << ","
+			<< msColls << "," << msColls / (static_cast<double>(universumMax / 2)) << ","
+			<< lmColls << "," << lmColls / pow(2, Hash::Math::log2exact(tableSize) * bits) << "\n";
 	}
 
 
 	return 0;
 }
+

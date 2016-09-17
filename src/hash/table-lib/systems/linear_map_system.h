@@ -18,11 +18,11 @@ namespace Hash { namespace Systems {
 	public:
 		typedef typename boost::uint_t<8 * sizeof(T)>::least UT;
 		const static T UNIVERSUM_MAX_VALUE = boost::integer_traits<T>::const_max;
-		const static size_t START_LENGTH = 10;
+		const static size_t DEFAULT_TABLE_BIT_SIZE = 10;
 
-		explicit UniversalFunctionLinearMap(size_t startLength = START_LENGTH):
-			tableBitSize(START_LENGTH),
-			tableSize(1 << startLength),
+		explicit UniversalFunctionLinearMap(size_t aTableBitSize = DEFAULT_TABLE_BIT_SIZE):
+			tableBitSize(aTableBitSize),
+			tableSize(1 << aTableBitSize),
 			matrix(0) {
 			reset();
 		}
@@ -39,6 +39,7 @@ namespace Hash { namespace Systems {
 		void setTableSize(size_t size) {
 			this->tableSize = size;
 			this->tableBitSize = Hash::Math::log2exact(size);
+			reset();
 		}
 
 		size_t getTableBitSize(void) const {
@@ -81,6 +82,8 @@ namespace Hash { namespace Systems {
 				y <<= 1;
 				y |= (size_t) c;
 			}
+
+			simple_assert(y < tableSize, "Hash value must be in the range of the table.");
 
 			return y;
 		}
@@ -128,30 +131,20 @@ namespace Hash { namespace Systems {
 		public:
 			explicit Generator(T aUniversumMax, size_t tableSize):
 				universumMax(aUniversumMax),
-				first(true) {
-				f.setTableSize(tableSize);
+				hasNextFunction(true),
+				f(Hash::Math::log2exact(tableSize)) {
 				for (size_t i = 0; i != f.tableBitSize; ++i) {
-					f.matrix[i] = 0;
+					f.matrix[i] = universumMax;
 				}
 			}
 
 			bool hasNext(void) const {
-				for (size_t i = 0; i != f.tableBitSize; ++i) {
-					if (f.matrix[i] < universumMax) {
-						return true;
-					}
-				}
-
-				return false;
+				return hasNextFunction;
 			}
 
 			UniversalFunctionLinearMap<T, Storage> next() {
-				if (first) {
-					first = false;
-					return f;
-				}
-
-				for (size_t i = 0; i != f.tableBitSize; ++i) {
+				size_t i = 0;
+				for (; i != f.tableBitSize; ++i) {
 					if (f.matrix[i] == universumMax) {
 						f.matrix[i] = 0;
 					} else {
@@ -160,13 +153,23 @@ namespace Hash { namespace Systems {
 					}
 				}
 
+				for (i = 0; i != f.tableBitSize; ++i) {
+					if (f.matrix[i] < universumMax) {
+						break;
+					}
+				}
+
+				if (i == f.tableBitSize) {
+					hasNextFunction = false;
+				}
+
 				return f;
 			}
 
 		private:
 			UniversalFunctionLinearMap<T, Storage> f;
 			T universumMax;
-			bool first;
+			bool hasNextFunction;
 		};
 
 	private:

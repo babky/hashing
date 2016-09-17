@@ -9,7 +9,7 @@ namespace Hash { namespace Utils {
 
 	class AssertException : public std::exception {
 	public:
-		AssertException(std::string message, std::string file, size_t line);
+		AssertException(std::string message, std::string file, std::size_t line);
 		const char * what(void) const throw();
 		
 		virtual ~AssertException(void) throw();
@@ -18,19 +18,21 @@ namespace Hash { namespace Utils {
 		std::string message;
 	};
 
-	void hash_assert(bool status, std::string message, std::string file, size_t line);
+	void hash_assert(bool status, std::string message, std::string file, std::size_t line);
+
+} }
 
 #ifdef HASH_DEBUG
-	// TODO: Aj pre GCC.
-	#ifndef __GNUC__
-		#define simple_assert(status, message) Hash::Utils::hash_assert(status, message, __FILE__, __LINE__);
+	#ifdef __GNUC__
+		void simple_assert(bool status, std::string message) {
+			Hash::Utils::hash_assert(status, message, "", 0);
+		}
 	#else
-		#define simple_assert(status, message) ;
+		#define simple_assert(status, message) Hash::Utils::hash_assert(status, message, __FILE__, __LINE__);
 	#endif
 #else
 	#define simple_assert(status, message) ;
 #endif
 
-} }
 
 #endif /* ASSERT_H */
