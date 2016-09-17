@@ -10,19 +10,19 @@
 	<body>
 		<h1>Datové struktury I - NTIN066 - ZS 2015/2016 - 1. úkol</h1>
 
-		<b>Termín odevzdání:</b> XX. října 2016. Samotné měření je možné dodělat do XX. listopadu 2016.<br>
-		<b>Způsob odevzdání:</b> Odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong>.<br>
+		<b>Termín odevzdání:</b> XX. října 2016.<br>
+		<b>Způsob odevzdání:</b> Odevzdáním na stránce https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/.<br>
 		<b>Vstup a výstup:</b> Řešení musí přečíst vstupní textová data ze souboru <strong>data.txt</strong> a zapsat je setříděná do souboru <strong>data.out</strong>. Předpokládejte, že zmíněné soubory se nacházejí v aktuálním adresáři.<br>
-		<b>Systém:</b> Fyzická pamět testovacího počítače je <strong>6 GB</strong>, OS Linux.<br>
-		<b>Čas:</b> Řešení musí vyprodukovat korektní řešení do <strong>35 minut</strong>.<br>
+		<b>Systém:</b> Fyzická pamět testovacího počítače je <strong>16 GB</strong>, OS Linux.<br>
+		<b>Čas:</b> Řešení musí vyprodukovat korektní řešení do <strong>XX minut</strong>.<br>
 
 		</dl><h2>Pravidla</h2>
 		<ul>
 			<li>Veškerý odevzdaný kód musí být originální tedy vytvořen vámi bez jakékoliv vedlejší &quot;inspirace&quot;.</li>
 			<li>Svůj kód s nikým nesdílejte, aby se váš kód nestal něčí &quot;inspirací&quot;. Výjimku tvoří odevzdání kódu.</li>
 			<li>Úkol a možné postupy řešení můžete probírat s ostatními, avšak respektuje výše uvedené o nesdílení kódu. To znamená - společná diskuse je povolena, ale programujte sami.</li>
-			<li>Povolené jsou řešení v jazycích C/C++ (doporučený jazyk), Java a C#. Ze zkušeností z minulých let doporučujeme C++.</li>
-			<li>Používejte standardní konstrukce vašeho programovacího jazyka, ale už ne speciální knihovní funkce. Veškerý třídící kód musíte naprogramovat samostatně, t.j. nepoužívejte std::sort a podobné funkce vašeho jazyka.</li>
+			<li>Povolené jsou řešení v jazycích C/C++, Java a C#. Ze zkušeností z minulých let doporučujeme C/C++.</li>
+			<li>Používejte standardní konstrukce vašeho programovacího jazyka, ale už ne speciální knihovní funkce. Veškerý třídící kód musíte naprogramovat samostatně, t.j. nepoužívejte <tt>std::sort</tt> a podobné funkce vašeho jazyka.</li>
 			<li>Vaše řešení musí být odevzdáno jako jediný soubor.</li>
 			<li>Řešení, která nejsou ve shodě s těmito pravidly, nebudou hodnocená.</li>
 		</ul>
@@ -31,89 +31,66 @@
 		<p>
 			Napište program, který setřídí soubor na disku <tt>data.txt</tt>. Soubor <tt>data.txt</tt> je textový soubor,
 			který na každém řádku obsahuje jediné 63-bitové číslo bez znaménka, <i>klíč</i>. V setříděném souboru
-			<tt>data.out</tt> musí jít klíče vzestupně. Navíc pro každý klíč vypište i číslo řádku, na kterém se daný klíč 
-			vyskytoval poprvé. Řádky číslujte od 1. Řádky výstupního souboru jsou tedy dvojice čísel oddělených mezerou.
+			<tt>data.out</tt> musí jít klíče vzestupně. Navíc pro každý klíč vypište číslo řádku, na kterém se daný klíč 
+			vyskytoval poprvé. Řádky číslujte od 1. Řádky výstupního souboru jsou tedy dvojice čísel oddělené mezerou.
 		</p>
 
 		<h3>Generování dat a testování</h3>
 		<p>
 			Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební vstup (je nutné přesměrovat do <tt>data.txt</tt>, protože generátor vypisuje na standardní výstup). 
-			Následně změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl0</tt> až <tt>u-pl15</tt>. Na měření použijte utilitu <tt>time</tt>. Vygenerovaný soubor má cca 46 GB a časový limit na jeho setřídění je 35 minut. Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
+			Následně změřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl1</tt> až <tt>u-pl15</tt>.
+            Na měření použijte utilitu <tt>time</tt>. 
+            Vygenerovaný soubor má cca XX GB a časový limit na jeho setřídění je XX minut. 
+            Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
 			Rychlost a správnost řešení bude následně ověřena na jiných ale podobných datech.
 		</p>
 		<p>
 			Při měření ukládejte soubor <tt>data.txt</tt> a jakékoliv pomocné soubory do adresáře <tt>/tmp</tt>. 
-			V případě, že dočasné soubory neuložíte do adresáře <tt>/tmp</tt> a nečtěto <tt>data.txt</tt>, vaše řešení není správné.
+			V případě, že dočasné soubory neuložíte do adresáře <tt>/tmp</tt> a nečtěte <tt>data.txt</tt> z aktuálního adresáře, vaše řešení není správné.
 			Po ukončení měření po sobě soubory smažte, aby ostatní mohli provést svoje měření.
 			Jinak dojde místo na disku a jelikož ostatní po vás nemohou soubory smazat, počítač tím bude pro měření zablokován.
 			Nezapomínejte smazat nejen pomocné soubory ale i vstup a výstup.
 		</p>
 		<p> 
 			Chovejte se k ostatním ohleduplně, pokud uvidíte, že někdo daný počítač zrovna používá na výpočty (příkazy <tt>who</tt> a <tt>top</tt> nebo <tt>htop</tt>), použijte jiný počítač, nebo počkejte, až měření dokončí. 
-			Nekolegiální jednání anebo zablokovaný počítač nám hlaste emailem na <tt>ds1@kam.mff.cuni.cz</tt>. 
-		</p>
-		<p>
-			Naměřenou dobu vašeho programu pošlete emailem na <tt>ds1@kam.mff.cuni.cz</tt> s detaily uvedenými níže. 
-			Řešení je nutné odevzdat ve výše uvedeném termínu.
+			Nekolegiální jednání anebo zablokovaný počítač nám hlaště emailem na <tt>ds1@kam.mff.cuni.cz</tt>. 
 		</p>
 
 		<h2>Příklad vstupu</h2>
 		<tt>
-		96313<br />
-		6024613951808161023<br />
-		11417427497858712892<br />
-		3894<br />
-		96313<br />
-		6437842131676518652<br /></tt>
+            96313<br />
+            6024613951808161023<br />
+            11417427497858712892<br />
+            3894<br />
+            96313<br />
+            6437842131676518652<br />
+        </tt>
 
 		<h2>Výstup</h2>
 		<tt>
-		3894 4<br />
-		96313 1<br />
-		6024613951808161023 2<br />
-		6437842131676518652 6<br />
-		11417427497858712892 3<br /></tt>
+            3894 4<br />
+            96313 1<br />
+            6024613951808161023 2<br />
+            6437842131676518652 6<br />
+            11417427497858712892 3<br />
+        </tt>
 
 		<h2>Generování zkušebních dat</h2>
 		<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX &gt;/tmp/data.txt</tt>
-		<p>vygeneruje data pro měření, zhruba 46 GB, a</p>
+		<p>vygeneruje data pro měření, zhruba XX GB, a</p>
 		<tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short &gt;/tmp/data.txt</tt>
-		<p>vygeneruje verzi dat pro ladění programu cca 2 GB.</p>
+		<p>vygeneruje verzi dat pro ladění programu cca XX GB.</p>
 
 		<p>
-		Zde XX jsou poslední dvě číslice z vašeho studentského čísla.
+            Zde XX je seed. K ladění použijte několik seed-ů a na nich ověřte rychlost a korektnost vašeho řešení.
 		</p>
 
-		<h2>Doprovodný email</h2>
+		<h2>Odevzdání</h2>
 		<p>
-			Při odeslání emailu se změřeným časem uveďte detaily měření dle následujícího vzoru.
-			Datum uvádějte ve tvaru <tt>D. M. YYYY H:M:S</tt>.
-			Striktně dodržuje formát emailu.
-		</p>
-		<p>
-			Předmět uveďte ako 'HW1-55973318'. (t.j. HW1-&lt;studentské číslo&gt;).
-		</p>
-		<p>
-			Do přílohy vložte zdrojový kód vašeho řešení, pojmenujte jej napríklad <tt>sorter-55973318.cpp</tt>.
-		</p>
-
-		<tt>
-		Jméno: Martin Babka<br />
-		Počítač: u-pl7<br />
-		CPU: Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz<br />
-		RAM: 6GB<br />
-		Čas: real 43m41.704s, user 20m30.975s sys 1m26.892s<br />
-		Datum spuštění: 1. 11. 2015 15:28:50<br />
-		XX: 37<br />
-		Popis: Pouzil jsem Huge-sort kombinovany se Super-sortem aplikovanym na inverzni prvky.<br />
-		Pseudonym: nechci byt uveden.<br />
-		Cvičení: pondeli-12:20-lichy.<br />
-		Kompilace: gcc -O3 sorter-55973318.cpp -o sorter-55973318<br /></tt>
-		
-		<h3>Odevzdání</h3>
-		<p>
-		V případě, že budete měřit po 27. 10., pošlete stejný email s doplněnými naměřenými hodnotami, ale už bez zdrojového kódu.
-		V případě, že se těsně nemůžete vejít do časového limitu, zkuste při generování dat jako XX zadat 333.
+			Pro odeslání řešení použijte formulář na <a href='https://kam.mff.cuni.cz/~ds1/'><tt>https://kam.mff.cuni.cz/~ds1/</tt></a>.
+			Do poznámky uvádějte například parametry kompilace "kompilace: <tt>gcc -O3 sorter-55973318.cpp -o sorter-55973318</tt>".
+            Popisem je textový soubor, kde je uveden stručný popis řešení.
+            Odevzdávejte, prosím, jenom úplně správné a dostatečně rychlé řešení do XX. října 2016.
 		</p>
 	</body>
 </html>

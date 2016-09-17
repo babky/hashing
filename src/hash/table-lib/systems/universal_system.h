@@ -86,6 +86,25 @@ namespace Hash { namespace Systems {
 
 	};
 
+	class NoNextFunctionException : public std::exception {
+
+	};
+
+	/**
+	 * Interface for generator of (usually all) the functions in the universal system.
+	 */
+	template<class Function>
+	class UniversalFunctionGenerator {
+	public:
+		virtual bool hasNext(void) const;
+
+		virtual Function next();
+
+		virtual ~UniversalFunctionGenerator(void) {
+		}
+
+	};
+
 } }
 
 #endif /* UNIVERSAL_SYSTEM_H */
