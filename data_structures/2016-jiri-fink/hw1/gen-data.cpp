@@ -210,7 +210,7 @@ int main(int argc, char** argv) {
 			++i;
 			length = atol(argv[i]);
 			if (length < MINLEN) {
-				printf("Minimal length is %d\n.", MINLEN);
+				printf("Minimal length is %lu\n.", MINLEN);
 				print_help();
 				return 1;
 			}
