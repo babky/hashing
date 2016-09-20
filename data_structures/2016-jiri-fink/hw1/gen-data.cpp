@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
 
 		if (!strcmp("--short", argv[i])) {
 			length = BASELEN / 16;
-		if (!strcmp("--half", argv[i])) {
+		} else if (!strcmp("--half", argv[i])) {
 			length = BASELEN / 2;
 		} else if (!strcmp("--super-short", argv[i])) {
 			length = BASELEN / 256;
