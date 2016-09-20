@@ -37,7 +37,7 @@ const size_t BASELEN = 1uL * 1024 * 1024 * 1024 / sizeof(T); // 2 G of data.
 #else
 const size_t BASELEN = 19uL * 1024 * 1024 * 1024 / sizeof(T); // cca 48 G of data.
 #endif
-const size_t TESTLEN = 4096;
+const size_t MINLEN = 1024 * 1024;
 
 T nextrandom() {
 	return (((T) rand()) * ((T) rand()) + (T) rand() + ((T) rand() << sizeof(T) * 8 / 2)) ^ rand();
@@ -53,7 +53,7 @@ T nextrandom(T A, T B) {
  * Just shows the help screen.
  */
 void print_help() {
-	printf("Usage: ./gen-data [-s|--seed <seed>] [--short] \n");
+	printf("Usage: ./gen-data [-s|--seed <seed>] [-l|--length <length>] [--short] [--super-short]\n");
 }
 
 const T MASK = (((T) 1) << (sizeof(T) * 8 - 1)) - 1;
@@ -206,8 +206,14 @@ int main(int argc, char** argv) {
 			length = BASELEN / 16;
 		} else if (!strcmp("--super-short", argv[i])) {
 			length = BASELEN / 256;
-		} else if (!strcmp("--test", argv[i])) {
-			length = TESTLEN;
+		} else if (!strcmp("-l", argv[i]) || !strcmp("--length", argv[i])) {
+			++i;
+			length = atol(argv[i]);
+			if (length < MINLEN) {
+				printf("Minimal length is %d\n.", MINLEN);
+				print_help();
+				return 1;
+			}
 		} else if (!strcmp("-s", argv[i]) || !strcmp("--seed", argv[i])) {
 			++i;
 			seed = atoi(argv[i]);
