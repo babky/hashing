@@ -17,7 +17,6 @@ CMakeCache.txt
 Makefile
 cmake/.*\.cmake
 vendor
-.hgignore
 src/hash/cwlf-dynamic-test/cmake/CWLFTest
 src/hash/table-simple-length-test/cmake/TableSimpleLengthTest
 src/hash/table-lib/cmake/libTable.a
@@ -28,6 +27,10 @@ src/hash/table-time-test/cmake/TableTimeTest
 src/hash/table-test/cmake/TableTest
 src/hash/table-two-way-test/cmake/TableTwoWayTest
 src/hash/test-suite/cmake/libTestSuite.a
+src/hash/table-simple-length-test/cmake/TableLengthTest
+src/hash/induction-test/cmake/InductionTest
+src/hash/m-test/cmake/MTest
+src/hash/probability-distribution/cmake/ProbabilityDistribution
 data_structures/.*/.*\.aux
 data_structures/.*/.*\.log
 data_structures/.*/.*\.out
@@ -55,6 +58,7 @@ syntax:regexp
 cmake/.*\.exe$
 cmake/.*\.txt$
 cmake/.*out.*$
+cmake/.*csv.*$
 syntax: regexp
 \.png$
 syntax: regexp
@@ -67,6 +71,11 @@ syntax: regexp
 ^src/simple-linear-functions/\.pydevproject$
 data_structures/2015-michal-koucky/hw5/cmake/...\.csv$
 data_structures/2015-michal-koucky/hw5/cmake/...\.raw
+data_structures/2015-michal-koucky/hw1/cmake/gen-data
+data_structures/2015-michal-koucky/hw1/cmake/mj
+data_structures/2015-michal-koucky/hw1/cmake/solution
+data_structures/2016-jiri-fink/hw1/cmake/gen-data
+data_structures/2016-jiri-fink/hw1/cmake/solution
 syntax:glob
 hashing\articles\thesis_babka\text\text.bbl
 hashing\articles\thesis_babka\text\text.blg
