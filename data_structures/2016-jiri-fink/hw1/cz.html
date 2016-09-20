@@ -77,11 +77,31 @@
         Proto při měření vždy nastavte velikost alokované paměti v závislosti na velikosti paměti počítače (stačí ako konstanta v zdrojovém kódu).
         </p>
         <ol>
-        <li>http://www.agner.org/optimize/instruction_tables.pdf, https://en.wikipedia.org/wiki/Instructions_per_second</li>
-        <li>http://d3s.mff.cuni.cz/teaching/principles_of_computers/ 6. přednáška, https://en.wikipedia.org/wiki/Hard_disk_drive_performance_characteristics</li>
-        <li>https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics, https://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html</li>
-        <li>http://stackoverflow.com/questions/705303/faster-i-o-in-c, http://stackoverflow.com/questions/22955178/why-does-java-read-a-big-file-faster-than-c, http://stackoverflow.com/questions/145110/c-performance-vs-java-c, http://stackoverflow.com/questions/5328873/c-streams-vs-c-style-io, http://stackoverflow.com/questions/7780072/when-to-use-printf-scanf-vs-cout-cin, http://stackoverflow.com/questions/1042110/using-scanf-in-c-programs-is-faster-than-using-cin</li>
-        <li>http://d3s.mff.cuni.cz/teaching/principles_of_computers/ 16. přednáška, http://d3s.mff.cuni.cz/teaching/principles_of_computers/ar-20112012/11-os-pamet.pdf, https://en.wikipedia.org/wiki/Paging</li>
+        <li>
+            <a href='http://www.agner.org/optimize/instruction_tables.pdf'>http://www.agner.org/optimize/instruction_tables.pdf</a>,
+            <a href='https://en.wikipedia.org/wiki/Instructions_per_second'>https://en.wikipedia.org/wiki/Instructions_per_second</a>
+        </li>
+        <li>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>6. přednáška principů počítačů</a>, 
+            <a href='https://en.wikipedia.org/wiki/Hard_disk_drive_performance_characteristics'>Wikipedie - výkonnostní charakteristiky disků</a>
+        </li>
+        <li>
+            <a href='https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics'>Základy page cache v Linux-u</a>,
+            <a href='https://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html'>Java: BufferedInputStream</a>
+        </li>
+        <li>
+            <a href='http://stackoverflow.com/questions/705303/faster-i-o-in-c'>Faster IO in C</a>, 
+            <a href='http://stackoverflow.com/questions/22955178/why-does-java-read-a-big-file-faster-than-c'>Why does java read a big file faster than C</a>, 
+            <a href='http://stackoverflow.com/questions/145110/c-performance-vs-java-c'>C++ performance vs. Java/C#</a>, 
+            <a href='http://stackoverflow.com/questions/5328873/c-streams-vs-c-style-io'>C++ Streams vs. C-style IO?</a>, 
+            <a href='http://stackoverflow.com/questions/7780072/when-to-use-printf-scanf-vs-cout-cin'>When to use printf/scanf vs cout/cin?</a>,
+            <a href='http://stackoverflow.com/questions/1042110/using-scanf-in-c-programs-is-faster-than-using-cin'>Using scanf() in C++ programs is faster than using cin?</a>
+        </li>
+        <li>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>16. přednáška principů počítačů</a>, 
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/ar-20112012/11-os-pamet.pdf'>Principy počítačů - stránkování, archiv</a>,
+            <a href='https://en.wikipedia.org/wiki/Paging'>Wikipedie: stránkování</a>
+        </li>
         </ol>
         <h3>Hardware</h3>
         <p>
@@ -109,7 +129,7 @@ Swap:          7985           0        7984
                 <dt>-s XX</dt><dd>Zde XX je seed. K ladění použijte několik seed-ů a na nich ověřte rychlost a korektnost vašeho řešení.</dd>
                 <dt>-l LL</dt><dd>Zde LL určí počet vygenerovaných klíčů na vstupu. Minimum je 1 048 576 klíčů. Pro menší délky je vhodné ořezat data pomocí utility <tt>head</tt>.</dd>
                 <dt>--half</dt><dd>Nastaví počet klíčů na polovinu oproti standardnímu. Velikost výstupu bude přibližně 25 GiB.</dd>
-                <dt>--short</dt><dd>Nastaví délku výstupu na 1/16 oproti standardní. Velikost výstupu bude přibližně 2.8 GiB.</dd>
+                <dt>--short</dt><dd>Nastaví délku výstupu na 1/16 oproti standardní. Velikost výstupu bude přibližně 3 GiB.</dd>
                 <dt>--super-short</dt><dd>Nastaví délku výstupu na 1/256 oproti standardu. Velikost výstupu bude přibližně 200 MiB.</dd>
             </dl>
         </p>
@@ -121,7 +141,7 @@ Swap:          7985           0        7984
         </p>
         <p>
         <tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short &gt;/tmp/data.txt</tt><br />
-        vygeneruje verzi dat pro ladění programu cca 2 GiB.
+        vygeneruje verzi dat pro ladění programu cca 3 GiB.
         </p>
 
         <h3>Testování</h3>
