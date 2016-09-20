@@ -53,7 +53,7 @@ T nextrandom(T A, T B) {
  * Just shows the help screen.
  */
 void print_help() {
-	printf("Usage: ./gen-data [-s|--seed <seed>] [-l|--length <length>] [--short] [--super-short]\n");
+	printf("Usage: ./gen-data [-s|--seed <seed>] [-l|--length <length>] [--half] [--short] [--super-short]\n");
 }
 
 const T MASK = (((T) 1) << (sizeof(T) * 8 - 1)) - 1;
@@ -204,6 +204,8 @@ int main(int argc, char** argv) {
 
 		if (!strcmp("--short", argv[i])) {
 			length = BASELEN / 16;
+		if (!strcmp("--half", argv[i])) {
+			length = BASELEN / 2;
 		} else if (!strcmp("--super-short", argv[i])) {
 			length = BASELEN / 256;
 		} else if (!strcmp("-l", argv[i]) || !strcmp("--length", argv[i])) {
