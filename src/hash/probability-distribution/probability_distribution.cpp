@@ -331,8 +331,8 @@ int main(int argc, char ** argv) {
 	size_t DEFAULT_TABLE_SIZE = 32;
 	size_t DEFAULT_BITS = 10;
 	size_t DEFAULT_RUNS = 1;
-	size_t DEFAULT_X = 1;
-	size_t DEFAULT_Y = 2;
+	size_t DEFAULT_X = 0;
+	size_t DEFAULT_Y = 1;
 	size_t tableSize;
 	size_t bits;
 	size_t runs;
@@ -398,6 +398,9 @@ int main(int argc, char ** argv) {
 	v.push_back(x);
 	v.push_back(y);
 	v.push_back(x);
+
+	const size_t tableBitSize = Hash::Math::log2exact(tableSize);
+
 	for (size_t i = 0; i != universumSize; ++i) {
 		if (std::find(v.begin(), v.end(), i) != v.end()) {
 			continue;
@@ -413,7 +416,7 @@ int main(int argc, char ** argv) {
 			<< i << ","
 			<< cwlfColls << "," << cwlfColls / (static_cast<double>(primes[bits]) * primes[bits]) << ","
 			<< msColls << "," << msColls / (static_cast<double>(universumMax / 2)) << ","
-			<< lmColls << "," << lmColls / pow(2, Hash::Math::log2exact(tableSize) * bits) << "\n";
+			<< lmColls << "," << lmColls / pow(2, tableBitSize * bits) << "\n";
 	}
 
 

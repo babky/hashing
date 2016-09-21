@@ -8,12 +8,19 @@
 #include <time.h>
 #include <unistd.h>
 
-#define BLOCK_SIZE 440000000		// Block size for presorting
+#define VALUE_OFFSET		// Value of an entity is the offset in its temporary file
+
 #define IO_BUFFER_SIZE 1048576		// Buffer size for file I/O
-#define MULTIWAY_MERGE 8		// Enables multi-way merging
 #define FAST_READ			// Replace fscanf() by inline code
 #define INLINE_QSORT			// Replace qsort() by inline code
 #define DEBUGGING			// Print debug messages to stderr
+
+#ifdef VALUE_OFFSET
+//#define BLOCK_SIZE 580000000		// Block size for presorting
+#define BLOCK_SIZE 280000000		// Block size for presorting, using cca 3.2 GB RAM
+#else
+#define BLOCK_SIZE 440000000		// Block size for presorting
+#endif
 
 /*** Auxiliary functions ***/
 
@@ -80,14 +87,22 @@ static void *xmalloc(size_t n)
 /*** Temporary files ***/
 
 struct kv {
-  u64 k, v;
-};
+  u64 k;
+#ifdef VALUE_OFFSET
+  uint o;
+#else
+  u64 v;
+#endif
+} __attribute__((__packed__));
 
 struct file {
   struct file *next;
   char name[16];
   int fd;
   u64 items;
+#ifdef VALUE_OFFSET
+  u64 line_offset;
+#endif
   struct kv *buffer, *rptr, *rend, *wptr, *wend;
   int eof;
 };
@@ -95,6 +110,12 @@ struct file {
 static struct file *first_file, *last_file;
 static uint num_files;
 static uint file_counter;
+static u64 line_counter;
+
+#ifdef VALUE_OFFSET
+static u64 file_first_line;
+#endif
+
 
 static struct file *new_file(void)
 {
@@ -106,6 +127,11 @@ static struct file *new_file(void)
     first_file = f;
   last_file = f;
   num_files++;
+
+#ifdef VALUE_OFFSET
+  f->line_offset = file_first_line;
+  file_first_line = line_counter;
+#endif
 
   sprintf(f->name, "tmp-%u", file_counter++);
   f->fd = open(f->name, O_RDWR | O_CREAT | O_TRUNC, 0666);
@@ -159,8 +185,13 @@ static void write_record(struct file *f, struct kv *x)
       struct kv *prev = f->wptr - 1;
       if (prev->k == x->k)
 	{
+#ifdef VALUE_OFFSET
+	  if (prev->o > x->o)
+	    prev->o = x->o;
+#else
 	  if (prev->v > x->v)
 	    prev->v = x->v;
+#endif
 	  return;
 	}
     }
@@ -294,10 +325,14 @@ static int read_block(void)
   block_items = 0;
   while (block_items < BLOCK_SIZE)
     {
-      u64 k, v;
-      if (!read_u64(&k) || !read_u64(&v))
+      u64 k;
+      if (!read_u64(&k) )
 	break;
-      block[block_items++] = (struct kv) { .k = k, .v = v };
+#ifdef VALUE_OFFSET
+      block[block_items++] = (struct kv) { .k = k, .o = ++line_counter - file_first_line};
+#else
+      block[block_items++] = (struct kv) { .k = k, .v = ++line_counter };
+#endif
     }
 
   DEBUG("Read %u items", block_items);
@@ -455,59 +490,7 @@ static void write_block(void)
   flush_file(f);
 }
 
-/*** Two-way merging ***/
-
-static void twoway_merge(void)
-{
-  DEBUG("Two-way merge");
-  struct file *a = pick_file();
-  struct file *b = pick_file();
-  struct file *x = new_file();
-
-  for (;;)
-    {
-      read_record(a);
-      read_record(b);
-      if (a->eof && b->eof)
-	break;
-
-      u64 aprev = 0, bprev = 0;
-
-      for (;;)
-	{
-	  read_record(a);
-	  read_record(b);
-	  struct kv *ar = a->rptr;
-	  struct kv *br = b->rptr;
-	  struct kv *xr;
-	  int enda = a->eof || ar->k < aprev;
-	  int endb = b->eof || br->k < bprev;
-
-	  if (enda && endb)
-	    break;
-	  if (endb || (!enda && ar->k < br->k))
-	    {
-	      aprev = ar->k;
-	      xr = a->rptr++;
-	    }
-	  else
-	    {
-	      bprev = br->k;
-	      xr = b->rptr++;
-	    }
-
-	  write_record(x, xr);
-	}
-    }
-
-  drop_file(a);
-  drop_file(b);
-  flush_file(x);
-}
-
 /*** Multi-way merging ***/
-
-#ifdef MULTIWAY_MERGE
 
 struct mwstate {
   struct file *f;
@@ -516,82 +499,72 @@ struct mwstate {
 
 static void multiway_merge(void)
 {
-  uint ways = (num_files < MULTIWAY_MERGE) ? num_files : MULTIWAY_MERGE;
+  uint ways = num_files;
   DEBUG("%d-way merge", ways);
 
-  struct mwstate state[MULTIWAY_MERGE];
+  struct mwstate state[ways];
   for (uint i=0; i<ways; i++)
     state[i].f = pick_file();
-  struct file *x = new_file();
 
-  for (;;)
-    {
-      for (uint i=0; i<ways; i++)
+	for (;;)
 	{
-	  struct mwstate *s = &state[i];
-	  read_record(s->f);
-	  if (s->f->eof)
-	    {
-	      drop_file(s->f);
-	      struct mwstate t = *s;
-	      *s = state[ways-1];
-	      state[ways-1] = t;
-	      ways--;
-	      i--;
-	      continue;
-	    }
-	  s->key = s->f->rptr->k;
-	}
-      if (!ways)
-	break;
+		for (uint i=0; i<ways; i++)
+		{
+			struct mwstate *s = &state[i];
+			read_record(s->f);
+			if (s->f->eof)
+			{
+				drop_file(s->f);
+				struct mwstate t = *s;
+				*s = state[ways-1];
+				state[ways-1] = t;
+				ways--;
+				i--;
+				continue;
+			}
+			s->key = s->f->rptr->k;
+		}
+		if (!ways)
+			return;
+		
+		uint rways = ways;
+		while (rways)
+		{
+			uint best = 0;
+			for (uint i=1; i<rways; i++)
+				if (state[i].key < state[best].key)
+					best = i;
+			
+			u64 min_key = state[best].key, min_value = UINT64_MAX;
+			for (uint i=0; i<rways; i++)
+				if(state[i].key == min_key)
+				{
+					struct mwstate *s = &state[i];
+					struct file *f = s->f;
+					struct kv *item = f->rptr++;
+					u64 prev_key = item->k;
 
-      uint rways = ways;
-      while (rways)
-	{
-	  uint best = 0;
-	  for (uint i=1; i<rways; i++)
-	    if (state[i].key < state[best].key)
-	      best = i;
-
-	  struct mwstate *s = &state[best];
-	  struct file *f = s->f;
-	  struct kv *item = f->rptr++;
-	  u64 prev_key = item->k;
-	  write_record(x, item);
-
-	  read_record(f);
-	  if (f->eof || f->rptr->k < prev_key)
-	    {
-	      struct mwstate t = *s;
-	      *s = state[rways-1];
-	      state[rways-1] = t;
-	      rways--;
-	    }
-	  else
-	    s->key = f->rptr->k;
-	}
-    }
-
-  flush_file(x);
-}
-
+#ifdef VALUE_OFFSET
+					u64 value = item->o + f->line_offset;
+#else
+					u64 value = item->v;
 #endif
-
-/*** Generating output ***/
-
-static void write_output(void)
-{
-  DEBUG("Generating output");
-  struct file *f = pick_file();
-  for (;;)
-    {
-      read_record(f);
-      if (f->eof)
-	break;
-      struct kv *x = f->rptr++;
-      printf("%llu %llu\n", (unsigned long long) x->k, (unsigned long long) x->v);
-    }
-  drop_file(f);
+					min_value = min_value < value ? min_value : value;
+					
+					read_record(f);
+					if (f->eof || f->rptr->k < prev_key)
+					{
+						struct mwstate t = *s;
+						*s = state[rways-1];
+						state[rways-1] = t;
+						rways--;
+					}
+					else
+						s->key = f->rptr->k;
+				}
+			printf("%llu %llu\n", (unsigned long long) min_key, (unsigned long long) min_value);
+		}
+	}
 }
 
 /*** Main ***/
@@ -600,6 +573,7 @@ int main(void)
 {
   start_time = get_timestamp();
 
+  DEBUG("Size of one entity %d", sizeof(struct kv));
   DEBUG("### Pre-sorting ###");
   block = xmalloc(BLOCK_SIZE * sizeof(struct kv));
   while (read_block())
@@ -609,20 +583,9 @@ int main(void)
     }
   free(block);
 
-  while (num_files > 1)
-    {
       DEBUG("### Main loop: %u files remain ###", num_files);
-#ifdef MULTIWAY_MERGE
-      if (num_files > 2)
-	{
-	  multiway_merge();
-	  continue;
-	}
-#endif
-      twoway_merge();
-    }
+	multiway_merge();
 
-  write_output();
   DEBUG("### Done ###");
   return 0;
 }

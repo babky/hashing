@@ -958,6 +958,11 @@ int main(int argc, char ** argv) {
 			++i;
 		}
 
+		if (std::string(argv[i]) == "-p") {
+			max_elements = atol(argv[i + 1]);
+			++i;
+		}
+
 		if (std::string(argv[i]) == "-f") {
 			max_files = atoi(argv[i + 1]);
 			++i;
