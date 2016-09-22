@@ -757,6 +757,55 @@ private:
 	std::FILE * file;
 };
 
+
+template<typename Key>
+class CppStyleInput : public Input<Key> {
+};
+
+template<typename Key, typename Value>
+class CppStyleOutput : public Output<Key, Value> {
+};
+
+template<>
+class CppStyleInput<std::size_t> : public Input<std::size_t> {
+public:
+	CppStyleInput(const std::string & filename):
+		in(filename) {
+	}
+
+	virtual ~CppStyleInput(void) {
+	}
+
+	virtual void read(std::size_t & key) {
+		in >> key;
+	}
+
+	virtual bool eof() {
+		return in.eof();
+	}
+private:
+	std::ifstream in;
+};
+
+
+template<>
+class CppStyleOutput<std::size_t, std::size_t> : public Output<std::size_t, std::size_t> {
+public:
+	CppStyleOutput(const std::string & filename):
+		out(filename.c_str()) {
+	}
+
+	virtual ~CppStyleOutput(void) {
+	}
+
+	virtual void write(const std::size_t & key, const std::size_t & value) {
+		out << key << " " << value << "\n";
+	}
+private:
+	std::ofstream out;
+};
+
+
 template<
 	typename Key, typename Value,
 	template<class> class Input, template<class, class> class Output,
@@ -1028,11 +1077,15 @@ private:
 	}
 };
 
-template <template<class, class, class> class Reducer, template <class, class> class RunType>
+template <
+	template <class> class Input, template <class,class> class Output,
+	template <class, class, class> class Reducer,
+	template <class, class> class RunType
+>
 Stats sort(const std::string & ifname, const std::string & ofname, std::string temp_directory, std::size_t max_files, std::size_t max_elements) {
-	Sorter<std::size_t, std::size_t, CStyleInput, CStyleOutput, Reducer, RunType> sorter(max_files, temp_directory, max_elements);
-	CStyleInput<std::size_t> in(ifname);
-	CStyleOutput<std::size_t, std::size_t> out(ofname);
+	Sorter<std::size_t, std::size_t, Input, Output, Reducer, RunType> sorter(max_files, temp_directory, max_elements);
+	Input<std::size_t> in(ifname);
+	Output<std::size_t, std::size_t> out(ofname);
 	sorter.sort(in, out);
 	return sorter.get_stats();
 }
@@ -1048,6 +1101,7 @@ int main(int argc, char ** argv) {
 
 	bool binary = true;
 	bool inner_reductions = true;
+	bool use_c_io = false;
 
 	std::size_t max_files = 256;
 	std::size_t max_elements = (1 << 20);
@@ -1056,6 +1110,10 @@ int main(int argc, char ** argv) {
 		if (std::string(argv[i]) == "-m") {
 			max_elements = 1 << atoi(argv[i + 1]);
 			++i;
+		}
+
+		if (std::string(argv[i]) == "-c") {
+			use_c_io = true;
 		}
 
 		if (std::string(argv[i]) == "-p") {
@@ -1112,15 +1170,31 @@ int main(int argc, char ** argv) {
 	Stats stats;
 	if (binary) {
 		if (inner_reductions) {
-			stats = sort<MinReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			if (use_c_io) {
+				stats = sort<CStyleInput, CStyleOutput, MinReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			} else {
+				stats = sort<CppStyleInput, CppStyleOutput, MinReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			}
 		} else {
-			stats = sort<NoReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			if (use_c_io) {
+				stats = sort<CStyleInput, CStyleOutput, NoReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			} else {
+				stats = sort<CppStyleInput, CppStyleOutput, NoReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			}
 		}
 	} else {
 		if (inner_reductions) {
-			stats = sort<MinReducer, TextRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			if (use_c_io) {
+				stats = sort<CStyleInput, CStyleOutput, MinReducer, TextRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			} else {
+				stats = sort<CppStyleInput, CppStyleOutput, NoReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			}
 		} else {
-			stats = sort<NoReducer, TextRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			if (use_c_io) {
+				stats = sort<CStyleInput, CStyleOutput, NoReducer, TextRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			} else {
+				stats = sort<CppStyleInput, CppStyleOutput, NoReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
+			}
 		}
 	}
 
