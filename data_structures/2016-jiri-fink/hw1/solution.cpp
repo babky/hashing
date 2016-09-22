@@ -16,7 +16,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#define LOG_SUPPORT
+// #define LOG_SUPPORT
 
 class Log {
 #ifdef LOG_SUPPORT
@@ -60,8 +60,8 @@ Log & operator <<(Log & log, const T & x) {
 
 #endif
 
-Log logger(false);
-Log logger_trace(false);
+Log logger(true);
+Log logger_trace(true);
 
 struct Stats {
 
@@ -224,16 +224,39 @@ public:
 	}
 };
 
-template<typename Key>
-void read_text(std::istream & in, Key & key) {
-	in >> key;
-}
-
 template<typename Key, typename Value>
 void read_binary(std::istream & in, Key & key, Value & value) {
 	in.read((char *) &key, sizeof(key));
 	in.read((char *) &value, sizeof(value));
 }
+
+template<typename Key, typename Value, template<class, class> class Output>
+class OutputPusher {
+public:
+	OutputPusher(Output<Key, Value> & a_out):
+		out(a_out) {
+	}
+
+	void operator()(Key key, Value value) {
+		logger_trace << "Outputting " << key << " " << value << ".\n";
+		out.write(key, value);
+		++push_count;
+	}
+
+	std::size_t get_push_count() const {
+		return push_count;
+	}
+
+	void finish_run() {
+	}
+
+	void start_run() {
+	}
+
+private:
+	Output<Key, Value> & out;
+	std::size_t push_count = 0;
+};
 
 template<typename Key, typename Value>
 class TextOutputPusher {
@@ -261,7 +284,6 @@ public:
 	std::size_t get_push_count() const {
 		return push_count;
 	}
-
 };
 
 template<typename Key, typename Value>
@@ -666,9 +688,85 @@ namespace std {
 	}
 }
 
-template<typename Key, typename Value, template<class, class, class> class Reducer, template <class, class> class RunType>
+template<typename Key>
+class Input {
+public:
+	virtual void read(Key & key) = 0;
+	virtual bool eof(void) = 0;
+	virtual ~Input(void) {
+	}
+};
+template<typename Key, typename Value>
+class Output {
+public:
+	virtual void write(const Key & key, const Value & value) = 0;
+	virtual ~Output(void) {
+	}
+};
+
+template<typename Key>
+class CStyleInput : public Input<Key> {
+};
+
+template<typename Key, typename Value>
+class CStyleOutput : public Output<Key, Value> {
+};
+
+template<>
+class CStyleInput<std::size_t> : public Input<std::size_t> {
+public:
+	CStyleInput(const std::string & filename):
+		file(std::fopen(filename.c_str(), "r")),
+		eof_flag(false) {
+	}
+
+	virtual ~CStyleInput(void) {
+		std::fclose(file);
+		file = 0;
+	}
+
+	virtual void read(std::size_t & key) {
+		eof_flag = (fscanf(file, "%lu", &key) != 1);
+	}
+
+	virtual bool eof() {
+		return eof_flag;
+	}
+private:
+	std::FILE * file;
+	bool eof_flag;
+};
+
+
+template<>
+class CStyleOutput<std::size_t, std::size_t> : public Output<std::size_t, std::size_t> {
+public:
+	CStyleOutput(const std::string & filename):
+		file(std::fopen(filename.c_str(), "w")) {
+	}
+
+	virtual ~CStyleOutput(void) {
+		std::fclose(file);
+		file = 0;
+	}
+
+	virtual void write(const std::size_t & key, const std::size_t & value) {
+		fprintf(file, "%lu %lu\n", key, value);
+	}
+private:
+	std::FILE * file;
+};
+
+template<
+	typename Key, typename Value,
+	template<class> class Input, template<class, class> class Output,
+	template<class, class, class> class Reducer,
+	template <class, class> class RunType
+>
 class Sorter {
 	typedef typename RunType<Key, Value>::Pusher Pusher;
+	typedef Input<Key> InputType;
+	typedef Output<Key, Value> OutputType;
 
 	std::size_t max_elements_in_memory;
 	std::size_t max_files;
@@ -689,7 +787,7 @@ public:
 		return stats;
 	}
 
-	void sort(std::ifstream & in, std::ostream & out) {
+	void sort(InputType & in, OutputType & out) {
 		clear_temp_files();
 
 		// parse the data and sort them into the files as runs
@@ -767,7 +865,7 @@ private:
 		}
 	}
 
-	std::size_t parse(std::ifstream & in) {
+	std::size_t parse(InputType & in) {
 		Key key;
 
 		std::vector<std::pair<Key, Value>> data;
@@ -779,7 +877,7 @@ private:
 		std::size_t run = 0;
 
 		for (Value value = 1; ; ++value) {
-			read_text(in, key);
+			in.read(key);
 			if (in.eof()) {
 				break;
 			}
@@ -829,7 +927,7 @@ private:
 	/**
 	 * Runs the merger.
 	 */
-	std::size_t merge_runs(std::ostream & out) {
+	std::size_t merge_runs(OutputType & out) {
 		logger << "Outputting directly after merge.\n";
 
 		// Create the run sources.
@@ -840,9 +938,9 @@ private:
 		}
 
 		// Initialize the merger.
-		Merger<Key, Value, MinReducer, TextOutputPusher<Key, Value>, RunType> merger(
+		Merger<Key, Value, MinReducer, OutputPusher<Key, Value, Output>, RunType> merger(
 			run_sources,
-			TextOutputPusher<Key, Value>(out)
+			OutputPusher<Key, Value, Output>(out)
 		);
 
 		std::size_t runs = merger.merge();
@@ -852,12 +950,12 @@ private:
 		return 0;
 	}
 
-	void write_to_out(std::size_t idx, std::ostream & out) {
+	void write_to_out(std::size_t idx, OutputType & out) {
 		std::pair<Key, Value> * element;
 		std::fstream & in = get_temp_file(idx, true, RunType<Key, Value>::READ_MODE);
 		in.seekg(std::ios_base::beg);
-		TextOutputPusher<Key, Value> text_pusher(out);
-		MinReducer<Key, Value, TextOutputPusher<Key, Value>> reducer(text_pusher);
+		OutputPusher<Key, Value, Output> pusher(out);
+		MinReducer<Key, Value, OutputPusher<Key, Value, Output>> reducer(pusher);
 
 		RunType<Key, Value> run(in);
 		reducer.start();
@@ -931,16 +1029,18 @@ private:
 };
 
 template <template<class, class, class> class Reducer, template <class, class> class RunType>
-Stats sort(std::ifstream & fin, std::ofstream & fout, std::string temp_directory, std::size_t max_files, std::size_t max_elements) {
-	Sorter<std::size_t, std::size_t, Reducer, RunType> sorter(max_files, temp_directory, max_elements);
-	sorter.sort(fin, fout);
+Stats sort(const std::string & ifname, const std::string & ofname, std::string temp_directory, std::size_t max_files, std::size_t max_elements) {
+	Sorter<std::size_t, std::size_t, CStyleInput, CStyleOutput, Reducer, RunType> sorter(max_files, temp_directory, max_elements);
+	CStyleInput<std::size_t> in(ifname);
+	CStyleOutput<std::size_t, std::size_t> out(ofname);
+	sorter.sort(in, out);
 	return sorter.get_stats();
 }
 
 int main(int argc, char ** argv) {
 	const std::string DEFAULT_INPUT_FILENAME = "data.txt";
 	const std::string DEFAULT_OUTPUT_FILENAME = "data.out";
-	const std::string DEFAULT_TEMPORARY_DIRECTORY = "/tmp";
+	const std::string DEFAULT_TEMPORARY_DIRECTORY = ".";
 
 	std::string in_filename = DEFAULT_INPUT_FILENAME;
 	std::string out_filename = DEFAULT_OUTPUT_FILENAME;
@@ -950,7 +1050,7 @@ int main(int argc, char ** argv) {
 	bool inner_reductions = true;
 
 	std::size_t max_files = 256;
-	std::size_t max_elements = (1 << 29);
+	std::size_t max_elements = (1 << 20);
 
 	for (int i = 1; i < argc; ++i) {
 		if (std::string(argv[i]) == "-m") {
@@ -1006,24 +1106,21 @@ int main(int argc, char ** argv) {
 	}
 
 
-	std::ifstream fin(in_filename);
-	std::ofstream fout(out_filename);
-
 	std::cout << "Binary mode:    " << binary << "\n";
 	std::cout << "Reduction mode: " << inner_reductions << "\n";
 
 	Stats stats;
 	if (binary) {
 		if (inner_reductions) {
-			stats = sort<MinReducer, BufferedBinaryRun>(fin, fout, temp_directory, max_files, max_elements);
+			stats = sort<MinReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
 		} else {
-			stats = sort<NoReducer, BufferedBinaryRun>(fin, fout, temp_directory, max_files, max_elements);
+			stats = sort<NoReducer, BufferedBinaryRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
 		}
 	} else {
 		if (inner_reductions) {
-			stats = sort<MinReducer, TextRun>(fin, fout, temp_directory, max_files, max_elements);
+			stats = sort<MinReducer, TextRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
 		} else {
-			stats = sort<NoReducer, TextRun>(fin, fout, temp_directory, max_files, max_elements);
+			stats = sort<NoReducer, TextRun>(in_filename, out_filename, temp_directory, max_files, max_elements);
 		}
 	}
 
