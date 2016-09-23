@@ -18,6 +18,7 @@
 #ifdef VALUE_OFFSET
 //#define BLOCK_SIZE 580000000		// Block size for presorting
 #define BLOCK_SIZE 280000000		// Block size for presorting, using cca 3.2 GB RAM
+//#define BLOCK_SIZE 2		// Block size for presorting, debugging
 #else
 #define BLOCK_SIZE 440000000		// Block size for presorting
 #endif
@@ -263,12 +264,13 @@ static void drop_file(struct file *f)
 
 static char stdio_buf[IO_BUFFER_SIZE];
 static char *stdio_rptr, *stdio_rend;
+static int fdin;
 
 static int stdio_getc(void)
 {
   if (stdio_rptr >= stdio_rend)
     {
-      int l = read(0, stdio_buf, IO_BUFFER_SIZE);
+      int l = read(fdin, stdio_buf, IO_BUFFER_SIZE);
       if (l < 0)
 	die("Read error: %m");
       if (!l)
@@ -497,6 +499,8 @@ struct mwstate {
   u64 key;
 };
 
+static FILE *fileout;
+
 static void multiway_merge(void)
 {
   uint ways = num_files;
@@ -558,11 +562,12 @@ static void multiway_merge(void)
 						*s = state[rways-1];
 						state[rways-1] = t;
 						rways--;
+						i--;
 					}
 					else
 						s->key = f->rptr->k;
 				}
-			printf("%llu %llu\n", (unsigned long long) min_key, (unsigned long long) min_value);
+			fprintf(fileout, "%llu %llu\n", (unsigned long long) min_key, (unsigned long long) min_value);
 		}
 	}
 }
@@ -572,8 +577,15 @@ static void multiway_merge(void)
 int main(void)
 {
   start_time = get_timestamp();
-
   DEBUG("Size of one entity %d", sizeof(struct kv));
+
+	fdin = open("data.txt", O_RDONLY);
+	if(fdin == -1)
+	{
+		perror("Cannot open input file");
+		return 1;
+	}
+
   DEBUG("### Pre-sorting ###");
   block = xmalloc(BLOCK_SIZE * sizeof(struct kv));
   while (read_block())
@@ -583,9 +595,18 @@ int main(void)
     }
   free(block);
 
+  close(fdin);
+  fileout = fopen("data.out", "w");
+  if(!fileout)
+  {
+	  perror("Cannot open output file");
+	  return 1;
+  }
+
       DEBUG("### Main loop: %u files remain ###", num_files);
 	multiway_merge();
 
+  fclose(fileout);
   DEBUG("### Done ###");
   return 0;
 }
