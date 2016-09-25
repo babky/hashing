@@ -8,10 +8,10 @@
         </style>
     </head>
     <body>
-        <h1>Datové struktury I - NTIN066 - ZS 2015/2016 - 1. úkol</h1>
+        <h1>Datové struktury I - NTIN066 - ZS 2016/2017 - 1. úkol</h1>
 
         <b>Termín odevzdání:</b> XX. října 2016.<br>
-        <b>Způsob odevzdání:</b> Odevzdáním na stránce https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/.<br>
+        <b>Způsob odevzdání:</b> Odevzdáním na stránce <a href=' https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/'>https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/</a>.<br>
         <b>Vstup a výstup:</b> Řešení musí přečíst vstupní textová data ze souboru <strong>data.txt</strong> a zapsat je setříděná do souboru <strong>data.out</strong>. Předpokládejte, že zmíněné soubory se nacházejí v aktuálním adresáři.<br>
         <b>Systém:</b> Fyzická pamět testovacího počítače je <strong>8 GiB</strong>, OS Linux.<br>
         <b>Čas:</b> Váš program musí vyprodukovat korektní řešení do <strong>XX minut</strong> na testovacím stroji.<br>
@@ -33,6 +33,7 @@
             který na každém řádku obsahuje jediné 63-bitové číslo bez znaménka, <i>klíč</i>. V setříděném souboru
             <tt>data.out</tt> musí jít klíče vzestupně. Navíc pro každý klíč vypište číslo řádku, na kterém se daný klíč 
             vyskytoval poprvé. Řádky číslujte od 1. Řádky výstupního souboru jsou tedy dvojice čísel oddělené mezerou.
+            Vstup <tt>data.txt</tt>, výstup <tt>data.out</tt> a dočasné soubory držte v aktuálním adresáři.
         </p>
 
         <h2>Příklad</h2>
@@ -124,7 +125,7 @@ Swap:          7985           0        7984
         Na generování dat je v laboratoři rotunda dostupný generátor <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt>.
         <h4>Volby generátoru</h4>
         <p>
-            Standardní počet klíčů, na kterém bude Vaše řešení testováno, je 2 550 136 832.
+            Generátor standardně vygeneruje zadání o takové délce, která se použije pri jeho testování na testovacím počítači.
             <dl>
                 <dt>-s XX</dt><dd>Zde XX je seed. K ladění použijte několik seed-ů a na nich ověřte rychlost a korektnost vašeho řešení.</dd>
                 <dt>-l LL</dt><dd>Zde LL určí počet vygenerovaných klíčů na vstupu. Minimum je 1 048 576 klíčů. Pro menší délky je vhodné ořezat data pomocí utility <tt>head</tt>.</dd>
