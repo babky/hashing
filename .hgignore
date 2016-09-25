@@ -76,6 +76,9 @@ data_structures/2015-michal-koucky/hw1/cmake/mj
 data_structures/2015-michal-koucky/hw1/cmake/solution
 data_structures/2016-jiri-fink/hw1/cmake/gen-data
 data_structures/2016-jiri-fink/hw1/cmake/solution
+data_structures/2016-jiri-fink/hw1/cmake/jf
+data_structures/2016-jiri-fink/hw1/cmake/data.short
+data_structures/2016-jiri-fink/hw1/cmake/data.super-short
 syntax:glob
 hashing\articles\thesis_babka\text\text.bbl
 hashing\articles\thesis_babka\text\text.blg
