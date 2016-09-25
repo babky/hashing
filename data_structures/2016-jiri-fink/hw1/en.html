@@ -56,26 +56,28 @@
             11417427497858712892 3<br />
         </tt>
 
-        <h2>Problémy při implementaci</h2>
-        <h3>Práce s pamětí</h3>
+        <h2>Implementation challenges</h2>
+        <h3>Memory</h3>
         <p>
-        Většinu času váš program spotřebuje čtěním a zapisovaním dat, tedy je nutné minimalizovat počet přístupů na disk.
-        Porovnejte například čas nutný k porovnání dvou prvků, řádovo nanosekundy, oproti času na jedno načtění dat z disku, řádovo milisekundy [1].
-        Protože při čtění dat z pevného disku je nutné čekat na natočení plotny (rotational latency) a nastavení hlavy (seek time) je výhodné načíst víc dat, ktoré jdou za sebou [2].
-        K tomu slouží page cache operačního systému a buffer pro práci s I/O [3].
-        Tuto nevýhodu pevních disků (částečně) řeší disky SSD.
+        Most of the running time of your program will be consumed by read and writing of the input and output data, so called I/O. Therefore it is vital to minimaz the number of I/O operations.
+        For example compare the time necessary to compare two integers, which is in nanosecond order of magnitude, to time required to read an integer from hard disk drive which is in milliseconds [1].
+        When reading from hard disk drive it is necessary to wait until the plate rotates under the head (rotational latency) and/or the head is moved into a right position (seek time) it is convenient to read subsequent data at once [2].
+        The page cache of the operating system and I/O buffer addresses this problem [3].
+        Some of the disadvantages of the hard disk drives are improved by SSDs.
         </p>
         <p>
-        Také je vhodné zvolit rychlý přístup ke čtění dat.
-        Na toto téma najdeme na internetu spousta porovnání a názorů [4].
-        Vždy je vhodné si zvolené přístupy pro danú aplikaci si samostatně otestovat.
-        Nám v zásadě bude stačit použít základné prostředky zvoleného jazyka.
+        It is also necessary to choose a fast I/O library.
+        You can find many comparisons and blogs on the Internet dealing with this problem [4].
+        The only reasonable advice is that you should test and measure the performance of your approaches yourself.
+        In this task the basic functions of your programming language should suit you well.
         </p>
         <p>
-        K přetřídění vstupních dat je také výhodné znát velikost operační paměti počítače, na kterém budou vykonány testy (v našem případě je to 8 GiB).
-        Pozor, pokud budete počas běhu programu používat více paměti než je dostupné, pak dojde ke stránkování.
-        Používaní stránkování (swap prostoru) vyžaduje přístupy na disk a tím dojde k výraznému spomalení běhu programu [5].
-        Proto při měření vždy nastavte velikost alokované paměti v závislosti na velikosti paměti počítače (stačí ako konstanta v zdrojovém kódu).
+        To pre-sort input data it is also convenient to know the size of the operating memory of your computer in advance. For the testing environment it is 8 GiB.
+        Pay attention to allocating a reasonable amount of memory.
+        If you allocate more than available, the paging may be used.
+        Paging (using swap space in Linux) requires disk I/O operations and thus significantly slows down your program [5].
+        When measuring your running time always carefully set-up the size of the allocated memory with respect to the used computer.
+        For our purposes a constant in the source code is fine.
         </p>
         <ol>
         <li>
@@ -83,11 +85,11 @@
             <a href='https://en.wikipedia.org/wiki/Instructions_per_second'>https://en.wikipedia.org/wiki/Instructions_per_second</a>
         </li>
         <li>
-            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>6. přednáška principů počítačů</a>, 
-            <a href='https://en.wikipedia.org/wiki/Hard_disk_drive_performance_characteristics'>Wikipedie - výkonnostní charakteristiky disků</a>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>6. course of Principles of Computers</a>, 
+            <a href='https://en.wikipedia.org/wiki/Hard_disk_drive_performance_characteristics'>Wikipedia - HDD performance characteristics</a>
         </li>
         <li>
-            <a href='https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics'>Základy page cache v Linux-u</a>,
+            <a href='https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics'>Page Cache Basics in Linux</a>,
             <a href='https://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html'>Java: BufferedInputStream</a>
         </li>
         <li>
@@ -99,19 +101,19 @@
             <a href='http://stackoverflow.com/questions/1042110/using-scanf-in-c-programs-is-faster-than-using-cin'>Using scanf() in C++ programs is faster than using cin?</a>
         </li>
         <li>
-            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>16. přednáška principů počítačů</a>, 
-            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/ar-20112012/11-os-pamet.pdf'>Principy počítačů - stránkování, archiv</a>,
-            <a href='https://en.wikipedia.org/wiki/Paging'>Wikipedie: stránkování</a>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>16. course of Principles of Computers</a>, 
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/ar-20112012/11-os-pamet.pdf'>Principles of Computers - paging, archive</a>,
+            <a href='https://en.wikipedia.org/wiki/Paging'>Wikipedia: paging</a>
         </li>
         </ol>
         <h3>Hardware</h3>
         <p>
-        K testování použijte počítače v unixové části laboratoře Rotunda, t.j. <tt>u-pl1</tt> až <tt>u-pl30</tt>. 
-        V zásadě jsou dvojího typu - jeden typ má 16 GiB operační paměti a druhý typ má jenom 4 GiB paměti a menší disk.
-        Naše řešení běželi 43 minut na rychlejších strojích a plnýma datama a XX minut na pomalejších s polovičníma datama, plná by se na tyto počítače nevešly.
-        Vždy jsme nastavili parametry řešení tak, aby odpovídali danému počítači.
-        Testovací počítač má 8 GiB paměti, vaše řešení odevzdávajte tak, aby na něm fungovali efektivně.
-        Běžný stav paměti testovacího stroje:
+        For estimating the speed of your solution use computers in the unix laboratory Rotunda <tt>u-pl1</tt> - <tt>u-pl30</tt>. 
+        These computers are of two types. The first one, faster has 16 GiB of operating memory and SSDs. 
+        The second one just 4 GiB of memory and smaller HDDs.
+        Our solutions ran XX minutes on the faster machines with standard data and XX minutes on the slower ones with half data since the full data would not fit into the HDDs of these computers.
+        The evaluation environment has 8 GiB of memory. Set up your solution so that it works efficiently on this environment.
+        Common memory state of the test computer:
         <pre>
 $ free -m
               total        used        free      shared  buff/cache   available
