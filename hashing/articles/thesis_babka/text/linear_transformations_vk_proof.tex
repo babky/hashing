@@ -1,0 +1,74 @@
+The idea of the proof is to factorise the transformation $T$ through the factor space $\vecspace{f}$, where the dimension $f$ is specified later, into two linear functions $T_0$ and $T_1$ such that $T = T_1 \circ T_0$. In fact, we estimate the probability of the complementary event, $T(S) \neq \vecspace{b}$. To successfully use the estimate from Theorem \ref{theorem-linear-function-set-onto} we must bound the inverse density $\mu$. The bound is obtained by using the Law of Total Probability, Theorem \ref{theorem-law-of-total-probability} as
+\[
+\begin{split}
+& \Prob{T(S) \neq \vecspace{b}} \\
+& \qquad = \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| \leq \frac{|S|}{2}} + \Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac{|S|}{2}} \text{.}
+\end{split}
+\] 
+Then we use the Markov's inequality to estimate the expression $\Prob{|T_0(S)| \leq \frac{|S|}{2}}$ and Theorem \ref{theorem-linear-function-set-onto} on the remaining one.
+
+First set $f = \left\lceil\log(\frac {2|S|}{\epsilon})\right\rceil$. Let $T_1: \vecspace{f} \rightarrow \vecspace{b}$ be a random uniformly chosen surjective linear mapping. Since $c_\epsilon$ is later chosen large enough, we have that $f \geq b$ and thus such onto mapping $T_1$ exists. Fix it. Secondly, perform the random uniform choice of a linear mapping $T_0: \vecspace{u} \rightarrow \vecspace{f}$. From Model \ref{remark-model-uniform-linear-map-selection} it follows that the linear mapping $T = T_1 \circ T_0$ is chosen randomly and uniformly, too.
+
+Since the family of all linear mappings from $\vecspace{u}$ into $\vecspace{f}$ is $1$-universal we conclude that \[ \Prob{T_0(\vec{x}) = T_0(\vec{y})} = 2 ^ {-f} \] for all distinct vectors $\vec {x}$ and $\vec {y}$ from the vector space $\vecspace{u}$. If $d_S$ is the number of  all pairs of distinct vectors $\vec {x},\vec {y}\in S$ with $T_0(\vec {x}) = T_0(\vec {y})$, then the expected value of the random variable $d_S$ is \[ \Expect{d_S}= \binom{|S|}{2} 2 ^ {-f} \text{.} \]
+
+If $|T_0(S)| \leq \frac {|S|}{2}$ then there exist at least $\frac {|S|}{2}$ pairs of distinct vectors $\vec{x}, \vec{y} \in S$ with $T_0(\vec {x}) = T_0(\vec {y})$. By the Markov's inequality, Theorem \ref{theorem-markov-inequality}, for every $k > 1$ we have \[ \Prob{d_S \geq k\binom {|S|}{2} 2^{-f}} \leq \frac{1}{k} \text{.} \]
+Thus if we set $k = \frac {|S|2 ^ f}{2\binom {|S|}{2}}$, then 
+\[
+	k \geq \frac{2|S| ^ 2}{\epsilon(|S| ^ 2 - |S|)} \ge 2\epsilon ^ {-1} > 1 
+\] 
+and
+\[
+	k\binom{|S|}{2} 2 ^ {-f} = \frac{|S|2 ^ f}{2\binom{|S|}{2}}\binom{|S|}{2} 2 ^ {-f} = \frac{|S|}{2}
+\]
+and, by the Markov's inequality, we obtain
+\[ 
+	\Prob{|T_0(S)| \leq \frac {|S|}{2}} 
+		\leq \Prob{d_S \geq \frac {|S|}{2}} 
+		\leq \frac{2 \binom{|S|}{2}}{|S|2 ^ f} = \frac{|S| - 1}{2 ^ f} < \frac{|S|}{2 ^ f} 
+		\leq \frac{\epsilon |S|}{2|S|} = \frac{\epsilon}{2} \text{.}
+\]
+
+We can summarise that
+\[ 
+\Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| \leq \frac{|S|}{2}} \leq \frac{\epsilon}{2} \text{.}
+\]
+
+Secondly we compute $\Prob{T(S) \neq \vecspace{b} \wedge |T_0(S)| > \frac{|S|}{2}}$. By Theorem \ref{theorem-linear-function-set-onto} used for the mapping $T_1:~\vecspace{f}~\rightarrow~\vecspace{b}$ and the set $T_0(S) \subseteq \vecspace{f}$ we have
+\[
+	\Prob{T(S) = T_1(T_0(S)) \neq \vecspace{b} \wedge |T_0(S)| > \frac{|S|}{2}} \leq \mu ^ {f - b - \log b  +\log\log \left(\frac{1}{\mu}\right) } 
+\]
+where $\mu = 1- \frac{|T_0(S)|}{2 ^ f}$. Since $2 ^ f \leq \frac{4|S|}{\epsilon}$, clearly
+\[
+\mu = 1 - \frac{|T_0(S)|}{2 ^ f} < 1 - \frac{|S|}{2 \cdot 2 ^ f} \leq 1 - \frac{\epsilon |S|}{8|S|} \leq e^{-\frac{\epsilon}{8}}
+\text{.}
+\]
+In the following constant $c_{\epsilon}$ is chosen as $4\left(\frac{2}{\epsilon}\right) ^ {\frac{8}{\epsilon}}$. Then we can estimate:
+\[
+\begin{split}
+& -\frac{\epsilon}{8} \left(f - b - \log b + \log \log \left( \frac{1}{\mu} \right) \right) \\
+& \qquad = -\frac{\epsilon}{8}\left(\left\lceil\log\left(\frac{2|S|}{\epsilon}\right)\right\rceil - b - \log b + \log\log\left(\frac{1}{\mu}\right)\right) \\
+& \qquad \leq -\frac{\epsilon}{8} \left( \left\lceil \log\left( \frac{8 \left(\frac{2}{\epsilon}\right) ^ {\frac{8}{\epsilon}}b2^b}{\epsilon} \right) \right\rceil - b - \log b + \log\log\left(\frac{1}{\mu}\right)\right) \\
+& \qquad \leq -\frac{\epsilon}{8} \left(3 + \frac{8}{\epsilon}\log\frac{2}{\epsilon} - \log\epsilon + \log b + b - b - \log b + \log \left( \left(\frac{\epsilon}{8}\right)\log e \right) \right) \\
+& \qquad = -\frac{\epsilon}{8} \left(3 - \log\epsilon + \frac{8}{\epsilon} \log \frac{2}{\epsilon} + \log\epsilon - 3 + \log\log e\right) \\
+& \qquad = -\frac{\epsilon}{8}\left(\frac{8}{\epsilon}\log \frac{2}{\epsilon} + \log\log e\right) \\
+& \qquad = \log \frac{\epsilon}{2} - \frac{\epsilon}{8} \log\log e \\
+& \qquad \leq \log\frac{\epsilon}{2} \text{.}
+\end{split}
+\]
+And for the calculated probability we derive:
+\[
+\begin{split}
+\Prob{T(S) \neq \vecspace{b} \wedge |T(S)| > \frac{|S|}{2}} 
+	& \leq \mu ^ {f - b - \log b + \log\log\left(\frac{1}{\mu}\right)} \\
+	& \leq e ^ {-\frac{\epsilon\left(f - b - \log b + \log\log\left(\frac{1}{\mu}\right)\right)}{8}} \\
+	& \leq e ^ {\log \left( \frac{\epsilon}{2} \right)} \leq e ^ {\ln \left(\frac{\epsilon}{2}\right)} = \frac{\epsilon}{2} \text{.}
+\end{split}
+\]
+
+If we put both alternatives together, we deduce that 
+\[ 
+	\Prob{T(S) = T_1(T_0(S)) \neq \vecspace{b}} \leq \frac{\epsilon}{2} + \frac{
+\epsilon}{2} = \epsilon \text{.}
+\]
+
+From this observation follows the required estimate: \[ \Prob{T(S) = \vecspace{b}} \geq 1 - \epsilon \text{.} \]

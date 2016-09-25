@@ -1,0 +1,6 @@
+All the performed changes reflect only the mentioned errors and typos. There are only minor changes - adding an article or deleting a word as proposed in the review.
+
+The only non-trivial change deals with an error in Theorem 1 since I denoted the number of alpha cycles and the constant of universality by "c" and the potential and the trimming rate by "p". I changed the notation of the number of cycles to "c_\alpha" and the overall potential to "p_o".
+
+I would like to thank my reviewers for suggestions that really improved the paper.
+
