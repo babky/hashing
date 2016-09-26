@@ -15,6 +15,7 @@
 #ifdef BOOST_MSVC
 	#pragma warning(default: 4512)
 #endif
+#include <boost/multiprecision/cpp_int.hpp>
 
 /**
  * Computes the PDF for linear functions
@@ -288,7 +289,15 @@ a11s1 + a12s2 + a13s3 + a14s4                                                   
 
 */
 
-size_t collision_count_linear_map(const ElementVector & elements, size_t universeBitSize, size_t tableSize) {
+typedef boost::multiprecision::number<boost::multiprecision::cpp_int_backend<>, boost::multiprecision::et_off> number;
+
+number compute_binary_power(size_t exponent) {
+	number x = 1;
+	x <<= exponent;
+	return x;
+}
+
+number collision_count_linear_map(const ElementVector & elements, size_t universeBitSize, size_t tableSize) {
 	size_t tableBitSize = Hash::Math::log2exact(tableSize);
 	size_t matrixCols = universeBitSize * tableBitSize;
 	size_t matrixRows = tableBitSize * elements.size();
@@ -296,7 +305,7 @@ size_t collision_count_linear_map(const ElementVector & elements, size_t univers
 	boost::numeric::ublas::matrix<size_t> matrix(matrixRows, matrixCols, 0);
 	boost::numeric::ublas::matrix<size_t> extendedMatrix(matrixRows, matrixCols + 1, 0);
 
-	size_t collisionCount = 0;
+	number collisionCount = 0;
 
 	size_t vectorNo = 0;
 	// Create the matrix and the extended matrix.
@@ -306,7 +315,8 @@ size_t collision_count_linear_map(const ElementVector & elements, size_t univers
 	}
 
 	size_t rank = compute_rank_destructive(matrix);
-	size_t kernelSize = 1 << (matrixCols - rank);
+
+	number kernelSize = compute_binary_power(matrixCols - rank);
 
 	for (size_t y = 0; y < tableSize; ++y){
 		write_vector_as_col_in_matrix(extendedMatrix, y, matrixCols, tableBitSize, elements.size());
@@ -315,7 +325,6 @@ size_t collision_count_linear_map(const ElementVector & elements, size_t univers
 			collisionCount += kernelSize;
 		}
 	}
-
 
 	return collisionCount;
 }
@@ -329,10 +338,10 @@ int main(int argc, char ** argv) {
 	typedef UniversalFunctionLinearMap<T, CollisionCountStorage<T, EqualityComparer<T>, size_t> > LinearMapFunction;
 
 	size_t DEFAULT_TABLE_SIZE = 32;
-	size_t DEFAULT_BITS = 10;
+	size_t DEFAULT_BITS = 11;
 	size_t DEFAULT_RUNS = 1;
-	size_t DEFAULT_X = 0;
-	size_t DEFAULT_Y = 1;
+	size_t DEFAULT_X = 2;
+	size_t DEFAULT_Y = 3;
 	size_t tableSize;
 	size_t bits;
 	size_t runs;
@@ -400,6 +409,13 @@ int main(int argc, char ** argv) {
 	v.push_back(x);
 
 	const size_t tableBitSize = Hash::Math::log2exact(tableSize);
+	size_t cwlfColls = 0;
+	size_t msColls = 0;
+	number lmColls = 0;
+	number lfSystemSize = compute_binary_power(tableBitSize * bits);
+	size_t lmCollsSampled = 0;
+	size_t lmCollsComplete = 0;
+	size_t randomRuns = 1024 * tableSize;
 
 	for (size_t i = 0; i != universumSize; ++i) {
 		if (std::find(v.begin(), v.end(), i) != v.end()) {
@@ -408,18 +424,24 @@ int main(int argc, char ** argv) {
 
 		v[v.size() - 1] = i;
 
-		size_t cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
-		size_t msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
-		size_t lmColls = collision_count_linear_map(v, bits, tableSize);
+		cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
+		msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
+		lmColls = collision_count_linear_map(v, bits, tableSize);
+		lmCollsSampled = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(randomRuns, tableSize));
+		// lmCollsComplete = collision_count<LinearMapFunction>(v, CompleteFunctionIterator<LinearMapFunction>(universumMax, tableSize));
 
 		std::cout
 			<< i << ","
 			<< cwlfColls << "," << cwlfColls / (static_cast<double>(primes[bits]) * primes[bits]) << ","
 			<< msColls << "," << msColls / (static_cast<double>(universumMax / 2)) << ","
-			<< lmColls << "," << lmColls / pow(2, tableBitSize * bits) << "\n";
+			<< lmColls << "," << boost::multiprecision::cpp_rational(lmColls, lfSystemSize).convert_to<double>() << ","
+			// << lmCollsComplete << "," << lmCollsComplete / pow(2, tableBitSize * bits) << ","
+			<< lmCollsSampled << "," << lmCollsSampled / static_cast<double>(randomRuns)
+			<< std::endl;
 	}
 
 
 	return 0;
 }
+
 
