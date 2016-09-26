@@ -1,0 +1,12 @@
+\section*{Appendix -- proof of Theorem \ref{theorem-linear-refined}}
+\setcounter{theorem}{2}
+
+\begin{theorem}
+Assume universal hashing with the system of all linear transformations between vector spaces over $\bbbz_2$. 
+Let $p \in (0, 1)$ be the trimming rate and $\alpha > 0$. 
+If $n = \alpha m$ elements are stored inside the hash table of size $m$, then $$\Expect{\lpsl} \leq 538 \alpha \log n \log \log n + 44\mbox{ and}$$ $$\Prob{\lpsl \geq a_{\alpha, p} \log m \log \log m + b_{\alpha, p}\log m} < p.$$ where constants $a$ and $b$ depend on the choice of $\alpha$ and $p$.
+\end{theorem}
+
+The proof of Theorem \ref{theorem-linear-refined} is rather technical we shall enclose so that verification of the results is possible.
+It may be found in Chapters 5 and 6.3 at \url{http://ktiml.mff.cuni.cz/~babka/hashing/thesis.pdf}.
+However, there is one change in the notation, the set of all addresses of the hash table is denoted by $B$ instead of $V$.
