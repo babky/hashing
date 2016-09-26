@@ -4,6 +4,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
 #include "storages/collision_count_storage.h"
+#include <boost/multiprecision/cpp_int.hpp>
 #include "systems/cwlf_system.h"
 #include "systems/multiply_shift_system.h"
 #include "systems/linear_map_system.h"
@@ -15,7 +16,6 @@
 #ifdef BOOST_MSVC
 	#pragma warning(default: 4512)
 #endif
-#include <boost/multiprecision/cpp_int.hpp>
 
 /**
  * Computes the PDF for linear functions
