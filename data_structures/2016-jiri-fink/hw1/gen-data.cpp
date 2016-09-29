@@ -37,7 +37,7 @@ const size_t BASELEN = 1uL * 1024 * 1024 * 1024 / sizeof(T); // 2 G of data.
 #else
 const size_t BASELEN = 19uL * 1024 * 1024 * 1024 / sizeof(T); // cca 48 G of data.
 #endif
-const size_t MINLEN = 1024 * 1024;
+const size_t MINLEN = 128;
 
 T nextrandom() {
 	return (((T) rand()) * ((T) rand()) + (T) rand() + ((T) rand() << sizeof(T) * 8 / 2)) ^ rand();
