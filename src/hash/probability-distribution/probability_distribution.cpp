@@ -1,6 +1,7 @@
 #define HASH_DEBUG
 
 #include <iostream>
+#include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
 #include "storages/collision_count_storage.h"
@@ -340,22 +341,19 @@ int main(int argc, char ** argv) {
 	size_t DEFAULT_TABLE_SIZE = 32;
 	size_t DEFAULT_BITS = 11;
 	size_t DEFAULT_RUNS = 1;
-	size_t DEFAULT_X = 2;
+	vector<size_t> DEFAULT_X = {0, 1};
 	size_t DEFAULT_Y = 3;
 	size_t tableSize;
 	size_t bits;
 	size_t runs;
-	size_t x = DEFAULT_X;
-	size_t y = DEFAULT_Y;
 
 	options_description optsDesc("Probability distribution computation.");
 	optsDesc.add_options()
-		("help", "prints this help message")
-		("m", value<size_t>(&tableSize)->default_value(DEFAULT_TABLE_SIZE), "The size of the table.")
-		("u", value<size_t>(&bits)->default_value(DEFAULT_BITS), "The number of bits.")
-		("x", value<size_t>(&x)->default_value(DEFAULT_X), "The first fixed element.")
-		("y", value<size_t>(&y)->default_value(DEFAULT_Y), "The second fixed element.")
-		("runs", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.");
+		("help,h", "prints this help message")
+		("table,m", value<size_t>(&tableSize)->default_value(DEFAULT_TABLE_SIZE), "The size of the table.")
+		("universe,u", value<size_t>(&bits)->default_value(DEFAULT_BITS), "The number of bits.")
+		("element,x", value<vector<size_t>>()->composing(), "The fixed elements.")
+		("runs,r", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.");
 
 	variables_map vm;
 	try {
@@ -403,10 +401,8 @@ int main(int argc, char ** argv) {
 		4294967291
 	};
 
-	ElementVector v;
-	v.push_back(x);
-	v.push_back(y);
-	v.push_back(x);
+	ElementVector v = vm["element"].as<vector<size_t>>();
+	v.push_back(0);
 
 	const size_t tableBitSize = Hash::Math::log2exact(tableSize);
 	size_t cwlfColls = 0;
@@ -427,16 +423,14 @@ int main(int argc, char ** argv) {
 		cwlfColls = collision_count<CWLFFunction>(v, CompleteFunctionIterator<CWLFFunction>(primes[bits], tableSize));
 		msColls = collision_count<MultiplyShiftFunction>(v, CompleteFunctionIterator<MultiplyShiftFunction>(universumMax, tableSize));
 		lmColls = collision_count_linear_map(v, bits, tableSize);
-		lmCollsSampled = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(randomRuns, tableSize));
-		// lmCollsComplete = collision_count<LinearMapFunction>(v, CompleteFunctionIterator<LinearMapFunction>(universumMax, tableSize));
+		// lmCollsSampled = collision_count<LinearMapFunction>(v, RandomFunctionIterator<LinearMapFunction>(randomRuns, tableSize));
 
 		std::cout
 			<< i << ","
 			<< cwlfColls << "," << cwlfColls / (static_cast<double>(primes[bits]) * primes[bits]) << ","
 			<< msColls << "," << msColls / (static_cast<double>(universumMax / 2)) << ","
 			<< lmColls << "," << boost::multiprecision::cpp_rational(lmColls, lfSystemSize).convert_to<double>() << ","
-			// << lmCollsComplete << "," << lmCollsComplete / pow(2, tableBitSize * bits) << ","
-			<< lmCollsSampled << "," << lmCollsSampled / static_cast<double>(randomRuns)
+			// << lmCollsSampled << "," << lmCollsSampled / static_cast<double>(randomRuns)
 			<< std::endl;
 	}
 
