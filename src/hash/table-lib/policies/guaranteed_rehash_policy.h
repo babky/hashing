@@ -3,8 +3,11 @@
 
 #include "../storage.h"
 #include "rehash_policy.h"
+#include "math/double_word.h"
 
 namespace Hash { namespace Policies { namespace Rehash {
+
+	double log2(double value);
 
 	class GuaranteedRehashPolicy : public RehashPolicy<MaxChainLengthStorageInfo> {
 	public:
@@ -26,7 +29,7 @@ namespace Hash { namespace Policies { namespace Rehash {
 			return this->maxLoadFactor;
 		}
 
-		inline size_t getMaxChainLength(size_t n) const {
+		inline std::size_t getMaxChainLength(std::size_t n) const {
 			double t = log2(n);
 		    size_t maxLength = static_cast<size_t> (ceil(this->multiplicativeConstant * t * log2(t)));
 			if (maxLength < MINIMAL_ALLOWED_BOUND) {

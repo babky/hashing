@@ -7,7 +7,7 @@ using namespace Hash::Policies::Rehash;
 using namespace Hash::Utils;
 using namespace std;
 
-double log2(double n) {
+double Hash::Policies::Rehash::log2(double n) {
 	return log(static_cast<double> (n)) / log(static_cast<double> (2));
 }
 

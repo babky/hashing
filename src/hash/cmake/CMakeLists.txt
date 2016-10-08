@@ -5,6 +5,7 @@ project (HashTable)
 
 
 add_subdirectory (../table-lib/cmake ../table-lib/cmake)
+add_subdirectory (../surjectivity/cmake ../surjectivity/cmake)
 add_subdirectory (../probability-distribution/cmake ../probability-distribution/cmake)
 add_subdirectory (../cwlf-dynamic-test/cmake ../cwlf-dynamic-test/cmake)
 add_subdirectory (../test-suite/cmake ../test-suite/cmake)

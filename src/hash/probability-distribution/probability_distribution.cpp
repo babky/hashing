@@ -176,7 +176,7 @@ struct BinaryOperations {
 
 };
 
-template<typename T, template<typename T> class operations>
+template<typename T, template<typename> class operations>
 void gauss_elimination_desctructive(boost::numeric::ublas::matrix<T> & m) {
 	// Compute the Gauss elimination of the matrix.
 	size_t col = 0;
@@ -217,7 +217,7 @@ void gauss_elimination_desctructive(boost::numeric::ublas::matrix<T> & m) {
 	}
 }
 
-template<typename T, template<typename T> class operations>
+template<typename T, template<typename> class operations>
 boost::numeric::ublas::matrix<T> gauss_elimination(const boost::numeric::ublas::matrix<T> & m) {
 	boost::numeric::ublas::matrix<T> result = m;
 	gauss_elimination_desctructive(result);
