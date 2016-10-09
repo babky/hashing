@@ -33,7 +33,8 @@ bool next(ElementVector & v, size_t max) {
 	while (v[s] == max) {
 		v[s] = v[s - 1] + 1;
 
-		if (s == 0) {
+		// First two elements may be fixed to 0 and 1 for linear functions.
+		if (s == 2) {
 			return false;
 		}
 
