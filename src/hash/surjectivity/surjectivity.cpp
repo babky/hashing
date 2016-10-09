@@ -3,15 +3,19 @@
 #include <numeric>
 #include <utility>
 #include "systems/cwlf_system.h"
+#include "storages/chained_storage.h"
+#include "utils/equality_comparer.h"
+#include "table.h"
 #ifdef BOOST_MSVC
-	#pragma warning(disable: 4512)
+#pragma warning(disable: 4512)
 #endif
 #include <boost/program_options.hpp>
 #ifdef BOOST_MSVC
-	#pragma warning(default: 4512)
+#pragma warning(default: 4512)
 #endif
 
 using namespace std;
+using namespace Hash;
 using namespace Hash::Systems;
 
 typedef vector<size_t> ElementVector;
@@ -71,7 +75,7 @@ bool is_surjective(const ElementVector & v, Function f, bool * table) {
 		table[f.hash(v[i])] = true;
 	}
 
-	return accumulate(table, table + f.getTableSize(), true, [](bool a, bool b) { return a & b; });
+	return accumulate(table, table + f.getTableSize(), true, [](bool a, bool b) {return a & b;});
 }
 
 template<class Function, class FunctionGenerator>
@@ -81,7 +85,7 @@ pair<size_t, size_t> surjective_number(const ElementVector & v, FunctionGenerato
 	bool * table = 0;
 	Function f = g.next();
 	table = new bool[f.getTableSize()];
-	for (; ; f = g.next()) {
+	for (;; f = g.next()) {
 		++count;
 		if (is_surjective(v, f, table)) {
 			++surjectiveCount;
@@ -91,10 +95,53 @@ pair<size_t, size_t> surjective_number(const ElementVector & v, FunctionGenerato
 			break;
 		}
 	}
-	delete [] table;
+	delete[] table;
 	table = 0;
 
 	return make_pair(surjectiveCount, count);
+}
+
+struct LongestChainResult {
+
+	LongestChainResult(void) :
+			sum(0), count(0) {
+	}
+
+	LongestChainResult(size_t aSum, size_t aFunctionCount) :
+			sum(aSum), count(aFunctionCount) {
+	}
+
+	size_t sum;
+	size_t count;
+
+};
+
+typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, UniversalFunctionCWLF, Hash::Storages::ChainedStorage> SimpleTable;
+
+template<class Function, class FunctionGenerator>
+LongestChainResult longest_chain(const ElementVector & v, FunctionGenerator g) {
+	size_t count = 0;
+	size_t sum = 0;
+
+	Function f = g.next();
+	Hash::Utils::StorageStatistics stats;
+	for (;; f = g.next()) {
+		SimpleTable table(f);
+
+		for (size_t i = 0; i < v.size(); ++i) {
+			table.insert(v[i]);
+		}
+
+		table.computeStatistics(stats);
+		sum += stats.getMaxChainLength();
+		++count;
+
+		if (!g.hasNext()) {
+			break;
+		}
+	}
+
+	return LongestChainResult(sum, count);
 }
 
 int main(int argc, char ** argv) {
@@ -105,11 +152,9 @@ int main(int argc, char ** argv) {
 	size_t tableSize = 4;
 
 	options_description optsDesc("Probability distribution computation.");
-	optsDesc.add_options()
-		("help", "prints this help message")
-		("p", value<size_t>(&prime)->default_value(prime), "Universe")
-		("s", value<size_t>(&setSize)->default_value(setSize), "The size of the set.")
-		("t", value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.");
+	optsDesc.add_options()("help", "prints this help message")("p", value<size_t>(&prime)->default_value(prime),
+			"Universe")("s", value<size_t>(&setSize)->default_value(setSize), "The size of the set.")("t",
+			value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.");
 
 	variables_map vm;
 	try {
@@ -125,30 +170,49 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-
 	ElementVector v = first(setSize);
-	pair<size_t, size_t> result;
+	pair<size_t, size_t> surjectivityResult;
+	LongestChainResult longestChainResult;
 
-	pair<size_t, size_t> minResult = make_pair(0, 0);
 	bool first = true;
-	ElementVector minVector;
+	pair<size_t, size_t> sResult = make_pair(0, 0);
+	ElementVector sVector;
+	LongestChainResult lResult;
+	ElementVector lVector;
 
 	for (bool shouldContinue = true; shouldContinue; shouldContinue = next(v, prime - 1)) {
-		UniversalFunctionCWLF<size_t, void>::Generator g(prime, tableSize);
-		result = surjective_number<UniversalFunctionCWLF<size_t, void>, UniversalFunctionCWLF<size_t, void>::Generator>(v, g);
-		cout << v << " " << result.first << "/" << result.second << "\n";
+		SimpleTable::HashFunction::Generator gs(prime, tableSize);
+		surjectivityResult = surjective_number<SimpleTable::HashFunction, SimpleTable::HashFunction::Generator>(v, gs);
+
+		SimpleTable::HashFunction::Generator gl(prime, setSize);
+		longestChainResult = longest_chain<SimpleTable::HashFunction, SimpleTable::HashFunction::Generator>(v, gl);
+
+		cout << v << " " << surjectivityResult.first << "/" << surjectivityResult.second << " "
+				<< longestChainResult.sum << "/" << longestChainResult.count << "\n";
 
 		if (first) {
 			first = false;
-			minVector = v;
-			minResult = result;
-		} else if (result.first < minResult.first) {
-			minVector = v;
-			minResult = result;
+			sVector = v;
+			sResult = surjectivityResult;
+
+			lVector = v;
+			lResult = longestChainResult;
+		} else {
+			if (surjectivityResult.first < sResult.first) {
+				sVector = v;
+				sResult = surjectivityResult;
+			}
+
+			if (longestChainResult.sum > lResult.sum) {
+				lVector = v;
+				lResult = longestChainResult;
+			}
 		}
 	}
 
-	cout << minVector << " " << minResult.first << "/" << minResult.second << "\n";
+	cout << "Results\n";
+	cout << "Surjectivity:  " << sVector << " " << sResult.first << "/" << sResult.second << "\n";
+	cout << "Longest chain: " << lVector << " " << lResult.sum << "/" << lResult.count << "\n";
 
 	return 0;
 }

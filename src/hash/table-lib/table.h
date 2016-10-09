@@ -78,6 +78,15 @@ namespace Hash {
 			this->function.setStorage(&storage);
 		}
 
+		/**
+		 * Table's initializer.
+		 */
+		void init(HashFunction aFunction) {
+			this->function = aFunction;
+			this->function.setTableSize(this->storage.getStorageInfo().getTableSize());
+			this->function.setStorage(&storage);
+		}
+
 	public:
 		/**
 		 * Constructor.
@@ -94,6 +103,17 @@ namespace Hash {
 		explicit Table(size_t tableSize):
 		  storage(HashStorage(tableSize)) {
 			init();
+		}
+
+		/**
+		 * Constructor.
+		 *
+		 * @param HashFunction Function.
+		 */
+		explicit Table(HashFunction aFunction):
+		  function(aFunction),
+		  storage(HashStorage(aFunction.getTableSize())) {
+			init(aFunction);
 		}
 
 		/**
