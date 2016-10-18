@@ -2,12 +2,12 @@
 #include <vector>
 #include <numeric>
 #include <utility>
+#include "boost/multiprecision/cpp_int.hpp"
 #include "systems/cwlf_system.h"
 #include "systems/multiply_shift_system.h"
 #include "storages/chained_storage.h"
 #include "utils/equality_comparer.h"
 #include "table.h"
-#include <boost/multiprecision/cpp_int.hpp>
 #ifdef BOOST_MSVC
 #pragma warning(disable: 4512)
 #endif
