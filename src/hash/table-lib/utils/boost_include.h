@@ -8,7 +8,6 @@
 #include <boost/date_time.hpp>
 #include <boost/random.hpp>
 #include <boost/integer.hpp>
-#include <boost/integer_traits.hpp>
 
 #ifdef BOOST_MSVC
 	#pragma warning(default: 4512 4127 4100)

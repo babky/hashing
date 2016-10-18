@@ -26,6 +26,24 @@ def modular_function_generator(p, m):
 			yield ModularFunction(a, b, p, m)
 
 if __name__ == "__main__":
+	elements = [0, 1, 4, 8] 
+	function_count = 0
+	M = 0
+	for f in modular_function_generator(11, 4):
+		t = {}
+		m = 0
+		function_count += 1
+		for x in elements:
+			r = 1 + t.get(f(x), 0)
+			m = max(m, r)
+			t[f(x)] = r
+
+		M += m
+		print(m)
+
+	print(M, "/", function_count, " ", float(M) / function_count)
+	exit()
+
 	function_count = 0
 	elements = [0, 1, 3965]
 	a = 0
