@@ -33,12 +33,20 @@ ElementVector first(size_t count) {
 	return v;
 }
 
+ostream & operator <<(ostream & out, const ElementVector & v) {
+	for (size_t i = 0; i < v.size(); ++i) {
+		if (i > 0) {
+			out << " ";
+		}
+		out << v[i];
+	}
+	return out;
+}
+
 bool next(ElementVector & v, size_t max) {
 	size_t s = v.size() - 1;
 
 	while (v[s] == max) {
-		v[s] = v[s - 1] + 1;
-
 		// First two elements may be fixed to 0 and 1 for linear functions.
 		if (s == 2) {
 			return false;
@@ -55,16 +63,6 @@ bool next(ElementVector & v, size_t max) {
 	return true;
 }
 
-ostream & operator <<(ostream & out, const ElementVector & v) {
-	for (size_t i = 0; i < v.size(); ++i) {
-		if (i > 0) {
-			out << " ";
-		}
-		out << v[i];
-	}
-	return out;
-}
-
 template<class Function>
 bool is_surjective(const ElementVector & v, Function f, bool * table) {
 	for (size_t i = 0; i < f.getTableSize(); ++i) {
@@ -72,8 +70,6 @@ bool is_surjective(const ElementVector & v, Function f, bool * table) {
 	}
 
 	for (size_t i = 0; i < v.size(); ++i) {
-		// cout << "Hashing " << v[i] << " to " << f.hash(v[i]) << ".\n";
-
 		table[f.hash(v[i])] = true;
 	}
 
@@ -82,9 +78,8 @@ bool is_surjective(const ElementVector & v, Function f, bool * table) {
 
 struct SurjectivityResult {
 
-	SurjectivityResult(size_t aSurjectiveCount, size_t aFunctionCount):
-		surjectiveCount(aSurjectiveCount),
-		functionCount(aFunctionCount) {
+	SurjectivityResult(size_t aSurjectiveCount, size_t aFunctionCount) :
+			surjectiveCount(aSurjectiveCount), functionCount(aFunctionCount) {
 	}
 
 	size_t surjectiveCount;
@@ -133,7 +128,7 @@ struct LongestChainResult {
 typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, UniversalFunctionCWLF, Hash::Storages::ChainedStorage> TableCWLF;
 typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, MultiplyShiftSystem, Hash::Storages::ChainedStorage> TableMultiplyShift;
 
-template<class Function, class FunctionGenerator>
+template<class Table, class Function, class FunctionGenerator>
 LongestChainResult longest_chain(const ElementVector & v, FunctionGenerator g) {
 	size_t count = 0;
 	size_t sum = 0;
@@ -141,7 +136,7 @@ LongestChainResult longest_chain(const ElementVector & v, FunctionGenerator g) {
 	Function f = g.next();
 	Hash::Utils::StorageStatistics stats;
 	for (;; f = g.next()) {
-		TableCWLF table(f);
+		Table table(f);
 		stats.clear();
 
 		for (size_t i = 0; i < v.size(); ++i) {
@@ -160,6 +155,28 @@ LongestChainResult longest_chain(const ElementVector & v, FunctionGenerator g) {
 	return LongestChainResult(sum, count);
 }
 
+template<class HashFunction>
+struct GeneratorFactoryTraits {
+
+	typedef typename HashFunction::Generator Generator;
+
+	static Generator create_generator(size_t universeSize, size_t tableSize) {
+		return Generator(universeSize, tableSize);
+	}
+
+};
+
+template<typename T, class Storage>
+struct GeneratorFactoryTraits<MultiplyShiftSystem<T, Storage>> {
+
+	typedef typename MultiplyShiftSystem<T, Storage>::Generator Generator;
+
+	static Generator create_generator(size_t universeSize, size_t tableSize) {
+		return Generator(universeSize - 1, tableSize);
+	}
+
+};
+
 template<class Table, bool intermediate>
 void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 	ElementVector v = first(setSize);
@@ -173,13 +190,14 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 	ElementVector lVector;
 
 	for (bool shouldContinue = true; shouldContinue; shouldContinue = next(v, universeSize - 1)) {
-		typename Table::HashFunction::Generator gs(universeSize, tableSize);
-		surjectivityResult = surjective_number<typename Table::HashFunction, typename Table::HashFunction::Generator>(v,
-				gs);
+		typedef typename Table::HashFunction::Generator Generator;
+		typedef typename Table::HashFunction HashFunction;
 
-		typename Table::HashFunction::Generator gl(universeSize, setSize);
-		longestChainResult = longest_chain<typename Table::HashFunction, typename Table::HashFunction::Generator>(v,
-				gl);
+		Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
+		surjectivityResult = surjective_number<HashFunction, Generator>(v, gs);
+
+		Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, setSize);
+		longestChainResult = longest_chain<Table, HashFunction, Generator>(v, gl);
 
 		if (intermediate) {
 			cout << v << " " << surjectivityResult.surjectiveCount << "/" << surjectivityResult.functionCount << " "
@@ -208,11 +226,44 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 
 	cout << "Results\n";
 	cout << "Surjectivity:  " << sVector << " " << sResult.surjectiveCount << "/" << sResult.functionCount << "\n";
-	cout << "Longest chain: " << lVector << " " << lResult.sum << "/" << lResult.count << " " << boost::multiprecision::cpp_rational(lResult.sum, lResult.count).convert_to<double>() << "\n";
+	cout << "Longest chain: " << lVector << " " << lResult.sum << "/" << lResult.count << " "
+			<< boost::multiprecision::cpp_rational(lResult.sum, lResult.count).convert_to<double>() << "\n";
 }
 
 template<class Table, bool intermediate>
+void perform_partial_experiment(size_t universeSize, const ElementVector & set, size_t tableSize) {
+	typedef typename Table::HashFunction::Generator Generator;
+	typedef typename Table::HashFunction HashFunction;
+
+	Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
+	SurjectivityResult sResult = surjective_number<HashFunction, Generator>(set, gs);
+
+	Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, Hash::Math::next_power(set.size()));
+	LongestChainResult lResult = longest_chain<Table, HashFunction, Generator>(set, gl);
+
+	cout << "Results\n";
+	cout << "Surjectivity:  " << set << " " << sResult.surjectiveCount << "/" << sResult.functionCount << "\n";
+	cout << "Longest chain: " << set << " " << lResult.sum << "/" << lResult.count << " "
+			<< boost::multiprecision::cpp_rational(lResult.sum, lResult.count).convert_to<double>() << "\n";
+}
+
+/**
+ * Performs the surjectivity and longest chain experiment for a single set.
+ * The set is in the form {0, 1, ..., log(tableSize)}.
+ */
+template<class Table, bool intermediate>
 void perform_partial_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
+	ElementVector set;
+
+	for (size_t i = 0; i < setSize; ++i) {
+		set.push_back(i);
+	}
+
+	perform_partial_experiment<Table, intermediate>(universeSize, set, tableSize);
+}
+
+template<class Table, bool intermediate>
+void perform_partial_experiment_log_set(size_t universeSize, size_t setSize, size_t tableSize) {
 	ElementVector set;
 
 	size_t log = Hash::Math::log2exact(tableSize);
@@ -224,17 +275,7 @@ void perform_partial_experiment(size_t universeSize, size_t setSize, size_t tabl
 		set.push_back(x);
 	}
 
-	typename Table::HashFunction::Generator gs(universeSize, tableSize);
-	SurjectivityResult sResult = surjective_number<typename Table::HashFunction,
-			typename Table::HashFunction::Generator>(set, gs);
-
-	typename Table::HashFunction::Generator gl(universeSize, setSize);
-	LongestChainResult lResult = longest_chain<typename Table::HashFunction,
-			typename Table::HashFunction::Generator>(set, gl);
-
-	cout << "Results\n";
-	cout << "Surjectivity:  " << set << " " << sResult.surjectiveCount << "/" << sResult.functionCount << "\n";
-	cout << "Longest chain: " << set << " " << lResult.sum << "/" << lResult.count << " " << boost::multiprecision::cpp_rational(lResult.sum, lResult.count).convert_to<double>() << "\n";
+	perform_partial_experiment<Table, intermediate>(universeSize, set, tableSize);
 }
 
 int main(int argc, char ** argv) {
@@ -248,7 +289,8 @@ int main(int argc, char ** argv) {
 	string function = "cwlf";
 
 	options_description optsDesc("Probability distribution computation.");
-	optsDesc.add_options()("help,h", "prints this help message")\
+	optsDesc.add_options()\
+		("help,h", "prints this help message")\
 		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe")\
 		("set,s", value<size_t>(&setSize)->default_value(setSize), "The size of the set.")\
 		("table,t", value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.")\
@@ -270,17 +312,33 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-	if (intermediate) {
-		if (shortExperiment) {
-			perform_partial_experiment<TableCWLF, true>(universeSize, setSize, tableSize);
+	if (function == "cwlf") {
+		if (intermediate) {
+			if (shortExperiment) {
+				perform_partial_experiment_log_set<TableCWLF, true>(universeSize, setSize, tableSize);
+			} else {
+				perform_experiment<TableCWLF, true>(universeSize, setSize, tableSize);
+			}
 		} else {
-			perform_experiment<TableCWLF, true>(universeSize, setSize, tableSize);
+			if (shortExperiment) {
+				perform_partial_experiment_log_set<TableCWLF, true>(universeSize, setSize, tableSize);
+			} else {
+				perform_experiment<TableCWLF, false>(universeSize, setSize, tableSize);
+			}
 		}
-	} else {
-		if (shortExperiment) {
-			perform_partial_experiment<TableCWLF, true>(universeSize, setSize, tableSize);
+	} else if (function == "multiply-shift") {
+		if (intermediate) {
+			if (shortExperiment) {
+				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
+			} else {
+				perform_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
+			}
 		} else {
-			perform_experiment<TableCWLF, false>(universeSize, setSize, tableSize);
+			if (shortExperiment) {
+				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
+			} else {
+				perform_experiment<TableMultiplyShift, false>(universeSize, setSize, tableSize);
+			}
 		}
 	}
 
