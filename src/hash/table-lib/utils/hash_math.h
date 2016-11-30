@@ -32,6 +32,12 @@ namespace Hash { namespace Math {
 		simple_assert(i == (static_cast<T> (1)) << l, "Can not compute exact logarithm.");
 		return l;
 	}
+
+	template <typename T>
+	unsigned int next_power(T i) {
+		unsigned int l = log2ceil(i);
+		return (static_cast<T> (1)) << l;
+	}
 } }
 
 #endif /* HASH_MATH_H */
