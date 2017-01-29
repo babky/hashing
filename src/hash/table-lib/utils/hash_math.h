@@ -34,6 +34,12 @@ namespace Hash { namespace Math {
 	}
 
 	template <typename T>
+	bool is_power_of_2(T i) {
+		unsigned int l = log2ceil(i);
+		return i == (static_cast<T> (1)) << l;
+	}
+
+	template <typename T>
 	unsigned int next_power(T i) {
 		unsigned int l = log2ceil(i);
 		return (static_cast<T> (1)) << l;

@@ -24,9 +24,7 @@ namespace Hash { namespace Utils {
 
 #ifdef HASH_DEBUG
 	#ifdef __GNUC__
-		void simple_assert(bool status, std::string message) {
-			Hash::Utils::hash_assert(status, message, "", 0);
-		}
+		void simple_assert(bool status, std::string message);
 	#else
 		#define simple_assert(status, message) Hash::Utils::hash_assert(status, message, __FILE__, __LINE__);
 	#endif
