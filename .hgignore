@@ -17,6 +17,7 @@ CMakeCache.txt
 Makefile
 cmake/.*\.cmake
 vendor
+src/hash/cmake/[.]settings$
 src/hash/cwlf-dynamic-test/cmake/CWLFTest
 src/hash/table-simple-length-test/cmake/TableSimpleLengthTest
 src/hash/table-lib/cmake/libTable.a

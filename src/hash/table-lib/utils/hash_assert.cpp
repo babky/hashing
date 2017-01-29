@@ -24,3 +24,13 @@ void Hash::Utils::hash_assert(bool status, string message, string file, size_t l
 		throw AssertException(message, file, line);
 	}
 }
+
+#ifdef HASH_DEBUG
+#ifdef __GNUC__
+
+void simple_assert(bool status, string message) {
+	Hash::Utils::hash_assert(status, message, "", 0);
+}
+
+#endif
+#endif

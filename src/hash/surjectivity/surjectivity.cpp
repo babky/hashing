@@ -284,7 +284,7 @@ int main(int argc, char ** argv) {
 	size_t universeSize = 17;
 	size_t setSize = 8;
 	size_t tableSize = 4;
-	bool intermediate = true;
+	bool intermediate = false;
 	bool shortExperiment = false;
 	string function = "cwlf";
 
@@ -327,6 +327,17 @@ int main(int argc, char ** argv) {
 			}
 		}
 	} else if (function == "multiply-shift") {
+		if (!Hash::Math::is_power_of_2(setSize)) {
+			cerr << "The set size must be power of 2 for multiply-shift.\n";
+			return 1;
+		}
+
+		if (!Hash::Math::is_power_of_2(tableSize)) {
+			cerr << "The table size size must be power of 2 for multiply-shift.\n";
+			return 2;
+		}
+
+
 		if (intermediate) {
 			if (shortExperiment) {
 				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
@@ -337,6 +348,7 @@ int main(int argc, char ** argv) {
 			if (shortExperiment) {
 				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
 			} else {
+				cout << "Multiply-shift long experiment wihtout immediate results." << endl;
 				perform_experiment<TableMultiplyShift, false>(universeSize, setSize, tableSize);
 			}
 		}
