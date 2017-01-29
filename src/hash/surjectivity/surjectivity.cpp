@@ -177,6 +177,15 @@ struct GeneratorFactoryTraits<MultiplyShiftSystem<T, Storage>> {
 
 };
 
+unsigned long long choose(size_t n, size_t k) {
+	unsigned long long up = 1, down = 1;
+	for (int i = 0; i < k; ++i) {
+		up *= (n - i);
+		down *= (k - i);
+	}
+	return up / down;
+}
+
 template<class Table, bool intermediate>
 void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 	ElementVector v = first(setSize);
@@ -189,9 +198,19 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 	LongestChainResult lResult;
 	ElementVector lVector;
 
+	unsigned long long count = choose(universeSize - 2, setSize - 2); // We fix 0 and 1.
+	unsigned long long current = 0;
+	size_t percent = 0;
+
 	for (bool shouldContinue = true; shouldContinue; shouldContinue = next(v, universeSize - 1)) {
 		typedef typename Table::HashFunction::Generator Generator;
 		typedef typename Table::HashFunction HashFunction;
+
+		++current;
+		if (percent != current * 100 / count) {
+			percent = current * 100 / count;
+			cout << percent << "%\n";
+		}
 
 		Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
 		surjectivityResult = surjective_number<HashFunction, Generator>(v, gs);
@@ -238,7 +257,8 @@ void perform_partial_experiment(size_t universeSize, const ElementVector & set, 
 	Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
 	SurjectivityResult sResult = surjective_number<HashFunction, Generator>(set, gs);
 
-	Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, Hash::Math::next_power(set.size()));
+	Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize,
+			Hash::Math::next_power(set.size()));
 	LongestChainResult lResult = longest_chain<Table, HashFunction, Generator>(set, gl);
 
 	cout << "Results\n";
@@ -293,7 +313,7 @@ int main(int argc, char ** argv) {
 		("help,h", "prints this help message")\
 		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe")\
 		("set,s", value<size_t>(&setSize)->default_value(setSize), "The size of the set.")\
-		("table,t", value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.")\
+		("table,t",	value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.")\
 		("short-experiment,e", value<bool>(&shortExperiment)->default_value(shortExperiment), "Short experiment.")\
 		("function,f", value<string>(&function)->default_value(function), "Function type.")\
 		("intermediate,i", value<bool>(&intermediate)->default_value(intermediate), "If the intermediate output should be provided.");
@@ -311,6 +331,9 @@ int main(int argc, char ** argv) {
 		cout << optsDesc;
 		return 0;
 	}
+
+	cout << "Function " << function << " " << (shortExperiment ? "short" : "long") << " experiment "
+			<< (intermediate ? "with" : "without") << " immediate results." << endl;
 
 	if (function == "cwlf") {
 		if (intermediate) {
@@ -337,7 +360,6 @@ int main(int argc, char ** argv) {
 			return 2;
 		}
 
-
 		if (intermediate) {
 			if (shortExperiment) {
 				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
@@ -348,7 +370,6 @@ int main(int argc, char ** argv) {
 			if (shortExperiment) {
 				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
 			} else {
-				cout << "Multiply-shift long experiment wihtout immediate results." << endl;
 				perform_experiment<TableMultiplyShift, false>(universeSize, setSize, tableSize);
 			}
 		}
