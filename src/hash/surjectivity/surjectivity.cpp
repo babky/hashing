@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <numeric>
 #include <utility>
 #include "boost/multiprecision/cpp_int.hpp"
@@ -22,12 +23,20 @@ using namespace Hash::Systems;
 
 typedef vector<size_t> ElementVector;
 
-ElementVector first(size_t count) {
-	ElementVector v;
+bool contains(const ElementVector & elements, size_t element) {
+	return find(elements.begin(), elements.end(), element) != elements.end();
+}
+
+ElementVector first(size_t count, const ElementVector & fixedElements, const ElementVector & disabledElements) {
+	ElementVector v(fixedElements);
 	v.reserve(count);
 
-	for (size_t i = 0; i < count; ++i) {
-		v.push_back(i);
+	for (size_t i = fixedElements.size(), o = 0; i < count; ++i, ++o) {
+		while (contains(fixedElements, o) || contains(disabledElements, o)) {
+			++o;
+		}
+
+		v.push_back(o);
 	}
 
 	return v;
@@ -43,21 +52,31 @@ ostream & operator <<(ostream & out, const ElementVector & v) {
 	return out;
 }
 
-bool next(ElementVector & v, size_t max) {
+void fixValue(size_t & val, const ElementVector & fixedElements, const ElementVector & disabledElements) {
+	for (; contains(fixedElements, val) || contains(disabledElements, val); ++val) {
+	}
+}
+
+bool next(ElementVector & v, size_t max, const ElementVector & fixedElements, const ElementVector & disabledElements) {
 	size_t s = v.size() - 1;
 
 	while (v[s] == max) {
 		// First two elements may be fixed to 0 and 1 for linear functions.
-		if (s == 2) {
+		if (s == fixedElements.size()) {
 			return false;
 		}
 
 		--s;
-		--max;
+		for(--max; contains(fixedElements, max) || contains(disabledElements, max); --max) {
+		}
+
 	}
 
-	for (++v[s], ++s; s < v.size(); ++s) {
+	++v[s];
+	fixValue(v[s], fixedElements, disabledElements);
+	for (++s; s < v.size(); ++s) {
 		v[s] = v[s - 1] + 1;
+		fixValue(v[s], fixedElements, disabledElements);
 	}
 
 	return true;
@@ -186,9 +205,15 @@ unsigned long long choose(size_t n, size_t k) {
 	return up / down;
 }
 
+void print_result(const ElementVector & v, const SurjectivityResult & surjectivityResult, const LongestChainResult & longestChainResult) {
+	cout << v << " " << surjectivityResult.surjectiveCount << "/" << surjectivityResult.functionCount << " "
+			<< longestChainResult.sum << "/" << longestChainResult.count << " "
+			<< boost::multiprecision::cpp_rational(longestChainResult.sum, longestChainResult.count).convert_to<double>() <<  "\n";
+}
+
 template<class Table, bool intermediate>
-void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
-	ElementVector v = first(setSize);
+void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, const ElementVector & fixedElements, const ElementVector & disabled, bool verbose) {
+	ElementVector v = first(setSize, fixedElements, disabled);
 	SurjectivityResult surjectivityResult(0, 0);
 	LongestChainResult longestChainResult;
 
@@ -198,29 +223,31 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 	LongestChainResult lResult;
 	ElementVector lVector;
 
-	unsigned long long count = choose(universeSize - 2, setSize - 2); // We fix 0 and 1.
+	// We fix 0, 1, ..., fixedCount. But we choose only from offset, offset + 1, ..., universeSize - 1
+	// and the first elements are fixed.
+	size_t fixedCount = fixedElements.size();
+	unsigned long long count = choose(universeSize - fixedCount, setSize - fixedCount);
 	unsigned long long current = 0;
 	size_t percent = 0;
 
-	for (bool shouldContinue = true; shouldContinue; shouldContinue = next(v, universeSize - 1)) {
+	for (bool shouldContinue = true; shouldContinue; shouldContinue = (setSize > fixedCount) && next(v, universeSize - 1, fixedElements, disabled)) {
 		typedef typename Table::HashFunction::Generator Generator;
 		typedef typename Table::HashFunction HashFunction;
 
 		++current;
-		if (percent != current * 100 / count) {
+		if (verbose && percent != current * 100 / count) {
 			percent = current * 100 / count;
 			cout << percent << "%\n";
 		}
 
-		Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
-		surjectivityResult = surjective_number<HashFunction, Generator>(v, gs);
+		// Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
+		// surjectivityResult = surjective_number<HashFunction, Generator>(v, gs);
 
 		Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, setSize);
 		longestChainResult = longest_chain<Table, HashFunction, Generator>(v, gl);
 
 		if (intermediate) {
-			cout << v << " " << surjectivityResult.surjectiveCount << "/" << surjectivityResult.functionCount << " "
-					<< longestChainResult.sum << "/" << longestChainResult.count << "\n";
+			print_result(v, surjectivityResult, longestChainResult);
 		}
 
 		if (first) {
@@ -230,15 +257,22 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
 
 			lVector = v;
 			lResult = longestChainResult;
+			if (verbose) {
+				print_result(v, surjectivityResult, longestChainResult);
+			}
 		} else {
-			if (surjectivityResult.surjectiveCount < sResult.surjectiveCount) {
+			/*if (surjectivityResult.surjectiveCount < sResult.surjectiveCount) {
 				sVector = v;
 				sResult = surjectivityResult;
-			}
+			}*/
 
 			if (longestChainResult.sum > lResult.sum) {
 				lVector = v;
 				lResult = longestChainResult;
+
+				if (verbose) {
+					print_result(v, surjectivityResult, longestChainResult);
+				}
 			}
 		}
 	}
@@ -305,7 +339,9 @@ int main(int argc, char ** argv) {
 	size_t setSize = 8;
 	size_t tableSize = 4;
 	bool intermediate = false;
-	bool shortExperiment = false;
+	bool verbose = false;
+	vector<size_t> elements;
+	vector<size_t> disabled;
 	string function = "cwlf";
 
 	options_description optsDesc("Probability distribution computation.");
@@ -314,9 +350,11 @@ int main(int argc, char ** argv) {
 		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe")\
 		("set,s", value<size_t>(&setSize)->default_value(setSize), "The size of the set.")\
 		("table,t",	value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.")\
-		("short-experiment,e", value<bool>(&shortExperiment)->default_value(shortExperiment), "Short experiment.")\
+		("elements,e", value<vector<size_t>>(&elements)->multitoken(), "The fixed elements.")\
+		("disabled,d", value<vector<size_t>>(&disabled)->multitoken(), "The disabled elements.")\
 		("function,f", value<string>(&function)->default_value(function), "Function type.")\
-		("intermediate,i", value<bool>(&intermediate)->default_value(intermediate), "If the intermediate output should be provided.");
+		("intermediate,i", value<bool>(&intermediate)->default_value(intermediate), "If the intermediate output should be provided.")\
+		("verbose,v", value<bool>(&verbose)->default_value(verbose), "If percent of the computation should be printed.");
 
 	variables_map vm;
 	try {
@@ -332,22 +370,16 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-	cout << "Function " << function << " " << (shortExperiment ? "short" : "long") << " experiment "
+	cout << "Function " << function << " with " << elements.size() << " fixed elements "
 			<< (intermediate ? "with" : "without") << " immediate results." << endl;
+
+	ElementVector fixedElements = elements;
 
 	if (function == "cwlf") {
 		if (intermediate) {
-			if (shortExperiment) {
-				perform_partial_experiment_log_set<TableCWLF, true>(universeSize, setSize, tableSize);
-			} else {
-				perform_experiment<TableCWLF, true>(universeSize, setSize, tableSize);
-			}
+			perform_experiment<TableCWLF, true>(universeSize, setSize, tableSize, fixedElements, disabled, verbose);
 		} else {
-			if (shortExperiment) {
-				perform_partial_experiment_log_set<TableCWLF, true>(universeSize, setSize, tableSize);
-			} else {
-				perform_experiment<TableCWLF, false>(universeSize, setSize, tableSize);
-			}
+			perform_experiment<TableCWLF, false>(universeSize, setSize, tableSize, fixedElements, disabled, verbose);
 		}
 	} else if (function == "multiply-shift") {
 		if (!Hash::Math::is_power_of_2(setSize)) {
@@ -361,17 +393,9 @@ int main(int argc, char ** argv) {
 		}
 
 		if (intermediate) {
-			if (shortExperiment) {
-				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
-			} else {
-				perform_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
-			}
+			perform_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize, fixedElements, disabled, verbose);
 		} else {
-			if (shortExperiment) {
-				perform_partial_experiment<TableMultiplyShift, true>(universeSize, setSize, tableSize);
-			} else {
-				perform_experiment<TableMultiplyShift, false>(universeSize, setSize, tableSize);
-			}
+			perform_experiment<TableMultiplyShift, false>(universeSize, setSize, tableSize, fixedElements, disabled, verbose);
 		}
 	}
 
