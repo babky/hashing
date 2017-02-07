@@ -43,6 +43,7 @@
 \newtheorem{corollary}{Corollary}
 
 \title{A probabilistic proof of existence of a small system of functions having small largest bins}
+\author{Martin Babka, Michal Kouck\'y}
 
 \begin{document}
 
@@ -67,33 +68,37 @@ By $\lbin{f}{S}$ we denote the size of the largest bin when the balls from the s
 It holds $\probs{f\in_U\mathcal{H}}{\lbin f S \geq c \log n / \log \log n} \leq n^{-c + 1 + o(1)}$.
 \end{lemma}
 \begin{proof}
-Union bound the probability that a single bucket has the required size. In the estimates use the fact that ${n \choose k} \leq (ne/k)^k$.
+Union bound the probability that a single bucket has the required size. In the estimates use the fact that $\binom{n}{k} \leq (ne/k)^k$.
 \end{proof}
 
 \begin{corollary}
 \label{corollary-single-function}
 It holds $\probs{f\in_U\mathcal{H}}{\lbin f S \geq c \log n / \log \log n} \leq n^{-c + 2}$.
 \end{corollary}
+\begin{corollary}
+\label{corollary-single-function-polylog}
+It holds $\probs{f\in_U\mathcal{H}}{\lbin f S \geq c \log n} \leq n^{-c \log \log n + 1}$.
+\end{corollary}
 
 \begin{theorem}
 \label{theorem-fixed-p-c}
-Let $p \in (0, 1)$, $c > 2$ and $n \in \mathbb{N}$ be large enough. If $\frac{n(\log n + \log e)}{p(c \log n - \log e - \log{p})} < h$, then there is a system of functions $H$, which contains mappings from $[n^2]$ to $[n]$, of size $h$ such that 
+Let $p \in (0, 1)$, $c > 2$ and $n \in \mathbb{N}$ be large enough. If $\frac{n(\log n + \log e)}{p(c \log n - \log e + \log{p})} < h$, then there is a system of functions $H$, which contains mappings from $[n^2]$ to $[n]$, of size $h$ such that 
 \[
-\forall S \in {[n^2] \choose n}\colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n} \leq p.
+\forall S \in \binom{[n^2]}{n} \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n} \leq p.
 \]
 \end{theorem}
 \begin{proof}
 Let $h$ be a positive integer and it is the size of the constructed system of functions.
 We create $H$ so that it consists of $h$ functions chosen uniformly from $\mathcal{H}$ with possible repetitions, i.e. $H$ is chosen uniformly at random from $\mathcal{H}^h$.
 
-Now notice that the system $H$ of size $h$ exists if the following statement holds:
+Now notice that a system $H$ of size $h$ having small large bins exists if the following statement holds:
 \[
 \probs{H \in_U \mathcal{H}^h}{\exists S \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n } > p} < 1.
 \]
 
 We can union bound the above probability as
 \[
-{n^2 \choose n} \probs{H \in_U \mathcal{H}^h}{\probs{f \in_U H}{\lbin{f}{S} > c \log n / \log \log n } > p}.
+\binom{n^2}{n} \probs{H \in_U \mathcal{H}^h}{\probs{f \in_U H}{\lbin{f}{S} > (c + 2) \log n / \log \log n } > p}.
 \]
 
 Now for a fixed $S$ and a random $H$ we estimate \[\probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n } > p.\]
@@ -107,10 +112,10 @@ If there are at least $ph$ functions in $H$ such that they break the $(c + 2)\lo
 	& \quad = 2^{ph(\log e - \log{p} -c \log n)}
 \end{alignat*}
 
-Since ${n^2 \choose n} < (ne)^n$ we may conclude:
+Since $\binom{n^2}{n} < (ne)^n$ we may conclude:
 
 \begin{alignat*}{1}
-& \probs{H \in_U \mathcal{H}^h}{\exists S \in {[n^2] \choose n} \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n} > p} \\ 
+& \probs{H \in_U \mathcal{H}^h}{\exists S \in \binom{[n^2]}{n} \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n} > p} \\ 
 	& \quad \leq (ne)^n \cdot 2^{ph(\log e - \log{p} -c \log n)} \\
 	& \quad = 2^{n(\log n + \log e) + ph(\log e - \log{p} - c \log n)}
 \end{alignat*}
@@ -139,7 +144,7 @@ Let $c \in [2, n \log \log n / \log n]$ and set $p := c^{-(1 + \epsilon)}$.
 
 From Theorem~\ref{theorem-fixed-p-c} it follows that
 \begin{alignat*}{1}
-& \probs{H \in_U \mathcal{H}^h}{\exists S \in {[n^2] \choose n} \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n} > c^{-(1 + \epsilon)}} \\ 
+& \probs{H \in_U \mathcal{H}^h}{\exists S \in \binom{[n^2]}{n} \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 2) \log n / \log \log n} > c^{-(1 + \epsilon)}} \\ 
 & \quad < 2^{n(\log n + \log e) + c^{-(1 + \epsilon)}h(\log e + (1 + \epsilon)\log{c} - c \log n)} \\
 & \quad < 2^{2n\log n + c^{-(1 + \epsilon)}h((1 + \epsilon)\log c - \frac{2c}{3} \log n)}.
 \end{alignat*}
@@ -157,9 +162,37 @@ As in the previous case we union bound not only over all choices of $S$ but also
 3n \log n - \frac{3h \log n}{n^\epsilon} & < 0 \\
 n^{1 + \epsilon} & < h.
 \end{alignat*}
-
 \end{proof}
 
+A similar minimization can be done in order to estimate the size of systems which will have $\expects{f \in_U H}{\lbin{f}{S} \leq c \log n}$.
+We use Corollary~\ref{corollary-single-function-polylog} instead of Corollary~\ref{corollary-single-function} and prove the following corollary of Theorem~\ref{theorem-fixed-p-c}.
+
+\begin{theorem}
+\label{theorem-fixed-p-c-polylog}
+Let $p \in (0, 1)$, $c > 1$ and $n \in \mathbb{N}$ be large enough. If $\frac{n(\log n + \log e)}{p(c \log n \log \log n - \log e - \log{p})} < h$, then there is a system of functions $H$, which contains mappings from $[n^2]$ to $[n]$, of size $h$ such that 
+\[
+\forall S \in \binom{[n^2]}{n} \colon \probs{f \in_U H}{\lbin{f}{S} \geq (c + 1) \log n} \leq p.
+\]
+\end{theorem}
+\begin{proof}
+The same as in the case of Theorem~\ref{theorem-fixed-p-c}. The additional factor $\log \log n$ in the term with $c$ comes from Corollary~\ref{corollary-single-function-polylog}.
+\end{proof}
+
+\begin{corollary}
+There exists a system $H$ of size $\Omega(n/\log \log n)$ satisfying \[\expects{f \in_U H}{\lbin{f}{S}} = O(\log n).\]
+\end{corollary}
+\begin{proof}
+First fix $\epsilon > 0$. We put $p:=c^-{1+\epsilon}$ for each $c \in [2, n/\log n]$ and compute the estimate on $h$ using Theorem~\ref{theorem-fixed-p-c-polylog}.
+
+We estimate the bound on $h$ from above as follows.
+\begin{align*}
+    \frac{n(\log n + \log e)}{c^{-(1 + \epsilon)}(c \log n \log \log n - \log e - (1 + \epsilon) \log c)} < \frac{2n\log n}{c^{-(1+\epsilon)}c/2\log n \log \log n} < \frac{4n}{2^{-\epsilon}\log \log n}.
+\end{align*}
+
+Hence if $h > \frac{4n}{2^{-\epsilon}\log \log n} = \Omega(n/\log \log n)$, then there exists a system $H$ having $O(\log n)$ expected largest bin.
+\end{proof}
+
+Let us note that if we multiply the size of $H$ by a constant, then we may satisfy all of the required properties with high probability.
 \end{document}
 
 
