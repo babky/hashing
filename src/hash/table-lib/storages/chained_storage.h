@@ -591,6 +591,9 @@ namespace Hash { namespace Storages {
 		{
 		}
 
+		virtual ~ChainedStorage(void) {
+		}
+
 		/**
 		 * Chained storage assignment operator.
 		 *

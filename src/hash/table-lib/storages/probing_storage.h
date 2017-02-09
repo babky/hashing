@@ -161,6 +161,8 @@ namespace Hash { namespace Storages {
 					return false;
 				}
 			};
+
+			return false;
 		}
 
 		inline bool contains(const T & item, HashType hash) const {
@@ -179,6 +181,8 @@ namespace Hash { namespace Storages {
 					return false;
 				}
 			};
+
+			return false;
 		}
 
 		size_t size(void) const {

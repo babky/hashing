@@ -23,9 +23,13 @@ namespace Hash { namespace Systems {
 		TwoWaySystemRandomized(void):
 		  bitGenerator(new Hash::Utils::RandomGenerator<size_t>(0, boost::integer_traits<size_t>::const_max, true)),
 		  mutex(new boost::mutex()),
+		  randomWord(0),
 		  p(REGENERATE_NOW) {
 		}
 		
+		virtual ~TwoWaySystemRandomized(void) {
+		}
+
 		virtual void reset(void) {
 			group1.reset();
 			group2.reset();
