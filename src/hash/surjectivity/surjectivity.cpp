@@ -237,7 +237,7 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, c
 		++current;
 		if (verbose && percent != current * 100 / count) {
 			percent = current * 100 / count;
-			cout << percent << "%\n";
+			cout << percent << " %\n";
 		}
 
 		// Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
