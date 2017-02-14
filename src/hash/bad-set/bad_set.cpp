@@ -44,8 +44,8 @@ struct Settings {
 	float optimizeMutationProbability;
 	float optimizeMutationProbabilityPerElement;
 
-	bool optimizeMutationProbabilityMultipleElements;
-	bool optimizeMutationProbabilityMultipleElementsPerElement;
+	float optimizeMutationProbabilityMultipleElements;
+	float optimizeMutationProbabilityMultipleElementsPerElement;
 };
 
 
@@ -331,7 +331,9 @@ bool readSettingsFromArguments(Settings & settings, int argc, char ** argv) {
 		("shift-single-element-mutation-probability-per-element", value<float>(&settings.shiftSingleElementMutationProbabilityPerElement)->default_value(settings.shiftSingleElementMutationProbabilityPerElement), "The probability of a change for a single element.")\
 		("shift-single-element-mutation-shift", value<size_t>(&settings.shiftSingleElementMutationShift)->default_value(settings.shiftSingleElementMutationShift), "The size of the shift, uniform distribution is used.")\
 		("optimize-mutation-probability", value<float>(&settings.optimizeMutationProbability)->default_value(settings.optimizeMutationProbability), "The probability of mutation which hides an element and tries to optimize the hidden value.")\
-		("optimize-mutation-probability-per-element", value<float>(&settings.optimizeMutationProbabilityPerElement)->default_value(settings.optimizeMutationProbabilityPerElement), "The probability of optimizing given element.");
+		("optimize-mutation-probability-per-element", value<float>(&settings.optimizeMutationProbabilityPerElement)->default_value(settings.optimizeMutationProbabilityPerElement), "The probability of optimizing given element.")\
+		("optimize-mutation-probability-multiple-elements", value<float>(&settings.optimizeMutationProbabilityMultipleElements)->default_value(settings.optimizeMutationProbabilityMultipleElements), "The probability of mutation which hides multiple elements and tries to optimize the hidden values.")\
+		("optimize-mutation-probability-multiple-elements-per-element", value<float>(&settings.optimizeMutationProbabilityMultipleElementsPerElement)->default_value(settings.optimizeMutationProbabilityMultipleElementsPerElement), "The probability of hiding a given element.");
 
 	variables_map vm;
 	try {
