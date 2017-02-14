@@ -1,0 +1,66 @@
+\documentclass[12pt]{article}
+
+\usepackage{amssymb, amsmath, amsthm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{observ}[theorem]{Observation}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\begin{document}
+
+\section{Find}
+
+Expected running time of Find procedure for finding the $k$-th element in $n$ elements, $\operatorname{Find}(n, k)$,  can be expressed as follows.
+Each choice of pivot is equally probable and equals $\frac{1}{n}$. First, let us note that the value of $i$ can be seen as the size of the set $S_1$.
+
+When $|S_1| < k - 1$, then we search in $S_2$ of size $|S_2| = n - |S_1| - 1 = n - i - 1$. If $|S_1| = k - 1$, then we do nothing and otherwise we search in the set $S_1$ of size $i$.
+
+\[
+\operatorname{Find}(n, k) = n + \frac{1}{n}\left(\displaystyle\sum_{i = 0}^{k - 2} \operatorname{Find}(n - 1 - i, k - 1 - i) + \displaystyle\sum_{i = k}^{n}\operatorname{Find}(i, k) \right).
+\]
+
+We will prove by induction that $\operatorname{Find}(n, k) \leq 4n$ for each $n \geq 1$.
+
+First, for $n = 1$, we have $\operatorname{Find}(1, 1) = 0 \leq 4 \cdot 1 = 4$ and for the initial case our assumption holds.
+
+Now assume that $n > 1$ and from the induction hypothesis we may assume that $\forall n' < n: \operatorname{Find}(n', k) \leq 4n'$.
+
+Because of the above recursive formula and the induction hypothesis we have that
+\[
+\operatorname{Find}(n, k) = n + \frac{1}{n}\left(\displaystyle\sum_{i = 0}^{k - 2} 4(n - 1 - i) + \displaystyle\sum_{i = k}^{n} 4i \right).
+\]
+
+Now from a known fact that $i + (i + 1) + \cdots + (i + k) = \frac{k(i + i + k)}{2}$ it follows that 
+\[
+\displaystyle\sum_{i = 0}^{k - 2} 4(n - 1 - i) = 4 \cdot \frac{(k - 1)(n - 1 + n - 1 - 	k + 2)}{2} = 2(k - 1)(2n - k)
+\] and
+\[
+\displaystyle\sum_{i = k}^{n - 1} 4i = 4 \cdot \frac{(n - k)(k + n - 1)}{2} = 2(n^2 - k^2 + k - n).
+\]
+
+Now we conclude that
+\begin{align*}
+\operatorname{Find}(n, k) 
+	\leq & n + \frac{1}{n} \cdot \left( 2(k - 1)(2n - k) + 2(n - k)(n + k - 1) \right) \\ 
+	& = n + \frac{4nk - 2k^2 - 4n + 2k + 2n^2 - 2k^2 + 2k - 2n}{n} \\
+	& = n + \frac{2n^2 - 6n + 4nk + 4k - 4k^2}{n}.
+\end{align*}
+
+Let us analyze the expression $2n^2 - 6n + 4nk + 4k - 4k^2$.
+
+First using derivatives.
+$(2n^2 - 6n + 4nk + 4k - 4k^2)' = 4n + 4 - 8k$.
+Hence the expression is maximal when $k = \frac{n + 1}{2}$.
+Thus $2n^2 - 6n + 4nk + 4k - 4k^2 \leq 2n^2 - 6n + 2n(n+1) + 2(n+1) - (n+1)^2 = 2n^2 - 6n + (n+1)^2 = 3n^2 -4n + 1 \leq 3n^2$. 
+So we can conclude that 
+$\operatorname{Find}(n, k) \leq n + 3n = 4n$.
+
+The quadratic functions can be analyzed without derivatives, too.
+Let us compute $2n^2 - 6n + 4k + 4kn -4k^2 = 2n^2 - 6n -(2k - (1+n))^2 + (1+n)^2 = -(2k - (1+n))^2 + 3n^2 - 3n + 1$.
+The equation is maximal when $(2k - (1+n)) = 0$ and thus it is at most $3n^2 - 3n + 1 < 3n^2$.
+\end{document}

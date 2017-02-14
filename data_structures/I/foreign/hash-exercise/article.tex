@@ -1,0 +1,322 @@
+\section*{Hashing - exercise}
+
+The operations I(x), F(x), D(x) denote the operations Insert(x), Find(x), Delete(x).
+
+\paragraph*{Separate Chaining}
+Keep the load factor $\alpha$ in the interval [0.25, 1]. Resizing of the table puts $\alpha = 0.5$ and the initial size of the table is $m = 4$. Use the hash function $h(x) = 3x + 2 \bmod m$. Sequence of operations: I(5), I(6), I(2), F(14), I(14), I(13), F(6), I(21), I(29), I(3), F(8), I(4), D(2), D(5), D(29), D(21), D(6).
+
+\vspace{0.5cm}
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Chain \\ \hline\hline
+0 & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Chain \\ \hline\hline
+0 & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Chain \\ \hline\hline
+0 & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} \\ \hline
+\end{tabular}
+
+\paragraph*{Linear Probing, Double Hashing}
+In this example keep the load factor in [0.3, 1] and when resizing put $\alpha$ as near $0.5$ as possible. But realise why it is not convenient to allow $\alpha$ higher than $0.7$ (Linear Probing) or $0.9$ (Double Hashing)? What value returns the function $h_2(x)$ with Linear Probing? Recall that with Open Addressing methods we have to choose $m$ to be a prime number.
+
+Use $h_1(x) = 2x \bmod m$ and $h_2(x) = (3x + 2) \bmod (m - 1) + 1$. What could happen if for any value $h_2(x) = 0$. Start with $m = 5$.
+
+The sequence of operations: I(1), I(6), D(1), I(11), F(2), F(3), I(16), F(1), D(6), F(11), I(1), I(2), D(1), D(11), D(16), I(3), I(4). 
+
+\vspace{0.5cm}
+Linear probing:
+
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Key \\ \hline\hline
+0 & \hspace{4cm} \\ \hline
+1 & \hspace{4cm} \\ \hline
+2 & \hspace{4cm} \\ \hline
+3 & \hspace{4cm} \\ \hline
+4 & \hspace{4cm} \\ \hline
+5 & \hspace{4cm} \\ \hline
+6 & \hspace{4cm} \\ \hline
+7 & \hspace{4cm} \\ \hline
+8 & \hspace{4cm} \\ \hline
+9 & \hspace{4cm} \\ \hline
+10 & \hspace{4cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Key \\ \hline\hline
+0 & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} \\ \hline
+8 & \hspace{3cm} \\ \hline
+9 & \hspace{3cm} \\ \hline
+10 & \hspace{3cm} \\ \hline
+\end{tabular}
+
+\clearpage
+Double hashing:
+
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Key \\ \hline\hline
+0 & \hspace{4cm} \\ \hline
+1 & \hspace{4cm} \\ \hline
+2 & \hspace{4cm} \\ \hline
+3 & \hspace{4cm} \\ \hline
+4 & \hspace{4cm} \\ \hline
+5 & \hspace{4cm} \\ \hline
+6 & \hspace{4cm} \\ \hline
+7 & \hspace{4cm} \\ \hline
+8 & \hspace{4cm} \\ \hline
+9 & \hspace{4cm} \\ \hline
+10 & \hspace{4cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|}
+\hline
+h(x) & Key \\ \hline\hline
+0 & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} \\ \hline
+8 & \hspace{3cm} \\ \hline
+9 & \hspace{3cm} \\ \hline
+10 & \hspace{3cm} \\ \hline
+\end{tabular}
+
+\vspace{1cm}
+For the remaining exercises start with $m = 8$. The hash value is given by the function $h(x) = x \bmod m$. The allocation of free space  returns the first free row from the beginning of the table or auxiliary memory for methods VICH, EICH, LICH.
+
+Sequence for Relocations and Two Pointers: I(7), I(9), I(0), I(1), I(2), I(10), I(3).
+
+\section*{Hashing with Relocations}
+\begin{tabular}{|c|c|c|c|}
+\hline
+h(x) & Key & Next & Previous \\ \hline\hline
+0 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+\end{tabular}
+
+\section*{Hashing with Two Pointers}
+\begin{tabular}{|c|c|c|c|}
+\hline
+h(x) & Key & Next & Begin \\ \hline\hline
+0 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+1 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+2 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+3 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+4 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+5 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+6 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+7 & \hspace{3cm} & \hspace{3cm} & \hspace{3cm} \\ \hline
+\end{tabular}
+
+\section*{EISCH, LISCH}
+If the inserted element is not first in its chain, then 
+\begin{itemize}
+\item EISCH inserts the key so that it is the second one in the chain (if it is not the first one).
+\item VISCH inserts the key so that is is the last one in the chain.
+\end{itemize}
+
+Why EISCH is supposed to be better than LISCH?
+
+Sequence: I(1), I(9), I(0), I(8), I(5), I(13), I(21).
+
+\vspace{0.5cm}
+EISCH \hspace{4.65cm} VISCH
+
+\vspace{0.2cm}
+\begin{tabular}{|c|c|c|}
+\hline
+h(x) & Key & Next \\ \hline\hline
+0 & \hspace{3cm} & \hspace{1cm} \\ \hline
+1 & \hspace{3cm} & \hspace{1cm} \\ \hline
+2 & \hspace{3cm} & \hspace{1cm} \\ \hline
+3 & \hspace{3cm} & \hspace{1cm} \\ \hline
+4 & \hspace{3cm} & \hspace{1cm} \\ \hline
+5 & \hspace{3cm} & \hspace{1cm} \\ \hline
+6 & \hspace{3cm} & \hspace{1cm} \\ \hline
+7 & \hspace{3cm} & \hspace{1cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|c|}
+\hline
+h(x) & Key & Next \\ \hline\hline
+0 & \hspace{3cm} & \hspace{1cm} \\ \hline
+1 & \hspace{3cm} & \hspace{1cm} \\ \hline
+2 & \hspace{3cm} & \hspace{1cm} \\ \hline
+3 & \hspace{3cm} & \hspace{1cm} \\ \hline
+4 & \hspace{3cm} & \hspace{1cm} \\ \hline
+5 & \hspace{3cm} & \hspace{1cm} \\ \hline
+6 & \hspace{3cm} & \hspace{1cm} \\ \hline
+7 & \hspace{3cm} & \hspace{1cm} \\ \hline
+\end{tabular}
+
+\section*{EICH, VICH, LICH}
+Space is first allocated in the auxiliary area (called cellar) which is never referenced by the hash function. Do not forget that the EISCH/EICH and VICH methods check if the key is not stored twice.
+\begin{itemize}
+\item EICH: Inserts the element as the second one in the chain, if the chain is not empty.
+\item LICH: Inserts the element so that it is the last one in the chain.
+\item VICH: If the new row is from cellar, then we insert at the end of the chain. Otherwise the inserted element will be the one just after the last cellar element. If there is no cellar element it will be the second one in the chain. For details see the exact algorithm below.
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Insert($x$) procedure for the VICH method}
+\begin{algorithmic}
+	\STATE $hash \leftarrow h(x)$ \COMMENT{Hash value of $x$.}
+	\STATE $i \leftarrow hash$ \COMMENT{Iterated element, after the loop it is the last element of the chain.}
+	\STATE $last \leftarrow \bot$ \COMMENT{The last element in the cellar or the first element of the chain.}
+
+	\IF{$T[i].key = \textbf{nil}$}
+		\STATE \COMMENT{The element $x$ is the first element in the chain.}
+		\STATE $T[i].key \leftarrow x$ 
+		\STATE \textbf{return}
+	\ENDIF
+
+	\WHILE{$T[i].next \neq \textbf{nil}$}
+		\IF{$x = T[i].key$}
+			\STATE \textbf{return}
+		\ENDIF
+
+		\IF{($T[i].next < m) \wedge (last = \bot)$}
+			\STATE $last \leftarrow i$
+		\ENDIF
+
+		\STATE $i \leftarrow T[i].next$
+	\ENDWHILE
+
+	\STATE $j \leftarrow$ an empty row primarily chosen from cellar.
+	\IF{$last = \bot$}
+		\STATE $T[i].next \leftarrow j$ \COMMENT{New row is placed just after $i$.}
+	\ELSE
+		\STATE \COMMENT{The new row is from the table and is placed behind the position $last$. If the chain contains an element from cellar, then $x$ is placed behind the last such element. Otherwise $x$ is placed behind the first element of the chain -- $hash$.}
+		\STATE $T[j].next \leftarrow T[last].next$
+		\STATE $T[last].next \leftarrow j$
+	\ENDIF
+
+	\STATE $T[j].key \leftarrow x$
+\end{algorithmic}
+\end{algorithm}
+
+\vspace{0.5cm}
+\begin{tabular}{|c|c|c|}
+\hline
+h(x) & Key & Next \\ \hline\hline
+0 & \hspace{1cm} & \hspace{1cm} \\ \hline
+1 & \hspace{1cm} & \hspace{1cm} \\ \hline
+2 & \hspace{1cm} & \hspace{1cm} \\ \hline
+3 & \hspace{1cm} & \hspace{1cm} \\ \hline
+4 & \hspace{1cm} & \hspace{1cm} \\ \hline
+5 & \hspace{1cm} & \hspace{1cm} \\ \hline
+6 & \hspace{1cm} & \hspace{1cm} \\ \hline
+7 & \hspace{1cm} & \hspace{1cm} \\ \hline\hline
+8 & \hspace{1cm} & \hspace{1cm} \\ \hline
+9 & \hspace{1cm} & \hspace{1cm} \\ \hline
+10 & \hspace{1cm} & \hspace{1cm} \\ \hline
+11 & \hspace{1cm} & \hspace{1cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|c|}
+\hline
+h(x) & Key & Next \\ \hline\hline
+0 & \hspace{1cm} & \hspace{1cm} \\ \hline
+1 & \hspace{1cm} & \hspace{1cm} \\ \hline
+2 & \hspace{1cm} & \hspace{1cm} \\ \hline
+3 & \hspace{1cm} & \hspace{1cm} \\ \hline
+4 & \hspace{1cm} & \hspace{1cm} \\ \hline
+5 & \hspace{1cm} & \hspace{1cm} \\ \hline
+6 & \hspace{1cm} & \hspace{1cm} \\ \hline
+7 & \hspace{1cm} & \hspace{1cm} \\ \hline\hline
+8 & \hspace{1cm} & \hspace{1cm} \\ \hline
+9 & \hspace{1cm} & \hspace{1cm} \\ \hline
+10 & \hspace{1cm} & \hspace{1cm} \\ \hline
+11 & \hspace{1cm} & \hspace{1cm} \\ \hline
+\end{tabular}
+\begin{tabular}{|c|c|c|}
+\hline
+h(x) & Key & Next \\ \hline\hline
+0 & \hspace{1cm} & \hspace{1cm} \\ \hline
+1 & \hspace{1cm} & \hspace{1cm} \\ \hline
+2 & \hspace{1cm} & \hspace{1cm} \\ \hline
+3 & \hspace{1cm} & \hspace{1cm} \\ \hline
+4 & \hspace{1cm} & \hspace{1cm} \\ \hline
+5 & \hspace{1cm} & \hspace{1cm} \\ \hline
+6 & \hspace{1cm} & \hspace{1cm} \\ \hline
+7 & \hspace{1cm} & \hspace{1cm} \\ \hline\hline
+8 & \hspace{1cm} & \hspace{1cm} \\ \hline
+9 & \hspace{1cm} & \hspace{1cm} \\ \hline
+10 & \hspace{1cm} & \hspace{1cm} \\ \hline
+11 & \hspace{1cm} & \hspace{1cm} \\ \hline
+\end{tabular}
+
+\clearpage
+
+\section*{Comparison}
+Order the methods according to space use.
+
+\vspace{3cm}
+\noindent Order the methods according to expected time.
+
+\vspace{3cm}
+\noindent Which open addressing method should not be used with $\alpha > 0.7$ or $\alpha > 0.9$?
+
+\clearpage
+
+\section*{Universal Hashing}
+Use the system of linear functions containing all functions of the form \[(ax + b) \bmod N \bmod m, \text{ for } a, b \in \{0, \dots, N - 1\}. \]
+
+Use $N = 97$. At first we choose the function $x \bmod N \bmod m$ and $m = 7$. Perform the sequence of operations: I(3), I(10), I(17), I(24), I(31), I(38), I(45). Then choose another function from the system and hash using the chosen function. What is the probability of choosing a function with $a = 1$? What happens when $a \neq 1$?
+
+\vspace{0.5cm}
+Universal hashing:
+
+\begin{tabular}{|c|c|c|}
+\hline
+h(x) & Chain \\ \hline\hline
+0 & \hspace{7cm} \\ \hline
+1 & \hspace{7cm} \\ \hline
+2 & \hspace{7cm} \\ \hline
+3 & \hspace{7cm} \\ \hline
+4 & \hspace{7cm} \\ \hline
+5 & \hspace{7cm} \\ \hline
+6 & \hspace{7cm} \\ \hline
+7 & \hspace{7cm} \\ \hline
+\end{tabular}
