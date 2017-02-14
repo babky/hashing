@@ -3,12 +3,20 @@
 #include <algorithm>
 #include <numeric>
 #include <utility>
+
 #include "boost/multiprecision/cpp_int.hpp"
+
+#include "table.h"
 #include "systems/cwlf_system.h"
 #include "systems/multiply_shift_system.h"
 #include "storages/chained_storage.h"
 #include "utils/equality_comparer.h"
-#include "table.h"
+#include "iterators/set_iterator.h"
+#include "experiments/traits.h"
+#include "experiments/longest_chain.h"
+#include "experiments/surjectivity.h"
+#include "math/combinatorics.h"
+
 #ifdef BOOST_MSVC
 #pragma warning(disable: 4512)
 #endif
@@ -20,190 +28,12 @@
 using namespace std;
 using namespace Hash;
 using namespace Hash::Systems;
-
-typedef vector<size_t> ElementVector;
-
-bool contains(const ElementVector & elements, size_t element) {
-	return find(elements.begin(), elements.end(), element) != elements.end();
-}
-
-ElementVector first(size_t count, const ElementVector & fixedElements, const ElementVector & disabledElements) {
-	ElementVector v(fixedElements);
-	v.reserve(count);
-
-	for (size_t i = fixedElements.size(), o = 0; i < count; ++i, ++o) {
-		while (contains(fixedElements, o) || contains(disabledElements, o)) {
-			++o;
-		}
-
-		v.push_back(o);
-	}
-
-	return v;
-}
-
-ostream & operator <<(ostream & out, const ElementVector & v) {
-	for (size_t i = 0; i < v.size(); ++i) {
-		if (i > 0) {
-			out << " ";
-		}
-		out << v[i];
-	}
-	return out;
-}
-
-void fixValue(size_t & val, const ElementVector & fixedElements, const ElementVector & disabledElements) {
-	for (; contains(fixedElements, val) || contains(disabledElements, val); ++val) {
-	}
-}
-
-bool next(ElementVector & v, size_t max, const ElementVector & fixedElements, const ElementVector & disabledElements) {
-	size_t s = v.size() - 1;
-
-	while (v[s] == max) {
-		// First two elements may be fixed to 0 and 1 for linear functions.
-		if (s == fixedElements.size()) {
-			return false;
-		}
-
-		--s;
-		for(--max; contains(fixedElements, max) || contains(disabledElements, max); --max) {
-		}
-
-	}
-
-	++v[s];
-	fixValue(v[s], fixedElements, disabledElements);
-	for (++s; s < v.size(); ++s) {
-		v[s] = v[s - 1] + 1;
-		fixValue(v[s], fixedElements, disabledElements);
-	}
-
-	return true;
-}
-
-template<class Function>
-bool is_surjective(const ElementVector & v, Function f, bool * table) {
-	for (size_t i = 0; i < f.getTableSize(); ++i) {
-		table[i] = false;
-	}
-
-	for (size_t i = 0; i < v.size(); ++i) {
-		table[f.hash(v[i])] = true;
-	}
-
-	return accumulate(table, table + f.getTableSize(), true, [](bool a, bool b) {return a & b;});
-}
-
-struct SurjectivityResult {
-
-	SurjectivityResult(size_t aSurjectiveCount, size_t aFunctionCount) :
-			surjectiveCount(aSurjectiveCount), functionCount(aFunctionCount) {
-	}
-
-	size_t surjectiveCount;
-	size_t functionCount;
-
-};
-
-template<class Function, class FunctionGenerator>
-SurjectivityResult surjective_number(const ElementVector & v, FunctionGenerator g) {
-	size_t count = 0;
-	size_t surjectiveCount = 0;
-	bool * table = 0;
-	Function f = g.next();
-	table = new bool[f.getTableSize()];
-	for (;; f = g.next()) {
-		++count;
-		if (is_surjective(v, f, table)) {
-			++surjectiveCount;
-		}
-
-		if (!g.hasNext()) {
-			break;
-		}
-	}
-	delete[] table;
-	table = 0;
-
-	return SurjectivityResult(surjectiveCount, count);
-}
-
-struct LongestChainResult {
-
-	LongestChainResult(void) :
-			sum(0), count(0) {
-	}
-
-	LongestChainResult(size_t aSum, size_t aFunctionCount) :
-			sum(aSum), count(aFunctionCount) {
-	}
-
-	size_t sum;
-	size_t count;
-
-};
+using namespace Hash::Iterators;
+using namespace Hash::Experiments;
+using namespace Hash::Math;
 
 typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, UniversalFunctionCWLF, Hash::Storages::ChainedStorage> TableCWLF;
 typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, MultiplyShiftSystem, Hash::Storages::ChainedStorage> TableMultiplyShift;
-
-template<class Table, class Function, class FunctionGenerator>
-LongestChainResult longest_chain(const ElementVector & v, FunctionGenerator g) {
-	size_t count = 0;
-	size_t sum = 0;
-
-	Function f = g.next();
-	Hash::Utils::StorageStatistics stats;
-	for (;; f = g.next()) {
-		Table table(f);
-		stats.clear();
-
-		for (size_t i = 0; i < v.size(); ++i) {
-			table.insert(v[i]);
-		}
-
-		table.computeStatistics(stats);
-		sum += stats.getMaxChainLength();
-		++count;
-
-		if (!g.hasNext()) {
-			break;
-		}
-	}
-
-	return LongestChainResult(sum, count);
-}
-
-template<class HashFunction>
-struct GeneratorFactoryTraits {
-
-	typedef typename HashFunction::Generator Generator;
-
-	static Generator create_generator(size_t universeSize, size_t tableSize) {
-		return Generator(universeSize, tableSize);
-	}
-
-};
-
-template<typename T, class Storage>
-struct GeneratorFactoryTraits<MultiplyShiftSystem<T, Storage>> {
-
-	typedef typename MultiplyShiftSystem<T, Storage>::Generator Generator;
-
-	static Generator create_generator(size_t universeSize, size_t tableSize) {
-		return Generator(universeSize - 1, tableSize);
-	}
-
-};
-
-unsigned long long choose(size_t n, size_t k) {
-	unsigned long long up = 1, down = 1;
-	for (int i = 0; i < k; ++i) {
-		up *= (n - i);
-		down *= (k - i);
-	}
-	return up / down;
-}
 
 void print_result(const ElementVector & v, const SurjectivityResult & surjectivityResult, const LongestChainResult & longestChainResult) {
 	cout << v << " " << surjectivityResult.surjectiveCount << "/" << surjectivityResult.functionCount << " "
@@ -226,7 +56,7 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, c
 	// We fix 0, 1, ..., fixedCount. But we choose only from offset, offset + 1, ..., universeSize - 1
 	// and the first elements are fixed.
 	size_t fixedCount = fixedElements.size();
-	unsigned long long count = choose(universeSize - fixedCount, setSize - fixedCount);
+	unsigned long long count = binomial_coefficient(universeSize - fixedCount, setSize - fixedCount);
 	unsigned long long current = 0;
 	size_t percent = 0;
 
@@ -302,11 +132,11 @@ void perform_partial_experiment(size_t universeSize, const ElementVector & set, 
 }
 
 /**
- * Performs the surjectivity and longest chain experiment for a single set.
- * The set is in the form {0, 1, ..., log(tableSize)}.
+ * Performs the surjectivity and longest chain experiment for the interval_set.
+ * The set is in the form {0, 1, ..., tableSize - 1}.
  */
 template<class Table, bool intermediate>
-void perform_partial_experiment(size_t universeSize, size_t setSize, size_t tableSize) {
+void perform_partial_experiment_interval_set(size_t universeSize, size_t setSize, size_t tableSize) {
 	ElementVector set;
 
 	for (size_t i = 0; i < setSize; ++i) {
@@ -316,6 +146,11 @@ void perform_partial_experiment(size_t universeSize, size_t setSize, size_t tabl
 	perform_partial_experiment<Table, intermediate>(universeSize, set, tableSize);
 }
 
+
+/**
+ * Performs the surjectivity and longest chain experiment for the interval_set.
+ * The set is in the form {0, 1, ..., log(tableSize)} \cup {tableSize, 2 * tableSize, ...}.
+ */
 template<class Table, bool intermediate>
 void perform_partial_experiment_log_set(size_t universeSize, size_t setSize, size_t tableSize) {
 	ElementVector set;
@@ -347,7 +182,7 @@ int main(int argc, char ** argv) {
 	options_description optsDesc("Probability distribution computation.");
 	optsDesc.add_options()\
 		("help,h", "prints this help message")\
-		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe")\
+		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe size")\
 		("set,s", value<size_t>(&setSize)->default_value(setSize), "The size of the set.")\
 		("table,t",	value<size_t>(&tableSize)->default_value(tableSize), "The size of the table.")\
 		("elements,e", value<vector<size_t>>(&elements)->multitoken(), "The fixed elements.")\
@@ -361,6 +196,7 @@ int main(int argc, char ** argv) {
 		store(parse_command_line(argc, argv, optsDesc), vm);
 		notify(vm);
 	} catch (std::exception & e) {
+		std::cerr << optsDesc;
 		std::cerr << e.what() << std::endl;
 		throw e;
 	}
@@ -401,3 +237,4 @@ int main(int argc, char ** argv) {
 
 	return 0;
 }
+

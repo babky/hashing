@@ -18,7 +18,12 @@ set(HEADERS
 	../generators/linear_generator.h
 	../generators/random_generator.h
 	../generators/unit_input_generator.h
+	../iterators/set_iterator.h
+	../experiments/longest_chain.h
+	../experiments/surjectivity.h
+	../experiments/traits.h
 	../math/double_word.h
+	../math/combinatorics.h
 	../miscellaneous/linear_probing_table_implementation.h
 	../policies/guaranteed_rehash_policy.h
 	../policies/rehash_policy.h
@@ -69,6 +74,8 @@ set(SOURCES
 	../utils/static_random_generator.cpp
 	../utils/hash_assert.cpp
 	../utils/time_vector.cpp
+	../math/combinatorics.cpp
+	../iterators/set_iterator.cpp
 	../policies/rehash_policy.cpp
 	../policies/guaranteed_rehash_policy.cpp
 	../policies/worst_case_rehash_policy.cpp
