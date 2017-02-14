@@ -1,10 +1,11 @@
 cmake_minimum_required	(VERSION 2.8.1)
 cmake_policy			(VERSION 2.8.1)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../bad-set/cmake")
 
 project (HashTable)
 
-
 add_subdirectory (../table-lib/cmake ../table-lib/cmake)
+add_subdirectory (../bad-set/cmake ../bad-set/cmake)
 add_subdirectory (../surjectivity/cmake ../surjectivity/cmake)
 add_subdirectory (../probability-distribution/cmake ../probability-distribution/cmake)
 add_subdirectory (../cwlf-dynamic-test/cmake ../cwlf-dynamic-test/cmake)

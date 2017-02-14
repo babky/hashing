@@ -7,4 +7,4 @@ rem Set the proper BOOST_ROOT (download boost and use a local copy)
 rem Use local cmake, i.e. download and unpacke windows cmake
 rem the Final command may look like the following line
 
-C:\Programs\cmake-3.7.0-rc1-win64-x64\bin\cmake -G "Eclipse CDT4 - Unix Makefiles" -D "BOOST_ROOT=C:\Users\babky\Documents\source\boost_1_62_0" . 
+C:\Programs\cmake-3.7.0-rc1-win64-x64\bin\cmake -G "Eclipse CDT4 - Unix Makefiles" -D "BOOST_ROOT=C:\Users\babky\Documents\source\boost_1_62_0" -D "PARADISEO_ROOT=C:\Users\babky\Documents\source\paradiseo" . 
