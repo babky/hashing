@@ -252,6 +252,22 @@ public:
 
 };
 
+class BadSetContinuator : public eoGenContinue<IndividualBadSet>{
+public:
+	explicit BadSetContinuator(size_t generationCount):
+		eoGenContinue<IndividualBadSet>(generationCount){
+	}
+
+	virtual bool operator() (const eoPop<IndividualBadSet> & pop) {
+		bool retVal = eoGenContinue::operator()(pop);
+		if (retVal) {
+			cout << "Continuing to generation " << value() << " with population:\n";
+			cout << pop << "\n" << endl;
+		}
+		return retVal;
+	}
+};
+
 template<typename Table>
 class Fitness: public eoEvalFunc<IndividualBadSet> {
 	ElementVector badSet;
@@ -295,8 +311,7 @@ void optimize(const Settings & settings) {
 	eoDetTournamentSelect<IndividualBadSet> select(settings.tournamentSize);
 	BadSetCrossOver xover;
 	BadSetMutation mutation(settings);
-
-	eoGenContinue<IndividualBadSet> continuator(settings.generationCount);
+	BadSetContinuator continuator(settings.generationCount);
 
 	eoSGA<IndividualBadSet> gga(select, xover, settings.crossoverProbability, mutation, settings.mutationProbability, fitness, continuator);
 	gga(pop);
