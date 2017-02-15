@@ -163,7 +163,7 @@ template<typename T>
 struct BinaryOperations {
 
 	static size_t divide(size_t dividee, size_t divisor) {
-		simple_assert(divisor != 0, "Divisor can not be null.");
+		hash_assert(divisor != 0, "Divisor can not be null.", __FILE__, __LINE__);
 		return dividee;
 	}
 
