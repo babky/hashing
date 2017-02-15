@@ -1,0 +1,190 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <style type="text/css">
+            h1 {
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Data Structures I - NTIN066 - Winter Semester 2016/2017 - 1st homework</h1>
+
+        <b>Deadline:</b> XXth October 2016.<br>
+        <b>How to submit:</b> Using <a href=' https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/'> the form at  https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/</a><br>
+        <b>Input and output:</b> Your solution has to read the data from the file <strong>data.txt</strong> and write the sorted data into the file <strong>data.out</strong>. Assume that the files are in the current directory.<br>
+        <b>System:</b> The memory of the test computer is <strong>8 GiB</strong>, OS Linux.<br>
+        <b>Time limit:</b> Your solution must present the correct result within <strong>XX minutes</strong> on the test computer.<br>
+
+        <h2>The rules</h2>
+        <ul>
+            <li>The whole code which you submit must be originally created by you without any "insipiration".</li>
+            <li>Do not share your solution so that your code can not become an "inspiration". The only exception is submitting the code.</li>
+            <li>The homework and the algorithms may be a subject of conversation. But respect the above rules about non-sharing. That means - dicussing is correct but write the code yourself!</li>
+            <li>Code in C/C++ (recommended), Java or C#.</li>
+            <li>Use standard constructs of your programming language. Do not use special library functions. The code dealing with sorting has to be written solely by you. That means that you may not not use <tt>std::sort</tt> or similar functions of your language.</li>
+            <li>Please submit your solution in a single source code file.</li>
+            <li>The solutions which violate the above rules shall be considered as wrong.</li>
+        </ul>
+
+        <h2>The description of the problem</h2>
+        <p>
+            Create a program which will sort a file stored on a computer's hard drive. 
+            Assume that the input file is stored in the current directory and named <tt>data.txt</tt>
+            The file <tt>data.txt</tt> is a text file. Each row consists of a single 63-bit unsigned value - a <i>key</i>.
+            In the output file <tt>data.out</tt> the keys are sorted ascendingly. Also for each key write the number of the first row on which it occurred. The number of the first row is 1.
+            You have to read the input <tt>data.txt</tt>, write the output <tt>data.out</tt> and keep all temporary files in the current directory.
+        </p>
+        
+        <h2>Example</h2>
+        <h3>Input</h3>
+        <tt>
+            96313<br />
+            6024613951808161023<br />
+            11417427497858712892<br />
+            3894<br />
+            96313<br />
+            6437842131676518652<br />
+        </tt>
+
+        <h3>Output</h3>
+        <tt>
+            3894 4<br />
+            96313 1<br />
+            6024613951808161023 2<br />
+            6437842131676518652 6<br />
+            11417427497858712892 3<br />
+        </tt>
+
+        <h2>Implementation challenges</h2>
+        <h3>Memory</h3>
+        <p>
+        Most of the running time of your program will be consumed by read and writing of the input and output data, so called I/O. Therefore it is vital to minimaz the number of I/O operations.
+        For example compare the time necessary to compare two integers, which is in nanosecond order of magnitude, to time required to read an integer from hard disk drive which is in milliseconds [1].
+        When reading from hard disk drive it is necessary to wait until the plate rotates under the head (rotational latency) and/or the head is moved into a right position (seek time) it is convenient to read subsequent data at once [2].
+        The page cache of the operating system and I/O buffer addresses this problem [3].
+        Some of the disadvantages of the hard disk drives are improved by SSDs.
+        </p>
+        <p>
+        It is also necessary to choose a fast I/O library.
+        You can find many comparisons and blogs on the Internet dealing with this problem [4].
+        The only reasonable advice is that you should test and measure the performance of your approaches yourself.
+        In this task the basic functions of your programming language should suit you well.
+        </p>
+        <p>
+        To pre-sort input data it is also convenient to know the size of the operating memory of your computer in advance. For the testing environment it is 8 GiB.
+        Pay attention to allocating a reasonable amount of memory.
+        If you allocate more than available, the paging may be used.
+        Paging (using swap space in Linux) requires disk I/O operations and thus significantly slows down your program [5].
+        When measuring your running time always carefully set-up the size of the allocated memory with respect to the used computer.
+        For our purposes a constant in the source code is fine.
+        </p>
+        <ol>
+        <li>
+            <a href='http://www.agner.org/optimize/instruction_tables.pdf'>http://www.agner.org/optimize/instruction_tables.pdf</a>,
+            <a href='https://en.wikipedia.org/wiki/Instructions_per_second'>https://en.wikipedia.org/wiki/Instructions_per_second</a>
+        </li>
+        <li>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>6. course of Principles of Computers</a>, 
+            <a href='https://en.wikipedia.org/wiki/Hard_disk_drive_performance_characteristics'>Wikipedia - HDD performance characteristics</a>
+        </li>
+        <li>
+            <a href='https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics'>Page Cache Basics in Linux</a>,
+            <a href='https://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html'>Java: BufferedInputStream</a>
+        </li>
+        <li>
+            <a href='http://stackoverflow.com/questions/705303/faster-i-o-in-c'>Faster IO in C</a>, 
+            <a href='http://stackoverflow.com/questions/22955178/why-does-java-read-a-big-file-faster-than-c'>Why does java read a big file faster than C</a>, 
+            <a href='http://stackoverflow.com/questions/145110/c-performance-vs-java-c'>C++ performance vs. Java/C#</a>, 
+            <a href='http://stackoverflow.com/questions/5328873/c-streams-vs-c-style-io'>C++ Streams vs. C-style IO?</a>, 
+            <a href='http://stackoverflow.com/questions/7780072/when-to-use-printf-scanf-vs-cout-cin'>When to use printf/scanf vs cout/cin?</a>,
+            <a href='http://stackoverflow.com/questions/1042110/using-scanf-in-c-programs-is-faster-than-using-cin'>Using scanf() in C++ programs is faster than using cin?</a>
+        </li>
+        <li>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>16. course of Principles of Computers</a>, 
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/ar-20112012/11-os-pamet.pdf'>Principles of Computers - paging, archive</a>,
+            <a href='https://en.wikipedia.org/wiki/Paging'>Wikipedia: paging</a>
+        </li>
+        </ol>
+        <h3>Hardware</h3>
+        <p>
+        For estimating the speed of your solution use computers in the unix laboratory Rotunda <tt>u-pl1</tt> - <tt>u-pl30</tt>. 
+        These computers are of two types. The first one, faster has 16 GiB of operating memory and SSDs. 
+        The second one just 4 GiB of memory and smaller HDDs.
+        Our solutions ran XX minutes on the faster machines with standard data and XX minutes on the slower ones with half data since the full data would not fit into the HDDs of these computers.
+        The evaluation environment has 8 GiB of memory. Set up your solution so that it works efficiently on this environment.
+        Common memory state of the test computer:
+        <pre>
+$ free -m
+              total        used        free      shared  buff/cache   available
+Mem:           7476         139         132          81        7204        6985
+Swap:          7985           0        7984
+        </pre>
+        </p>
+
+        <h2>Data generator and testing</h2>
+        <h3>Data generator</h3>
+        To generate data use generator available at unix Rotunda laboratory <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt>.
+        <h4>Generator options</h4>
+        <p>
+            Without any option the generator generates output with the length used for the evaluation on the test computer.
+            <dl>
+                <dt>-s XX</dt><dd>XX is the seed of the pseudo-random generator. When debugging use several seeds and verify that the speed of your solution is consistent.</dd>
+                <dt>-l LL</dt><dd>LL is the length of the output, i.e. the number of keys generated.</dd>
+                <dt>--half</dt><dd>Shortens the length by half. The output size will be around 25 GiB.</dd>
+                <dt>--short</dt><dd>Sets the length to 1/16 compared to the standard length. Output size is around 3 GiB.</dd>
+                <dt>--super-short</dt><dd>Sets the length to 1/256 compared to the standard length. Output size is around 200 MiB.</dd>
+            </dl>
+        </p>
+
+        <h4>Use cases</h4>
+        <p>
+        <tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX &gt;/tmp/data.txt</tt><br />
+        generates the testing data, approximately 44 GiB.
+        </p>
+        <p>
+        <tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short &gt;/tmp/data.txt</tt><br />
+        data useful for debugging, around 3 GiB.
+        </p>
+
+        <h3>Testing</h3>
+        <p>
+            Use the unix program <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt> available at Rotunda laboratory to generate the input file <tt>data.txt</tt>. Just redirect the standard output to the file <tt>data.txt</tt> since the generator outputs the data to the standard output.
+            Then measure the running time of your solution using one of the computers from <tt>u-pl</tt> to <tt>u-pl30</tt>.
+            For measuring use the <tt>time</tt> utility.
+        </p>
+        
+        <p>
+            The generated input file <tt>data.txt</tt> is about 44 GiB large and the time limit for sorting it is XX minutes. 
+            If you can not beat the time limit you will be notified and asked to improve your solution.
+            You have to prepare a working solution by the deadline.
+            The solution which does not finish within the time limit is considered as incorrect.
+            We will run your program on different but similar data.
+        </p>
+
+        <p>
+            When running your program, save the input file <tt>data.txt</tt>, the output file <tt>data.out</tt> and the temporary files into <tt>/tmp</tt> directory.
+            You have to read the input <tt>data.txt</tt>, write the output <tt>data.out</tt> and keep all temporary files in the current directory.
+            After finishing your work delete all your files in <tt>/tmp</tt> so that the others can run their programs. 
+            If you do not delete your files you consume almost the whole disk space.
+            Especially, do not forget about the input and output files.
+            Also remember the others can not delete your files and  thus the computer will be blocked.
+        </p>
+
+        <p>
+            Also be careful when you see that some else uses the computer. Use commands <tt>who</tt> and <tt>top</tt> or <tt>htop</tt>.
+            If you see that someone else is performing computations use another computer or wait when he or she is finished. 
+            Please report any intolerant behaviour or a blocked computer to <strong>ds1@kam.mff.cuni.cz</strong>.
+            The lab administrator can clear <tt>/tmp</tt> directory, if necessary.
+        </p>
+
+        <h2>Submitting your solution</h2>
+        <p>
+            Submit your solution before the deadline at <a href='https://kam.mff.cuni.cz/~ds1/'><tt>https://kam.mff.cuni.cz/~ds1/</tt></a>.
+            Send us your compilation command in the note, e.g. "compilation: <tt>g++ -O3 sorter-55973318.cpp -o sorter-55973318</tt>".
+            The description is a text file in which you should describe your solution in a few sentences.
+            Please submit only correct and fast enough solutions by XXth October 2016.
+        </p>
+    </body>
+</html>
+

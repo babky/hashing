@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<style type="text/css">
+			h1 {
+				font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Datové struktury I - NTIN066 - ZS 2015/2016 - 5. úkol</h1>
+
+		<b>Termín odevzdání:</b> XX. leden 2016.<br>
+		<b>Způsob odevzdání:</b> Odesláním v příloze emailem na <strong>ds1@kam.mff.cuni.cz</strong>.<br>
+
+		</dl><h2>Pravidla</h2>
+		<ul>
+			<li>Veškerý odevzdaný kód musí být originální tedy vytvořen vámi bez jakékoliv vedlejší &quot;inspirace&quot;.</li>
+			<li>Svůj kód s nikým nesdílejte, aby se váš kód nestal něčí &quot;inspirací&quot;. Výjimku tvoří odevzdání kódu.</li>
+			<li>Úkol a možné postupy řešení můžete probírat s ostatními, avšak respektuje výše uvedené o nesdílení kódu. To znamená - společná diskuse je povolena, ale programujte sami.</li>
+			<li>Povolené jsou řešení v jazycích C/C++ (doporučený jazyk), Java a C#.</li>
+			<li>Používejte standardní konstrukce vašeho programovacího jazyka, ale už ne speciální knihovní funkce.</li>
+			<li>Řešení, která nejsou ve shodě s těmito pravidly, nebudou hodnocená.</li>
+		</ul>
+		
+		<h2>Popis problému</h2>
+		<p>
+			Implementujte dvě hašovací tabulky a dva systémy hašovacích funkcí. Následně je srovnejte na dvou variantech operací, složených z vložení a vyhledávání.
+			Operace Insert vytváří množinu, Insert s duplicitním klíčem tedy nezmění tabulku, jen se započítá do statistik.
+			První variant operací, <em>Insert</em>, je zvolen tak, že vyhledávání tvoří 20&nbsp;% operací. Druhý variant, <em>Find</em>, tak, že vyhledání tvoří 80&nbsp;% operací.
+		</p>
+		<p>Implementujte <em>lineární přidávání (linear probing)</em> dle přednášky.
+		Implementujte variantu <em>kukaččího hašování</em> z přednášky s jedinou tabulkou. Velikost tabulky zvolte rovnou parametru M, který je popsán v sekci o generování dat. Pro generování dat pro kukaččí hašování použijte parametr C, který omezí faktor naplnění.
+		<!-- Poslední hašovací schéma je v literatuře pojmenováno <em>two-choices</em>. Jedná se o variantu, kde se kolize řeší pomocí spojových seznamů. Rozdíl oproti klasickému hašování je ale ten, že tabulka je rozdělená na dvě polovice a máme dvě funkce f (pracuje jen s první polovinou) a g (pracuje jen s druhou polovinou). Pro vložení prvku x vyhodnotíme f(x) a g(x) a prvek x vložíme do kratšího z řeťezců na pozicích f(x) a g(x). Při vyhledávání je nutno prohledat dva řeťezce. Výhodou je, že reťezce mají očekávanou konstatní délku a s velkou pravděpodobností je očekávaná délka nejdelšího reťezce v tabulce O(log log n).  -->
+		</p>
+
+		<h3>Systémy funkcí</h3>
+		Nechť U = {0, ..., 2<sup>u</sup> - 1} je universum a m=2<sup>k</sup> je velikost hašovací tabulky.
+		Popsané systémy funkcí hašují univerzum U do prostoru {0, ..., m - 1}.
+		Pro účely zadaní použijte jako univerzum množinu {0, ..., 2<sup>32</sup> - 1}.
+		Generátor dat navíc generuje hodnoty z množiny {0, ..., 2<sup>31</sup> - 1}.
+
+		<p>
+			<strong>Tabulační funkce</strong>.
+			Nechť x je prvek univerza U, představme si jej jako bitový řeťezec rozdělený na c stejně dlouhých částí, t.j. x = x<sub>1</sub>x<sub>2</sub>...x<sub>c</sub>.
+			Pro každou z těchto c částí uniformně náhodně inicializujme její tabulku, která obsahuje 2<sup>u/c</sup> bitových řeťezců délky k.
+			Pak <strong>h(x) = T<sub>1</sub>(x<sub>1</sub>) &oplus; T<sub>2</sub>(x<sub>2</sub>) &oplus; ... &oplus; T<sub>c</sub>(x<sub>c</sub>).</strong>
+
+			Tedy pro každou část získáme index do tabulky, kde je uloženo číslo z množiny {0, ..., m - 1}. 
+			Výsledek hašovací funkce je XOR takto získaných hodnot. 
+			Rychlá implementace spoléhá na fixní volbu c, například c = 4.
+		</p>
+		
+		<p>
+			<strong>Multiplikativní funkce</strong>.
+			Nechť x je prvek z univerza U, a nechť a &isin; U - {1} je uniformně náhodně zvolené číslo.
+			Pak <strong>h(x) = ((a x) mod |U|) / (|U| / m).</strong>.
+			Pro 32-bitové universum lze tuto funkci implementovat efektivně pomocí posunů a zanedbání přetečení při násobení.
+		</p>
+
+		<h3>Výsledek měření</h3>
+		<p>
+			Pro každou variantu dat udělejte dva grafy. První graf bude zachytávat průměrný počet operací na jednu operaci Insert nebo Find vzhledem k faktoru naplnění, druhý graf bude zachytávat průměrný čas (zvolte milisekundy nebo mikrosekundy tak, aby byl graf přehledný) na operaci Insert nebo Find vzhledem k faktoru naplnění.
+		</p>
+		<dl>
+			<dt><strong>Linear Probing</strong></dt>
+			<dd>Počet operací pro Insert nebo Find je 1 + délka sekvence, kterou bylo nutné projít k nalezení nebo vložení prvku.</dd>
+
+			<!--
+			<dt><strong>Two Choices</strong></dt>
+			<dd>Počet operací je 1 + součet délek řeťezců, které byly prohledány za účelem vyhledání nebo vložení prvku. Abychom zabránili duplicitním klíčům, musíme při vložení prvku nejdřív prohledat oba řeťezce a ověřit zda vkládaný prvek již není v tabulce uložen.
+			-->
+
+			<dt><strong>Kukaččí hašování</strong></dt>
+			<dd>Find potřebuje jednu nebo dvě operace. Insert zkusí nejdřív vyhledat prvek, to vyžaduje jednu nebo dvě operace. Když vkládaný prvek není nalezen, udělá několik "swap" operací. Započítejte i operace swap z případných rehash operací. Maximální počet rehashů v jedné operaci Insert nastavte na 15. V případě, že některý Insert tento limit překročí, daný běh do výsledku nezapočítávejte. V případě, že každý běh pro daný faktor naplnění skončí selháním, load factor do grafu nezahrnujte/nebo ho zakreslete jako nulu.</dd>
+		</dl>
+
+		<p>
+			Sepište zprávu, v níž budou:
+			<ul>
+				<li>čtyři grafy s naměřenými výsledky. V každém grafu vykresletě 4 funkce. V grafu operací pro daný faktor naplnění sečtěte celkový počet operací a vydělte jej počtem Find a Insert operací. Obdobně v grafe časů zakresletě závislost průměrného času na operaci Find/Insert.</li>
+				<li>Komentář shrnující chování algoritmu.</li>
+			</ul>
+		</p>
+
+		<h3>Generování dat</h3>
+		<p>
+			Pro vygenerování testovacích dat použijte už zkompilovaný generátor
+			<code>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw5/hashgen</code> dostupný v unixové laboratoři Rotunda.
+			Spusťte ho s následujícími parametry:
+			</p><ul>
+				<li><code>-s <em>XX</em></code>, kde <em>XX</em> jsou poslední dvě číslice
+				vašeho studentského čísla;</li>
+				<li><code>--short</code>, pro kratší data;</li>
+				<li><code>I</code>, pokud chcete vygenerovat data, v kterých převládá operace Insert;</li>
+				<li><code>F</code>, pokud chcete vygenerovat data, v kterých převládá operace Find;</li>
+				<li><code>C</code>, pokud chcete generovat data pro kukaččí hašování, přidejte tento argument, maximální faktor naplnění bude omezen na 55&nbsp;%.</li>
+			</ul>
+		</p>
+
+		<p>
+			Generátor produkuje textový výstup, každý řádek je tvaru:
+		</p>
+		
+		<ul>
+			<li><code># <em>N</em> <em>M</em></code>: začátek běhu pro množinu velikosti <em>N</em> uložené do tabulky velikosti <em>M</em> –
+			zrušte starou tabulku a založte novú. Velikost množin se vám může hodit při kreslení grafů. Navíc velikost M bude během generovaní dat pořád stejná a bude to mocnina dvojky. N určuje velikost množiny, kterú tenhle běh vytvoří, t.j. počet úspěšných Insert operací v běhu.</li>
+			<li><code>I <em>X</em></code>: vložení klíče <em>X</em> do tabulky;</li>
+			<li><code>F <em>X</em></code>: vyhledání klíče <em>X</em> v tabulce.</li>
+		</ul>
+
+		<p>
+			Na jedno spuštění generátor vytvoří sadu testů s faktorem naplnění od 30 do 90%  (nebo 55&nbsp;%, pokud jste zadali i parameter C). Pro každý faktor naplnění jsou vygenerovány čtyři běhy. Výsledky zakreslete zprůměrovány přes tyto běhy.
+		</p>
+
+		<h3>Příklad vstupu</h3>
+<pre>
+# 2 4
+I 1
+I 2
+I 1
+I 3
+F 1
+# 3 4
+I 2
+I 3
+I 7
+I 3
+I 2
+F 2
+F 0
+</pre>
+
+		<h2>Odevzdání</h2>
+		<p>
+			Pošlete e-mail s předmětem tvaru 'HW5-55973318' (t.j. HW5-<em>studentské číslo</em>)
+			s těmito přílohami:
+		</p>
+		<ul>
+			<li>zdrojový text, na kterém jste vše naměřili (pokud je složen z více souborů, zabalte je ZIPem nebo TARem do jednoho),</li>
+			<li>PDF s grafy a komentáři.</li>
+		</ul>
+
+		<p>
+			Tělo e-mailu nechť obsahuje údaje podle tohoto vzoru:
+		</p>
+		<pre><code>
+Jmeno: Martin Babka
+Pseudonym pro vysledky na webu: Babočka Admirál
+Cviceni: pondeli-12:20-lichy
+		</code></pre>
+	</body>
+</html>

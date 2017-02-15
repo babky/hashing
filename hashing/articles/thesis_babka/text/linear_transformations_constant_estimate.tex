@@ -1,0 +1,87 @@
+\section{Minimising the Integrals}
+This integral $I_\epsilon$ is a part of the multiplicative constant $4c_\epsilon(4 + I_\epsilon)$. The next lemma states a way how to estimate it and compute the value of the multiplicative constant so that it is minimal.
+
+In the original proof of Theorem \ref{theorem-n-logn-to-n} in \cite{DBLP:journals/jacm/AlonDMPT99} only the special case $I_{\frac{1}{2}}$ is considered. We moved to $I_\epsilon$ because choosing other values for $\epsilon \in (0, 1)$ may bring an improvement for the value of the multiplicative constant. Indeed, if we select different value of $\epsilon$ and use better estimates for the constant $c_\epsilon$, then we really obtain a smaller value of the multiplicative constant and a tighter bound on $\Expect{\lpsl}$.
+
+\label{section-integral-estimate}
+\begin{lemma}
+\label{lemma-convergent-I-e}
+The integral $I_\epsilon$ from Equality \ref{equality-i-e} converges for every $\epsilon \in (0, 1)$ and
+\[
+I_\epsilon \leq \frac{4.8}{1 - \epsilon} \text{.}
+\]
+\end{lemma}
+\begin{proof}
+We recall that the integral $I_\epsilon$ equals
+\[
+I_{\epsilon} = \frac{1}{1 - \epsilon} \displaystyle\int\limits_4^\infty \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
+\]
+
+Evaluation of the integral $I_\epsilon$ is split into two parts. We compare the integrand of $I_\epsilon$ to a function $f: \mathbb{R} \rightarrow \mathbb{R}$ which has a convergent improper integral $\int_{4}^{\infty} f(x) dx$. The function $f$ chosen here is $x ^ {-1.5}$. 
+
+The function $f$ majors the integrand only for $r \geq 16$. Therefore we bound the value of the integral $I_\epsilon$ in the interval $[4, 16]$ by its upper Riemann sum.
+
+For $r = 16$, the function $f$ equals $f(r) = r ^ {-1.5} = \frac{1}{64}$.
+The value of the integrand equals
+\[
+	\left(\frac{16}{\log 16}\right)^{-\log \left(\frac{16}{\log 16}\right) - \log \log \left(\frac{16}{\log 16}\right)} = 4^{-2 - 1} = \frac{1}{64} \text{.}
+\]
+
+By combining our estimates we obtain that
+\[
+\begin{split}
+I_{\epsilon} 
+	& \leq \frac{1}{1 - \epsilon} \left( \displaystyle \sum_{r = 4}^{15} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} + \int\limits_{16}^\infty \frac{1}{r^{1.5}} dr \right) \\
+	& \leq \frac{1}{1 - \epsilon} \left(4.3 + \frac{1}{2}\right) = \frac{4.8}{1-\epsilon} \text{.}
+\end{split}
+\]
+
+The estimate of the Riemann sum can be computed numerically.
+\end{proof}
+
+\begin{lemma}
+\label{lemma-estimate-j-a}
+Let $b \in \mathbb{N}$, $b \geq 4$, $\alpha \in [0.5, 1]$, $J'_{\alpha, b}$ be the integral defined in Equality \ref{equality-j-prime-a-b} and $J_{\alpha, b}$ be the integral defined in Equality \ref{equality-j-a-b}. Then 
+\[
+	J'_{\alpha, b} \leq 2b \log b - 4 + J_{\alpha, b} \text{ and}
+\]
+\[
+	J_{\alpha, b} \leq 3.36 \text{.}
+\]
+\end{lemma}
+\begin{proof}
+We estimate the integral \[ J'_{\alpha, b} = \int\limits_{4}^\infty \min \left(1, \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \] in a similar way to the previous one. 
+
+However, the situation is slightly complicated. First we must realise that if the exponent is negative, the integrand is certainly less than one. We show that if $r > 2 b \log b$, then the exponent is negative.
+
+First we show that $r > 2 b \log b$ implies $\log \left( \frac{r}{\log r} \right) \geq \log b$ since
+\[
+\begin{split}
+\frac{r}{\log r} 
+	& \geq \frac{2 b \log b}{1 + \log b + \log \log b} \\
+	& = \frac{2 b}{1 + \frac{1}{\log b} + \frac{\log \log b}{\log b}} \\
+	& \geq \frac{2 b}{2} = b \text{.}
+\end{split}
+\]
+
+Since we assume $b \geq 4$, we have that $r > 2 b \log b \geq 16$. So if $r > 2b \log b$, then for the remaining part of the exponent we have that \[ -\log \alpha - \log \log \left( \frac{r}{\log r} \right) < -\log 0.5 - \log \log \frac{16}{4} = 0 \text{.} \]
+
+Indeed, if $r > 2 b \log b$, then the exponent is negative.
+
+Now the integral $J'_{\alpha, b}$ is split into two parts according to the value of the variable $r$. If $r \in [4, 2b \log b]$, then we estimate the integrand by one. In the interval $[2b \log b, \infty)$ we use the value \[ J_{\alpha, b} = \int\limits_{2 b \log b}^\infty \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.} \] So
+\[
+J'_{\alpha, b} \leq 2b \log b - 4 + J_{\alpha, b} \text{.}
+\]
+
+The integral $J_{\alpha, b}$ is determined in the similar way as the value of the integral $I_\epsilon$ in Lemma \ref{lemma-convergent-I-e}. The integrand is majored by the function $x ^ {-1.3}$ for $x \geq 2048$. In the interval $[16, 2048]$ we estimate the integral by its upper Riemann sum. We partition the interval uniformly with the norm equal to $0.1$. For simplicity put $g(r) = \frac{r}{\log r}$ and estimate the integral $J_{\alpha, b}$ as
+\[
+\begin{split}
+J_{\alpha, b} 
+	& = \int_{2 b \log b}^{\infty} g(r) ^ {\log b - \log \alpha - \log g(r) - \log \log g(r)} dr \\
+	& \leq \int\limits_{16}^{\infty} g(r) ^ {1 - \log \log g(r)} dr \\
+	& \leq \sum\displaylimits_{r \in \{16, 16.1, \dots, 2048 \}} \frac{g(r) ^ {1 - \log \log g(r)}}{10} + 
+		\int\limits_{2048}^{\infty} r ^ {-1.3} dr \\
+	& \leq 3.01 + \frac{2048 ^ {-0.3}}{0.3} \leq 3.36 \text{.}
+\end{split}
+\]
+\end{proof}

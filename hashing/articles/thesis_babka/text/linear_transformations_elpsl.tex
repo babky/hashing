@@ -1,0 +1,113 @@
+\section{The Expected Value of the Variable \texorpdfstring{$\lpsl$}{lpsl}}
+In this section we estimate the expected value of the variable $\lpsl$, $\Expect{\lpsl}$. We exploit bounds from Section \ref{section-linear-transformations-distribution} which give its cumulative probability density function.  We are interested in this expected value because it corresponds to the length of the longest chain when using the system of linear transformations as a universal class.
+
+\begin{theorem}
+\label{theorem-n-logn-to-n}
+Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation and $\epsilon \in (0, 1)$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| \leq b 2 ^ b$, then \[ \Expect{\lpsl} \leq 4 c_\epsilon(4 + I_\epsilon) b \log b \text{.} \] The value $I_\epsilon$ is defined as:
+\stepcounter{definition}
+\begin{equation}
+\label{equality-i-e}
+I_\epsilon = \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
+\end{equation}
+\end{theorem}
+\begin{proof}
+First set $K_\epsilon = 4 c_\epsilon b \log b$. In order to prove the theorem we use the probability distribution of the variable $\lpsl$ from Remark \ref{remark-probability-long-chain}. For every $r \geq 4$ it states that 
+\[ 
+\Prob{\lpsl \geq r K_\epsilon} \leq \frac{1}{1 - \epsilon}\left(\frac{1}{\log r}\right) ^ {-\log\left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.} 
+\]
+
+Lemma \ref{lemma-expected-value-cumulative} implies 
+\[
+\begin{split}
+\Expect{\lpsl}
+	& = \int\limits_0^{\infty} \Prob{\lpsl > l} dl \\
+	& \leq 4K_\epsilon + \int\limits_{4K_\epsilon}^\infty \Prob{\lpsl > l} dl \\
+	& = 4K_\epsilon + K_\epsilon \int\limits_4^\infty \Prob{\lpsl > rK_\epsilon} dr \\
+	& \leq 4K_\epsilon + K_\epsilon \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \\
+	& = K_\epsilon(4 + I_\epsilon) \in O(K_\epsilon) = O(b \log b) \text{.}
+\end{split}
+\]
+
+The fact that the integral $I_\epsilon$ is convergent for every $\epsilon \in (0, 1)$ is shown later in Lemma \ref{lemma-convergent-I-e}.
+\end{proof}
+
+Multiplicative constant $4 c_\epsilon(4 + I_\epsilon)$ plays an important role for a practical use of the result. For example when choosing $\epsilon$ equal to $\frac{1}{2}$ the value of the constant $c_\epsilon$ equals $4 ^ {17}$ when using the original estimate. Our next goal is to show a better estimate when assuming that $\alpha \leq 1$ and using our results.
+
+\begin{theorem}
+\label{theorem-n-to-n}
+Let $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $\epsilon \in (0, 1)$ and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq 4 \alpha c_\epsilon(4 + I_\epsilon) b \log b \text{.} \] The value $I_\epsilon$ is defined in Equality \ref{equality-i-e}.
+\end{theorem}
+\begin{proof}
+Set $K_\epsilon = 4 c_\epsilon b \log b$. When estimating $\Prob{\lpsl > r \alpha K_\epsilon}$ we use Remark \ref{remark-lpsl-pdf-linear-amount}. Its assumptions are satisfied since we use it for $r \geq 4$ and $\alpha \leq 1 \leq \frac{\log r}{2}$. It states that
+\[
+	\Prob{\lpsl > r \alpha K_\epsilon} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{-\log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
+\]
+Since $\alpha \leq 1$, then $\log \alpha \leq 0$ and thus we conclude that
+\[
+	\Prob{\lpsl > r \alpha K_\epsilon} \leq \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{- \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} \text{.}
+\]
+
+Now we compute the expected value using Lemma \ref{lemma-expected-value-cumulative} as
+\[
+\begin{split}
+\Expect{\lpsl}
+	& = \int\limits_0^\infty \Prob{\lpsl > l} dl \\
+	& \leq 4 \alpha K_\epsilon + \int\limits_{4 \alpha K_\epsilon}^\infty \Prob{\lpsl > l} dl \\
+	& = 4 \alpha K_\epsilon + \alpha K_\epsilon \int\limits_4^\infty \Prob{\lpsl > r \alpha K_\epsilon} dr \\
+	& \leq 4 \alpha K_\epsilon + \alpha K_\epsilon \int\limits_4^\infty \frac{1}{1 - \epsilon} \left(\frac{r}{\log r}\right)^{- \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \\
+	& = \alpha K_\epsilon(4 + I_\epsilon) \in O(\alpha K_\epsilon) = O(\alpha b \log b) \text{.}
+\end{split}
+\]
+\end{proof}
+\end{section}
+
+\section{The Achieved Bound}
+
+The improved estimate of $c_\epsilon$ combined with the last claim of Remark \ref{remark-lpsl-pdf-linear-amount} are used together to show a tighter bound on $\Expect{\lpsl}$.
+
+\begin{theorem}
+\label{theorem-hashing-linear-amount}
+Let $b \in \mathbb{N}$, $b \geq 4$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation, $\epsilon \in (0, 1)$ and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq \frac{4 c_\epsilon \alpha}{1 - \epsilon} b \log b + 2 c_\epsilon \alpha \left( \frac{J_{\alpha, b} - 4}{1 - \epsilon} + 4 \right) \text{.} \] The value $J_{\alpha, b}$ is defined as
+\stepcounter{definition}
+\begin{equation}
+\label{equality-j-a-b}
+J_{\alpha, b} = \int\limits_{2 b \log b}^\infty \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)} dr \text{.}
+\end{equation}
+\end{theorem}
+\begin{proof}
+From Remark \ref{remark-lpsl-pdf-linear-amount}, Lemma \ref{lemma-expected-value-cumulative} and Lemma \ref{lemma-estimate-j-a} it follows that
+\[
+\begin{split}
+& \Expect{\lpsl}
+	= \int\limits_0^\infty \Prob{\lpsl > l} dl \\ 
+	& \qquad \leq 8 c_\epsilon \alpha + \int\limits_{8 c_\epsilon \alpha}^\infty \Prob{\lpsl > l} dl \\ 
+	& \qquad = 8c_\epsilon \alpha + 2 c_\epsilon \alpha \int\limits_{4}^\infty \Prob{\lpsl > 2c_\epsilon \alpha r} dr \\
+	& \qquad = 2c_\epsilon \alpha \left(4 + \frac{1}{1 - \epsilon} \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \right) \\ 
+	& \qquad \leq 2c_\epsilon \alpha \left( 4 + \frac{1}{1-\epsilon}\left( 2 b \log b - 4 + J_{\alpha, b} \right) \right) \text{.}
+\end{split}
+\]
+
+Let the value $J'_{\alpha, b}$ denote the integral,
+\stepcounter{definition}
+\begin{equation}
+\label{equality-j-prime-a-b}
+J'_{\alpha, b} = \int\limits_{4}^\infty \min\left(1, \left(\frac{r}{\log r}\right)^{\log b - \log \alpha - \log \left(\frac{r}{\log r}\right) - \log \log \left(\frac{r}{\log r}\right)}\right) dr \text{.}
+\end{equation}
+
+Later, in Lemma \ref{lemma-estimate-j-a} we estimate the integral $J'_{\alpha, b}$ by $2 b \log b - 4 +  J_{\alpha, b}$, where
+
+The whole bound on the expected value, $\Expect{\lpsl}$, then looks like:
+\[
+\Expect{\lpsl} \leq \frac{4 c_\epsilon \alpha}{1 - \epsilon} b \log b + 2 c_\epsilon \alpha \left( \frac{J_{\alpha, b} - 4}{1 - \epsilon} + 4 \right) \text{.}
+\]
+
+In advance, let us note that from Lemma \ref{lemma-estimate-j-a} it follows that $J_{\alpha, b} \leq 3.36$. The bound thus exists for every $\alpha \in [0.5, 1]$.
+\end{proof}
+
+\begin{corollary}
+\label{corollary-best-elpsl}
+Let $b \in \mathbb{N}$, $b \geq 4$, $T: \vecspace{u} \rightarrow \vecspace{b}$ be a random uniformly chosen linear transformation and $\alpha \in \left[0.5, 1\right]$. If $S$ is a subset of the vector space $\vecspace{u}$ such that $|S| = \alpha 2 ^ b$, then \[ \Expect{\lpsl} \leq 538 \alpha b \log b + 44 \text{.} \] 
+\end{corollary}
+\begin{proof}
+The best estimate on the expected value $\Expect{\lpsl}$ is achieved by the parametrisation technique using the estimate of $c_\epsilon$ from Statement \ref{statement-better-c-e}. For the choice of $\epsilon = 0.8$ and by settings parameters $k = 2.26$, $l = 2$ of Statement \ref{statement-better-c-e} we get the required bound.
+\end{proof}
