@@ -29,7 +29,7 @@ namespace Hash { namespace Utils {
 		#define simple_assert(status, message) Hash::Utils::hash_assert(status, message, __FILE__, __LINE__);
 	#endif
 #else
-	#define simple_assert(status, message) ;
+	void simple_assert(bool status, std::string message);
 #endif
 
 
