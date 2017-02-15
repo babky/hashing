@@ -35,7 +35,7 @@ void simple_assert(bool status, string message) {
 #endif
 #else
 
-void hash_assert(bool status, string message) {
+void simple_assert(bool status, string message) {
 }
 
 #endif
