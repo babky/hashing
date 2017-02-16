@@ -75,7 +75,6 @@ namespace Hash { namespace Systems {
 		 */
 		virtual size_t operator()(const T & a) = 0;
 #endif
-
 		/**
 		 * Sets the storage for the hash function.
 		 * 
@@ -83,11 +82,9 @@ namespace Hash { namespace Systems {
 		 */
 		virtual void setStorage(Storage *) {
 		}
-
 	};
 
 	class NoNextFunctionException : public std::exception {
-
 	};
 
 	/**
@@ -102,7 +99,6 @@ namespace Hash { namespace Systems {
 
 		virtual ~UniversalFunctionGenerator(void) {
 		}
-
 	};
 
 } }
