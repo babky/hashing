@@ -205,6 +205,9 @@ namespace Hash {
 	template <typename T, typename Comparer, typename Hash, class StorageInfo>
 	class Storage {
 	public:
+		virtual ~Storage(void) {
+		}
+
 #ifdef HASH_DEBUG
 		/**
 		 * Inserts the {@code element} into the table.

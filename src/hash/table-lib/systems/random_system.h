@@ -13,6 +13,9 @@ namespace Hash { namespace Systems {
 	template <typename T, class Storage>
 	class RandomBin : public Hash::Systems::UniversalFunction<T, Storage> {
 	public:
+		virtual ~RandomBin(void) {
+		}
+
 		explicit RandomBin(size_t aTableSize = StorageParams::INITIAL_STORAGE_SIZE):
 		  tableSize(aTableSize),
 		  g(Hash::Utils::IntegralGeneratorWrapper<T>(0, aTableSize)) {
@@ -33,6 +36,13 @@ namespace Hash { namespace Systems {
 
 		size_t hash(const T & x) {
 			return g.generate();
+		}
+
+		virtual T getUniversumMax(void) const {
+			return boost::integer_traits<T>::const_max;
+		}
+
+		virtual void setUniversumMax(T) {
 		}
 
 		size_t operator()(const T & a) {
