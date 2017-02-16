@@ -26,8 +26,8 @@ namespace Hash { namespace Utils {
 		/**
 		 * Generator.
 		 */
-		typedef boost::variate_generator<Engine&, Distribution> Generator;
 
+		typedef boost::variate_generator<Engine&, Distribution> Generator;
 		/**
 		 * Generator constructor.
 		 *
@@ -64,6 +64,12 @@ namespace Hash { namespace Utils {
 		 */
 		IntType generate(void) {
 			return this->generator();
+		}
+
+		void setDistribution(IntType min, IntType max) {
+			typename Generator::distribution_type * distribution = 0;
+			// generator.distribution();
+			// distribution.param(Distribution::param_type(min, max));
 		}
 
 	private:

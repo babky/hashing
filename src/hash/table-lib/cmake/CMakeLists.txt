@@ -35,6 +35,7 @@ set(HEADERS
 	../storages/probing_storage.h
 	../storages/probing/policies.h
 	../systems/bit_string_system.h
+	../systems/bad_linear_system.h
 	../systems/cwlf_exponential_system.h
 	../systems/cwlf_system.h
 	../systems/multiply_shift_system.h
