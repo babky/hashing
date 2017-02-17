@@ -16,6 +16,9 @@ namespace Hash { namespace Math {
 		return l;
 	}
 
+    template <>
+    unsigned int log2ceil<unsigned int>(unsigned int i);
+
 	template <typename T>
 	unsigned int log2floor(T i) {
 		unsigned int l = log2ceil(i);
@@ -26,12 +29,18 @@ namespace Hash { namespace Math {
 		}
 	}
 
+    template <>
+    unsigned int log2floor<unsigned int>(unsigned int i);
+
 	template <typename T>
 	unsigned int log2exact(T i) {
 		unsigned int l = log2ceil(i);
 		simple_assert(i == (static_cast<T> (1)) << l, "Can not compute exact logarithm.");
 		return l;
 	}
+
+    template <>
+    unsigned int log2exact<unsigned int>(unsigned int i);
 
 	template <typename T>
 	bool is_power_of_2(T i) {

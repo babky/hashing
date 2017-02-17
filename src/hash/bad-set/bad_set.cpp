@@ -2,6 +2,7 @@
 #include <eo>
 #include "table.h"
 #include "systems/multiply_shift_system.h"
+#include "systems/bad_linear_system.h"
 #include "storages/chained_storage.h"
 #include "utils/equality_comparer.h"
 #include "utils/hash_assert.h"
@@ -21,12 +22,17 @@ using namespace std;
 using namespace Hash;
 using namespace Hash::Experiments;
 using namespace Hash::Systems;
+using namespace Hash::Storages;
 using namespace Hash::Iterators;
 using namespace Hash::Utils;
 
-typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, MultiplyShiftSystem, Hash::Storages::ChainedStorage> TableMultiplyShift;
+typedef ChainedStorage<size_t, EqualityComparer<size_t>, size_t> Storage;
+typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, MultiplyShiftSystem, ChainedStorage> TableMultiplyShift;
+typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, BadLinearSystem, ChainedStorage> TableBadLinearSystem;
 
 struct Settings {
+	string system;
+
 	size_t universeMax;
 	size_t setSize;
 
@@ -47,7 +53,6 @@ struct Settings {
 	float optimizeMutationProbabilityMultipleElements;
 	float optimizeMutationProbabilityMultipleElementsPerElement;
 };
-
 
 class IndividualBadSet: public EO<size_t> {
 	size_t universeMax;
@@ -85,7 +90,7 @@ public:
 
 public:
 	friend class BadSetCrossOver;
-	friend class BadSetMutation;
+	template<class Table, template <class> class GeneratorFactoryTraits> friend class BadSetMutation;
 };
 
 class BadSetCrossOver : public eoQuadOp<IndividualBadSet> {
@@ -119,6 +124,7 @@ public:
 	}
 };
 
+template<class Table, template <class> class GeneratorFactoryTraits>
 class BadSetMutation : public eoMonOp<IndividualBadSet> {
 	Settings settings;
 
@@ -211,7 +217,7 @@ public:
 			// Find the best possible element for the set.
 			fixed = set;
 			fixed.erase(fixed.begin() + i);
-			LongestChainExperimentResult r = perform_longest_chain_experiment<TableMultiplyShift, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
+			LongestChainExperimentResult r = perform_longest_chain_experiment<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
 			*it = r.set[r.set.size() - 1];
 			change = change || *it != r.set[r.set.size() - 1];
 			*it = r.set[r.set.size() - 1];
@@ -244,7 +250,7 @@ public:
 			return false;
 		}
 
-		LongestChainExperimentResult r = perform_longest_chain_experiment<TableMultiplyShift, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
+		LongestChainExperimentResult r = perform_longest_chain_experiment<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
 		set = r.set;
 		std::sort(set.begin(), set.end());
 		return change;
@@ -268,7 +274,7 @@ public:
 	}
 };
 
-template<typename Table>
+template<typename Table, template <class> class GeneratorFactoryTraits>
 class Fitness: public eoEvalFunc<IndividualBadSet> {
 	ElementVector badSet;
 	size_t universeMax;
@@ -286,20 +292,20 @@ public:
 	virtual void operator()(IndividualBadSet & individual) {
 		typedef typename Table::HashFunction Function;
 		typedef typename Function::Generator Generator;
-		Generator g(universeMax, tableSize);
+		Generator g = GeneratorFactoryTraits<Function>::create_generator(universeMax, tableSize);
 		LongestChainResult r = longest_chain<Table, Function, Generator>(individual.getSet(), g);
-		// cout << "Set " << individual.getSet() << " fitness " << (double)r.sum/r.count << endl;
 		individual.fitness(r.sum);
 	}
 };
 
+template<class Table, template <class> class GeneratorFactoryTraits>
 void optimize(const Settings & settings) {
 	rng.reseed(settings.seed);
 
 	const size_t universeMax = settings.universeMax;
 	const size_t setSize = settings.setSize;
 
-	Fitness<TableMultiplyShift> fitness(universeMax, setSize);
+	Fitness<Table, GeneratorFactoryTraits> fitness(universeMax, setSize);
 	eoPop<IndividualBadSet> pop;
 	for (size_t i = 0; i < settings.populationSize; ++i) {
 		IndividualBadSet v(universeMax, setSize);
@@ -310,7 +316,7 @@ void optimize(const Settings & settings) {
 
 	eoDetTournamentSelect<IndividualBadSet> select(settings.tournamentSize);
 	BadSetCrossOver xover;
-	BadSetMutation mutation(settings);
+	BadSetMutation<Table, GeneratorFactoryTraits> mutation(settings);
 	BadSetContinuator continuator(settings.generationCount);
 
 	eoSGA<IndividualBadSet> gga(select, xover, settings.crossoverProbability, mutation, settings.mutationProbability, fitness, continuator);
@@ -320,7 +326,7 @@ void optimize(const Settings & settings) {
 	cout << "The best solution found: " << pop[0] << endl;
 	cout << "Final Population\n" << pop << endl;
 
-	LongestChainHistogram histogram = compute_histogram<TableMultiplyShift, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
+	LongestChainHistogram histogram = compute_histogram<Table, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
 	cout << "L C\n";
 	for (LongestChainHistogram::Histogram::iterator it = histogram.histogram.begin(); it != histogram.histogram.end(); ++it) {
 		cout << it->first << " " << it->second << "\n";
@@ -334,7 +340,8 @@ bool readSettingsFromArguments(Settings & settings, int argc, char ** argv) {
 	options_description optsDesc("Probability distribution computation.");
 	optsDesc.add_options()\
 		("help,h", "prints this help message")\
-		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe size")\
+		("function,f", value<string>(&settings.system)->default_value(settings.system), "System of functions (multiply-shift, bad-linear).")\
+		("universe,u", value<size_t>(&universeSize)->default_value(universeSize), "Universe size.")\
 		("set,s", value<size_t>(&settings.setSize)->default_value(settings.setSize), "The size of the set.")\
 		("generation-count,g", value<size_t>(&settings.generationCount)->default_value(settings.generationCount), "The number of generations in the GA.")\
 		("population-size,p", value<size_t>(&settings.populationSize)->default_value(settings.populationSize), "The size of the population in the GA.")\
@@ -372,6 +379,7 @@ bool readSettingsFromArguments(Settings & settings, int argc, char ** argv) {
 
 int main(int argc, char ** argv) {
 	Settings settings;
+	settings.system = "multiply-shift";
 	settings.universeMax = 63;
 	settings.setSize = 8;
 	settings.crossoverProbability = 0.4;
@@ -393,6 +401,14 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-	optimize(settings);
+	if (settings.system == "multiply-shift") {
+		optimize<TableMultiplyShift, GeneratorFactoryTraits>(settings);
+	} else if (settings.system == "bad-linear") {
+		optimize<TableBadLinearSystem, GeneratorFactoryTraits>(settings);
+	} else {
+		cerr << "Unknown family of functions " << settings.system << ".";
+		return 1;
+	}
+
 	return 0;
 }

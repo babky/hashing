@@ -2,6 +2,7 @@
 #define TRAITS_H
 
 #include "../systems/multiply_shift_system.h"
+#include "../systems/bad_linear_system.h"
 
 namespace Hash { namespace Experiments {
 
@@ -23,6 +24,17 @@ struct GeneratorFactoryTraits<Hash::Systems::MultiplyShiftSystem<T, Storage>> {
 
 	static Generator create_generator(size_t universeSize, size_t tableSize) {
 		return Generator(universeSize - 1, tableSize);
+	}
+
+};
+
+template<typename T, class Storage>
+struct GeneratorFactoryTraits<Hash::Systems::BadLinearSystem<T, Storage>> {
+
+	typedef typename Hash::Systems::BadLinearSystem<T, Storage>::Generator Generator;
+
+	static Generator create_generator(size_t universeSize, size_t tableSize) {
+		return Generator(tableSize);
 	}
 
 };
