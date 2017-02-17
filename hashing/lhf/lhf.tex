@@ -1,24 +1,15 @@
-\documentclass{article}
-
-\usepackage[utf8]{inputenc}
+\documentclass[unicode,review]{siamart1116}
 
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{amsthm}
 \usepackage{mathabx}
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{pgf}
-\usepackage{tikz}
-
-\geometry{
-	b5paper,
-	margin=1.5cm,
-	top=1.75cm,
-	bottom=1.75cm
-}
+% May be removed later
+\usepackage{todonotes}
 
 \newcommand{\llinnm}[2]{\operatorname{L}_{\operatorname{lin}}({#1}, {#2})}
 \newcommand{\llinn}[1]{\llinnm{#1}{#1}}
@@ -42,68 +33,93 @@
 \newcommand{\expect}[1]{\expects{}{#1}}
 \newcommand{\inu}{\in_U}
 
-\newtheorem{lemma}{Lemma}
-\newtheorem{definition}{Definition}
-\newtheorem{theorem}{Theorem}
 \newtheorem{claim}{Claim}
-\newtheorem{corollary}{Corollary}
 
-\title{On the Size of Largest Bins Using Placement with Linear Transformations}
+% SIAM template
+\numberwithin{theorem}{section}
 
-\author{Martin Babka}
+\newcommand{\TheTitle}{On the Size of Largest Bins Using Placement with Linear
+Transformations} 
+\newcommand{\TheAuthors}{M. Babka}
 
+\title{\TheTitle}
+
+\headers{\TheTitle}{\TheAuthors}
+
+\author{
+  Martin Babka\thanks{Charles University, Prague (\email{babkys@gmail.com}).}
+}
+
+\usepackage{amsopn}
+\DeclareMathOperator{\diag}{diag}
+
+\ifpdf
+\hypersetup{
+  pdftitle={\TheTitle},
+  pdfauthor={\TheAuthors}
+}
+\fi
+% End SIAM template
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-We are dealing with placement of $n$ balls into $n$ bins using affine linear transformations between two vector spaces over $\binvecspace{2}$, i.e. functions of the form $Ax + a$ where $A$ is a binary matrix and $a$ is a binary vector.
-The currently known upper bound for this settings is $O(\log n \log \log n)$ by Alon et al. and holds even for hashing $n \log n$ balls into $n$ bins.
-We show a better estimate which fits the placement of $n$ balls into $n$ bins and get $O(\log n)$ upper bound on the size of a largest bin.
-We present a proof which uses the same technique but has a different parametrization of the parameters.
+We are studying placement of $n$ balls into $n$ bins where balls and bins are represented as two vector spaces over $\binvecspace{2}$. The placements is done according a linear transformation between the two vector spaces.
+We analyze the expected size of the largest bin. The only currently known upper bound is is $O(\log n \log \log n)$ by Alon et al. and holds for placing $n \log n$ balls into $n$ bins.
+We show that this bound can be improved to $O(\log n)$ in the case when $n$ balls are placed into $n$ bins.
+We reuse the same technique as it is in the article by Alon et al. but switch to a different parametrization of the building blocks.
 \end{abstract}
+
+\begin{keywords}
+balls and bins, universal hashing, linear transformations
+\end{keywords}
+
+\begin{AMS}
+  68W20, % Randomized algorithms
+  68P05, % Data structures
+  68W40  % Analysis of algorithms
+\end{AMS}
 
 \section{Introduction}
 
-The current research of hash function families is nowadays naturally focused on finding fast systems suitable for a chosen application.
-The applications relying on the systems of functions are universal hashing, cuckoo hashing, linear probing, load balancing, etc.
+Research of hash function families is nowadays naturally focused on finding fast systems suitable for universal hashing, cuckoo hashing, linear probing, load balancing, etc.
 Each application has slightly different requirements on the used system.
-For example universal hashing requires families having small largest bins. 
-For linear probing we have to to provide a 5-independent family.
+For example universal hashing~\cite{cw} requires families having small largest bins, for linear probing we have to to provide a 5-independent family~\cite{linear-probing}.
 And not only the mentioned requirements have to be fulfilled yet the time to compute a function should be small.
 
 In this article we are dealing with the size of a largest bin in a special balls-and-bins setting.
-The size of a largest bin when placing $n$ balls into $n$ bins is $\Theta(\log n/\log \log n)$ with high probability.
-This bound can be achieved by various systems, especially by a fully independent system.
-The requirement on full independence may be further relaxed because the systems which are at least $\log n/\log \log n$-independent achieve the above bound as well.
-The high independence provides perfect results for many other applications as well.
+It is known that if we randomly and independently place $n$ balls into $n$ bins, then the size of a largest bin is $\Theta(\log n/\log \log n)$ with high probability.
+This bound can be achieved by various systems, especially by completely independent uniform placement, by systems constructed in \cite{siegel} and \cite{celisetal}. 
+Let us note that relaxing full independence to $\log n/\log \log n$-independence is also possible without asymptotically worsening the above bound.
+Hash function families with high degrees of independence provide perfect results for many other applications e.g. as concentration bounds.
 
 Unfortunately the systems with high independence are inefficient in practice because of size and/or speed according to Siegel's lower bound~\cite{siegel}. 
 The research then moved from finding highly independent systems to finding functions which best fit the needs of the application. 
-Efficient systems specially designed to achieve the optimal bound of balls-and-bins emerged in \cite{celisetal}.
+As already mentioned efficient systems specially designed to achieve the optimal bound of balls-and-bins emerged in \cite{celisetal}.
 There are also special designs of hash function systems which accommodate to the special needs of the settings required by cuckoo hashing, linear probing, etc.
 For cuckoo hashing there are known families and modifications of the scheme which keep the expected $O(1)$ operation time such as cuckoo hashing with stash from \cite{mitzenmacher-cuckoo} and \cite{dietzfelbinger-cuckoo}.
 For linear probing it is known that 5-indepence is enough to achieve the expected constant probe sequence length~\cite{linear-probing}.
 
 The system of linear transformations between the binary vector spaces forms a simple and natural two-wise independent system of functions.
-We show that this system achieves the size of a largest bin which is nearly optimal despite its 2-independence.
-We assume that $n = 2^b$ and we have $n$ elements arbitrarily chosen from the universe $\binvecspace{u}$.
+We show that this system achieves the size of a largest bin which is nearly optimal despite its only 2-independence.
+We assume that $n = 2^b$ and we have $n$ elements arbitrarily chosen from the universe, the vector space $\binvecspace{u}$.
 We show that if $n$ balls are placed into the table of size $n$ using a randomly chosen linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$, then the expected size of a largest bin is $O(\log n)$.
-For the system of linear mappings it has been already shown in a paper by Alon et al \cite{alonetal} that the bound is $O(\log n \log \log n)$ for placing $n \log n$ balls into $n$ bins.
-This bound certainly holds for placing $n$ balls into the same number of bins.
+It has been already shown in a paper by Alon et al \cite{alonetal} that the bound achieved by linear transformations is $O(\log n \log \log n)$ for placing $n \log n$ balls into $n$ bins.
+This bound certainly holds for placing $n$ balls into $n$ bins.
 We improve the previous bound by $\log \log n$ factor when assuming that just $n$ balls are placed into the same number of bins.
 
 The technique of the proof is similar as in the original proof. 
 We switch to a different parametrization and change a few statements so that they suit the current setting.
 Our result was still not known and published and the asymptotic improvement has impact on universal hashing using this family of functions.
-The dictionary problem solved by universal hashing with linear transformations now matches the running times achieved by balanced trees.
+The dictionary problem solved by universal hashing with linear transformations has now expected ``worst case'' guarantee which matches the running times achieved by balanced trees.
 
-\section{Setting and notation}
+\section{Notation and the setting}
 Let $u, b \in \mathbb{N}$ and $A$ be a binary matrix of dimension $u \times b$, i.e. $A \in \{0, 1\}^{u \times b}$, and $\vec{a} \in \binvecspace{b}$. 
 By affine linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$ we understand a mapping $x \mapsto Ax + \vec{a}$.
 By linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$
-we understand a mapping $x \mapsto Ax$, i.e. $\vec{a} = \vec{0}$.
-Notice that the choice of $\vec{a}$ does not change the bin sizes and thus we can fix $\vec{a} = \vec{0}$
+we understand a mapping $x \mapsto Ax$, i.e. affine transformation with $\vec{a} = \vec{0}$.
+Notice that the choice of $\vec{a}$ does not change the bin sizes and thus for placing balls into bins we may use linear transformations only.
 
 By $\linearmaps{u}{b}$ we denote all linear transformations from $\binvecspace{u}$ to $\binvecspace{b}$.
 By $\surjectivelinearmaps{u}{b}$ we denote all surjective linear transformations from $\binvecspace{u}$ onto $\binvecspace{b}$.
@@ -111,7 +127,7 @@ Let $S \subseteq \binvecspace{u}$ and $T \in \linearmaps{u}{b}$, then by $\lbin{
 
 When considering probability of an event $E$ or the expected value of a variable $V$ we use $\probs{h \in_U H}{E}$ or $\expects{h \in_U H}{V}$ to indicate that the probability space is formed by random uniform choice of an object $h$ from a set $H$.
 
-\section{Placement of $n$ Balls into $n$ Bins}
+\section{Placement of \texorpdfstring{$n$}{n} Balls into \texorpdfstring{$n$}{n} Bins}
 
 Throughout this section we assume the placement of $n$ balls into $n$ bins using linear transformations.
 Moreover we assume that $n = 2^b$ for a positive integer $b$.
@@ -120,9 +136,10 @@ The universe is $\binvecspace{u}$ and the stored set is $S \subseteq \binvecspac
 \label{theorem-n-to-n}
 Let $S \subseteq \binvecspace{u}$ and let $n = |S|$. It holds that $\expects{T \in_U \linearmaps{u}{\log n}}{\lbin{T}{S}} = O(\log n)$.
 \end{theorem}
-To prove Theorem~\ref{theorem-n-to-n} we proceeded in the same way as in \cite{alonetal} to prove $\log n \log \log n$ bound for placement of $n \log n$ balls into $n$ bins.
-The main difference is switching to a different parametrization which suits better to our case.
-Now let us cite some of the results proved in \cite{alonetal} that are reused in our setting without any change.
+To prove \cref{theorem-n-to-n} we proceeded in the same way as it is done to prove $\log n \log \log n$ bound for placement of $n \log n$ balls into $n$ bins in \cite{alonetal}.
+We cite all the old and provide the proofs of all the new claims.
+The main difference between the two approaches is switching to a different parametrization which better suits our case.
+We cite the results proved in \cite{alonetal} that are directly reused.
 \begin{theorem}
 \label{theorem-prob-bound}
 Let $t, u \in \mathbb{N}$, $t < u$.
@@ -147,7 +164,7 @@ Theorem~{7a} from \cite{alonetal}.
 
 We now define two events needed to estimate the probability of having a large bin. 
 Both of them originally appeared in \cite{alonetal}.
-The first one, $E_1$, occurs if there is a bin of size at least $l$.
+The first event, $E_1$, occurs iff there is a bin of size at least $l$.
 The second one, $E_2$ is used to bound the probability of occurrence of  $E_1$.
 \begin{definition}[Event $E_1$]
 Let $l \in \mathbb{N}$, $T \in \linearmaps{u}{b}$. We define $E_1(S, T, l)$ as $\exists \vec{y} \in \binvecspace{b} \colon |T^{-1}(y) \cap S| \geq l$.
@@ -161,10 +178,10 @@ Let $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \i
 The event $E_2(S, T_0, T_1)$ occurs when $\exists \vec{y} \in \binvecspace{b} \colon T_1^{-1}(y) \subseteq T_0(S)$.
 \end{definition}
 
-From now on we reserve the symbols used by the factorization; we assume that $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \in_U \linearmaps{u}{f}$ and $T_1 \in_U \surjectivelinearmaps{f}{b}$ and $T = T_0 \circ T_1$.
+From now on we reserve the following symbols for the factorization; we assume that $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \in_U \linearmaps{u}{f}$ and $T_1 \in_U \surjectivelinearmaps{f}{b}$ and $T = T_0 \circ T_1$.
 
-The event $E_2$ co-occurs along with $E_1$ with at least a constant probability as is analyzed in Lemma~\ref{lemma-e1-e2}. 
-Using this fact we may bound the probability of $E_1$ by bounding the probability of occurrence of $E_2$ as it is in Corollary~\ref{corollary-e1-e2} of Lemma~\ref{lemma-e1-e2}.
+The event $E_2$ co-occurs along with $E_1$ with at least a constant probability as is analyzed in \cref{lemma-e1-e2}. 
+Using this fact we may bound the probability of $E_1$ by bounding the probability of occurrence of $E_2$ as it is in \cref{corollary-e1-e2} of \cref{lemma-e1-e2}.
 Let us note that the proofs of the lemma and the corollary come from~\cite{alonetal}.
 On the other hand we proceed more slowly and provide more formal statements.
 We also explicitly consider the probabilities along with their probability spaces.
@@ -182,15 +199,15 @@ For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $l \geq c_\epsilo
 First observe that any choice of $T_k$ can not violate $T = T_0 \circ T_1$.
 Because we assume that $E_1(S, T, l)$ occurs, there is $\vec{y} \in \binvecspace{b}$ such that $|T^{-1}(\vec{y}) \cap S| \geq l$.
 Put $U_A = T^{-1}(\vec{y})$, $S_A = U_A \cap S$ and $F_A = T_1^{-1}(\vec{y})$.
-See Figure~\ref{fig-factorisation-general} for a better picture of the situation.
+See \cref{fig-factorisation-general} for a better picture of the situation.
 Bin $\vec{y}$ consists only of the elements in $S_A$ and $|S_A| \geq l$.
 Notice that $|F_A| = 2^{f-b}$ since $T_1$ is onto and both $U_A$ and $F_A$ are affine subspaces of $\binvecspace{u}$ and $\binvecspace{f}$ respectively. 
 Let $T_k^A$ be the affine linear mapping between $U_A$ and $F_A$ uniquely defined by $T_k$.
 Realize that if $T_k^A(S_A) = F_A$, then $T_0(S) \supseteq T_k^A(S_A) = F_A = T_1^{-1}(\vec{y})$ and thus $E_2$ occurs.
-Figure~\ref{fig-factorisation-e2} provides a better picture of the situation when $E_2$ occurs.
-Using Theorem~\ref{theorem-epsilon} for $U_A$, $S_A$, $F_A$ and the affine mapping $T_k^A$ between $U_A$ and $F_A$ yields the wanted bound, i.e. $\probs{T_k \in_U \linearmaps{\operatorname{dim}(\operatorname{Ker}(T))}{f-b}}{T_k^A(S_A) = F_A} \geq 1 - \epsilon$. 
+\cref{fig-factorisation-e2} provides a better picture of the situation when $E_2$ occurs.
+Using \cref{theorem-epsilon} for $U_A$, $S_A$, $F_A$ and the affine mapping $T_k^A$ between $U_A$ and $F_A$ yields the wanted bound, i.e. $\probs{T_k \in_U \linearmaps{\operatorname{dim}(\operatorname{Ker}(T))}{f-b}}{T_k^A(S_A) = F_A} \geq 1 - \epsilon$. 
 If $\vec{y} = 0$, then $U_A$, $F_A$ and $T_k^A$ are not affine but plain vector subspaces and a linear mapping between then, i.e. $T_k^A = T_k$.
-Moreover realize that Theorem~\ref{theorem-epsilon} may be applied for affine subspaces as well.
+Moreover realize that \cref{theorem-epsilon} may be applied for affine subspaces as well.
 \end{proof}
 
 \begin{figure}[h]
@@ -273,16 +290,16 @@ Proposition~3.4 in \cite{alonetal}.
 For a fixed onto linear mapping $T_1$ the uniform choice of $T_0$ gives the uniform choice of $T = T_0 \circ T_1$.
 \end{claim}
 \begin{proof}
-See the beginning of the proof of Theorem~\ref{theorem-epsilon} named Theorem~7a in \cite{alonetal}.
+See the beginning of the proof of \cref{theorem-epsilon} named Theorem~7a in \cite{alonetal}.
 As a consequence notice that the uniform choice of $T$ is preserved even if $T_1$ is chosen randomly as well.
 \end{proof}
-From Claim~\ref{claim-dstr-affine} and Lemma~\ref{lemma-e1-e2} it follows $1 - \epsilon \leq \probs{T_0, T_1}{E_2 | E_1}$ and directly from the definition of conditional probability we get $\probs{T_0, T_1}{E_1} \leq \frac{1}{1-\epsilon}\probs{T_0, T_1}{E_2}$.
-Finally from Claim~\ref{claim-dstr-factor} it follows that $\probs{T}{E_1} = \probs{T_0, T_1}{E_1}$.
+From \cref{claim-dstr-affine} and \cref{lemma-e1-e2} it follows $1 - \epsilon \leq \probs{T_0, T_1}{E_2 | E_1}$ and directly from the definition of conditional probability we get $\probs{T_0, T_1}{E_1} \leq \frac{1}{1-\epsilon}\probs{T_0, T_1}{E_2}$.
+Finally from \cref{claim-dstr-factor} it follows that $\probs{T}{E_1} = \probs{T_0, T_1}{E_1}$.
 \end{proof}
 
 Now we switch to estimating the probability of $E_2$. 
 We start to differentiate from the original proof by choosing different size of the factor space.
-The substantial change advantage is that we can start using the probability estimate from the following lemma for $f > b$ instead of $f > b + \log b$  from Proposition~3.1 of \cite{alonetal}.
+The substantial change advantage is that we can start using the probability estimate coming from the following lemma for $f > b$ instead of $f > b + \log b$  from Proposition~3.1 of \cite{alonetal}.
 On the other hand our estimate depends on $b$ and the calculation becomes a bit more complicated than the original one.
 
 \begin{lemma}
@@ -295,17 +312,17 @@ If $S \subseteq \binvecspace{u}$, $|S| = 2^b$ and $\mu = \frac{|S|}{|\binvecspac
 \begin{proof}
 Observe that it is possible to restate $E_2(S, T_0, T_1)$ as $T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}$. 
 Occurrence of $E_2(S, T_0, T_1) \equiv \exists \vec{y} \in \binvecspace{b} \colon T_1^{-1}(y) \subseteq T_0(S)$ is equivalent to $T_1(\binvecspace{f} - T_0(S))$ not containing $\vec{y}$, i.e. $E_2(S, T_0, T_1) \equiv \exists \vec{y} \colon \vec{y} \not\in T_1(\binvecspace{f} - T_0(S))$.
-For more details of the situation check Figure~\ref{fig-factorisation-e2}.
+For more details of the situation check \cref{fig-factorisation-e2}.
 
 We prove the estimate for arbitrary $T_0$ and thus it also holds for the uniform choice of $T_0$. 
-We use Theorem~\ref{theorem-prob-bound} to estimate $\probs{T_1\in_U \surjectivelinearmaps{f}{b}}{T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ where $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} \leq \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} \leq \mu$.
+We use \cref{theorem-prob-bound} to estimate $\probs{T_1\in_U \surjectivelinearmaps{f}{b}}{T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ where $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} \leq \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} \leq \mu$.
 Since the function $\alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ is increasing w.r.t. $\alpha$ in $(0, 1)$ we get that
 $
 \probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}}.
 $
 \end{proof} 
 
-Now we compute the tail distribution of the variable $\lbin{T}{S}$ using the estimate from Lemma~\ref{lemma-bound} which in turns directly gives Theorem~\ref{theorem-n-to-n}.
+Now we compute the tail distribution of the variable $\lbin{T}{S}$ using the estimate from \cref{lemma-bound} which in turns directly gives \cref{theorem-n-to-n}.
 
 \begin{theorem}
 \label{theorem-prob-distribution-bound}
@@ -315,31 +332,31 @@ If $r > 4$, $\epsilon > 0$, then there is a constant $c_\epsilon > 0$ such that
 \]
 \end{theorem}
 \begin{proof}
-In this proof we fix $f = \lfloor b + \log r - \log \log r + 1 \rfloor$, $l = 2c_\epsilon r$ where $c_\epsilon$ comes from Lemma~\ref{lemma-bound}.
+In this proof we fix $f = \lfloor b + \log r - \log \log r + 1 \rfloor$, $l = 2c_\epsilon r$ where $c_\epsilon$ comes from \cref{lemma-bound}.
 
 As already mentioned in order to bound the probability of $E_1(S, T, l)$, i.e. $\lbin{T}{S} \geq l$, we first obtain an estimate on $\prob{E_2(S, T_0, T_1)}$ using the factorization through $\binvecspace{f}$. 
 
-The choice of $f$ meets the requirement $f > b$ of Lemma~\ref{lemma-bound} which also means that $\surjectivelinearmaps{f}{b}$ is nonempty.
-To use Corollary~\ref{corollary-e1-e2} we have to verify that $l \geq c_\epsilon (f - b)2^{f - b}$.
-Since we assume that $r \geq 4$ we have $(f - b)2^{f - b} \leq (\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2r(\log r - \log \log r + 1)}{\log r} \leq 2r$ and this requirement is thus met.
+The choice of $f$ meets the requirement $f > b$ of \cref{lemma-bound} which also means that $\surjectivelinearmaps{f}{b}$ is nonempty.
+To use \cref{corollary-e1-e2} we have to verify that $l \geq c_\epsilon (f - b)2^{f - b}$.
+Since we assume that $r \geq 4$ we have $(f - b)2^{f - b} \leq (\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2r(\log r - \log \log r + 1)}{\log r} \leq 2r$ and this requirement is met.
 
 Realize that $\mu = 2^{b - f} \leq \frac{\log r}{r}$ and that $f(\mu) = \mu ^ {- \log b + \log \mu^{-1} + \log \log \mu^{-1}}$ is increasing in $(0, 1)$.
-From the previous facts and Lemma~\ref{lemma-bound} we obtain that $\prob{E_2(S, T_0, T_1)} \leq f(\mu) \leq f(\log r/r)$.
-Corollary~\ref{corollary-e1-e2} directly implies the statement.
+From the previous facts and \cref{lemma-bound} we obtain that $\prob{E_2(S, T_0, T_1)} \leq f(\mu) \leq f(\log r/r)$.
+\cref{corollary-e1-e2} directly implies the statement.
 \end{proof}
 
 When compared to the original proof the estimate from the proven theorem becomes less than one for $r \approx b$. 
-This is possible because Lemma~\ref{lemma-bound} may be used for smaller values of $f$ as was already mentioned.
+This is possible because \cref{lemma-bound} may be used for smaller values of $f$ as was already mentioned.
 The proof of the main theorem is now straightforward.
 
-\begin{proof}[Proof of Theorem~\ref{theorem-n-to-n}]
+\begin{proof}[Proof of \cref{theorem-n-to-n}]
 We fix $\epsilon > 0$ arbitrarily.
 We split $\sum_{l = 1}^{n} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq l}$ into two sums according to $l$ being lower or greater than $8c_\epsilon \log n$.
 In the second case we show that the probability of having a bin larger than $2 c_\epsilon r$ where $r \geq 4\log n$ is bounded from above by $\frac{r^{-1.5}}{1-\epsilon}$.
 Hence $\sum_{l = 8c_\epsilon \log n}^{n} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq l} = \frac{O(1)}{1-\epsilon}$.
 The first sum is estimated as $\sum_{l = 1}^{8c_\epsilon \log n} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq l} \leq 8c_\epsilon \log n$.
 
-It remains to show that for $r \geq 4 \log n$ the estimate obtained by Theorem~\ref{theorem-prob-distribution-bound} is below $\frac{r^{-1.5}}{1-\epsilon}$.
+It remains to show that for $r \geq 4 \log n$ the estimate obtained by \cref{theorem-prob-distribution-bound} is below $\frac{r^{-1.5}}{1-\epsilon}$.
 To do so we bound the exponent coming from the theorem from below.
 \[
 -\log b - \log \log r + \log r + \log (\log r - \log \log r) \geq -\log \log r + 2 + \log \left(\frac{3\log r}{4}\right) = \log(3).
@@ -347,7 +364,8 @@ To do so we bound the exponent coming from the theorem from below.
 Hence for $r \geq 4\log n$ we may conclude that $\prob{\lbin{T}{S} \geq 2c_\epsilon r} \leq \frac{\left(\frac{\log r}{r}\right)^{\log 3}}{1-\epsilon} \leq \frac{r^{-1.5}}{1-\epsilon}$.
 \end{proof}
 
-\section{A Special Case When $S$ is a Vector Subspace}
+\section{The special case when balls form a vector subspace}
+\todo{This is a redundent section possibly.}
 
 Let us note that when $S$ is a subspace of the universe, then the expected size of the largest bin is constant.
 
@@ -371,61 +389,9 @@ Thus the sizes of all the non-empty bins are the same and are equal to $\bin{h}{
 
 \section{Acknowledgement}
 
-I would like to thank Michal Koucky and Vaclav Koubek for many advices and  time spent helping me with creating this article.
+We would like to thank V\'aclav Koubek and Michal Kouck\'y for many advices, consultations and time spent verifying the result. \todo{Venovanie Vaskovi - ale co napisat?}
 
-TODO: Add someone as the author?
-
-TODO: UTF-8 not working?
-
-\begin{thebibliography}{32}
-\bibitem{alonetal}
-N. Alon, M. Dietzfelbinger, P. B. Miltersen, E. Petrank and G. Tardos
-\newblock Linear Hash Functions
-\newblock J. {ACM}, 46. pages 667--683, 1999
-
-\bibitem{siegel}
-A. Siegel. 
-\newblock On universal classes of extremely random constant-time hash functions
-\newblock SIAM Journal on Computing, 33(3). pages 505--543 (electronic), 2004
-
-\bibitem{celisetal}
-L.E. Celis, O. Reingold, G. Segen and U. Wieder
-\newblock Balls and Bins: Smaller Hash Families and Faster Evaluation
-\newblock Foundations of Computer Science (FOCS), 2011 IEEE 52nd Annual Symposium, pages 599 -- 608, 2011
-
-\bibitem{linear-probing}
-A. Pagh, R. Pagh and M. Ruzic
-\newblock Linear Probing with Constant Independence
-\newblock Proceedings of the Thirty-ninth Annual ACM Symposium on Theory of Computing (STOC), pages 318--327, 2007 
-
-\bibitem{mitzenmacher-cuckoo} 
-A. Kirsch, M. Mitzenmacher and U. Wieder
-\newblock More Robust Hashing: Cuckoo Hashing with a Stash
-\newblock {SIAM} J. Comput., Vol. 39, pages 1543--1561, 2009
-               
-\bibitem{dietzfelbinger-cuckoo}
-M. Aum{\"{u}}ller, M. Dietzfelbinger and P. Woelfel
-\newblock Explicit and Efficient Hash Families Suffice for Cuckoo Hashing with a Stash
-\newblock Algorithms - {ESA} 2012 - 20th Annual European Symposium, Ljubljana, Slovenia, September 10-12, 2012. Proceedings
-
-% \bibitem{cw}
-% J.L. Carter, and M.N. Wegman. 
-% \newblock Universal Classes of Hash Functions.
-% \newblock Journal of Computer and System Sciences, 18. pages 143--154, 1979.
-
-
-% \bibitem{azar}
-% Y. Azar, A. Broder, A. Karlin, and E. Upfal
-% \newblock Balanced allocations.
-% \newblock SIAM Journal on Computing, 29(1). pages 180--200, 1999.
-
-% \bibitem{vocking}
-% B. V\"{o}cking
-% \newblock How asymmetry helps load balancing.
-% \newblock In Proceedings of the Fortieth Annual Symposium on Foundations of Computer Science. pages 131--140, 1999.
-\end{thebibliography}
+\bibliographystyle{siamplain}
+\bibliography{lhf}
 
 \end{document}
-
-
- 
