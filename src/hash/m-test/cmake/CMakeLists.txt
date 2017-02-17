@@ -3,7 +3,8 @@ cmake_policy			(VERSION 2.8.1)
 
 find_package( Boost 1.34 COMPONENTS random program_options system thread date_time REQUIRED )
 
-SET(CMAKE_CXX_FLAGS "-std=gnu++0x -ggdb -O3")
+SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++11 -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++11 -O3")
 
 set(SOURCES 
   ../m_test.cpp

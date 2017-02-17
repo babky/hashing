@@ -35,6 +35,7 @@ set(HEADERS
 	../storages/probing_storage.h
 	../storages/probing/policies.h
 	../systems/bit_string_system.h
+	../systems/bad_linear_system.h
 	../systems/cwlf_exponential_system.h
 	../systems/cwlf_system.h
 	../systems/multiply_shift_system.h
@@ -70,17 +71,18 @@ set(HEADERS
 
 set(SOURCES
 	${HEADERS}
-	../utils/storage_statistics.cpp
-	../utils/static_random_generator.cpp
-	../utils/hash_assert.cpp
-	../utils/time_vector.cpp
-	../math/combinatorics.cpp
-	../iterators/set_iterator.cpp
-	../policies/rehash_policy.cpp
-	../policies/guaranteed_rehash_policy.cpp
-	../policies/worst_case_rehash_policy.cpp
-	../storage.cpp
-	../math/double_word.cpp
+    ../math/double_word.cpp
+    ../math/combinatorics.cpp
+    ../policies/rehash_policy.cpp
+    ../policies/worst_case_rehash_policy.cpp
+    ../policies/guaranteed_rehash_policy.cpp
+    ../storage.cpp
+    ../utils/hash_math.cpp
+    ../utils/static_random_generator.cpp
+    ../utils/storage_statistics.cpp
+    ../utils/time_vector.cpp
+    ../utils/hash_assert.cpp
+    ../iterators/set_iterator.cpp
 )
 
 include_directories ( .. ${Boost_INCLUDE_DIRS} )
@@ -91,3 +93,4 @@ target_link_libraries (
 	Table
 	${Boost_LIBRARIES}
 )
+

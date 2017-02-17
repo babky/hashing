@@ -33,4 +33,9 @@ void simple_assert(bool status, string message) {
 }
 
 #endif
+#else
+
+void simple_assert(bool status, string message) {
+}
+
 #endif

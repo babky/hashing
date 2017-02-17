@@ -3,6 +3,7 @@
 
 #include "random_generator.h"
 #include "utils/boost_include.h"
+#include "utils/smart_pointer.h"
 
 namespace Hash { namespace Utils {
 
@@ -34,27 +35,26 @@ namespace Hash { namespace Utils {
 	public:
 		IntegralGeneratorWrapper(T minimum, T maximum):
 			min(minimum), 
-			max(maximum) {
-			this->g = &StaticRandomGenerator<size_t>::getGenerator();
+			max(maximum),
+			g(new RandomGenerator<size_t>(minimum, maximum, true)) {
 		}
 
 		T getMin(void) const {
-			return this->min;
+			return min;
 		}
 
 		T getMax(void) const {
-			return this->max;
+			return max;
 		}
 
-		T generate(void) const {
-			return this->g->generate() % (this->max - this->min) + this->min;
+		T generate(void) {
+			return g->generate();
 		}
 
 	private:
 		T min;
 		T max;
-
-		Hash::Utils::RandomGenerator<size_t> * g;
+		Hash::Utils::SmartPointer<Hash::Utils::RandomGenerator<size_t>> g;
 	};
 	 
 } }
