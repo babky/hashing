@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{wds10,epsf,mybib}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\include{definitions}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage[utf8]{inputenc}
+
+\lefthead{Martin Babka}
+\righthead{A Worst Case Aware Version of Universal Hashing}
+
+\setcounter{secnumdepth}{0}
+
+\begin{document}
+\title{A Worst Case Aware Version of Universal Hashing}
+
+\author{Martin Babka}
+
+\affil{Charles University, Faculty  of  Mathematics  and  Physics,
+     Prague, Czech Republic.}
+
+\begin{abstract}
+In this work we propose and analyze a simple hash table giving a worst case time guarantee in case of Find operation with all operations running in constant expected amortized time.
+To achieve this goal we exploit known properties of some universal classes of functions.
+Since the mentioned guarantee strongly depends on the quality of the underlying universal system, we show various systems capable of interesting bounds.
+With reasonable assumptions we can also combine the proposed model with the "two choices paradigm" and obtain $\bigo(\log \log n)$ worst case bound.
+The main advantage of the method is its simplicity and genericness because it may be used with chaining as well as with open addressing.
+\end{abstract}
+
+\begin{article}
+
+\input{introduction}
+\input{model}
+\input{limit_function}
+\input{conclusion}
+
+\acknowledgments %\footnotesize
+{We would like to thank Václav Koubek and Vladimír Čunát for helpful comments.
+The  present  work  was  supported by Grant Agency of Charles University under Contract 205-10/251473.}
+
+\input{bibliography}
+
+\end{article}
+\end{document}

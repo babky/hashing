@@ -1,0 +1,69 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+  \theoremstyle{definition}
+  \newtheorem{xca}[thm]{\protect\exercisename}
+  \newcounter{casectr}
+  \newenvironment{caseenv}
+  {\begin{list}{{\itshape\ \protect\casename} \arabic{casectr}.}{%
+   \setlength{\leftmargin}{\labelwidth}
+   \addtolength{\leftmargin}{\parskip}
+   \setlength{\itemindent}{\listparindent}
+   \setlength{\itemsep}{\medskipamount}
+   \setlength{\topsep}{\itemsep}}
+   \setcounter{casectr}{0}
+   \usecounter{casectr}}
+  {\end{list}}
+
+\makeatother
+
+\usepackage{babel}
+  \providecommand{\casename}{Case}
+  \providecommand{\exercisename}{Exercise}
+\providecommand{\theoremname}{Theorem}
+
+\begin{document}
+\global\long\def\e{\mathrm{e}}
+
+
+
+\section{Lower bound on tree depth}
+
+The entropy argument can be written as
+\[
+\log\binom{k+d}{k}\le k\log\left(1+d/k\right)+d\log\left(1+k/d\right)
+\]
+
+\begin{xca}
+\label{ex:simple}$c\log\left(1+1/c\right)$ is growing from $[1;1]$
+to $[\infty;\log\e]$, so $c\log\left(1+1/c\right)\le\log\e$. Proof
+is simple~-- growth by derivation, limit by L'Hospital.\end{xca}
+\begin{caseenv}
+\item $k\ge d\ge2$, denote $c:=k/d\ge1$. From the above we have
+\begin{eqnarray*}
+\log n & \le & cd\log\left(1+1/c\right)+d\log\left(1+c\right)=d\left[\left(1+c\right)\log\left(1+c\right)-c\log c\right]=\\
+ & = & d\left[\log\left(1+c\right)+c\log\left(1+1/c\right)\right]\overset{ex.\,\ref{ex:simple}}{\le}d\log\left(\e\left(1+c\right)\right)
+\end{eqnarray*}
+ As a consequence we have a very tight bound
+\[
+d\ge\frac{\log n}{\log\left(\e\left(1+c\right)\right)}=\frac{\log n}{\log\left(\e\left(1+k/d\right)\right)}
+\]
+Now we use the inequality on itself (what a cheat!) and we use that
+$1+c=1+k/d\le k$
+\[
+d\ge\frac{\log n}{\log\left(\e\left(1+k\frac{\log\left(\e\left(1+c\right)\right)}{\log n}\right)\right)}\ge\frac{\log n}{\log\e+\log\left(1+k\frac{\log\left(\e k\right)}{\log n}\right)}
+\]
+\end{caseenv}
+
+\end{document}

@@ -1,0 +1,3 @@
+create_plot.sh <bits> - creates a gnuplot script that processes the data created by call to process.sh
+process.sh <input file> - process the output of the system test
+make_graph <bits> - uses the previous scripts to create the graph

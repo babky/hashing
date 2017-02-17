@@ -1,0 +1,663 @@
+\let\accentvec\vec
+\documentclass{llncs}
+%[draft]
+\let\spvec\vec
+\let\vec\accentvec
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[usenames,dvipsnames]{color}
+
+\usepackage{amsmath}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{epstopdf}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{courier}
+
+\usepackage{listings}
+\lstset{language=c++, basicstyle=\ttfamily\footnotesize}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\floatname{algorithm}{Algorithm}
+\renewcommand{\listalgorithmname}{List of algorithms}
+\newcommand{\CALL}[1]{\STATE \textbf{call} #1}
+\if 0 1
+\newtheorem{definition}{Definition} % [chapter]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{example}[definition]{Example}
+\newtheorem{claim}[definition]{Claim}
+\newtheorem{statement}[definition]{Statement}
+\fi
+
+\newenvironment{proofof}[1]{\noindent{\it Proof of #1. }} {{\qed}}
+
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{definition}}
+
+\newcommand{\setdelim}{\mid}
+\newcommand{\hb}[2]{b\left(#1, #2\right)}
+\newcommand{\hn}[2]{n\left(#1, #2\right)}
+\newcommand{\hs}[2]{s\left(#1, #2\right)}
+\newcommand{\hS}[2]{S\left(#1, #2\right)}
+\newcommand{\hH}[1]{H\left(#1\right)}
+\newcommand{\hl}[2]{\ell(#1, #2)}
+\newcommand{\pp}[2]{p\left(#1, #2\right)}
+\newcommand{\optPrice}[2]{C\left(#1, #2\right)}
+\newcommand{\htz}{3}
+\newcommand{\Prob}[1]{\mathbf{Pr}\left(#1\right)}
+\newcommand{\Expect}[1]{\mathbf{E}\left[#1\right]}
+\newcommand{\Variance}[1]{\mathbf{Var}\left(#1\right)}
+\newcommand{\lpsl}{\mathbf{lpsl}}
+\newcommand{\psl}{\mathbf{psl}}
+\newcommand{\Indicator}{\mathbf{I}}
+\newcommand{\rank}[1]{\mathrm{rank}\left({#1}\right)}
+\newcommand{\dimension}[1]{\mathrm{dim}\left({#1}\right)}
+\newcommand{\nullspace}[1]{\mathcal{N}\left({#1}\right)}
+\newcommand{\matrixkernel}[1]{\mathrm{Ker}\left({#1}\right)}
+\newcommand{\vecspan}[1]{\mathrm{span}\left({#1}\right)}
+\newcommand{\vecspace}[1]{\mathbb{Z}_{2}^{#1}}
+\newcommand{\todo}[1]{\noindent{[{\bf ToDo:} #1]}}
+\newcommand{\PB}{Prefix Bucketing}
+\newcommand{\rl}[1]{\ell\left(#1\right)}
+
+\author{Martin Babka, Jan Bulánek, Vladimír Čunát, Michal Koucký, Michael Saks}
+\title{Online labeling lower bound.}
+
+\begin{document}
+\renewcommand{\theequation}{\arabic{equation}}
+
+\selectlanguage{english}
+
+\section{Introduction}
+\subsection{Online Labeling}
+In this paper we consider the {\em Online Labeling Problem}.
+The goal is to use an array of length~$m$ to successively store in order every prefix of a stream containing $n$~items.
+The linear ordering of the items is apriori unknown, so it is sometimes necessary to move items to make space for a new one.
+The task is to minimize the total number of such item moves.
+
+\subsection{Previous work}
+Itai et al.~\cite{Itaietal} were the first to design an algorithm that maintains an array of size $m \ge (1+\epsilon)n$, $\epsilon>0$, ordered while only making $O(n (\log n)^2)$ moves for the whole sequence of $n$ elements, i.e., in the amortized setting the algorithm makes $O((\log n)^2)$ moves per item.
+Willard~\cite{Willard} improved this algorithm to the worst case setting of $O((\log n)^2)$ moves per item and Bender et al.~\cite{Benderetal} further simplified his result.
+The Itai et al.~approach can be modified so that for an array of
+size $m=n^{1+\epsilon}$, $\epsilon>0$ constant, it uses only $O(\log n)$ moves per item,
+amortized (folklore). For the case that the array size~$m$ is exactly the number of items $n$,
+\cite{Zhang} gave an algorithm that achieves a surprising amortized bound $O((\log n)^3)$ moves per
+item; this result was simplified in~\cite{BirdSadnicki}.
+
+\subsection{Previous results}
+The only known lower bound for general strategies was given in~\cite{Bulaneketal}.
+Unfortunately this lower bound is only tight for arrays of linear size.
+However, we focus on arrays of super-linear size for which the lower bound was given in~\cite{Dietz-SIAM}.
+This lower bound was shown to be incorrect in~\cite{Bulaneketal}.
+
+\subsection{Our results}
+We provide a corrected reduction of Labeling to Prefix Bucketing.
+We simplify the former proof of the lower bound for the prefix bucketing problem and also show the limits of this lower bound.
+\todo{What is the real constant, since it does not hold for arbitrary one.}
+Finally we extend the lower bound for Online Labeling up to the arrays of size $2^{O(n)}$.
+
+\section{Online Labeling}
+\todo{Definition of Online Labeling}
+\begin{theorem}
+\label{thm:labeling-lower-bound}
+Assume that $m$ and $n$ are integers such that $m \geq n$. Each algorithm solving Labeling problem for $n$ elements with the array of size $m$ takes $\Omega\left(\frac{n \log n}{\log 4 \log m - \log \log n}\right)$ time.
+\end{theorem}
+
+\begin{corollary}
+Let $c > 0$ be a constant.
+Then for each $n \in \mathrm{N}$ solving Labeling problem for $n$ elements with the array of size $n^{1 + c}$ takes $\Omega\left(n \log n\right)$ time.
+\end{corollary}
+
+\section{Prefix Bucketing}
+\todo{Cite Zhang}
+The actual lower bound, which we show, is obtained from a lower bound on Prefix Bucketing.
+First let us describe Prefix Bucketing.
+Image that you have~$k$ buckets numbered from 1 to $k$ and $n$ items and you want to insert them to these buckets one by one.
+There are two possible operations~-- {\em insert} which put one item into the first bucket. The cost of insertion is equal to the number of items in this bucket after the insertion.
+The second operation is {\em merge}. During this operation you choose some $k_m<k$ and then you can arbitrarily move items between the buckets $1\ldots k_m$. The cost of such operation is equal to number of all items in these bucket (even if not all were moved).
+The aim is to minimize the sum of the costs of all operations.
+
+Let us formally define this version of Prefix Bucketing.
+\begin{definition}[\PB{}]
+\emph{\PB{}} for $n$ items and $k$ buckets with the size of virtual bucket $\alpha$ is a sequence $(x(t))_{t = 0}^{n}$ where $x(t)$ is a $k$ dimensional vector of integers. We refer to the element $i$ of $x(t)$ as $x(t)[i]$. The sequence satisfies the following properties.
+\begin{enumerate}
+	\item[P1)] For the the initial vector $x_0$ it must be true that $x(0) = (0, \dots, 0)$.
+	\item[P2)] For each $t$, $1 \leq t \leq n$ there exists $p(t)$ such that:
+	\begin{itemize}
+		\item $1 \leq p(t) \leq k$,
+		\item $x(t)[i] = x(t-1)[i]$ for each $i>p(t)$,
+		\item $x(t)[p(t)] = 1+\sum_{i=0}^{p(t)} x({t-1})[i]$,
+		\item $x(t)[i] = 0$, for each $i<p(t)$.
+	\end{itemize}
+\end{enumerate}
+Let $t$, $1\leq t \leq n$, be an integer. We define the cost of \PB{} at the time $t$ as $c(t):= 1+\sum_{i=1}^{p(t)} x({t-1})[i]$.
+The overall cost of the bucketing sequence $C((x(t))_{t = 0}^n) = \sum_{t=1}^n c(t)$.
+\end{definition}
+
+In Section~\ref{sec:bucketing} we finally prove the following lower bound on the cost of the bucketing sequence.
+\begin{theorem}
+\label{thm:bucketing-lower-bound}
+Let $n$ and $k$ be positive integers.
+Then the cost of each \PB{} for $n$ items and $k$ buckets sequence is at least $\frac{n \log n}{12(\log 4k - \log log n)}$.
+\end{theorem}
+
+\section{Reduction From Labeling to Prefix Bucketing}
+
+This section deals with a reduction of Online Labeling to Prefix Bucketing.
+We describe a way how to obtain a Prefix Bucketing strategy from any algorithm solving online labeling problem on a properly chosen sequence of Online Labeling $n$ insertions.
+Therefore any lower bound for Prefix Bucketing implies a lower bound for Online Labeling.
+
+First we make some observations concerning Online Labeling.
+From now on we consider labeling to be a game between an adversary who determines the input stream in response to an algorithm which wants to store the items as efficiently as possible.
+First notice that we can split the labeling game into~$n$ steps.
+During each step the adversary first chooses the next item~$i$ to be inserted and then the algorithm moves certain already inserted items inside the array and finally stores the item $i$.
+
+%The outline of the reduction is following. We build a segment hierarchy, where the smallest segment of the hierarchy defines the insertion point for the adversary and the other segments define (somehow) the buckets of the prefix bucketing. Finally we show that insert and rearrange in the labeling corresponds to the insert and merge in the prefix bucketing.
+
+We design an adversary whose task is to determine the next item to be inserted.
+Equivalently said in each step the adversary decides between which two already inserted items in the array the next item should be inserted.
+In order to determine the insertion point we build a segment hierarchy prior to each step.
+This idea is similar to the one which appeared in~\cite{Bulaneketal}.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{hierarchy.pdf}
+\caption{The segment hierarchy}
+\label{fig:segment-hierarchy}
+\end{figure}
+
+\subsection{The Segment Hierarchy}
+
+We first introduce the needed notation.
+By $\hH{t}$ we denote the \emph{segment hierarchy} which we use to choose the $t$-th inserted item.
+The hierarchy $\hH{t}$ is built at the beginning of the $t$-th step (or equivalently at the time $t$) just before the insertion.
+
+The segments of the hierarchy are organized in levels so that each \emph{segment} is nested inside the segment on the previous level (Fig.~\ref{fig:segment-hierarchy}).
+Precisely, the segment in the $i$-th level of $\hH{t}$ is a continuous area of the array and is denoted by $\hS{t}{i}$.
+Each segment can be seen as an subinterval of the interval $[1, m]$.
+The number of levels of $\hH{t}$ is denoted by $d(t)$.
+
+The hierarchy at the time $t$, $\hH{t}$, is thus a sequence of the nested segments $\hS{t}{1}, \dots, \hS{t}{d(t)}$.
+We define the value $\hs{t}{i}$ as the number of all elements in the segment $\hS{t}{i}$.
+We refer to the length of the $\hS{t}{i}$ as to $\hl{t}{i}$.
+Inside each segment $\hS{t}{i}$ we keep the $\hb{t}{i}$ leftmost and the same number of rightmost elements as so called \emph{barriers}.
+The choice of the value $\hb{t}{i}$ is specified later in this section.
+The other elements, which remained in the middle of $\hS{t}{i}$, are used to choose the segment on the next level.
+
+We define the \emph{critical level at the time $t$}, which we denote by $\rl{t}$, as the maximal~$i$ such that the rearrange operation which occurred at the time $t$ only moved elements within $\hS{t}{i}$.
+If there was no rearrange at the time $t$ we put $\rl{t}$ equal to $d(t)$.
+
+Hence at least one of the two borders of $\hS{t}{i + 1}$ was exceeded.
+For each level $i$ we maintain its \emph{level weight}, $\hn{t}{i}$, which is set by algorithms rebuilding the hierarchy.
+When a rearrange on the critical level $\rl{t}$ occurs, we move the weights from the levels $\rl{t} + 2, \dots, d(t)$ to the weight of the level $\rl{t} + 1$.
+Furthermore we show that the sum of these weights is proportional to the cost of the rearrange.
+
+We show that the reduction works for three arbitrarily chosen constants $\alpha \in \mathrm{N}, \beta, \lambda \in \mathrm{R}$, $0 < \beta < 1/2$, $\lambda \geq 2$ satisfying the inequality
+\begin{equation}
+\label{eq:choice}
+\alpha - 2\lceil\beta\alpha\rceil \geq 2\lambda.
+\end{equation}
+However these constants must be fixed before the start of the labeling game.
+The constant $\alpha$ denotes the maximal number of elements in the last segment.
+The term $\beta$ describes how many elements of a segment we leave in the barriers on each level; it is the $2 \beta$ fraction of all the elements.
+Finally, the length of a subsegment is at most a $1 / \lambda$ fraction of the length of its parent segment.
+
+\subsection{Construction of the Segment Hierarchy}
+To precisely define the hierarchy we first describe a procedure $\emph{Construct}$ which we use as the procedure for an inductive construction of $\hH{t}$.
+The procedure reconstructs the last levels of $\hH{t}$ at the time $t$.
+The created segments are nested in a prescribed segment $S$ beginning on the level $i$.
+
+\begin{algorithm}
+\caption{Construct($t$)}
+\label{alg:construct}
+\begin{algorithmic}
+\STATE $f := \min(d(t - 1) - 1, \rl{t - 1})$
+\FOR {$i = 1 \textbf{ to } f$}
+	\STATE $\hS{t}{i} := \hS{t - 1}{i}$
+	\STATE $\hs{t}{i} := \hs{t - 1}{i}$
+	\STATE $\hl{t}{i} := \hl{t - 1}{i}$
+	\STATE $\hb{t}{i} := \hb{t - 1}{i}$
+	\STATE $\hn{t}{i} := \hn{t - 1}{i}$
+\ENDFOR
+
+\STATE \textbf{call } Deepen($t, f + 1$)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Deepen($t, i$)}
+\label{alg:deepen}
+\begin{algorithmic}
+\STATE $\hn{t}{i} := 1 + \sum_{j = i}^{d(t - 1)} \hn{t - 1}{j}$
+\STATE \textbf{call} Choose($t, i$)
+
+\IF {$\hs{t}{i} \geq \alpha$}
+	\STATE $\hn{t}{i + 1} := 0$
+	\STATE \textbf{call} Choose($t, i + 1$)
+	\STATE $d(t) := i + 1$
+\ELSE
+	\STATE $d(t) := i$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Choose($t, i$)}
+\label{alg:choose}
+\begin{algorithmic}
+\STATE $n = \max\left(2 , \min\left(\hn{t}{i}, \left\lfloor \frac{\hs{t}{i - 1} - 2\hb{t}{i - 1}}{\lambda}\right\rfloor\right)\right)$
+\STATE $\hS{t}{i} := $ arbitrary subsegment of $\hS{t}{i - 1}$ from the set of the shortest segments containing $n$ elements and not intersecting the barriers of $\hS{t}{i - 1}$
+\STATE $\hs{t}{i} := \mbox{the number of elements in the segment }\hS{t}{i}$
+\STATE $\hl{t}{i} := \mbox{length of elements in the segment }\hS{t}{i}$
+\STATE $\hb{t}{i} := \left\lceil \beta \hs{t}{i} \right\rceil$
+\end{algorithmic}
+\end{algorithm}
+
+For the first time the hierarchy is created at the beginning of step $\htz$.
+We simply set $\hS{\htz}{1} := [1, m]$, $d(\htz) := 1$, $\hs{\htz}{1} := 2$, $\hn{\htz}{1} := 2$, $\hb{\htz}{1} := 1$ and $\hl{\htz}{1} := m$.
+
+Now let $t > \htz$ be an arbitrary time and assume that $\hH{t - 1}$ was already constructed.
+To build $\hH{t}$ we just call Construct($t$).
+
+Even if there was no rearrange at the time $t - 1$ we redefine the last segment $\hS{t - 1}{d(t - 1)}$ and possibly deepen the hierarchy.
+Notice that by the choice of $n$ in procedure Choose we avoid having $\hs{t}{i} > \hn{t}{i}$ except the case when $\hn{t}{i} < 2$.
+Therefore the number of elements in the last segment is at most $\alpha$.
+
+When having such a hierarchy, at the time $t$ we always choose to insert the next item just after the $\left\lfloor \hs{t}{d(t)} / 2 \right\rfloor$-th item of $\hS{t}{d(t)}$.
+
+\subsection{Properties of the Hierarchy}
+
+Now let us show some crucial properties of the hierarchy which will finally allow a reduction of Labeling to Prefix Bucketing.
+
+\begin{lemma}
+\label{lm:halving}
+At each time $t$, $\htz \leq t \leq n$, and for every level $i$, $1 \leq i < d(t)$, it holds that $\lambda \hl{t}{i + 1} \leq \hl{t}{i}$
+\end{lemma}
+\begin{proof}
+The shortest subsegment of $\hS{t}{i}$ containing less than the $\lambda$ fraction of the elements must have length shorter than $\hl{t}{i} / \lambda$.
+\qed
+\end{proof}
+
+\begin{corollary}
+\label{cor:decreasing_segment_size}
+At each time $t$, $\htz \leq t \leq n$, and for every level $i$, $1 \leq i \leq d(t)$, it holds that $\hl{t}{i} \leq \hl{t}{1}/\lambda^{i-1}$.
+\end{corollary}
+\begin{proof}
+Straightforward iteration of Lemma~\ref{lm:halving} gives the wanted result.
+\qed
+\end{proof}
+
+Although $d(t)$ may change significantly over time, it is easy to get a tight upper bound on $d(t)$.
+
+\begin{lemma}
+\label{lm:d_bound}
+At each time $t$, $\htz \leq t \leq n$, it is true that $d(t) \leq 1 + \log_\lambda \frac{m}{2}$.
+\end{lemma}
+\begin{proof}
+From the choice of the constants it clearly holds that $2 \leq \hs{t}{d(t)} \leq \hl{t}{d(t)} \leq \hl{t}{1}/\lambda^{d(t)-1}$.
+Now it follows that $d(t) \leq 1 + \log_\lambda \frac{\hl{t}{1}}{2} = 1 + \log_\lambda \frac{m}{2}$.
+\qed
+\end{proof}
+
+The following claims shows that the sizes of barriers at the level $i$, $\hb{t}{i}$, actually correspond to the number $\hn{t}{i}$.
+
+\begin{lemma}
+\label{lm:b_i_size}
+At each time $t$, $\htz \leq t \leq n$, and for each level $i$, it holds that $\hb{t}{i} \geq \left\lceil \frac{\beta}{\lambda} \hn{t}{i} \right\rceil$.
+\end{lemma}
+Before we prove Lemma~$\ref{lm:b_i_size}$ we need the following claim.
+
+\begin{claim}
+For each time $t$, $\htz \leq t \leq n$, and for each $i$, $1 < i \leq d(t)$, it holds that
+\[
+	\hs{t}{i - 1} - 2\hb{t}{i - 1} \geq \hn{t}{i} + \lambda.
+\]
+\end{claim}
+\begin{proof}
+Let $t'$ be the greatest time such that $t' \leq t$ and $\rl{t' - 1} < i - 1$, that is when $\hS{t}{i}$ was defined.
+Observe that at $t'$ it is true that $\hn{t'}{i} = 0$ and $\hs{t'}{i - 1} \geq \alpha$.
+Since the choice of the constants satisfies $\left\lfloor \alpha - 2 \lceil\beta\alpha\rceil \right\rfloor \geq 2\lambda$ (Inequality~\eqref{eq:choice}) it follows that $\hs{t'}{i - 1} - 2\hb{t'}{i - 1} \geq \alpha - 2 \lceil\beta\alpha\rceil \geq \hn{t'}{i} + \lambda.$
+
+By the construction of the hierarchy at the time $t$ we have $\hs{t}{i - 1} = \hs{t'}{i - 1} + t - t'$, $\hb{t}{i - 1} = \hb{t'}{i - 1}$ and $\hn{t}{i} = \hn{t'}{i} + t - t'$.
+
+Hence the inequality holds.
+\end{proof}
+
+\begin{proofof}{Lemma~\ref{lm:b_i_size}}
+We prove the lemma by induction on $t$.
+For $t = \htz$ it holds trivially because the hierarchy construction ensures this property.
+
+Now we prove the statement for $t > \htz$.
+For levels $i \leq \rl{t - 1}$ it holds that $\hn{t}{i} = \hn{t - 1}{i}$ and $\hb{t}{i} = \hb{t - 1}{i}$ so the inequality follows from the induction.
+
+Now we consider the level $i = \rl{t - 1} + 1$.
+The construction of $\hH{t}$ created $\hS{t}{i}$ so that $\hn{t}{i} = 1 + \sum_{j = i}^{d(t - 1)} \hn{t - 1}{j}$ and
+\[
+	\hb{t}{i} = \left\lceil \beta \cdot \hs{t}{i} \right\rceil = \left\lceil \beta \left \lfloor \frac{\hs{t}{i - 1} - 2\hb{t}{i - 1}}{\lambda} \right \rfloor \right\rceil \geq \left\lceil \beta \left\lfloor \frac{\hn{t}{i} + \lambda}{\lambda} \right\rfloor \right\rceil
+\]
+where the last inequality follows from the previous claim.
+
+For a level $i$, $i > \rl{t - 1} + 1$, we have $\hn{t}{i} = 0$, therefore the inequality is also preserved.
+\end{proofof}
+
+From these observations we can conclude the following corollary.
+
+\begin{corollary}
+\label{cl:invariants}
+The hierarchy is maintained so that the following invariants are satisfied for each level $i$, $1 \leq i \leq d(t)$, at each $t$:
+\begin{enumerate}
+	\item[I1)] $\hS{t}{1} = [1, m]$,
+	\item[I2)] $d(t) \leq 1 + \lfloor\log_\lambda m\rfloor$,
+	\item[I3)] $\hb{t}{i} \geq \left\lceil\frac{\beta}{\lambda} \cdot \hn{t}{i}\right\rceil$,
+	\item[I4)] $\hn{t}{d(t)} \leq \alpha$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Invariants I1 and I4 follow directly from construction of hierarchy. Invariant I2 is the statement of Lemma~\ref{lm:d_bound} and I3 is exactly Lemma~\ref{lm:b_i_size}.
+\end{proof}
+
+These invariants will enable us to successfully reduce Labeling to Prefix Bucketing.
+
+\subsection{Actual Reduction of Labeling to Prefix Bucketing}
+
+Now we are ready to show a reduction from Labeling to \PB{} for $n$ elements and the array of size $m$.
+We create a hard Labeling instance from which we are able to create a sequence of \PB{} for $n$ elements with $k = 1 + \left\lfloor \log_\lambda m \right\rfloor$ buckets.
+
+\begin{lemma}
+\label{lm:reduction-cost}
+Assume that the constants $\alpha, \beta$ and $\lambda$ were chosen as described in the construction of the segment hierarchy.
+Let $k = 1 + \lfloor\log_\lambda \frac{m}{2}\rfloor$.
+The cost of Labeling with $n$ items and size of the array $m$ is at least the $\frac{\beta}{\lambda} \cdot P(n, k) - \alpha n - 3$ where $P(n, k)$ is the minimal cost of \PB{} for $n$ items with $k$ buckets over all prefix bucketing sequences.
+\end{lemma}
+\begin{proof}
+First let us describe the correspondence among the segment hierarchy of Labeling and buckets of \PB{}.
+For $1 \leq t \leq n$ and $1 \leq i \leq k$ let $\pp{t}{i}$ be the number of elements in the bucket $i$ after inserting the element given at the step $t$ into the labeling array.
+After each step we maintain \emph{Mapping Invariant}, that is for each $t$, $1 \leq t \leq n$,
+\[
+\pp{t}{k - i + 1} =
+  \begin{cases}
+    \hn{t}{i} & \mbox{if } 1 \leq i \leq d(t) \\
+    0 & \mbox{if } d(t) < i \leq k.
+  \end{cases}
+\]
+
+\begin{figure}
+\label{fig:mapping-invariant}
+\includegraphics[width=\linewidth]{hierarchy2bucketing.pdf}
+\caption{Mapping Invariant}
+\end{figure}
+
+From Invariant I2 of Corollary~\ref{cl:invariants} it follows that it follows that $d(t) \leq k$ and hence we may choose $k$ as the number of buckets.
+
+At the time $\htz$ we build the hierarchy for the first time and thus we have to redistribute the first two elements so that the Mapping Invariant holds.
+We start by $x_0 = (0, \dots, 0)$, $x_1 = (0, \dots, 0, 1)$ and put $x_2 = (0, \dots, 0, 2)$.
+The cost of such distribution is exactly 3.
+
+After the step at the time $t$ of our labeling game we have to reflect the changes in the segment hierarchy made by the labeling algorithm. The next vector of the bucketing sequence, $x_t$, which preserves Mapping Invariant, must be equal to $(0, \dots, 0, \hn{t}{d(t)}, \hn{t}{d(t) - 1}, \dots, \hn{t}{1})$.
+
+From Corollary~\ref{cl:invariants} Invariant I4 it follows that the size of the first non-empty bucket $\pp{t}{k - d(t) + 1} = \hn{t}{d(t)} \leq \alpha$.
+
+After a rearrange at the time $t$ we make a merge of buckets $1, \dots, k - \rl{t}$ and thus we move the items of these buckets into bucket $k - \rl{t}$.
+This exactly reflects the change in the segment hierarchy since the weights from the levels $\rl{t} + 2, \dots, d(t)$ were moved to the weight of the level $\rl{t} + 1$.
+Cost of the described step is exactly $c(t) = \sum_{i = 1}^{k - \rl{t}} {\pp{t}{i}} = \sum_{i = \rl{t} + 1}^{d(t)} \hn{t}{i}$.
+
+If there is no rearrange during the step $t$ we just increase the size of the bucket $k - d(t) + 1$ by one.
+The cost of such a step is at most $\alpha$ since $\pp{t}{k - d(t) + 1} \leq \alpha$ by Invariant~I4 of Corollary\ref{cl:invariants}.
+
+We show that the cost of \PB{} at each time is proportional to the cost of Labeling.
+
+\begin{claim}
+\label{cl:rearrange_cost}
+Assume that a rearrange occurred at the time $t$. Then the cost of the rearrange is at least $\sum_{j=\rl{t} + 1}^{d(t)} \hb{t}{j}$.
+\end{claim}
+\begin{proof}
+Since the rearrange stopped at the level $\rl{t}$ for each level $j > \rl{t}$ there must be an element which was moved out of the segment $\hS{t}{j}$.
+Because the barriers of those levels were replaced the cost of the rearrange is at least $\sum_{j=\rl{t} + 1}^{d(t)} \hb{t}{j}$.
+\qed
+\end{proof}
+
+\begin{claim}
+\label{lm:rearrange_cost}
+Assume that a rearrange occurred at the time $t$. Then the cost of the rearrange is at least $\frac{\beta}{\lambda} \cdot \sum_{j=\rl{t} + 1}^{d(t)} \hn{t}{j}$.
+\end{claim}
+\begin{proof}
+From the previous claim it follows that the cost of the rearrange is at least $\sum_{j = \rl{t} + 1}^{d(t)} \hb{t}{j}$.
+Invariant I3 of Corollary~\ref{cl:invariants} implies that this cost is at least $\frac{\beta}{\lambda} \cdot \sum_{j = \rl{t} + 1}^{d(t)} \hn{t}{j}$.
+\qed
+\end{proof}
+
+From the previous claims it now follows that the cost of Labeling is at least $\left(\sum_{t = 1}^{n} \frac{\beta}{\lambda} \cdot c(t)\right) - \alpha n - 3$.
+\qed
+\end{proof}
+
+\begin{proofof}{Theorem~\ref{thm:labeling-lower-bound}}
+Let us choose constants $\alpha := 8$, $\lambda := 2$ and $\beta := 1/4$.
+The result now follows from Lemma~\ref{lm:reduction-cost}.
+\end{proofof}
+\todo{Constants in the Theorem can be chosen better but the improvement should be only in the multiplicative factor.}
+
+\section{Bucketing}
+\label{sec:bucketing}
+
+\begin{definition}[Prefix Time Forest, $k$-admissibility]
+\label{def:ptf}
+Let $F$ be a forest of $m$ rooted trees $T(v_1), \dots, T(v_m)$ with roots $v_1,\ldots, v_m$ consisting of $n$ nodes such that each node $v \in V(F)$ is a assigned a unique number $t(v) \in \{1, \dots, n\}$.
+
+Let $i, j$ be from $\{1, \dots, m\}$ such that $t(v_i) < t(v_j)$.
+We call the forest $F$ \emph{Prefix Time Forest} if
+\begin{itemize}
+	\item for each pair of nodes $x \in T({v_i})$ and $y \in T({v_j})$ it holds that $t(x) < t(y)$,
+	\item the numbering $t$ of nodes gives a postorder numbering of $T(v_i)$  for each $i \in \{1, \dots, m\}$.
+\end{itemize}
+
+From now on we assume that the trees $T(v_1), \dots, T(v_m)$ of a Prefix Time Forest are ordered from left to right by $t(v_1), \dots, t(v_m)$.
+
+Let $k$ be a non-negative integer. A Prefix Time Forest is \emph{$k$-admissible} if it is empty or
+\begin{itemize}
+\item the forest created from the leftmost tree by removing its root is $k$-admissible and
+\item the forest created by removing the leftmost tree is $(k - 1)$-admissible.
+\end{itemize}
+
+The cost of the Prefix Time Forest $F$, $C(F) = \sum_{v\in V(F)} (d(v) + 1)$ where $d(v)$ is the depth\footnote{We consider the depth of the root of a tree to be zero.} of the node $v$. We denote the depth of the forest $F$ by $d(F) = \max_{v \in V(F)} d(v)$.
+
+We denote the minimal cost of all $k$-admissible forests on $n$ vertices by $\optPrice{k}{n}$.
+\end{definition}
+
+\begin{lemma}
+\label{lm:optimal-price-depth}
+Let $F$ be a $k$-admissible forest such that $C(F) = \optPrice{k}{n}$, then the leaves are in depth $d(F)$ or $d(F) - 1$.
+\end{lemma}
+\begin{proof}
+Note that every node in the forest contributes to the total price by its depth increased by one.
+Whenever there is a node of depth at most $d-2$, it can adopt as a child at least one leaf from the depth $d$ without breaking the admissibility and so decreasing the price.
+\qed
+\end{proof}
+
+\begin{lemma}
+\label{lm:k-admissibility}
+Let $F$ be a Prefix Time Forest consisting of at most $k$ trees.
+Then $F$ is $k$-admissible iff the $i$-th leftmost tree of $F$ is $(k - i + 1)$-admissible.
+\end{lemma}
+\begin{proof}
+We show both directions at once by induction on $k$.
+For the empty forest the statement trivially holds.
+Observe that the forest which is created by removing the root of the a $k$-admissible tree is $k$-admissible.
+Therefore the first part of Definition~\ref{def:ptf} is equivalent to the leftmost tree being $k$-admissible.
+For the rest of the forest we just use the induction hypothesis since the rest of the forest contains at most $k - 1$ trees.
+\qed
+\end{proof}
+
+\begin{lemma}
+\label{lm:1-1-pb-ptf}
+For each \PB{} sequence $(x(t))_{t=0}^n$ for $n$ items with $k$ buckets there is a $k$-admissible forest $F$ with $C(F) = C((x_t)_{t = 0}^n)$ consisting of $n$ nodes and vice-versa.
+\end{lemma}
+\begin{proof}
+First we prove by induction on $n$ that each \PB{} sequence $(x(t))_{t = 0}^n$ has a corresponding $k$-admissible forest $F(n)$ so that each bucket $i$, $1 \leq i \leq k$, such that $x(n)[i] \neq 0$, is assigned a unique tree $T$ in the forest $F(n)$ consisting of $x(n)[i]$ nodes. Furthermore for arbitrary two non-empty buckets $i$ and $j$, $i < j$, and for each $x \in T(i)$ and $y \in T(j)$ it holds that $t(x) > t(y)$.
+We refer to these properties as to \emph{Bucket-Tree Mapping}.
+
+Notice that because of Bucket-Tree Mapping it holds that the buckets with bigger indices have their corresponding trees more on the left. So the order is reversed. \todo{Oh poor english.}
+
+\begin{case}
+If $n = 0$ then the \PB{} sequence is equivalent to the empty tree $F(0)$ it holds that $C(F(0)) = C((x_t)_{t = 0}^0) = 0$ and Bucket-Tree Mapping is satisfied.
+\end{case}
+
+\begin{case}
+Let $n > 0$ and let $F(n - 1)$ and $(x(t))_{t = 0}^{n - 1}$ be the forest and the sequence satisfying Bucket-Tree Mapping with $C(F(n - 1)) = C((x(t))_{t = 0}^{n - 1})$.
+\paragraph{Unique Mapping of Buckets to Trees.}
+We define the tree $F(n)$ satisfying the Bucket-Tree Mapping with the sequence $(x(t))_{t = 0}^n$.
+Recall the definition of the value $p(t)$ from the definition of \PB{}. 
+For each $i > p(t)$ we map the bucket $i$, $x(n)[i] \neq 0$, to the tree $T(i) \in F(n - 1)$ which we place into $F(n)$ (as these buckets remain unchanged by the merge) and we do not change their order.
+Finally we map the bucket $p(t)$ to a new tree $T$ of $F(n)$ which consists of a root labeled by $t$ and subtrees $T(j)$ for every $j \leq p(t)$ such that $x(n - 1)[j] \neq 0$. We place $T$ in $F$ so that it is the rightmost one.
+The number of vertices in the newly created tree $T$ is the number of vertices in its subtrees plus one for the root -- that is exactly the number $x(n)[p(t)]$.
+Observe that the Prefix Time Forest condition and the second condition of Bucket-Tree Mapping hold for $F(n)$ because the newly created root has the greatest label and is the rightmost tree of the forest.
+
+\paragraph{$k$-admissibility.}
+Now we prove the $k$-admissibility of $F$.
+Observe that the number of trees in $F(n)$ and $F(n - 1)$ is at most $k$ since there are at most $k$ buckets.
+There are two possibilities either the number of trees of $F(n)$ decreased when compared to $F(n - 1)$ and then $T$ contains more than just one vertex, or $T$ consists of just one node.
+The second case when $T$ consists of just one node is trivial since it is $1$-admissible and it is the rightmost one.
+Now assume that $T$ is not a single vertex and it is the $i$-th leftmost tree of $F$.
+Then the number of subtrees of $T$ is at most $k - i + 1$.
+Because of the construction of $F(n - 1)$ the subtrees of $T$ satisfy the requirements of Lemma~\ref{lm:k-admissibility} we get that $T$ is $(k - i + 1)$-admissibile.
+Therefore the forest $F(n)$ is $k$-admissible.
+Hence the whole forest $F$ is $k$-admissible.
+\end{case}
+
+\paragraph{The price $C(F(n)) = C((x_t)_{t = 0}^n)$.}
+From induction for $F(n - 1)$ it is true that $C(F(n - 1)) = C((x_t)_{t = 0}^{n - 1})$.
+Now realize that $C(F(n)) = \sum_{i: x(n)[i] \neq 0} C(T(i)) = C(T(p(t))) + \sum_{i \neq p(t): x(n)[i] \neq 0} C(T(i)) = C(F(n - 1)) + 1 + x(n)[p(t)] = C((x_t)_{t = 0}^n)$. 
+We used the fact that the number of vertices of $T(p(t))$ is $x(n)[p(t)]$ and by a merge the vertices of $T(p(t))$ from $F(n - 1)$ get their depth increased by one.
+
+We just finished the induction and the part from left to right holds.
+
+\todo{Honza -- tvoja cast z prava do lava, ak sa s Michalom dohodneme, ze ju chceme.}
+
+\todo{Maybe a part of the future proof sketch (a real proof, heh?).}
+We can perform the history represented by the forest in post order:
+when creating the first tree we can use all $k$ buckets before the
+final merge, then for the rest we only have $k-1$ buckets.
+
+Similarly if we record a valid sequence of actions in post order,
+we get the corresponding admissibility.
+\qed
+\end{proof}
+
+\begin{definition}
+We say that a $k$-admissible Prefix Time Forest is \emph{$(k,d)$-complete} if it has maximal number of vertices among all $k$-admissible Prefix Time Forests of depth $d$.
+\end{definition}
+
+\todo{I'd use a simpler proof with a worse estimate for which we have adopted the results in the reduction section. However n:= should be n = in the following claim (i guess).} 
+\begin{lemma}
+\label{lm:k-d-complete}
+For $k \ge 1$ and $d \ge 0$ and $F$ is $(k, d)$-complete.
+Then $F$ consists of $n(k, d) := \binom{k+d+1}{k} - 1$ vertices and $C(F) = p(k,d):=\binom{k+d+1}{k} \frac{k(d+1)}{k+1} = (n(k,d)+1)\frac{k}{k+1}(d+1)$ .
+\end{lemma}
+\begin{proof}
+By induction on $k+d$:
+\begin{case}
+$k=1$ and $d\ge0$. The forest is only a single path of length $d$,
+which represents $d+1$ elements so $n\left(1,d\right)=\binom{d+1+1}{1}-1$
+holds. The price is $\sum_{i=0}^{d}(i+1)=\binom{d+2}{2}$,
+which corresponds to $p(1,d)=\binom{d+1+1}{1}\frac{d+1}{2}$.
+\end{case}
+
+\begin{case}
+$k\ge1$ and $d=0$. The forest consists of $k$ leaves, which represent
+$k$ elements so $n(k,0)=\binom{k+1}{k}-1$ holds. The
+price is also $k$ which, corresponds to $p(k,0)=\binom{k+1}{k}\frac{k}{k+1}1$.
+\end{case}
+
+\begin{case}
+$k\ge2$ and $d\ge1$. We use induction from Definition~\ref{def:ptf}
+to split the forest into the root of the leftmost tree, its subforest, and the remainder.
+We clearly have
+\begin{eqnarray*}
+n(k,d) & = & 1+n(k,d-1)+n(k-1,d)=\\
+ & = & 1+\binom{k+d-1+1}{k}-1+\binom{k-1+d+1}{k-1}-1=\\
+ & = & \binom{k+d+1}{k}-1.
+\end{eqnarray*}
+Similarly the price can be decomposed the same way as
+\begin{eqnarray*}
+	p(k,d)
+	& = &	1 + p(k,d-1) + n(k,d-1) + p(k-1,d) = \\
+	& = &	1 + \binom{k+d}{k} \frac{kd}{k+1} + \binom{k+d}{k} - 1 + \binom{k+d}{k-1} \frac{(k-1)(d+1)}{k}= \\
+	& = &	\binom{k+d}{k}\frac{kd+k+1}{k+1}+\binom{k+d}{k-1}\frac{(k-1)(d+1)}{k}=\\
+	& = &	\frac{(k+d)!(kd+k+1)}{k!d!(k+1)} + \frac{(k+d)!(k-1)(d+1)}{(k-1)!(d+1)!k} = \\
+	& = &	\frac{(k+d+1)!}{k!(d+1)!} \left[
+		\frac{d+1}{k+d+1} \frac{kd+k+1}{k+1} + \frac{k}{k+d+1} \frac{(k-1)(d+1)}{k}
+		\right] = \\
+	& = &	\binom{k+d+1}{k} \left[
+		\frac{ (d+1)(kd+k+1) + (k^{2}-1)(d+1) }{(k+d+1)(k+1)}
+		\right] = \\
+	& = & \binom{k+d+1}{k} \left[
+		\frac{ (d+1) (k^{2}+kd+k)}{(k+d+1)(k+1)}
+		\right] = \binom{k+d+1}{k} \frac{k(d+1)}{k+1}.
+\end{eqnarray*}
+
+\end{case}
+\qed
+\end{proof}
+
+\begin{lemma}
+\label{lm:bucketing-price-bound-by-depth}
+Let $d$ be the lowest possible depth of a $k$-admissible Prefix Time Forest that represents $n$ elements.
+Then $\optPrice kd \ge (n+1) \frac{k d}{k+1}$.
+\end{lemma}
+\begin{proof}
+In an optimal $k$-admissible forest the levels up to $d-1$ are full
+so they make an $(k,d-1)$-complete forest which has price
+$(n(k,d-1)+1) \frac{k d}{k+1}$. The remaining elements
+have to be in depth $d$ so each of them costs $d+1$. Together we
+have price at least $(n+1) \frac{k d}{k+1}$.
+\qed
+\end{proof}
+
+\begin{lemma}
+\label{lm:lower_bound_d} Let $n, k, d$ be positive integers such that $k\ge \log n$ and let $d$ be the smallest number such that ${k+d+1 \choose d+1} - 1\ge n$. Then it holds that $d\ge \frac{\log n}{6 (\log 4k - \log \log n)} - 1$ for $n$ large enough.
+\end{lemma}
+\begin{proof}
+In order to prove the lemma we state the following claim.
+\newcommand{\ddd}{d'}
+\begin{claim}
+\label{cl:d_value}
+For $\ddd = \frac{\log n}{6 (\log 4k - \log \log n)} + 1$ and $k, n$ from the statement of Lemma~\ref{lm:lower_bound_d} it holds that ${k+\ddd-1 \choose \ddd-1} \leq n + 1$.
+\end{claim}
+\begin{proof}
+First notice that $\ddd\leq k$. Recall that ${a \choose b}\leq 2^{h(a/b)b}$ where $h$ stands for the entropy.
+In addition for $x<0.5$ it holds that $h(x)<- 2x \log x$. If we combine all these we obtain the following
+inequality $$\log {k + \ddd - 1 \choose \ddd - 1} \leq 2(\ddd - 1) \log\frac{\ddd + k - 1}{\ddd - 1}.$$ Now we continue
+with straightforward calculations.
+
+\[
+\begin{split}
+\log {k + \ddd - 1 \choose \ddd - 1}
+	& \leq 2(\ddd - 1) \log\frac{\ddd + k - 1}{\ddd - 1} \\
+	& \leq 2(\ddd - 1) \log\frac{2k}{\ddd - 1} \\
+	& = \frac{\log n}{3} \cdot \frac{1}{\log 4k - \log \log n} \cdot \log \frac{12k (\log 4k - \log \log n)}{\log n} \\
+	& = \frac{\log n}{3} \cdot \frac{\log 3 + \log 4k - \log \log n + \log (\log 4k - \log \log n)}{\log 4k - \log \log n} \\
+	& \leq \frac{\log n}{3} \cdot (1 + 1 + 0.5) \\
+	& \leq \log n.\\
+\end{split}
+\]
+
+We used the fact, that for $x > 2$ it holds that $\frac{\log x}{x}$ is decreasing.
+\qed
+\end{proof}
+
+Use substitution $d' = d + 2$.
+Realize that the expression ${k + \ddd - 1 \choose \ddd - 1}$ is increasing in $\ddd$, the proof now follows from the previous claim.
+\qed
+\end{proof}
+
+\begin{proofof}{Theorem~\ref{thm:bucketing-lower-bound}}
+Follows immediately from Lemmas~\ref{lm:k-d-complete} and~\ref{lm:lower_bound_d}.
+\end{proofof}
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
+\end{document}
