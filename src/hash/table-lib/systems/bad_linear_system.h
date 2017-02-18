@@ -165,7 +165,6 @@ namespace Hash { namespace Systems {
 			g = Hash::Utils::IntegralGeneratorWrapper<T>(0, p - 1);
 		}
 
-	private:
 		T p;
 		T A, B;
 		Hash::Utils::IntegralGeneratorWrapper<T> g;
