@@ -373,7 +373,7 @@ namespace Hash {
 			rehash(reservedSize);
 		}
 
-	private:
+	protected:
 		/**
 		 * Used hashed function.
 		 */

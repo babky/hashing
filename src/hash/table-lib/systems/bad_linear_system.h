@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <sstream>
 #include "universal_system.h"
 #include "../generators/random_generator.h"
 #include "../math/double_word.h"
@@ -153,11 +154,17 @@ namespace Hash { namespace Systems {
 			BadLinearSystem<T, Storage> f;
 		};
 
-		void swap(BadLinearSystem & function) {
+		virtual void swap(BadLinearSystem & function) {
 			std::swap(p, function.p);
 			std::swap(A, function.A);
 			std::swap(B, function.B);
 			std::swap(g, function.g);
+		}
+
+		virtual std::string toString() const {
+			std::stringstream str;
+			str << "BadLinear((" << A << ", " << B << ")/" << p << ")";
+			return str.str();
 		}
 
 	protected:
@@ -178,6 +185,11 @@ namespace std {
 	template <typename T, class Storage>
 	void swap(Hash::Systems::BadLinearSystem<T, Storage> & a, Hash::Systems::BadLinearSystem<T, Storage> & b) {
 		a.swap(b);
+	}
+
+	template <typename T, class Storage>
+	std::string to_string(const Hash::Systems::BadLinearSystem<T, Storage> & a) {
+		return a.toString();
 	}
 
 }

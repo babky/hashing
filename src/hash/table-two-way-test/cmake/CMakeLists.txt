@@ -2,6 +2,9 @@ cmake_minimum_required( VERSION 2.8.1 FATAL_ERROR )
 
 find_package( Boost 1.34 COMPONENTS random thread program_options system REQUIRED )
 
+SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++17 -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++17 -O3")
+
 link_directories ( ${Boost_LIBRARY_DIRS} )
 
 set(SOURCES 

@@ -35,7 +35,7 @@ using namespace Hash::Math;
 typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, UniversalFunctionCWLF, Hash::Storages::ChainedStorage> TableCWLF;
 typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, MultiplyShiftSystem, Hash::Storages::ChainedStorage> TableMultiplyShift;
 
-void print_result(const ElementVector & v, const SurjectivityResult & surjectivityResult, const LongestChainResult & longestChainResult) {
+void print_result(const ElementVector & v, const SurjectivityResult & surjectivityResult, const AverageLongestChainResult & longestChainResult) {
 	cout << v << " " << surjectivityResult.surjectiveCount << "/" << surjectivityResult.functionCount << " "
 			<< longestChainResult.sum << "/" << longestChainResult.count << " "
 			<< boost::multiprecision::cpp_rational(longestChainResult.sum, longestChainResult.count).convert_to<double>() <<  "\n";
@@ -45,12 +45,12 @@ template<class Table, bool intermediate>
 void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, const ElementVector & fixedElements, const ElementVector & disabled, bool verbose) {
 	ElementVector v = first(setSize, fixedElements, disabled);
 	SurjectivityResult surjectivityResult(0, 0);
-	LongestChainResult longestChainResult;
+	AverageLongestChainResult longestChainResult;
 
 	bool first = true;
 	SurjectivityResult sResult(0, 0);
 	ElementVector sVector;
-	LongestChainResult lResult;
+	AverageLongestChainResult lResult;
 	ElementVector lVector;
 
 	// We fix 0, 1, ..., fixedCount. But we choose only from offset, offset + 1, ..., universeSize - 1
@@ -61,9 +61,6 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, c
 	size_t percent = 0;
 
 	for (bool shouldContinue = true; shouldContinue; shouldContinue = (setSize > fixedCount) && next(v, universeSize - 1, fixedElements, disabled)) {
-		typedef typename Table::HashFunction::Generator Generator;
-		typedef typename Table::HashFunction HashFunction;
-
 		++current;
 		if (verbose && percent != current * 100 / count) {
 			percent = current * 100 / count;
@@ -73,10 +70,12 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, c
 		// Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
 		// surjectivityResult = surjective_number<HashFunction, Generator>(v, gs);
 
-		Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, setSize);
-		longestChainResult = longest_chain<Table, HashFunction, Generator>(v, gl);
+		longestChainResult  = compute_longest_chain_average<Table, GeneratorFactoryTraits>(universeSize, v, tableSize);
 
 		if (intermediate) {
+			if (verbose) {
+				cout << current << "/" << count << " -> [" << v << "]" << endl;
+			}
 			print_result(v, surjectivityResult, longestChainResult);
 		}
 
@@ -88,6 +87,7 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, c
 			lVector = v;
 			lResult = longestChainResult;
 			if (verbose) {
+				cout << "Improvement: ";
 				print_result(v, surjectivityResult, longestChainResult);
 			}
 		} else {
@@ -101,6 +101,7 @@ void perform_experiment(size_t universeSize, size_t setSize, size_t tableSize, c
 				lResult = longestChainResult;
 
 				if (verbose) {
+					cout << "Improvement: ";
 					print_result(v, surjectivityResult, longestChainResult);
 				}
 			}
@@ -121,9 +122,7 @@ void perform_partial_experiment(size_t universeSize, const ElementVector & set, 
 	Generator gs = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, tableSize);
 	SurjectivityResult sResult = surjective_number<HashFunction, Generator>(set, gs);
 
-	Generator gl = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize,
-			Hash::Math::next_power(set.size()));
-	LongestChainResult lResult = longest_chain<Table, HashFunction, Generator>(set, gl);
+	AverageLongestChainResult lResult = compute_longest_chain_average<Table, GeneratorFactoryTraits>(universeSize, set, tableSize);
 
 	cout << "Results\n";
 	cout << "Surjectivity:  " << set << " " << sResult.surjectiveCount << "/" << sResult.functionCount << "\n";
@@ -188,8 +187,8 @@ int main(int argc, char ** argv) {
 		("elements,e", value<vector<size_t>>(&elements)->multitoken(), "The fixed elements.")\
 		("disabled,d", value<vector<size_t>>(&disabled)->multitoken(), "The disabled elements.")\
 		("function,f", value<string>(&function)->default_value(function), "Function type.")\
-		("intermediate,i", value<bool>(&intermediate)->default_value(intermediate), "If the intermediate output should be provided.")\
-		("verbose,v", value<bool>(&verbose)->default_value(verbose), "If percent of the computation should be printed.");
+		("intermediate,i", bool_switch(&intermediate), "If the intermediate output should be provided.")\
+		("verbose,v", bool_switch(&verbose), "If percent of the computation should be printed.");
 
 	variables_map vm;
 	try {
