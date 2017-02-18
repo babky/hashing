@@ -4,8 +4,8 @@ cmake_policy (VERSION 2.8.1)
 find_package(Boost 1.34 COMPONENTS random program_options system thread date_time REQUIRED)
 find_package(Paradiseo COMPONENTS eo moeo eoutils REQUIRED)
 
-SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++0x -ggdb")
-SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O3")
+SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++17 -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++17 -O3")
 
 set(SOURCES 
   ../bad_set.cpp
@@ -25,6 +25,6 @@ include_directories(
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../table-lib/cmake ${Boost_LIBRARY_DIRS})
 
-add_executable(BadSet ${SOURCES})
+add_executable(BadSetTmp ${SOURCES})
 
-target_link_libraries(BadSet Table ${Boost_LIBRARIES} ${PARADISEO_LIBRARIES})
+target_link_libraries(BadSetTmp Table ${Boost_LIBRARIES} ${PARADISEO_LIBRARIES})

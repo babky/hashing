@@ -27,8 +27,6 @@ using namespace Hash::Iterators;
 using namespace Hash::Utils;
 
 typedef ChainedStorage<size_t, EqualityComparer<size_t>, size_t> Storage;
-typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, MultiplyShiftSystem, ChainedStorage> TableMultiplyShift;
-typedef Table<size_t, Hash::Utils::EqualityComparer<size_t>, BadLinearSystem, ChainedStorage> TableBadLinearSystem;
 
 struct Settings {
 	string system;
@@ -217,7 +215,7 @@ public:
 			// Find the best possible element for the set.
 			fixed = set;
 			fixed.erase(fixed.begin() + i);
-			LongestChainExperimentResult r = perform_longest_chain_experiment<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
+			FindWorstSetResult r = find_worst_set<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
 			*it = r.set[r.set.size() - 1];
 			change = change || *it != r.set[r.set.size() - 1];
 			*it = r.set[r.set.size() - 1];
@@ -250,7 +248,7 @@ public:
 			return false;
 		}
 
-		LongestChainExperimentResult r = perform_longest_chain_experiment<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
+		FindWorstSetResult r = find_worst_set<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
 		set = r.set;
 		std::sort(set.begin(), set.end());
 		return change;
@@ -290,16 +288,15 @@ public:
 	}
 
 	virtual void operator()(IndividualBadSet & individual) {
-		typedef typename Table::HashFunction Function;
-		typedef typename Function::Generator Generator;
-		Generator g = GeneratorFactoryTraits<Function>::create_generator(universeMax, tableSize);
-		LongestChainResult r = longest_chain<Table, Function, Generator>(individual.getSet(), g);
+		AverageLongestChainResult r = compute_longest_chain_average<Table, GeneratorFactoryTraits>(universeMax, individual.getSet(), tableSize);
 		individual.fitness(r.sum);
 	}
 };
 
-template<class Table, template <class> class GeneratorFactoryTraits>
+template<template <class, class> class Function, template <class> class GeneratorFactoryTraits>
 void optimize(const Settings & settings) {
+	typedef Hash::Table<size_t, Hash::Utils::EqualityComparer<size_t>, Function, ChainedStorage> Table;
+
 	rng.reseed(settings.seed);
 
 	const size_t universeMax = settings.universeMax;
@@ -326,10 +323,24 @@ void optimize(const Settings & settings) {
 	cout << "The best solution found: " << pop[0] << endl;
 	cout << "Final Population\n" << pop << endl;
 
-	LongestChainHistogram histogram = compute_histogram<Table, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
+	LongestChainHistogram histogram = compute_longest_chain_histogram<Table, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
 	cout << "L C\n";
 	for (LongestChainHistogram::Histogram::iterator it = histogram.histogram.begin(); it != histogram.histogram.end(); ++it) {
 		cout << it->first << " " << it->second << "\n";
+	}
+
+	typedef typename CompleteLongestChainInformationTraits<Function>::HashFunction HashFunction;
+	typedef typename CompleteLongestChainInformation<HashFunction>::ChainInformation ChainInformation;
+	typedef typename CompleteLongestChainInformation<HashFunction>::Chains Chains;
+	CompleteLongestChainInformation<HashFunction> info = compute_longest_chain_complete_information<Function, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
+	cout << "L C\n";
+	for (typename ChainInformation::iterator it = info.info.begin(); it != info.info.end(); ++it) {
+		cout << "---\n";
+		cout << it->first << ": ";
+		for (typename Chains::iterator cit = it->second.begin(); cit != it->second.end(); ++cit) {
+			cout << "{" << std::to_string(cit->function) << ": " << "[" << cit->chain << "]} ";
+		}
+		cout << "\n";
 	}
 }
 
@@ -402,9 +413,9 @@ int main(int argc, char ** argv) {
 	}
 
 	if (settings.system == "multiply-shift") {
-		optimize<TableMultiplyShift, GeneratorFactoryTraits>(settings);
+		optimize<MultiplyShiftSystem, GeneratorFactoryTraits>(settings);
 	} else if (settings.system == "bad-linear") {
-		optimize<TableBadLinearSystem, GeneratorFactoryTraits>(settings);
+		optimize<BadLinearSystem, GeneratorFactoryTraits>(settings);
 	} else {
 		cerr << "Unknown family of functions " << settings.system << ".";
 		return 1;

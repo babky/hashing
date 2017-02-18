@@ -2,6 +2,7 @@
 #define MULTIPLY_SHIFT_SYSTEM_H
 
 #include <algorithm>
+#include <sstream>
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
 #include "math/double_word.h"
@@ -100,6 +101,13 @@ namespace Hash { namespace Systems {
 			MultiplyShiftSystem<T, Storage> f;
 		};
 
+	public:
+		virtual std::string toString() const {
+			std::stringstream str;
+			str << "MultiplyShift(" << a << "/" << universumMax << ")";
+			return str.str();
+		}
+
 	private:
 		T universumMax;
 		T a;
@@ -114,6 +122,11 @@ namespace std {
 	template <typename T, class Storage>
 	void swap(Hash::Systems::MultiplyShiftSystem<T, Storage> & a, Hash::Systems::MultiplyShiftSystem<T, Storage> & b) {
 		a.swap(b);
+	}
+
+	template <typename T, class Storage>
+	std::string to_string(const Hash::Systems::MultiplyShiftSystem<T, Storage> & a) {
+		return a.toString();
 	}
 
 }

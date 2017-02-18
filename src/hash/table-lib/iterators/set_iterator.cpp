@@ -36,7 +36,7 @@ ostream & std::operator <<(std::ostream & out, const ElementVector & v) {
 }
 
 size_t compute_max(size_t max, const ElementVector & fixedElements, const ElementVector & disabledElements) {
-	for(--max; contains(fixedElements, max) || contains(disabledElements, max); --max) {
+	for(; contains(fixedElements, max) || contains(disabledElements, max); --max) {
 	}
 	return max;
 }
@@ -52,13 +52,12 @@ bool Hash::Iterators::next(ElementVector & v, std::size_t max, const ElementVect
 	max = compute_max(max, fixedElements, disabledElements);
 
 	while (v[s] == max) {
-		// First two elements may be fixed to 0 and 1 for linear functions.
 		if (s == fixedElements.size()) {
 			return false;
 		}
 
 		--s;
-		max = compute_max(max, fixedElements, disabledElements);
+		max = compute_max(max - 1, fixedElements, disabledElements);
 	}
 
 	++v[s];

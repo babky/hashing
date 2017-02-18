@@ -186,7 +186,7 @@ namespace Hash { namespace Storages {
 			a.swap(b);
 		}
 
-	private:
+	protected:
 		/**
 		 * Node of the chain of items with the same hash code.
 		 */
@@ -540,7 +540,6 @@ namespace Hash { namespace Storages {
 		 */
 		SettableStorageInfo storageInfo;
 
-	private:		
 		/**
 		 * Table of chains.
 		 */

@@ -1,9 +1,10 @@
 cmake_minimum_required	(VERSION 2.8.1)
 cmake_policy			(VERSION 2.8.1)
 
-SET(CMAKE_CXX_FLAGS "-std=gnu++0x -O3 -gtoggle -ftree-vectorize -msse2")
-
 find_package( Boost 1.34 COMPONENTS random system date_time program_options REQUIRED )
+
+SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++17 -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++17 -O3 -gtoggle -ftree-vectorize -msse2")
 
 set(SOURCES 
     ../table_time_test.cpp
