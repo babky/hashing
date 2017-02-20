@@ -25,6 +25,7 @@ include_directories(
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../table-lib/cmake ${Boost_LIBRARY_DIRS})
 
-add_executable(BadSetTmp ${SOURCES})
+add_executable(BadSet ${SOURCES})
 
-target_link_libraries(BadSetTmp Table ${Boost_LIBRARIES} ${PARADISEO_LIBRARIES})
+target_link_libraries(BadSet Table ${Boost_LIBRARIES} ${PARADISEO_LIBRARIES})
+
