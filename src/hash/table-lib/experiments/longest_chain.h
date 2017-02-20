@@ -255,10 +255,9 @@ struct CompleteLongestChainInformation {
 template<class Table>
 struct CompleteLongestChainInformationGatherer {
 	typedef typename Table::HashFunction HashFunction;
-	typedef CompleteLongestChainInformation<HashFunction> CompleteLongestChainInformation;
-	typedef typename CompleteLongestChainInformation::ChainInformation ChainInformation;
-	typedef typename CompleteLongestChainInformation::SingleChainInformation SingleChainInformation;
-	typedef typename CompleteLongestChainInformation::Chains Chains;
+	typedef typename CompleteLongestChainInformation<HashFunction>::ChainInformation ChainInformation;
+	typedef typename CompleteLongestChainInformation<HashFunction>::SingleChainInformation SingleChainInformation;
+	typedef typename CompleteLongestChainInformation<HashFunction>::Chains Chains;
 
 	CompleteLongestChainInformationGatherer() {
 	}
@@ -275,8 +274,8 @@ struct CompleteLongestChainInformationGatherer {
 		it->second.push_back(SingleChainInformation(chain, table.getFunction()));
 	}
 
-	CompleteLongestChainInformation getCompleteLongestChainInformation(void) const {
-		return CompleteLongestChainInformation(info);
+	CompleteLongestChainInformation<HashFunction> getCompleteLongestChainInformation(void) const {
+		return CompleteLongestChainInformation<HashFunction>(info);
 	}
 
 private:
