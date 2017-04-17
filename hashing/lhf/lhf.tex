@@ -111,16 +111,16 @@ We use similar technique as Alon et al. however we use a different parametrizati
 
 \section{Notation and the setting}
 Let $u, b \in \mathbb{N}$, $\vec{a} \in \binvecspace{b}$ and $A$ be a binary matrix of dimension $u \times b$, i.e. $A \in \{0, 1\}^{u \times b}$.
-By an affine linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$ we understand a mapping $x \mapsto Ax + \vec{a}$.
+By an affine linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$ we understand a mapping $\vec x \mapsto A\vec x + \vec{a}$.
 By linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$
-we understand a mapping $x \mapsto Ax$, i.e. an affine transformation with $\vec{a} = \vec{0}$.
+we understand a mapping $\vec x \mapsto A\vec x$, i.e. an affine transformation with $\vec{a} = \vec{0}$.
 Notice that the choice of $\vec{a}$ does not change the bin sizes and thus in our case it is sufficient to analyze the linear transformations only.
 
 By $\linearmaps{u}{b}$ we denote all linear transformations from $\binvecspace{u}$ to $\binvecspace{b}$.
 By $\surjectivelinearmaps{u}{b}$ we denote all surjective linear transformations from $\binvecspace{u}$ onto $\binvecspace{b}$.
-Let $S \subseteq \binvecspace{u}$ and $T \in \linearmaps{u}{b}$, then by $\lbin{T}{S}$ we denote the size of a largest bin created by $T$ when hashing $S$, i.e. $\lbin{T}{S} = \operatorname{max}_{\vec y \in \binvecspace{b}} |T^{-1}(\vec y) \cap S|$.
+Let $S \subseteq \binvecspace{u}$ and $T \in \linearmaps{u}{b}$, then by $\lbin{T}{S}$ we denote the size of a largest bin created by $T$ when placing $S$ into $\binvecspace{b}$, i.e. $\lbin{T}{S} = \operatorname{max}_{\vec y \in \binvecspace{b}} |T^{-1}(\vec y) \cap S|$.
 
-When considering probability of an event $E$ or the expected value of a variable $V$ we use $\probs{h \in_U H}{E}$ or $\expects{h \in_U H}{V}$ to indicate that the probability space is formed by random uniform choice of an object $h$ from a set $H$.
+When considering probability of an event $E$ or the expected value of a variable $V$ we use the notation $\probs{h \in_U H}{E}$ or $\expects{h \in_U H}{V}$ to indicate that the probability space is formed by the random uniform choice of an object $h$ from a set $H$.
 
 All the logarithms in this article are to the base 2.
 
@@ -133,19 +133,16 @@ Let $u, b \in \mathbb{N}$, $S \subseteq \binvecspace{u}$ and $|S| \leq 2^b$. The
 \end{theorem}
 
 We proceeded similarly to \cite{alonetal} and reuse the following propositions from \cite{alonetal}.
-\begin{proposition}
-\label{proposition-prob-bound}[Theorem~{7b} from \cite{alonetal}]
+\begin{proposition}[{\cite[Theorem~7b, p.~7]{alonetal}}]
+\label{proposition-prob-bound}
 Let $t, u \in \mathbb{N}$, $t < u$.
 Let $S \subset \binvecspace{u}$ such that $\alpha = 1 - \frac{|S|}{2^u}$, $\alpha < 1$.
-Then 
-\[
-\probs{T \in_U \surjectivelinearmaps{u}{t}}{T(S) \neq \binvecspace{t}} \leq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}}.
-\]
+Then $\probs{T \in_U \surjectivelinearmaps{u}{t}}{T(S) \neq \binvecspace{t}} \leq \alpha^{u - t - \log t + \log \log \frac{1}{\alpha}}$.
 \end{proposition}
 
-\begin{proposition}
-\label{proposition-epsilon}[Theorem~{7a} from \cite{alonetal}]
-For each $\epsilon > 0$ there exists a positive value $c_\epsilon$ depending solely on $\epsilon$, such that for each $t \in \mathbb{N}, S \subseteq \binvecspace{u}$ satisfying $|S| \geq c_\epsilon t 2^t$ it holds  \[\probs{T \in_U \linearmaps{u}{t}}{T(S) = \binvecspace{t}} \geq 1 - \epsilon .\]
+\begin{proposition}[{\cite[Theorem~{7a}, p.~7]{alonetal}}]
+\label{proposition-epsilon}
+For each $\epsilon > 0$ there exists $c_\epsilon > 0$ depending solely on $\epsilon$, such that for each $t \in \mathbb{N}, S \subseteq \binvecspace{u}$ satisfying $|S| \geq c_\epsilon t 2^t$ it holds $\probs{T \in_U \linearmaps{u}{t}}{T(S) = \binvecspace{t}} \geq 1 - \epsilon$.
 \end{proposition}
 Let us note that from the proof in \cite{alonetal} it follows that $c_\epsilon$ may be chosen as $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$.
 
@@ -153,21 +150,21 @@ We now define two events needed to estimate the probability of having a  bin of 
 So they were defined also in \cite{alonetal}.
 The first event, $E_1$, occurs iff there is a bin of size at least $\ell$.
 The second one, $E_2$ is used to upper bound the probability of occurrence of $E_1$.
-\begin{definition}[Event $E_1$ from \cite{alonetal}]
+\begin{definition}[{\cite[Event $E_1$, p.~11]{alonetal}}]
 Let $u, b, \ell \in \mathbb{N}$, $T \in \linearmaps{u}{b}$. We put \[E_1(S, T, \ell) \equiv \exists \vec{y} \in \binvecspace{b} \colon |T^{-1}(\vec y) \cap S| \geq \ell.\]
 \end{definition}
 
 To define the second event, $E_2$, we decompose the chosen random linear map $T \in \linearmaps{u}{b}$ into $T_0 \in \linearmaps{u}{f}$ and a surjective $T_1 \in \surjectivelinearmaps{f}{b}$ satisfying $T = T_1 \circ T_0$.
 
-\begin{definition}[Event $E_2$ from \cite{alonetal}]
+\begin{definition}[{\cite[Event $E_2$, p.~11]{alonetal}}]
 Let $u, f, b \in \mathbb{N}$, $f \geq b$, $S \subseteq \binvecspace{u}$, $T_0 \in \linearmaps{u}{f}$ and $T_1 \in \surjectivelinearmaps{f}{b}$.
 The event $E_2(S, T_0, T_1)$ occurs when $\exists \vec{y} \in \binvecspace{b} \colon T_1^{-1}(\vec y) \subseteq T_0(S)$.
 \end{definition}
 
 From now on we reserve the following symbols for the decomposition; we assume that $u, f, b \in \mathbb{N}$, $f \geq b$, $T_0 \in_U \linearmaps{u}{f}$ and $T_1 \in_U \surjectivelinearmaps{f}{b}$ and $T = T_1 \circ T_0$.
-Refer to \cref{fig-decomposition-general} for a better picture of the decomposition. 
+Refer to \cref{fig-decomposition-general} for the general case of the decomposition.
 \begin{figure}
-	\caption{The decomposition of $T$. Let us note that $F_A = T_1^{-1}(\vec{y})$, $U_A = T^{-1}(y)$ and $S_A = S \cap U_A$.}
+	\caption{The decomposition of $T$, general case. Let us note that $F_A = T_1^{-1}(\vec{y})$, $U_A = T^{-1}(\vec y)$ and $S_A = S \cap U_A$.}
 	\label{fig-decomposition-general}
 \begin{center}
 	\begin{tikzpicture}
@@ -195,7 +192,7 @@ Refer to \cref{fig-decomposition-general} for a better picture of the decomposit
 \end{figure}
 Next we show $E_1$ is strongly related to event $E_2$.
 
-\begin{proposition}[Proposition 3.2 from \cite{alonetal}]
+\begin{proposition}[{\cite[Proposition 3.2, p.~11]{alonetal}}]
 \label{proposition-e1-e2}
 For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $\ell \geq c_\epsilon (f - b)2^{f-b}$, then
 $
@@ -206,10 +203,10 @@ Moreover the value $c_\epsilon$ can be chosen according to \cref{proposition-eps
 
 Now we will estimate the probability of $E_2$.
 We restate Proposition~3.1 from \cite{alonetal} as \cref{proposition-e2-bound}.
-The claimed probability estimate in \cref{proposition-e2-bound} is slightly different from the one in \cite{alonetal} since we assume that $|S| = 2^b$ instead of $|S| = b2^b$.
-Although the proof sketch remains similar when compared to the original proposition, we give the full proof of the proposition for convenience.
+However the claimed probability estimate slightly differs from the one in \cite{alonetal} since we assume that $|S| = 2^b$ instead of $|S| = b2^b$.
+Although the proof sketch remains similar, when compared to the original proposition, we give the full proof of the proposition.
 
-\begin{proposition}[Proposition~3.1 of \cite{alonetal}]
+\begin{proposition}[{\cite[Proposition~3.1, p.~11]{alonetal}}]
 \label{proposition-e2-bound}
 If $S \subseteq \binvecspace{u}$, $|S| = 2^b$, $f > b$ and $\mu = \frac{2^b}{2^f}$, then
 \[
@@ -250,7 +247,7 @@ Refer to \cref{fig-decomposition-e2} for more details of the situation when $E_2
 \end{figure}
 
 We prove the estimate for arbitrary fixed $T_0$ and uniform choice of $T_1$.
-From \cref{proposition-prob-bound} it follows that $\probs{T_1\in_U \surjectivelinearmaps{f}{b}}{T_1(\binvecspace{f} - T_0(S)) \neq \binvecspace{b}} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ where $\alpha = 1 - \frac{|\binvecspace{f} - T_0(S)|}{|\binvecspace{f}|} = \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} = \mu = 2^{b - f} < 1$.
+From \cref{proposition-prob-bound} it follows that $\probs{T_1\in_U \surjectivelinearmaps{f}{b}}{T_1(\binvecspace{f} \setminus T_0(S)) \neq \binvecspace{b}} \leq \alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ where $\alpha = 1 - \frac{|\binvecspace{f} \setminus T_0(S)|}{|\binvecspace{f}|} = \frac{|T_0(S)|}{2^f} \leq \frac{|S|}{2^f} = \mu = 2^{b - f} < 1$.
 Since the function $\alpha ^ {f - b - \log b + \log \log \alpha^{-1}}$ is increasing w.r.t. $\alpha$ in $(0, 1)$ we get that
 $
 \probs{T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)} \leq \mu ^ {-\log \mu - \log b + \log \log \mu^{-1}}.
@@ -258,40 +255,40 @@ $
 \end{proof}
 
 The following theorem gives an upper bound for the tail distribution of the random variable $\lbin{T}{S}$.
-This bound in turn implies \cref{theorem-n-to-n}.
-The theorem and is proof is similar to Corollary~3.3 from \cite{alonetal}.
-The substantial difference is that in our case estimates coming from \cref{theorem-prob-distribution-bound} become non-trivial for the logarithmic size of a largest bin instead of superlogarithmic in \cite{alonetal}.
+The theorem is similar to Corollary~3.3 from \cite{alonetal}, however the stated estimate is slightly different because it is adapted to our setting.
+The substantial difference between them is that in our case estimates coming from \cref{theorem-prob-distribution-bound} become non-trivial for the logarithmic size of a largest bin instead of superlogarithmic in \cite{alonetal}.
+The theorem in turn implies \cref{theorem-n-to-n}.
 
 \begin{theorem}
 \label{theorem-prob-distribution-bound}
-For each $\epsilon > 0$ there exists $c_\epsilon > 0$ such that for each $u, b \in \mathbb{N}, u > b$, $r > 4$ it holds that
+For each $\epsilon > 0$ there exists $c_\epsilon > 0$ such that for each $u, b \in \mathbb{N}, u \geq b$, $r \geq 	 4$ it holds that
 \[
 \probs{T \in_U \linearmaps{u}{b}}{\lbin{T}{S} \geq 2 c_\epsilon r} \leq \frac{1}{1 - \epsilon}\left(\frac{\log r}{r}\right)^{-\log b - \log \frac{\log r}{r} + \log \log \frac{r}{\log r}}.
 \]
 Moreover $c_\epsilon$ depends solely on $\epsilon$ and may be chosen according to \cref{proposition-epsilon}.
 \end{theorem}
 \begin{proof}
-We fix $\epsilon, u, b, r$ so that they meet the requirements of the theorem.
-We put $\ell = \left \lceil 2c_\epsilon r \right\rceil$ where $c_\epsilon$ comes from \cref{proposition-epsilon} and $f = \lfloor b + \log r - \log \log r + 1 \rfloor$.
+Let $\epsilon, u, b, r$ be given so that they meet the requirements of the theorem.
+We put $f = \lfloor b + \log r - \log \log r + 1 \rfloor$ and $\ell = \left \lceil 2c_\epsilon r \right\rceil$ where $c_\epsilon$ comes from \cref{proposition-epsilon}.
 Recall that $\lbin{T}{S} \geq \ell$ is equivalent to the occurrence of event $E_1(S, T, \ell)$.
 
 \cref{proposition-e1-e2} implies that $\probs{T \in_U \linearmaps{u}{b}}{E_1(S, T, \ell)} \leq \frac{1}{1 - \epsilon}\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)}$.
 We have to verify that $\ell \geq c_\epsilon (f - b)2^{f - b}$.
-From the requirement $r > 4$ it follows that $c_\epsilon(f - b)2^{f - b} \leq c_\epsilon(\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2c_\epsilon r(\log r - \log \log r + 1)}{\log r} \leq 2c_\epsilon r \leq \ell$.
+From the requirement $r \geq 4$ it follows that $c_\epsilon(f - b)2^{f - b} \leq c_\epsilon(\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2c_\epsilon r(\log r - \log \log r + 1)}{\log r} \leq 2c_\epsilon r \leq \ell$.
 
 To bound probability of $E_2(S, T_0, T_1)$ we use \cref{proposition-e2-bound}.
 Observe that the choice of $f$ from the beginning of the proof satisfies $f > b$.
 This also means that $\surjectivelinearmaps{f}{b}$ is nonempty. 
-We put $\mu := 2^{b - f}$
-Since $\mu \leq 2^{-\log r + \log \log r} = \frac{\log r}{r}$ and the function $g(x) := x ^ {- \log b + \log x^{-1} + \log \log x^{-1}}$ is increasing in $(0, 1)$, it holds that $\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)} \leq g(\mu) \leq g\left(\frac{\log r}{r}\right)$.
+We put $\mu = 2^{b - f}$.
+Since $\mu \leq 2^{-\log r + \log \log r} = \frac{\log r}{r}$ and the function $g(x) := x ^ {- \log b + \log x^{-1} + \log \log x^{-1}}$ is increasing in $(0, 1)$, from \cref{proposition-e2-bound} it follows that $\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)} \leq g(\mu) \leq g\left(\frac{\log r}{r}\right)$.
 \end{proof}
 
 Now we show the proof of the main theorem.
 
 \begin{proof}[Proof of \cref{theorem-n-to-n}]
 We show the theorem for $|S| = 2^b$.
-If $|S| < 2^b$, the theorem follows from the previous case.
-Put $n = |S|$.
+If $|S| < 2^b$, the theorem follows from the proved case.
+Put $n = 2^b = |S|$.
 We split $\sum_{\ell = 1}^{n} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq \ell}$ into two sums according to $\ell$ being lower or greater than $8c_\epsilon \log n$.
 We show that in the second case probability of $\lbin{T}{S} \geq \ell$ is $o(\ell^{-1})$.
 
@@ -368,7 +365,7 @@ Since $T_1$ is onto, for each $\vec{y} \in \binvecspace{b}$ we have that $|T_1^{
 Hence the uniform independent choice of values $T_0(\vec{e}_i) \in \binvecspace{f}$ yields uniform independent choice of values $T(\vec{e}_i) = T_1(T_0(\vec{e}_i)) \in \binvecspace{b}$ for $i \in \{1, \dots, u\}$.
 \end{proof}
 
-\begin{proposition}[Proposition~3.4 in \cite{alonetal}]
+\begin{proposition}[{\cite[Proposition~3.4, p.~13]{alonetal}}]
 \label{proposition-affine-model}
 Let $u, f, b \in \mathbb{N}$, such that $u \geq f \geq b$.
 For a fixed $T \in \linearmaps{u}{b}$ and $T_1 \in \surjectivelinearmaps{f}{b}$ there is a bijection between $\{ T_0 \in \linearmaps{u}{f} \mid T = T_1 \circ T_0 \}$ and linear maps from $\operatorname{Ker}(T)$ to $\operatorname{Ker}(T_1)$.
@@ -386,7 +383,7 @@ Analogically there is a unique vector $\vec{q}_{\vec{x}} \in \operatorname{Span}
 We put $T_0(\vec{x}) = \vec{q}_{\vec{x}} + T_K(\vec{x}_K)$.
 \end{proof}
 
-\begin{propositionrep*}[\cref{proposition-e1-e2}]\emph{(Proposition 3.2 from \cite{alonetal}).}
+\begin{propositionrep*}[\cref{proposition-e1-e2}] \emph{({\cite[Proposition 3.2, p.~11]{alonetal}}).}
 For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that if $\ell \geq c_\epsilon (f - b)2^{f-b}$, then
 $
 \probs{T \in_U \linearmaps{u}{b}}{E_1(S, T, \ell)} \leq \frac{1}{1 - \epsilon}\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)}.
@@ -409,10 +406,9 @@ Also notice that $U_A$ and $F_A$ are affine subspaces of $\binvecspace{u}$ and $
 Let $T_A$ be an affine linear map from $U_A$ to $F_A$.
 From \cref{proposition-epsilon} used for $T_A$, $U_A$, $S_A$, $F_A$ we get that $\probs{T_A}{T_A(S_A) = F_A | E_1} \geq 1 - \epsilon$.
 Notice that \cref{proposition-epsilon} may be used for affine linear maps as well.
-Since the previous estimate holds for arbitrary choice of $T$ and $T_1$, it also holds for the uniform choice of the mappings and hence $1 - \epsilon \leq \probs{T_A}{T_A(S_A) = F_A | E_1} = \probs{T_A, T, T_1}{T_A(S_A) = F_A | E_1}$.
-From previous and \cref{proposition-affine-model} we get that $1 - \epsilon \probs{T_0, T_1}{E_2 | E_1}$.
-
-From \cref{claim-dstr-factor} and from the fact that $1 - \epsilon \leq \probs{T_0, T_1}{E_2 | E_1}$ it follows that \[\probs{T}{E_1} = \probs{T_0, T_1}{E_1} \leq \frac{1}{1-\epsilon}\probs{T_0, T_1}{E_2}.\]
+Since the previous estimate holds for arbitrary choice of $T$ and $T_1$, it also holds for the uniform choice of both mappings and hence $1 - \epsilon \leq \probs{T_A}{T_A(S_A) = F_A | E_1} = \probs{T_A, T, T_1}{T_A(S_A) = F_A | E_1}$.
+From previous and \cref{proposition-affine-model} we get that $1 - \epsilon \leq \probs{T_0, T_1}{E_2 | E_1}$.
+From the previous inequality and \cref{claim-dstr-factor} it follows that $\probs{T}{E_1} = \probs{T_0, T_1}{E_1} \leq \frac{1}{1-\epsilon}\probs{T_0, T_1}{E_2}$.
 \end{proof}
 \end{appendix}
 \end{document}
