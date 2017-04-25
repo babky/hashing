@@ -1,0 +1,47 @@
+\documentclass[hyperref={pdfpagelabels=false}]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lmodern}
+\usepackage{textcomp}
+
+\usecolortheme{crane}
+\usetheme{Pittsburgh}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\include{csprimes}
+\include{definitions}
+\title{A Worst Case Aware Version of Universal Hashing}
+\institute[Charles University Prague]%
+{
+	Department of Theoretical Computer Science and Mathematical Logic\\
+	Charles University Prague
+}
+\author{Martin Babka}
+
+\AtBeginSection[]
+{
+\begin{frame}{Table of Contents}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\begin{document}
+\selectlanguage{english}
+
+\frame{\titlepage}
+
+\begin{frame}{Table of Contents}
+\tableofcontents
+\end{frame}
+
+\input{beamer}
+
+\end{document}

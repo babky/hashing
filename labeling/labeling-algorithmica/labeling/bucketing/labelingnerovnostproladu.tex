@@ -1,0 +1,138 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{epsfig}
+\sloppy
+%\usepackage{fullpage}
+%\usepackage{a4wide}
+
+%\usepackage{showlabels}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbold}
+   
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage{xcolor}
+
+\usepackage{latexsym}
+\usepackage{graphics}
+%\usepackage[dvips]{graphics}
+%\usepackage{epic}
+%\usepackage{eepic}
+%\usepackage{color}
+
+\newtheorem{theorem}{Theorem} %***
+\newtheorem{corollary}[theorem]{Corollary} 
+\newtheorem{claim}[theorem]{Claim} 
+\newtheorem{lemma}[theorem]{Lemma} 
+\newtheorem{theorem*}{Theorem} 
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition} 
+\newtheorem{proposition}[theorem]{Proposition} 
+\newcommand{\qed}{$\Box$}
+%\newcommand{\qed}{\rule{1em}{0in} \hspace*{\fill}$\square$\vspace{1ex}\par}%{\rule{7pt}{7pt}}
+\newenvironment{proof}{\noindent {\bf Proof:}}{\hfill \qed \smallskip}
+\newenvironment{proofof}[1]{\noindent{\it Proof of #1. }} {{\qed}}
+
+\newcommand\bel[1]{\begin{equation}\label{#1}}
+\newcommand\ee{\end{equation}} 
+
+\newcommand\rest{\restriction}
+
+
+\date{\today} 
+
+\begin{document}
+
+
+%\def\R{\mathbb{R}}
+\def\1{\mathbb{1}}
+\def\R{\mathbb{R}}
+%\def\1{1}
+\def\<{\left<}
+\def\>{\right>}
+\newcommand{\RL}{\mbox{{\sf RL}}}
+\newcommand{\BPL}{\mbox{{\sf BPL}}}
+\newcommand{\Log}{\mbox{{\sf L}}}
+\newcommand{\NCo}{\mbox{{\sf NC$^1$}}}
+\newcommand{\RNC}{\mbox{{\sf RNC$^1$}}}
+\newcommand{\SC}{\mbox{{\sf SC}}}
+
+% \def\D{\widetilde{D}}
+% \def\hD{\widehat{D}}
+% \def\hR{\widehat{R}}
+
+ \def\D{\tilde{D}}
+\def\hD{\hat{D}}
+\def\hR{\hat{R}}
+
+%\def\supp{{\mathrm{supp}}}
+%\def\rank{{\mathrm{rank}}}
+\def\supp{{\rm{supp}}}
+\def\rank{{\rm{rank}}}
+
+\def\prl{\|}
+Vime ze plati ${{b}\choose{a}} <2^{h(b/a)b}$.
+case 1 je jasny, vrhneme se tedy na case 2.
+
+case 2. $d-1<k$  chceme najit dolni odhad na d takove, ze 
+$$ n \leq {k+d-1 \choose d-1}$$
+Ale protoze je to rostouci fce (na tomto intervalu), tak jiste staci najit $d$ t.ze 
+$$ n \ge {k+d-1 \choose d-1}$$
+Protoze (detaily viz mike) 
+$$\log {k+d-1 \choose d-1}\leq 2(d-1) \log\frac{d+k-1}{d-1}$$
+staci najit $d$ splnujici
+$$\log n\ge 2(d-1) \log\frac{d+k-1}{d-1}$$
+Tato nerovnost se da upravit jako 
+$$\frac{\log n}{\log\frac{d+k-1}{d-1}}\ge 2(d-1) $$
+$$\frac{\log n}{\log({d+k-1})-\log({d-1})}\ge 2(d-1) $$
+a protoze $k>d-1$
+$$\frac{\log n}{\log({2k})-\log({d-1})}\ge 2(d-1) $$
+nyni magicky zvolme
+$$d-1 = \frac {\log n }{6\log (4k) - 6 \log \log n}$$
+a potom dostanem
+$$\log n \ge \frac{2\log n}{6(\log (4k) -\log \log n)} \log \frac{2k6(\log (4k)- \log \log n)}{\log n}$$
+coz je 
+$$ 1\ge \frac{1}{3(\log (4k) -\log \log n)} (\log 4k + \log 3(\log (4k)- \log \log n) - \log \log n)$$
+to jde upravit nasledovne
+$$\frac{1}{3(\log (4k) -\log \log n)} (\log 4k + \log 3(\log (4k)- \log \log n) - \log \log n)=$$
+$$\frac{\log (3(\log (4k)- \log \log n))}{3(\log (4k) -\log \log n)} + \frac{\log 4k - \log \log n}{3(\log (4k) -\log \log n)}>$$
+$$1/3+\frac{\log(3\log\frac{4k}{\log n})}{3\log\frac{4k}{\log n}}<1/3+1/2 = 5/6$$
+takze takova volba d je ok
+
+
+% Hence
+% 
+% log(n)/2(log(2k)-log(d-1)) < = d-1
+% 
+% Now if d-1 > = log(n) we're happy.  Otherwise
+% we can bound the LHS below by replacing log(d-1) by loglog(n) and we get
+% 
+% d-1 >= log(n)/2(log(2k)-loglog(n))
+% Chceme dokazat, ze plati nasledujici nerovnost
+% $$\log(n) \leq 2(d-1)\log ((d+k-1)/(d-1))$$
+% volme $d = \frac{\log n}{2(\log(2k) - \log \log n)}+1$.Potom
+% $$2(d-1)\log ((d+k-1)/(d-1)) = $$
+% $$2\frac{\log n}{2\log (2k) - 2\log \log n}\log\left(\frac{2(\log (2k) - \log \log n) k}{\log n }+1\right)$$
+% a tedy otazka zni
+% $$\frac{\log n}{\log (2k) - \log \log n}\log\left(\frac{2(\log (2k) - \log \log n) k}{\log n }+1\right)
+% \overset{?}{>}\log n$$
+% 
+% $$\frac{1}{\log (2k) - \log \log n}\log\left(\frac{2(\log (2k) - \log \log n) k}{\log n }+1\right)
+% \overset{?}{>}1$$
+% 
+% A pro $k>(1/2)\log n $
+% $$\log\left(\frac{2(\log (2k) - \log \log n) k}{\log n }+1\right)
+% \overset{?}{>}\log \left(\frac{2k}{\log n}\right)$$
+% $$\left(\frac{2(\log (2k) - \log \log n) k}{\log n }+1\right)
+% \overset{?}{>}\left(\frac{2k}{\log n}\right)$$
+% 
+% $$\left(2(\log (2k) - \log \log n) k+\log n \right) \overset{?}{>}2k$$
+% $$\left(2k \log \frac{2k}{\log n } + \log n \right) \overset{?}{>}2k$$
+% a jelikoz pro $k>\log n$ je $\log \frac{2k}{\log n }\ge 1$
+% jsme hotovi
+
+
+\end{document}
+

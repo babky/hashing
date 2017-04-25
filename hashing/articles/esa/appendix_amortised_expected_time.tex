@@ -1,0 +1,66 @@
+\section*{Appendix -- detailed proof of Theorem \ref{theorem-amortised-expected-time}}
+We have to prove Theorem \ref{theorem-amortised-expected-time} for each sequence of operations. Assume that we are given a sequence of operations. We deal with the amortized time of Find and unsuccessful Insert and unsuccessful Delete operations in advance. Their expected running time is proportional to the expected chain length. From Lemma \ref{lemma-trimmed-system} it follows that this value is expected to be constant. Since chains are bounded by $l(m, \alpha', p)$ we have that the worst case time of Find and unsuccessful update operation is $O(1 + l(m, \alpha', p))$. Notice that the operations may not change the potential and for our choice of the potential this requirement is satisfied. Our analysis is thus simplified by omitting Find and unsuccessful updates from the sequence of operations. So let the sequence $o = \{o_i\}_{i=1}^{k}$ denote the successful \emph{Insert} and \emph{Delete} operations, $o_i \in \{Insert, Delete\}$ for $i = 1, \dots, k$.
+
+Let us describe the reason for the choice of the potential function. In the proof we partition the sequence of performed operations into two types of cycles. We distinguish between the work required to enforce Load Factor Rule and the work needed by keeping Chain Length Limit Rule. During so called $\alpha$-cycles we gather potential needed to rehash the table to enforce Load Factor Rule. From this potential we pay the needed \emph{Rehash} operation at the end of the cycle. The second type of cycles, l-cycle, is essential for analysis of Chain Length Limit Rule. Every l-cycle has its potential charged at the beginning and from this potential we are able to pay the expected time spent by keeping Chain Length Limit Rule. From their definitions it is clear that if an $\alpha$-cycle ends after an operation, the corresponding l-cycle also ends after the same operation, too. 
+
+The potential $p$ consists is the sum of two parts $p_1$ and $p_2$ so $p = p_1 + p_2$. The first part of potential is used to distribute the time needed for rehashing the table at the end of an $\alpha$-cycle across operations inside it. The second parts deals with the expected time needed to enforce Chain Length Limit Rule.
+
+Let $e$ denote the expected number of trails when finding a suitable function for a set, $i_{\alpha}$ be the number of insertions and $d_{\alpha}$ be the number of deletions performed successfully so far in the current $\alpha$-cycle. The value $i_l$ denotes the number of insertions performed so far in the current l-cycle. The variable $r$ denotes the number of performed \emph{Rehash} operations, which are caused by Chain Length Limit Rule violation counted from the initial state. The variable $c$ denotes the number of current l-cycle counted from the beginning starting at one. We defined the parts $p_1$ and $p_2$ as
+\[
+\begin{split}
+p_1 & = \frac{2ei_{\alpha}}{\alpha_u - \alpha_k} + \frac{2ed_{\alpha}}{\alpha_m - \alpha_l}, \\
+p_2 & = \frac{ei_{l}}{\alpha' - \alpha_u} + (ce - r) m.
+\end{split}
+\]
+
+Remark that the initial potential $p_0$ equals $em_0$ where $m_0$ is the initial size of the hash table and hence $p_0 \in O(1)$. Execution of a single operation, without possible subsequent rehash, is expected to take $O(1)$ time because we iterate through a chain with a constant expected length and obtaining the hash value is assumed to take only constant time, too. Each possible rehash seeks for a suitable function every try requires $O(m)$ time and by Lemma \ref{lemma-no-trials} we expect $e \leq 1 / (1 - p)$ trials but this estimate is later refined. In the following analysis we use the notation that values of variables $c, r, i_\alpha, d_\alpha, i_l$ refer to the state just before the execution of the analyzed operation.
+
+The analysis of \emph{Delete} operation is simpler and is shown first. When a deletion is performed we have to discuss the following two cases.
+\begin{itemize}
+\item \textbf{\emph{Delete} operation is not the last one in its $\alpha$-cycle.} The potential difference is constant since $\Delta p = \Delta p_1 + \Delta p_2 = \frac{2e}{\alpha_m - \alpha_l} + 0 \in O(1)$.
+
+\item \textbf{\emph{Delete} operation is the last one in its $\alpha$-cycle.} Notice that at the end of the cycle $d_\alpha = (\alpha_m - \alpha_l)m$ and after the operation values of $i_\alpha$ and $d_\alpha$ are zeroed. The expected amortized complexity of the operation is constant since
+\[
+\begin{split}
+a
+	& = O(1) + O(em) + \Delta p_1 + \Delta p_2 \\
+	& \leq O(em) -2em + ((c + 1)e - r)m - (ce - r)m \\
+	& = O(em) - em.
+\end{split}
+\]
+
+After rescaling the potential the claim holds.
+\end{itemize}
+
+The analysis of \emph{Insert} now follows.
+\begin{itemize}
+\item \textbf{The operation is not last in neither of its $\alpha$-cycle or l-cycle and Chain Length Limit Rule is not violated.}
+We have already shown that the expected running time is constant. The potential change is constant since
+$\Delta p = \Delta p_1 + \Delta p_2 = \frac{2e}{\alpha_u - \alpha_k} + \frac{e}{\alpha' - \alpha_u} \in O(1)$.
+
+\item \textbf{The operation is last in its $\alpha$-cycle.} 
+Since at the end of the $\alpha$-cycle $i_\alpha = (\alpha_u - \alpha_m)m$ the expected amortized time required to execute the whole operation may be bounded from above as
+\[
+\begin{split}
+a
+	& = O(1) + O(em) + \Delta p  \\
+	& \leq O(em) - 2em + ((c + 1)e - r)m - (ce - r)m \\
+	& = O(em) - em.
+\end{split}
+\]
+
+After possible rescaling of the potential the claim holds.
+
+\item \textbf{Operation is the last one in the l-cycle and Chain Length Limit Rule is not violated.} Under these assumptions it follows that $i_l = (\alpha' - \alpha_u)m$ hence $\Delta p_2 = ((c + 1)e + r)m - em - rm = 0$. Since $\Delta p_1 = \frac{2e}{\alpha_u - \alpha_m}$ the expected amortized time of the operation is constant.
+
+\item \textbf{Chain Length Limit Rule was violated during the performed insertion.}
+The operation took $O(1) + O(\Delta r m)$ time. Whole potential change is equal to \[ \frac{2e}{\alpha_u - \alpha_m} + \frac{e}{\alpha' - \alpha_u} - \Delta r m .\] The already performed rescaling of the potential deals with the time needed to rehash the table. The expected amortized complexity of the operation is again constant.
+\end{itemize}
+
+In order to be properly able to estimate the expected running time of the sequence of operations we have to show that $\Expect{p_k} \geq 0$. If it is non negative, then $\Expect{T} \leq \Expect{A} + O(1)$ and the proof is finished.
+
+At first notice that the variable $c$ is incremented by one at the beginning of each $l$-cycle. The part $p_2$ of potential is thus increased by $em$; the potential is "charged". This "charge" is paid by the operations from the previous $l$-cycle or from $p_0$ if we are in the initial state. Now consider the sequence of sets $S_1, S_2, \dots$. Let $S_1$ be equal to the set stored at the beginning of the l-cycle. $S_2$ is the union of $S_1$ and the set stored immediately after the first violation of Chain Length Limit Rule. $S_3$ is the union of $S_2$ and the set stored after the second violation and so on. Realize that there are at most $(\alpha' - \alpha_u)m$ successful insertions in an l-cycle and $|S_1| \leq \alpha_u m$. So the last set of the sequence contains at most $\alpha'm$ elements. We can use Lemma \ref{lemma-sets} for the sequence and immediately obtain that the expected number of trials in an l-cycle equals $e$. From this fact it is clear that after an l-cycle $\Expect{\Delta r} = e$ and so $\Expect{ce - r} = 0$. Since during an l-cycle the value of $r$ only grows we conclude that
+\[
+\Expect{p_k} = \Expect p_1 + \Expect p_2 \geq m\Expect{ce - r} \geq 0.
+\]
+\qed

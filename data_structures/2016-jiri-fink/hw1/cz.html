@@ -1,0 +1,178 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <style type="text/css">
+            h1 {
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Datové struktury I - NTIN066 - ZS 2016/2017 - 1. úkol</h1>
+
+        <b>Termín odevzdání:</b> XX. října 2016.<br>
+        <b>Způsob odevzdání:</b> Odevzdáním na stránce <a href=' https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/'>https://ktiml.mff.cuni.cz/~fink/teaching/data_structures_I/</a>.<br>
+        <b>Vstup a výstup:</b> Řešení musí přečíst vstupní textová data ze souboru <strong>data.txt</strong> a zapsat je setříděná do souboru <strong>data.out</strong>. Předpokládejte, že zmíněné soubory se nacházejí v aktuálním adresáři.<br>
+        <b>Systém:</b> Fyzická pamět testovacího počítače je <strong>8 GiB</strong>, OS Linux.<br>
+        <b>Čas:</b> Váš program musí vyprodukovat korektní řešení do <strong>XX minut</strong> na testovacím stroji.<br>
+
+        <h2>Pravidla</h2>
+        <ul>
+            <li>Veškerý odevzdaný kód musí být originální tedy vytvořen vámi bez jakékoliv vedlejší &quot;inspirace&quot;.</li>
+            <li>Svůj kód s nikým nesdílejte, aby se váš kód nestal něčí &quot;inspirací&quot;. Výjimku tvoří odevzdání kódu.</li>
+            <li>Úkol a možné postupy řešení můžete probírat s ostatními, avšak respektuje výše uvedené o nesdílení kódu. To znamená - společná diskuse je povolena, ale programujte sami.</li>
+            <li>Povolené jsou řešení v jazycích C/C++, Java a C#. Ze zkušeností z minulých let doporučujeme C/C++.</li>
+            <li>Používejte standardní konstrukce vašeho programovacího jazyka, ale už ne speciální knihovní funkce. Veškerý třídící kód musíte naprogramovat samostatně, t.j. nepoužívejte <tt>std::sort</tt> a podobné funkce vašeho jazyka.</li>
+            <li>Vaše řešení musí být odevzdáno jako jediný soubor.</li>
+            <li>Řešení, která nejsou ve shodě s těmito pravidly, nebudou hodnocená.</li>
+        </ul>
+        
+        <h2>Popis problému</h2>
+        <p>
+            Napište program, který setřídí soubor na disku <tt>data.txt</tt>. Soubor <tt>data.txt</tt> je textový soubor,
+            který na každém řádku obsahuje jediné 63-bitové číslo bez znaménka, <i>klíč</i>. V setříděném souboru
+            <tt>data.out</tt> musí jít klíče vzestupně. Navíc pro každý klíč vypište číslo řádku, na kterém se daný klíč 
+            vyskytoval poprvé. Řádky číslujte od 1. Řádky výstupního souboru jsou tedy dvojice čísel oddělené mezerou.
+            Vstup <tt>data.txt</tt>, výstup <tt>data.out</tt> a dočasné soubory držte v aktuálním adresáři.
+        </p>
+
+        <h2>Příklad</h2>
+        <h3>Vstup</h3>
+        <tt>
+            96313<br />
+            6024613951808161023<br />
+            11417427497858712892<br />
+            3894<br />
+            96313<br />
+            6437842131676518652<br />
+        </tt>
+
+        <h3>Výstup</h3>
+        <tt>
+            3894 4<br />
+            96313 1<br />
+            6024613951808161023 2<br />
+            6437842131676518652 6<br />
+            11417427497858712892 3<br />
+        </tt>
+
+        <h2>Problémy při implementaci</h2>
+        <h3>Práce s pamětí</h3>
+        <p>
+        Většinu času váš program spotřebuje čtěním a zapisovaním dat, tedy je nutné minimalizovat počet přístupů na disk.
+        Porovnejte například čas nutný k porovnání dvou prvků, řádovo nanosekundy, oproti času na jedno načtění dat z disku, řádovo milisekundy [1].
+        Protože při čtění dat z pevného disku je nutné čekat na natočení plotny (rotational latency) a nastavení hlavy (seek time) je výhodné načíst víc dat, ktoré jdou za sebou [2].
+        K tomu slouží page cache operačního systému a buffer pro práci s I/O [3].
+        Tuto nevýhodu pevních disků (částečně) řeší disky SSD.
+        </p>
+        <p>
+        Také je vhodné zvolit rychlý přístup ke čtění dat.
+        Na toto téma najdeme na internetu spousta porovnání a názorů [4].
+        Vždy je vhodné si zvolené přístupy pro danú aplikaci si samostatně otestovat.
+        Nám v zásadě bude stačit použít základné prostředky zvoleného jazyka.
+        </p>
+        <p>
+        K přetřídění vstupních dat je také výhodné znát velikost operační paměti počítače, na kterém budou vykonány testy (v našem případě je to 8 GiB).
+        Pozor, pokud budete počas běhu programu používat více paměti než je dostupné, pak dojde ke stránkování.
+        Používaní stránkování (swap prostoru) vyžaduje přístupy na disk a tím dojde k výraznému spomalení běhu programu [5].
+        Proto při měření vždy nastavte velikost alokované paměti v závislosti na velikosti paměti počítače (stačí ako konstanta v zdrojovém kódu).
+        </p>
+        <ol>
+        <li>
+            <a href='http://www.agner.org/optimize/instruction_tables.pdf'>http://www.agner.org/optimize/instruction_tables.pdf</a>,
+            <a href='https://en.wikipedia.org/wiki/Instructions_per_second'>https://en.wikipedia.org/wiki/Instructions_per_second</a>
+        </li>
+        <li>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>6. přednáška principů počítačů</a>, 
+            <a href='https://en.wikipedia.org/wiki/Hard_disk_drive_performance_characteristics'>Wikipedie - výkonnostní charakteristiky disků</a>
+        </li>
+        <li>
+            <a href='https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics'>Základy page cache v Linux-u</a>,
+            <a href='https://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html'>Java: BufferedInputStream</a>
+        </li>
+        <li>
+            <a href='http://stackoverflow.com/questions/705303/faster-i-o-in-c'>Faster IO in C</a>, 
+            <a href='http://stackoverflow.com/questions/22955178/why-does-java-read-a-big-file-faster-than-c'>Why does java read a big file faster than C</a>, 
+            <a href='http://stackoverflow.com/questions/145110/c-performance-vs-java-c'>C++ performance vs. Java/C#</a>, 
+            <a href='http://stackoverflow.com/questions/5328873/c-streams-vs-c-style-io'>C++ Streams vs. C-style IO?</a>, 
+            <a href='http://stackoverflow.com/questions/7780072/when-to-use-printf-scanf-vs-cout-cin'>When to use printf/scanf vs cout/cin?</a>,
+            <a href='http://stackoverflow.com/questions/1042110/using-scanf-in-c-programs-is-faster-than-using-cin'>Using scanf() in C++ programs is faster than using cin?</a>
+        </li>
+        <li>
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/'>16. přednáška principů počítačů</a>, 
+            <a href='http://d3s.mff.cuni.cz/teaching/principles_of_computers/ar-20112012/11-os-pamet.pdf'>Principy počítačů - stránkování, archiv</a>,
+            <a href='https://en.wikipedia.org/wiki/Paging'>Wikipedie: stránkování</a>
+        </li>
+        </ol>
+        <h3>Hardware</h3>
+        <p>
+        K testování použijte počítače v unixové části laboratoře Rotunda, t.j. <tt>u-pl1</tt> až <tt>u-pl30</tt>. 
+        V zásadě jsou dvojího typu - jeden typ má 16 GiB operační paměti a druhý typ má jenom 4 GiB paměti a menší disk.
+        Naše řešení běželi 43 minut na rychlejších strojích a plnýma datama a XX minut na pomalejších s polovičníma datama, plná by se na tyto počítače nevešly.
+        Vždy jsme nastavili parametry řešení tak, aby odpovídali danému počítači.
+        Testovací počítač má 8 GiB paměti, vaše řešení odevzdávajte tak, aby na něm fungovali efektivně.
+        Běžný stav paměti testovacího stroje:
+        <pre>
+$ free -m
+              total        used        free      shared  buff/cache   available
+Mem:           7476         139         132          81        7204        6985
+Swap:          7985           0        7984
+        </pre>
+        </p>
+
+        <h2>Generování dat a testování</h2>
+        <h3>Generování dat</h3>
+        Na generování dat je v laboratoři rotunda dostupný generátor <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt>.
+        <h4>Volby generátoru</h4>
+        <p>
+            Generátor standardně vygeneruje zadání o takové délce, která se použije pri jeho testování na testovacím počítači.
+            <dl>
+                <dt>-s XX</dt><dd>Zde XX je seed. K ladění použijte několik seed-ů a na nich ověřte rychlost a korektnost vašeho řešení.</dd>
+                <dt>-l LL</dt><dd>Zde LL určí počet vygenerovaných klíčů na vstupu. Minimum je 1 048 576 klíčů. Pro menší délky je vhodné ořezat data pomocí utility <tt>head</tt>.</dd>
+                <dt>--half</dt><dd>Nastaví počet klíčů na polovinu oproti standardnímu. Velikost výstupu bude přibližně 25 GiB.</dd>
+                <dt>--short</dt><dd>Nastaví délku výstupu na 1/16 oproti standardní. Velikost výstupu bude přibližně 3 GiB.</dd>
+                <dt>--super-short</dt><dd>Nastaví délku výstupu na 1/256 oproti standardu. Velikost výstupu bude přibližně 200 MiB.</dd>
+            </dl>
+        </p>
+
+        <h4>Příklady použití</h4>
+        <p>
+        <tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX &gt;/tmp/data.txt</tt><br />
+        vygeneruje data pro měření, zhruba 44 GiB.
+        </p>
+        <p>
+        <tt>$/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data -s XX --short &gt;/tmp/data.txt</tt><br />
+        vygeneruje verzi dat pro ladění programu cca 3 GiB.
+        </p>
+
+        <h3>Testování</h3>
+        <p>
+            Pomocí unixového programu <tt>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw1/gen-data</tt> dostupného v laboratoři Rotunda vygenerujte zkušební vstup (je nutné přesměrovat do <tt>data.txt</tt>, protože generátor vypisuje na standardní výstup). 
+            Následně ověřte dobu běhu vašeho programu na jednom z počítačů <tt>u-pl1</tt> až <tt>u-pl30</tt>.
+            Na měření použijte utilitu <tt>time</tt>. 
+            Vygenerovaný soubor má cca 44 GiB a časový limit na jeho setřídění je XX minut na testovacím stroji. 
+            V případě, že se nevedejte do časového limitu na testovacím stroji, budete vyzváni k zrychlení řešení.
+            Čas na opravu ostane do konce deadlinu.
+            Řešení, které se nevejde do tohoto časového limitu na těchto datech, je považované za nedostačující.
+        </p>
+        <p>
+            Při měření ukládejte soubor <tt>data.txt</tt> a jakékoliv pomocné soubory do adresáře <tt>/tmp</tt>, t.j. pracujte v adresáři <tt>/tmp</tt>. 
+            V případě, že vstup <tt>data.txt</tt>, výstup <tt>data.out</tt> a dočasné soubory neuložíte do aktuálního adresáře, vaše řešení není správné.
+            Při doběhnutí programu pomocné soubory automaticky smažte.
+            Navíc po skončení měření smažte i vstup a výstup, aby ostatní mohli provést svoje měření.
+            Jinak dojde místo na disku a jelikož ostatní po vás nemohou soubory smazat, počítač tím bude pro měření zablokován.
+        </p>
+        <p> 
+            Chovejte se k ostatním ohleduplně, pokud uvidíte, že někdo daný počítač zrovna používá na výpočty (příkazy <tt>who</tt> a <tt>top</tt> nebo <tt>htop</tt>), použijte jiný počítač, nebo počkejte, až měření dokončí. 
+            Nekolegiální jednání anebo zablokovaný počítač nám hlaště emailem na <tt>ds1@kam.mff.cuni.cz</tt>. 
+        </p>
+
+        <h2>Odevzdání</h2>
+        <p>
+            Pro odeslání řešení použijte formulář na <a href='https://kam.mff.cuni.cz/~ds1/'><tt>https://kam.mff.cuni.cz/~ds1/</tt></a>.
+            Do poznámky uvádějte například parametry kompilace "kompilace: <tt>gcc -O3 sorter-55973318.c -o sorter-55973318</tt>".
+            Popisem je textový soubor, kde je uveden stručný popis řešení.
+            Odevzdávejte, prosím, jenom úplně správné a dostatečně rychlé řešení do XX. října 2016.
+        </p>
+    </body>
+</html>

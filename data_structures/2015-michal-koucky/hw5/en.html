@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<style type="text/css">
+			h1 {
+				font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Data Structures I - NTIN066 - Winter Semester 2015/2016 - 5th homework</h1>
+
+		<b>Deadline:</b> XXth January 2016.<br>
+		<b>How to submit:</b> By sending an email to <strong>ds1@kam.mff.cuni.cz</strong> the required attachments.<br>
+
+		<h2>The rules</h2>
+		<ul>
+			<li>The whole code which you submit must be originally created by you without any "insipiration".</li>
+			<li>Do not share your solution so that your code can not become an "inspiration". The only exception is submitting the code.</li>
+			<li>The homework and the algorithms may be a subject of conversation. But respect the above rules about non-sharing. That means - dicussing is correct but write the code yourself!</li>
+			<li>Code in C/C++ (recommended), Java or C#.</li>
+			<li>Use standard constructs of your programming  language. Do not use special library functions.</li>
+			<li>The solutions which violate the above rules shall be considered as wrong.</li>
+		</ul>
+
+		<h2>The description of the problem</h2>
+		<p>
+			Implement two types of hash tables and two universal families of hash functions. Then compare their performance on two datasets consiting of Insertions and Finds.
+			Insert operations do not create duplicate keys. If an insertion creating a non-unique key shall be performed do not change the table. Also these operations are counted in the performance statistics.
+			The first dataset consists mainly of <em>Insert</em> operations (Find has only 20&nbsp;%), the second one constists mainly of <em>Find</em> operations (contains 80&nbsp;% of Find operations).
+		</p>
+		<p>
+		Implement <em>linear probing</em> exactly as told in the course.
+		Also implement the course version of <em>cuckoo hashing</em>, i.e. use a single table. Choose the size of the table to be M - the number is described in the section Generating the data. In order to measure the performance of cuckoo hashing use the generator parameter C, which bounds the maximal load factor.
+		</p>
+		
+		<h3>The families of hash functions</h3>
+		Let U = {0, ..., 2<sup>u</sup> - 1} be the universe and m=2<sup>k</sup> be the size of the hash table.
+		Both of the systems map the universe to the space {0, ..., m - 1}.
+		In this homework choose the universe U = {0, ..., 2<sup>32</sup> - 1}.
+		However, the data generator generetates the values from the set {0, ..., 2<sup>31</sup> - 1}.
+		
+		<p>
+			<strong>Tabulation</strong>.
+			Let x be an element of the universe U. 
+			If we treat x as a bitstring then we can split it into c parts having the same length, i.e. x = x<sub>1</sub>x<sub>2</sub>...x<sub>c</sub>.
+			For each part we randomly initialize a tabulation table. The table contains exactly 2<sup>u/c</sup> bit strings of length k.
+			Then <strong>h(x) = T<sub>1</sub>(x<sub>1</sub>) &oplus; T<sub>2</sub>(x<sub>2</sub>) &oplus; ... &oplus; T<sub>c</sub>(x<sub>c</sub>).</strong>
+			
+			In other words, each part of the bit string x determines an index in its tabulation table. The tables at the indices contain values from the set {0, ..., m - 1}. 
+			The value of the hash function equals to the XOR of these values.
+			A fast implementation usually relies on a fixed value of c, choose c = 4.
+		</p>
+		
+		<p>
+			<strong>Multiplicative function</strong>.
+			Let x &isin; U and a &isin; U - {1} be a random number chosen uniformly from the universe.
+			Then <strong>h(x) = ((a x) mod |U|) / (|U| / m).</strong>
+			For a 32-bit universe we can implement this function effectively by ignoring the overflow of the multiplication and using the bit shifts.
+		</p>
+
+		<h3>The results</h3>
+		<p>
+			For each dataset create two graphs, i.e. the results are four graphs.
+			In the first graph plot the average number of operations caused by Insert or Find with respect to the load factor of the table.
+			The second one contains the average running time (scale to miliseconds or microseconds according to your needs) of Insert or Find with respect to the load factor of the table. 
+			The operation count should determined as follows.
+		</p>
+		<dl>
+			<dt><strong>Linear Probing</strong></dt>
+			<dd>The number of operations for Insert or Find equals 1 + the length of the sequence which was iterated to find the element or an empty cell.</dd>
+
+			<!--
+			<dt><strong>Two Choices</strong></dt>
+			<dd>Počet operací je 1 + součet délek řeťezců, které byly prohledány za účelem vyhledání nebo vložení prvku. Abychom zabránili duplicitním klíčům, musíme při vložení prvku nejdřív prohledat oba řeťezce a ověřit zda vkládaný prvek již není v tabulce uložen.
+			-->
+
+			<dt><strong>Cuckoo hashing</strong></dt>
+			<dd>Find requires one or two operations. Insert first tries to find the element, this requires one or two operations. When the inserted element is not found, insertion can make several "swaps". Also count the swaps from the subsequent rehash operations. The maximal rehash operations per one Insert set to be 15. In the case that an Insert requires more rehashes eliminate the run from the results. In the case that each run for a given load factor fails in this way this ignore the load factor in the graphs. You also may draw zero values for such load factors in the graphs.</dd>
+		</dl>
+		
+		<p>
+			Write down the report consisting of:
+			<ul>
+				<li>the four graphs described above. In each graph there should be 4 curves. In the graph with operations devide the overall number of operations by the count of Finds and all Insertions.
+			Similarily in the graph of running times.</li>
+				<li>A comment summarizing the behaviour of the algorithms.</li>
+			</ul>
+		</p>
+
+		<h3>Generating the data</h3>
+		<p>
+			Use the program <code>/afs/ms.mff.cuni.cz/u/b/babkm5am/ds1/hw5/hashgen</code> in the unix lab Rotunda. Run it with the following parameters:
+			</p><ul>
+				<li><code>-s <em>XX</em></code>, where <em>XX</em> are the last two digits of your student ID;</li>
+				<li><code>--short</code>, for shorter data;</li>
+				<li><code>I</code>, the dataset mainly consisting of insertions;</li>
+				<li><code>F</code>, the dataset mainly consisting of finds;</li>
+				<li><code>C</code>, for the dataset convenient to cuckoo hashing, the load factor is restricted to 55&nbsp;%.</li>
+			</ul>
+		</p>
+
+		<p>
+			The generator produces a text output. Each row describes one 
+		</p>
+		
+		<ul>
+			<li><code># <em>N</em> <em>M</em></code>: start of the run for the set of <em>N</em> values hashed into a table of size <em>M</em> –
+			delete the old table and create a new one. The size of the set can be beneficial to determine the load factor in order to draw the graphs. Moreover the size of the table M remains the same for each run. The value N determines the size of the set created by this run, i.e. the number of successful Insert operations.</li>
+			<li><code>I <em>X</em></code>: insertion of the key <em>X</em>;</li>
+			<li><code>F <em>X</em></code>: find the key <em>X</em> in the table.</li>
+		</ul>
+
+		<p>
+			A single invocation of the generator creates a sequence of runs ranging having load factor from 30 to 90&nbsp;%,. (the maximal load factor is 55&nbsp;%, if you you used the parameter C). For each load factor there are 4 runs generated. The results shown in the graph should be averaged over these runs.
+		</p>
+
+		<h3>A sample of the input</h3>
+<pre>
+# 2 4
+I 1
+I 2
+I 1
+I 3
+F 1
+# 3 4
+I 2
+I 3
+I 7
+I 3
+I 2
+F 2
+F 0
+</pre>
+		<h2>Submitting your solution</h2>
+		<p>
+			Send an e-mail with subject of the form 'HW5-55973318' (i.e., HW5-<em>student ID</em>) with the following attachments:
+		</p>
+		<ul>
+			<li>source code used to get your results (in case it consists of multiple files, please use ZIP or TAR to pack them),</li>
+			<li>a PDF with plots and comments.</li>
+		</ul>
+
+		<p>
+			The body of your e-mail shall have the following form:
+		</p>
+		<pre><code>
+Jmeno: Jiří Fink
+Pseudonym: Guybrush Threepwood
+Tutorial section: Monday-12:20-odd
+		</code></pre>	</body>
+</html>
+
