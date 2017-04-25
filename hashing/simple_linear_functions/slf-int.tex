@@ -78,7 +78,7 @@ It is also possible to use functions of higher degree of independence and thus o
 
 The need to improve the size of the largest bins leads to the two-choice paradigm. For the placement we use two functions and the ball is placed into the smaller bin out of the two chosen bins. In this model the size of the largest bin is $O(\log \log m)$ where $m$ is the number of balls and bins. This was first shown shown by Azar et al \cite{azar} and later improved by V\"{o}cking \cite{vocking}.
 
-Nowadays more complicated family of functions are studied in \cite{wieder}. The functions no longer rely on high degree of independence but are designed so that they achieve small largest bins with high probability.
+Nowadays more complicated family of functions are studied in \cite{celisetal}. The functions no longer rely on high degree of independence but are designed so that they achieve small largest bins with high probability.
 
 \section{Notation and definitions}
 \label{sec:notation}
@@ -227,7 +227,7 @@ When $d \geq p/m$, the formula is a great overestimate as shown in Figure~1.
 \begin{figure}[h]
 	\label{fig:probability-3}
 	\centering
-	\includegraphics[width=8cm]{coll-3-21787-512-scaled}
+	% \includegraphics[width=8cm]{coll-3-21787-512-scaled.png}
 	\caption{The function of probability of collision of the elements $0, 1, d$ with respect to $d$. Notice that the probability is decreasing in the part when $d \leq p / m$ and is almost symmetric. In this figure $m = 512$ and $p = 21787$.}
 \end{figure}
 
@@ -610,34 +610,26 @@ If $g > 2^b$, then from the assumption that $k \geq 2b$  we get that the element
 
 \section{Natural set for linear functions modulo prime}
 
+\section{Factorisation of the multiply-shift-system}
+
+\begin{theorem}
+Let $w, f, b \in \mathbb{N}$ such that $w > f \geq b$.
+Each $h_\alpha \in \mathcal{MS}_{u}^{b}$ can be decomposed into $h_\beta \in \mathcal{MS}_{u}^{f}$ and $h_\gamma \in \mathcal{MS}_{f}^{b}$ such that $\alpha = \beta (\gamma 2 ^ {w - f} + 1)$.
+\end{theorem}
+\begin{proof}
+
+\begin{align*}
+h_\alpha(x) 
+	& = (\alpha x \bmod 2^w) \div 2^{w - b} \\
+	& = 
+\end{align*}
 
 
-\begin{thebibliography}{32}
-\bibitem{cw}
-J.L. Carter, and M.N. Wegman. 
-\newblock Universal Classes of Hash Functions.
-\newblock Journal of Computer and System Sciences, 18. pages 143--154, 1979.
+$\beta = \alpha$ be by was full
+\end{proof}
 
-\bibitem{siegel}
-A. Siegel. 
-\newblock On universal classes of extremely random constant-time hash functions.
-\newblock SIAM Journal on Computing, 33(3). pages 505--543 (electronic), 2004
-
-\bibitem{wieder}
-L.E. Celis, O. Reingold, G. Segen, and U. Wieder
-\newblock Balls and Bins: Smaller Hash Families and Faster Evaluation
-\newblock Foundations of Computer Science (FOCS), 2011 IEEE 52nd Annual Symposium, pages 599 -- 608, 2011
-
-\bibitem{azar}
-Y. Azar, A. Broder, A. Karlin, and E. Upfal
-\newblock Balanced allocations.
-\newblock SIAM Journal on Computing, 29(1). pages 180--200, 1999.
-
-\bibitem{vocking}
-B. V\"{o}cking
-\newblock How asymmetry helps load balancing.
-\newblock In Proceedings of the Fortieth Annual Symposium on Foundations of Computer Science. pages 131--140, 1999.
-\end{thebibliography}
+\bibliographystyle{siam}
+\bibliography{slf-int}
 
 \end{document}
 
