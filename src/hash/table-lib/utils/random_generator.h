@@ -35,16 +35,16 @@ namespace Hash { namespace Utils {
 		 * @param max Maximum value.
 		 * @param initializeSeed Automatic (based on current timestamp) seed initialization.
 		 */
-		RandomGenerator(IntType min, IntType max, bool initializeSeed = false):
-		  engine(Engine()),
+		RandomGenerator(IntType min, IntType max):
 		  generator(Generator(engine, Distribution(min, max))) {
-			if (initializeSeed) {
+			if (!seedInitialized) {
 				using namespace boost::posix_time;
 				using namespace boost::gregorian;
 
 				ptime now = second_clock::local_time();
 				time_duration time = now.time_of_day();
 				generator.engine().seed(time.total_seconds());
+				seedInitialized = true;
 			}
 		}
 
@@ -67,9 +67,8 @@ namespace Hash { namespace Utils {
 		}
 
 		void setDistribution(IntType min, IntType max) {
-			typename Generator::distribution_type * distribution = 0;
-			// generator.distribution();
-			// distribution.param(Distribution::param_type(min, max));
+			typename Generator::distribution_type * distribution = generator.distribution();
+			distribution.param(Distribution::param_type(min, max));
 		}
 
 	private:
@@ -77,7 +76,8 @@ namespace Hash { namespace Utils {
 		RandomGenerator & operator =(const RandomGenerator &);
 
 		Generator generator;
-		Engine engine;
+		static Engine engine;
+		static bool seedInitialized;
 	};
 
 #ifdef __GNUC__
@@ -112,16 +112,17 @@ namespace Hash { namespace Utils {
 		 * @param max Maximum value.
 		 * @param initializeSeed Automatic (based on current timestamp) seed initialization.
 		 */
-		RandomGenerator(IntType min, IntType max, bool initializeSeed = false):
+		RandomGenerator(IntType min, IntType max):
 		  engine(Engine()),
 		  generator(Generator(engine, Distribution(min, max))) {
-			if (initializeSeed) {
+			if (!seedInitialized) {
 				using namespace boost::posix_time;
 				using namespace boost::gregorian;
 
 				ptime now = second_clock::local_time();
 				time_duration time = now.time_of_day();
 				generator.engine().seed(time.total_seconds());
+				seedInitialized = true;
 			}
 		}
 
@@ -150,7 +151,8 @@ namespace Hash { namespace Utils {
 		RandomGenerator & operator =(const RandomGenerator &);
 
 		Generator generator;
-		Engine engine;
+		static Engine engine = Engine();
+		static bool seedInitialized;
 	};
 
 #endif

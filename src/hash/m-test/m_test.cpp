@@ -1,11 +1,14 @@
 #include "storages/collision_count_storage.h"
+#include "storages/chained_storage.h"
 #include "systems/cwlf_system.h"
+#include "systems/multiply_shift_system.h"
 #include "systems/random_system.h"
 #include "table.h"
 #include "utils/equality_comparer.h"
 #include "utils/storage_statistics.h"
 #include <iostream>
 #include <boost/format.hpp>
+#include <limits>
 
 /**
  * This test is used to compute the size of the largest bin for various hash systems.
@@ -172,37 +175,75 @@ private:
 	Table & t;
 };
 
-
 size_t compute_hierarchy_factor(size_t n) {
 	return exp2((size_t) (log2(n) / log2(log2(n))));
 }
 
-template <typename base_t, typename double_t, typename Table>
-void performTest(size_t runs, size_t n, size_t m, size_t cell_height, bool print_set) {
+template<typename Table>
+class DataGenerator {
+public:
+	virtual ~DataGenerator(void) {
+	}
+
+	virtual void generate(Table & t) = 0;
+};
+
+template <typename Table>
+class MultiplyShiftDataGenerator : public DataGenerator<Table> {
+public:
+	MultiplyShiftDataGenerator(size_t aUniverseBitSize):
+		universeBitSize(aUniverseBitSize) {
+		std::cout << "Creating generator.\n";
+	}
+
+	virtual ~MultiplyShiftDataGenerator(void) {
+	}
+
+	virtual void generate(Table & t) {
+		const size_t UNIVERSE_B_PARTS = 4;
+		size_t bBits = universeBitSize / UNIVERSE_B_PARTS;
+		size_t fBits = bBits / 2;
+		size_t f = 1 << fBits;
+		size_t x, x_b;
+		std::cout << "Generating set for multiply-shift, f = " << fBits << ".\n";
+
+		t.reserve(f * f);
+		std::cout << "Setting universum max to " << universeBitSize << " bits ("<< (1 << universeBitSize) << " values).\n";
+		t.getFunction().setUniversumMax((1 << universeBitSize) - 1);
+		t.getFunction().reset();
+		std::cout << "Used function " << t.getFunction() << ".\n";
+		for (size_t b = 0; b < f; ++b) {
+			x_b = b << ((UNIVERSE_B_PARTS - 1) * bBits + fBits);
+			for (size_t e = 0; e < f; ++e) {
+				x = x_b | e;
+				// std::cout << x << "=comp(" << b << ", "<< e << ")" << std::endl;
+				t.insert(x);
+			}
+		}
+	}
+
+private:
+	size_t universeBitSize;
+};
+
+// size_t runs, size_t n, size_t m, size_t cell_height
+
+template <typename Table>
+void performTest(DataGenerator<Table> & generator, size_t runs) {
 	using namespace Hash;
 	using namespace Hash::Storages;
 	using namespace Hash::Systems;
 	using namespace Hash::Utils;
-
 	using namespace std;
 
-	size_t max = 0, min = m, sum = 0;
-
-	Table t;
-	t.reserve(m);
-
-	verify_set<base_t> s;
-	// generate_data_many_collisions<base_t, double_t, Table>(t, cell_height, n, m, compute_hierarchy_factor(n), 1, 0);
-	generate_data_many_collisions<base_t, double_t, verify_set<base_t>>(s, cell_height, n, m, 32);
-	if (print_set) {
-		s.print();
-	}
+	size_t max = 0, min = numeric_limits<size_t>::max(), sum = 0;
+	Table t(4);
 
 	// Run it.
 	for (size_t run = 0; run < runs; ++run) {
+		cout << "Run " << run << "." << endl;
 		t.clear();
-		insert_to_counting_table<base_t, Table> ins(t);
-		generate_data_many_collisions<base_t, double_t, insert_to_counting_table<base_t, Table>>(ins, cell_height, n, m, 32);
+		generator.generate(t);
 
 		StorageStatistics stats;
 		t.computeStatistics(stats);
@@ -241,8 +282,10 @@ int main(int argc, const char ** argv) {
 		typedef uint64_t base_t;
 		typedef __uint128_t double_t;
 	#else
-		typedef uint32_t base_t;
-		typedef uint64_t double_t;
+//		typedef uint32_t base_t;
+//		typedef uint64_t double_t;
+		typedef uint64_t base_t;
+		typedef __uint128_t double_t;
 	#endif
 #else
 	typedef uint64_t base_t;
@@ -254,7 +297,7 @@ int main(int argc, const char ** argv) {
 	const size_t DEFAULT_N = 0;
 	const size_t DEFAULT_RUNS = 64;
 	const size_t DEFAULT_CELL_HEIGHT = 0;
-	const string DEFAULT_FUNCTION = "cwlf";
+	const string DEFAULT_FUNCTION = "multiply-shift";
 	const bool DEFAULT_PRINT_SET = false;
 
 	size_t m = DEFAULT_M;
@@ -295,11 +338,16 @@ int main(int argc, const char ** argv) {
 
 		typedef Table<base_t, EqualityComparer<base_t>, RandomBin, CollisionCountStorage> HashTableRandom;
 		typedef Table<base_t, EqualityComparer<base_t>, UniversalFunctionCWLF, CollisionCountStorage> HashTableCWLF;
+		typedef Table<base_t, EqualityComparer<base_t>, MultiplyShiftSystem, ChainedStorage> HashTableMultiplyShift;
 
 		if (functionType == "cwlf") {
-			performTest<base_t, double_t, HashTableCWLF>(runs, n, m, cell_height, print_set);
+			// performTest<base_t, double_t, HashTableCWLF>(runs, n, m, cell_height, print_set);
 		} else if (functionType == "random") {
-			performTest<base_t, double_t, HashTableRandom>(runs, n, m, cell_height, print_set);
+			// performTest<base_t, double_t, HashTableRandom>(runs, n, m, cell_height, print_set);
+		} else if (functionType == "multiply-shift") {
+			MultiplyShiftDataGenerator<HashTableMultiplyShift> g(m);
+			cout << "Generator created.\n";
+			performTest<HashTableMultiplyShift>(g, runs);
 		} else {
 			cerr << "What the function? Use random or CWLF." << endl;
 			return 1;

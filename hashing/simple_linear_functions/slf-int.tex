@@ -614,18 +614,21 @@ If $g > 2^b$, then from the assumption that $k \geq 2b$  we get that the element
 
 \begin{theorem}
 Let $w, f, b \in \mathbb{N}$ such that $w > f \geq b$.
-Each $h_\alpha \in \mathcal{MS}_{u}^{b}$ can be decomposed into $h_\beta \in \mathcal{MS}_{u}^{f}$ and $h_\gamma \in \mathcal{MS}_{f}^{b}$ such that $\alpha = \beta (\gamma 2 ^ {w - f} + 1)$.
+Each $h_\alpha \in \mathcal{MS}_{u}^{b}$ can be decomposed into $i_\beta^{p} \in \mathcal{MS}_{u}$ and $j_\gamma^{f} \in \mathcal{MS}_{f}^{b}$ such that $\alpha = \beta (\gamma 2 ^ {w - f} + 1)$.
 \end{theorem}
 \begin{proof}
+Let $x_f = (\beta x \bmod 2^w) \div 2^{w - b}$ and $t_f = \beta x \bmod 2^f$.
 
 \begin{align*}
-h_\alpha(x) 
-	& = (\alpha x \bmod 2^w) \div 2^{w - b} \\
-	& = 
+j_\gamma(i_\beta(x)) & = \left(x_f + \gamma t_f\right) \bmod 2^b \\
+	& = \left(x_f 2^{w-b} + \gamma t_f 2^{w-f}\right) \bmod 2^w \div 2^{w-b} \\
+	& = \left(\beta x \bmod 2^w + \gamma \right(\beta x \bmod 2^f\left) 2^{w-f}\right) \bmod 2^w \div 2^{w-b} \\
+	& = \left(\beta x \bmod 2^w + \gamma 2^{w-f} \left(\beta x \bmod 2^f\right)\right) \bmod 2^w \div 2^{w-b} \\
+	& = \left(\beta x \bmod 2^w + \left(\gamma 2^{w-f}\beta x\right) \bmod 2^w\right) \bmod 2^w \div 2^{w-b} \\
+	& = \beta \left(\gamma 2^{w - f} + 1\right) x \bmod 2^w \div 2^{w - b} \\
+	& = \alpha x \bmod 2^w \div 2^{w - b} \\
+	& = h_\alpha(x).
 \end{align*}
-
-
-$\beta = \alpha$ be by was full
 \end{proof}
 
 \bibliographystyle{siam}
