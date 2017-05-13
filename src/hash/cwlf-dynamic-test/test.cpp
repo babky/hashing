@@ -17,7 +17,7 @@ void LengthTest::runTest(void) {
 	const size_t TEST_LENGTH = 1 << 24;
 #endif
 
-	RandomGenerator<size_t> generator(0, 8 * TEST_LENGTH, true);
+	RandomGenerator<size_t> generator(0, 8 * TEST_LENGTH);
 	cout << "Running " << TEST_COUNT << " tests.\n";
 
 	for (size_t t = 0; t < TEST_COUNT; ++t) {

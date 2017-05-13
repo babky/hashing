@@ -2,6 +2,7 @@
 #define MULTIPLY_SHIFT_SYSTEM_H
 
 #include <algorithm>
+#include <ostream>
 #include <sstream>
 #include "systems/universal_system.h"
 #include "utils/hash_assert.h"
@@ -19,20 +20,26 @@ namespace Hash { namespace Systems {
 	class MultiplyShiftSystem : public Hash::Systems::UniversalFunction<T, Storage> {
 	public:
 		explicit MultiplyShiftSystem(size_t aTableSize = StorageParams::INITIAL_STORAGE_SIZE, size_t aUniversumMax = 0):
-		  tableSize(aTableSize) {
+		  tableSize(aTableSize),
+		  g(0, prepareUniversumMax(aUniversumMax)) {
 			setUniversumMax(aUniversumMax);
 			reset();
 		}
 
+		virtual ~MultiplyShiftSystem(void) {
+		}
+
 		void setUniversumMax(T aUniversumMax) {
-			if (aUniversumMax == 0) {
-				universumMax = std::numeric_limits<T>::max();
-			} else {
-				universumMax = aUniversumMax;
+			aUniversumMax = prepareUniversumMax(aUniversumMax);
+			if (aUniversumMax == universumMax) {
+				return;
 			}
 
+			universumMax = aUniversumMax;
 			// Remove the bits overflowing the universum max.
 			lshift = sizeof(T) * 8 - Hash::Math::log2ceil(universumMax);
+			g = Hash::Utils::IntegralGeneratorWrapper<T>(0, universumMax / 2);
+			reset();
 		}
 
 		T getUniversumMax(void) const {
@@ -53,7 +60,6 @@ namespace Hash { namespace Systems {
 			// We need an odd number in the range of universe.
 			// The half of max + 1 is the valid range for generating the values which
 			// are then mapped to odd values.
-			Hash::Utils::IntegralGeneratorWrapper<T> g = Hash::Utils::IntegralGeneratorWrapper<T>(0, this->getUniversumMax() / 2 + 1);
 			a = g.generate() * 2 + 1;
 		}
 
@@ -101,6 +107,15 @@ namespace Hash { namespace Systems {
 			MultiplyShiftSystem<T, Storage> f;
 		};
 
+	protected:
+		static std::size_t prepareUniversumMax(std::size_t aUniversumMax) {
+			if (aUniversumMax == 0) {
+				aUniversumMax = std::numeric_limits<T>::max();
+			}
+
+			return aUniversumMax;
+		}
+
 	public:
 		virtual std::string toString() const {
 			std::stringstream str;
@@ -113,6 +128,7 @@ namespace Hash { namespace Systems {
 		T a;
 		size_t lshift, rshift;
 		size_t tableSize;
+		Hash::Utils::IntegralGeneratorWrapper<T> g;
 	};
 
 } }
@@ -127,6 +143,11 @@ namespace std {
 	template <typename T, class Storage>
 	std::string to_string(const Hash::Systems::MultiplyShiftSystem<T, Storage> & a) {
 		return a.toString();
+	}
+
+	template <typename T, class Storage>
+	std::ostream & operator <<(std::ostream & out, const Hash::Systems::MultiplyShiftSystem<T, Storage> & f) {
+		return out << f.toString();
 	}
 
 }

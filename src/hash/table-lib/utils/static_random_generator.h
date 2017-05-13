@@ -2,8 +2,10 @@
 #define STATIC_RANDOM_GENERATOR_H
 
 #include "random_generator.h"
+#include <boost/log/trivial.hpp>
 #include "utils/boost_include.h"
 #include "utils/smart_pointer.h"
+#include <iostream>
 
 namespace Hash { namespace Utils {
 
@@ -19,7 +21,7 @@ namespace Hash { namespace Utils {
 		}
 
 		static void initialize(T min = boost::integer_traits<T>::const_min, T max = boost::integer_traits<T>::const_max) {
-			StaticRandomGenerator<T>::generator = new RandomGenerator<T>(min, max, true);
+			StaticRandomGenerator<T>::generator = new RandomGenerator<T>(min, max);
 		}
 
 		static bool isInitialized(void) {
@@ -36,7 +38,7 @@ namespace Hash { namespace Utils {
 		IntegralGeneratorWrapper(T minimum, T maximum):
 			min(minimum), 
 			max(maximum),
-			g(new RandomGenerator<size_t>(minimum, maximum, true)) {
+			g(new RandomGenerator<size_t>(minimum, maximum)) {
 		}
 
 		T getMin(void) const {

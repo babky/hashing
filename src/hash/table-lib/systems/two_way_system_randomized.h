@@ -21,7 +21,7 @@ namespace Hash { namespace Systems {
 	class TwoWaySystemRandomized : public UniversalFunction<T, Storage> {
 	public:
 		TwoWaySystemRandomized(void):
-		  bitGenerator(new Hash::Utils::RandomGenerator<size_t>(0, boost::integer_traits<size_t>::const_max, true)),
+		  bitGenerator(new Hash::Utils::RandomGenerator<size_t>(0, boost::integer_traits<size_t>::const_max)),
 		  mutex(new boost::mutex()),
 		  randomWord(0),
 		  p(REGENERATE_NOW) {

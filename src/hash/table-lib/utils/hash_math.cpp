@@ -5,7 +5,7 @@ template<>
 unsigned int Hash::Math::log2ceil<unsigned int>(unsigned int i) {
 	unsigned int l = 0;
 
-	for (unsigned int x = 1; x < i; x *= 2) {
+	for (unsigned int x = 1; x && (x < i); x *= 2) {
 		++l;
 	}
 

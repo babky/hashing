@@ -58,16 +58,18 @@ class IndividualBadSet: public EO<size_t> {
 	ElementVector set;
 
 public:
-	IndividualBadSet() :
-			universeMax(0), setSize(0), set(0) {
+	IndividualBadSet():
+		universeMax(0), setSize(0), set(0) {
 	}
 
-	IndividualBadSet(size_t aUniverseMax, size_t aSetSize) :
-			universeMax(aUniverseMax), setSize(aSetSize), set(aSetSize) {
+	IndividualBadSet(size_t aUniverseMax, size_t aSetSize):
+		universeMax(aUniverseMax), setSize(aSetSize), set(aSetSize) {
 	}
 
 	void printOn(std::ostream & os) const {
-		os << "Individual: [" << set << "], fitness: " << fitness() << ".";
+		size_t f = fitness();
+		double lbin = static_cast<double>(f) / ((universeMax + 1) / 2);
+		os << "Individual: [" << set << "], fitness: " << f << ", lbin: " << lbin << ".";
 	}
 
 	void fillRandomly() {
@@ -148,7 +150,11 @@ public:
 		}
 
 		for (ElementVector::iterator it = individual.set.begin(); it != individual.set.end(); ++it) {
-			hash_assert(*it >= 0 && *it <= settings.universeMax, "The value must be in the range 0 - universeMax.", __FILE__, __LINE__);
+			hash_assert(
+				*it >= 0 && *it <= settings.universeMax, "The value must be in the range 0 - universeMax.",
+				__FILE__,
+				__LINE__
+			);
 		}
 
 		return mutationByShifting || mutationByOptimizingSingleElement;
@@ -215,7 +221,13 @@ public:
 			// Find the best possible element for the set.
 			fixed = set;
 			fixed.erase(fixed.begin() + i);
-			FindWorstSetResult r = find_worst_set<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
+			FindWorstSetResult r = find_worst_set<Table, GeneratorFactoryTraits>(
+				settings.universeMax + 1,
+				settings.setSize,
+				settings.setSize,
+				fixed,
+				empty
+			);
 			*it = r.set[r.set.size() - 1];
 			change = change || *it != r.set[r.set.size() - 1];
 			*it = r.set[r.set.size() - 1];
@@ -248,7 +260,13 @@ public:
 			return false;
 		}
 
-		FindWorstSetResult r = find_worst_set<Table, GeneratorFactoryTraits>(settings.universeMax + 1, settings.setSize, settings.setSize, fixed, empty);
+		FindWorstSetResult r = find_worst_set<Table, GeneratorFactoryTraits>(
+			settings.universeMax + 1,
+			settings.setSize,
+			settings.setSize,
+			fixed,
+			empty
+		);
 		set = r.set;
 		std::sort(set.begin(), set.end());
 		return change;
@@ -288,7 +306,11 @@ public:
 	}
 
 	virtual void operator()(IndividualBadSet & individual) {
-		AverageLongestChainResult r = compute_longest_chain_average<Table, GeneratorFactoryTraits>(universeMax, individual.getSet(), tableSize);
+		AverageLongestChainResult r = compute_longest_chain_average<Table, GeneratorFactoryTraits>(
+			universeMax,
+			individual.getSet(),
+			tableSize
+		);
 		individual.fitness(r.sum);
 	}
 };
@@ -316,23 +338,43 @@ void optimize(const Settings & settings) {
 	BadSetMutation<Table, GeneratorFactoryTraits> mutation(settings);
 	BadSetContinuator continuator(settings.generationCount);
 
-	eoSGA<IndividualBadSet> gga(select, xover, settings.crossoverProbability, mutation, settings.mutationProbability, fitness, continuator);
+	eoSGA<IndividualBadSet> gga(
+		select,
+		xover,
+		settings.crossoverProbability,
+		mutation,
+		settings.mutationProbability,
+		fitness,
+		continuator
+	);
 	gga(pop);
 
 	pop.sort();
 	cout << "The best solution found: " << pop[0] << endl;
 	cout << "Final Population\n" << pop << endl;
 
-	LongestChainHistogram histogram = compute_longest_chain_histogram<Table, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
+	LongestChainHistogram histogram = compute_longest_chain_histogram<Table, GeneratorFactoryTraits>(
+		settings.universeMax,
+		pop[0].getSet(),
+		settings.setSize
+	);
 	cout << "L C\n";
-	for (LongestChainHistogram::Histogram::iterator it = histogram.histogram.begin(); it != histogram.histogram.end(); ++it) {
-		cout << it->first << " " << it->second << "\n";
+	{
+		const LongestChainHistogram::Histogram & h = histogram.histogram;
+		for (LongestChainHistogram::Histogram::const_iterator it = h.begin(); it != h.end(); ++it) {
+			cout << it->first << " " << it->second << "\n";
+		}
 	}
 
 	typedef typename CompleteLongestChainInformationTraits<Function>::HashFunction HashFunction;
 	typedef typename CompleteLongestChainInformation<HashFunction>::ChainInformation ChainInformation;
 	typedef typename CompleteLongestChainInformation<HashFunction>::Chains Chains;
-	CompleteLongestChainInformation<HashFunction> info = compute_longest_chain_complete_information<Function, GeneratorFactoryTraits>(settings.universeMax, pop[0].getSet(), settings.setSize);
+	CompleteLongestChainInformation<HashFunction> info =
+		compute_longest_chain_complete_information<Function, GeneratorFactoryTraits>(
+			settings.universeMax,
+			pop[0].getSet(),
+			settings.setSize
+		);
 	cout << "L C\n";
 	for (typename ChainInformation::iterator it = info.info.begin(); it != info.info.end(); ++it) {
 		cout << "---\n";

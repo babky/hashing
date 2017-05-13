@@ -5,6 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../bad-s
 project (HashTable)
 
 add_subdirectory (../table-lib/cmake ../table-lib/cmake)
+add_subdirectory (../m-test/cmake ../m-test/cmake)
 add_subdirectory (../bad-set/cmake ../bad-set/cmake)
 add_subdirectory (../surjectivity/cmake ../surjectivity/cmake)
 add_subdirectory (../probability-distribution/cmake ../probability-distribution/cmake)
@@ -14,6 +15,5 @@ add_subdirectory (../table-simple-length-test/cmake ../table-simple-length-test/
 add_subdirectory (../table-test/cmake ../table-test/cmake)
 add_subdirectory (../system-test/cmake ../system-test/cmake)
 add_subdirectory (../table-time-test/cmake ../table-time-test/cmake)
-add_subdirectory (../m-test/cmake ../m-test/cmake)
 add_subdirectory (../induction-test/cmake ../induction-test/cmake)
 add_subdirectory (../table-two-way-test/cmake ../table-two-way-test/cmake)
