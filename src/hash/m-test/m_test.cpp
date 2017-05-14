@@ -36,15 +36,15 @@ template <typename base_t, typename Table>
  * @param f Multiplactive factor - number of children per one progression == length of the progression.
  * @param s Offset.
  */
-void generate_data_cells(Table & t, size_t cell_height, size_t n, size_t m, size_t f, size_t cell_count, base_t s) {
-	if (cell_height == 0) {
+void generate_data_cells(Table & t, size_t cellHeight, size_t n, size_t m, size_t f, size_t cell_count, base_t s) {
+	if (cellHeight == 0) {
 		for (size_t i = 0; i < n / cell_count; ++i) {
 			// std::cout << compute_s_m_i(s, m, i) << " ";
 			t.insert(compute_s_m_i<base_t>(s, m, i));
 		}
 	} else {
 		for (size_t i = 0; i < f;  ++i) {
-			generate_data(t, cell_height - 1, n, m, f, cell_count * f, compute_s_m_i<base_t>(s, m, i));
+			generate_data(t, cellHeight - 1, n, m, f, cell_count * f, compute_s_m_i<base_t>(s, m, i));
 		}
 	}
 }
@@ -54,7 +54,7 @@ template <typename base_t, typename double_t, typename Table>
  * @param f Multiplactive factor - number of children per one progression == length of the progression.
  * @param s Offset.
  */
-void generate_data_many_collisions(Table & t, size_t cell_height, size_t n, size_t m, size_t f) {
+void generate_data_many_collisions(Table & t, size_t cellHeight, size_t n, size_t m) {
 	base_t p = Hash::Math::Prime<base_t>::GREATEST_PRIME;
 	base_t r = 2;
 
@@ -125,7 +125,7 @@ void generate_data_many_collisions(Table & t, size_t cell_height, size_t n, size
 }
 
 template <typename base_t>
-class verify_set {
+class UniquenessVerifier {
 public:
 	bool contains(base_t x) {
 		return s.find(x) != s.end();
@@ -140,9 +140,11 @@ public:
 	}
 
 	void print() const {
+		std::cout << "Set: ";
 		for (typename set_type::const_iterator it = s.begin(); it != s.end(); ++it) {
-			std::cout << *(it) << "\n";
+			std::cout << *(it) << " ";
 		}
+		std::cout << "\n";
 	}
 
 private:
@@ -151,9 +153,9 @@ private:
 };
 
 template<typename base_t, class Table>
-class insert_to_counting_table {
+class CountingTableInserter {
 public:
-	insert_to_counting_table(Table & table):
+	CountingTableInserter(Table & table):
 		t(table) {
 	}
 
@@ -171,12 +173,22 @@ public:
 	}
 
 private:
-	verify_set<base_t> verifier;
+	UniquenessVerifier<base_t> verifier;
 	Table & t;
 };
 
 size_t compute_hierarchy_factor(size_t n) {
 	return exp2((size_t) (log2(n) / log2(log2(n))));
+}
+
+template <typename Table>
+void print_table(const Table & t) {
+	using namespace std;
+	cout << "Set: ";
+	for (typename Table::Iterator i = t.getBeginning(); i != t.getEnd(); ++i) {
+		cout << (*i) << " ";
+	}
+	cout << "\n";
 }
 
 template<typename Table>
@@ -185,7 +197,7 @@ public:
 	virtual ~DataGenerator(void) {
 	}
 
-	virtual void generate(Table & t) = 0;
+	virtual void generate(Table & t, bool printSet) = 0;
 };
 
 template <typename Table>
@@ -199,7 +211,7 @@ public:
 	virtual ~MultiplyShiftDataGenerator(void) {
 	}
 
-	virtual void generate(Table & t) {
+	virtual void generate(Table & t, bool printSet) {
 		const size_t UNIVERSE_B_PARTS = 4;
 		size_t bBits = universeBitSize / UNIVERSE_B_PARTS;
 		size_t fBits = bBits / 2;
@@ -216,20 +228,50 @@ public:
 			x_b = b << ((UNIVERSE_B_PARTS - 1) * bBits + fBits);
 			for (size_t e = 0; e < f; ++e) {
 				x = x_b | e;
-				// std::cout << x << "=comp(" << b << ", "<< e << ")" << std::endl;
 				t.insert(x);
 			}
 		}
+
+		if (printSet) {
+			print(t);
+		}
+	}
+
+	virtual void print(const Table & t) const {
+		print_table(t);
 	}
 
 private:
 	size_t universeBitSize;
 };
 
-// size_t runs, size_t n, size_t m, size_t cell_height
+template <typename base_t, typename double_t, typename Table>
+class CwlfDataGenerator : public DataGenerator<Table> {
+public:
+	CwlfDataGenerator(size_t aN, size_t aM, size_t aCellHeight):
+		n(aN),
+		m(aM),
+		cellHeight(aCellHeight) {
+	}
+
+	virtual ~CwlfDataGenerator(void) {
+	}
+
+	virtual void generate(Table & t, bool printSet) {
+		typedef CountingTableInserter<base_t, Table> Inserter;
+		Inserter inserter(t);
+		generate_data_many_collisions<base_t, double_t, Inserter>(inserter, cellHeight, n, m);
+		if (printSet) {
+			inserter.print();
+		}
+	}
+
+private:
+	size_t n, m, cellHeight;
+};
 
 template <typename Table>
-void performTest(DataGenerator<Table> & generator, size_t runs) {
+void performTest(DataGenerator<Table> & generator, size_t runs, bool printSet) {
 	using namespace Hash;
 	using namespace Hash::Storages;
 	using namespace Hash::Systems;
@@ -243,7 +285,7 @@ void performTest(DataGenerator<Table> & generator, size_t runs) {
 	for (size_t run = 0; run < runs; ++run) {
 		cout << "Run " << run << "." << endl;
 		t.clear();
-		generator.generate(t);
+		generator.generate(t, printSet);
 
 		StorageStatistics stats;
 		t.computeStatistics(stats);
@@ -296,24 +338,23 @@ int main(int argc, const char ** argv) {
 	const size_t DEFAULT_RUNS = 64;
 	const size_t DEFAULT_CELL_HEIGHT = 0;
 	const string DEFAULT_FUNCTION = "multiply-shift";
-	const bool DEFAULT_PRINT_SET = false;
 
 	size_t m = DEFAULT_M;
 	size_t n = DEFAULT_N;
-	size_t cell_height = DEFAULT_CELL_HEIGHT;
+	size_t cellHeight = DEFAULT_CELL_HEIGHT;
 	string functionType = DEFAULT_FUNCTION;
 	size_t runs = DEFAULT_RUNS;
-	bool print_set = DEFAULT_PRINT_SET;
+	bool printSet = false;
 
 	options_description optsDesc("Table M Test allowed options.");
 	optsDesc.add_options()
-		("help", "prints this help message")
-		("m", value<size_t>(&m)->default_value(DEFAULT_M), "The size of the table.")
-		("n", value<size_t>(&n)->default_value(DEFAULT_N), "The number of elements. When zero is given we choose n = m.")
-		("cell_height", value<size_t>(&cell_height)->default_value(DEFAULT_CELL_HEIGHT), "The height of the cell hierarchy into which the input elements are split.")
-		("runs", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.")
-		("print_set", value<bool>(&print_set)->default_value(DEFAULT_PRINT_SET), "If the hashed set should be printed out.")
-		("function", value<string>(&functionType)->default_value(DEFAULT_FUNCTION), "Default function is a randomly chosen function from CWLF. Possible values:\n\tcwlf: a CWLF function,\n\trandom: a random function.");
+		("help,h", "Prints this help message.")
+		("table-size,m", value<size_t>(&m)->default_value(DEFAULT_M), "The size of the table.")
+		("set-size,n", value<size_t>(&n)->default_value(DEFAULT_N), "The number of elements. When zero is given we choose n = m.")
+		("cell-height,c", value<size_t>(&cellHeight)->default_value(DEFAULT_CELL_HEIGHT), "The height of the cell hierarchy into which the input elements are split.")
+		("runs,r", value<size_t>(&runs)->default_value(DEFAULT_RUNS), "The number of runs.")
+		("print-set,p", boost::program_options::bool_switch(&printSet), "If the hashed set should be printed out.")
+		("function,f", value<string>(&functionType)->default_value(DEFAULT_FUNCTION), "Default function is a randomly chosen function from CWLF. Possible values:\n\tcwlf: a CWLF function,\n\trandom: a random function,\n\tmultiply-shift: Dietzfelbinger system.");
 
 	variables_map vm;
 	try {
@@ -339,13 +380,14 @@ int main(int argc, const char ** argv) {
 		typedef Table<base_t, EqualityComparer<base_t>, MultiplyShiftSystem, ChainedStorage> HashTableMultiplyShift;
 
 		if (functionType == "cwlf") {
-			// performTest<base_t, double_t, HashTableCWLF>(runs, n, m, cell_height, print_set);
+			CwlfDataGenerator<base_t, double_t, HashTableCWLF> g(n, m, cellHeight);
+			performTest<HashTableCWLF>(g, runs, printSet);
 		} else if (functionType == "random") {
-			// performTest<base_t, double_t, HashTableRandom>(runs, n, m, cell_height, print_set);
+			CwlfDataGenerator<base_t, double_t, HashTableRandom> g(n, m, cellHeight);
+			performTest<HashTableRandom>(g, runs, printSet);
 		} else if (functionType == "multiply-shift") {
 			MultiplyShiftDataGenerator<HashTableMultiplyShift> g(m);
-			cout << "Generator created.\n";
-			performTest<HashTableMultiplyShift>(g, runs);
+			performTest<HashTableMultiplyShift>(g, runs, printSet);
 		} else {
 			cerr << "What the function? Use random or CWLF." << endl;
 			return 1;
