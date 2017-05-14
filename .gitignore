@@ -6,6 +6,8 @@
 **/cmake/.cproject
 .settings
 src/hash/bad-test/cmake/BadTest
+src/hash/bad-set/cmake/BadSet
+src/hash/table-test/cmake/BadLinearSystemTest
 src/hash/cwlf-dynamic-test/cmake/CWLFTest
 src/hash/table-simple-length-test/cmake/TableSimpleLengthTest
 src/hash/table-lib/cmake/libTable.a
@@ -33,3 +35,14 @@ src/hash/probability-distribution/cmake/ProbabilityDistribution
 *.synctex
 *.wsp
 *.ps
+data_structures/2015-michal-koucky/hw1/cmake/gen-data
+data_structures/2015-michal-koucky/hw1/cmake/mj
+data_structures/2015-michal-koucky/hw1/cmake/solution
+data_structures/2016-jiri-fink/hw1/cmake/data.*
+data_structures/2016-jiri-fink/hw1/cmake/gen-data
+data_structures/2016-jiri-fink/hw1/cmake/in.txt
+data_structures/2016-jiri-fink/hw1/cmake/jf
+data_structures/2016-jiri-fink/hw1/cmake/solution
+src/hash/bad-set/cmake/*.txt
+src/hash/probability-distribution/cmake/*.csv
+src/hash/probability-distribution/cmake/*.png

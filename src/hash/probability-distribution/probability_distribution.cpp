@@ -2,7 +2,10 @@
 
 #include <iostream>
 #include <vector>
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 106400
 #include <boost/serialization/array_wrapper.hpp>
+#endif
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
 #include "storages/collision_count_storage.h"

@@ -113,7 +113,6 @@ namespace Hash { namespace Utils {
 		 * @param initializeSeed Automatic (based on current timestamp) seed initialization.
 		 */
 		RandomGenerator(IntType min, IntType max):
-		  engine(Engine()),
 		  generator(Generator(engine, Distribution(min, max))) {
 			if (!seedInitialized) {
 				using namespace boost::posix_time;
@@ -151,7 +150,7 @@ namespace Hash { namespace Utils {
 		RandomGenerator & operator =(const RandomGenerator &);
 
 		Generator generator;
-		static Engine engine = Engine();
+		static Engine engine;
 		static bool seedInitialized;
 	};
 

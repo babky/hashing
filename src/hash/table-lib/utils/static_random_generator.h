@@ -62,3 +62,4 @@ namespace Hash { namespace Utils {
 } }
 
 #endif /* STATIC_RANDOM_GENERATOR_H */
+
