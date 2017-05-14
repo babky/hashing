@@ -282,10 +282,8 @@ int main(int argc, const char ** argv) {
 		typedef uint64_t base_t;
 		typedef __uint128_t double_t;
 	#else
-//		typedef uint32_t base_t;
-//		typedef uint64_t double_t;
-		typedef uint64_t base_t;
-		typedef __uint128_t double_t;
+		typedef uint32_t base_t;
+		typedef uint64_t double_t;
 	#endif
 #else
 	typedef uint64_t base_t;

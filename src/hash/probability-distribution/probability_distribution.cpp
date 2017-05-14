@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <boost/version.hpp>
-#if BOOST_VERSION >= 106400
+#if BOOST_VERSION >= 106300
 #include <boost/serialization/array_wrapper.hpp>
 #endif
 #include <boost/numeric/ublas/matrix.hpp>
