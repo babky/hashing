@@ -83,7 +83,7 @@ int main(int argc, const char ** argv) {
 		}
 	}
 
-	cout << "Bin structure assumption not failed after " << runs << " runs for " << m << " elements.\n";
+	cout << "Bin structure assumption succeeded after " << runs << " runs for " << m << " elements.\n";
 
 	return 0;
 }
