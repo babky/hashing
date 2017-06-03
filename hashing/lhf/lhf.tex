@@ -69,7 +69,7 @@ Transformations}
 We study the placement of $n$ balls into $n$ bins where balls and bins are represented as two vector spaces over $\binvecspace{}$. The placements is done according to a linear transformation between the two vector spaces.
 We analyze the expected size of a largest bin. The only currently known upper bound is $O(\log n \log \log n)$ by Alon et al. and holds for placing $n \log n$ balls into $n$ bins.
 We show that this bound can be improved to $O(\log n)$ in the case when $n$ balls are placed into $n$ bins.
-We use the same basic technique as Alon et al. but give a tighter analysis for the mentioned case.
+We use the same basic technique as Alon et al. but give a tighter analysis for this case.
 \end{abstract}
 
 \begin{keywords}
@@ -91,7 +91,7 @@ Additionally the time to compute the hash function should be small.
 
 In this article we are dealing with the size of a largest bin in a balls-and-bins setting.
 It is known that if we place $n$ balls into $n$ bins randomly and independently, then with high probability the size of a largest bin is $\Theta(\log n/\log \log n)$.
-There are non-trivial hash function families that achieve the sublogarithmic bound such as systems constructed by Siegel~\cite{siegel}, the systems given in~\cite{celisetal} and any $\Theta(\log n/\log \log n)$-independent hash function family. 
+There are non-trivial hash function families that achieve the sublogarithmic bound such as systems constructed by Siegel~\cite{siegel}, the systems given in~\cite{celisetal}, tabulation hashing~\cite{charhash}, and any $\Theta(\log n/\log \log n)$-independent hash function family. 
 The hash function families with high degrees of independence provide asymptotically perfect results for other applications e.g. concentration bounds, Bloom filters, ``two choices'', etc.
 
 Unfortunately the systems with high degrees of independence are inefficient in practice either because of their size and/or speed according to Siegel's lower bound~\cite{siegel}. 
@@ -104,7 +104,7 @@ The system of linear transformations between the binary vector spaces forms a na
 We show that using this system the size of a largest bin is nearly optimal despite its limited independence.
  Precisely if $n = 2^b$ and $n$ balls, chosen arbitrarily from $\binvecspace{u}$, are placed into $n$ bins using a randomly chosen linear transformation between $\binvecspace{u}$ and $\binvecspace{b}$, then the expected size of a largest bin is $O(\log n)$.
 Previously Alon et al \cite{alonetal} showed the bound $O(\log n \log \log n)$ for placement of $n \log n$ balls into $n$ bins.
-This bound certainly holds for placing $n$ balls into $n$ bins.
+This bound certainly holds also for placing $n$ balls into $n$ bins.
 We improve the previous bound by $\log \log n$ factor when placing $n$ balls into $n$ bins.
 
 We use similar technique as Alon et al. however we use a different parametrization that suits the current setting. 
@@ -145,10 +145,9 @@ Then $\probs{T \in_U \surjectivelinearmaps{u}{t}}{T(S) \neq \binvecspace{t}} \le
 \label{proposition-epsilon}
 For each $\epsilon > 0$ there exists $c_\epsilon > 0$ depending solely on $\epsilon$, such that for each $t \in \mathbb{N}, S \subseteq \binvecspace{u}$ satisfying $|S| \geq c_\epsilon t 2^t$ it holds $\probs{T \in_U \linearmaps{u}{t}}{T(S) = \binvecspace{t}} \geq 1 - \epsilon$.
 \end{proposition}
-Let us note that from the proof in \cite{alonetal} it follows that $c_\epsilon$ may be chosen as $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$.
+Let us note that from the proof in~\cite{alonetal} it follows that $c_\epsilon$ may be chosen as $4\left(\frac{2}{\epsilon}\right)^{\frac{8}{\epsilon}}$.
 
-We now define two events needed to estimate the probability of having a  bin of size $\ell$. 
-So they were defined also in \cite{alonetal}.
+Following~\cite{alonetal} we define two events needed to estimate the probability of having a  bin of size $\ell$. 
 The first event, $E_1$, occurs iff there is a bin of size at least $\ell$.
 The second one, $E_2$ is used to upper bound the probability of occurrence of $E_1$.
 \begin{definition}[{\cite[Event $E_1$, p.~11]{alonetal}}]
@@ -163,7 +162,7 @@ The event $E_2(S, T_0, T_1)$ occurs when $\exists \vec{y} \in \binvecspace{b} \c
 \end{definition}
 
 Refer to \cref{fig-decomposition-general} for the general case of the decomposition and to \cref{fig-decomposition-e2} for the case when $E_2$ occurs. 
-Now we will show a relation between $E_1$ and $E_2$.
+Now we show a relation between $E_1$ and $E_2$.
 
 \begin{figure}
 	\caption{The decomposition of $T$, general case. Let us note that $F_A = T_1^{-1}(\vec{y})$, $U_A = T^{-1}(\vec y)$ and $S_A = S \cap U_A$.}
@@ -202,12 +201,14 @@ $
 In addition the value $c_\epsilon$ can be chosen according to \cref{proposition-epsilon} and depends only on $\epsilon$.
 \end{proposition}
 
-Now we will estimate the probability of $E_2$.
-We restate Proposition~3.1 from \cite{alonetal} as \cref{proposition-e2-bound}.
-However the claimed probability estimate slightly differs from the one in \cite{alonetal} since we assume that $|S| = 2^b$ instead of $|S| = b2^b$.
-Although the proof sketch remains similar, when compared to the original proposition, we give the full proof of the proposition.
+For completeness we provide a proof of \cref{proposition-e1-e2} in the appendix.
 
-\begin{proposition}[{\cite[Proposition~3.1, p.~11]{alonetal}}]
+Now we estimate the probability of $E_2$.
+Our \cref{proposition-e2-bound} is a slight restatement of Proposition~3.1 from \cite{alonetal}.
+It is similar to Proposition~3.1 in \cite{alonetal} but gives a slightly better bound.
+The proof is similar.
+
+\begin{proposition}
 \label{proposition-e2-bound}
 Let $u, f, b \in \mathbb{N}$ such that $u \geq f > b$.
 If $S \subseteq \binvecspace{u}$, $|S| = 2^b$, $f > b$ and $\mu = \frac{2^b}{2^f}$, then
@@ -258,7 +259,7 @@ $
 
 The following theorem gives an upper bound for the tail distribution of the random variable $\lbin{T}{S}$.
 The theorem is similar to Corollary~3.3 from \cite{alonetal}, however the stated estimate is slightly different because it is adapted to our setting.
-The substantial difference between them is that in our case estimates coming from \cref{theorem-prob-distribution-bound} become non-trivial for the logarithmic size of a largest bin instead of superlogarithmic in \cite{alonetal}.
+The substantial difference between them is that we obtain non-trivial estimates for the logarithmic size of a largest bin whereas in \cite{alonetal} they get them for super-logarithmic sizes.
 The theorem in turn implies \cref{theorem-n-to-n}.
 
 \begin{theorem}
@@ -278,7 +279,7 @@ Recall that $\lbin{T}{S} \geq \ell$ is equivalent to the occurrence of event $E_
 We have to verify that $\ell \geq c_\epsilon (f - b)2^{f - b}$.
 From the requirement $r \geq 4$ it follows that $c_\epsilon(f - b)2^{f - b} \leq c_\epsilon(\log r - \log \log r + 1)2^{\log r - \log \log r + 1} \leq \frac{2c_\epsilon r(\log r - \log \log r + 1)}{\log r} \leq 2c_\epsilon r \leq \ell$.
 
-To bound probability of $E_2(S, T_0, T_1)$ we use \cref{proposition-e2-bound}.
+To bound the probability of $E_2(S, T_0, T_1)$ we use \cref{proposition-e2-bound}.
 Observe that the choice of $f$ from the beginning of the proof satisfies $f > b$.
 This also means that $\surjectivelinearmaps{f}{b}$ is nonempty. 
 We put $\mu = 2^{b - f}$.
@@ -292,7 +293,7 @@ We show the theorem for $|S| = 2^b$.
 If $|S| < 2^b$, the theorem follows from the proved case.
 Put $n = 2^b = |S|$.
 We split $\sum_{\ell = 1}^{n} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq \ell}$ into two sums according to $\ell$ being lower or greater than $8c_\epsilon \log n$.
-We show that in the second case probability of $\lbin{T}{S} \geq \ell$ is $o(\ell^{-1})$.
+We show that in the second case the probability of $\lbin{T}{S} \geq \ell$ is $o(\ell^{-1})$.
 
 First we fix $\epsilon \in (0, 1)$ arbitrarily, assume that $\ell \geq 8c_\epsilon n$ and choose $r$ so that $\ell = 2 c_\epsilon r$.
 Hence $r \geq 4\log n$.
@@ -347,18 +348,13 @@ We would like to thank V\'aclav Koubek and Michal Kouck\'y for advices, consulta
 \bibliography{lhf}
 
 \begin{appendix}
-\section{The full proofs}
 In this appendix we give the full proof of \cref{proposition-e1-e2} along with the necessary claims. 
-As already mentioned \cref{proposition-e1-e2} is a restated version of Proposition~3.2 from~\cite{alonetal}.
-The main difference between the two propositions is that we explicitly consider probabilities together with their probability spaces.
-In the appendix we give the full proofs of our version of the statements.
-They are based on the proofs which appeared in \cite{alonetal}.
 \begin{proposition}
 \label{claim-dstr-factor}
 Let $T_1 \in \surjectivelinearmaps{f}{b}$ be fixed. Then the uniform choice of $T_0 \in \linearmaps{u}{f}$ yields the uniform choice of $T \in \linearmaps{u}{b}$ where $T = T_1 \circ T_0 $.
 \end{proposition}
 \begin{proof}
-The proof may be found in \cite{alonetal} in the proof of Theorem~7b.
+The proof of the claim may be found in \cite{alonetal} in the proof of Theorem~7b.
 Let $\vec{e}_1, \dots, \vec{e}_u$ be a basis of $\binvecspace{u}$.
 Recall that the uniform choice of $T \in \linearmaps{u}{b}$ is equivalent to random and independent choice of $T(\vec{e}_i) \in \binvecspace{b}$ for $i \in \{1, \dots, u\}$.
 Since $T_1$ is onto, for each $\vec{y} \in \binvecspace{b}$ we have that $|T_1^{-1}(\vec{y})| = 2^{f - b}$.
