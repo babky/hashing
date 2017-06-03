@@ -26,6 +26,10 @@ using namespace Hash::Storages;
 using namespace Hash::Iterators;
 using namespace Hash::Utils;
 
+/**
+ * Uses genetic algorithm for finding a bad set.
+ */
+
 typedef ChainedStorage<size_t, EqualityComparer<size_t>, size_t> Storage;
 
 struct Settings {

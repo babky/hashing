@@ -1,11 +1,12 @@
 #include "storage_statistics.h"
+#include <limits>
 
 using namespace Hash::Utils;
 
 StorageStatistics::StorageStatistics(void):
   elementCount(0),
   tableLength(0),
-  minChainLength(0),  
+  minChainLength(std::numeric_limits<size_t>::max()),
   maxChainLength(0),
   rehashCount(0) {
 }
@@ -39,7 +40,7 @@ size_t StorageStatistics::getMaxChainLength(void) const {
 }
 
 void StorageStatistics::addChain(size_t chainLength) {
-	if (this->minChainLength > chainLength) {
+	if (chainLength && this->minChainLength > chainLength) {
 		this->minChainLength = chainLength;
 	}
 
@@ -53,7 +54,7 @@ void StorageStatistics::addChain(size_t chainLength) {
 
 void StorageStatistics::clear(void) {
 	this->maxChainLength = 0;
-	this->minChainLength = 0;
+	this->minChainLength = std::numeric_limits<size_t>::max();
 	this->elementCount = 0;
 	this->tableLength = 0;
 	this->rehashCount = 0;

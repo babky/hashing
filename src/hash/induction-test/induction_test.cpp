@@ -7,6 +7,13 @@
 #include <iostream>
 #include <boost/format.hpp>
 
+/**
+ * Checks the induction assumption for when computing the fact that.
+ *
+ * Let G be a positive integer and g, h \in [G]. We prove that [m] \cap h +_G  g G [G/m] is a
+ * union of at most two arithmetic progressions having the same difference.
+ */
+
 #ifdef BOOST_MSVC
 	#pragma warning(disable: 4512)
 #endif

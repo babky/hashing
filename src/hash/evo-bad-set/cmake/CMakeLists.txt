@@ -8,7 +8,7 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++17 -ggdb")
 SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++17 -O3")
 
 set(SOURCES 
-  ../bad_set.cpp
+  ../evo_bad_set.cpp
 )
 
 set(HEADERS
@@ -25,7 +25,7 @@ include_directories(
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../table-lib/cmake ${Boost_LIBRARY_DIRS})
 
-add_executable(BadSet ${SOURCES})
+add_executable(EvoBadSet ${SOURCES})
 
-target_link_libraries(BadSet Table ${Boost_LIBRARIES} ${PARADISEO_LIBRARIES})
+target_link_libraries(EvoBadSet Table ${Boost_LIBRARIES} ${PARADISEO_LIBRARIES})
 

@@ -9,17 +9,19 @@
 
 namespace Hash { namespace Systems {
 
-	// TODO: Doc.
 	template<typename T, class Storage>
 	class TabulationFunction : public UniversalFunction<T, Storage> {
+		/**
+		 * Simple tabulation system as described in https://arxiv.org/abs/1011.5200.
+		 */
 	public:
 		explicit TabulationFunction(size_t length = Hash::StorageParams::INITIAL_STORAGE_SIZE, size_t c = 8):
 		  characterTableSize(1 << c),
-		  fullTableSize(characterTableSize * DIGIT_NUMBER / c),
-		  hashTableSize(length),
 		  characterNumber(DIGIT_NUMBER / c),
+		  fullTableSize(characterTableSize * characterNumber),
+		  hashTableSize(length),
 		  characterDigits(c),
-		  table(new size_t[characterTableSize * DIGIT_NUMBER / c])
+		  table(new size_t[characterTableSize * characterNumber])
 		{
 			setTableSize(length);
 		}
@@ -106,9 +108,9 @@ namespace Hash { namespace Systems {
 		 */
 		const static size_t DIGIT_NUMBER = boost::integer_traits<T>::digits;
 
+		size_t characterNumber;
 		size_t characterTableSize;
 		size_t fullTableSize;
-		size_t characterNumber;
 		size_t characterDigits;
 		size_t hashTableSize;
 		size_t outputMask;

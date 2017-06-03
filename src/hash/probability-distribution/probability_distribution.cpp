@@ -24,9 +24,9 @@
 
 /**
  * Computes the PDF for linear functions
- *  - cwlf
+ *  - CWLF
  *  - multiply-shift
- *  - matrix multiplication (linear function/transformation)
+ *  - matrix multiplication (linear map)
  */
 
 using namespace Hash;
