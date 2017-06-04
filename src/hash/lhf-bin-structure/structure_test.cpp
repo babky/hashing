@@ -71,6 +71,8 @@ int main(int argc, const char ** argv) {
 	HashTableLinearMap t;
 	StorageStatistics st;
 
+    size_t sum = 0;
+
 	for (size_t i = 0; i < runs; ++i) {
 		t.clear();
 		st.clear();
@@ -81,9 +83,12 @@ int main(int argc, const char ** argv) {
 			cerr << "Bin structure assumption failure.\n";
 			return 1;
 		}
+
+        sum += st.getMaxChainLength();
 	}
 
 	cout << "Bin structure assumption succeeded after " << runs << " runs for " << m << " elements.\n";
+    cout << "E lbin = " << static_cast<double>(sum) / runs << "\n";
 
 	return 0;
 }
