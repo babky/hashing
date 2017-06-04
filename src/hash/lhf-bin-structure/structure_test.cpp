@@ -29,14 +29,10 @@ void generate_subspace(Table & t, size_t m) {
         threshold = 1;
     }
 	for (size_t i = 0; i < m; ++i) {
-        if (i > threshold) {
-            x = (i / threshold) * threshold * 16 * 16 + (i % threshold) * 16;
-        } else {
-		    x = i * 16;
-        }
+        x = (i / threshold) * threshold * 16 + (i % threshold);
+        x *= 16;
+        t.insert(x);
 	}
-
-    t.insert(x);
 }
 
 int main(int argc, const char ** argv) {
