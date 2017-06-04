@@ -24,7 +24,11 @@ using namespace std;
 template<typename Table>
 void generate_subspace(Table & t, size_t m) {
 	for (size_t i = 0; i < m; ++i) {
-		t.insert(i);
+        if (i > m / 256) {
+            t.insert((i / 256) * 32768 + (i % 256) * 16);
+        } else {
+		    t.insert(i * 16);
+        }
 	}
 }
 
