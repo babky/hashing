@@ -34,9 +34,5 @@ RandomGenerator<boost::uint64_t>::Engine RandomGenerator<boost::uint64_t>::engin
 #if __LP64__
 template<>
 RandomGenerator<__uint128_t> * StaticRandomGenerator<__uint128_t>::generator = 0;
-template<>
-bool RandomGenerator<__uint128_t>::seedInitialized = false;
-template<>
-RandomGenerator<__uint128_t>::Engine RandomGenerator<__uint128_t>::engine = RandomGenerator<__uint128_t>::Engine();
 #endif
 #endif

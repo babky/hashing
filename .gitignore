@@ -6,8 +6,9 @@
 **/cmake/.cproject
 .settings
 src/hash/bad-test/cmake/BadTest
-src/hash/bad-set/cmake/BadSet
+src/hash/evo-bad-set/cmake/EvoBadSet
 src/hash/table-test/cmake/BadLinearSystemTest
+src/hash/lhf-bin-structure/cmake/LhfBinStructureTest
 src/hash/cwlf-dynamic-test/cmake/CWLFTest
 src/hash/table-simple-length-test/cmake/TableSimpleLengthTest
 src/hash/table-lib/cmake/libTable.a
