@@ -23,13 +23,20 @@ using namespace std;
 
 template<typename Table>
 void generate_subspace(Table & t, size_t m) {
+    size_t x;
+    size_t threshold = m / 256;
+    if (!threshold) {
+        threshold = 1;
+    }
 	for (size_t i = 0; i < m; ++i) {
-        if (i > m / 256) {
-            t.insert((i / 256) * 32768 + (i % 256) * 16);
+        if (i > threshold) {
+            x = (i / threshold) * threshold * 16 * 16 + (i % threshold) * 16;
         } else {
-		    t.insert(i * 16);
+		    x = i * 16;
         }
 	}
+
+    t.insert(x);
 }
 
 int main(int argc, const char ** argv) {
