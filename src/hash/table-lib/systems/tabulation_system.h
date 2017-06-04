@@ -36,7 +36,8 @@ namespace Hash { namespace Systems {
 		  hashTableSize(r.hashTableSize),
 		  characterNumber(r.characterNumber),
 		  characterDigits(r.characterDigits),
-		  table(new size_t[r.fullTableSize])
+		  table(new size_t[r.fullTableSize]),
+		  outputMask(r.outputMask)
 		{
 			for (size_t i = 0; i < fullTableSize; ++i) {
 				table[i] = r.table[i];

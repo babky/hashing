@@ -111,6 +111,9 @@ public:
 		TestImplBase<T, Generator, Table>(aBits, aTableName, aGeneratorName, aMaxLoadFactor, aSize) {
 	}
 
+	virtual ~TestImpl(void) {
+	}
+
 	virtual void runTest(size_t repeats) {
 		while (repeats != 0) {
 			ptime start, finish;
@@ -174,6 +177,9 @@ public:
 
 	StlTestImpl(size_t aBits, string aTableName, string aGeneratorName, double aMaxLoadFactor, size_t aSize):
 		TestImplBase<T, Generator, Structure>(aBits, aTableName, aGeneratorName, aMaxLoadFactor, aSize) {
+	}
+
+	virtual ~StlTestImpl(void) {
 	}
 
 	virtual void runTest(size_t repeats) {
