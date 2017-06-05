@@ -1,0 +1,56 @@
+\documentclass[10pt,stdletter]{newlfm}
+\usepackage{charter}
+\usepackage[utf8]{inputenc}
+
+\widowpenalty=1000
+\clubpenalty=1000
+
+\newlfmP{headermarginskip=20pt}
+\newlfmP{sigsize=50pt}
+\newlfmP{dateskipafter=20pt}
+\newlfmP{addrfromphone}
+\newlfmP{addrfromemail}
+\PhrPhone{Phone}
+\PhrEmail{Email}
+
+\namefrom{Martin Babka}
+\addrfrom{%
+    Martin Babka\\
+    \\
+    Charles University\\
+    Faculty of Mathematics and Physics\\
+    Department of Theoretical Computer Science \\
+    and Mathematical Logic\\
+    \\
+    Malostranské náměstí 25\\
+    118 00 Praha 1, Czech Republic
+}
+\phonefrom{00420-799-506-798}
+\emailfrom{babkys@gmail.com}
+
+\addrto{%
+SIAM\\
+3600 Market Street, 6th Floor\\
+Philadelphia, PA 19104-2688 USA
+}
+
+\greetto{To Whom It May Concern,}
+\closeline{Sincerely,}
+\begin{document}
+\begin{newlfm}
+We wish to submit a research article entitled ``A Note On The Size Of Largest Bins Using Placement With Linear Transformations'' for consideration by SICOMP. 
+
+This note is an improvement of paper [1] by Alon et. al . The authors showed an upper bound O(log n log log n) on the largest bin size in case of placement of n log n balls into n bins using linear transformations.
+However the case of placing n balls into n bins seems more natural.
+The original upper bound holds in this case as well but we improved it asymptotically by a factor of log log n to O(log n) when considering this case only.
+
+This note is quite short and reuses many results and techniques from the original paper. However it is not known to us that the result has been published or is widely known.
+Recently many papers dealing with hashing and balls and bins appeared in your journal.
+We believe that this paper is thus suitable for publication in it. 
+
+Thank you for your consideration. 
+We look forward to hearing from you.
+
+1: Noga Alon, Martin Dietzfelbinger, Peter Bro Miltersen, Erez Petrank, and Gábor Tardos. 1999. Linear hash functions. J. ACM 46, 5 (September 1999), 667-683. DOI=http://dx.doi.org/10.1145/324133.324179
+\end{newlfm}
+\end{document}
