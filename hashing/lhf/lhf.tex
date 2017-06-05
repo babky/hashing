@@ -39,13 +39,14 @@
 % SIAM template
 \numberwithin{theorem}{section}
 
-\newcommand{\TheTitle}{A Note On the Size of Largest Bins Using Placement with Linear
+\newcommand{\TheTitle}{A Note On the Size of Largest Bins Using Placement With Linear
 Transformations} 
+\newcommand{\RunningTitle}{On The Size of Largest Bins With Linear Maps}
 \newcommand{\TheAuthors}{M. Babka}
 
 \title{\TheTitle}
 
-\headers{\TheTitle}{\TheAuthors}
+\headers{\RunningTitle}{\TheAuthors}
 
 \author{
   Martin Babka\thanks{Charles University, Prague (\email{babkys@gmail.com}).}
@@ -112,8 +113,8 @@ As a consequence, universal hashing with linear transformations can be implement
 
 \section{Notation and the setting}
 Let $u, b \in \mathbb{N}$, $\vec{a} \in \binvecspace{b}$ and $A$ be a binary matrix of dimension $u \times b$, i.e. $A \in \{0, 1\}^{u \times b}$.
-By an affine linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$ we understand a mapping $\vec x \mapsto A\vec x + \vec{a}$.
-By linear transformation from $\binvecspace{u}$ to $\binvecspace{b}$
+By an \emph{affine linear transformation} from $\binvecspace{u}$ to $\binvecspace{b}$ we understand a mapping $\vec x \mapsto A\vec x + \vec{a}$.
+By \emph{linear transformation} from $\binvecspace{u}$ to $\binvecspace{b}$
 we understand a mapping $\vec x \mapsto A\vec x$, i.e. an affine transformation with $\vec{a} = \vec{0}$.
 Notice that the choice of $\vec{a}$ does not change the bin sizes and thus in our case it is sufficient to analyze the linear transformations only.
 
@@ -293,7 +294,7 @@ We show the theorem for $|S| = 2^b$.
 If $|S| < 2^b$, the theorem follows from the proved case.
 Put $n = 2^b = |S|$.
 We split $\sum_{\ell = 1}^{n} \probs{T\in_U\linearmaps{u}{b}}{\lbin{T}{S} \geq \ell}$ into two sums according to $\ell$ being lower or greater than $8c_\epsilon \log n$.
-We show that in the second case the probability of $\lbin{T}{S} \geq \ell$ is $o(\ell^{-1})$.
+We show that in the second case the probability of $\lbin{T}{S} \geq \ell$ is $O(\ell^{-3/2})$.
 
 First we fix $\epsilon \in (0, 1)$ arbitrarily, assume that $\ell \geq 8c_\epsilon n$ and choose $r$ so that $\ell = 2 c_\epsilon r$.
 Hence $r \geq 4\log n$.
@@ -324,7 +325,7 @@ Let us note that when $S$ is a subspace of the universe, then the expected size 
 Let $b, u \in \mathbb{N}$ and $S$ be a subspace of $\binvecspace{u}$ of dimension $b$. Then \[ \expects{T \in_U \linearmaps{u}{b}}{\lbin{T}{S}} = O(1).\]
 \end{theorem}
 \begin{proof}
-We first observe the non-empty bins have a simple structure -- all of them are formed by elements which are affine subspaces of the universe.
+We first observe that the non-empty bins have a simple structure -- all of them are formed by elements which are affine subspaces of the universe.
 This in turns means that all the non-empty bins have the same size.
 Since the bin containing $\vec{0}$ in $\binvecspace{b}$ is always non-empty and has a constant expected size, the theorem follows.
 
@@ -348,7 +349,8 @@ We would like to thank V\'aclav Koubek and Michal Kouck\'y for advices, consulta
 \bibliography{lhf}
 
 \begin{appendix}
-In this appendix we give the full proof of \cref{proposition-e1-e2} along with the necessary claims. 
+\section{Proof of \cref{proposition-e1-e2}}
+We give the full proof of \cref{proposition-e1-e2} along with the necessary claims. 
 \begin{proposition}
 \label{claim-dstr-factor}
 Let $T_1 \in \surjectivelinearmaps{f}{b}$ be fixed. Then the uniform choice of $T_0 \in \linearmaps{u}{f}$ yields the uniform choice of $T \in \linearmaps{u}{b}$ where $T = T_1 \circ T_0 $.
