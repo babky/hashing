@@ -224,7 +224,7 @@ The worst possible case is for $d = 2$ and the probability is roughly $1/2m$.
 When $d \geq p/m$, the formula is a great overestimate as shown in Figure~1.
 % When $d \geq p/m$, the formula is a great overestimate as shown in Figure~\ref{fig:probability-3}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\label{fig:probability-3}
 	\centering
 	% \includegraphics[width=8cm]{coll-3-21787-512-scaled.png}
@@ -631,9 +631,116 @@ j_\gamma(i_\beta(x)) & = \left(x_f + \gamma t_f\right) \bmod 2^b \\
 \end{align*}
 \end{proof}
 
+\section*{Low Randomness Tabulation System}
+
+\begin{definition}[Low Randomness Tabulation System]
+Let $w, b$ be integers such that $w \geq b$.
+Let $T_i\colon \{0, 1\} \mapsto \{0, 1\}$ for $i \in \{1, \dots, w\}$ and $\mathbb{T} = (T_1, \dots, T_w)$.
+Then the function $f_\mathbb{T}^b (x)$ maps a bit string $x$ of length $w$ into a bit string $y$ of length $b$ so that it holds $y_i = \oplus_{j=1}^{w} T_j(x_{i + j - 1}) $ for all $i \in \{1, \dots, b\}$.
+In the definition we put $x_{u} := x_{u - w}$ for $u > w$.
+
+\emph{Low Randomness Tabulation System} between $\{0, \dots, 2^w - 1\}$ and $\{0, \dots, 2^b - 1\}$ is the set \[\operatorname{LRTS}_{w, b} = \left\{f_\mathbb{T}^b \mid \mathbb{T} \in \left( \{0, 1\}^{\{0, 1\}} \right)^w\right\}.\]
+\end{definition}
+
+\begin{figure}[ht]
+\caption{The example of Low Randomness Tabulation System for $w = 5$ and $b = 3$.}
+\begin{center} 
+\begin{tabular}{l l l | l l}
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\
+$x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_1$ \\
+$x_3$ & $x_4$ & $x_5$ & $x_1$ & $x_2$ \\
+$x_4$ & $x_5$ & $x_1$ & $x_2$ & $x_3$ \\
+$x_5$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ \\
+\hline
+$y_1$ & $y_2$ & $y_3$ & -- &  --
+\end{tabular}
+\end{center}
+
+\begin{align*}
+y_1 = T_1(x_1) \oplus T_2(x_2) \oplus T_3(x_3) \oplus T_4(x_4) \oplus T_5(x_5) \\
+y_2 = T_1(x_2) \oplus T_2(x_3) \oplus T_3(x_4) \oplus T_4(x_5) \oplus T_5(x_1) \\
+y_3 = T_1(x_3) \oplus T_2(x_4) \oplus T_3(x_5) \oplus T_4(x_1) \oplus T_5(x_2) \\
+\end{align*}
+\end{figure}
+
+This type of hash system is similar to the multiplication with the two following exceptions
+\begin{itemize}
+	\item there are no carries -- may lead to a simpler analysis,
+	\item instead of multiplying each row by a single constant we use a simple table for each row tabulation,
+	\item instead of shifting we use circular shifting.
+\end{itemize}
+
+\begin{claim}
+\label{claim-lrts-universality}
+ There are $x_1$ and $x_2$ such that $\prob{f(x_1) = f(x_2)} = 1/2$.
+\end{claim}
+\begin{proof}
+Choose $x_1 = 0$, $x_2 = 2^w - 1$. Then the bits of $f(x_1)$, $f(x_2)$ are all all ones or zeros with probability $1/2$. These events are independent.
+\end{proof}
+
+\begin{claim}
+When a single table $T_i$ has the values negated, it has no effect on the sets of colliding elements.
+\end{claim}
+\begin{proof}
+The parity of each affected bit in the result is changed by exactly one.
+\end{proof}
+This means that negating the tables has no effect on the bin structure.
+For bin analysis we only have to track if the tables are constant or variable.
+
+By polarity of $T_i$ we understand an indicator $\operatorname{pol}_i$ defined as 
+\[
+\operatorname{pol}_i = 
+	\begin{cases}
+		1 \mbox{ if } T_i(0) \neq T_i(1), \\
+		0 \mbox{ if } T_i(0) = T_i(1).
+	\end{cases}
+\]
+We say that $T_i$ is \emph{constant} if $\operatorname{pol}_i = 0$ and is \emph{variable} otherwise.
+Previous claim implies that only polarities of the tables affect if the elements are colliding or not. 
+The actual values of the tables only ``rotate'' the results.
+
+\begin{claim}
+Let $x_1, x_2 \in \{0, \dots, 2^w - 1\}$ and $c = x_1 \oplus x_2$, i.e. c is the bitwise xor of the elements.
+Then $f_\mathbb{T}(x_1) = f_\mathbb{T}(x_2)$ iff $\oplus_{j=1}^{w} \operatorname{pol}_j \cdot c_{i + j - 1} = 0$ for all $i \in \{1, \dots, b\}$.
+\end{claim}
+\begin{proof}
+Each bit change which is exposed to a bit $y_i$ for $i \in \{1, \dots, b\}$ by a table $T_j$ must have $c_{i + j - 1} = 1$ and $\operatorname{pol}_j = 1$. 
+Since the two elements collide such changes must be compensated to zero and satisfy the above equation.
+That also means that the dot product $\langle c \lll (i - 1), \operatorname{pol} \rangle = 0$ where $c \lll k$ is the circular shift of $c$ by $k$ bits.
+This must be true for each $i \in \{1, \dots, b\}$.
+\end{proof}
+
+\begin{definition}[Rotated system of linear equations]
+Let $C$ be a binary matrix and $b$ be a positive integer.
+By $C \lll i$ we understand a matrix with rows being circular shifts of the rows of $C$ by $i$ bits.
+By \emph{$b$-rotated system of linear equations} we understand the system of equations satisfying $(C \lll i)x = 0$ for all $i \in \{0, \dots, b - 1\}$.
+\end{definition}
+
+\begin{claim}
+\label{claim-rotated-system}
+Let $S = \{x_1, \dots, x_\ell\} \subseteq \{0, \dots, 2^w - 1\}$.
+Put $c_j = x_{j + 1} \oplus x_1$ for $j \in \{1, \dots, \ell - 1\}$.
+The LRTS functions colliding the elements of $S$ into a single bin out of $2^b$ bins are solutions of a $b$-rotated system of linear equations with the matrix $C$ being a binary matrix consisting of $\ell - 1$ rows $c_1, \dots, c_{\ell - 1}$.
+\end{claim}
+\begin{proof}
+For each $i \in \{1, \dots, b\}$ the bit $y_i$ must be constant on $S$.
+From the previous we get that $\langle c_j \lll (i - 1), \operatorname{pol} \rangle = 0$ for each $j \in \{1, \dots, \ell - 1\}$.
+This can be reformulated as the system of equations $(C \lll (i - 1)) \operatorname{pol} = 0$ for $i \in \{1, \dots, b\}$.
+\end{proof}
+
+Let us note that Claim~\ref{claim-lrts-universality} simply follows from the above. In the case of the claim we have $|S| = 2$ and there is at least one bit where the two elements differ.
+When this bit is rotated in the $b$-rotated system of linear equations it makes the system to have rank at least $b$.
+
+This system has a similar property when compared to MSS and CWLS.
+\begin{claim}
+LRTS satisfies $\prob{\ell \mbox{ elements differing in exactly } \log \ell \mbox{ bits are colliding}} = 2^{-(b + l - 1)}$.
+\end{claim}
+\begin{proof}
+Direct proof is based on the fact that all the tables connected to the bits must be constant, see pg. 22.1. - 23.1. in my notes. Follows similarly as Claim~\ref{claim-lrts-universality} from Claim~\ref{claim-rotated-system}.
+The proof is only modified so that the rank of the system must be $b + \log l - 1$.
+\end{proof}
+
 \bibliographystyle{siam}
 \bibliography{slf-int}
 
 \end{document}
-
-
