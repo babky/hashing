@@ -1,5 +1,7 @@
-\documentclass[unicode,review]{siamart1116}
+﻿\documentclass[review]{elsarticle}
 
+\usepackage{lineno}
+\usepackage{hyperref}
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -8,8 +10,11 @@
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{pgf}
-% May be removed later
 \usepackage{todonotes}
+\usepackage[capitalise]{cleveref}
+\usepackage{amsopn}
+\usepackage{amsthm}
+\usepackage[utf8]{inputenc}
 
 \newcommand{\llinnm}[2]{\operatorname{L}_{\operatorname{lin}}({#1}, {#2})}
 \newcommand{\llinn}[1]{\llinnm{#1}{#1}}
@@ -34,25 +39,21 @@
 \newcommand{\inu}{\in_U}
 
 \newtheorem{claim}{Claim}
-\newtheorem*{propositionrep*}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newdefinition{definition}{Definition}
+\newtheorem*{propositionrep*}{Proposition 3}
 
-% SIAM template
-\numberwithin{theorem}{section}
-
-\newcommand{\TheTitle}{A Note On the Size of Largest Bins Using Placement With Linear
-Transformations} 
-\newcommand{\RunningTitle}{On The Size of Largest Bins With Linear Maps}
-\newcommand{\TheAuthors}{M. Babka}
+\newcommand{\TheTitle}{A Note On the Size of Largest Bins Using Placement With Linear Transformations} 
+\newcommand{\TheAuthors}{M.~Babka}
 
 \title{\TheTitle}
 
-\headers{\RunningTitle}{\TheAuthors}
+\author[mff]{\TheAuthors\corref{corresponding}}
+\ead{babkys@gmail.com}
+\cortext[corresponding]{Corresponding author}
+\address[mff]{Department of Theoretical Computer Science and Mathematical Logic, Faculty of Mathematics and Physics, Malostranské náměstí 25, 118 00 Prague 1, Czech Republic}
 
-\author{
-  Martin Babka\thanks{Charles University, Prague (\email{babkys@gmail.com}).}
-}
-
-\usepackage{amsopn}
 \DeclareMathOperator{\diag}{diag}
 
 \ifpdf
@@ -61,10 +62,11 @@ Transformations}
   pdfauthor={\TheAuthors}
 }
 \fi
-% End SIAM template
-\begin{document}
 
-\maketitle
+\linenumbers
+\modulolinenumbers[5]
+
+\begin{document}
 
 \begin{abstract}
 We study the placement of $n$ balls into $n$ bins where balls and bins are represented as two vector spaces over $\binvecspace{}$. The placement is done according to a linear transformation between the two vector spaces.
@@ -73,15 +75,13 @@ We show that this bound can be improved to $O(\log n)$ in the case when $n$ ball
 We use the same basic technique as Alon et al. but give a tighter analysis for this case.
 \end{abstract}
 
-\begin{keywords}
-balls and bins, universal hashing, linear transformations
-\end{keywords}
+\begin{keyword}
+balls and bins \sep universal hashing \sep linear transformations
 
-\begin{AMS}
-  68W20, % Randomized algorithms
-  68P05, % Data structures
-  68W40  % Analysis of algorithms
-\end{AMS}
+\MSC 68W20 \sep 68P05 \sep 68W40
+\end{keyword}
+
+\maketitle
 
 \section{Introduction}
 
@@ -345,7 +345,7 @@ $
 
 We would like to thank V\'aclav Koubek and Michal Kouck\'y for advices, consultations and time spent verifying this note.
 
-\bibliographystyle{siamplain}
+\bibliographystyle{elsarticle-num}
 \bibliography{lhf}
 
 \begin{appendix}
@@ -381,7 +381,7 @@ Analogically there is a unique vector $\vec{q}_{\vec{x}} \in \operatorname{Span}
 We put $T_0(\vec{x}) = \vec{q}_{\vec{x}} + T_K(\vec{x}_K)$.
 \end{proof}
 
-\begin{propositionrep*}[\cref{proposition-e1-e2}] \emph{({\cite[Proposition 3.2, p.~11]{alonetal}}).}
+\begin{propositionrep*} \emph{({\cite[Proposition 3.2, p.~11]{alonetal}}).}
 For each $\epsilon > 0$ there is $c_\epsilon > 0$ such that for each $u, f, b, \ell \in \mathbb{N}$ satisfying $u \geq f \geq b$, $\ell \geq c_\epsilon (f - b)2^{f-b}$ and for arbitrary $S \subseteq \binvecspace{u}$, it holds that
 $
 \probs{T \in_U \linearmaps{u}{b}}{E_1(S, T, \ell)} \leq \frac{1}{1 - \epsilon}\probs{T_0 \in_U \linearmaps{u}{f}, T_1 \in_U \surjectivelinearmaps{f}{b}}{E_2(S, T_0, T_1)}.
