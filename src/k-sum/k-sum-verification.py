@@ -80,7 +80,7 @@ def check_walk_k_independence(k: int, p: int, n: int, K: List[Tuple[int, int]]) 
     w = generate_walk(p, h, n, s)[0]
     for e in K:
         if len(w) <= e[0]:
-            return False
+            return None
 
         if w[e[0]] != e[1]:
             return False
@@ -95,10 +95,17 @@ def check_walk_inclusion(k: int, p: int, n: int, incl: List[int]) -> bool:
 
 def check_walk_k_independence_repeated(k: int, p: int, n: int, K: List[Tuple[int, int]], r: int) -> Tuple[int, int, float]:
     sum = 0
+    count = 0
     for _ in range(r):
-        if check_walk_k_independence(k, p, n, K):
+        single_result = check_walk_k_independence(k, p, n, K)
+        if single_result is None:
+            continue
+
+        count += 1
+
+        if single_result:
             sum += 1
-    return (sum, r, sum / r)
+    return (sum, count, sum / count)
 
 def check_walk_inclusion_repeated(k: int, p: int, n: int, K: List[int], r: int) -> Tuple[int, int, float]:
     sum = 0
@@ -114,9 +121,10 @@ if __name__ == "__main__":
     # r = 1000000
     # print(verify_walk_contains_two_elements(n, r))
 
-    r = 1000000
+    r = 10000000
     p = 59
     n = 16
     k = 4
-    print(check_walk_k_independence_repeated(k, p, n, [[1, 1], [2, 2], [3, 3], [4, 4]], r))
+    print(check_walk_k_independence_repeated(k, p, n, [[5, 1], [6, 2], [7, 3], [4, 4]], r))
+    print(n**(-4))
     print(check_walk_inclusion_repeated(k, p, n, [2, 3], r))
