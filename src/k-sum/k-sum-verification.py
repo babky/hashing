@@ -165,9 +165,9 @@ def check_walk_inclusion_repeated(k: int, p: int, n: int, incl: List[int], r: in
 
 
 def run_walk_k_independence_test():
-    r = 10000000
-    p = 59
-    n = 16
+    r = 1000000
+    p = 127
+    n = 32
     k = 4
     path = [
         WalkPoint(5, 1),
@@ -179,16 +179,23 @@ def run_walk_k_independence_test():
     result = check_walk_k_independence_repeated(k, p, n, path, r)
 
     print(
-        f"""
+        """
         Walk k-independence Test Result   
         
         Repeats:        {result.count}
         Not unique:     {result.not_unique}
         Not traversed:  {result.not_traversed}
         Traversed:      {result.traversed}
-        Traversed prob: {result.traversed / result.count}
-        Target prob:    {n ** -4}
-        """.strip())
+        Traversed prob: {traversed_prob}
+        Target prob:    {target_prob}
+        """.
+            format(
+                result=result, 
+                traversed_prob=result.traversed/result.count, 
+                target_prob=n**-4
+            )
+            .strip()
+    )
 
 
 if __name__ == "__main__":
