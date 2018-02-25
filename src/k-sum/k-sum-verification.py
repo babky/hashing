@@ -4,6 +4,8 @@ from enum import Enum
 
 from typing import List, Tuple
 
+from math import ceil
+
 
 def contains_collision(beta: List[int]) -> bool:
     """
@@ -67,11 +69,14 @@ def compute(p: int, h: List[int], n: int, s: int) -> int:
     return y % n
 
 
-def generate_walk(p: int, h: List[int], n: int, s: int) -> Tuple[List[int], int]:
+Walk = namedtuple('Walk', ['walk', 'repetition_node'])
+
+
+def generate_walk(p: int, h: List[int], n: int, s: int) -> Walk:
     w = []
     while True:
         if s in w:
-            return w, s
+            return Walk(walk=w, repetition_node=s)
 
         w.append(s)
         s = compute(p, h, n, s)
@@ -97,11 +102,12 @@ WalkPoint = namedtuple('WalkPoint', ['source', 'destination'])
 def check_walk_k_independence(k: int, p: int, n: int, path: List[WalkPoint]) -> WalkResult:
     h = generate_function(k, p)
     s = random.randint(0, n - 1)
-    w = generate_walk(p, h, n, s)[0]
-    for point in path:
-        if len(w) <= point.source:
-            return WalkResult.NOT_UNIQUE
+    w = generate_walk(p, h, n, s).walk
+    m = max(map(lambda x: x.source, path))
+    if len(w) <= m:
+        return WalkResult.NOT_UNIQUE
 
+    for point in path:
         if w[point.source] != point.destination:
             return WalkResult.PATH_NOT_TRAVERSED
 
@@ -111,7 +117,7 @@ def check_walk_k_independence(k: int, p: int, n: int, path: List[WalkPoint]) -> 
 def check_walk_inclusion(k: int, p: int, n: int, incl: List[int]) -> bool:
     h = generate_function(k, p)
     s = random.randint(0, n - 1)
-    w = generate_walk(p, h, n, s)[0]
+    w = generate_walk(p, h, n, s).walk
     return set(incl).issubset(set(w))
 
 
@@ -165,37 +171,44 @@ def check_walk_inclusion_repeated(k: int, p: int, n: int, incl: List[int], r: in
 
 
 def run_walk_k_independence_test():
-    r = 1000000
-    p = 127
+    r = 10000000
+    p = 67
     n = 32
     k = 4
     path = [
-        WalkPoint(5, 1),
-        WalkPoint(6, 2),
-        WalkPoint(7, 3),
-        WalkPoint(4, 4),
+        WalkPoint(3, 1),
+        WalkPoint(4, 2),
+        WalkPoint(5, 3),
+        WalkPoint(6, 4),
+        # WalkPoint(7, 5),
+        # WalkPoint(8, 6),
     ]
 
     result = check_walk_k_independence_repeated(k, p, n, path, r)
-
-    print(
-        """
-        Walk k-independence Test Result   
+    format_str = """
+        Walk k-independence Test Result
         
-        Repeats:        {result.count}
-        Not unique:     {result.not_unique}
-        Not traversed:  {result.not_traversed}
-        Traversed:      {result.traversed}
-        Traversed prob: {traversed_prob}
-        Target prob:    {target_prob}
-        """.
-            format(
-                result=result, 
-                traversed_prob=result.traversed/result.count, 
-                target_prob=n**-4
-            )
-            .strip()
-    )
+        k:    {k}
+        walk: {walk} 
+        
+        Repeats:       {result.count}
+        Not unique:    {result.not_unique}
+        Not traversed: {result.not_traversed}
+        Traversed:     {result.traversed}
+        
+        Traver prob: {traversed_prob}
+        Target prob: {target_prob}
+        Discrepancy: {discrepancy}
+        """.strip()
+
+    print(format_str.format(
+        walk=", ".join(map(lambda x: "{0}->{1}".format(x.source, x.destination), path)),
+        k=k,
+        result=result,
+        traversed_prob=result.traversed / result.count,
+        target_prob=(ceil(p / n) / p) ** len(path),
+        discrepancy=(result.traversed / result.count) / ((ceil(p / n) / p) ** len(path))
+    ))
 
 
 if __name__ == "__main__":
