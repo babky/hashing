@@ -1,3 +1,4 @@
+import click
 import random
 from collections import namedtuple
 from enum import Enum
@@ -170,11 +171,16 @@ def check_walk_inclusion_repeated(k: int, p: int, n: int, incl: List[int], r: in
     return count, r, count / r
 
 
-def run_walk_k_independence_test():
-    r = 10000000
-    p = 67
-    n = 32
-    k = 4
+@click.command()
+@click.option('--repetitions', '-r', default=10000000, help='Number of repetitions.')
+@click.option('--prime', '-p', default=67, help='Prime.')
+@click.option('--independence', '-k', default=3, help='Independenc (k).')
+@click.option('--bins', '-n', default=32, help='Bins (n).')
+def run_walk_k_independence_test(repetitions, prime, independence, bins):
+    r = repetitions
+    p = prime
+    n = bins
+    k = independence
     path = [
         WalkPoint(3, 1),
         WalkPoint(4, 2),
@@ -187,8 +193,10 @@ def run_walk_k_independence_test():
     result = check_walk_k_independence_repeated(k, p, n, path, r)
     format_str = """
         Walk k-independence Test Result
-        
+
+        p:    {p}
         k:    {k}
+        n:    {n}
         walk: {walk} 
         
         Repeats:       {result.count}
@@ -203,7 +211,7 @@ def run_walk_k_independence_test():
 
     print(format_str.format(
         walk=", ".join(map(lambda x: "{0}->{1}".format(x.source, x.destination), path)),
-        k=k,
+        p=p, n=n, k=k,
         result=result,
         traversed_prob=result.traversed / result.count,
         target_prob=(ceil(p / n) / p) ** len(path),
