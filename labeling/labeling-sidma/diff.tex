@@ -1,7 +1,7 @@
 \documentclass[unicode,review]{siamart1116}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL lab070217-siam-submitted.tex   Sun Jun 10 13:51:53 2018
-%DIF ADD lab-fix.tex                    Mon Jun  4 21:46:03 2018
+%DIF ADD lab-fix.tex                    Thu Jun 14 22:48:22 2018
 
 \usepackage{graphicx}
 \usepackage{multirow}
@@ -462,7 +462,7 @@ do this by relating online labeling to the prefix bucketing game.
 (Our definition of the game differs slightly from that in \cite{DSZ04}.)
 %%%MIKE END 5-3-15
 
-A \emph{prefix bucketing of $n$ items into $k$ buckets} (numbered 1 to $k$) is a one player game consisting of $n$ steps.
+\DIFdelbegin \DIFdel{A }\DIFdelend \emph{\DIFdelbegin \DIFdel{prefix }\DIFdelend \DIFaddbegin \DIFadd{Prefix }\DIFaddend bucketing of $n$ items into $k$ buckets} (numbered 1 to $k$) is a one player game consisting of $n$ steps.
 At the beginning of the game
 all the buckets are empty. In each step a new item arrives and the player selects an index $p \in \natInt{1}{k}$.
 The new item as well as all items in buckets $p+1,\dotsc,k$ are moved into bucket $p$ at a cost equal to the
@@ -500,7 +500,7 @@ or all labels in its right buffer were reassigned, and the total number of such 
 in the critical segment.
 
 
-\paragraph{An Improved Analysis of Bucketing}
+\paragraph{\DIFdelbegin \DIFdel{An }\DIFdelend Improved Analysis of Bucketing}
 
 It then remains to give a lower bound
 for the cost of prefix bucketing.  This was previously given by Dietz et al. \cite{DSZ04} for $k\in \Theta(\log n)$.
@@ -602,31 +602,31 @@ These $b$ items on either side of $T$ form the left and right buffers described 
 %%%BEGIN MIKE 5-13-15
 \begin{proposition}
 \label{prop:shrinks}
-For a segment $S$, if $\weight^{t-1}(S) \geq 2b$ then $|\densify^{t-1}(S,b)| \leq |S|/2$.
+For a segment $S$, if $\weight^{t-1}(S) \geq 2b$\DIFaddbegin \DIFadd{, }\DIFaddend then $|\densify^{t-1}(S,b)| \leq |S|/2$.
 \end{proposition}
 
 \begin{proof}
 Let $S'$ be the largest subsegment of $S$ such that $\pop^{t-1}(S')$ excludes the
 smallest $b$  members and the largest $b$ members of $\pop^{t-1}(S)$.  
 Let $L'$ be the smallest subsegment of $S'$ that starts at the left endpoint of $S'$
-and satisfies  $\weight^{t-1}(L)=\lfloor \weight^{t-1}(S')/2 \rfloor$.  Let $R'$
+and satisfies  \DIFdelbegin \DIFdel{$\weight^{t-1}(L)=\lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFdelend \DIFaddbegin \DIFadd{$\weight^{t-1}(L')=\lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFaddend .  Let $R'$
  be the smallest subsegment of $S'$ that ends at the right endpoint of $S'$
-and satisfies  $\weight^{t-1}(L)=\lfloor \weight^{t-1}(S')/2 \rfloor$.
+and satisfies  \DIFdelbegin \DIFdel{$\weight^{t-1}(L)=\lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFdelend \DIFaddbegin \DIFadd{$\weight^{t-1}(R')=\lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFaddend .
 $L'$ and $R'$ are disjoint subsegments of $S$ so the smaller of them has
 size at most $|S|/2$. Since $\densify^{t-1}(S,b)$ is the smallest subsegment $T$ of $S'$ with
-\DIFdelbegin \DIFdel{$\weight^t{T} = \lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFdelend \DIFaddbegin \DIFadd{$\weight^t(T) = \lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFaddend , the proposition follows.
+\DIFdelbegin \DIFdel{$\weight^t{T} = \lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFdelend \DIFaddbegin \DIFadd{$\weight^{t-1}(T) = \lfloor \weight^{t-1}(S')/2 \rfloor$}\DIFaddend , the proposition follows.
 \end{proof} 
 
 %%%END MIKE 5-13-15
 
 Suppose $S$ is a segment with $\weight^{t-1}(S)=\ell \geq 2$.  Let $x_1< \ldots < x_\ell$ denote the elements
-of $\pop^{t-1}(S)$.  We define $\midp^{t-1}(S)= \lceil (x_{\lceil (\ell-1)/2 \rceil} + x_{\lceil (\ell+1)/2 \rceil} )/ 2 \rceil$. Thus $\midp^t(S)$ is obtained by averaging the two middle items whose labels belong to  $S$. 
+of $\pop^{t-1}(S)$.  We define $\midp^{t-1}(S)= \lceil (x_{\lceil (\ell-1)/2 \rceil} + x_{\lceil (\ell+1)/2 \rceil} )/ 2 \rceil$. Thus \DIFdelbegin \DIFdel{$\midp^t(S)$ }\DIFdelend \DIFaddbegin \DIFadd{$\midp^{t-1}(S)$ }\DIFaddend is obtained by averaging the two middle items whose labels belong to  $S$. 
 
 Let $y^1,y^2,\dotsc,y^t$ be the first $t$ items inserted  and let $Rel^t$ be the items
 that are relabeled by
 $\A$ in response to the insertion of $y^t$. The \emph{busy segment $B^t\subseteq \natInt{1}{m}$ at time $t$} is
-the smallest segment that contains $f^t(Rel^t)\cup f^{t-1}(Rel^t \setminus \{y^t\})$. 
-%%%MIKE BEGIN 5/3/15
+the smallest segment that contains $f^t(Rel^t)\cup f^{t-1}(Rel^t \setminus \{y^t\})$. \DIFaddbegin \DIFadd{(As usual, $f(A) = \{f(x) : x \in A\}.$)
+}\DIFaddend %%%MIKE BEGIN 5/3/15
  (Equivalently, say that a label
 is {\em  impacted at step $t$} if either it is unassigned under $f^{t-1}$ and assigned under $f^t$ or assigned under
 $f^{t-1}$ and unassigned under $f^t$ or assigned to different items under $f^{t-1}$ and $f^t$. Then $B^t$ is
@@ -681,7 +681,7 @@ in the next iteration to help define the hierarchy at step $t+1$.
 \iffalse
 \smallskip\noindent Set $p^0=0$.
 \fi
-\item  \emph{The first 7 steps:} For $t$ from 1 to 7, set $y^t= 1+ (i-1)2^{n-7}$.
+\item  \emph{The first 7 steps:} For $t$ from 1 to 7, set \DIFdelbegin \DIFdel{$y^t= 1+ (i-1)2^{n-7}$}\DIFdelend \DIFaddbegin \DIFadd{$y^t= 1+ (t-1)2^{n-7}$}\DIFaddend .
 
 \item \emph{Initialization for remaining steps:}
 \begin{itemize}
@@ -1076,7 +1076,7 @@ as required.
 
 \begin{proof}  %% {\cref{l-p2}}
 We prove the claim by induction on $t$. For $t=1$, the only non-empty set is $A^1_1=\{y^1\}$ so the claim is true.  Assume $t \geq 2$.
-The {\bf Adversary($\A,n,m$)} chooses the sets $S^t_i$ and the item $y^t$,  the algorithm $\A$ outputs $f^t$and then
+The {\bf Adversary($\A,n,m$)} chooses the sets $S^t_i$ and the item $y^t$,  the algorithm $\A$ outputs $f^t$ and then
 the adversary defines $B^t, Rel^t$ and $p^t$.
 We distinguish two cases.
 
@@ -1106,7 +1106,8 @@ Using the induction hypothesis:
 $$f^{t-1}(A^t_{p^t} \setminus \{y^t\}) \subseteq f^{t-1}(\bigcup_{j\ge p^t} A^{t-1}_j)
 \subseteq \bigcup_{j\ge p^t} f^{t-2}( A^{t-1}_j \setminus \{y^{t-1}\}) \cup B^{t-1} \subseteq 
 \bigcup_{j \ge p^t} S^{t-1}_{j} \cup B^{t-1} \subseteq S^t_{p^t}.$$
-\end{proof}
+\DIFaddbegin \hfill\DIFadd{${}$
+}\DIFaddend \end{proof}
 
 
 Using this lemma, we can replace $\weight^{t-1}(S^t_{p^t})$ by  $|A^t_{p^t}|-1$  in \cref{c-main} to 
@@ -1242,7 +1243,7 @@ subtree $T''_i$ is also $(k-i+1)$-admissible.  It follows immediately that $T''$
 To show that $T'$ is $k$-admissible, we split into cases according to whether $|T_i|>1$ or $|T_i|=1$.
 If $|T_i|>1$ let $T'_i$ be obtained by deleting $v$.   By induction $T'_i$ is still $(k-i+1)$ admissible,
 and every other subtree is unchanged so $T'$ is still $k$-admissible.  
-If $|T_i|=1$ then $v$ is a child of the root and removing it eliminates the $i$th subtree. Thus for any $j \geq i$, 
+If $|T_i|=1$ then $v$ is a child of the root and removing it eliminates the $i$\DIFdelbegin \DIFdel{th }\DIFdelend \DIFaddbegin \DIFadd{-th }\DIFaddend subtree. Thus for any $j \geq i$, 
 the $j$-th subtree $T_j$
 of $T$ (which must be $(k-j+1)$-admissible) becomes the $(j-1)$-st subtree of $T'$ (and is $(k-(j-1)+1)$-admissible 
 by the first part of the proposition) and so $T'$ is $k$-admissible. 
@@ -1262,8 +1263,8 @@ and let $\bar{a}'=a^0,\ldots,a^{n-1}$.  By induction $T(\bar{a}')_i$ is $(k+1-i)
 By the definition of $T(\bar{a})$, for $i <p_n$, $T(\bar{a})_i=T(\bar{a}')_i$ and is
  $k+1-i$-admissible by induction.  We need to show that $T(\bar{a})_{p^n}$ is
 $(k+1-p^n)$-admissible.   Its subtrees are $T(\bar{a}'_i)$ for $p^n \leq i \leq k$ (some of which may be empty)
-so it has at most $k+1-p^n$ children. We also need that its $i$th nonempty subtree is $(k+1-p^n + 1 -i)$-admissible. 
-Its $i$th nonempty subtree is equal to $T(\bar{a}'_j)$ for
+so it has at most $k+1-p^n$ children. We also need that its $i$\DIFdelbegin \DIFdel{th }\DIFdelend \DIFaddbegin \DIFadd{-th }\DIFaddend nonempty subtree is $(k+1-p^n + 1 -i)$-admissible. 
+Its $i$\DIFdelbegin \DIFdel{th }\DIFdelend \DIFaddbegin \DIFadd{-th }\DIFaddend nonempty subtree is equal to $T(\bar{a}'_j)$ for
 some $j \geq p^n+i-1$. By induction the subtree is $(k+1-j)$ admissible and therefore (by the first part of \cref{lm:k-admissibility}) is $(k+1-p^n +1 - i)$-admissible. 
 \end{proof}
 %%%MIKE END 5-13-15
@@ -1435,7 +1436,7 @@ The lower bound of \cref{thm:main} generalizes the $\Omega(n \log n)$ lower boun
 for $m=n^{\Theta(1)}$ of~\cite{DSZ04} to  $\Omega(n\log n \frac{1}{\log\log m -\log\log n})$  for  $m$ up through $m<2^n$.   
 When $m=n^{\Theta(1)}$ the upper and lower bounds match at $\Theta(n \log n)$.  On the other hand, when
 $m \geq 2^n$,  $n$ items can be inserted without ever moving a placed item (and thus the cost is $n$):
-when the $j$th item arrives, 
+when the $j$\DIFdelbegin \DIFdel{th }\DIFdelend \DIFaddbegin \DIFadd{-th }\DIFaddend item arrives, 
 store it in location $L+2^{n-j}$ where $L$ is the location of the largest item less than it
 (or is 0 if there is no such item.)
 
@@ -1518,7 +1519,8 @@ in this case each of the $q$ resulting subsegments has length $a+1 \geq |S|/q$.)
 
 For each $k \geq 1$ we define algorithm $A_k$ whose cost per item
 inserted is at most $k$.  We'll show that $A_k$ can insert $b_k(m)$ items when
-run on an array of size $m$
+run on an array of size $m$\DIFaddbegin \DIFadd{.
+}\DIFaddend 
 
  Algorithm $A_1$ is: While  no two adjacent cells are occupied, insert the next item $y$ into the middle cell of the
 open segment $S$ compatible with $y$.
