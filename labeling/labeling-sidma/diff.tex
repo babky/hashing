@@ -1,7 +1,7 @@
 \documentclass[unicode,review]{siamart1116}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL lab070217-siam-submitted.tex   Sun Jun 10 13:51:53 2018
-%DIF ADD lab-fix.tex                    Thu Jun 14 22:48:22 2018
+%DIF ADD lab-fix.tex                    Sat Jun 16 13:16:04 2018
 
 \usepackage{graphicx}
 \usepackage{multirow}
@@ -373,8 +373,13 @@ algorithm in the case of linearly many labels, or can the lower bound be improve
 \subsection{Overview of the proof}
 \label{s-1.1}
 
-Our proof follows the high level structure of the proof from \cite{DSZ04}.  In the remainder of the introduction we sketch the two
-parts, and relate our proof to the one in \cite{DSZ04}.
+Our proof follows the high level structure of the proof from \cite{DSZ04}.
+\DIFaddbegin \DIFadd{We provide an adversary algorithm providing input for a given online labeling algorithm so that the algorithm is forced to make many relabelings.
+A substantial property of the adversary is that the run of any online labeling algorithm against the constructed adversary naturally gives a strategy of a game we call }\emph{\DIFadd{Prefix Bucketing}}\DIFadd{, which is defined further in the text.
+We show that the cost of the run of the online labeling algorithm and the cost of the prefix bucket strategy are equal up to a constant factor.
+Finally we provide a lower bound on the cost of each prefix bucketing strategy which immediately gives a tight lower bound for }\emph{\DIFadd{Online Labeling}}\DIFadd{.
+}\DIFaddend In the remainder of the introduction we sketch the \DIFdelbegin \DIFdel{two
+parts }\DIFdelend \DIFaddbegin \DIFadd{parts in more detail}\DIFaddend , and relate our proof to the one in \cite{DSZ04}.
 
 \paragraph{Reducing Prefix Bucketing to Online Labeling}
 
@@ -433,7 +438,7 @@ step.
 We build a hierarchy with similar properties to theirs using a sowmewhat simpler argument.
 
 
-Before the 8th insertion, the hierarchy consists of just the single segment $\natInt{1}{m}$.
+Before the \DIFdelbegin \DIFdel{8th }\DIFdelend \DIFaddbegin \DIFadd{8-th }\DIFaddend insertion, the hierarchy consists of just the single segment $\natInt{1}{m}$ \DIFaddbegin \DIFadd{consisting of the equally spaced 7 items}\DIFaddend .
 After each subsequent insertion,
 the algorithm $\A$ specifies the label of the next item and (possibly) relabels some items. Say that a label is {\em impacted} if
 it is either assigned by the algorithm to some item during this step, or is freed up (because the item previously
@@ -497,7 +502,9 @@ the critical segment, so to relate this to the cost incurred by the online label
 to argue that at step $t$ a constant fraction of the items in the critical segment were relabeled.  This is done
 by arguing that  for each successor (sub)segment of the critical segment, either all labels in its left buffer
 or all labels in its right buffer were reassigned, and the total number of such items is a constant fraction of the items
-in the critical segment.
+in the critical segment. \DIFaddbegin \DIFadd{In the case when the critical segment has no successor (sub)segment, then the amount of items 
+in the critical segment is less than a constant defined later and the cost of the online labeling step is exactly one.
+}\DIFaddend 
 
 
 \paragraph{\DIFdelbegin \DIFdel{An }\DIFdelend Improved Analysis of Bucketing}
@@ -568,7 +575,7 @@ immediately from this lemma.
 \label{ss-adversary}
 
 %%%MIKE BEGIN 5-12-15
- Fix $n$ and $m$ with $m\ge n$  and 
+Fix $n$ and $m$ with $m\ge n$  and 
 fix an online labeling algorithm $\A$ with range $m$.  Our adversary will select 
 the sequence of items $y^1,\dotsc,y^n$, one by one.    During step $t$  the adversary chooses $y^t$,
 and the algorithm specifies the labeling of $y^1,\ldots,y^t$, which is denoted $f^t$.  All of the $y^j$ will be chosen
@@ -674,8 +681,15 @@ The adversary defines the integer $p^t$, called the {\em critical level at step 
  to be the largest level such that  $B^t \subseteq S^t_{p^t}$, and $p^t$ is used
 in the next iteration to help define the hierarchy at step $t+1$.
 
+\DIFaddbegin \DIFadd{We present the }\emph{\DIFadd{Adversary}} \DIFadd{which generates the input. Recall that the adversary keeps 
+the hierarchy of nested }\emph{\DIFadd{segments}} \DIFadd{having, imprecisely said, increasing }\emph{\DIFadd{density}}\DIFadd{. 
+The idea is to insert items near a dense point and therefore the next item is chosen as the 
+average of median items of the last segment. The relabelings may substantially change the
+density of the affected segments and the hierarchy must therefore be rebuilt starting 
+from the }\emph{\DIFadd{critical segment}}\DIFadd{.
+}
 
-\medskip\noindent {\bf Adversary($\A,n,m$)} (We assume that $n \geq 8$)
+\DIFaddend \medskip\noindent {\bf Adversary($\A,n,m$)} (We assume that $n \geq 8$)
 
 \begin{itemize}
 \iffalse
@@ -1522,25 +1536,30 @@ inserted is at most $k$.  We'll show that $A_k$ can insert $b_k(m)$ items when
 run on an array of size $m$\DIFaddbegin \DIFadd{.
 }\DIFaddend 
 
- Algorithm $A_1$ is: While  no two adjacent cells are occupied, insert the next item $y$ into the middle cell of the
+\DIFdelbegin \DIFdel{Algorithm $A_1$ is: }\DIFdelend \DIFaddbegin \paragraph{\DIFadd{Algorithm $A_1$}} 
+\DIFaddend While  no two adjacent cells are occupied, insert the next item $y$ into the middle cell of the
 open segment $S$ compatible with $y$.
-A simple induction shows that after inserting $t$ items, each open segment has length at least $m/2^t$. Since $A_1$ can continue as long as this exceeds 2, it can
-do
-at least $\lceil \log m/2 \rceil  \geq b_k(m)=\lceil \sqrt{\log (m/2)} \rceil $ insertions.
+A simple induction shows that after inserting $t$ items, each open segment has length at least $m/2^t$. Since $A_1$ can continue as long as this exceeds 2, it can do at least $\lceil \log m/2 \rceil  \geq b_k(m)=\lceil \sqrt{\log (m/2)} \rceil $ insertions.
 
-
-For $k>1$ we define $A_k$.  If  $m=2$   $b_k(2)=0$ items are inserted,
+\DIFaddbegin \paragraph{\DIFadd{Algorithm $A_k$}}
+\DIFaddend For $k>1$ we define $A_k$.  If  $m=2$\DIFaddbegin \DIFadd{, }\DIFaddend $b_k(2)=0$ items are inserted,
 so assume $m \geq 3$.  If $k > r(m)/2$ then let $k'=\lfloor r(m)/2 \rfloor$ and run $A_{k'}$.
 By induction, $b_{k'}(m) \geq b_k(m)$ items can be inserted.
-For $m \geq 3$, and $2 \leq k < r(m)/2$, $A_k$ consists of two {\em phases}.  In phase 1,  $A_{k-1}$ is
-used to insert $b_{k-1}(m)$ items.
-We then redistribute the items evenly so that each of the $w=1+b_{k-1}(m)$ segments has size
-at least $\lceil m/w \rceil$.  
-We call the segments defined by these items the {\em phase 1 segments}.   
+For $m \geq 3$, and $2 \leq k < r(m)/2$, $A_k$ consists of two \DIFaddbegin \DIFadd{main }\DIFaddend {\em phases} \DIFdelbegin \DIFdel{.  In phase 1,  }\DIFdelend \DIFaddbegin \DIFadd{using the algorithm }\DIFaddend $A_{k-1}$ \DIFdelbegin \DIFdel{is
+used to insert }\DIFdelend \DIFaddbegin \DIFadd{on the whole array and algorithms $A_{k}$ on smaller arrays.
+}\begin{itemize}
+	\item {\bf \DIFadd{Phase 1.}} \DIFadd{Insert }\DIFaddend $b_{k-1}(m)$ items \DIFdelbegin \DIFdel{.
+We then redistribute }\DIFdelend \DIFaddbegin \DIFadd{using algorithm $A_{k-1}$.
+	}\item {\bf \DIFadd{Redistribution step.}} \DIFadd{Redistribute }\DIFaddend the items evenly so that each of the $w=1+b_{k-1}(m)$ segments has size at least $\lceil m/w \rceil$. 
+	\DIFdelbegin \DIFdel{We call the segments defined by these items the }\DIFdelend \DIFaddbegin \item \DIFaddend {\DIFdelbegin %DIFDELCMD < \em %%%
+\DIFdel{phase 1 segments}\DIFdelend \DIFaddbegin \bf \DIFadd{Phase 2.}\DIFaddend } \DIFdelbegin \DIFdel{.   
 The total cost per item inserted in phase 1  is at most $k$.
-In phase 2, items placed during phase 1 do not move. 
-We run $w$ separate instances of $A_k$, one for each  phase 1 segment. Each arriving item is assigned to the phase 1 segment that is compatible with it,
-and is inserted into that segment using $A_k$.  Each segment has length at least $\lceil m/w \rceil $ and so we can handle $b_k(m/w)$ insertions 
+In phase 2, items }\DIFdelend \DIFaddbegin \DIFadd{Items }\DIFaddend placed during phase 1 do not move. We run $w$ separate instances of $A_k$, one for each  phase 1 segment. Each arriving item is assigned to the phase 1 segment that is compatible with it,
+		and is inserted into that segment using $A_k$. 
+\DIFdelbegin \DIFdel{Each }\DIFdelend \DIFaddbegin \end{itemize}
+\DIFadd{The total cost per item inserted in phase 1 is at most $k$.
+We call the segments defined by the items after the redistribution step the }{\em \DIFadd{phase 1 segments}}\DIFadd{.   
+Each phase 1 }\DIFaddend segment has length at least $\lceil m/w \rceil $ and so we can handle $b_k(m/w)$ insertions 
 even if all items in phase 2 are assigned to the same phase 1 segment. The total
 cost per item in phase 2 is at most $k$.
 
