@@ -1,7 +1,7 @@
 \documentclass[unicode,review]{siamart1116}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL lab070217-siam-submitted.tex   Sun Jun 10 13:51:53 2018
-%DIF ADD lab-fix.tex                    Sat Jun 16 13:16:04 2018
+%DIF ADD lab-fix.tex                    Sat Jun 16 13:34:53 2018
 
 \usepackage{graphicx}
 \usepackage{multirow}
@@ -374,7 +374,7 @@ algorithm in the case of linearly many labels, or can the lower bound be improve
 \label{s-1.1}
 
 Our proof follows the high level structure of the proof from \cite{DSZ04}.
-\DIFaddbegin \DIFadd{We provide an adversary algorithm providing input for a given online labeling algorithm so that the algorithm is forced to make many relabelings.
+\DIFaddbegin \DIFadd{To prove the lower bound we construct an adversary generating input for a given online labeling algorithm so that the algorithm is forced to make many relabelings.
 A substantial property of the adversary is that the run of any online labeling algorithm against the constructed adversary naturally gives a strategy of a game we call }\emph{\DIFadd{Prefix Bucketing}}\DIFadd{, which is defined further in the text.
 We show that the cost of the run of the online labeling algorithm and the cost of the prefix bucket strategy are equal up to a constant factor.
 Finally we provide a lower bound on the cost of each prefix bucketing strategy which immediately gives a tight lower bound for }\emph{\DIFadd{Online Labeling}}\DIFadd{.
@@ -502,7 +502,7 @@ the critical segment, so to relate this to the cost incurred by the online label
 to argue that at step $t$ a constant fraction of the items in the critical segment were relabeled.  This is done
 by arguing that  for each successor (sub)segment of the critical segment, either all labels in its left buffer
 or all labels in its right buffer were reassigned, and the total number of such items is a constant fraction of the items
-in the critical segment. \DIFaddbegin \DIFadd{In the case when the critical segment has no successor (sub)segment, then the amount of items 
+in the critical segment. \DIFaddbegin \DIFadd{In the case when the critical segment has no successor (sub)segment, the amount of items 
 in the critical segment is less than a constant defined later and the cost of the online labeling step is exactly one.
 }\DIFaddend 
 
