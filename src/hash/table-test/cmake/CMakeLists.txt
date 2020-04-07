@@ -1,11 +1,10 @@
-cmake_minimum_required	(VERSION 2.8.1)
-cmake_policy			(VERSION 2.8.1)
+cmake_minimum_required (VERSION 3.17.0)
+cmake_policy           (VERSION 3.17.0)
 
-find_package(Boost 1.34 COMPONENTS random system date_time REQUIRED)
+find_package(Boost 1.72.0 COMPONENTS random system date_time REQUIRED)
 
 SET(CMAKE_CXX_FLAGS_DEBUG "-std=gnu++17 -ggdb")
 SET(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++17 -O3")
-
 
 include_directories(
   ../../table-lib
@@ -20,5 +19,3 @@ target_link_libraries(TableTest TestSuite Table)
 
 add_executable(BadLinearSystemTest ../bad_linear_system_test.cpp)
 target_link_libraries(BadLinearSystemTest TestSuite Table)
-
-
