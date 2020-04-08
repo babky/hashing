@@ -41,4 +41,9 @@ then
 fi 
 
 cd "${DIR}"
-$CMAKE -DCMAKE_MODULE_PATH="${DIR}/../paradiseo/cmake/module" -DPARADISEO_ROOT="${DIR}/../paradiseo" -DCMAKE_TOOLCHAIN_FILE="`pwd`/../vcpkg/scripts/buildsystems/vcpkg.cmake" -DCMAKE_BUILD_TYPE=Debug -DBOOST_ROOT='${DIR}/../vcpkg/installed/x64-linux/' .
+$CMAKE \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_MODULE_PATH="${DIR}/../paradiseo/cmake/module" \
+  -DPARADISEO_ROOT="${DIR}/../paradiseo" \
+  -DCMAKE_TOOLCHAIN_FILE="`pwd`/../vcpkg/scripts/buildsystems/vcpkg.cmake" \
+  -DBOOST_ROOT='${DIR}/../vcpkg/installed/x64-linux/' .

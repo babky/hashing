@@ -1,0 +1,16 @@
+{
+    "cmake.buildDirectory": "${workspaceRoot}/cmake",
+    "cmake.sourceDirectory": "${workspaceRoot}/cmake",
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_MODULE_PATH": "${workspaceRoot}/paradiseo/cmake/module",
+        "PARADISEO_ROOT": "${workspaceRoot}/paradiseo",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceRoot}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "BOOST_ROOT": "${workspaceRoot}/vcpkg/installed/x64-linux/"
+    },
+    "cmake.generator": "Unix Makefiles",
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "files.associations": {
+        "functional": "cpp"
+    }
+}

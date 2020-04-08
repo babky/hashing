@@ -22,6 +22,31 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "EvoBadSet",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/evo-bad-set/cmake/EvoBadSet",
+            "args": [
+                "-f", "bad-linear",
+                "-u", "1021",
+                "-s", "16"
+                // "-u", "4099",
+                // "-s", "64"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }

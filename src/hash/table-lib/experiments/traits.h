@@ -42,4 +42,3 @@ struct GeneratorFactoryTraits<Hash::Systems::BadLinearSystem<T, Storage>> {
 } }
 
 #endif
-
