@@ -29,11 +29,9 @@
             "request": "launch",
             "program": "${workspaceFolder}/evo-bad-set/cmake/EvoBadSet",
             "args": [
-                "-f", "bad-linear",
-                "-u", "1021",
-                "-s", "16"
-                // "-u", "4099",
-                // "-s", "64"
+                "-f", "cwlf",
+                "-u", "1022",
+                "-s", "256"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

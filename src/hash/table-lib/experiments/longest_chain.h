@@ -10,9 +10,10 @@
 namespace Hash { namespace Experiments {
 
 template<class Table, template <class> class GeneratorFactoryTraits, template <class> class ResultGatherer>
-void compute_longest_chain_result(std::size_t universeSize, const Hash::Iterators::ElementVector & set, std::size_t tableSize, ResultGatherer<Table> & gatherer) {
-	typedef typename Table::HashFunction::Generator Generator;
+void compute_longest_chain_result(std::size_t universeSize, const Hash::Iterators::ElementVector & set, 
+		                          std::size_t tableSize, ResultGatherer<Table> & gatherer) {
 	typedef typename Table::HashFunction HashFunction;
+	typedef typename GeneratorFactoryTraits<HashFunction>::Generator Generator;
 
 	std::size_t setSize = set.size();
 	Generator g = GeneratorFactoryTraits<HashFunction>::create_generator(universeSize, setSize);
@@ -64,9 +65,16 @@ private:
 };
 
 template<class Table, template <class> class GeneratorFactoryTraits>
-AverageLongestChainResult compute_longest_chain_average(std::size_t universeSize, const Hash::Iterators::ElementVector & set, std::size_t tableSize) {
+AverageLongestChainResult compute_longest_chain_average(std::size_t universeSize,
+														const Hash::Iterators::ElementVector & set,
+														std::size_t tableSize) {
 	AverageLongestChainResultGatherer<Table> gatherer;
-	compute_longest_chain_result<Table, GeneratorFactoryTraits, AverageLongestChainResultGatherer>(universeSize, set, tableSize, gatherer);
+	compute_longest_chain_result<Table, GeneratorFactoryTraits, AverageLongestChainResultGatherer>(
+		universeSize,
+		set, 
+		tableSize,
+		gatherer
+	);
 	return gatherer.getAverageLongestChainResult();
 }
 
@@ -76,7 +84,9 @@ struct FindWorstSetResult {
 };
 
 template<class Table, template <class> class GeneratorFactoryTraits>
-FindWorstSetResult find_worst_set(std::size_t universeSize, std::size_t setSize, std::size_t tableSize, const Hash::Iterators::ElementVector & fixedElements, const Hash::Iterators::ElementVector & disabled) {
+FindWorstSetResult find_worst_set(std::size_t universeSize, std::size_t setSize, std::size_t tableSize,
+								  const Hash::Iterators::ElementVector & fixedElements,
+								  const Hash::Iterators::ElementVector & disabled) {
 	Hash::Iterators::ElementVector v = Hash::Iterators::first(setSize, fixedElements, disabled);
 	AverageLongestChainResult longestChainResult;
 
@@ -87,7 +97,11 @@ FindWorstSetResult find_worst_set(std::size_t universeSize, std::size_t setSize,
 	// and the first elements are fixed.
 	std::size_t fixedCount = fixedElements.size();
 
-	for (bool shouldContinue = true; shouldContinue; shouldContinue = (setSize > fixedCount) && Hash::Iterators::next(v, universeSize - 1, fixedElements, disabled)) {
+	for (
+		bool shouldContinue = true; 
+	    shouldContinue; 
+		shouldContinue = (setSize > fixedCount) && Hash::Iterators::next(v, universeSize - 1, fixedElements, disabled)
+	) {
 		longestChainResult = compute_longest_chain_average<Table, GeneratorFactoryTraits>(universeSize, v, tableSize);
 
 		if (first) {
@@ -156,9 +170,16 @@ private:
 };
 
 template<class Table, template <class> class GeneratorFactoryTraits>
-LongestChainHistogram compute_longest_chain_histogram(std::size_t universeSize, const Hash::Iterators::ElementVector & set, std::size_t tableSize) {
+LongestChainHistogram compute_longest_chain_histogram(std::size_t universeSize,
+													  const Hash::Iterators::ElementVector & set,
+													  std::size_t tableSize) {
 	LongestChainHistogramGatherer<Table> gatherer;
-	compute_longest_chain_result<Table, GeneratorFactoryTraits, LongestChainHistogramGatherer>(universeSize, set, tableSize, gatherer);
+	compute_longest_chain_result<Table, GeneratorFactoryTraits, LongestChainHistogramGatherer>(
+		universeSize,
+		set,
+		tableSize,
+		gatherer
+	);
 	return gatherer.getLongestChainResult();
 }
 
@@ -196,7 +217,8 @@ public:
 		Hash::Storages::ChainedStorage<T, EqualityComparer, HashType>(tableSize) {
 	}
 
-	explicit ExperimentChainedStorage(const EqualityComparer & comparer, size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
+	explicit ExperimentChainedStorage(const EqualityComparer & comparer, 
+									  size_t tableSize = StorageParams::INITIAL_STORAGE_SIZE):
 		Hash::Storages::ChainedStorage<T, EqualityComparer, HashType>(comparer, tableSize) {
 	}
 
@@ -224,9 +246,21 @@ public:
 template<template <class, class> class Function>
 struct CompleteLongestChainInformationTraits {
 	typedef Hash::Utils::EqualityComparer<size_t> Comparer;
-	typedef ExperimentTable<size_t, Comparer, Function, ExperimentChainedStorage, Policies::Rehash::LoadFactorBoundsRehashPolicy> Table;
+	typedef ExperimentTable<
+		size_t,
+		Comparer,
+		Function,
+		ExperimentChainedStorage, 
+		Policies::Rehash::LoadFactorBoundsRehashPolicy
+	> Table;
 	typedef typename Table::HashStorage Storage;
-	typedef typename ExperimentTable<size_t, Comparer, Function, ExperimentChainedStorage, Policies::Rehash::LoadFactorBoundsRehashPolicy>::HashFunction HashFunction;
+	typedef typename ExperimentTable<
+		size_t,
+		Comparer,
+		Function,
+		ExperimentChainedStorage,
+		Policies::Rehash::LoadFactorBoundsRehashPolicy
+	>::HashFunction HashFunction;
 };
 
 
@@ -281,8 +315,12 @@ struct CompleteLongestChainInformationGatherer {
 private:
 	ChainInformation info;
 };
+
 template<template <class, class> class Function, template <class> class GeneratorFactoryTraits>
-CompleteLongestChainInformation<typename CompleteLongestChainInformationTraits<Function>::HashFunction> compute_longest_chain_complete_information(std::size_t universeSize, const Hash::Iterators::ElementVector & set, std::size_t tableSize) {
+
+CompleteLongestChainInformation<typename CompleteLongestChainInformationTraits<Function>::HashFunction>
+compute_longest_chain_complete_information(std::size_t universeSize, const Hash::Iterators::ElementVector & set, 
+										   std::size_t tableSize) {
 	typedef typename CompleteLongestChainInformationTraits<Function>::Comparer Comparer;
 	typedef typename CompleteLongestChainInformationTraits<Function>::Table Table;
 	typedef typename CompleteLongestChainInformationTraits<Function>::HashFunction HashFunction;
@@ -291,7 +329,6 @@ CompleteLongestChainInformation<typename CompleteLongestChainInformationTraits<F
 	compute_longest_chain_result<Table, GeneratorFactoryTraits, CompleteLongestChainInformationGatherer>(universeSize, set, tableSize, gatherer);
 	return gatherer.getCompleteLongestChainInformation();
 }
-
 
 } }
 

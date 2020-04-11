@@ -65,6 +65,12 @@ namespace Hash { namespace Systems {
 			std::swap(tableSize, function.tableSize);
 		}
 
+		virtual std::string toString() const {
+			std::stringstream str;
+			str << "CWLF((" << a << " * x + " << b << ") % " << prime << " % " << tableSize << ")";
+			return str.str();
+		}
+
 		class Generator {
 		public:
 			explicit Generator(T aPrime, size_t tableSize, bool aFixConstant = false):
@@ -119,6 +125,12 @@ namespace std {
 	template <typename T, class Storage>
 	void swap(Hash::Systems::UniversalFunctionCWLF<T, Storage> & a, Hash::Systems::UniversalFunctionCWLF<T, Storage> & b) {
 		a.swap(b);
+	}
+
+	// TODO: Make generic interface having toString and the template for this interface.
+	template <typename T, class Storage>
+	std::string to_string(const Hash::Systems::UniversalFunctionCWLF<T, Storage> & a) {
+		return a.toString();
 	}
 
 }

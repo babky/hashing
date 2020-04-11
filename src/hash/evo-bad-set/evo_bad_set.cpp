@@ -1,8 +1,9 @@
 #include <iostream>
 #include <eo>
 #include "table.h"
-#include "systems/multiply_shift_system.h"
 #include "systems/bad_linear_system.h"
+#include "systems/cwlf_system.h"
+#include "systems/multiply_shift_system.h"
 #include "storages/chained_storage.h"
 #include "utils/equality_comparer.h"
 #include "utils/hash_assert.h"
@@ -441,17 +442,17 @@ int main(int argc, char ** argv) {
 	settings.setSize = 8;
 	settings.crossoverProbability = 0.4;
 	settings.generationCount = 512;
-	settings.mutationProbability = 1.0;
+	settings.mutationProbability = 0.125;
 	settings.populationSize = 32;
 	settings.tournamentSize = 3;
 	settings.seed = 42;
-	settings.shiftSingleElementMutationProbability = 0.1;
+	settings.shiftSingleElementMutationProbability = 0.125;
 	settings.shiftSingleElementMutationProbabilityPerElement = 0.75;
 	settings.shiftSingleElementMutationShift = 7;
-	settings.optimizeMutationProbability = 0.1;
+	settings.optimizeMutationProbability = 0.125;
 	settings.optimizeMutationProbabilityPerElement = 0.1;
 	settings.optimizeMutationProbabilityMultipleElements = 0.1;
-	settings.optimizeMutationProbabilityMultipleElementsPerElement = 0.05;
+	settings.optimizeMutationProbabilityMultipleElementsPerElement = 0.05 / 8;
 
 	bool shouldStop = readSettingsFromArguments(settings, argc, argv);
 	if (shouldStop) {
@@ -462,6 +463,8 @@ int main(int argc, char ** argv) {
 		optimize<MultiplyShiftSystem, GeneratorFactoryTraits>(settings);
 	} else if (settings.system == "bad-linear") {
 		optimize<BadLinearSystem, GeneratorFactoryTraits>(settings);
+	} else if (settings.system == "cwlf") {
+		optimize<UniversalFunctionCWLF, RandomFunctionGeneratorFactoryTraits>(settings);
 	} else {
 		cerr << "Unknown family of functions " << settings.system << ".";
 		return 1;

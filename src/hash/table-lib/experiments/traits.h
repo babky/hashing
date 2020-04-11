@@ -39,6 +39,42 @@ struct GeneratorFactoryTraits<Hash::Systems::BadLinearSystem<T, Storage>> {
 
 };
 
+template<class System>
+class RandomFunctionGenerator {
+public:
+	RandomFunctionGenerator(size_t aSampleCount, size_t universeSize, size_t tableSize):
+	  sampleCount(aSampleCount) { 
+		f.setUniversumMax(universeSize - 1);
+		f.setTableSize(tableSize);
+	}
+
+	bool hasNext(void) const {
+		return sampleCount != 0;
+	}
+
+	System next() {
+		f.reset();
+		--sampleCount;
+		return f;
+	}
+
+private:
+	System f;
+	size_t sampleCount;
+};
+
+template<class System>
+struct RandomFunctionGeneratorFactoryTraits {
+
+	using Generator = RandomFunctionGenerator<System>;
+
+	static RandomFunctionGenerator<System> create_generator(size_t universeSize, size_t tableSize) {
+		return RandomFunctionGenerator<System>(1024, universeSize, tableSize);
+	}
+
+};
+
+
 } }
 
 #endif
