@@ -1,8 +1,6 @@
 cmake_minimum_required (VERSION 3.17.0)
 cmake_policy           (VERSION 3.17.0)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../bad-set/cmake")
-
 project (HashTable)
 
 add_subdirectory (../table-lib/cmake ../table-lib/cmake)
