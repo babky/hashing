@@ -32,8 +32,7 @@ fi
 cd "${DIR}/.."
 if [ ! -d "paradiseo" ]
 then
-  # git clone git://scm.gforge.inria.fr/paradiseo/paradiseo.git 
-  git clone git@github.com:babky/paradiseo.git
+  git clone https://github.com/babky/paradiseo.git
   cd paradiseo
   git checkout fix-compilation-issues
   mkdir build
