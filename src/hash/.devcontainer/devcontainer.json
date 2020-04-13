@@ -1,0 +1,11 @@
+{
+	"name": "hash",
+	"dockerComposeFile": [
+		"./docker-compose.vscode.yml"
+	],
+	"service": "hash",
+	"workspaceFolder": "/hash/src/hash",
+	"extensions": ["ms-vscode.cpptools", "ms-vscode.cmake-tools"],
+	"runArgs": [ "-u", "user" ],	
+	"postCreateCommand": "/hash/src/hash/.devcontainer/install.sh"
+}

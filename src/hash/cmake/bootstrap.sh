@@ -36,9 +36,13 @@ then
   cd paradiseo
   git checkout fix-compilation-issues
   mkdir build
-  $CMAKE .. -DINSTALL_TYPE=full
-  make
-fi 
+else
+  cd paradiseo
+fi
+
+cd build
+$CMAKE .. -DINSTALL_TYPE=full
+make
 
 cd "${DIR}"
 $CMAKE \
