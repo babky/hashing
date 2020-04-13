@@ -442,7 +442,7 @@ int main(int argc, char ** argv) {
 	settings.setSize = 8;
 	settings.crossoverProbability = 0.4;
 	settings.generationCount = 512;
-	settings.mutationProbability = 0.125;
+	settings.mutationProbability = 1/64;
 	settings.populationSize = 32;
 	settings.tournamentSize = 3;
 	settings.seed = 42;
@@ -451,7 +451,7 @@ int main(int argc, char ** argv) {
 	settings.shiftSingleElementMutationShift = 7;
 	settings.optimizeMutationProbability = 0.125;
 	settings.optimizeMutationProbabilityPerElement = 0.1;
-	settings.optimizeMutationProbabilityMultipleElements = 0.1;
+	settings.optimizeMutationProbabilityMultipleElements = 1 / 128;
 	settings.optimizeMutationProbabilityMultipleElementsPerElement = 0.05 / 8;
 
 	bool shouldStop = readSettingsFromArguments(settings, argc, argv);
